@@ -7,8 +7,8 @@ from decimal import Decimal
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import ARRAY, Boolean, Date, DateTime, ForeignKey, Integer, Numeric, Text, func
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy import Boolean, Date, DateTime, ForeignKey, Integer, Numeric, Text, func
+from sqlalchemy.dialects.postgresql import ARRAY, JSONB
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 

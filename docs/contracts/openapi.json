@@ -1,0 +1,4260 @@
+{
+  "components": {
+    "schemas": {
+      "AuditEntry": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "title": "Action",
+            "type": "string"
+          },
+          "actor": {
+            "title": "Actor",
+            "type": "string"
+          },
+          "after": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "After"
+          },
+          "at": {
+            "format": "date-time",
+            "title": "At",
+            "type": "string"
+          },
+          "before": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Before"
+          }
+        },
+        "required": [
+          "actor",
+          "action",
+          "at",
+          "before",
+          "after"
+        ],
+        "title": "AuditEntry",
+        "type": "object"
+      },
+      "Body_portal_photo_portal__token__photos_post": {
+        "properties": {
+          "file": {
+            "contentMediaType": "application/octet-stream",
+            "title": "File",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "file"
+        ],
+        "title": "Body_portal_photo_portal__token__photos_post",
+        "type": "object"
+      },
+      "Caps": {
+        "additionalProperties": false,
+        "properties": {
+          "max_seconds": {
+            "title": "Max Seconds",
+            "type": "number"
+          },
+          "max_steps": {
+            "title": "Max Steps",
+            "type": "integer"
+          },
+          "max_usd": {
+            "title": "Max Usd",
+            "type": "string"
+          }
+        },
+        "required": [
+          "max_steps",
+          "max_usd",
+          "max_seconds"
+        ],
+        "title": "Caps",
+        "type": "object"
+      },
+      "CheckoutSession": {
+        "additionalProperties": false,
+        "properties": {
+          "url": {
+            "title": "Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "title": "CheckoutSession",
+        "type": "object"
+      },
+      "ClaimAction": {
+        "additionalProperties": false,
+        "examples": [
+          {
+            "action": "resume_override",
+            "message": "label photo checked by hand",
+            "outcome": "approve"
+          }
+        ],
+        "properties": {
+          "action": {
+            "enum": [
+              "resume_override",
+              "request_info",
+              "mark_fraud"
+            ],
+            "title": "Action",
+            "type": "string"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "question for the claimant (request_info) or note",
+            "title": "Message"
+          },
+          "outcome": {
+            "anyOf": [
+              {
+                "enum": [
+                  "approve",
+                  "deny",
+                  "needs_info",
+                  "flag"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "required for resume_override",
+            "title": "Outcome"
+          }
+        },
+        "required": [
+          "action"
+        ],
+        "title": "ClaimAction",
+        "type": "object"
+      },
+      "ClaimDetail": {
+        "additionalProperties": false,
+        "properties": {
+          "audit": {
+            "items": {
+              "$ref": "#/components/schemas/AuditEntry"
+            },
+            "title": "Audit",
+            "type": "array"
+          },
+          "claimant": {
+            "$ref": "#/components/schemas/Claimant"
+          },
+          "clusters": {
+            "items": {
+              "$ref": "#/components/schemas/Cluster"
+            },
+            "title": "Clusters",
+            "type": "array"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "date_code_claimed": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date Code Claimed"
+          },
+          "decided_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decided At"
+          },
+          "decision": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Decision"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "model_claimed": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Claimed"
+          },
+          "payout": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PayoutView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "photos": {
+            "items": {
+              "$ref": "#/components/schemas/Photo"
+            },
+            "title": "Photos",
+            "type": "array"
+          },
+          "program_id": {
+            "format": "uuid",
+            "title": "Program Id",
+            "type": "string"
+          },
+          "purchase_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Purchase Date"
+          },
+          "quantity": {
+            "title": "Quantity",
+            "type": "integer"
+          },
+          "refund_cents": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Refund Cents"
+          },
+          "remedy": {
+            "anyOf": [
+              {
+                "enum": [
+                  "refund",
+                  "repair",
+                  "replacement"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Remedy"
+          },
+          "retailer_claimed": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retailer Claimed"
+          },
+          "run": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RunSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "serial_claimed": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Serial Claimed"
+          },
+          "status": {
+            "enum": [
+              "draft",
+              "submitted",
+              "needs_info",
+              "under_review",
+              "approved",
+              "denied",
+              "flagged",
+              "capped",
+              "paid",
+              "closed"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "submitted_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Submitted At"
+          }
+        },
+        "required": [
+          "id",
+          "program_id",
+          "status",
+          "claimant",
+          "model_claimed",
+          "serial_claimed",
+          "date_code_claimed",
+          "retailer_claimed",
+          "purchase_date",
+          "quantity",
+          "refund_cents",
+          "remedy",
+          "photos",
+          "decision",
+          "run",
+          "clusters",
+          "payout",
+          "audit",
+          "created_at",
+          "submitted_at",
+          "decided_at"
+        ],
+        "title": "ClaimDetail",
+        "type": "object"
+      },
+      "ClaimPage": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ClaimSummary"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "pass as ?cursor= for the next page; null on the last page",
+            "title": "Next Cursor"
+          }
+        },
+        "required": [
+          "items",
+          "next_cursor"
+        ],
+        "title": "ClaimPage",
+        "type": "object"
+      },
+      "ClaimSummary": {
+        "additionalProperties": false,
+        "examples": [
+          {
+            "created_at": "2026-10-16T22:40:01Z",
+            "decided_at": "2026-10-16T22:40:05Z",
+            "id": "0b7f0d8e-3c2a-4b5e-8f1a-7d6c5b4a3e21",
+            "model_claimed": "TL1302Z",
+            "outcome": "approve",
+            "program_id": "6c1f2a8e-1b7d-4d1e-9a6f-2f6f5e0a9b11",
+            "purchase_date": "2025-03-14",
+            "refund_cents": 4999,
+            "retailer_claimed": "Amazon.com",
+            "routed_to_human": false,
+            "status": "approved"
+          }
+        ],
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "decided_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decided At"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "model_claimed": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Claimed"
+          },
+          "outcome": {
+            "anyOf": [
+              {
+                "enum": [
+                  "approve",
+                  "deny",
+                  "needs_info",
+                  "flag"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Outcome"
+          },
+          "program_id": {
+            "format": "uuid",
+            "title": "Program Id",
+            "type": "string"
+          },
+          "purchase_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Purchase Date"
+          },
+          "refund_cents": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Refund Cents"
+          },
+          "retailer_claimed": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retailer Claimed"
+          },
+          "routed_to_human": {
+            "title": "Routed To Human",
+            "type": "boolean"
+          },
+          "status": {
+            "enum": [
+              "draft",
+              "submitted",
+              "needs_info",
+              "under_review",
+              "approved",
+              "denied",
+              "flagged",
+              "capped",
+              "paid",
+              "closed"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "program_id",
+          "status",
+          "model_claimed",
+          "retailer_claimed",
+          "purchase_date",
+          "refund_cents",
+          "outcome",
+          "routed_to_human",
+          "created_at",
+          "decided_at"
+        ],
+        "title": "ClaimSummary",
+        "type": "object"
+      },
+      "Claimant": {
+        "additionalProperties": false,
+        "properties": {
+          "address_line1": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Address Line1"
+          },
+          "city": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "City"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "phone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phone"
+          },
+          "state": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "State"
+          },
+          "synthetic": {
+            "default": false,
+            "title": "Synthetic",
+            "type": "boolean"
+          },
+          "zip": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Zip"
+          }
+        },
+        "title": "Claimant",
+        "type": "object"
+      },
+      "Cluster": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "same_photo",
+              "same_address",
+              "same_payout",
+              "same_serial"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "member_claim_ids": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Member Claim Ids",
+            "type": "array"
+          },
+          "score": {
+            "title": "Score",
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "member_claim_ids",
+          "score"
+        ],
+        "title": "Cluster",
+        "type": "object"
+      },
+      "DateCodeRule": {
+        "additionalProperties": false,
+        "properties": {
+          "end": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End"
+          },
+          "format": {
+            "title": "Format",
+            "type": "string"
+          },
+          "raw": {
+            "title": "Raw",
+            "type": "string"
+          },
+          "start": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start"
+          }
+        },
+        "required": [
+          "format",
+          "raw"
+        ],
+        "title": "DateCodeRule",
+        "type": "object"
+      },
+      "Decision": {
+        "additionalProperties": false,
+        "properties": {
+          "cited_rules": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Cited Rules",
+            "type": "array"
+          },
+          "confidence": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confidence"
+          },
+          "decided_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "agent | rules_only | a user id",
+            "title": "Decided By"
+          },
+          "outcome": {
+            "enum": [
+              "approve",
+              "deny",
+              "needs_info",
+              "flag"
+            ],
+            "title": "Outcome",
+            "type": "string"
+          },
+          "reasons": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Reasons",
+            "type": "array"
+          },
+          "routed_to_human": {
+            "title": "Routed To Human",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "outcome",
+          "reasons",
+          "cited_rules",
+          "routed_to_human"
+        ],
+        "title": "Decision",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "Health": {
+        "additionalProperties": false,
+        "properties": {
+          "database": {
+            "title": "Database",
+            "type": "boolean"
+          },
+          "status": {
+            "enum": [
+              "ok",
+              "degraded"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "worker_heartbeat_age_s": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "null until the M2 worker exists",
+            "title": "Worker Heartbeat Age S"
+          }
+        },
+        "required": [
+          "status",
+          "database"
+        ],
+        "title": "Health",
+        "type": "object"
+      },
+      "IdentificationRules": {
+        "additionalProperties": false,
+        "properties": {
+          "date_codes": {
+            "items": {
+              "$ref": "#/components/schemas/DateCodeRule"
+            },
+            "title": "Date Codes",
+            "type": "array"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/Span"
+            },
+            "title": "Evidence",
+            "type": "array"
+          },
+          "model_label_location": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Label Location"
+          },
+          "models": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Models",
+            "type": "array"
+          },
+          "price_range_cents": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PriceRange"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "serial_ranges": {
+            "items": {
+              "$ref": "#/components/schemas/SerialRange"
+            },
+            "title": "Serial Ranges",
+            "type": "array"
+          },
+          "sold_at": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Sold At",
+            "type": "array"
+          },
+          "sold_from": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sold From"
+          },
+          "sold_to": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sold To"
+          },
+          "units_affected": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Units Affected"
+          }
+        },
+        "title": "IdentificationRules",
+        "type": "object"
+      },
+      "IssueRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "n": {
+            "maximum": 10000.0,
+            "minimum": 1.0,
+            "title": "N",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "n"
+        ],
+        "title": "IssueRequest",
+        "type": "object"
+      },
+      "IssueResponse": {
+        "additionalProperties": false,
+        "properties": {
+          "links": {
+            "items": {
+              "$ref": "#/components/schemas/IssuedLink"
+            },
+            "title": "Links",
+            "type": "array"
+          }
+        },
+        "required": [
+          "links"
+        ],
+        "title": "IssueResponse",
+        "type": "object"
+      },
+      "IssuedLink": {
+        "additionalProperties": false,
+        "properties": {
+          "claim_id": {
+            "format": "uuid",
+            "title": "Claim Id",
+            "type": "string"
+          },
+          "url": {
+            "title": "Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "claim_id",
+          "url"
+        ],
+        "title": "IssuedLink",
+        "type": "object"
+      },
+      "ManualRecall": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "recall_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recall Date"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "description"
+        ],
+        "title": "ManualRecall",
+        "type": "object"
+      },
+      "MprReport": {
+        "additionalProperties": false,
+        "properties": {
+          "generated_at": {
+            "format": "date-time",
+            "title": "Generated At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "payload": {
+            "additionalProperties": true,
+            "description": "the CPSC MPR boxes (01-backend.md section 8)",
+            "title": "Payload",
+            "type": "object"
+          },
+          "period_end": {
+            "format": "date",
+            "title": "Period End",
+            "type": "string"
+          },
+          "period_start": {
+            "format": "date",
+            "title": "Period Start",
+            "type": "string"
+          },
+          "program_id": {
+            "format": "uuid",
+            "title": "Program Id",
+            "type": "string"
+          },
+          "reconciled": {
+            "title": "Reconciled",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "program_id",
+          "period_start",
+          "period_end",
+          "payload",
+          "reconciled",
+          "generated_at"
+        ],
+        "title": "MprReport",
+        "type": "object"
+      },
+      "Payout": {
+        "additionalProperties": false,
+        "properties": {
+          "amount_rule": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Amount Rule"
+          },
+          "method": {
+            "anyOf": [
+              {
+                "enum": [
+                  "check",
+                  "original_payment",
+                  "store_credit"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Method"
+          }
+        },
+        "title": "Payout",
+        "type": "object"
+      },
+      "PayoutView": {
+        "additionalProperties": false,
+        "properties": {
+          "amount_cents": {
+            "title": "Amount Cents",
+            "type": "integer"
+          },
+          "currency": {
+            "title": "Currency",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "method": {
+            "enum": [
+              "stripe_connect",
+              "check_export",
+              "ach_export"
+            ],
+            "title": "Method",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "pending",
+              "pending_export",
+              "onboarding",
+              "transferred",
+              "failed",
+              "exported"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "amount_cents",
+          "currency",
+          "method",
+          "status"
+        ],
+        "title": "PayoutView",
+        "type": "object"
+      },
+      "Photo": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "label",
+              "destruction",
+              "receipt",
+              "other"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "phash": {
+            "title": "Phash",
+            "type": "string"
+          },
+          "sha256": {
+            "title": "Sha256",
+            "type": "string"
+          },
+          "uploaded_at": {
+            "format": "date-time",
+            "title": "Uploaded At",
+            "type": "string"
+          },
+          "url": {
+            "description": "short-lived URL; in dev a tenant-scoped API path",
+            "title": "Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "url",
+          "sha256",
+          "phash",
+          "uploaded_at"
+        ],
+        "title": "Photo",
+        "type": "object"
+      },
+      "PortalAnswer": {
+        "additionalProperties": false,
+        "properties": {
+          "message": {
+            "title": "Message",
+            "type": "string"
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "title": "PortalAnswer",
+        "type": "object"
+      },
+      "PortalPayout": {
+        "additionalProperties": false,
+        "properties": {
+          "mailing_address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mailing Address"
+          },
+          "method": {
+            "enum": [
+              "stripe_connect",
+              "check_export"
+            ],
+            "title": "Method",
+            "type": "string"
+          }
+        },
+        "required": [
+          "method"
+        ],
+        "title": "PortalPayout",
+        "type": "object"
+      },
+      "PortalProgram": {
+        "additionalProperties": false,
+        "properties": {
+          "destruction_instruction": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Destruction Instruction"
+          },
+          "model_label_location": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Label Location"
+          },
+          "models": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Models",
+            "type": "array"
+          },
+          "remedy_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Remedy Type"
+          },
+          "required_photos": {
+            "items": {
+              "enum": [
+                "label",
+                "destruction",
+                "receipt"
+              ],
+              "type": "string"
+            },
+            "title": "Required Photos",
+            "type": "array"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "models",
+          "model_label_location",
+          "remedy_type",
+          "destruction_instruction",
+          "required_photos"
+        ],
+        "title": "PortalProgram",
+        "type": "object"
+      },
+      "PortalSubmit": {
+        "additionalProperties": false,
+        "properties": {
+          "address_line1": {
+            "title": "Address Line1",
+            "type": "string"
+          },
+          "city": {
+            "title": "City",
+            "type": "string"
+          },
+          "date_code_claimed": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date Code Claimed"
+          },
+          "email": {
+            "title": "Email",
+            "type": "string"
+          },
+          "model_claimed": {
+            "title": "Model Claimed",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "phone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phone"
+          },
+          "purchase_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Purchase Date"
+          },
+          "quantity": {
+            "default": 1,
+            "minimum": 1.0,
+            "title": "Quantity",
+            "type": "integer"
+          },
+          "retailer_claimed": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retailer Claimed"
+          },
+          "serial_claimed": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Serial Claimed"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          },
+          "zip": {
+            "title": "Zip",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "address_line1",
+          "city",
+          "state",
+          "zip",
+          "model_claimed"
+        ],
+        "title": "PortalSubmit",
+        "type": "object"
+      },
+      "PortalView": {
+        "additionalProperties": false,
+        "properties": {
+          "claim_id": {
+            "format": "uuid",
+            "title": "Claim Id",
+            "type": "string"
+          },
+          "decision_reasons": {
+            "description": "plain-language reasons once decided",
+            "items": {
+              "type": "string"
+            },
+            "title": "Decision Reasons",
+            "type": "array"
+          },
+          "pending_question": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pending Question"
+          },
+          "program": {
+            "$ref": "#/components/schemas/PortalProgram"
+          },
+          "status": {
+            "enum": [
+              "draft",
+              "submitted",
+              "needs_info",
+              "under_review",
+              "approved",
+              "denied",
+              "flagged",
+              "capped",
+              "paid",
+              "closed"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "claim_id",
+          "status",
+          "program",
+          "pending_question",
+          "decision_reasons"
+        ],
+        "title": "PortalView",
+        "type": "object"
+      },
+      "PriceRange": {
+        "additionalProperties": false,
+        "properties": {
+          "max_cents": {
+            "minimum": 0.0,
+            "title": "Max Cents",
+            "type": "integer"
+          },
+          "min_cents": {
+            "minimum": 0.0,
+            "title": "Min Cents",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "min_cents",
+          "max_cents"
+        ],
+        "title": "PriceRange",
+        "type": "object"
+      },
+      "Problem": {
+        "additionalProperties": false,
+        "description": "RFC 7807 problem detail. The UI shows `detail` plus `correlation_id`.",
+        "examples": [
+          {
+            "correlation_id": "c0ffee00-0000-4000-8000-000000000001",
+            "detail": "POST /v1/programs arrives in M2 (backend owner); the contract is final.",
+            "instance": "/v1/programs",
+            "status": 501,
+            "title": "Not Implemented",
+            "type": "about:blank"
+          }
+        ],
+        "properties": {
+          "correlation_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Correlation Id"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          },
+          "instance": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Instance"
+          },
+          "status": {
+            "title": "Status",
+            "type": "integer"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "type": {
+            "default": "about:blank",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "status"
+        ],
+        "title": "Problem",
+        "type": "object"
+      },
+      "Program": {
+        "additionalProperties": false,
+        "examples": [
+          {
+            "claim_counts": {
+              "approved": 270,
+              "denied": 101,
+              "flagged": 77,
+              "needs_info": 52
+            },
+            "created_at": "2026-10-16T22:40:00Z",
+            "id": "6c1f2a8e-1b7d-4d1e-9a6f-2f6f5e0a9b11",
+            "identification_rules": {
+              "date_codes": [],
+              "evidence": [],
+              "model_label_location": "on the sticker on the bottom",
+              "models": [
+                "TL1302Z"
+              ],
+              "price_range_cents": {
+                "max_cents": 5600,
+                "min_cents": 4400
+              },
+              "serial_ranges": [],
+              "sold_at": [
+                "Amazon.com"
+              ],
+              "sold_from": "2024-06-01",
+              "sold_to": "2026-09-30",
+              "units_affected": 53634
+            },
+            "opened_at": "2026-10-16T22:40:00Z",
+            "recall_id": "2a3b4c5d-6e7f-4a8b-9c0d-1e2f3a4b5c6d",
+            "remedy_rules": {
+              "contact": "800-772-4337",
+              "evidence": [],
+              "options": [],
+              "remedy_type": "refund"
+            },
+            "status": "open",
+            "title": "Scotch Thermal Laminators",
+            "units_affected": 53634,
+            "value_threshold_cents": 10000
+          }
+        ],
+        "properties": {
+          "claim_counts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "description": "claims by status",
+            "title": "Claim Counts",
+            "type": "object"
+          },
+          "closed_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Closed At"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "identification_rules": {
+            "$ref": "#/components/schemas/IdentificationRules"
+          },
+          "opened_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Opened At"
+          },
+          "recall_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recall Id"
+          },
+          "remedy_rules": {
+            "$ref": "#/components/schemas/RemedyRules"
+          },
+          "status": {
+            "enum": [
+              "draft",
+              "open",
+              "closed"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "units_affected": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Units Affected"
+          },
+          "value_threshold_cents": {
+            "title": "Value Threshold Cents",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "recall_id",
+          "title",
+          "status",
+          "units_affected",
+          "identification_rules",
+          "remedy_rules",
+          "value_threshold_cents",
+          "claim_counts",
+          "opened_at",
+          "closed_at",
+          "created_at"
+        ],
+        "title": "Program",
+        "type": "object"
+      },
+      "ProgramCreate": {
+        "additionalProperties": false,
+        "examples": [
+          {
+            "recall_id": "2a3b4c5d-6e7f-4a8b-9c0d-1e2f3a4b5c6d",
+            "value_threshold_cents": 10000
+          }
+        ],
+        "properties": {
+          "manual": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ManualRecall"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "recall_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "A recall from GET /v1/recalls; or give manual",
+            "title": "Recall Id"
+          },
+          "value_threshold_cents": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value Threshold Cents"
+          }
+        },
+        "title": "ProgramCreate",
+        "type": "object"
+      },
+      "ProgramList": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Program"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "ProgramList",
+        "type": "object"
+      },
+      "ProgramPatch": {
+        "additionalProperties": false,
+        "examples": [
+          {
+            "status": "open",
+            "value_threshold_cents": 15000
+          }
+        ],
+        "properties": {
+          "identification_rules": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/IdentificationRules"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "remedy_rules": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemedyRules"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "draft",
+                  "open",
+                  "closed"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "value_threshold_cents": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value Threshold Cents"
+          }
+        },
+        "title": "ProgramPatch",
+        "type": "object"
+      },
+      "RecallPage": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/RecallSummary"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total"
+        ],
+        "title": "RecallPage",
+        "type": "object"
+      },
+      "RecallSummary": {
+        "additionalProperties": false,
+        "examples": [
+          {
+            "category": "Business and Office Machines",
+            "id": "2a3b4c5d-6e7f-4a8b-9c0d-1e2f3a4b5c6d",
+            "recall_date": "2026-10-15",
+            "source": "cpsc",
+            "source_id": "27024",
+            "title": "3M Company Recalls Scotch™ Thermal Laminators Due to Risk of Serious Injury or Death from Fire Hazard",
+            "units_affected": 53634,
+            "units_status": "ok",
+            "url": "https://cpsc.gov/Recalls/2027/3M-Company-Recalls-ScotchTM-Thermal-Laminators"
+          }
+        ],
+        "properties": {
+          "category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Category"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "recall_date": {
+            "format": "date",
+            "title": "Recall Date",
+            "type": "string"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          },
+          "source_id": {
+            "description": "CPSC recall number, digits only",
+            "title": "Source Id",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "units_affected": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Units Affected"
+          },
+          "units_status": {
+            "enum": [
+              "ok",
+              "ambiguous",
+              "unparsed"
+            ],
+            "title": "Units Status",
+            "type": "string"
+          },
+          "url": {
+            "title": "Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "source",
+          "source_id",
+          "recall_date",
+          "title",
+          "url",
+          "units_affected",
+          "units_status",
+          "category"
+        ],
+        "title": "RecallSummary",
+        "type": "object"
+      },
+      "RemedyOption": {
+        "additionalProperties": false,
+        "properties": {
+          "payout": {
+            "$ref": "#/components/schemas/Payout"
+          },
+          "proof_required": {
+            "items": {
+              "enum": [
+                "label_photo",
+                "destruction_photo",
+                "receipt",
+                "product_return",
+                "registration",
+                "none"
+              ],
+              "type": "string"
+            },
+            "title": "Proof Required",
+            "type": "array"
+          },
+          "steps": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Steps",
+            "type": "array"
+          },
+          "type": {
+            "enum": [
+              "refund",
+              "repair",
+              "replacement"
+            ],
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "title": "RemedyOption",
+        "type": "object"
+      },
+      "RemedyRules": {
+        "additionalProperties": false,
+        "properties": {
+          "contact": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contact"
+          },
+          "destruction_instruction": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Destruction Instruction"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/Span"
+            },
+            "title": "Evidence",
+            "type": "array"
+          },
+          "options": {
+            "items": {
+              "$ref": "#/components/schemas/RemedyOption"
+            },
+            "title": "Options",
+            "type": "array"
+          },
+          "registration_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Registration Url"
+          },
+          "remedy_type": {
+            "anyOf": [
+              {
+                "enum": [
+                  "refund",
+                  "repair",
+                  "replacement",
+                  "multiple"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Remedy Type"
+          }
+        },
+        "title": "RemedyRules",
+        "type": "object"
+      },
+      "RunSummary": {
+        "additionalProperties": false,
+        "properties": {
+          "cost_usd": {
+            "description": "decimal string, USD",
+            "title": "Cost Usd",
+            "type": "string"
+          },
+          "finished_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At"
+          },
+          "graph": {
+            "enum": [
+              "extract_rules",
+              "adjudicate",
+              "rules_only"
+            ],
+            "title": "Graph",
+            "type": "string"
+          },
+          "run_id": {
+            "format": "uuid",
+            "title": "Run Id",
+            "type": "string"
+          },
+          "started_at": {
+            "format": "date-time",
+            "title": "Started At",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "running",
+              "done",
+              "capped",
+              "failed",
+              "waiting_human"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "steps": {
+            "title": "Steps",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "run_id",
+          "graph",
+          "status",
+          "steps",
+          "cost_usd",
+          "started_at",
+          "finished_at"
+        ],
+        "title": "RunSummary",
+        "type": "object"
+      },
+      "SerialRange": {
+        "additionalProperties": false,
+        "properties": {
+          "end": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End"
+          },
+          "prefix": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prefix"
+          },
+          "raw": {
+            "title": "Raw",
+            "type": "string"
+          },
+          "start": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start"
+          }
+        },
+        "required": [
+          "raw"
+        ],
+        "title": "SerialRange",
+        "type": "object"
+      },
+      "Span": {
+        "additionalProperties": false,
+        "properties": {
+          "end": {
+            "minimum": 0.0,
+            "title": "End",
+            "type": "integer"
+          },
+          "field": {
+            "title": "Field",
+            "type": "string"
+          },
+          "quote": {
+            "title": "Quote",
+            "type": "string"
+          },
+          "start": {
+            "minimum": 0.0,
+            "title": "Start",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "field",
+          "quote",
+          "start",
+          "end"
+        ],
+        "title": "Span",
+        "type": "object"
+      },
+      "Trace": {
+        "additionalProperties": false,
+        "examples": [
+          {
+            "caps": {
+              "max_seconds": 60.0,
+              "max_steps": 8,
+              "max_usd": "0.02"
+            },
+            "run": {
+              "cost_usd": "0.000000",
+              "finished_at": "2026-10-16T22:40:05Z",
+              "graph": "rules_only",
+              "run_id": "9e8d7c6b-5a4f-4e3d-8c2b-1a0f9e8d7c6b",
+              "started_at": "2026-10-16T22:40:04Z",
+              "status": "done",
+              "steps": 7
+            },
+            "steps": [
+              {
+                "args": {
+                  "model_claimed": "TL1302Z"
+                },
+                "cost_usd": "0.000000",
+                "created_at": "2026-10-16T22:40:04Z",
+                "idx": 0,
+                "latency_ms": 0,
+                "node": "check_model",
+                "result": {
+                  "cited_rule": "TL1302Z",
+                  "verdict": "match"
+                },
+                "tokens_in": 0,
+                "tokens_out": 0,
+                "tool": "check_model"
+              }
+            ]
+          }
+        ],
+        "properties": {
+          "caps": {
+            "$ref": "#/components/schemas/Caps"
+          },
+          "run": {
+            "$ref": "#/components/schemas/RunSummary"
+          },
+          "steps": {
+            "items": {
+              "$ref": "#/components/schemas/TraceStep"
+            },
+            "title": "Steps",
+            "type": "array"
+          }
+        },
+        "required": [
+          "run",
+          "caps",
+          "steps"
+        ],
+        "title": "Trace",
+        "type": "object"
+      },
+      "TraceStep": {
+        "additionalProperties": false,
+        "properties": {
+          "args": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Args"
+          },
+          "cost_usd": {
+            "title": "Cost Usd",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "idx": {
+            "title": "Idx",
+            "type": "integer"
+          },
+          "latency_ms": {
+            "title": "Latency Ms",
+            "type": "integer"
+          },
+          "node": {
+            "title": "Node",
+            "type": "string"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Result"
+          },
+          "thought": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Thought"
+          },
+          "tokens_in": {
+            "title": "Tokens In",
+            "type": "integer"
+          },
+          "tokens_out": {
+            "title": "Tokens Out",
+            "type": "integer"
+          },
+          "tool": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tool"
+          }
+        },
+        "required": [
+          "idx",
+          "node",
+          "thought",
+          "tool",
+          "args",
+          "result",
+          "latency_ms",
+          "tokens_in",
+          "tokens_out",
+          "cost_usd",
+          "created_at"
+        ],
+        "title": "TraceStep",
+        "type": "object"
+      },
+      "Usage": {
+        "additionalProperties": false,
+        "properties": {
+          "claims_adjudicated": {
+            "title": "Claims Adjudicated",
+            "type": "integer"
+          },
+          "model_cost_usd": {
+            "title": "Model Cost Usd",
+            "type": "string"
+          },
+          "open_programs": {
+            "title": "Open Programs",
+            "type": "integer"
+          },
+          "period_start": {
+            "format": "date",
+            "title": "Period Start",
+            "type": "string"
+          }
+        },
+        "required": [
+          "period_start",
+          "claims_adjudicated",
+          "model_cost_usd",
+          "open_programs"
+        ],
+        "title": "Usage",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "description": "RecallOps backend API (component 1). Contract for the UI (component 2), payments (component 3),\nand login (component 4) owners. In development, authenticate with X-Dev-Firm-Id and X-Dev-Role headers\n(AUTH_PROVIDER=dev); the login owner's Clerk provider replaces them with a bearer token. Errors are RFC 7807\nproblem details with a correlation_id. Routes marked 501 have a final contract and arrive in the named milestone.",
+    "title": "RecallOps API",
+    "version": "0.1.0-m1"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/healthz": {
+      "get": {
+        "operationId": "healthz_healthz_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Healthz",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/internal/feeds/pull": {
+      "post": {
+        "operationId": "feeds_pull_internal_feeds_pull_post",
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Feeds Pull Internal Feeds Pull Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "contract final, implementation in a later milestone"
+          }
+        },
+        "summary": "Nightly feed pull (shared secret header)",
+        "tags": [
+          "internal"
+        ]
+      }
+    },
+    "/internal/stripe/webhook": {
+      "post": {
+        "operationId": "stripe_webhook_internal_stripe_webhook_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "title": "Response Stripe Webhook Internal Stripe Webhook Post",
+                  "type": "object"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "contract final, implementation in a later milestone"
+          }
+        },
+        "summary": "Stripe webhook (component 3 replaces this stub)",
+        "tags": [
+          "internal"
+        ]
+      }
+    },
+    "/portal/{token}": {
+      "get": {
+        "operationId": "portal_view_portal__token__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "token",
+            "required": true,
+            "schema": {
+              "title": "Token",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PortalView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Program public info, required steps, status, pending question",
+        "tags": [
+          "portal"
+        ]
+      }
+    },
+    "/portal/{token}/answer": {
+      "post": {
+        "operationId": "portal_answer_portal__token__answer_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "token",
+            "required": true,
+            "schema": {
+              "title": "Token",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalAnswer"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PortalView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "contract final, implementation in a later milestone"
+          }
+        },
+        "summary": "Reply to needs_info",
+        "tags": [
+          "portal"
+        ]
+      }
+    },
+    "/portal/{token}/payout": {
+      "post": {
+        "operationId": "portal_payout_portal__token__payout_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "token",
+            "required": true,
+            "schema": {
+              "title": "Token",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalPayout"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PortalView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "contract final, implementation in a later milestone"
+          }
+        },
+        "summary": "Payout destination (Connect onboarding handoff is component 3)",
+        "tags": [
+          "portal"
+        ]
+      }
+    },
+    "/portal/{token}/photos": {
+      "post": {
+        "operationId": "portal_photo_portal__token__photos_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "token",
+            "required": true,
+            "schema": {
+              "title": "Token",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_portal_photo_portal__token__photos_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Photo"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "contract final, implementation in a later milestone"
+          }
+        },
+        "summary": "Upload a photo (multipart); sha256 and pHash computed server-side",
+        "tags": [
+          "portal"
+        ]
+      }
+    },
+    "/portal/{token}/submit": {
+      "post": {
+        "operationId": "portal_submit_portal__token__submit_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "token",
+            "required": true,
+            "schema": {
+              "title": "Token",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PortalSubmit"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PortalView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "contract final, implementation in a later milestone"
+          }
+        },
+        "summary": "Submit claim fields",
+        "tags": [
+          "portal"
+        ]
+      }
+    },
+    "/readyz": {
+      "get": {
+        "operationId": "readyz_readyz_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Readyz",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/v1/billing/checkout": {
+      "post": {
+        "operationId": "checkout_v1_billing_checkout_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckoutSession"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "contract final, implementation in a later milestone"
+          }
+        },
+        "summary": "Stripe Checkout session for the growth plan",
+        "tags": [
+          "billing (component 3)"
+        ]
+      }
+    },
+    "/v1/billing/portal": {
+      "post": {
+        "operationId": "customer_portal_v1_billing_portal_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckoutSession"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "contract final, implementation in a later milestone"
+          }
+        },
+        "summary": "Stripe Customer Portal session",
+        "tags": [
+          "billing (component 3)"
+        ]
+      }
+    },
+    "/v1/claims/{claim_id}": {
+      "get": {
+        "operationId": "get_claim_v1_claims__claim_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "claim_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Claim Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClaimDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Claim with photos, decision, latest run, clusters, payout, audit trail",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/claims/{claim_id}/actions": {
+      "post": {
+        "operationId": "claim_action_v1_claims__claim_id__actions_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "claim_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Claim Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClaimAction"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClaimDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "contract final, implementation in a later milestone"
+          }
+        },
+        "summary": "Reviewer action: resume_override, request_info, mark_fraud (writes audit_log)",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/claims/{claim_id}/photos/{photo_id}": {
+      "get": {
+        "operationId": "get_photo_v1_claims__claim_id__photos__photo_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "claim_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Claim Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "photo_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Photo Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "image/jpeg": {}
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Photo bytes (dev stand-in for a signed storage URL)",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/claims/{claim_id}/trace": {
+      "get": {
+        "operationId": "get_trace_v1_claims__claim_id__trace_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "claim_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Claim Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Trace"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "agent_steps of the claim's latest run (docs/contracts/trace.md)",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/programs": {
+      "get": {
+        "operationId": "list_programs_v1_programs_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProgramList"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "summary": "List the firm's recall programs",
+        "tags": [
+          "firm"
+        ]
+      },
+      "post": {
+        "operationId": "create_program_v1_programs_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProgramCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Program"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "contract final, implementation in a later milestone"
+          }
+        },
+        "summary": "Open a program from a recall; runs rule extraction and returns rules for review",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/programs/{program_id}": {
+      "get": {
+        "operationId": "get_program_v1_programs__program_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "program_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Program Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Program"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Program with rules",
+        "tags": [
+          "firm"
+        ]
+      },
+      "patch": {
+        "operationId": "patch_program_v1_programs__program_id__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "program_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Program Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProgramPatch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Program"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "contract final, implementation in a later milestone"
+          }
+        },
+        "summary": "Edit rules, threshold, or status",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/programs/{program_id}/claims": {
+      "get": {
+        "operationId": "list_claims_v1_programs__program_id__claims_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "program_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Program Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "draft",
+                    "submitted",
+                    "needs_info",
+                    "under_review",
+                    "approved",
+                    "denied",
+                    "flagged",
+                    "capped",
+                    "paid",
+                    "closed"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClaimPage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Claims queue, oldest first, with a status filter and keyset cursor",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/programs/{program_id}/claims/issue": {
+      "post": {
+        "operationId": "issue_links_v1_programs__program_id__claims_issue_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "program_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Program Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IssueRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IssueResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "contract final, implementation in a later milestone"
+          }
+        },
+        "summary": "Issue n single-claim portal links for distribution",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/programs/{program_id}/mpr": {
+      "get": {
+        "operationId": "get_mpr_v1_programs__program_id__mpr_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "program_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Program Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "period",
+            "required": true,
+            "schema": {
+              "pattern": "^\\d{4}-\\d{2}$",
+              "title": "Period",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MprReport"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "contract final, implementation in a later milestone"
+          }
+        },
+        "summary": "MPR for a period (YYYY-MM)",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/programs/{program_id}/mpr/generate": {
+      "post": {
+        "operationId": "generate_mpr_v1_programs__program_id__mpr_generate_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "program_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Program Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "period",
+            "required": true,
+            "schema": {
+              "pattern": "^\\d{4}-\\d{2}$",
+              "title": "Period",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MprReport"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "contract final, implementation in a later milestone"
+          }
+        },
+        "summary": "Generate the MPR for a period",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/programs/{program_id}/mpr/{report_id}.pdf": {
+      "get": {
+        "operationId": "mpr_pdf_v1_programs__program_id__mpr__report_id__pdf_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "program_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Program Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "report_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Report Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              },
+              "application/pdf": {}
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "501": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "contract final, implementation in a later milestone"
+          }
+        },
+        "summary": "MPR as PDF",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/recalls": {
+      "get": {
+        "operationId": "search_recalls_v1_recalls_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "in": "query",
+            "name": "since",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Since"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecallPage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Search the public recall archive (full text)",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/usage": {
+      "get": {
+        "operationId": "get_usage_v1_usage_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Usage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "summary": "Current period meters (read by the billing UI)",
+        "tags": [
+          "firm"
+        ]
+      }
+    }
+  }
+}

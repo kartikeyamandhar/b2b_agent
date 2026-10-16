@@ -213,15 +213,15 @@ def render(summary: dict[str, Any], violations: dict[str, dict[str, Any]], first
     return "\n".join(lines) + "\n"
 
 
-def main() -> dict[str, Any]:
+def main(results_dir: Path = RESULTS_DIR) -> dict[str, Any]:
     rows, _ = run()
     summary = summarize(rows)
     violations = per_violation(rows)
     first_rows, _ = run(phash_kinds=FIRST_RUN_PHASH_KINDS)
     first_run = summarize(first_rows)
-    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-    (RESULTS_DIR / "adjudication.md").write_text(render(summary, violations, first_run), encoding="utf-8")
-    (RESULTS_DIR / "adjudication.json").write_text(
+    results_dir.mkdir(parents=True, exist_ok=True)
+    (results_dir / "adjudication.md").write_text(render(summary, violations, first_run), encoding="utf-8")
+    (results_dir / "adjudication.json").write_text(
         json.dumps({"rules_only": summary, "rules_only_first_run": first_run, "per_violation": violations}, indent=1)
         + "\n",
         encoding="utf-8",

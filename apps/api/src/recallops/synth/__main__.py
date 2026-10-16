@@ -60,10 +60,11 @@ def label_record(c: SynthClaim) -> dict[str, Any]:
     }
 
 
-def build_golden(out_dir: Path = ADJ_DIR, photo_dir: Path = PHOTO_DIR) -> dict[str, Any]:
+def build_golden(out_dir: Path = ADJ_DIR, photo_dir: Path = PHOTO_DIR, limit: int | None = None) -> dict[str, Any]:
     planted = load_yaml(out_dir / "planted.yaml")
     policy = load_yaml(out_dir / "outcome_policy.yaml")
     notices = [n for n in load_golden(REPO_ROOT / "evals" / "extraction" / "golden_notices.json") if n.synth_source]
+    notices = notices[:limit] if limit else notices
     claims: list[SynthClaim] = []
     for notice in notices:
         claims += generate_program(

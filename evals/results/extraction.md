@@ -1,6 +1,6 @@
 # Extraction eval
 
-Generated 2026-10-16 22:24 UTC by `make eval`. Pre-registration: evals/extraction/PREREG.md.
+Generated 2026-10-16 22:56 UTC by `make eval`. Pre-registration: evals/extraction/PREREG.md.
 
 - Golden set: 40 notices, **model-labeled, unaudited** (labeled blind in session 1 before either extractor existed; the owner audits them in M2).
 - Baseline: rules/baseline.py 1.0.0. It was developed on the 15 baseline-test notices, which are inside the golden set, so the 25 held-out notices are the fair baseline number.

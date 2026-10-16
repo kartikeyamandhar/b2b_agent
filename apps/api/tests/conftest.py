@@ -6,7 +6,9 @@ Tests never call a model: LLM_MODE is forced to fake and the API key is removed 
 from __future__ import annotations
 
 import os
+import tempfile
 from collections.abc import Iterator
+from pathlib import Path
 
 import pytest
 from sqlalchemy import Engine, text
@@ -17,9 +19,22 @@ os.environ.pop("ANTHROPIC_API_KEY", None)
 os.environ.setdefault("APP_ENV", "test")
 
 from recallops.db.engine import build_engine
-from recallops.settings import get_settings
+from recallops.settings import Settings, get_settings
 
 TEST_DB = "recallops_test"
+
+
+def _point_settings_at_test_db() -> None:
+    """Everything that reads settings (API engines, seed, tracing) uses the test database and temp storage."""
+    base = Settings()
+    for name in ("database_url", "database_url_internal", "database_url_owner"):
+        url = make_url(getattr(base, name)).set(database=TEST_DB).render_as_string(hide_password=False)
+        os.environ[name.upper()] = url
+    os.environ.setdefault("STORAGE_DIR", str(Path(tempfile.gettempdir()) / "recallops-test-storage"))
+    get_settings.cache_clear()
+
+
+_point_settings_at_test_db()
 
 # Delete order respects foreign keys. Runs as recallops_internal (BYPASSRLS).
 CLEAN_ORDER = (

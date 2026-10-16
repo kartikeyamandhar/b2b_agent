@@ -7,6 +7,7 @@ from __future__ import annotations
 import json
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
+from pathlib import Path
 from typing import Any
 
 from recallops.evals.golden import GoldenNotice, load_golden, notice_text
@@ -138,7 +139,7 @@ def estimate_live_cost(notices: list[GoldenNotice], settings: Settings) -> str:
     return f"{worst:.4f}"
 
 
-def main() -> dict[str, Any]:
+def main(results_dir: Path = RESULTS_DIR) -> dict[str, Any]:
     settings = get_settings()
     notices = load_golden(EXTRACTION_DIR / "golden_notices.json")
     texts = {n.source_id: notice_text(EXTRACTION_DIR / "notices", n.source_id) for n in notices}
@@ -167,8 +168,8 @@ def main() -> dict[str, Any]:
         f"\nWorst-case cost of one live recording run of the graph on these {len(notices)} notices "
         f"(conservative token estimate, {settings.extract_max_calls} calls each): {estimate} USD.\n"
     )
-    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-    (RESULTS_DIR / "extraction.md").write_text(md, encoding="utf-8")
+    results_dir.mkdir(parents=True, exist_ok=True)
+    (results_dir / "extraction.md").write_text(md, encoding="utf-8")
     payload = {
         "label_status": notices[0].label_status,
         "n": len(notices),
@@ -182,7 +183,7 @@ def main() -> dict[str, Any]:
         "graph_cost_usd": graph_run.cost_usd,
         "live_run_worst_case_usd": estimate,
     }
-    (RESULTS_DIR / "extraction.json").write_text(json.dumps(payload, indent=1) + "\n", encoding="utf-8")
+    (results_dir / "extraction.json").write_text(json.dumps(payload, indent=1) + "\n", encoding="utf-8")
     return payload
 
 
