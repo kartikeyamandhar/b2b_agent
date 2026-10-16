@@ -164,9 +164,7 @@ def test_windows_cover_range_without_gaps() -> None:
 
 
 def _client(handler: Any) -> CpscClient:
-    return CpscClient(
-        httpx.Client(transport=httpx.MockTransport(handler)), "https://example.test/Recall", backoff_s=0
-    )
+    return CpscClient(httpx.Client(transport=httpx.MockTransport(handler)), "https://example.test/Recall", backoff_s=0)
 
 
 def test_client_returns_records_and_sends_window_params() -> None:

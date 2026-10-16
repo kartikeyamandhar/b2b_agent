@@ -42,16 +42,12 @@ class FirmsRepo(TenantRepo):
 class ProgramsRepo(TenantRepo):
     def list(self) -> list[RecallProgram]:
         stmt = (
-            select(RecallProgram)
-            .where(RecallProgram.firm_id == self.firm_id)
-            .order_by(RecallProgram.created_at.desc())
+            select(RecallProgram).where(RecallProgram.firm_id == self.firm_id).order_by(RecallProgram.created_at.desc())
         )
         return list(self.session.scalars(stmt))
 
     def get(self, program_id: UUID) -> RecallProgram | None:
-        stmt = select(RecallProgram).where(
-            RecallProgram.id == program_id, RecallProgram.firm_id == self.firm_id
-        )
+        stmt = select(RecallProgram).where(RecallProgram.id == program_id, RecallProgram.firm_id == self.firm_id)
         return self.session.scalars(stmt).first()
 
     def claim_status_counts(self, program_id: UUID) -> dict[str, int]:
@@ -136,7 +132,5 @@ class RunsRepo(TenantRepo):
 
 class UsageRepo(TenantRepo):
     def for_period(self, period_start: date) -> UsageMeter | None:
-        stmt = select(UsageMeter).where(
-            UsageMeter.firm_id == self.firm_id, UsageMeter.period_start == period_start
-        )
+        stmt = select(UsageMeter).where(UsageMeter.firm_id == self.firm_id, UsageMeter.period_start == period_start)
         return self.session.scalars(stmt).first()

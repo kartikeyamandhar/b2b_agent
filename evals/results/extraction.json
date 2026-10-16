@@ -1,0 +1,47 @@
+{
+ "label_status": "model-labeled, unaudited",
+ "n": 40,
+ "baseline_all": {
+  "n": 40,
+  "per_field": {
+   "models": 74.2,
+   "serial_ranges": 97.5,
+   "date_codes": 90.0,
+   "sold_at": 87.3,
+   "sold_from": 100.0,
+   "sold_to": 100.0,
+   "price_range_cents": 100.0,
+   "units_affected": 97.5,
+   "remedy_type": 100.0,
+   "has_destruction_instruction": 100.0,
+   "registration_url": 100.0
+  },
+  "headline": 95.1,
+  "span_grounded_rate": 1.0
+ },
+ "baseline_heldout": {
+  "n": 25,
+  "per_field": {
+   "models": 66.7,
+   "serial_ranges": 96.0,
+   "date_codes": 84.0,
+   "sold_at": 79.7,
+   "sold_from": 100.0,
+   "sold_to": 100.0,
+   "price_range_cents": 100.0,
+   "units_affected": 96.0,
+   "remedy_type": 100.0,
+   "has_destruction_instruction": 100.0,
+   "registration_url": 100.0
+  },
+  "headline": 92.9,
+  "span_grounded_rate": 1.0
+ },
+ "graph_status": "not run",
+ "graph_reason": "no successful extraction ({'failed': 40}); replay recordings missing",
+ "graph_all": null,
+ "graph_heldout": null,
+ "graph_calls": 0,
+ "graph_cost_usd": "0.000000",
+ "live_run_worst_case_usd": "0.1132"
+}

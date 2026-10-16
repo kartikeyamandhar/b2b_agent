@@ -153,9 +153,7 @@ def test_updates_and_deletes_of_firm_b_affect_zero_rows(
             assert canary >= 1, f"firm B rows in {table} must survive"
 
 
-def test_app_role_cannot_delete_audit_rows(
-    app_engine_test: Engine, two_firms: tuple[FirmRows, FirmRows]
-) -> None:
+def test_app_role_cannot_delete_audit_rows(app_engine_test: Engine, two_firms: tuple[FirmRows, FirmRows]) -> None:
     a, _ = two_firms
     with (
         pytest.raises(ProgrammingError, match="permission denied"),
@@ -223,9 +221,7 @@ def test_repository_scoping_holds_even_without_rls(
         assert ProgramsRepo(session, ctx(a)).get(b.program_id) is None
 
 
-def test_agent_step_firm_must_match_its_run(
-    internal_engine_test: Engine, two_firms: tuple[FirmRows, FirmRows]
-) -> None:
+def test_agent_step_firm_must_match_its_run(internal_engine_test: Engine, two_firms: tuple[FirmRows, FirmRows]) -> None:
     a, b = two_firms
     with (
         pytest.raises(DBAPIError, match=r"must equal agent_runs\.firm_id"),

@@ -48,9 +48,7 @@ def test_baseline_matches_gold_on_test_notice(notice: GoldenNotice) -> None:
 
 
 def test_headline_on_test_subset() -> None:
-    pairs = [
-        (n.rules, extract(t), t) for n in TEST_NOTICES for t in [notice_text(Path(NOTICES), n.source_id)]
-    ]
+    pairs = [(n.rules, extract(t), t) for n in TEST_NOTICES for t in [notice_text(Path(NOTICES), n.source_id)]]
     table = score(pairs)
     assert table.headline >= 98.0
     assert table.span_grounded_rate == 1.0

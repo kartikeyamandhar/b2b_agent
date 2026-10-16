@@ -173,13 +173,9 @@ def _date_codes(b: _Builder, ev: list[Span]) -> list[DateCodeRule]:
     for m in _DATE_CODE.finditer(desc):
         out.append(DateCodeRule(format="date code", start=m.group(1), end=m.group(2), raw=m.group(0)))
     for m in _MANUFACTURED.finditer(desc):
-        out.append(
-            DateCodeRule(format="Month YYYY", start=m.group(1), end=m.group(2) or m.group(1), raw=m.group(0))
-        )
+        out.append(DateCodeRule(format="Month YYYY", start=m.group(1), end=m.group(2) or m.group(1), raw=m.group(0)))
     for m in _MODEL_YEARS.finditer(desc):
-        out.append(
-            DateCodeRule(format="model year", start=m.group(1), end=m.group(2) or m.group(1), raw=m.group(0))
-        )
+        out.append(DateCodeRule(format="model year", start=m.group(1), end=m.group(2) or m.group(1), raw=m.group(0)))
     for rule in out:
         span = b.span("date_codes", rule.raw, offset)
         if span:
@@ -190,9 +186,7 @@ def _date_codes(b: _Builder, ev: list[Span]) -> list[DateCodeRule]:
 def _sold_at(b: _Builder, ev: list[Span]) -> list[str]:
     body, offset = b.section("SOLD AT")
     head = re.split(rf"\b(?:from|between|since) (?:{_MONTH_RE}|\d{{4}})", body, maxsplit=1)[0]
-    head = re.sub(
-        r"^(?:Sold )?(?:Online )?(?:exclusively )?(?:online )?(?:at|on)?:?\s*", "", head, flags=re.I
-    )
+    head = re.sub(r"^(?:Sold )?(?:Online )?(?:exclusively )?(?:online )?(?:at|on)?:?\s*", "", head, flags=re.I)
     pieces = re.split(r",|;|\band\b|\bonline at\b|\bonline\b|\bat\b|\.\s", head)
     sellers: list[str] = []
     for piece in pieces:

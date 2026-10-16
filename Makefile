@@ -19,7 +19,7 @@ PY := $(RUN) python
 PSQL := docker compose exec -T db psql -U postgres -v ON_ERROR_STOP=1 -q
 DATABASES := recallops recallops_test
 
-.PHONY: help setup db-up db-bootstrap migrate downgrade api dev seed test lint format typecheck check eval ingest openapi
+.PHONY: help setup db-up db-bootstrap migrate downgrade api dev seed test lint format typecheck check eval ingest label openapi
 
 help: ## List targets
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-14s %s\n", $$1, $$2}'
@@ -75,6 +75,9 @@ check: lint typecheck test ## Everything CI runs for the backend
 
 eval: ## Run every eval in replay mode and rewrite evals/results/*.md
 	$(PY) -m recallops.evals.run_all
+
+label: ## Owner audit or blind labeling of golden notices: make label ARGS="--audit --source-id 24082"
+	$(PY) evals/extraction/label.py $(ARGS)
 
 openapi: ## Regenerate docs/contracts/openapi.json from the app
 	$(PY) -m recallops.api.export_openapi docs/contracts/openapi.json

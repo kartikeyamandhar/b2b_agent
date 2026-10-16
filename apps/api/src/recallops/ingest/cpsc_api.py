@@ -97,9 +97,7 @@ def parse_record(record: Mapping[str, Any]) -> ParsedRecall:
     title = clean(record.get("Title"))
     if not title:
         raise CpscRecordError(f"record {source_id} has no title")
-    products: Sequence[Mapping[str, Any]] = [
-        p for p in record.get("Products") or [] if isinstance(p, Mapping)
-    ]
+    products: Sequence[Mapping[str, Any]] = [p for p in record.get("Products") or [] if isinstance(p, Mapping)]
     category = clean(str(products[0].get("Type") or "")) if products else ""
     last_publish = record.get("LastPublishDate")
     source_text = build_source_text(record)
@@ -162,9 +160,7 @@ class CpscClient:
                     except ValueError as exc:
                         raise CpscResponseError(f"non-JSON body for {start}..{end}") from exc
                     if not isinstance(body, list):
-                        raise CpscResponseError(
-                            f"body is {type(body).__name__}, not a list, for {start}..{end}"
-                        )
+                        raise CpscResponseError(f"body is {type(body).__name__}, not a list, for {start}..{end}")
                     log_event(
                         log,
                         "cpsc_window_fetched",

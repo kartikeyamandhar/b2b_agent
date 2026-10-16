@@ -98,9 +98,7 @@ def upsert_record(session: Session, raw: Mapping[str, Any], counts: RunCounts) -
                 counts.unchanged += 1
             else:
                 session.execute(
-                    update(Recall)
-                    .where(Recall.id == existing.id)
-                    .values(**values, updated_at=datetime.now(UTC))
+                    update(Recall).where(Recall.id == existing.id).values(**values, updated_at=datetime.now(UTC))
                 )
                 counts.updated += 1
     except SQLAlchemyError as exc:
@@ -198,9 +196,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--until", type=date.fromisoformat, default=None)
     args = parser.parse_args(argv)
     configure(get_settings().log_level)
-    batches = (
-        window_files(args.from_dir) if args.from_dir else api_batches(args.since, args.until or date.today())
-    )
+    batches = window_files(args.from_dir) if args.from_dir else api_batches(args.since, args.until or date.today())
     run_id, counts = run(batches, internal_engine(), args.source)
     print(json.dumps({"run_id": str(run_id), **asdict(counts), "balanced": counts.balanced()}))
     return 0 if counts.balanced() and counts.failed == 0 else 1

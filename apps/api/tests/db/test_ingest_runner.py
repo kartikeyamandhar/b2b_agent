@@ -62,9 +62,7 @@ def test_bad_records_are_counted_not_dropped(clean_db: Engine) -> None:
     assert (counts.fetched, counts.inserted, counts.failed) == (7, 5, 2)
     assert counts.balanced()
     with clean_db.connect() as conn:
-        row = conn.execute(
-            text("SELECT status, failed, error FROM feed_runs WHERE id = :id"), {"id": run_id}
-        ).one()
+        row = conn.execute(text("SELECT status, failed, error FROM feed_runs WHERE id = :id"), {"id": run_id}).one()
     assert row.status == "partial"
     assert row.failed == 2
 
