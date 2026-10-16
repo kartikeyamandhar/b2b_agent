@@ -41,7 +41,7 @@ run_id c47d52d2-9570-4d2b-b454-472615547bce: 1,657 fetched, 0 inserted, 0 update
 status | fetched | inserted | updated | unchanged | failed | seconds
 done   | 1657    | 1657     | 0       | 0         | 0      | 4.21
 done   | 1657    | 0        | 0       | 1657      | 0      | 1.32
-done   | 76      | 0        | 0       | 76        | 0      | 3.26
+done   | 76      | 0        | 0       | 76        | 0      | 3.25
 ```
 
 Not yet traced: the nightly GitHub Actions cron calling POST /internal/feeds/pull (M2), which will append a trace here.
