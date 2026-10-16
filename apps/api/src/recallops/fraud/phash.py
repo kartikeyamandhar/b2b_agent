@@ -21,7 +21,8 @@ def _dct_matrix() -> npt.NDArray[np.float64]:
     i = np.arange(n).reshape(1, -1)
     m = np.cos(np.pi * (2 * i + 1) * k / (2 * n)) * np.sqrt(2 / n)
     m[0, :] = np.sqrt(1 / n)
-    return m
+    result: npt.NDArray[np.float64] = m.astype(np.float64)
+    return result
 
 
 def phash_image(image: Image.Image) -> str:

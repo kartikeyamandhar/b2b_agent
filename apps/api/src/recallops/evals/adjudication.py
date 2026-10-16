@@ -160,7 +160,8 @@ def _row(name: str, s: dict[str, Any]) -> str:
     return (
         f"| {name} | {s['n']} | {s['outcome_accuracy']:.3f} | {s['macro_f1']:.3f} | {s['approval_accuracy']:.3f} | "
         f"{s['fraud_precision']:.3f} | {s['fraud_recall']:.3f} | {s['needs_info_precision']:.3f} | "
-        f"{s['share_routed_to_human']:.3f} | {s['mean_steps']:.1f} | {s['mean_cost_usd']:.4f} | {s['p50_seconds']:.4f} |"
+        f"{s['share_routed_to_human']:.3f} | {s['mean_steps']:.1f} | {s['mean_cost_usd']:.4f} | "
+        f"{s['p50_seconds']:.4f} |"
     )
 
 
