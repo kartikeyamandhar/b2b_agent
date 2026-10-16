@@ -96,4 +96,4 @@ Provenance for every downloaded file. data/raw/ is gitignored except this file; 
 - Size: 6,847,220 bytes; 8,445 lines including the header
 - sha256: 269d75082641c609e81bf2dd45ac6e29a71760450dfeebbbeb0a477687bc3e9f
 - Columns: recall_date, recall_number, title, products, hazard, remedy, retailers, units, url
-- Comparison against the API archive: RECALLBENCH_COMPARISON_PENDING
+- Comparison against the API archive (2026-10-16, `python -m recallops.ingest.recallbench --csv data/raw/recallbench/cpsc-recalls-full.csv --archive data/raw/cpsc`): 30 rows sampled at seed 20261016 from Recall Bench rows dated inside the archive window (2022-08-04 to 2026-10-15); recall number (digits only), recall date, and canonicalized title compared with the API record. Result: 0 of 30 missing from the API, 0 number, 0 date, 0 title mismatches. Mismatch rate 0.0 percent (stop threshold 2 percent).

@@ -7,7 +7,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Literal
 
-from pydantic import Field
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
@@ -99,6 +99,12 @@ class Settings(BaseSettings):
     # Adjudication defaults.
     phash_duplicate_bits: int = Field(6)
     default_value_threshold_cents: int = Field(10_000)
+
+    @field_validator("storage_dir", "replay_dir")
+    @classmethod
+    def _repo_relative(cls, value: Path) -> Path:
+        """Relative paths in .env are relative to the repository root, not the process cwd."""
+        return value if value.is_absolute() else REPO_ROOT / value
 
 
 @lru_cache(maxsize=1)

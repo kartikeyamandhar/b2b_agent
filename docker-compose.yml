@@ -1,0 +1,23 @@
+# Local Postgres for RecallOps. M1 uses postgres:16 (16.14) because no M1 table needs pgvector;
+# the M2 migration that creates document_chunks switches this image to pgvector/pgvector:pg16.
+name: recallops
+
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_SUPERUSER_PASSWORD:-postgres-dev-only}
+      POSTGRES_DB: postgres
+    ports:
+      - "${POSTGRES_PORT:-55432}:5432"
+    volumes:
+      - recallops_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  recallops_pg:
