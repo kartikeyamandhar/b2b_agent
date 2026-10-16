@@ -1,0 +1,88 @@
+[project]
+name = "recallops"
+version = "0.1.0"
+description = "RecallOps backend: recall ingestion, rule extraction, claim adjudication, evals"
+requires-python = ">=3.13,<3.14"
+# Exact pins from CLAUDE.md (Stack). Upgrade only by a logged decision.
+dependencies = [
+    "fastapi==0.143.3",
+    "uvicorn==0.54.0",
+    "langgraph==1.2.15",
+    "langgraph-checkpoint-postgres==3.2.0",
+    "langchain-core==1.6.12",
+    "langchain-anthropic==1.7.6",
+    "sqlalchemy==2.1.5",
+    "alembic==1.20.0",
+    "psycopg==3.3.6",
+    "pgvector==0.5.1",
+    "polars==2.0.0",
+    "pydantic==2.14.1",
+    "pydantic-settings==2.16.0",
+    "httpx==0.28.1",
+    "pyjwt==2.15.1",
+    "networkx==3.7",
+    "python-multipart==0.0.32",
+    "stripe==16.0.0",
+    "anthropic==1.15.0",
+    "fastexcel==0.21.0",
+    "pillow==12.3.0",
+    "numpy==2.5.4",
+    "pyyaml==6.0.3",
+]
+
+[dependency-groups]
+dev = [
+    "ruff==0.17.1",
+    "mypy==2.4.0",
+    "pytest==9.1.1",
+    "pytest-cov==7.1.0",
+]
+
+[tool.uv]
+# Not built or installed as a distribution: building would need an unpinned build backend.
+# Code is importable through PYTHONPATH=src (Makefile, pytest pythonpath, mypy_path).
+package = false
+
+[tool.ruff]
+line-length = 110
+target-version = "py313"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF", "TID", "BLE"]
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+"pandas".msg = "Polars only (CLAUDE.md invariant 11)."
+"anthropic".msg = "Model calls go through recallops.llm so the cost meter checks them first."
+"langchain_anthropic".msg = "Model calls go through recallops.llm so the cost meter checks them first."
+
+[tool.ruff.lint.per-file-ignores]
+"src/recallops/llm/**" = ["TID251"]
+"tests/contract/**" = ["TID251"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+mypy_path = "src"
+explicit_package_bases = true
+plugins = ["pydantic.mypy"]
+files = ["src", "tests"]
+
+[[tool.mypy.overrides]]
+module = ["yaml", "yaml.*", "networkx", "networkx.*", "fastexcel", "pgvector.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+markers = [
+    "db: needs the docker compose Postgres (make db-up && make migrate)",
+    "contract: API-shape probes for the pinned libraries",
+]
+
+[tool.coverage.run]
+source = ["src/recallops"]
+
+[tool.coverage.report]
+skip_empty = true

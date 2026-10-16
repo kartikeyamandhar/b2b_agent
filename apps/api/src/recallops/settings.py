@@ -1,0 +1,106 @@
+"""Application settings. Every variable is documented here and listed in .env.example with a fake value."""
+
+from __future__ import annotations
+
+from decimal import Decimal
+from functools import lru_cache
+from pathlib import Path
+from typing import Literal
+
+from pydantic import Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+REPO_ROOT = Path(__file__).resolve().parents[4]
+
+
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=REPO_ROOT / ".env", env_file_encoding="utf-8", extra="ignore", frozen=True
+    )
+
+    app_env: Literal["dev", "test", "prod"] = Field("dev", description="Deployment environment.")
+    log_level: str = Field("INFO", description="Root log level for JSON-lines logs.")
+
+    # Database. Three roles (CLAUDE.md invariant 2): app (API, RLS enforced), internal (jobs, BYPASSRLS),
+    # owner (migrations, owns tables).
+    database_url: str = Field(
+        "postgresql://recallops_app:app-dev-only@localhost:55432/recallops",
+        description="libpq URL for recallops_app, the API's only role.",
+    )
+    database_url_internal: str = Field(
+        "postgresql://recallops_internal:internal-dev-only@localhost:55432/recallops",
+        description="libpq URL for recallops_internal (BYPASSRLS), used by jobs only.",
+    )
+    database_url_owner: str = Field(
+        "postgresql://recallops_owner:owner-dev-only@localhost:55432/recallops",
+        description="libpq URL for recallops_owner, used by migrations only.",
+    )
+
+    # Auth seam (component 4 replaces the provider).
+    auth_provider: Literal["dev", "clerk"] = Field("dev", description="dev reads X-Dev-* headers.")
+    clerk_secret_key: str = Field("sk_test_fake", description="Clerk secret key (login owner).")
+    clerk_publishable_key: str = Field("pk_test_fake", description="Clerk publishable key.")
+    clerk_jwks_url: str = Field("https://example.clerk.accounts.dev/.well-known/jwks.json")
+    clerk_allowed_origins: str = Field("http://localhost:3000", description="Comma-separated azp values.")
+    claim_token_secret: str = Field("ZmFrZS1jbGFpbS10b2tlbi1zZWNyZXQtMzItYnl0ZXM=")
+
+    # Payments seam (component 3).
+    stripe_secret_key: str = Field("sk_test_fake", description="Stripe test-mode secret key only.")
+    stripe_publishable_key: str = Field("pk_test_fake")
+    stripe_webhook_secret: str = Field("whsec_fake")
+    stripe_api_version: str = Field("2026-09-30.fake", description="Pinned Stripe API version.")
+
+    internal_shared_secret: str = Field("internal-dev-only", description="Header secret for /internal/*.")
+
+    # Ingestion.
+    cpsc_api_base: str = Field("https://www.saferproducts.gov/RestWebServices/Recall")
+    http_user_agent: str = Field("RecallOps research (student project)")
+    cpsc_timeout_s: float = Field(30.0)
+    cpsc_window_days: int = Field(30)
+    cpsc_pause_s: float = Field(2.0)
+    recallbench_url: str = Field("https://recallbench.com/data/cpsc-recalls-full.csv")
+
+    # Model. Prices are documented defaults from the phase 0 decision (CLAUDE.md decisions log).
+    llm_mode: Literal["fake", "replay", "live"] = Field("replay", description="live needs owner approval.")
+    llm_model_id: str = Field("claude-haiku-5-5")
+    anthropic_api_key: str = Field("sk-ant-fake", description="Real key only in .env, never committed.")
+    llm_price_input_per_mtok_usd: Decimal = Field(Decimal("0.10"))
+    llm_price_output_per_mtok_usd: Decimal = Field(Decimal("0.50"))
+    llm_price_long_context_threshold_tokens: int = Field(100_000)
+    llm_price_input_long_per_mtok_usd: Decimal = Field(Decimal("0.50"))
+    llm_price_output_long_per_mtok_usd: Decimal = Field(Decimal("2.50"))
+    llm_prices_checked_on: str = Field("2026-10-06", description="Date of the price source.")
+    llm_chars_per_token_estimate: float = Field(2.0, description="Conservative: overestimates tokens.")
+    llm_image_patch_px: int = Field(28, description="One image token per patch of this many pixels square.")
+    llm_max_output_tokens: int = Field(2048)
+    llm_timeout_s: float = Field(30.0)
+    llm_budget_stop_usd: Decimal = Field(Decimal("2.00"), description="Global stop; M1 budget is 2 USD.")
+    llm_budget_warn_usd: Decimal = Field(Decimal("1.50"))
+    llm_spend_carried_usd: Decimal = Field(Decimal("0"), description="Spend not visible in agent_steps.")
+    replay_dir: Path = Field(REPO_ROOT / "evals" / "recordings")
+
+    # Caps (CLAUDE.md invariant 4) and extraction caps.
+    run_cap_steps: int = Field(8)
+    run_cap_usd: Decimal = Field(Decimal("0.02"))
+    run_cap_seconds: float = Field(60.0)
+    extract_run_cap_usd: Decimal = Field(Decimal("0.01"))
+    extract_max_calls: int = Field(2)
+
+    # Embeddings (M2; provisional, see decisions log).
+    embedding_model_id: str = Field("voyage-3.5-lite")
+    embedding_dim: int = Field(1024)
+
+    # Storage for claim photos. Local directory in dev; Supabase private bucket in prod.
+    storage_dir: Path = Field(REPO_ROOT / "data" / "generated" / "storage")
+    supabase_url: str = Field("https://example.supabase.co")
+    supabase_service_key: str = Field("fake-service-key")
+    supabase_bucket: str = Field("claim-photos")
+
+    # Adjudication defaults.
+    phash_duplicate_bits: int = Field(6)
+    default_value_threshold_cents: int = Field(10_000)
+
+
+@lru_cache(maxsize=1)
+def get_settings() -> Settings:
+    return Settings()
