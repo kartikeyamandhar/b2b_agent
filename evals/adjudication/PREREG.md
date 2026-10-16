@@ -27,3 +27,10 @@ Committed before the rules-only adjudicator is run on the golden claims. Changes
 - The rules-only adjudicator has no vision, so destruction_not_shown with subtype intact cannot be caught in M1 (expected recall 0 on that subtype); missing and label_reupload should be caught.
 - Duplicate detection uses sha256 and a 6-bit pHash threshold; near-duplicate photo copies are planted only when their pHash distance is 6 or less, so planted photo duplicates should be caught.
 - The kill criterion cannot be evaluated in M1: there is no agent row yet. adjudication.md says so in its header.
+
+## Revision 1 (2026-10-16, after the first rules-only run)
+
+Two changes, each reported rather than folded in silently:
+
+1. Tool change, tools 1.0.0 to 1.0.1. The first run flagged 44 legitimate claims. All 82 false duplicate hits were receipt photos matched by pHash: receipts are template documents, and pHash ignores the text that tells two of them apart. check_duplicates now matches receipts on exact bytes (sha256) only; label and destruction photos keep the 6-bit pHash threshold. adjudication.md shows both rows.
+2. Golden set v1.0 to v1.1. A unit test found 3 mislabeled claims: two serial_out_of_range claims on notice 25126 whose serials were in fact inside a wrap-around range (the generator found no outside value and kept the in-range serial), and one date_code_out_of_range claim on notice 24118 ("8/21", a one-digit month the generator could not parse). The generator now searches harder for an outside value and drops a violation it cannot build. Regenerating changed exactly those 3 claims; every other claim and the composition (102 approve, 87 deny, 72 flag, 39 needs_info) are identical.

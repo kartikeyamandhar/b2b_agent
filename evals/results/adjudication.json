@@ -1,0 +1,211 @@
+{
+ "rules_only": {
+  "n": 300,
+  "outcome_accuracy": 0.9867,
+  "macro_f1": 0.9817,
+  "approval_accuracy": 0.9867,
+  "fraud_precision": 1.0,
+  "fraud_recall": 1.0,
+  "needs_info_precision": 1.0,
+  "share_routed_to_human": 0.2533,
+  "mean_steps": 7,
+  "mean_cost_usd": 0.0,
+  "p50_seconds": 9e-05,
+  "per_class": {
+   "approve": {
+    "tp": 102,
+    "fp": 4,
+    "fn": 0,
+    "f1": 0.9808,
+    "precision": 0.9623,
+    "recall": 1.0
+   },
+   "deny": {
+    "tp": 87,
+    "fp": 0,
+    "fn": 0,
+    "f1": 1.0,
+    "precision": 1.0,
+    "recall": 1.0
+   },
+   "needs_info": {
+    "tp": 35,
+    "fp": 0,
+    "fn": 4,
+    "f1": 0.9459,
+    "precision": 1.0,
+    "recall": 0.8974
+   },
+   "flag": {
+    "tp": 72,
+    "fp": 0,
+    "fn": 0,
+    "f1": 1.0,
+    "precision": 1.0,
+    "recall": 1.0
+   }
+  },
+  "confusion": {
+   "approve": {
+    "approve": 102
+   },
+   "deny": {
+    "deny": 87
+   },
+   "needs_info": {
+    "needs_info": 35,
+    "approve": 4
+   },
+   "flag": {
+    "flag": 72
+   }
+  }
+ },
+ "rules_only_first_run": {
+  "n": 300,
+  "outcome_accuracy": 0.8433,
+  "macro_f1": 0.8496,
+  "approval_accuracy": 0.92,
+  "fraud_precision": 0.6207,
+  "fraud_recall": 1.0,
+  "needs_info_precision": 1.0,
+  "share_routed_to_human": 0.3933,
+  "mean_steps": 7,
+  "mean_cost_usd": 0.0,
+  "p50_seconds": 9e-05,
+  "per_class": {
+   "approve": {
+    "tp": 81,
+    "fp": 3,
+    "fn": 21,
+    "f1": 0.871,
+    "precision": 0.9643,
+    "recall": 0.7941
+   },
+   "deny": {
+    "tp": 70,
+    "fp": 0,
+    "fn": 17,
+    "f1": 0.8917,
+    "precision": 1.0,
+    "recall": 0.8046
+   },
+   "needs_info": {
+    "tp": 30,
+    "fp": 0,
+    "fn": 9,
+    "f1": 0.8696,
+    "precision": 1.0,
+    "recall": 0.7692
+   },
+   "flag": {
+    "tp": 72,
+    "fp": 44,
+    "fn": 0,
+    "f1": 0.766,
+    "precision": 0.6207,
+    "recall": 1.0
+   }
+  },
+  "confusion": {
+   "approve": {
+    "approve": 81,
+    "flag": 21
+   },
+   "deny": {
+    "deny": 70,
+    "flag": 17
+   },
+   "needs_info": {
+    "needs_info": 30,
+    "approve": 3,
+    "flag": 6
+   },
+   "flag": {
+    "flag": 72
+   }
+  }
+ },
+ "per_violation": {
+  "date_code_out_of_range": {
+   "n": 17,
+   "correct": 17,
+   "recall": 1.0
+  },
+  "destruction_not_shown": {
+   "n": 12,
+   "correct": 8,
+   "recall": 0.6667
+  },
+  "destruction_not_shown:intact": {
+   "n": 5,
+   "correct": 1,
+   "recall": 0.2
+  },
+  "destruction_not_shown:label_reupload": {
+   "n": 4,
+   "correct": 4,
+   "recall": 1.0
+  },
+  "destruction_not_shown:missing": {
+   "n": 3,
+   "correct": 3,
+   "recall": 1.0
+  },
+  "duplicate_address": {
+   "n": 8,
+   "correct": 8,
+   "recall": 1.0
+  },
+  "duplicate_payout": {
+   "n": 24,
+   "correct": 24,
+   "recall": 1.0
+  },
+  "duplicate_photo": {
+   "n": 14,
+   "correct": 14,
+   "recall": 1.0
+  },
+  "duplicate_photo:exact": {
+   "n": 6,
+   "correct": 6,
+   "recall": 1.0
+  },
+  "duplicate_photo:near": {
+   "n": 1,
+   "correct": 1,
+   "recall": 1.0
+  },
+  "duplicate_serial": {
+   "n": 26,
+   "correct": 26,
+   "recall": 1.0
+  },
+  "no_receipt_when_required": {
+   "n": 2,
+   "correct": 2,
+   "recall": 1.0
+  },
+  "purchase_before_window": {
+   "n": 45,
+   "correct": 45,
+   "recall": 1.0
+  },
+  "retailer_not_listed": {
+   "n": 43,
+   "correct": 43,
+   "recall": 1.0
+  },
+  "serial_out_of_range": {
+   "n": 16,
+   "correct": 16,
+   "recall": 1.0
+  },
+  "wrong_model": {
+   "n": 40,
+   "correct": 40,
+   "recall": 1.0
+  }
+ }
+}

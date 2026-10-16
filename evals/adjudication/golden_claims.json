@@ -1504,7 +1504,7 @@
    "program": "24118",
    "model_claimed": "B0726Y",
    "serial_claimed": "SN71222040",
-   "date_code_claimed": "8/21",
+   "date_code_claimed": "8/22",
    "retailer_claimed": "Fred Meyer",
    "purchase_date": "2023-10-31",
    "refund_cents": 3422,
@@ -1523,7 +1523,7 @@
    "photos": [
     {
      "kind": "label",
-     "sha256": "c5cf1edf6c04a771368e5b557a084782a12cdf74595e070f9c360b99241b9dff",
+     "sha256": "5d07b02e71b3f8d8f9d1918741ec5e0dd6ef4290869ace552969d8ac5f42d940",
      "phash": "c93636d9cb0d8966",
      "path": "data/generated/golden_photos/24118/e370ac90-2d51-532b-bb7b-e36c01b68035_label.jpg"
     },
@@ -5691,7 +5691,7 @@
    "claim_id": "5963eb9d-aeaa-5911-9dc6-360d1f259bc9",
    "program": "25126",
    "model_claimed": "LTE4815BD",
-   "serial_claimed": "206KM5416063",
+   "serial_claimed": "409KM2538543",
    "date_code_claimed": null,
    "retailer_claimed": "LG.com",
    "purchase_date": "2019-09-21",
@@ -5711,7 +5711,7 @@
    "photos": [
     {
      "kind": "label",
-     "sha256": "bd7495e1b8d9415d35706adc27ce87c1352b88e36fb4aec90f0017c70a214658",
+     "sha256": "8ee6168df3b96cb30eabb1de6566ac6cb3aac39daa727f6fd18321431ca7c96c",
      "phash": "c92d348adb39c936",
      "path": "data/generated/golden_photos/25126/5963eb9d-aeaa-5911-9dc6-360d1f259bc9_label.jpg"
     }
@@ -5751,10 +5751,10 @@
    "claim_id": "1c9c7a0e-db85-57bd-95e2-fe8634bef859",
    "program": "25126",
    "model_claimed": "LSE4611BD",
-   "serial_claimed": "102KM6386607",
+   "serial_claimed": "409KM8955161",
    "date_code_claimed": null,
    "retailer_claimed": "The Home Depot",
-   "purchase_date": "2013-12-21",
+   "purchase_date": "2014-07-24",
    "refund_cents": null,
    "remedy": "repair",
    "claimant": {
@@ -5771,7 +5771,7 @@
    "photos": [
     {
      "kind": "label",
-     "sha256": "6ac79145101e4c9bd7178d35c32efad4dc2afbcd57709b7567ecc210faa90e7e",
+     "sha256": "5bd8320503786d499d9c38e39e4d305403200953284583d19dd26008f428b57c",
      "phash": "967865928e0ea76d",
      "path": "data/generated/golden_photos/25126/1c9c7a0e-db85-57bd-95e2-fe8634bef859_label.jpg"
     }
