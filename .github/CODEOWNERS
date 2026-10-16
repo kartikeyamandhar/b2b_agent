@@ -1,0 +1,24 @@
+# One owner per component (CLAUDE.md, Working in a team). Replace the placeholder handles.
+# Later rules win, so the specific paths come after the general ones.
+
+*                                                   @BACKEND_OWNER_HANDLE
+
+# Backend (component 1)
+/apps/api/                                          @BACKEND_OWNER_HANDLE
+/evals/                                             @BACKEND_OWNER_HANDLE
+/docs/contracts/                                    @BACKEND_OWNER_HANDLE
+/apps/api/migrations/                               @BACKEND_OWNER_HANDLE
+
+# UI (component 2)
+/apps/web/                                          @UI_OWNER_HANDLE
+
+# Payments (component 3)
+/apps/api/src/recallops/billing/                    @PAYMENTS_OWNER_HANDLE
+/apps/api/src/recallops/payouts/stripe_connect.py   @PAYMENTS_OWNER_HANDLE
+
+# Login (component 4)
+/apps/api/src/recallops/auth/                       @LOGIN_OWNER_HANDLE
+/apps/web/src/middleware.ts                         @LOGIN_OWNER_HANDLE
+/apps/web/src/lib/auth/                             @LOGIN_OWNER_HANDLE
+/apps/web/src/app/sign-in/                          @LOGIN_OWNER_HANDLE
+/apps/web/src/app/sign-up/                          @LOGIN_OWNER_HANDLE

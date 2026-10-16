@@ -1,0 +1,80 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: backend (ruff, mypy, pytest + coverage)
+    runs-on: ubuntu-24.04
+    services:
+      db:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres-dev-only
+        ports: ["55432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 2s --health-timeout 3s --health-retries 30
+    env:
+      PGPASSWORD: postgres-dev-only
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.11.21"
+          python-version: "3.13"
+      - run: uv --version
+      - name: Environment
+        run: cp .env.example .env
+      - name: Install pinned dependencies
+        run: uv sync --project apps/api --frozen
+      - name: Roles and databases
+        run: |
+          for db in recallops recallops_test; do
+            psql -h localhost -p 55432 -U postgres -v ON_ERROR_STOP=1 -q \
+              -v owner_password=owner-dev-only -v app_password=app-dev-only \
+              -v internal_password=internal-dev-only -v dbname=$db -f apps/api/sql/bootstrap_roles.sql
+          done
+      - name: Migrations
+        working-directory: apps/api
+        run: |
+          for db in recallops recallops_test; do
+            uv run --frozen alembic -x dburl=postgresql://recallops_owner:owner-dev-only@localhost:55432/$db upgrade head
+          done
+      - name: Lint
+        working-directory: apps/api
+        run: uv run --frozen ruff check src tests migrations && uv run --frozen ruff format --check src tests migrations
+      - name: Types
+        working-directory: apps/api
+        run: uv run --frozen mypy
+      - name: Tests with coverage (includes the OpenAPI drift test and the golden-set reproducibility test)
+        working-directory: apps/api
+        run: uv run --frozen pytest --cov --cov-report=term --cov-fail-under=85
+
+  # ---------------------------------------------------------------------------------------------
+  # WEB HALF: owned by the UI owner (component 2). Enable once apps/web/package.json exists.
+  # ---------------------------------------------------------------------------------------------
+  web:
+    name: web (vitest) - owned by the UI owner
+    if: ${{ hashFiles('apps/web/package.json') != '' }}
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.22.0"
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npx vitest run
