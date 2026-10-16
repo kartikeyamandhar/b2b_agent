@@ -1,0 +1,19 @@
+# Planted-violation mix for the synthetic golden set (pre-registered with evals/adjudication/PREREG.md).
+# A violation is planted only where the notice's rules make it meaningful (applicable_violations in
+# recallops.synth.generate); weights are relative among the applicable ones.
+seed: 42
+claims_per_program: 15
+clean_share: 0.40
+second_violation_share: 0.15
+violations:
+  wrong_model: 1.0
+  serial_out_of_range: 1.0
+  date_code_out_of_range: 1.0
+  retailer_not_listed: 1.0
+  purchase_before_window: 1.0
+  no_receipt_when_required: 1.0
+  destruction_not_shown: 1.0
+  duplicate_photo: 0.25
+  duplicate_address: 0.25
+  duplicate_serial: 0.25
+  duplicate_payout: 0.25

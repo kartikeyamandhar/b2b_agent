@@ -1,0 +1,11 @@
+{
+ "claim_id": "678a21f9-9890-5041-b0fa-542230f3ad87",
+ "program": "24082",
+ "violations": [
+  "date_code_out_of_range"
+ ],
+ "subtypes": {},
+ "cluster": null,
+ "tier": "clean",
+ "expected_outcome": "deny"
+}

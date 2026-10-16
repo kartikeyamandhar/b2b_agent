@@ -1,0 +1,13 @@
+{
+ "claim_id": "3d8cf607-2005-5445-93fa-d97a5033d46d",
+ "program": "26046",
+ "violations": [
+  "destruction_not_shown"
+ ],
+ "subtypes": {
+  "destruction_not_shown": "label_reupload"
+ },
+ "cluster": null,
+ "tier": "mild",
+ "expected_outcome": "needs_info"
+}

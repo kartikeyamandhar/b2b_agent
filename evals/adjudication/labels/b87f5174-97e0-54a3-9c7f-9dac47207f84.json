@@ -1,0 +1,13 @@
+{
+ "claim_id": "b87f5174-97e0-54a3-9c7f-9dac47207f84",
+ "program": "26046",
+ "violations": [
+  "destruction_not_shown"
+ ],
+ "subtypes": {
+  "destruction_not_shown": "intact"
+ },
+ "cluster": null,
+ "tier": "clean",
+ "expected_outcome": "needs_info"
+}

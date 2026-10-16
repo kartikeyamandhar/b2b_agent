@@ -1,0 +1,11 @@
+{
+ "claim_id": "ef492897-7b27-5482-968a-2fb0258ff4f3",
+ "program": "24149",
+ "violations": [
+  "purchase_before_window"
+ ],
+ "subtypes": {},
+ "cluster": null,
+ "tier": "mild",
+ "expected_outcome": "deny"
+}

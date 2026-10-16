@@ -1,0 +1,22 @@
+# Expected adjudication outcome per planted violation. DRAFT for the owner's sign-off (session 1).
+# Ground truth for the synthetic golden set and the spec the rules-only decision table implements.
+# A claim with several violations takes the highest outcome in this precedence order.
+precedence: [flag, deny, needs_info, approve]
+
+clean: approve
+
+violations:
+  wrong_model: deny                # the claimed model is not a recalled model
+  serial_out_of_range: deny        # only planted when the notice has serial rules
+  date_code_out_of_range: deny     # only planted when the notice has date-code rules
+  purchase_before_window: deny     # bought before the recalled units were sold
+  retailer_not_listed: needs_info  # secondhand and gift owners exist; ask for proof rather than deny
+  no_receipt_when_required: needs_info
+  destruction_not_shown: needs_info  # ask for the destruction photo (missing, or a re-upload of the label)
+  duplicate_photo: flag            # both claims in the pair are flagged
+  duplicate_address: flag
+  duplicate_serial: flag
+  duplicate_payout: flag
+
+# Not an outcome: claims whose refund exceeds the program's value threshold are routed to a human
+# regardless of outcome (reported as "share routed to human").

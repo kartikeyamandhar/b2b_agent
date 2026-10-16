@@ -1,0 +1,11 @@
+{
+ "claim_id": "c0ccaed1-9c9d-5787-b9ef-09a5ec2f15d2",
+ "program": "24235",
+ "violations": [
+  "no_receipt_when_required"
+ ],
+ "subtypes": {},
+ "cluster": null,
+ "tier": "clean",
+ "expected_outcome": "needs_info"
+}

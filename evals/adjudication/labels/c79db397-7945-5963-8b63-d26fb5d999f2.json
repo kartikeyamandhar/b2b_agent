@@ -1,0 +1,15 @@
+{
+ "claim_id": "c79db397-7945-5963-8b63-d26fb5d999f2",
+ "program": "26624",
+ "violations": [
+  "duplicate_serial"
+ ],
+ "subtypes": {},
+ "cluster": {
+  "cluster_id": "566b3feb-fa5a-59b6-9265-ef2e1a4bc5da",
+  "kind": "duplicate_serial",
+  "role": "copy"
+ },
+ "tier": "clean",
+ "expected_outcome": "flag"
+}

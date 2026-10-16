@@ -1,0 +1,9 @@
+{
+ "claim_id": "65be0ca6-25f6-51e9-a4f4-869c36c36c04",
+ "program": "25253",
+ "violations": [],
+ "subtypes": {},
+ "cluster": null,
+ "tier": "clean",
+ "expected_outcome": "approve"
+}

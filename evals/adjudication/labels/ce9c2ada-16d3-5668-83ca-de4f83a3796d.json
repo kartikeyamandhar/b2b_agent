@@ -1,0 +1,16 @@
+{
+ "claim_id": "ce9c2ada-16d3-5668-83ca-de4f83a3796d",
+ "program": "24082",
+ "violations": [
+  "date_code_out_of_range",
+  "duplicate_payout"
+ ],
+ "subtypes": {},
+ "cluster": {
+  "cluster_id": "8352433e-38dc-5c7a-a564-a4bb540df6d8",
+  "kind": "duplicate_payout",
+  "role": "original"
+ },
+ "tier": "mild",
+ "expected_outcome": "flag"
+}

@@ -1,0 +1,13 @@
+{
+ "claim_id": "f8e1fa07-30ff-55b4-bcb8-4bc8eb016f71",
+ "program": "25206",
+ "violations": [
+  "destruction_not_shown"
+ ],
+ "subtypes": {
+  "destruction_not_shown": "missing"
+ },
+ "cluster": null,
+ "tier": "hard",
+ "expected_outcome": "needs_info"
+}

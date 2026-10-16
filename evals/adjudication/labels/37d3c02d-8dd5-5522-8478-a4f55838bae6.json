@@ -1,0 +1,11 @@
+{
+ "claim_id": "37d3c02d-8dd5-5522-8478-a4f55838bae6",
+ "program": "26011",
+ "violations": [
+  "retailer_not_listed"
+ ],
+ "subtypes": {},
+ "cluster": null,
+ "tier": "mild",
+ "expected_outcome": "needs_info"
+}

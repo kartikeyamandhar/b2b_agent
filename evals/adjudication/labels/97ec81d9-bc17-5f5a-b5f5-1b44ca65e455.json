@@ -1,0 +1,12 @@
+{
+ "claim_id": "97ec81d9-bc17-5f5a-b5f5-1b44ca65e455",
+ "program": "26027",
+ "violations": [
+  "date_code_out_of_range",
+  "retailer_not_listed"
+ ],
+ "subtypes": {},
+ "cluster": null,
+ "tier": "clean",
+ "expected_outcome": "deny"
+}

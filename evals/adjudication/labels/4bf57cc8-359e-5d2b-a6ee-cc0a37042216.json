@@ -1,0 +1,16 @@
+{
+ "claim_id": "4bf57cc8-359e-5d2b-a6ee-cc0a37042216",
+ "program": "24082",
+ "violations": [
+  "retailer_not_listed",
+  "duplicate_serial"
+ ],
+ "subtypes": {},
+ "cluster": {
+  "cluster_id": "feaa6fce-1d52-5d46-b031-eb51875d76f2",
+  "kind": "duplicate_serial",
+  "role": "original"
+ },
+ "tier": "mild",
+ "expected_outcome": "flag"
+}

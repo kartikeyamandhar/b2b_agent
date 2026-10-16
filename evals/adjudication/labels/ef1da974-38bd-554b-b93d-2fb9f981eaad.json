@@ -1,0 +1,16 @@
+{
+ "claim_id": "ef1da974-38bd-554b-b93d-2fb9f981eaad",
+ "program": "24179",
+ "violations": [
+  "wrong_model",
+  "duplicate_photo"
+ ],
+ "subtypes": {},
+ "cluster": {
+  "cluster_id": "d118e22a-bc75-5fd5-b27b-f63fdefc0895",
+  "kind": "duplicate_photo",
+  "role": "original"
+ },
+ "tier": "clean",
+ "expected_outcome": "flag"
+}

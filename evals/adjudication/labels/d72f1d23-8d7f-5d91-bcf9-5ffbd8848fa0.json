@@ -1,0 +1,11 @@
+{
+ "claim_id": "d72f1d23-8d7f-5d91-bcf9-5ffbd8848fa0",
+ "program": "25126",
+ "violations": [
+  "wrong_model"
+ ],
+ "subtypes": {},
+ "cluster": null,
+ "tier": "mild",
+ "expected_outcome": "deny"
+}

@@ -1,0 +1,15 @@
+{
+ "claim_id": "ee6c9d50-8fbb-5519-bcb0-04927d9a38e2",
+ "program": "25253",
+ "violations": [
+  "duplicate_payout"
+ ],
+ "subtypes": {},
+ "cluster": {
+  "cluster_id": "ae2adeed-f485-5b1b-a4c4-61249fc8d050",
+  "kind": "duplicate_payout",
+  "role": "original"
+ },
+ "tier": "clean",
+ "expected_outcome": "flag"
+}
