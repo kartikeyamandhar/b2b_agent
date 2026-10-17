@@ -1,0 +1,14 @@
+{
+ "text": "{\"identification\":{\"models\":[\"KABI-0176 G062401IC\"],\"model_label_location\":\"A label on the underside of the toy\",\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"Amazon.com\"],\"sold_from\":\"2024-10-01\",\"sold_to\":\"2025-06-30\",\"price_range_cents\":{\"min_cents\":1700,\"max_cents\":3000},\"units_affected\":340,\"evidence\":[{\"field\":\"models\",\"quote\":\"Model: KABI-0176 G062401IC\",\"start\":0,\"end\":0},{\"field\":\"model_label_location\",\"quote\":\"printed on a label on the underside of the toy\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"Online at Amazon.com from October 2024 through June 2025\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"from October 2024\",\"start\":0,\"end\":0},{\"field\":\"sold_to\",\"quote\":\"through June 2025\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for between $17 and $30\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 340\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Immediately stop using the recalled toys, take them away from children and contact Brandworl.USA for a full refund.\",\"Destroy the toy by writing \\\"RECALLED\\\" with permanent marker on each piece of the toy and send a photo of the destroyed toy to Brandworl@gmail.com.\",\"Dispose of the recalled toy.\"],\"proof_required\":[\"destruction_photo\"],\"payout\":{\"method\":null,\"amount_rule\":\"full refund\"}}],\"destruction_instruction\":\"Write \\\"RECALLED\\\" with permanent marker on each piece of the toy and send a photo of the destroyed toy to Brandworl@gmail.com, then dispose of the recalled toy.\",\"registration_url\":null,\"contact\":\"Brandworl.USA by email at brandworl@gmail.com.\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Refund\",\"start\":0,\"end\":0},{\"field\":\"options\",\"quote\":\"contact Brandworl.USA for a full refund\",\"start\":0,\"end\":0},{\"field\":\"destruction_instruction\",\"quote\":\"writing \\\"RECALLED\\\" with permanent marker on each piece of the toy and send a photo of the destroyed toy to Brandworl@gmail.com\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"Brandworl.USA by email at brandworl@gmail.com.\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4070,
+  "output_tokens": 872,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011Cg6trDKb3ekKcfkazyis8",
+ "purpose": "extract_rules",
+ "max_tokens": 4096
+}

@@ -10,8 +10,8 @@ RECALLOPS_OWNER_PASSWORD ?= owner-dev-only
 RECALLOPS_APP_PASSWORD ?= app-dev-only
 RECALLOPS_INTERNAL_PASSWORD ?= internal-dev-only
 
-# psycopg needs a system libpq. On macOS it is passed per command because the system shell strips
-# DYLD_* variables; on Linux the loader finds libpq5 without help.
+# psycopg[binary] bundles libpq, so no system libpq is needed. LIBPQ_DIR is only a fallback for the pure-Python
+# implementation; it is passed per command because the macOS system shell strips DYLD_* variables.
 LIBPQ_DIR ?= $(firstword $(wildcard /opt/homebrew/opt/libpq/lib /opt/homebrew/opt/postgresql@16/lib /opt/homebrew/opt/postgresql@15/lib /usr/local/opt/libpq/lib))
 ENV := DYLD_FALLBACK_LIBRARY_PATH=$(LIBPQ_DIR) PYTHONPATH=$(CURDIR)/$(API)/src
 RUN := $(ENV) uv run --project $(API) --frozen

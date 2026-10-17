@@ -1,8 +1,8 @@
 # Adjudication eval
 
-Generated 2026-10-16 23:05 UTC by `make eval`. Pre-registration: evals/adjudication/PREREG.md.
+Generated 2026-10-17 00:54 UTC by `make eval`. Pre-registration: evals/adjudication/PREREG.md.
 
-- Golden claims: 300 synthetic claims from 20 golden notices (gold rules), planted violations, expected outcomes from the draft outcome_policy.yaml. The 60 owner-reviewed and 40 classmate claims arrive in M2.
+- Golden claims: 300 synthetic claims from 20 golden notices (gold rules), planted violations, expected outcomes from outcome_policy.yaml (decided 2026-10-17). The 60 owner-reviewed and 40 classmate claims arrive in M2.
 - Rules-only decision table 1.0.0; pure-code tools; destruction photo presence only (no vision).
 - **Kill criterion not evaluable in M1:** there is no agent row yet. It compares macro F1 below with the agent's in M2.
 - The first run (tools 1.0.0) flagged 44 legitimate claims: all 82 false duplicate hits were receipt photos matched by pHash, which ignores the text that distinguishes template documents. Tools 1.0.1 match receipts on exact bytes only (decisions log). Both rows are shown; 1.0.1 is the baseline going forward.

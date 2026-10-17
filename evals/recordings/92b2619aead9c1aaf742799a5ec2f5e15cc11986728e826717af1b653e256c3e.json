@@ -1,0 +1,14 @@
+{
+ "text": "{\"identification\":{\"models\":[],\"model_label_location\":null,\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"Amazon.com\"],\"sold_from\":\"2025-02-01\",\"sold_to\":\"2026-03-31\",\"price_range_cents\":{\"min_cents\":8500,\"max_cents\":10000},\"units_affected\":130,\"evidence\":[{\"field\":\"products\",\"quote\":\"AMZCMJ DGD Children's Tower Stools\",\"start\":0,\"end\":0},{\"field\":\"products\",\"quote\":\"About 130\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"Online at Amazon.com\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"February 2025\",\"start\":0,\"end\":0},{\"field\":\"sold_to\",\"quote\":\"March 2026\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"between $85 and $100\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 130\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Stop using the recalled tower stools immediately.\",\"Contact AMZCMJ DGD for a full refund.\",\"Destroy the stool by writing \\\"recalled\\\" in permanent marker on all sides and disassembling it.\",\"Send a photo of the destroyed stool to dgdtoddlertowerrecall@dchskj.cn.\",\"Dispose of the destroyed product.\"],\"proof_required\":[\"destruction_photo\"],\"payout\":{\"method\":null,\"amount_rule\":\"full refund\"}}],\"destruction_instruction\":\"Write \\\"recalled\\\" in permanent marker on all sides, disassemble the stool, and send a photo of the destroyed stool to dgdtoddlertowerrecall@dchskj.cn, then dispose of the destroyed product.\",\"registration_url\":null,\"contact\":\"dgdtoddlertowerrecall@dchskj.cn\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Consumers should stop using the recalled tower stools immediately and contact AMZCMJ DGD for a full refund.\",\"start\":0,\"end\":0},{\"field\":\"options\",\"quote\":\"Remedy options: Refund\",\"start\":0,\"end\":0},{\"field\":\"destruction_instruction\",\"quote\":\"destroy the stool by writing \\\"recalled\\\" in permanent marker on all sides, disassembling it and sending a photo of the destroyed stool to dgdtoddlertowerrecall@dchskj.cn\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"AMZCMJ DGD by email at dgdtoddlertowerrecall@dchskj.cn.\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 3969,
+  "output_tokens": 904,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011Cg6tt3iC3TLc97XpdVw5R",
+ "purpose": "extract_rules",
+ "max_tokens": 4096
+}

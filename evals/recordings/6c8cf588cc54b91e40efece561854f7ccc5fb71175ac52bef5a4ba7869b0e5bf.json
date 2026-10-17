@@ -1,0 +1,14 @@
+{
+ "text": "{\"identification\":{\"models\":[\"BMX Race Box One Oversized 31.8 Delta bicycle stems\"],\"model_label_location\":null,\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"BMX Race dealers\",\"https://boxcomponents.com\"],\"sold_from\":\"2023-01-01\",\"sold_to\":\"2023-10-31\",\"price_range_cents\":{\"min_cents\":10000,\"max_cents\":10000},\"units_affected\":160,\"evidence\":[{\"field\":\"models\",\"quote\":\"BMX Race Box One Oversized 31.8 Delta bicycle stems\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"BMX Race dealers nationwide and online at https://boxcomponents.com\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"from January 2023 through October 2023\",\"start\":0,\"end\":0},{\"field\":\"sold_to\",\"quote\":\"from January 2023 through October 2023\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for about $100 for the bicycle stems sold separately\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 160\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"multiple\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Contact Box Components for a full refund\"],\"proof_required\":[],\"payout\":{\"method\":null,\"amount_rule\":null}},{\"type\":\"replacement\",\"steps\":[\"Contact Box Components for a free replacement stem, including shipping\"],\"proof_required\":[],\"payout\":{\"method\":null,\"amount_rule\":null}}],\"destruction_instruction\":null,\"registration_url\":\"https://boxcomponents.com/pages/recall-claim-form-delta-stem\",\"contact\":\"Box Components at 800-797-6880 from 8 a.m. to 5 p.m. PT Monday through Thursday; email at orders@boxcomponents.com\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Refund, Replace\",\"start\":0,\"end\":0},{\"field\":\"options\",\"quote\":\"contact Box Components for a full refund or a free replacement stem, including shipping\",\"start\":0,\"end\":0},{\"field\":\"registration_url\",\"quote\":\"https://boxcomponents.com/pages/recall-claim-form-delta-stem\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"Box Components at 800-797-6880 from 8 a.m. to 5 p.m. PT Monday through Thursday; email at orders@boxcomponents.com\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4021,
+  "output_tokens": 859,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011Cg6tgUJxJvcP8cx66T59c",
+ "purpose": "extract_rules",
+ "max_tokens": 4096
+}

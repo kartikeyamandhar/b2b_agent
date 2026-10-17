@@ -1,0 +1,14 @@
+{
+ "text": "{\"identification\":{\"models\":[\"P1410\",\"P1410-P\",\"P1411\",\"P1411-P\"],\"model_label_location\":\"Printed on a label located on the grip handle of the bed rails\",\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"www.amazon.com\",\"www.walmart.com\"],\"sold_from\":\"2006-10-01\",\"sold_to\":\"2021-12-31\",\"price_range_cents\":{\"min_cents\":3600,\"max_cents\":9800},\"units_affected\":272000,\"evidence\":[{\"field\":\"identification.models\",\"quote\":\"Hand Bed Rail (model P1410), Hand Bed Rail with Pouch (model P1410-P), Hand Bed Rail with Floor Support (model P1411), and Hand Bed Rail with Floor Support with Pouch (model P1411-P)\",\"start\":0,\"end\":0},{\"field\":\"identification.model_label_location\",\"quote\":\"The name \\\"Essential Medical Supply, Inc.\\\" and the model number are printed on a label located on the grip handle of the bed rails\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_at\",\"quote\":\"online at www.amazon.com and www.walmart.com\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_from\",\"quote\":\"The bed rails were sold from October 2006 through December 2021\",\"start\":0,\"end\":0},{\"field\":\"identification.price_range_cents\",\"quote\":\"for between $36 and $98\",\"start\":0,\"end\":0},{\"field\":\"identification.units_affected\",\"quote\":\"About 272,000\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Consumers should immediately stop using the recalled bed rails.\",\"For consumers who own the recalled bed rails sold or imported on or after November 1, 2015, Essential Medical Supply Inc., will provide a refund. The amount of the refund will be pro-rated based on the age of the bed rail.\"],\"proof_required\":[],\"payout\":{\"method\":null,\"amount_rule\":\"Pro-rated based on the age of the bed rail\"}}],\"destruction_instruction\":null,\"registration_url\":null,\"contact\":\"Essential Medical Supply at 800-826-8423 from 9 a.m. to 5 p.m. ET Monday through Friday, or online at essentialmedicalsupply.com\",\"evidence\":[{\"field\":\"remedy.remedy_type\",\"quote\":\"Remedy options: Refund\",\"start\":0,\"end\":0},{\"field\":\"remedy.options\",\"quote\":\"Consumers should immediately stop using the recalled bed rails.\",\"start\":0,\"end\":0},{\"field\":\"remedy.options\",\"quote\":\"Essential Medical Supply Inc., will provide a refund. The amount of the refund will be pro-rated based on the age of the bed rail.\",\"start\":0,\"end\":0},{\"field\":\"remedy.contact\",\"quote\":\"Essential Medical Supply at 800-826-8423 from 9 a.m. to 5 p.m. ET Monday through Friday\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4211,
+  "output_tokens": 1001,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011Cg6tj2HNbbbvVTNEVy8L9",
+ "purpose": "extract_rules",
+ "max_tokens": 4096
+}

@@ -174,8 +174,8 @@ def render(summary: dict[str, Any], violations: dict[str, dict[str, Any]], first
         "evals/adjudication/PREREG.md.",
         "",
         f"- Golden claims: {s['n']} synthetic claims from 20 golden notices (gold rules), planted violations, "
-        "expected outcomes from the draft outcome_policy.yaml. The 60 owner-reviewed and 40 classmate claims "
-        "arrive in M2.",
+        "expected outcomes from outcome_policy.yaml (decided 2026-10-17). The 60 owner-reviewed and 40 classmate "
+        "claims arrive in M2.",
         f"- Rules-only decision table {DECISION_TABLE_VERSION}; pure-code tools; destruction photo presence only "
         "(no vision).",
         "- **Kill criterion not evaluable in M1:** there is no agent row yet. It compares macro F1 below with the "

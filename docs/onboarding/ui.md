@@ -23,7 +23,7 @@ You build the firm console and the claim portal in apps/web (02-ui.md). The back
 
 ## Run the backend locally
 
-Prerequisites: Docker, uv 0.11.21, Python 3.13. On macOS, psycopg needs libpq (`brew install libpq`); the Makefile finds it. A fresh machine pulls the image once: `docker pull postgres:16`.
+Prerequisites: Docker, uv 0.11.21, Python 3.13. A fresh machine pulls the database image once: `docker pull postgres:16`.
 
 ```
 cp .env.example .env

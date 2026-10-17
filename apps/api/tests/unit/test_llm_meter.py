@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from decimal import Decimal
 
 import pytest
@@ -178,3 +179,43 @@ def test_canonical_key_ignores_max_tokens_but_not_content() -> None:
     b = ModelRequest(system="s", user_text="u", max_tokens=99)
     c = ModelRequest(system="s", user_text="v")
     assert a.canonical_key(MODEL) == b.canonical_key(MODEL) != c.canonical_key(MODEL)
+
+
+def test_wire_schema_drops_unsupported_constraints_and_disables_thinking() -> None:
+    from recallops.llm.client import api_schema, request_kwargs
+    from recallops.rules.schemas import ExtractedRules
+
+    schema = ExtractedRules.model_json_schema()
+    assert "minimum" in json.dumps(schema)
+    wire = api_schema(schema)
+    assert "minimum" not in json.dumps(wire) and "maxLength" not in json.dumps(wire)
+    assert '"additionalProperties": false' in json.dumps(wire)
+    image = ImageInput("image/jpeg", "abc", 10, 10)
+    body = request_kwargs(ModelRequest(system="s", user_text="u", output_schema=schema, images=(image,)), MODEL, 500)
+    assert body["thinking"] == {"type": "disabled"}
+    assert body["max_tokens"] == 500
+    assert body["messages"][0]["content"][0]["type"] == "image"
+    assert body["output_config"]["format"]["schema"] == wire
+
+
+def test_recording_transport_output_replays(tmp_path: object) -> None:
+    from pathlib import Path
+
+    from recallops.llm.client import RecordingTransport
+
+    directory = Path(str(tmp_path))
+    recorder = RecordingTransport(FakeTransport([response(1200, 300)]), directory)
+    meter = CostMeter(PRICES, InMemoryLedger(), Decimal(2), Decimal(1))
+    live = LlmClient(recorder, meter, MODEL, Settings()).complete(REQUEST, run_budget())
+    assert len(recorder.recorded) == 1
+    replayed = LlmClient(ReplayTransport(directory), meter, MODEL, Settings()).complete(REQUEST, run_budget())
+    assert replayed.response.text == live.response.text
+    assert replayed.response.usage == live.response.usage
+
+
+def test_live_mode_wraps_the_sdk_transport_in_a_recorder() -> None:
+    from recallops.llm.client import AnthropicTransport, RecordingTransport
+
+    llm = build_client(Settings(llm_mode="live", anthropic_api_key="sk-ant-" + "x" * 40))
+    assert isinstance(llm.transport, RecordingTransport)
+    assert isinstance(llm.transport.inner, AnthropicTransport)

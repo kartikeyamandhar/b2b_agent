@@ -1,0 +1,14 @@
+{
+ "text": "{\"identification\":{\"models\":[\"Soquel\",\"B0726Y\",\"Bell Soquel Youth\",\"Bell Soquel Youth MIPS\"],\"model_label_location\":\"inner helmet sticker\",\"serial_ranges\":[],\"date_codes\":[{\"format\":\"8/21\",\"start\":null,\"end\":\"2021-08-31\",\"raw\":\"date code on the white inner label with August 2021 (\\\"8/21\\\") or earlier\"}],\"sold_at\":[\"Fred Meyer\",\"Walmart\",\"www.Amazon.com\"],\"sold_from\":\"2017-01-01\",\"sold_to\":\"2024-01-31\",\"price_range_cents\":{\"min_cents\":2500,\"max_cents\":5000},\"units_affected\":2425,\"evidence\":[{\"field\":\"models\",\"quote\":\"Soquel\\\" and \\\"B0726Y\\\"\",\"start\":0,\"end\":0},{\"field\":\"model_label_location\",\"quote\":\"inner helmet sticker\",\"start\":0,\"end\":0},{\"field\":\"date_codes\",\"quote\":\"date code on the white inner label with August 2021 (\\\"8/21\\\") or earlier\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"Fred Meyer, Walmart and other stores nationwide, and online at www.Amazon.com\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"from January 2017 through January 2024\",\"start\":0,\"end\":0},{\"field\":\"sold_to\",\"quote\":\"from January 2017 through January 2024\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for between $25 and $50\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 2,425\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Immediately stop using the recalled Bell Soquel Youth Helmets\",\"Contact Bell Sports for a refund\",\"Destroy the helmet by cutting off the straps\",\"Upload photos of the helmet with the straps cut to consumersupport-bell@bellhelmets.com to prove destruction\",\"Dispose of the recalled helmet\"],\"proof_required\":[\"destruction_photo\"],\"payout\":{\"method\":null,\"amount_rule\":null}}],\"destruction_instruction\":\"destroy the helmet by cutting off the straps\",\"registration_url\":null,\"contact\":\"Bell Helmets at 800-456-2355 (Option 3), consumersupport-bell@bellhelmets.com\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Refund\",\"start\":0,\"end\":0},{\"field\":\"destruction_instruction\",\"quote\":\"destroy the helmet by cutting off the straps\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"Bell Helmets at 800-456-2355 (Option 3)\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4354,
+  "output_tokens": 934,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011Cg6thBh6zkbPX6PSgdWyW",
+ "purpose": "extract_rules",
+ "max_tokens": 4096
+}

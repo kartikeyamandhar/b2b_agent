@@ -1,0 +1,14 @@
+{
+ "text": "{\"identification\":{\"models\":[],\"model_label_location\":null,\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"At Home stores nationwide\",\"athome.com\"],\"sold_from\":\"2023-09-01\",\"sold_to\":\"2024-02-29\",\"price_range_cents\":{\"min_cents\":5000,\"max_cents\":6000},\"units_affected\":990,\"evidence\":[{\"field\":\"identification.sold_at\",\"quote\":\"At Home stores nationwide and online at athome.com\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_from\",\"quote\":\"from September 2023 through February 2024\",\"start\":0,\"end\":0},{\"field\":\"identification.price_range_cents\",\"quote\":\"for between $50 and $60\",\"start\":0,\"end\":0},{\"field\":\"identification.units_affected\",\"quote\":\"units: About 990\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Immediately stop using the recalled toy storage chests.\",\"Return them to any At Home store for a full refund.\"],\"proof_required\":[\"none\"],\"payout\":{\"method\":null,\"amount_rule\":\"full refund\"}}],\"destruction_instruction\":null,\"registration_url\":null,\"contact\":\"At Home by email at productrecalls@athome.com, toll-free at 888-688-8426 from 9 a.m. to 5 p.m. CT Monday through Friday, or online at https://athome.com/product-recalls\",\"evidence\":[{\"field\":\"remedy.remedy_type\",\"quote\":\"Remedy options: Refund\",\"start\":0,\"end\":0},{\"field\":\"remedy.options\",\"quote\":\"return them to any At Home store for a full refund\",\"start\":0,\"end\":0},{\"field\":\"remedy.contact\",\"quote\":\"At Home by email at productrecalls@athome.com, toll-free at 888-688-8426 from 9 a.m. to 5 p.m. CT Monday through Friday\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 3856,
+  "output_tokens": 644,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011Cg6tm7ZvPpzUmBakrSwdL",
+ "purpose": "extract_rules",
+ "max_tokens": 4096
+}

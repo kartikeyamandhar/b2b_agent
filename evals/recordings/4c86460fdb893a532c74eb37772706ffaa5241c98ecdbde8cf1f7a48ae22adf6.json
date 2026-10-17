@@ -1,0 +1,14 @@
+{
+ "text": "{\"identification\":{\"models\":[\"LT005\"],\"model_label_location\":\"label on the underside of the standing platform\",\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"Amazon.com\"],\"sold_from\":\"2022-06-01\",\"sold_to\":\"2026-03-31\",\"price_range_cents\":{\"min_cents\":6000,\"max_cents\":6000},\"units_affected\":9700,\"evidence\":[{\"field\":\"models\",\"quote\":\"\\\"Model LT005\\\"\",\"start\":0,\"end\":0},{\"field\":\"model_label_location\",\"quote\":\"printed on label on the underside of the standing platform\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"Online at Amazon.com\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"from June 2022\",\"start\":0,\"end\":0},{\"field\":\"sold_to\",\"quote\":\"through March of 2026\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for about $60\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 9,700\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Stop using the recalled tower stools immediately and contact Wiifo for a full refund.\",\"Destroy the stool by disassembling it and send a photo of the destroyed stool to support@wiifo.net.\",\"Dispose of the destroyed product.\"],\"proof_required\":[\"destruction_photo\"],\"payout\":{\"method\":null,\"amount_rule\":\"full refund\"}}],\"destruction_instruction\":\"Destroy the stool by disassembling it\",\"registration_url\":null,\"contact\":\"Wiifo toll free at 888-505-6206 from 9 a.m. to 5 p.m. PT Monday through Friday, email at support@wiifo.net, or online at www.wiifo.net/recall\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Refund\",\"start\":0,\"end\":0},{\"field\":\"options\",\"quote\":\"contact Wiifo for a full refund\",\"start\":0,\"end\":0},{\"field\":\"destruction_instruction\",\"quote\":\"Consumers will be asked to destroy the stool by disassembling it and send a photo of the destroyed stool to support@wiifo.net\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"Wiifo toll free at 888-505-6206\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 3961,
+  "output_tokens": 798,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011Cg6tskP9rPvh24o9bJzQH",
+ "purpose": "extract_rules",
+ "max_tokens": 4096
+}

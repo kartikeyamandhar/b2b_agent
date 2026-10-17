@@ -1,0 +1,14 @@
+{
+ "text": "{\"identification\":{\"models\":[\"RT668-17\"],\"model_label_location\":\"printed on a white label on the back of the packaging\",\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"Amazon\"],\"sold_from\":\"2024-05-01\",\"sold_to\":\"2025-04-30\",\"price_range_cents\":{\"min_cents\":2000,\"max_cents\":2000},\"units_affected\":3000,\"evidence\":[{\"field\":\"models\",\"quote\":\"model \\\"RT668-17\\\" printed on a white label on the back\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"Amazon from May 2024 through April 2025 for about $20.\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"Amazon from May 2024 through April 2025\",\"start\":0,\"end\":0},{\"field\":\"sold_to\",\"quote\":\"Amazon from May 2024 through April 2025\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for about $20.\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 3,000\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Immediately stop using the recalled toy and contact GKKBSJ for a refund.\",\"Throw away the product and send a photo of the disposed product to gkkbsjtoys@outlook.com to receive a full refund.\",\"To keep the crib mobile, throw away only the remote and send a photo of the disposed remote to gkkbsjtoys@outlook.com to receive a refund of $8.\"],\"proof_required\":[\"destruction_photo\"],\"payout\":{\"method\":null,\"amount_rule\":\"Full refund for disposed crib mobile; $8 refund for disposed remote only\"}}],\"destruction_instruction\":\"Throw away the product and send a photo of the disposed product to gkkbsjtoys@outlook.com; or throw away only the remote and send a photo of the disposed remote to receive a refund of $8.\",\"registration_url\":null,\"contact\":\"gkkbsjtoys@outlook.com\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Refund\",\"start\":0,\"end\":0},{\"field\":\"destruction_instruction\",\"quote\":\"Consumers will be asked to throw away the product and send a photo of the disposed product to gkkbsjtoys@outlook.com to receive a full refund.\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"contact GKKBSJ for a refund\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4102,
+  "output_tokens": 842,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011Cg6todnQmHWdzNqiDqKaS",
+ "purpose": "extract_rules",
+ "max_tokens": 4096
+}

@@ -6,7 +6,7 @@ This README covers the backend (component 1, apps/api) as of milestone M1. Numbe
 
 ## Quickstart (backend)
 
-Prerequisites: Docker, [uv](https://docs.astral.sh/uv/) 0.11.21, Python 3.13, make. On macOS, psycopg needs a system libpq (`brew install libpq`); the Makefile passes its path to every command. A machine without the database image pulls it once: `docker pull postgres:16`.
+Prerequisites: Docker, [uv](https://docs.astral.sh/uv/) 0.11.21, Python 3.13, make. A machine without the database image pulls it once: `docker pull postgres:16`.
 
 ```
 git clone https://github.com/kartikeyamandhar/b2b_agent.git recallops && cd recallops
@@ -103,6 +103,6 @@ data/samples/        committed CPSC fixture; data/raw/ is gitignored, provenance
 
 ## Results so far (M1)
 
-- Extraction, 40 golden notices (model-labeled, unaudited): regex baseline headline 95.1 on all 40, 92.9 on the 25 notices it was not developed on. The model-based extractor has not run (live model calls were not approved in session 1), so the extraction kill criterion is not yet evaluable. evals/results/extraction.md.
+- Extraction, 40 golden notices (model-labeled, unaudited): regex baseline headline 95.1 on all 40 and 92.9 on the 25 it was not developed on; the model-based extractor (claude-haiku-5-5, one call per notice, 0.037 USD for all 40) scores 86.6 and 86.0. The extraction kill criterion is met, provisionally: the model extractor is demoted to a fallback until the owner-audited 100-notice set in M2 decides. Before span verification the model's drafts score 92.2, so the verbatim-quote rule costs 5.6 points and the model is still 2.9 points behind the baseline without it. Responses are recorded in evals/recordings/, so `make eval` replays them at no cost. evals/results/extraction.md.
 - Adjudication, 300 synthetic golden claims: rules-only adjudicator macro F1 0.982, outcome accuracy 0.987, fraud precision and recall 1.000. Its misses are intact-product destruction photos, which need vision. Because the claims are generated from the same rules, rules-only is near its ceiling here; the M2 owner-reviewed and classmate-written claims are where an agent can show value. evals/results/adjudication.md.
 - Completion forecast: killed, because the public MPR spreadsheet has one cumulative row per recall per snapshot, not monthly rows (CLAUDE.md decisions log).

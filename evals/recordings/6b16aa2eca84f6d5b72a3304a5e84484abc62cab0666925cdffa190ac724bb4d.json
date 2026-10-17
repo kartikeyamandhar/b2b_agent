@@ -1,0 +1,14 @@
+{
+ "text": "{\"identification\":{\"models\":[\"EX-D112-05\",\"EX-D106-25\"],\"model_label_location\":\"The model numbers are found on the order invoice.\",\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"Amazon.com\"],\"sold_from\":\"2023-12-01\",\"sold_to\":\"2025-10-31\",\"price_range_cents\":{\"min_cents\":1500,\"max_cents\":4000},\"units_affected\":11200,\"evidence\":[{\"field\":\"identification.models\",\"quote\":\"ANNQUAN-branded power strips models EX-D112-05 and EX-D106-25\",\"start\":0,\"end\":0},{\"field\":\"identification.model_label_location\",\"quote\":\"The model numbers are found on the order invoice.\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_at\",\"quote\":\"Online at Amazon.com from December 2023 through October 2025\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_from\",\"quote\":\"Online at Amazon.com from December 2023 through October 2025\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_to\",\"quote\":\"Online at Amazon.com from December 2023 through October 2025\",\"start\":0,\"end\":0},{\"field\":\"identification.price_range_cents\",\"quote\":\"for between $15 and $40\",\"start\":0,\"end\":0},{\"field\":\"identification.units_affected\",\"quote\":\"About 11,200\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Immediately stop using the ANNQUAN power strips and contact Hefei Juyuan Sporting Development to receive a full refund.\"],\"proof_required\":[\"none\"],\"payout\":{\"method\":null,\"amount_rule\":\"full refund\"}}],\"destruction_instruction\":null,\"registration_url\":null,\"contact\":\"Hefei Juyuan Sporting Development at 401-998-3366 from 9 a.m. to 5 p.m. ET Monday through Friday, email at recall_annquan@163.com or online at https://annquanrecall.com/\",\"evidence\":[{\"field\":\"remedy.remedy_type\",\"quote\":\"Remedy options: Refund\",\"start\":0,\"end\":0},{\"field\":\"remedy.options\",\"quote\":\"contact Hefei Juyuan Sporting Development to receive a full refund\",\"start\":0,\"end\":0},{\"field\":\"remedy.contact\",\"quote\":\"Hefei Juyuan Sporting Development at 401-998-3366 from 9 a.m. to 5 p.m. ET Monday through Friday, email at recall_annquan@163.com or online at https://annquanrecall.com/\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 3984,
+  "output_tokens": 869,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011Cg6tqbFfMVmN4WAcf9uZn",
+ "purpose": "extract_rules",
+ "max_tokens": 4096
+}

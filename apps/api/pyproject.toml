@@ -13,7 +13,7 @@ dependencies = [
     "langchain-anthropic==1.7.6",
     "sqlalchemy==2.1.5",
     "alembic==1.20.0",
-    "psycopg==3.3.6",
+    "psycopg[binary]==3.3.6",
     "pgvector==0.5.1",
     "polars==2.0.0",
     "pydantic==2.14.1",

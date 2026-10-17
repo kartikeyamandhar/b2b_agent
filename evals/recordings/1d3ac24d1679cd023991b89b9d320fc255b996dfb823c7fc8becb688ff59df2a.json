@@ -1,0 +1,14 @@
+{
+ "text": "{\"identification\":{\"models\":[],\"model_label_location\":null,\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"BJ's Wholesale Club\",\"www.bjs.com\"],\"sold_from\":\"2015-01-01\",\"sold_to\":\"2023-11-30\",\"price_range_cents\":{\"min_cents\":1300,\"max_cents\":1300},\"units_affected\":90000,\"evidence\":[{\"field\":\"sold_at\",\"quote\":\"Exclusively at BJ's Wholesale Club locations nationwide and online at www.bjs.com\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"from January 2015 through November 2023\",\"start\":0,\"end\":0},{\"field\":\"sold_to\",\"quote\":\"from January 2015 through November 2023\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for about $13\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 90,000\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Immediately stop using the recalled tiki torches\",\"Contact BJ's Wholesale Club for a full refund\",\"Destroy and dispose of or return the tiki torches (with the fuel reservoir empty) to BJ's Wholesale Club to receive a refund\"],\"proof_required\":[],\"payout\":{\"method\":null,\"amount_rule\":null}}],\"destruction_instruction\":\"Destroy and dispose of or return the tiki torches (with the fuel reservoir empty) to BJ's Wholesale Club to receive a refund.\",\"registration_url\":null,\"contact\":\"BJ's Wholesale Club at 800-257-2582 from 8 a.m. to 7 p.m. ET Monday through Friday, 8 a.m. to 6 p.m. ET Saturday and 12 p.m. to 6 p.m. ET Sunday, email at www.bjs.com/help/recall and click on the email icon, or visit www.bjs.com and click on \\\"Product Recalls\\\" at the bottom of the page.\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Refund\",\"start\":0,\"end\":0},{\"field\":\"destruction_instruction\",\"quote\":\"Consumers should destroy and dispose of or return the tiki torches (with the fuel reservoir empty) to BJ's Wholesale Club to receive a refund.\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"BJ's Wholesale Club at 800-257-2582 from 8 a.m. to 7 p.m. ET Monday through Friday\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4011,
+  "output_tokens": 877,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011Cg6tiijBBoAsMZeSAS1Di",
+ "purpose": "extract_rules",
+ "max_tokens": 4096
+}

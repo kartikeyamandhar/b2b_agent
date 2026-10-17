@@ -1,0 +1,14 @@
+{
+ "text": "{\"identification\": {\"models\": [], \"model_label_location\": \"The brand name can be found on the product sale receipt.\", \"serial_ranges\": [], \"date_codes\": [], \"sold_at\": [\"Amazon.com\"], \"sold_from\": \"2025-12-01\", \"sold_to\": \"2026-01-31\", \"price_range_cents\": {\"min_cents\": 11000, \"max_cents\": 11000}, \"units_affected\": 370, \"evidence\": [{\"field\": \"models\", \"quote\": \"LIVEHOM-branded 11-Drawer Dressers\", \"start\": 0, \"end\": 0}, {\"field\": \"model_label_location\", \"quote\": \"The brand name can be found on the product sale receipt.\", \"start\": 0, \"end\": 0}, {\"field\": \"sold_at\", \"quote\": \"Online at Amazon.com\", \"start\": 0, \"end\": 0}, {\"field\": \"sold_from\", \"quote\": \"Online at Amazon.com from December 2025 through January 2026\", \"start\": 0, \"end\": 0}, {\"field\": \"sold_to\", \"quote\": \"Online at Amazon.com from December 2025 through January 2026\", \"start\": 0, \"end\": 0}, {\"field\": \"price_range_cents\", \"quote\": \"for about $110\", \"start\": 0, \"end\": 0}, {\"field\": \"units_affected\", \"quote\": \"About 370\", \"start\": 0, \"end\": 0}]}, \"remedy\": {\"remedy_type\": \"refund\", \"options\": [{\"type\": \"refund\", \"steps\": [\"Immediately stop using the recalled dressers if they are not anchored to the wall and place them in an area that children cannot access.\", \"Contact Simplehome for a full refund.\", \"Write \\\"RECALL\\\" with permanent marker on the dressers and send a photo of the marked dressers to livehomerecall@163.com.\", \"Dispose of the recalled product.\"], \"proof_required\": [\"label_photo\"], \"payout\": {\"method\": null, \"amount_rule\": \"full refund\"}}], \"destruction_instruction\": \"Write \\\"RECALL\\\" with permanent marker on the dressers, then dispose of the recalled product.\", \"registration_url\": null, \"contact\": \"Simplehome by email at livehomerecall@163.com.\", \"evidence\": [{\"field\": \"remedy_type\", \"quote\": \"Remedy options: Refund\", \"start\": 0, \"end\": 0}, {\"field\": \"options\", \"quote\": \"Contact Simplehome for a full refund.\", \"start\": 0, \"end\": 0}, {\"field\": \"destruction_instruction\", \"quote\": \"Consumers will be asked to write \\\"RECALL\\\" with permanent marker on the dressers and send a photo of the marked dressers to livehomerecall@163.com. Consumers should then dispose of the recalled product.\", \"start\": 0, \"end\": 0}, {\"field\": \"contact\", \"quote\": \"Simplehome by email at livehomerecall@163.com.\", \"start\": 0, \"end\": 0}]}}",
+ "usage": {
+  "input_tokens": 3938,
+  "output_tokens": 942,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011Cg6trzLWwNNUhHEpVrfU2",
+ "purpose": "extract_rules",
+ "max_tokens": 4096
+}

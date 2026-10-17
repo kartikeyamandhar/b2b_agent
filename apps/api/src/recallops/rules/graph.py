@@ -65,6 +65,7 @@ class ExtractionResult:
     calls: int
     dropped: list[str]
     cost_usd: Decimal
+    draft: ExtractedRules | None = None  # last model draft before verify_spans (diagnostics only)
 
 
 def build_graph(llm: LlmClient, trace: TraceSink, run: RunBudget, max_calls: int) -> Any:
@@ -206,4 +207,5 @@ def extract(source_text: str, llm: LlmClient, trace: TraceSink) -> ExtractionRes
         calls=final.get("calls", 0),
         dropped=final.get("dropped", []),
         cost_usd=run.cost_usd,
+        draft=ExtractedRules.model_validate(final["draft"]) if final.get("draft") is not None else None,
     )

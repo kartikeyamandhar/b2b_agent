@@ -1,0 +1,14 @@
+{
+ "text": "{\"identification\":{\"models\":[\"991139699\"],\"model_label_location\":\"The product code, 991139699, is printed on the price tag located on the back of the product packaging.\",\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"Primark\"],\"sold_from\":\"2025-06-01\",\"sold_to\":\"2025-08-31\",\"price_range_cents\":{\"min_cents\":500,\"max_cents\":500},\"units_affected\":1330,\"evidence\":[{\"field\":\"models\",\"quote\":\"The product code, 991139699, is printed on the price tag located on the back of the product packaging.\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"Primark stores located in the northeast and in Florida, Maryland and Illinois\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"from June 2025 through August 2025\",\"start\":0,\"end\":0},{\"field\":\"sold_to\",\"quote\":\"from June 2025 through August 2025\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for about $5.\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 1,330\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Immediately stop using the recalled soother clips and return them to a Primark store for a full refund in the original form of payment.\"],\"proof_required\":[],\"payout\":{\"method\":\"original_payment\",\"amount_rule\":\"full refund\"}}],\"destruction_instruction\":null,\"registration_url\":null,\"contact\":\"Primark at 617-946-3236 from 8 a.m. to 5 p.m. ET Monday through Friday, or online at www.primark.com/recall\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Refund\",\"start\":0,\"end\":0},{\"field\":\"options\",\"quote\":\"Consumers should immediately stop using the recalled soother clips and return them to a Primark store for a full refund in the original form of payment.\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"Primark at 617-946-3236 from 8 a.m. to 5 p.m. ET Monday through Friday, or online at www.primark.com/recall\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 3859,
+  "output_tokens": 736,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011Cg6tqKNgdBMRbxyoBZxfV",
+ "purpose": "extract_rules",
+ "max_tokens": 4096
+}

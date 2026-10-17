@@ -37,11 +37,71 @@
   "headline": 92.9,
   "span_grounded_rate": 1.0
  },
- "graph_status": "not run",
- "graph_reason": "no successful extraction ({'failed': 40}); replay recordings missing",
- "graph_all": null,
- "graph_heldout": null,
- "graph_calls": 0,
- "graph_cost_usd": "0.000000",
+ "graph_status": "run",
+ "graph_reason": "",
+ "graph_all": {
+  "n": 40,
+  "per_field": {
+   "models": 84.2,
+   "serial_ranges": 81.2,
+   "date_codes": 80.0,
+   "sold_at": 87.5,
+   "sold_from": 97.5,
+   "sold_to": 72.5,
+   "price_range_cents": 100.0,
+   "units_affected": 97.5,
+   "remedy_type": 100.0,
+   "has_destruction_instruction": 65.0,
+   "registration_url": 87.5
+  },
+  "headline": 86.6,
+  "span_grounded_rate": 1.0
+ },
+ "graph_heldout": {
+  "n": 25,
+  "per_field": {
+   "models": 77.6,
+   "serial_ranges": 84.0,
+   "date_codes": 80.0,
+   "sold_at": 84.0,
+   "sold_from": 100.0,
+   "sold_to": 68.0,
+   "price_range_cents": 100.0,
+   "units_affected": 96.0,
+   "remedy_type": 100.0,
+   "has_destruction_instruction": 68.0,
+   "registration_url": 88.0
+  },
+  "headline": 86.0,
+  "span_grounded_rate": 1.0
+ },
+ "graph_draft_all": {
+  "n": 40,
+  "per_field": {
+   "models": 84.2,
+   "serial_ranges": 85.0,
+   "date_codes": 80.0,
+   "sold_at": 87.5,
+   "sold_from": 100.0,
+   "sold_to": 100.0,
+   "price_range_cents": 100.0,
+   "units_affected": 97.5,
+   "remedy_type": 100.0,
+   "has_destruction_instruction": 92.5,
+   "registration_url": 87.5
+  },
+  "headline": 92.2,
+  "span_grounded_rate": 0.0
+ },
+ "graph_dropped_by_field": {
+  "sold_to": 11,
+  "contact": 2,
+  "serial": 3,
+  "destruction_instruction": 13,
+  "model_label_location": 5,
+  "sold_from": 1
+ },
+ "graph_calls": 40,
+ "graph_cost_usd": "0.037476",
  "live_run_worst_case_usd": "0.1132"
 }

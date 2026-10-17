@@ -1,0 +1,14 @@
+{
+ "text": "{\"identification\":{\"models\":[\"DR2A\",\"DR2E\"],\"model_label_location\":null,\"serial_ranges\":[{\"prefix\":\"J0D\",\"start\":null,\"end\":null,\"raw\":\"serial numbers that begin with J0D\"},{\"prefix\":\"J0E\",\"start\":null,\"end\":null,\"raw\":\"serial numbers that begin with J0E\"},{\"prefix\":\"J2D\",\"start\":null,\"end\":null,\"raw\":\"serial numbers that begin with J2D\"}],\"date_codes\":[],\"sold_at\":[\"Yamaha dealers\"],\"sold_from\":\"2018-06-01\",\"sold_to\":\"2025-07-31\",\"price_range_cents\":{\"min_cents\":950000,\"max_cents\":1300000},\"units_affected\":4300,\"evidence\":[{\"field\":\"models\",\"quote\":\"DR2A and DR2E Personal Transportation Vehicles (PTVs)\",\"start\":0,\"end\":0},{\"field\":\"serial_ranges\",\"quote\":\"serial numbers that begin with J0D, J0E, and J2D\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"Yamaha dealers nationwide from June 2018 through July 2025\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"June 2018\",\"start\":0,\"end\":0},{\"field\":\"sold_to\",\"quote\":\"July 2025\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for between $9,500 and $13,000\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 4,300\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"repair\",\"options\":[{\"type\":\"repair\",\"steps\":[\"Immediately stop using the recalled golf car vehicles and contact an authorized Yamaha Golf Car dealer to schedule the free installation of new brake shoes and pads.\",\"For consumers who cannot take their recalled golf car to an authorized dealer, Yamaha will provide transportation or will install the replacement brake shoes and pads at the location of the golf car.\"],\"proof_required\":[],\"payout\":{\"method\":null,\"amount_rule\":null}}],\"destruction_instruction\":null,\"registration_url\":null,\"contact\":\"Yamaha toll-free at 866-747-4027 from 8:30 a.m. to 5 p.m. ET seven days a week, by email at ygc_callcenter@yamaha-motor.com, or online at https://www.yamahamotorsports.com/Content.php?content=cpsc-recalls or https://yamaha-motor.com/\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Repair\",\"start\":0,\"end\":0},{\"field\":\"options\",\"quote\":\"contact an authorized Yamaha Golf Car dealer to schedule the free installation of new brake shoes and pads\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"Yamaha toll-free at 866-747-4027 from 8:30 a.m. to 5 p.m. ET seven days a week\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 3988,
+  "output_tokens": 1001,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011Cg6tpgrUmw86CuPn5ZYgd",
+ "purpose": "extract_rules",
+ "max_tokens": 4096
+}

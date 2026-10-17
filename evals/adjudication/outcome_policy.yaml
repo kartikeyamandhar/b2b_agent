@@ -1,4 +1,5 @@
-# Expected adjudication outcome per planted violation. DRAFT for the owner's sign-off (session 1).
+# Expected adjudication outcome per planted violation. Decided 2026-10-17 (owner delegated the call): the
+# contested line, retailer_not_listed, stays needs_info because secondhand and gift owners still hold recalled units.
 # Ground truth for the synthetic golden set and the spec the rules-only decision table implements.
 # A claim with several violations takes the highest outcome in this precedence order.
 precedence: [flag, deny, needs_info, approve]

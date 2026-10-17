@@ -35,7 +35,8 @@ def verify_spans(rules: ExtractedRules, source_text: str) -> Verification:
     the extractor supplied an evidence quote for that field that appears verbatim."""
     ident = rules.identification.model_copy(deep=True)
     remedy = rules.remedy.model_copy(deep=True)
-    quotes = {s.field: s.quote for s in [*ident.evidence, *remedy.evidence]}
+    # Evidence may name a field bare (sold_from) or by path (identification.sold_from); both mean the same field.
+    quotes = {s.field.rsplit(".", 1)[-1]: s.quote for s in [*ident.evidence, *remedy.evidence]}
     id_ev: list[Span] = []
     rem_ev: list[Span] = []
     v = Verification(rules=rules)

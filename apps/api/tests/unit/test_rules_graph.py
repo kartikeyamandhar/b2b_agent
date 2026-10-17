@@ -149,3 +149,23 @@ def test_replay_miss_fails_fast_without_counting_a_call(tmp_path: object) -> Non
     assert (result.status, result.calls, result.cost_usd) == ("failed", 0, Decimal(0))
     assert len(transport.calls) == 1
     assert [s.node for s in trace.steps] == ["load_notice", "draft_rules", "finalize"]
+
+
+def test_verify_accepts_path_qualified_evidence_field_names() -> None:
+    rules = ExtractedRules.model_validate(json.loads(draft(["AB-1234"])))
+    for span in rules.identification.evidence:
+        span.field = f"identification.{span.field}"
+    for span in rules.remedy.evidence:
+        span.field = f"remedy.{span.field}"
+    checked = verify_spans(rules, NOTICE)
+    assert checked.rules.identification.units_affected == 500
+    assert checked.rules.identification.sold_from is not None
+    assert checked.rules.remedy.remedy_type == "refund"
+    assert checked.dropped == []
+
+
+def test_result_keeps_the_pre_verification_draft_for_diagnostics() -> None:
+    result, _, _ = run_graph([reply(draft(["AB-1234", "ZZ-9999"]))])
+    assert result.draft is not None
+    assert result.draft.identification.models == ["AB-1234", "ZZ-9999"]
+    assert result.rules is not None and result.rules.identification.models == ["AB-1234"]

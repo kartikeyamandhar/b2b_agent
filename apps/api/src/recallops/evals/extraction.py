@@ -5,18 +5,23 @@ reported as "not run", never silently scored as an empty extraction."""
 from __future__ import annotations
 
 import json
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
+from recallops.db.engine import internal_engine
 from recallops.evals.golden import GoldenNotice, load_golden, notice_text
 from recallops.evals.metrics import HEADLINE_FIELDS, FieldTable, score
 from recallops.llm.client import LiveCallsDisabled, LlmClient, build_client
+from recallops.models import Recall
 from recallops.rules import baseline, graph
 from recallops.rules.schemas import ExtractedRules
 from recallops.settings import REPO_ROOT, Settings, get_settings
-from recallops.tracing.writer import MemoryTrace
+from recallops.tracing.writer import DbTrace, MemoryTrace, TraceSink
 
 EXTRACTION_DIR = REPO_ROOT / "evals" / "extraction"
 RESULTS_DIR = REPO_ROOT / "evals" / "results"
@@ -30,6 +35,20 @@ class GraphRun:
     cost_usd: str
     outcomes: dict[str, int]
     predictions: dict[str, ExtractedRules | None]
+    drafts: dict[str, ExtractedRules | None] = field(default_factory=dict)
+    dropped: dict[str, int] = field(default_factory=dict)
+
+
+def _trace(llm: LlmClient, source_id: str) -> TraceSink:
+    """Live runs write real agent_runs and agent_steps rows (archive extraction, no firm): agent_steps.cost_usd is
+    the spend ledger the meter reads, so the global budget stop sees every live call. Replay costs nothing and
+    keeps the trace in memory."""
+    if llm.settings.llm_mode != "live":
+        return MemoryTrace("extract_rules")
+    engine = internal_engine()
+    with Session(engine) as session:
+        recall_id = session.scalar(select(Recall.id).where(Recall.source == "cpsc", Recall.source_id == source_id))
+    return DbTrace(engine, "extract_rules", firm_id=None, recall_id=recall_id, model_id=llm.model_id)
 
 
 def run_graph(notices: list[GoldenNotice], llm: LlmClient | None, reason_if_none: str) -> GraphRun:
@@ -37,11 +56,17 @@ def run_graph(notices: list[GoldenNotice], llm: LlmClient | None, reason_if_none
         return GraphRun("not run", reason_if_none, 0, "0", {}, {})
     outcomes: dict[str, int] = {}
     predictions: dict[str, ExtractedRules | None] = {}
+    drafts: dict[str, ExtractedRules | None] = {}
+    dropped: dict[str, int] = {}
     calls, cost = 0, 0.0
     for n in notices:
-        result = graph.extract(notice_text(EXTRACTION_DIR / "notices", n.source_id), llm, MemoryTrace("extract_rules"))
+        result = graph.extract(notice_text(EXTRACTION_DIR / "notices", n.source_id), llm, _trace(llm, n.source_id))
         outcomes[result.status] = outcomes.get(result.status, 0) + 1
         predictions[n.source_id] = result.rules
+        drafts[n.source_id] = result.draft
+        for item in result.dropped:
+            key = item.split(":", 1)[0]
+            dropped[key] = dropped.get(key, 0) + 1
         calls += result.calls
         cost += float(result.cost_usd)
     if outcomes.get("done", 0) == 0:
@@ -53,7 +78,7 @@ def run_graph(notices: list[GoldenNotice], llm: LlmClient | None, reason_if_none
             outcomes,
             {},
         )
-    return GraphRun("run", "", calls, f"{cost:.6f}", outcomes, predictions)
+    return GraphRun("run", "", calls, f"{cost:.6f}", outcomes, predictions, drafts, dropped)
 
 
 def _row(name: str, table: FieldTable) -> str:
@@ -103,7 +128,12 @@ def render(
         )
         lines += [
             "",
-            f"Graph runs: {graph_run.outcomes}, {graph_run.calls} model calls, {graph_run.cost_usd} USD.",
+            f"Graph runs: {graph_run.outcomes}, {graph_run.calls} model calls, {graph_run.cost_usd} USD"
+            + (
+                " as recorded in the live run (replaying the recordings costs nothing)."
+                if settings.llm_mode == "replay"
+                else " spent in this live run."
+            ),
             "",
             f"**Kill criterion (provisional):** {verdict}",
         ]
@@ -164,6 +194,21 @@ def main(results_dir: Path = RESULTS_DIR) -> dict[str, Any]:
         )
     estimate = estimate_live_cost(notices, settings)
     md = render(notices, base_all, base_heldout, graph_run, graph_all, graph_heldout, settings)
+    graph_draft_all = None
+    if graph_run.status == "run":
+        graph_draft_all = table(graph_run.drafts, notices)
+        md += (
+            "\n**Diagnostic, not kill-deciding:** the same recorded responses scored before verify_spans removes "
+            "values it cannot find verbatim in the notice. The gap between this row and `graph, all` is the cost of "
+            "the verification rule, not of extraction. Values dropped by verification, by field: "
+            f"{dict(sorted(graph_run.dropped.items(), key=lambda kv: -kv[1]))}.\n\n"
+            f"| extractor | n | {' | '.join(HEADLINE_FIELDS)} | headline | grounded |\n"
+            + "|"
+            + "---|" * (len(HEADLINE_FIELDS) + 4)
+            + "\n"
+            + _row("graph draft before verify_spans, all", graph_draft_all)
+            + "\n"
+        )
     md += (
         f"\nWorst-case cost of one live recording run of the graph on these {len(notices)} notices "
         f"(conservative token estimate, {settings.extract_max_calls} calls each): {estimate} USD.\n"
@@ -179,6 +224,8 @@ def main(results_dir: Path = RESULTS_DIR) -> dict[str, Any]:
         "graph_reason": graph_run.reason,
         "graph_all": asdict(graph_all) if graph_all else None,
         "graph_heldout": asdict(graph_heldout) if graph_heldout else None,
+        "graph_draft_all": asdict(graph_draft_all) if graph_draft_all else None,
+        "graph_dropped_by_field": graph_run.dropped,
         "graph_calls": graph_run.calls,
         "graph_cost_usd": graph_run.cost_usd,
         "live_run_worst_case_usd": estimate,

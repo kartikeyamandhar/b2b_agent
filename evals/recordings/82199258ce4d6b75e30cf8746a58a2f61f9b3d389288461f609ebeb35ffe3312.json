@@ -1,0 +1,14 @@
+{
+ "text": "{\"identification\":{\"models\":[],\"model_label_location\":null,\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"Amazon.com\"],\"sold_from\":\"2025-05-01\",\"sold_to\":\"2026-03-31\",\"price_range_cents\":{\"min_cents\":3200,\"max_cents\":3200},\"units_affected\":640,\"evidence\":[{\"field\":\"sold_at\",\"quote\":\"Online at Amazon.com from May 2025 through March 2026\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"from May 2025 through March 2026\",\"start\":0,\"end\":0},{\"field\":\"sold_to\",\"quote\":\"through March 2026\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for about $32\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 640\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Stop using pools with the recalled pool drain covers.\",\"Destroy the removed drain cover.\",\"Take a clear photograph/video of the destroyed product as proof of destruction.\",\"Send the proof to the recalling firm by email at yeeluzanrecall@163.com.\"],\"proof_required\":[\"destruction_photo\"],\"payout\":{\"method\":\"original_payment\",\"amount_rule\":null}}],\"destruction_instruction\":\"destroy the removed drain cover\",\"registration_url\":null,\"contact\":\"yeeluzanrecall@163.com\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Refund\",\"start\":0,\"end\":0},{\"field\":\"destruction_instruction\",\"quote\":\"consumers should destroy the removed drain cover\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"send the proof to the recalling firm by email at yeeluzanrecall@163.com\",\"start\":0,\"end\":0},{\"field\":\"options\",\"quote\":\"To receive a full refund to their original payment method\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 3940,
+  "output_tokens": 660,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011Cg6tsYjv3nEjY5muR5NQJ",
+ "purpose": "extract_rules",
+ "max_tokens": 4096
+}

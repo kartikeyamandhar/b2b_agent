@@ -121,6 +121,53 @@ class ReplayTransport:
         )
 
 
+UNSUPPORTED_SCHEMA_KEYS = frozenset(
+    {
+        "minimum",
+        "maximum",
+        "exclusiveMinimum",
+        "exclusiveMaximum",
+        "multipleOf",
+        "minLength",
+        "maxLength",
+        "minItems",
+        "maxItems",
+        "uniqueItems",
+        "pattern",
+    }
+)
+
+
+def api_schema(schema: Any) -> Any:
+    """Structured outputs reject numeric and length constraints; drop them for the wire. Responses are still
+    validated against the full pydantic schema locally."""
+    if isinstance(schema, dict):
+        return {k: api_schema(v) for k, v in schema.items() if k not in UNSUPPORTED_SCHEMA_KEYS}
+    if isinstance(schema, list):
+        return [api_schema(v) for v in schema]
+    return schema
+
+
+def request_kwargs(request: ModelRequest, model_id: str, max_tokens: int) -> dict[str, Any]:
+    """The Messages API body. Thinking is disabled: extraction is a copy-out task, and thinking tokens would
+    compete with the JSON for max_tokens."""
+    content: list[dict[str, Any]] = [
+        {"type": "image", "source": {"type": "base64", "media_type": i.media_type, "data": i.data_b64}}
+        for i in request.images
+    ]
+    content.append({"type": "text", "text": request.user_text})
+    kwargs: dict[str, Any] = {
+        "model": model_id,
+        "max_tokens": max_tokens,
+        "system": request.system,
+        "messages": [{"role": "user", "content": content}],
+        "thinking": {"type": "disabled"},
+    }
+    if request.output_schema is not None:
+        kwargs["output_config"] = {"format": {"type": "json_schema", "schema": api_schema(request.output_schema)}}
+    return kwargs
+
+
 class AnthropicTransport:
     """Live calls through the pinned anthropic SDK. SDK retries are off so the meter sees every attempt."""
 
@@ -131,21 +178,10 @@ class AnthropicTransport:
         self._client = anthropic.Anthropic(api_key=api_key, max_retries=0)
 
     def send(self, request: ModelRequest, model_id: str, max_tokens: int, timeout_s: float) -> ModelResponse:
-        content: list[dict[str, Any]] = [
-            {"type": "image", "source": {"type": "base64", "media_type": i.media_type, "data": i.data_b64}}
-            for i in request.images
-        ]
-        content.append({"type": "text", "text": request.user_text})
-        kwargs: dict[str, Any] = {
-            "model": model_id,
-            "max_tokens": max_tokens,
-            "system": request.system,
-            "messages": [{"role": "user", "content": content}],
-        }
-        if request.output_schema is not None:
-            kwargs["output_config"] = {"format": {"type": "json_schema", "schema": request.output_schema}}
         try:
-            message = self._client.with_options(timeout=timeout_s).messages.create(**kwargs)
+            message = self._client.with_options(timeout=timeout_s).messages.create(
+                **request_kwargs(request, model_id, max_tokens)
+            )
         except self._anthropic.APIError as exc:
             raise ModelCallFailed(f"{type(exc).__name__}: {exc}") from exc
         text = "".join(block.text for block in message.content if block.type == "text")
@@ -162,6 +198,38 @@ class AnthropicTransport:
             model_id=message.model,
             request_id=getattr(message, "_request_id", None),
         )
+
+
+@dataclass
+class RecordingTransport:
+    """Wraps the live transport and saves every response under its canonical request key, so the same request
+    replays later at no cost (ReplayTransport reads the same files)."""
+
+    inner: Transport
+    directory: Path
+    recorded: list[str] = field(default_factory=list)
+
+    def send(self, request: ModelRequest, model_id: str, max_tokens: int, timeout_s: float) -> ModelResponse:
+        response = self.inner.send(request, model_id, max_tokens, timeout_s)
+        key = request.canonical_key(model_id)
+        self.directory.mkdir(parents=True, exist_ok=True)
+        record = {
+            "text": response.text,
+            "usage": {
+                "input_tokens": response.usage.input_tokens,
+                "output_tokens": response.usage.output_tokens,
+                "cache_read_input_tokens": response.usage.cache_read_input_tokens,
+                "cache_creation_input_tokens": response.usage.cache_creation_input_tokens,
+            },
+            "stop_reason": response.stop_reason,
+            "model_id": response.model_id,
+            "request_id": response.request_id,
+            "purpose": request.purpose,
+            "max_tokens": max_tokens,
+        }
+        (self.directory / f"{key}.json").write_text(json.dumps(record, indent=1) + "\n", encoding="utf-8")
+        self.recorded.append(key)
+        return response
 
 
 class LlmClient:
@@ -209,7 +277,7 @@ def build_client(settings: Settings, transport: Transport | None = None) -> LlmC
         elif settings.llm_mode == "live":
             if settings.anthropic_api_key in {"", "sk-ant-fake"}:
                 raise LiveCallsDisabled("LLM_MODE=live needs a real ANTHROPIC_API_KEY in .env")
-            transport = AnthropicTransport(settings.anthropic_api_key)
+            transport = RecordingTransport(AnthropicTransport(settings.anthropic_api_key), settings.replay_dir)
         else:
             raise LiveCallsDisabled("LLM_MODE=fake needs an injected transport")
     meter = CostMeter(

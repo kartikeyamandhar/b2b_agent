@@ -1,0 +1,14 @@
+{
+ "text": "{\"identification\":{\"models\":[],\"model_label_location\":\"On the front of the neck label is a flamingo, \\\"100% Cotton\\\", and \\\"Made in China\\\".\",\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"Amazon.com\"],\"sold_from\":\"2021-11-01\",\"sold_to\":\"2023-07-31\",\"price_range_cents\":{\"min_cents\":2000,\"max_cents\":2700},\"units_affected\":5000,\"evidence\":[{\"field\":\"identification.model_label_location\",\"quote\":\"On the front of the neck label is a flamingo, \\\"100% Cotton\\\", and \\\"Made in China\\\".\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_at\",\"quote\":\"Online at Amazon.com from November 2021 through July 2023 for between $20 and $27.\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_from\",\"quote\":\"Online at Amazon.com from November 2021 through July 2023\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_to\",\"quote\":\"Online at Amazon.com from November 2021 through July 2023\",\"start\":0,\"end\":0},{\"field\":\"identification.price_range_cents\",\"quote\":\"for between $20 and $27.\",\"start\":0,\"end\":0},{\"field\":\"identification.units_affected\",\"quote\":\"About 5,000 (About 950 children's robes were previously recalled in June 2021)\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Immediately take the recalled robes away from children, stop using them, and contact SIORO for a full refund.\",\"Destroy the garments by cutting them in half, and send a photo of the destroyed garment to amazonus@sioro.com.\",\"Upon receipt of the photo, SIORO will refund consumers the purchase price.\",\"Dispose of the destroyed garments in accordance with local and state recycling laws.\"],\"proof_required\":[\"destruction_photo\"],\"payout\":{\"method\":null,\"amount_rule\":\"Refund of the purchase price\"}}],\"destruction_instruction\":\"Destroy the garments by cutting them in half\",\"registration_url\":null,\"contact\":\"Email at amazonus@sioro.com or visit the SIORO amazon store link https://www.amazon.com/sp?ie=UTF8&seller=AUPGGE9NR4SBV and click \\\"Ask a question\\\" for more information.\",\"evidence\":[{\"field\":\"remedy.remedy_type\",\"quote\":\"Remedy options: Refund\",\"start\":0,\"end\":0},{\"field\":\"remedy.options\",\"quote\":\"contact SIORO for a full refund\",\"start\":0,\"end\":0},{\"field\":\"remedy.destruction_instruction\",\"quote\":\"Consumers should destroy the garments by cutting them in half\",\"start\":0,\"end\":0},{\"field\":\"remedy.contact\",\"quote\":\"Email at amazonus@sioro.com\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4041,
+  "output_tokens": 956,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011Cg6tk7g6JUsrbxYcqtvgf",
+ "purpose": "extract_rules",
+ "max_tokens": 4096
+}
