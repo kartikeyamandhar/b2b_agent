@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[\"17249\",\"17310\"],\"model_label_location\":\"Labels with the word \\\"Torex\\\" are located on the front and side of the ride-on toy.\",\"serial_ranges\":[],\"date_codes\":[{\"format\":\"DDDYY\",\"start\":\"16919\",\"end\":\"11122\",\"raw\":\"date codes between 16919 and 11122\"}],\"sold_at\":[\"Walmart\",\"www.walmart.com\"],\"sold_from\":\"2019-08-01\",\"sold_to\":\"2024-12-31\",\"price_range_cents\":{\"min_cents\":50000,\"max_cents\":60000},\"units_affected\":24700,\"evidence\":[{\"field\":\"models\",\"quote\":\"The model numbers are 17249 and 17310\",\"start\":0,\"end\":0},{\"field\":\"model_label_location\",\"quote\":\"Labels with the word \\\"Torex\\\" are located on the front and side of the ride-on toy.\",\"start\":0,\"end\":0},{\"field\":\"date_codes\",\"quote\":\"date codes between 16919 and 11122\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"Exclusively at Walmart nationwide and online at www.walmart.com\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"from August 2019\",\"start\":0,\"end\":0},{\"field\":\"sold_to\",\"quote\":\"through December 2024\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for between $500 and $600\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 24,700\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"repair\",\"options\":[{\"type\":\"repair\",\"steps\":[\"Consumers should immediately stop using the recalled UTVs and contact Huffy Corporation to schedule a free repair.\",\"Consumers can have the repair done by a third party.\",\"Huffy Corporation will reimburse consumers up to $50 for charges incurred in the third-party repair.\"],\"proof_required\":[],\"payout\":{\"method\":null,\"amount_rule\":\"Reimbursement up to $50 for charges incurred in the third-party repair\"}}],\"destruction_instruction\":null,\"registration_url\":null,\"contact\":\"Huffy Corporation at 800-872-2453 from 8 a.m. to 5 p.m. ET, Monday through Friday, by email at torex@huffy.com, or online at www.huffy.com/torex-utv-ride-on-toy-recall\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Repair\",\"start\":0,\"end\":0},{\"field\":\"options\",\"quote\":\"Consumers should immediately stop using the recalled UTVs and contact Huffy Corporation to schedule a free repair.\",\"start\":0,\"end\":0},{\"field\":\"payout\",\"quote\":\"Huffy Corporation will reimburse consumers up to $50 for charges incurred in the third-party repair.\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"Huffy Corporation at 800-872-2453 from 8 a.m. to 5 p.m. ET, Monday through Friday, by email at torex@huffy.com, or online at www.huffy.com/torex-utv-ride-on-toy-recall\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4055,
+  "output_tokens": 1049,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYmtSqep47ghwLi7C35",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 4718
+}

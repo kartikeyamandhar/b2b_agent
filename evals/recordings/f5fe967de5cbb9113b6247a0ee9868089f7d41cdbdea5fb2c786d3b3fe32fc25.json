@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[\"AG-12011\",\"12014\",\"12016\"],\"model_label_location\":\"The model numbers are printed in the owner's manual and labeled on the bed rail's metal post.\",\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"Amazon.com\"],\"sold_from\":\"2025-04-01\",\"sold_to\":\"2026-05-31\",\"price_range_cents\":{\"min_cents\":5000,\"max_cents\":8000},\"units_affected\":35083,\"evidence\":[{\"field\":\"identification.models\",\"quote\":\"models AG-12011, 12014 and 12016\",\"start\":0,\"end\":0},{\"field\":\"identification.model_label_location\",\"quote\":\"The model numbers are printed in the owner's manual and labeled on the bed rail's metal post.\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_at\",\"quote\":\"Amazon.com from April 2025 through May 2026\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_from\",\"quote\":\"Amazon.com from April 2025 through May 2026\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_to\",\"quote\":\"Amazon.com from April 2025 through May 2026\",\"start\":0,\"end\":0},{\"field\":\"identification.price_range_cents\",\"quote\":\"for between $50 and $80\",\"start\":0,\"end\":0},{\"field\":\"identification.units_affected\",\"quote\":\"About 35,083 units\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Immediately stop using the recalled adult portable bed rails.\",\"Contact Agrish Direct for a full refund.\",\"Go to http://www.agrish.online/recall to register for the recall.\",\"Follow the instructions on how to dispose of the recalled bed rail.\"],\"proof_required\":[\"registration\"],\"payout\":{\"method\":null,\"amount_rule\":\"full refund\"}}],\"destruction_instruction\":\"Follow the instructions on how to dispose of the recalled bed rail.\",\"registration_url\":\"http://www.agrish.online/recall\",\"contact\":\"agrish.us@outlook.com\",\"evidence\":[{\"field\":\"remedy.remedy_type\",\"quote\":\"Remedy options: Refund\",\"start\":0,\"end\":0},{\"field\":\"remedy.options\",\"quote\":\"contact Agrish Direct for a full refund\",\"start\":0,\"end\":0},{\"field\":\"remedy.destruction_instruction\",\"quote\":\"instructions on how to dispose of the recalled bed rail\",\"start\":0,\"end\":0},{\"field\":\"remedy.registration_url\",\"quote\":\"Consumers will be asked to go to http://www.agrish.online/recall to register for the recall\",\"start\":0,\"end\":0},{\"field\":\"remedy.contact\",\"quote\":\"agrish.us@outlook.com\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4251,
+  "output_tokens": 915,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYtc1aRtgipEhSNoaeQ",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 3318
+}

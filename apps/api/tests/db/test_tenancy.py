@@ -25,6 +25,7 @@ TENANT_TABLES = (
     "firm_members",
     "recall_programs",
     "documents",
+    "document_chunks",
     "claims",
     "claim_photos",
     "agent_runs",
@@ -54,6 +55,9 @@ def _seed_firm(conn: object, name: str) -> FirmRows:
         "INSERT INTO firm_members (firm_id, clerk_user_id, role) VALUES (:f, 'user_' || :name, 'admin')",
         "INSERT INTO recall_programs (id, firm_id, value_threshold_cents) VALUES (:p, :f, 10000)",
         "INSERT INTO documents (firm_id, program_id, kind, title, text) VALUES (:f, :p, 'faq', 't', 'x')",
+        "INSERT INTO document_chunks (document_id, firm_id, program_id, idx, text, embedding, embedding_model) "
+        "SELECT id, :f, :p, 0, 'x', array_fill(0.0::real, ARRAY[1024])::vector, 'hash-ngram-v1' FROM documents "
+        "WHERE firm_id = :f",
         "INSERT INTO claims (id, firm_id, program_id, token_hash, status) VALUES (:c, :f, :p, :tok, 'submitted')",
         "INSERT INTO claim_photos (firm_id, claim_id, kind, storage_path, sha256, phash) "
         "VALUES (:f, :c, 'label', 'p', 's', '0000000000000000')",

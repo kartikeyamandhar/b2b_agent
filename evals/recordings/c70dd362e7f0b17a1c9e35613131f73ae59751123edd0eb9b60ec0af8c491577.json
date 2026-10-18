@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[\"RV001\"],\"model_label_location\":\"Label located under the walker's seat\",\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"Target.com\"],\"sold_from\":\"2026-06-01\",\"sold_to\":\"2026-06-30\",\"price_range_cents\":{\"min_cents\":6200,\"max_cents\":7000},\"units_affected\":243,\"evidence\":[{\"field\":\"models\",\"quote\":\"Model No.: RV001\",\"start\":0,\"end\":0},{\"field\":\"model_label_location\",\"quote\":\"label located under the walker's seat\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"Target.com in June 2026\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"Target.com in June 2026\",\"start\":0,\"end\":0},{\"field\":\"sold_to\",\"quote\":\"Target.com in June 2026\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for between $62 and $70\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"units: About 243\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Stop using the recalled walkers immediately\",\"Contact Kmaier for a full refund\",\"Disassemble the walker\",\"Destroy it by cutting the walker's fabric seat and writing in permanent marker \\\"Recalled\\\" on the top of the tray\",\"Send a photo of the destroyed walker to TargetplusSJ@outlook.com\",\"Dispose of the recalled product\"],\"proof_required\":[\"destruction_photo\"],\"payout\":{\"method\":null,\"amount_rule\":\"full refund\"}}],\"destruction_instruction\":\"Disassemble the walker; destroy it by cutting the walker's fabric seat and writing in permanent marker \\\"Recalled\\\" on the top of the tray; send a photo of the destroyed walker to TargetplusSJ@outlook.com; then dispose of the recalled product.\",\"registration_url\":null,\"contact\":\"Kmaier by email at TargetplusSJ@outlook.com\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Refund\",\"start\":0,\"end\":0},{\"field\":\"options\",\"quote\":\"contact Kmaier for a full refund\",\"start\":0,\"end\":0},{\"field\":\"destruction_instruction\",\"quote\":\"destroy it by cutting the walker's fabric seat and writing in permanent marker \u201cRecalled\u201d on the top of the tray\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"Kmaier by email at TargetplusSJ@outlook.com\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 3881,
+  "output_tokens": 874,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYrXebUbC89mny5mNTA",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 4262
+}

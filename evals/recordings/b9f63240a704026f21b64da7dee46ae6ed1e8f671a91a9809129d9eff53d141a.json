@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[\"Magellan Odyssey Rocker Chairs\"],\"model_label_location\":\"tracking label sewn onto the seat of the chair\",\"serial_ranges\":[],\"date_codes\":[{\"format\":\"MM/YYYY\",\"start\":\"2025-07\",\"end\":\"2025-08\",\"raw\":\"07/2025 or 08/2025\"}],\"sold_at\":[\"Academy Sports + Outdoors\"],\"sold_from\":\"2025-09-01\",\"sold_to\":\"2025-10-31\",\"price_range_cents\":{\"min_cents\":5000,\"max_cents\":5000},\"units_affected\":35300,\"evidence\":[{\"field\":\"models\",\"quote\":\"Magellan-branded Odyssey Rocker Chairs\",\"start\":0,\"end\":0},{\"field\":\"model_label_location\",\"quote\":\"tracking label sewn onto the seat of the chair\",\"start\":0,\"end\":0},{\"field\":\"date_codes\",\"quote\":\"date codes 07/2025 or 08/2025\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"Academy Sports + Outdoors stores nationwide and online at academy.com\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"sold from September 2025 to October 2025\",\"start\":0,\"end\":0},{\"field\":\"sold_to\",\"quote\":\"sold from September 2025 to October 2025\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for about $50\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 35,300\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Immediately stop using the recalled chairs and return them to any Academy Sports + Outdoors store for a full refund.\",\"Contact Academy's Customer Care to return the chair by mail at no cost.\"],\"proof_required\":[],\"payout\":{\"method\":null,\"amount_rule\":null}}],\"destruction_instruction\":null,\"registration_url\":null,\"contact\":\"Academy Sports + Outdoors toll-free at 888-922-2336 from 7 a.m. to 10 p.m. CT, email at customerservice@academy.com, or online at www.academy.com/product-recalls\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Consumers should immediately stop using the recalled chairs and return them to any Academy Sports + Outdoors store for a full refund.\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"Academy Sports + Outdoors toll-free at 888-922-2336 from 7 a.m. to 10 p.m. CT, email at customerservice@academy.com\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4089,
+  "output_tokens": 886,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYpPzez5kpjNb7tN4L7",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 3184
+}

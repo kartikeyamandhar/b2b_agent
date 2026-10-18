@@ -7,6 +7,7 @@ from decimal import Decimal
 from typing import Any
 from uuid import UUID
 
+from pgvector.sqlalchemy import Vector
 from sqlalchemy import Boolean, Date, DateTime, ForeignKey, Integer, Numeric, Text, func
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
@@ -87,6 +88,15 @@ class FeedRun(Base):
     error: Mapped[str | None]
 
 
+class WorkerHeartbeat(Base):
+    """Non-tenant: one row per worker process, no claim data (0002)."""
+
+    __tablename__ = "worker_heartbeats"
+    worker_id: Mapped[str] = mapped_column(primary_key=True)
+    seen_at: Mapped[datetime] = _now()
+    info: Mapped[dict[str, Any]] = mapped_column(server_default="{}")
+
+
 class StripeEvent(Base):
     __tablename__ = "stripe_events"
     id: Mapped[str] = mapped_column(primary_key=True)
@@ -143,6 +153,23 @@ class Document(Base):
     created_at: Mapped[datetime] = _now()
 
 
+EMBEDDING_DIM = 1024  # migrations/versions/0002_m2_agent.py
+
+
+class DocumentChunk(Base):
+    __tablename__ = "document_chunks"
+    id: Mapped[UUID] = _pk()
+    document_id: Mapped[UUID] = mapped_column(ForeignKey("documents.id"))
+    firm_id: Mapped[UUID]
+    program_id: Mapped[UUID]
+    idx: Mapped[int]
+    text: Mapped[str]
+    embedding: Mapped[list[float]] = mapped_column(Vector(EMBEDDING_DIM))
+    embedding_model: Mapped[str]
+    created_at: Mapped[datetime] = _now()
+    # search (generated tsvector) is queried with SQL text only, so it is not mapped.
+
+
 class Claim(Base):
     __tablename__ = "claims"
     id: Mapped[UUID] = _pk()
@@ -164,6 +191,10 @@ class Claim(Base):
     submitted_at: Mapped[datetime | None]
     decided_at: Mapped[datetime | None]
     decided_by: Mapped[str | None]
+    lease_owner: Mapped[str | None]
+    lease_until: Mapped[datetime | None]
+    attempts: Mapped[int] = mapped_column(server_default="0")
+    messages: Mapped[list[dict[str, Any]]] = mapped_column(JSONB, server_default="[]")
 
 
 class ClaimPhoto(Base):
@@ -195,6 +226,11 @@ class AgentRun(Base):
     cost_usd: Mapped[Decimal] = mapped_column(server_default="0")
     model_id: Mapped[str | None]
     outcome: Mapped[dict[str, Any] | None]
+    config: Mapped[dict[str, Any]] = mapped_column(server_default="{}")
+    resume_payload: Mapped[dict[str, Any] | None]
+    lease_owner: Mapped[str | None]
+    lease_until: Mapped[datetime | None]
+    attempts: Mapped[int] = mapped_column(server_default="0")
 
 
 class AgentStep(Base):
@@ -213,6 +249,9 @@ class AgentStep(Base):
     tokens_out: Mapped[int] = mapped_column(server_default="0")
     cost_usd: Mapped[Decimal] = mapped_column(server_default="0")
     created_at: Mapped[datetime] = _now()
+    counted: Mapped[bool] = mapped_column(server_default="false")
+    nominal_cost_usd: Mapped[Decimal] = mapped_column(server_default="0")
+    step_key: Mapped[str | None]
 
 
 class FraudCluster(Base):
@@ -281,6 +320,7 @@ TENANT_MODELS: tuple[type[Base], ...] = (
     FirmMember,
     RecallProgram,
     Document,
+    DocumentChunk,
     Claim,
     ClaimPhoto,
     AgentRun,

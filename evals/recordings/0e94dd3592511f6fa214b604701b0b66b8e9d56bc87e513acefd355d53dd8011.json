@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[],\"model_label_location\":\"sewn-in labels inside the left inseam of the robes\",\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"lolanta.com\",\"Amazon.com\"],\"sold_from\":\"2021-01-01\",\"sold_to\":\"2023-10-31\",\"price_range_cents\":{\"min_cents\":3000,\"max_cents\":3000},\"units_affected\":16900,\"evidence\":[{\"field\":\"identification.model_label_location\",\"quote\":\"sewn-in labels inside the left inseam of the robes\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_at\",\"quote\":\"Online at lolanta.com and Amazon.com\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_from\",\"quote\":\"from January 2021\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_to\",\"quote\":\"through October 2023\",\"start\":0,\"end\":0},{\"field\":\"identification.price_range_cents\",\"quote\":\"for about $30\",\"start\":0,\"end\":0},{\"field\":\"identification.units_affected\",\"quote\":\"About 16,900\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Immediately take the recalled bathrobes away from children and stop using them.\",\"Contact Nanchang Zhongcangjishi E-commerce for a full refund.\",\"Destroy the garments by cutting them in half.\",\"Email a photo of the destroyed garment to business@lolanta.com.\",\"Upon receipt of the photo, receive a full refund of the purchase price.\"],\"proof_required\":[\"destruction_photo\"],\"payout\":{\"method\":null,\"amount_rule\":\"full refund of the purchase price\"}}],\"destruction_instruction\":\"cutting them in half\",\"registration_url\":null,\"contact\":\"business@lolanta.com\",\"evidence\":[{\"field\":\"remedy.remedy_type\",\"quote\":\"Remedy options: Refund\",\"start\":0,\"end\":0},{\"field\":\"remedy.options.steps\",\"quote\":\"Consumers should immediately take the recalled bathrobes away from children, stop using them and contact Nanchang Zhongcangjishi E-commerce for a full refund.\",\"start\":0,\"end\":0},{\"field\":\"remedy.destruction_instruction\",\"quote\":\"Consumers should destroy the garments by cutting them in half\",\"start\":0,\"end\":0},{\"field\":\"remedy.contact\",\"quote\":\"business@lolanta.com\",\"start\":0,\"end\":0},{\"field\":\"remedy.options.payout.amount_rule\",\"quote\":\"consumers will be issued a full refund of the purchase price\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4025,
+  "output_tokens": 862,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYdeZheGmn3zCmN4Cpr",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 3186
+}

@@ -38,6 +38,7 @@ _point_settings_at_test_db()
 
 # Delete order respects foreign keys. Runs as recallops_internal (BYPASSRLS).
 CLEAN_ORDER = (
+    "document_chunks",
     "agent_steps",
     "agent_runs",
     "payouts",
@@ -54,6 +55,7 @@ CLEAN_ORDER = (
     "feed_runs",
     "recalls",
     "stripe_events",
+    "worker_heartbeats",
 )
 
 

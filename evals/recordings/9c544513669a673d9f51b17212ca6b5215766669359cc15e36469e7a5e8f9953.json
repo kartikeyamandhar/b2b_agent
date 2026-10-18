@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[\"DGHK2355TF\",\"DGHX2655TF\",\"FFSC2323TS\",\"FGSC2335TD\",\"FGSC2335TF\",\"FGSS2635TD\",\"FGSS2635TE\",\"FGSS2635TF\",\"FGSS2635TP\",\"FPSC2277RF\",\"FPSC2278UF\",\"FPSS2677RF\",\"LFSC2324VF\",\"LGHK2336TD\",\"LGHK2336TF\",\"LGHX2636TD\",\"LGHX2636TF\"],\"model_label_location\":\"serial plate located inside the refrigerator compartment\",\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"Lowe's\",\"Home Depot\",\"Frigidaire.com\"],\"sold_from\":\"2015-11-01\",\"sold_to\":\"2019-09-30\",\"price_range_cents\":{\"min_cents\":140000,\"max_cents\":240000},\"units_affected\":383240,\"evidence\":[{\"field\":\"identification.models\",\"quote\":\"model numbers DGHK2355TF, DGHX2655TF, FFSC2323TS, FGSC2335TD, FGSC2335TF, FGSS2635TD, FGSS2635TE, FGSS2635TF, FGSS2635TP, FPSC2277RF, FPSC2278UF, FPSS2677RF, LFSC2324VF, LGHK2336TD, LGHK2336TF, LGHX2636TD, and LGHX2636TF\",\"start\":0,\"end\":0},{\"field\":\"identification.model_label_location\",\"quote\":\"The model and serial numbers are printed on a serial plate located inside the refrigerator compartment\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_at\",\"quote\":\"Lowe's, Home Depot and other stores nationwide and online at Frigidaire.com\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_from\",\"quote\":\"from November 2015 through September 2019\",\"start\":0,\"end\":0},{\"field\":\"identification.price_range_cents\",\"quote\":\"for between $1,400 and $2,400\",\"start\":0,\"end\":0},{\"field\":\"identification.units_affected\",\"quote\":\"About 383,240\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"repair\",\"options\":[{\"type\":\"repair\",\"steps\":[\"Consumers should immediately stop using the ice makers and contact Electrolux Group to request a replacement ice bucket assembly component, free of charge.\"],\"proof_required\":[],\"payout\":{\"method\":null,\"amount_rule\":null}}],\"destruction_instruction\":null,\"registration_url\":null,\"contact\":\"Electrolux Group toll-free at 888-377-7563 from 8:30 a.m. to 8 p.m. ET Monday through Friday, by email at IceBucketRecall@electrolux.com or online at www.icebucketrecall.com or at www.frigidaire.com\",\"evidence\":[{\"field\":\"remedy.options\",\"quote\":\"Consumers should immediately stop using the ice makers and contact Electrolux Group to request a replacement ice bucket assembly component, free of charge.\",\"start\":0,\"end\":0},{\"field\":\"remedy.contact\",\"quote\":\"Electrolux Group toll-free at 888-377-7563 from 8:30 a.m. to 8 p.m. ET Monday through Friday, by email at IceBucketRecall@electrolux.com or online at www.icebucketrecall.com or at www.frigidaire.com\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4386,
+  "output_tokens": 1134,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYd6jHFDRREkARm3uzx",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 3858
+}

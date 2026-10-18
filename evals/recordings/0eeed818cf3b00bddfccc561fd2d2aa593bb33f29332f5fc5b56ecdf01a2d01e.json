@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[\"7927-OZ\",\"7927-OZ1\"],\"model_label_location\":\"a sticker on the underside of the base of the lamp\",\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"HomeGoods\"],\"sold_from\":\"2025-06-01\",\"sold_to\":\"2026-07-31\",\"price_range_cents\":{\"min_cents\":7900,\"max_cents\":8900},\"units_affected\":4200,\"evidence\":[{\"field\":\"models\",\"quote\":\"model 7927-OZ and model 7927-OZ1\",\"start\":0,\"end\":0},{\"field\":\"model_label_location\",\"quote\":\"The model number is located on a sticker on the underside of the base of the lamp.\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"HomeGoods retail stores from June 2025 through July 2026\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"HomeGoods retail stores from June 2025 through July 2026\",\"start\":0,\"end\":0},{\"field\":\"sold_to\",\"quote\":\"HomeGoods retail stores from June 2025 through July 2026\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for between $79 and $89\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 4,200\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Stop using the recalled lamp immediately, turn it off, and unplug it.\",\"Cut the cord and provide a photograph of the destroyed lamp, following the instructions at https://www.designsdirectllc.com/recalls/.\"],\"proof_required\":[\"destruction_photo\"],\"payout\":{\"method\":null,\"amount_rule\":\"full refund within 15 days of receipt of the photo proof of destruction\"}}],\"destruction_instruction\":\"Cut the cord and provide a photograph of the destroyed lamp, following the instructions at https://www.designsdirectllc.com/recalls/.\",\"registration_url\":null,\"contact\":\"Designs Direct toll-free at 888-425-9692 between 9 a.m. and 5 p.m. ET, Monday through Friday, or by email at recall@designsdirectllc.com\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Refund\",\"start\":0,\"end\":0},{\"field\":\"destruction_instruction\",\"quote\":\"Consumers will be asked to cut the cord and provide a photograph of the destroyed lamp, following the instructions at https://www.designsdirectllc.com/recalls/.\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"Designs Direct toll-free at 888-425-9692 between 9 a.m. and 5 p.m. ET, Monday through Friday, or by email at recall@designsdirectllc.com\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4208,
+  "output_tokens": 949,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYsn1pMEtgKa6fMkLZY",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 3318
+}

@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-24.04
     services:
       db:
-        image: postgres:16
+        image: pgvector/pgvector:0.8.6-pg16
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres-dev-only

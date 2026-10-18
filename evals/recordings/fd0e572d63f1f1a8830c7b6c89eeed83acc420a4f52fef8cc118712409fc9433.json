@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[\"98715\"],\"model_label_location\":null,\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"www.goalzero.com\"],\"sold_from\":\"2023-10-01\",\"sold_to\":\"2024-09-30\",\"price_range_cents\":{\"min_cents\":7000,\"max_cents\":7000},\"units_affected\":530,\"evidence\":[{\"field\":\"models\",\"quote\":\"model number 98715 Goal Zero 4x HPP to 1x HPP+ Solar Series Combiner\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"Online at www.goalzero.com and other websites\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"from October 2023 through September 2024\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for about $70 when sold separately and when sold as part of a kit\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 530\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Immediately stop using the recalled products\",\"Contact Goal Zero to receive a refund of the purchase price in the original form of payment\",\"Register for a refund on the firm's website\",\"Discard the recalled product in the trash in accordance with any local and state ordinances\"],\"proof_required\":[\"registration\"],\"payout\":{\"method\":\"original_payment\",\"amount_rule\":\"Refund of the purchase price\"}}],\"destruction_instruction\":\"Discard the recalled product in the trash in accordance with any local and state ordinances.\",\"registration_url\":\"https://goalzero.com/pages/notices-recalls\",\"contact\":\"Goal Zero LLC toll-free at 888-794-6250 from 9 a.m. to 5 p.m. MT, Monday through Friday, email at support@goalzero.com, or online at https://goalzero.com/pages/notices-recalls\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Refund\",\"start\":0,\"end\":0},{\"field\":\"options\",\"quote\":\"contact Goal Zero to receive a refund of the purchase price in the original form of payment\",\"start\":0,\"end\":0},{\"field\":\"destruction_instruction\",\"quote\":\"discard the recalled product in the trash in accordance with any local and state ordinances\",\"start\":0,\"end\":0},{\"field\":\"registration_url\",\"quote\":\"Consumers should register for a refund on the firm's website\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"Goal Zero LLC toll-free at 888-794-6250 from 9 a.m. to 5 p.m. MT, Monday through Friday\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 3966,
+  "output_tokens": 890,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYktdEf4MyU8au8X1Md",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 3421
+}

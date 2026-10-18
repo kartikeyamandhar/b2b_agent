@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[\"SFMPAVORG\"],\"model_label_location\":\"Attached to the mattress pad is a law label listing \\\"Model SFMPAVORG\\\"\",\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"Avocado stores\",\"www.avocadogreenmattress.com\"],\"sold_from\":\"2019-01-01\",\"sold_to\":\"2024-03-31\",\"price_range_cents\":{\"min_cents\":20000,\"max_cents\":37000},\"units_affected\":55480,\"evidence\":[{\"field\":\"models\",\"quote\":\"Model SFMPAVORG\",\"start\":0,\"end\":0},{\"field\":\"model_label_location\",\"quote\":\"Attached to the mattress pad is a law label listing \\\"Model SFMPAVORG\\\"\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"Avocado stores nationwide and online at www.avocadogreenmattress.com\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"from January 2019 through March 2024\",\"start\":0,\"end\":0},{\"field\":\"sold_to\",\"quote\":\"from January 2019 through March 2024\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for between $200 and $370\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 55,480\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"replacement\",\"options\":[{\"type\":\"replacement\",\"steps\":[\"Immediately stop using the recalled mattress pads\",\"Contact Avocado Green Mattress to obtain a free replacement mattress pad, including shipping, at no charge\",\"Cut the mattress pad in two\",\"Write the date and initial the law label attached to the mattress pad\",\"Upload photos of the cut mattress pad and dated and initialed law label to www.avocadogreenmattress.com/pages/recall\"],\"proof_required\":[\"label_photo\",\"destruction_photo\"],\"payout\":{\"method\":null,\"amount_rule\":null}}],\"destruction_instruction\":\"Cut the mattress pad in two, and write the date and initial the law label attached to the mattress pad.\",\"registration_url\":null,\"contact\":\"Avocado Mattress toll-free at 844-326-5009 from 9 a.m. to 8 p.m. ET Monday through Friday, email at safety@avocadomattress.com, or online at www.avocadogreenmattress.com/pages/recall\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Replace\",\"start\":0,\"end\":0},{\"field\":\"options\",\"quote\":\"contact Avocado Green Mattress to obtain a free replacement mattress pad, including shipping, at no charge\",\"start\":0,\"end\":0},{\"field\":\"destruction_instruction\",\"quote\":\"Consumers should cut the mattress pad in two, and write the date and initial the law label attached to the mattress pad.\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"Avocado Mattress toll-free at 844-326-5009 from 9 a.m. to 8 p.m. ET Monday through Friday, email at safety@avocadomattress.com\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4098,
+  "output_tokens": 1035,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYiX5P5aQLm6vHpADC5",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 3523
+}

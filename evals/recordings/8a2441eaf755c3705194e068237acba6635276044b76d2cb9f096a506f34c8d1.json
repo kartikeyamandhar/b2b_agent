@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[\"BGAAL9\"],\"model_label_location\":\"The model is located on the bottom of the light, on the removable cover that provides access to the charging cord storage area.\",\"serial_ranges\":[],\"date_codes\":[{\"format\":\"month/year\",\"start\":\"2024-06\",\"end\":\"2024-06\",\"raw\":\"date code of June 2024\"}],\"sold_at\":[\"Meijer\",\"Blain\",\"Fleet Wholesale\",\"Amazon.com\"],\"sold_from\":\"2025-01-01\",\"sold_to\":\"2025-11-30\",\"price_range_cents\":{\"min_cents\":3500,\"max_cents\":4500},\"units_affected\":4100,\"evidence\":[{\"field\":\"models\",\"quote\":\"The model number of the lantern is BGAAL9\",\"start\":0,\"end\":0},{\"field\":\"model_label_location\",\"quote\":\"The model is located on the bottom of the light, on the removable cover that provides access to the charging cord storage area.\",\"start\":0,\"end\":0},{\"field\":\"date_codes\",\"quote\":\"Only lanterns with a date code of June 2024 located on the base of the unit, are part of this recall.\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"Meijer, Blain, and Fleet Wholesale stores nationwide and online at Amazon.com\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"between January and November 2025\",\"start\":0,\"end\":0},{\"field\":\"sold_to\",\"quote\":\"between January and November 2025\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for between $35 to $45\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 4,100\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Immediately stop using the recalled lanterns and contact Energizer for instructions on how to receive a full refund.\",\"Register for the recall by providing proof of the affected date code.\",\"Send the recalled lantern back using the prepaid shipping materials sent by Energizer.\",\"Once the lantern is returned, a refund will be issued.\"],\"proof_required\":[\"registration\",\"product_return\"],\"payout\":{\"method\":null,\"amount_rule\":null}}],\"destruction_instruction\":null,\"registration_url\":null,\"contact\":\"Energizer toll free at 800-383-7323 from 8 a.m. to 5 p.m. ET Monday through Friday, email at customersupport@energizer.com or online at https://energizer.com/lightings/lanternrecall or www.energizer.com and clicking on the \\\"Lantern Recall\\\" tab.\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Refund\",\"start\":0,\"end\":0},{\"field\":\"options\",\"quote\":\"contact Energizer for instructions on how to receive a full refund\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"Energizer toll free at 800-383-7323 from 8 a.m. to 5 p.m. ET Monday through Friday, email at customersupport@energizer.com\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4339,
+  "output_tokens": 1012,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYp7yW1Z974kVPUaHQ7",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 3652
+}

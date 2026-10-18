@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[],\"model_label_location\":\"\\\"BRS\\\" or \\\"BULin,\\\" and the bottle's volume, warnings, and/or directions appear in white lettering on the bottles.\",\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"Amazon.com\"],\"sold_from\":\"2023-01-01\",\"sold_to\":\"2023-12-31\",\"price_range_cents\":{\"min_cents\":1000,\"max_cents\":1300},\"units_affected\":290,\"evidence\":[{\"field\":\"identification.model_label_location\",\"quote\":\"\\\"BRS\\\" or \\\"BULin,\\\" and the bottle's volume, warnings, and/or directions appear in white lettering on the bottles.\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_at\",\"quote\":\"Amazon.com\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_from\",\"quote\":\"January 2023\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_to\",\"quote\":\"December 2023\",\"start\":0,\"end\":0},{\"field\":\"identification.price_range_cents\",\"quote\":\"between $10 and $13\",\"start\":0,\"end\":0},{\"field\":\"identification.units_affected\",\"quote\":\"About 290\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Immediately stop using the recalled fuel bottles\",\"Place them out of reach to children\",\"Contact Tentock for instructions on how to dispose of the product to receive a full refund\"],\"proof_required\":[],\"payout\":{\"method\":null,\"amount_rule\":null}}],\"destruction_instruction\":\"contact Tentock for instructions on how to dispose of the product\",\"registration_url\":null,\"contact\":\"squarebird@aliyun.com\",\"evidence\":[{\"field\":\"remedy.remedy_type\",\"quote\":\"Remedy options: Refund\",\"start\":0,\"end\":0},{\"field\":\"remedy.options\",\"quote\":\"Consumers should immediately stop using the recalled fuel bottles, place them out of reach to children, and contact Tentock for instructions on how to dispose of the product to receive a full refund.\",\"start\":0,\"end\":0},{\"field\":\"remedy.destruction_instruction\",\"quote\":\"contact Tentock for instructions on how to dispose of the product\",\"start\":0,\"end\":0},{\"field\":\"remedy.contact\",\"quote\":\"Email squarebird@aliyun.com\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 3909,
+  "output_tokens": 796,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYfrTNeiimUkkbuymy9",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 3105
+}

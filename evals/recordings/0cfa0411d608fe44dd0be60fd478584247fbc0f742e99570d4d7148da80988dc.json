@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[],\"model_label_location\":null,\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"article.com\"],\"sold_from\":\"2021-07-01\",\"sold_to\":\"2023-06-30\",\"price_range_cents\":{\"min_cents\":70000,\"max_cents\":70000},\"units_affected\":4500,\"evidence\":[{\"field\":\"sold_at\",\"quote\":\"Exclusively online at article.com\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"from July 2021 through June 2023\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for about $700\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 4,500\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"repair\",\"options\":[{\"type\":\"repair\",\"steps\":[\"Immediately stop using the recalled swivel chairs.\",\"Contact Article for a free replacement base and installation instructions.\"],\"proof_required\":[],\"payout\":{\"method\":null,\"amount_rule\":null}}],\"destruction_instruction\":null,\"registration_url\":null,\"contact\":\"Article toll-free at 888-746-3455 from 6 a.m. to 5 p.m. PT Monday through Friday, and on weekends from 7 a.m. to 5 p.m. PT, email at service@article.com, or online at https://www.article.com/c/spin-recall\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Repair\",\"start\":0,\"end\":0},{\"field\":\"steps\",\"quote\":\"Consumers should immediately stop using the recalled swivel chairs, and contact Article for a free replacement base and installation instructions.\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"Article toll-free at 888-746-3455\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 3876,
+  "output_tokens": 606,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYhWPSTPGb9M4AzW5ze",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 2584
+}

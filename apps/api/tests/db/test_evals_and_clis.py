@@ -82,10 +82,10 @@ def test_runner_cli_from_dir(clean_db: Engine, tmp_path: Path) -> None:
 def test_extraction_and_adjudication_evals_write_tables(clean_db: Engine, tmp_path: Path) -> None:
     out = tmp_path / "evals" / "results"
     ext = extraction.main(out)
-    assert ext["n"] == 40 and ext["graph_status"] == "not run" and ext["graph_calls"] == 0
-    assert ext["baseline_all"]["headline"] > 90
+    assert ext["n"] == 100 and ext["graph_status"] == "not run" and ext["graph_calls"] == 0
+    assert ext["baseline_all"]["headline"] > 90 and ext["blocks"]["new60"]["baseline"]["n"] == 60
     md = (out / "extraction.md").read_text()
-    assert "model-labeled, unaudited" in md and "Kill criterion" in md
+    assert "assistant-audited (owner delegated)" in md and "Kill criterion" in md
     adj = adjudication.main(out)
     assert adj["n"] == 300 and adj["macro_f1"] > 0.9
     assert "rules_only (tools 1.0.1" in (out / "adjudication.md").read_text()

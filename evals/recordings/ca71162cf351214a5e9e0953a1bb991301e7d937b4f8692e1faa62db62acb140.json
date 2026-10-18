@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[],\"model_label_location\":null,\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"Amazon.com\"],\"sold_from\":\"2026-02-01\",\"sold_to\":\"2026-03-31\",\"price_range_cents\":{\"min_cents\":1900,\"max_cents\":1900},\"units_affected\":480,\"evidence\":[{\"field\":\"models\",\"quote\":\"Muscccm Pool Drain Covers\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"Online at Amazon.com\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"from February 2026\",\"start\":0,\"end\":0},{\"field\":\"sold_to\",\"quote\":\"through March 2026\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for about $19\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 480\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Remove the drain cover from the pool.\",\"Take a photo of the removed cover.\",\"Send the photo to SZ Hengxun by email at MuscccmRecall@126.com.\"],\"proof_required\":[\"label_photo\"],\"payout\":{\"method\":null,\"amount_rule\":null}}],\"destruction_instruction\":null,\"registration_url\":null,\"contact\":\"SZ Hengxun by email at MuscccmRecall@126.com.\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Refund\",\"start\":0,\"end\":0},{\"field\":\"options\",\"quote\":\"To receive a refund, consumers should remove the drain cover from the pool, take a photo of the removed cover, and send it to SZ Hengxun by email at MuscccmRecall@126.com.\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"SZ Hengxun by email at MuscccmRecall@126.com.\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 3977,
+  "output_tokens": 650,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYpy6UJusi5CcCEoCRM",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 2553
+}

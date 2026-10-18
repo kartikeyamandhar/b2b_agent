@@ -74,11 +74,12 @@ class RunBudget:
     max_seconds: float
     steps: int = 0
     cost_usd: Decimal = Decimal(0)
-    active_seconds: float = 0.0
+    active_seconds: float = 0.0  # carried over from earlier segments of the same run (resume after a pause)
+    virtual_seconds: float = 0.0  # replayed calls' recorded live latency minus their replay time
     _started: float = field(default_factory=time.monotonic)
 
     def elapsed(self) -> float:
-        return self.active_seconds + (time.monotonic() - self._started)
+        return self.active_seconds + self.virtual_seconds + (time.monotonic() - self._started)
 
     def remaining_usd(self) -> Decimal:
         return self.max_usd - self.cost_usd
@@ -139,11 +140,13 @@ class CostMeter:
         )
         return Preflight(max_tokens=max_tokens, projected_usd=projected, timeout_s=timeout)
 
-    def settle(self, model_id: str, usage: Usage, run: RunBudget) -> Decimal:
+    def settle(self, model_id: str, usage: Usage, run: RunBudget, charged: bool = True) -> Decimal:
+        """Nominal cost from usage counts against the run caps whether or not it was charged (replay parity);
+        only charged cost reaches the spend ledger."""
         cost = self.prices.actual(model_id, usage)
         run.cost_usd += cost
         run.steps += 1
-        if isinstance(self.ledger, InMemoryLedger):
+        if charged and isinstance(self.ledger, InMemoryLedger):
             self.ledger.add(cost)
         total = self.ledger.spent_usd()
         if not self._warned and total >= self.budget_warn:

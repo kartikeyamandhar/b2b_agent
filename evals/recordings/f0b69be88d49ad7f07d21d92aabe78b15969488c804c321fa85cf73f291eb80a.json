@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[],\"model_label_location\":null,\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"Amazon.com\"],\"sold_from\":\"2025-08-01\",\"sold_to\":\"2026-04-30\",\"price_range_cents\":{\"min_cents\":2800,\"max_cents\":3000},\"units_affected\":1430,\"evidence\":[{\"field\":\"units_affected\",\"quote\":\"About 1,430\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"Online at Amazon.com from August 2025 through April 2026 for between $28 and $30.\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for between $28 and $30.\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"August 2025\",\"start\":0,\"end\":0},{\"field\":\"sold_to\",\"quote\":\"through April 2026\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Stop using the recalled nursing pillows immediately.\",\"Contact Little Grape Land for a full refund.\",\"Cut the pillow in half and send a photo of the destroyed pillow to recall@evermorepartner.com.\"],\"proof_required\":[\"destruction_photo\"],\"payout\":{\"method\":null,\"amount_rule\":\"full refund\"}}],\"destruction_instruction\":\"Cut the pillow in half and send a photo of the destroyed pillow to recall@evermorepartner.com.\",\"registration_url\":null,\"contact\":\"recall@evermorepartner.com\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Refund\",\"start\":0,\"end\":0},{\"field\":\"destruction_instruction\",\"quote\":\"Consumers will be asked to cut the pillow in half and send a photo of the destroyed pillow to recall@evermorepartner.com.\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"recall@evermorepartner.com\",\"start\":0,\"end\":0},{\"field\":\"options\",\"quote\":\"contact Little Grape Land for a full refund\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 3919,
+  "output_tokens": 696,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYqjuWCqwwZAYuTYJGQ",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 3080
+}
