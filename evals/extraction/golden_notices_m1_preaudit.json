@@ -1,0 +1,6502 @@
+{
+ "label_status": "model-labeled, unaudited",
+ "prereg": "evals/extraction/PREREG.md",
+ "count": 40,
+ "notices": [
+  {
+   "source_id": "24082",
+   "recall_date": "2024-01-11",
+   "title": "Boot Royalty Recalls Men's Leather Work Boots Due to Crush Hazard",
+   "category": "other",
+   "source_text_sha256": "bf8ecb4d89533ffc4c5af44ebb0d55d5838d84ebd0cc362c9539e44979107162",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "SE4570"
+     ],
+     "model_label_location": null,
+     "serial_ranges": [],
+     "date_codes": [
+      {
+       "format": "MM/YY",
+       "start": "07/22",
+       "end": "08/22",
+       "raw": "date code of either 07/22 NH or 08/22 NH"
+      }
+     ],
+     "sold_at": [
+      "Grainger",
+      "Safety Shoes Distributors",
+      "Saf-Gard Safety Shoe Company",
+      "www.grainger.com",
+      "www.justinboots.com"
+     ],
+     "sold_from": "2022-09-01",
+     "sold_to": "2023-09-30",
+     "price_range_cents": {
+      "min_cents": 15000,
+      "max_cents": 20000
+     },
+     "units_affected": 3200,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "SE4570",
+       "start": 171,
+       "end": 177
+      },
+      {
+       "field": "date_codes",
+       "quote": "date code of either 07/22 NH or 08/22 NH",
+       "start": 825,
+       "end": 865
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for between $150 and $200",
+       "start": 1209,
+       "end": 1234
+      },
+      {
+       "field": "sold_from",
+       "quote": "September 2022",
+       "start": 1171,
+       "end": 1185
+      },
+      {
+       "field": "sold_to",
+       "quote": "September 2023",
+       "start": 1194,
+       "end": 1208
+      },
+      {
+       "field": "sold_at",
+       "quote": "Grainger",
+       "start": 997,
+       "end": 1005
+      },
+      {
+       "field": "sold_at",
+       "quote": "Safety Shoes Distributors",
+       "start": 1007,
+       "end": 1032
+      },
+      {
+       "field": "sold_at",
+       "quote": "Saf-Gard Safety Shoe Company",
+       "start": 1034,
+       "end": 1062
+      },
+      {
+       "field": "sold_at",
+       "quote": "www.grainger.com",
+       "start": 1105,
+       "end": 1121
+      },
+      {
+       "field": "sold_at",
+       "quote": "www.justinboots.com",
+       "start": 1123,
+       "end": 1142
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 3,200",
+       "start": 975,
+       "end": 986
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "replacement",
+     "options": [
+      {
+       "type": "replacement",
+       "steps": [
+        "stop using the boots",
+        "contact Boot Royalty Company"
+       ],
+       "proof_required": [
+        "none"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": null
+       }
+      }
+     ],
+     "destruction_instruction": null,
+     "registration_url": null,
+     "contact": "800-550-7327",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "free replacement boots",
+       "start": 1372,
+       "end": 1394
+      },
+      {
+       "field": "contact",
+       "quote": "800-550-7327",
+       "start": 1753,
+       "end": 1765
+      }
+     ]
+    }
+   },
+   "notes": "Date code label location is given, model label location is not. Recall website is for information only.",
+   "baseline_test": true,
+   "synth_source": true
+  },
+  {
+   "source_id": "24105",
+   "recall_date": "2024-02-01",
+   "title": "Box Components Recalls BMX Race Bicycle Stems Due to Fall Hazard",
+   "category": "outdoor_sports",
+   "source_text_sha256": "937ab70b3122adf328ed4dab364561192065fa0b52f32f1845d7a234c7cd5214",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [],
+     "model_label_location": null,
+     "serial_ranges": [],
+     "date_codes": [],
+     "sold_at": [
+      "BMX Race dealers",
+      "https://boxcomponents.com"
+     ],
+     "sold_from": "2023-01-01",
+     "sold_to": "2023-10-31",
+     "price_range_cents": {
+      "min_cents": 10000,
+      "max_cents": 10000
+     },
+     "units_affected": 160,
+     "evidence": [
+      {
+       "field": "price_range_cents",
+       "quote": "for about $100",
+       "start": 772,
+       "end": 786
+      },
+      {
+       "field": "sold_from",
+       "quote": "January 2023",
+       "start": 738,
+       "end": 750
+      },
+      {
+       "field": "sold_to",
+       "quote": "October 2023",
+       "start": 759,
+       "end": 771
+      },
+      {
+       "field": "sold_at",
+       "quote": "BMX Race dealers",
+       "start": 665,
+       "end": 681
+      },
+      {
+       "field": "sold_at",
+       "quote": "https://boxcomponents.com",
+       "start": 707,
+       "end": 732
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 160",
+       "start": 645,
+       "end": 654
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "multiple",
+     "options": [
+      {
+       "type": "refund",
+       "steps": [
+        "stop using the stems",
+        "contact Box Components"
+       ],
+       "proof_required": [
+        "none"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": "full refund"
+       }
+      },
+      {
+       "type": "replacement",
+       "steps": [
+        "stop using the stems",
+        "contact Box Components"
+       ],
+       "proof_required": [
+        "none"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": null
+       }
+      }
+     ],
+     "destruction_instruction": null,
+     "registration_url": "https://boxcomponents.com/pages/recall-claim-form-delta-stem",
+     "contact": "800-797-6880",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "full refund or a free replacement stem",
+       "start": 935,
+       "end": 973
+      },
+      {
+       "field": "registration_url",
+       "quote": "https://boxcomponents.com/pages/recall-claim-form-delta-stem",
+       "start": 1520,
+       "end": 1580
+      },
+      {
+       "field": "contact",
+       "quote": "800-797-6880",
+       "start": 1409,
+       "end": 1421
+      }
+     ]
+    }
+   },
+   "notes": "Box One Oversized 31.8 Delta is a product name, not a model code.",
+   "baseline_test": false,
+   "synth_source": false
+  },
+  {
+   "source_id": "24117",
+   "recall_date": "2024-02-15",
+   "title": "Electrolux Group Recalls Frigidaire Rear-Controlled Ranges Due to Electric Shock and Electrocution Hazards",
+   "category": "appliance_electrical",
+   "source_text_sha256": "c4968c45018eab1ad33a76f3b21e89dd35df83ada8f209686cbe7a6494b20b03",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "FCRE3052BW",
+      "FCRE305CBW",
+      "FCRG3051BB",
+      "FCRG3051BW",
+      "FCRE3062AB",
+      "FCRG3052BW",
+      "FCRE3052BB",
+      "FCRE3052BS",
+      "FCRE306CAS",
+      "FCRG3051BS"
+     ],
+     "model_label_location": "in the drawer beneath the oven",
+     "serial_ranges": [
+      {
+       "prefix": null,
+       "start": "VF34618193",
+       "end": "VF34618322",
+       "raw": "VF34618193 thru VF34618322"
+      },
+      {
+       "prefix": null,
+       "start": "VF34601466",
+       "end": "VF34601608",
+       "raw": "VF34601466 thru VF34601608"
+      },
+      {
+       "prefix": null,
+       "start": "VF34508449",
+       "end": "VF34508592",
+       "raw": "VF34508449 thru VF34508592"
+      },
+      {
+       "prefix": null,
+       "start": "VF34521553",
+       "end": "VF34521696",
+       "raw": "VF34521553 thru VF34521696"
+      },
+      {
+       "prefix": null,
+       "start": "VF34521697",
+       "end": "VF34521835",
+       "raw": "VF34521697 thru VF34521835"
+      },
+      {
+       "prefix": null,
+       "start": "VF34504801",
+       "end": "VF34504942",
+       "raw": "VF34504801 thru VF34504942"
+      },
+      {
+       "prefix": null,
+       "start": "VF34424109",
+       "end": "VF34424252",
+       "raw": "VF34424109 thru VF34424252"
+      },
+      {
+       "prefix": null,
+       "start": "VF34510705",
+       "end": "VF34510818",
+       "raw": "VF34510705 thru VF34510818"
+      },
+      {
+       "prefix": null,
+       "start": "VF34414413",
+       "end": "VF34414546",
+       "raw": "VF34414413 thru VF34414546"
+      },
+      {
+       "prefix": null,
+       "start": "VF34600745",
+       "end": "VF34600888",
+       "raw": "VF34600745 thru VF34600888"
+      },
+      {
+       "prefix": null,
+       "start": "VF34413405",
+       "end": "VF34413692",
+       "raw": "VF34413405 thru VF34413692"
+      },
+      {
+       "prefix": null,
+       "start": "VF34410621",
+       "end": "VF34410752",
+       "raw": "VF34410621 thru VF34410752"
+      },
+      {
+       "prefix": null,
+       "start": "VF34410338",
+       "end": "VF34410338",
+       "raw": "VF34410338 thru VF34410338"
+      },
+      {
+       "prefix": null,
+       "start": "VF34413117",
+       "end": "VF34413260",
+       "raw": "VF34413117 thru VF34413260"
+      },
+      {
+       "prefix": null,
+       "start": "VF34512157",
+       "end": "VF34512300",
+       "raw": "VF34512157 thru VF34512300"
+      },
+      {
+       "prefix": null,
+       "start": "VF34512673",
+       "end": "VF34512816",
+       "raw": "VF34512673 thru VF34512816"
+      },
+      {
+       "prefix": null,
+       "start": "VF34519273",
+       "end": "VF34519416",
+       "raw": "VF34519273 thru VF34519416"
+      },
+      {
+       "prefix": null,
+       "start": "VF34316279",
+       "end": "VF34316279",
+       "raw": "VF34316279 thru VF34316279"
+      }
+     ],
+     "date_codes": [
+      {
+       "format": "Month YYYY",
+       "start": "October 2023",
+       "end": "November 2023",
+       "raw": "produced from October 2023 through November 2023"
+      }
+     ],
+     "sold_at": [
+      "Lowe's"
+     ],
+     "sold_from": "2023-10-01",
+     "sold_to": "2023-12-31",
+     "price_range_cents": {
+      "min_cents": 79000,
+      "max_cents": 105000
+     },
+     "units_affected": 1800,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "FCRE3052BW",
+       "start": 373,
+       "end": 383
+      },
+      {
+       "field": "models",
+       "quote": "FCRE305CBW",
+       "start": 411,
+       "end": 421
+      },
+      {
+       "field": "models",
+       "quote": "FCRG3051BB",
+       "start": 449,
+       "end": 459
+      },
+      {
+       "field": "models",
+       "quote": "FCRG3051BW",
+       "start": 543,
+       "end": 553
+      },
+      {
+       "field": "models",
+       "quote": "FCRE3062AB",
+       "start": 581,
+       "end": 591
+      },
+      {
+       "field": "models",
+       "quote": "FCRG3052BW",
+       "start": 619,
+       "end": 629
+      },
+      {
+       "field": "models",
+       "quote": "FCRE3052BB",
+       "start": 657,
+       "end": 667
+      },
+      {
+       "field": "models",
+       "quote": "FCRE3052BS",
+       "start": 724,
+       "end": 734
+      },
+      {
+       "field": "models",
+       "quote": "FCRE306CAS",
+       "start": 762,
+       "end": 772
+      },
+      {
+       "field": "models",
+       "quote": "FCRG3051BS",
+       "start": 939,
+       "end": 949
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "VF34618193 thru VF34618322",
+       "start": 384,
+       "end": 410
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "VF34601466 thru VF34601608",
+       "start": 422,
+       "end": 448
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "VF34508449 thru VF34508592",
+       "start": 460,
+       "end": 486
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "VF34521553 thru VF34521696",
+       "start": 488,
+       "end": 514
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "VF34521697 thru VF34521835",
+       "start": 516,
+       "end": 542
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "VF34504801 thru VF34504942",
+       "start": 554,
+       "end": 580
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "VF34424109 thru VF34424252",
+       "start": 592,
+       "end": 618
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "VF34510705 thru VF34510818",
+       "start": 630,
+       "end": 656
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "VF34414413 thru VF34414546",
+       "start": 668,
+       "end": 694
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "VF34600745 thru VF34600888",
+       "start": 696,
+       "end": 722
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "VF34413405 thru VF34413692",
+       "start": 735,
+       "end": 761
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "VF34410621 thru VF34410752",
+       "start": 773,
+       "end": 799
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "VF34410338 thru VF34410338",
+       "start": 800,
+       "end": 826
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "VF34413117 thru VF34413260",
+       "start": 828,
+       "end": 854
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "VF34512157 thru VF34512300",
+       "start": 856,
+       "end": 882
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "VF34512673 thru VF34512816",
+       "start": 884,
+       "end": 910
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "VF34519273 thru VF34519416",
+       "start": 912,
+       "end": 938
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "VF34316279 thru VF34316279",
+       "start": 950,
+       "end": 976
+      },
+      {
+       "field": "date_codes",
+       "quote": "produced from October 2023 through November 2023",
+       "start": 196,
+       "end": 244
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for between $790 and $1,050",
+       "start": 1417,
+       "end": 1444
+      },
+      {
+       "field": "sold_from",
+       "quote": "from October 2023 through December 2023",
+       "start": 1377,
+       "end": 1416
+      },
+      {
+       "field": "sold_to",
+       "quote": "from October 2023 through December 2023",
+       "start": 1377,
+       "end": 1416
+      },
+      {
+       "field": "model_label_location",
+       "quote": "located in the drawer beneath the oven",
+       "start": 1161,
+       "end": 1199
+      },
+      {
+       "field": "sold_at",
+       "quote": "Lowe's",
+       "start": 1321,
+       "end": 1327
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 1,800",
+       "start": 1254,
+       "end": 1265
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "repair",
+     "options": [
+      {
+       "type": "repair",
+       "steps": [
+        "stop using the range",
+        "contact Electrolux Group",
+        "unplug the unit until repaired"
+       ],
+       "proof_required": [
+        "none"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": null
+       }
+      }
+     ],
+     "destruction_instruction": null,
+     "registration_url": null,
+     "contact": "877-232-6822",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "free repair/professional installation of a new control panel",
+       "start": 1577,
+       "end": 1637
+      },
+      {
+       "field": "contact",
+       "quote": "877-232-6822",
+       "start": 2088,
+       "end": 2100
+      }
+     ]
+    }
+   },
+   "notes": "Serial ranges are not paired to models in a parseable way; the model-to-range pairing is lost in the flattened table. The eligibility lookup URL is not a registration form.",
+   "baseline_test": true,
+   "synth_source": true
+  },
+  {
+   "source_id": "24118",
+   "recall_date": "2024-02-15",
+   "title": "Bell Sports Recalls Bell Soquel Youth Bicycle Helmets Due to Risk of Head Injury; Violation of the Federal Safety Regulation for Bicycle Helmets",
+   "category": "children",
+   "source_text_sha256": "1e8dcba15629b002f8a77966693f26bf5d4ba22b16146130d9181edd24fe79d5",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "B0726Y"
+     ],
+     "model_label_location": "inner helmet sticker",
+     "serial_ranges": [],
+     "date_codes": [
+      {
+       "format": "M/YY",
+       "start": null,
+       "end": "8/21",
+       "raw": "date code on the white inner label with August 2021 (\"8/21\") or earlier"
+      }
+     ],
+     "sold_at": [
+      "Fred Meyer",
+      "Walmart",
+      "www.Amazon.com"
+     ],
+     "sold_from": "2017-01-01",
+     "sold_to": "2024-01-31",
+     "price_range_cents": {
+      "min_cents": 2500,
+      "max_cents": 5000
+     },
+     "units_affected": 2425,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "B0726Y",
+       "start": 419,
+       "end": 425
+      },
+      {
+       "field": "date_codes",
+       "quote": "date code on the white inner label with August 2021 (\"8/21\") or earlier",
+       "start": 461,
+       "end": 532
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for between $25 and $50",
+       "start": 1258,
+       "end": 1281
+      },
+      {
+       "field": "sold_from",
+       "quote": "January 2017",
+       "start": 1224,
+       "end": 1236
+      },
+      {
+       "field": "sold_to",
+       "quote": "January 2024",
+       "start": 1245,
+       "end": 1257
+      },
+      {
+       "field": "model_label_location",
+       "quote": "inner helmet sticker",
+       "start": 357,
+       "end": 377
+      },
+      {
+       "field": "sold_at",
+       "quote": "Fred Meyer",
+       "start": 1141,
+       "end": 1151
+      },
+      {
+       "field": "sold_at",
+       "quote": "Walmart",
+       "start": 1153,
+       "end": 1160
+      },
+      {
+       "field": "sold_at",
+       "quote": "www.Amazon.com",
+       "start": 1204,
+       "end": 1218
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 2,425",
+       "start": 1072,
+       "end": 1083
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "refund",
+     "options": [
+      {
+       "type": "refund",
+       "steps": [
+        "stop using the helmet",
+        "cut off the straps",
+        "upload photos of the helmet with the straps cut",
+        "dispose of the helmet"
+       ],
+       "proof_required": [
+        "destruction_photo"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": "refund"
+       }
+      }
+     ],
+     "destruction_instruction": "destroy the helmet by cutting off the straps",
+     "registration_url": null,
+     "contact": "800-456-2355",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "contact Bell Sports for a refund",
+       "start": 1375,
+       "end": 1407
+      },
+      {
+       "field": "destruction_instruction",
+       "quote": "destroy the helmet by cutting off the straps",
+       "start": 1447,
+       "end": 1491
+      },
+      {
+       "field": "contact",
+       "quote": "800-456-2355",
+       "start": 2038,
+       "end": 2050
+      }
+     ]
+    }
+   },
+   "notes": "Soquel is a model name; SKUs are listed but not presented as model numbers. Photos go to an email address, not a URL.",
+   "baseline_test": false,
+   "synth_source": true
+  },
+  {
+   "source_id": "24124",
+   "recall_date": "2024-02-22",
+   "title": "EVAS 20 lb. Propane Exchange Tanks Recalled by Worthington Enterprises Due to Fire Hazard",
+   "category": "other",
+   "source_text_sha256": "2f24c166e4d19d3a086bd9373886868e212c4b97c6a2b9b6931adf6e719f1a95",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "EVAS - M0859"
+     ],
+     "model_label_location": "stamped on the collar of the cylinder",
+     "serial_ranges": [
+      {
+       "prefix": "W",
+       "start": null,
+       "end": null,
+       "raw": "serial number beginning with a \"W,\""
+      }
+     ],
+     "date_codes": [
+      {
+       "format": "MM-YY",
+       "start": "06-23",
+       "end": "07-23",
+       "raw": "date code of either \"06-23\" or \"07-23.\""
+      }
+     ],
+     "sold_at": [
+      "AmeriGas' propane cylinder exchange suppliers"
+     ],
+     "sold_from": "2023-07-01",
+     "sold_to": "2023-08-31",
+     "price_range_cents": {
+      "min_cents": 2000,
+      "max_cents": 8000
+     },
+     "units_affected": 146160,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "EVAS - M0859",
+       "start": 189,
+       "end": 201
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "serial number beginning with a \"W,\"",
+       "start": 205,
+       "end": 240
+      },
+      {
+       "field": "date_codes",
+       "quote": "date code of either \"06-23\" or \"07-23.\"",
+       "start": 247,
+       "end": 286
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for between $20 and $80",
+       "start": 878,
+       "end": 901
+      },
+      {
+       "field": "sold_from",
+       "quote": "July 2023",
+       "start": 790,
+       "end": 799
+      },
+      {
+       "field": "sold_to",
+       "quote": "August 2023",
+       "start": 808,
+       "end": 819
+      },
+      {
+       "field": "model_label_location",
+       "quote": "stamped on the collar of the cylinder",
+       "start": 338,
+       "end": 375
+      },
+      {
+       "field": "sold_at",
+       "quote": "AmeriGas' propane cylinder exchange suppliers",
+       "start": 669,
+       "end": 714
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 146,160",
+       "start": 645,
+       "end": 658
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "replacement",
+     "options": [
+      {
+       "type": "replacement",
+       "steps": [
+        "stop using the cylinder",
+        "close the top valve completely",
+        "return it to any AmeriGas Propane Exchange retail location"
+       ],
+       "proof_required": [
+        "product_return"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": null
+       }
+      }
+     ],
+     "destruction_instruction": null,
+     "registration_url": null,
+     "contact": "888-520-1304",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "free replacement",
+       "start": 1098,
+       "end": 1114
+      },
+      {
+       "field": "contact",
+       "quote": "888-520-1304",
+       "start": 1607,
+       "end": 1619
+      }
+     ]
+    }
+   },
+   "notes": "Sale window also extends to later exchanges ('or from a propane cylinder exchange supplier thereafter'); labeled the stated months.",
+   "baseline_test": true,
+   "synth_source": false
+  },
+  {
+   "source_id": "24144",
+   "recall_date": "2024-03-07",
+   "title": "High-Powered Magnetic Ball Sets Recalled Due to Ingestion Hazard; Violation of the Federal Safety Regulation for Toy Magnet Sets; Sold Exclusively on Walmart.com through Joybuy",
+   "category": "children",
+   "source_text_sha256": "54e420a542353c2edd769735914c0705efda8cf4e6024cb399cf1d8c246a2eef",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [],
+     "model_label_location": null,
+     "serial_ranges": [],
+     "date_codes": [],
+     "sold_at": [
+      "Walmart.com"
+     ],
+     "sold_from": "2022-08-01",
+     "sold_to": "2023-04-30",
+     "price_range_cents": {
+      "min_cents": 1400,
+      "max_cents": 1400
+     },
+     "units_affected": 650,
+     "evidence": [
+      {
+       "field": "price_range_cents",
+       "quote": "for about $14",
+       "start": 723,
+       "end": 736
+      },
+      {
+       "field": "sold_from",
+       "quote": "August 2022",
+       "start": 692,
+       "end": 703
+      },
+      {
+       "field": "sold_to",
+       "quote": "April 2023",
+       "start": 712,
+       "end": 722
+      },
+      {
+       "field": "sold_at",
+       "quote": "Walmart.com",
+       "start": 157,
+       "end": 168
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 650",
+       "start": 633,
+       "end": 642
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "refund",
+     "options": [
+      {
+       "type": "refund",
+       "steps": [
+        "stop using the magnet sets",
+        "contact Joybuy Marketplace Express",
+        "return them with the pre-paid label"
+       ],
+       "proof_required": [
+        "product_return"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": "full refund"
+       }
+      }
+     ],
+     "destruction_instruction": null,
+     "registration_url": null,
+     "contact": "302-426-4543",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "full refund",
+       "start": 938,
+       "end": 949
+      },
+      {
+       "field": "contact",
+       "quote": "302-426-4543",
+       "start": 2013,
+       "end": 2025
+      }
+     ]
+    }
+   },
+   "notes": "",
+   "baseline_test": false,
+   "synth_source": false
+  },
+  {
+   "source_id": "24146",
+   "recall_date": "2024-03-07",
+   "title": "Anker EverFrost Lithium-Ion Battery Powered Coolers Recalled Due to Battery Fire Hazard; Manufactured by Anker Innovations",
+   "category": "battery_power",
+   "source_text_sha256": "f38734686b1d34e8dbd845b3b61245a561fed1b513ba10b653b26555dd45c48b",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "A17B0",
+      "A17A0",
+      "A17A1",
+      "A17A2"
+     ],
+     "model_label_location": "printed on the outer surface on the bottom of the cooler",
+     "serial_ranges": [],
+     "date_codes": [],
+     "sold_at": [
+      "Best Buy",
+      "TD Synnex",
+      "kickstarter.com"
+     ],
+     "sold_from": "2023-05-01",
+     "sold_to": "2023-09-30",
+     "price_range_cents": {
+      "min_cents": 25000,
+      "max_cents": 95000
+     },
+     "units_affected": 5480,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "A17B0",
+       "start": 798,
+       "end": 803
+      },
+      {
+       "field": "models",
+       "quote": "A17A0",
+       "start": 854,
+       "end": 859
+      },
+      {
+       "field": "models",
+       "quote": "A17A1",
+       "start": 904,
+       "end": 909
+      },
+      {
+       "field": "models",
+       "quote": "A17A2",
+       "start": 955,
+       "end": 960
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for between $250 and $950",
+       "start": 1196,
+       "end": 1221
+      },
+      {
+       "field": "sold_from",
+       "quote": "May 2023",
+       "start": 1164,
+       "end": 1172
+      },
+      {
+       "field": "sold_to",
+       "quote": "September 2023",
+       "start": 1181,
+       "end": 1195
+      },
+      {
+       "field": "model_label_location",
+       "quote": "printed on the outer surface on the bottom of the cooler",
+       "start": 613,
+       "end": 669
+      },
+      {
+       "field": "sold_at",
+       "quote": "Best Buy",
+       "start": 1081,
+       "end": 1089
+      },
+      {
+       "field": "sold_at",
+       "quote": "TD Synnex",
+       "start": 1091,
+       "end": 1100
+      },
+      {
+       "field": "sold_at",
+       "quote": "kickstarter.com",
+       "start": 1143,
+       "end": 1158
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 5,480",
+       "start": 1024,
+       "end": 1035
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "replacement",
+     "options": [
+      {
+       "type": "replacement",
+       "steps": [
+        "stop using the cooler",
+        "contact Anker",
+        "file a claim online",
+        "replace the battery pack"
+       ],
+       "proof_required": [
+        "registration"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": null
+       }
+      }
+     ],
+     "destruction_instruction": null,
+     "registration_url": "https://www.anker.com/anker-solix/cooler-battery-recall-pps",
+     "contact": "800-988-7973",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "free replacement lithium-ion battery pack",
+       "start": 1318,
+       "end": 1359
+      },
+      {
+       "field": "registration_url",
+       "quote": "https://www.anker.com/anker-solix/cooler-battery-recall-pps",
+       "start": 1367,
+       "end": 1426
+      },
+      {
+       "field": "contact",
+       "quote": "800-988-7973",
+       "start": 1942,
+       "end": 1954
+      }
+     ]
+    }
+   },
+   "notes": "Disposal of old batteries per local law is an instruction but not a destruction requirement for the remedy.",
+   "baseline_test": true,
+   "synth_source": true
+  },
+  {
+   "source_id": "24149",
+   "recall_date": "2024-03-07",
+   "title": "Yamaha Corporation of America Recalls Power Adaptors Due to Electrical Shock and Electrocution Hazards",
+   "category": "other",
+   "source_text_sha256": "50d182272a1bc309cd7e6d7ca7fa4ca5c5265ba03ed6a129cd8bb6708ae9b69a",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "PA-10"
+     ],
+     "model_label_location": null,
+     "serial_ranges": [],
+     "date_codes": [
+      {
+       "format": "date code",
+       "start": "2126",
+       "end": "2319",
+       "raw": "date codes ranging from 2126 to 2319"
+      }
+     ],
+     "sold_at": [
+      "Guitar Center",
+      "Amazon.com",
+      "Sweetwater Sound",
+      "Sam Ash",
+      "Musicians Friend",
+      "B & H Foto & Electronics",
+      "American Musical Supply",
+      "www.usa.yamaha.com",
+      "www.shop.usa.yamaha.com/"
+     ],
+     "sold_from": "2021-06-01",
+     "sold_to": "2023-11-30",
+     "price_range_cents": {
+      "min_cents": 6000,
+      "max_cents": 6000
+     },
+     "units_affected": 34500,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "PA-10",
+       "start": 154,
+       "end": 159
+      },
+      {
+       "field": "date_codes",
+       "quote": "date codes ranging from 2126 to 2319",
+       "start": 183,
+       "end": 219
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for about $60",
+       "start": 950,
+       "end": 963
+      },
+      {
+       "field": "sold_from",
+       "quote": "June 2021",
+       "start": 918,
+       "end": 927
+      },
+      {
+       "field": "sold_to",
+       "quote": "November 2023",
+       "start": 936,
+       "end": 949
+      },
+      {
+       "field": "sold_at",
+       "quote": "Guitar Center",
+       "start": 630,
+       "end": 643
+      },
+      {
+       "field": "sold_at",
+       "quote": "Amazon.com",
+       "start": 645,
+       "end": 655
+      },
+      {
+       "field": "sold_at",
+       "quote": "Sweetwater Sound",
+       "start": 657,
+       "end": 673
+      },
+      {
+       "field": "sold_at",
+       "quote": "Sam Ash",
+       "start": 675,
+       "end": 682
+      },
+      {
+       "field": "sold_at",
+       "quote": "Musicians Friend",
+       "start": 684,
+       "end": 700
+      },
+      {
+       "field": "sold_at",
+       "quote": "B & H Foto & Electronics",
+       "start": 702,
+       "end": 726
+      },
+      {
+       "field": "sold_at",
+       "quote": "American Musical Supply",
+       "start": 728,
+       "end": 751
+      },
+      {
+       "field": "sold_at",
+       "quote": "www.usa.yamaha.com",
+       "start": 865,
+       "end": 883
+      },
+      {
+       "field": "sold_at",
+       "quote": "www.shop.usa.yamaha.com/",
+       "start": 888,
+       "end": 912
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 34,500",
+       "start": 607,
+       "end": 619
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "replacement",
+     "options": [
+      {
+       "type": "replacement",
+       "steps": [
+        "stop using the adaptor",
+        "contact Yamaha"
+       ],
+       "proof_required": [
+        "none"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": null
+       }
+      }
+     ],
+     "destruction_instruction": null,
+     "registration_url": null,
+     "contact": "844-703-5446",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "free replacement",
+       "start": 1066,
+       "end": 1082
+      },
+      {
+       "field": "contact",
+       "quote": "844-703-5446",
+       "start": 1759,
+       "end": 1771
+      }
+     ]
+    }
+   },
+   "notes": "The mixing console models MG10 etc. are bundles, not recalled models; only PA-10 is recalled. Date code format is not explained.",
+   "baseline_test": true,
+   "synth_source": true
+  },
+  {
+   "source_id": "24177",
+   "recall_date": "2024-03-28",
+   "title": "BJ's Wholesale Club Recalls Berkley Jensen Citronella 72-inch Tiki Torches Due to Burn Hazard",
+   "category": "other",
+   "source_text_sha256": "006673c66e9a1bdffd870d30145b30f117509c1671020a02b10455f24125b65b",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [],
+     "model_label_location": null,
+     "serial_ranges": [],
+     "date_codes": [],
+     "sold_at": [
+      "BJ's Wholesale Club",
+      "www.bjs.com"
+     ],
+     "sold_from": "2015-01-01",
+     "sold_to": "2023-11-30",
+     "price_range_cents": {
+      "min_cents": 1300,
+      "max_cents": 1300
+     },
+     "units_affected": 90000,
+     "evidence": [
+      {
+       "field": "price_range_cents",
+       "quote": "for about $13",
+       "start": 652,
+       "end": 665
+      },
+      {
+       "field": "sold_from",
+       "quote": "January 2015",
+       "start": 617,
+       "end": 629
+      },
+      {
+       "field": "sold_to",
+       "quote": "November 2023",
+       "start": 638,
+       "end": 651
+      },
+      {
+       "field": "sold_at",
+       "quote": "BJ's Wholesale Club",
+       "start": 7,
+       "end": 26
+      },
+      {
+       "field": "sold_at",
+       "quote": "www.bjs.com",
+       "start": 600,
+       "end": 611
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 90,000",
+       "start": 507,
+       "end": 519
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "refund",
+     "options": [
+      {
+       "type": "refund",
+       "steps": [
+        "stop using the tiki torches",
+        "destroy and dispose of or return the tiki torches",
+        "contact BJ's Wholesale Club"
+       ],
+       "proof_required": [
+        "none"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": "full refund"
+       }
+      }
+     ],
+     "destruction_instruction": "destroy and dispose of or return the tiki torches",
+     "registration_url": null,
+     "contact": "800-257-2582",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "full refund",
+       "start": 780,
+       "end": 791
+      },
+      {
+       "field": "destruction_instruction",
+       "quote": "destroy and dispose of or return the tiki torches",
+       "start": 810,
+       "end": 859
+      },
+      {
+       "field": "contact",
+       "quote": "800-257-2582",
+       "start": 1302,
+       "end": 1314
+      }
+     ]
+    }
+   },
+   "notes": "Destruction is one of two alternatives (destroy or return); no photo proof is required.",
+   "baseline_test": false,
+   "synth_source": false
+  },
+  {
+   "source_id": "24179",
+   "recall_date": "2024-04-04",
+   "title": "Essential Medical Supply Reannounces Recall of Adult Portable Bed Rails Due to Entrapment and Asphyxia Hazards; Two Additional Deaths Reported After 2021 Recall",
+   "category": "furniture",
+   "source_text_sha256": "e4e8a7c0cf987a317e1729e715ca640254b1cb6adeb94a7c52f3a1165c54b453",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "P1410",
+      "P1410-P",
+      "P1411",
+      "P1411-P"
+     ],
+     "model_label_location": "a label located on the grip handle of the bed rails",
+     "serial_ranges": [],
+     "date_codes": [],
+     "sold_at": [
+      "www.amazon.com",
+      "www.walmart.com"
+     ],
+     "sold_from": "2006-10-01",
+     "sold_to": "2021-12-31",
+     "price_range_cents": {
+      "min_cents": 3600,
+      "max_cents": 9800
+     },
+     "units_affected": 272000,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "P1410",
+       "start": 228,
+       "end": 233
+      },
+      {
+       "field": "models",
+       "quote": "P1410-P",
+       "start": 268,
+       "end": 275
+      },
+      {
+       "field": "models",
+       "quote": "P1411",
+       "start": 318,
+       "end": 323
+      },
+      {
+       "field": "models",
+       "quote": "P1411-P",
+       "start": 381,
+       "end": 388
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for between $36 and $98",
+       "start": 1025,
+       "end": 1048
+      },
+      {
+       "field": "sold_from",
+       "quote": "October 2006",
+       "start": 990,
+       "end": 1002
+      },
+      {
+       "field": "sold_to",
+       "quote": "December 2021",
+       "start": 1011,
+       "end": 1024
+      },
+      {
+       "field": "model_label_location",
+       "quote": "a label located on the grip handle of the bed rails",
+       "start": 469,
+       "end": 520
+      },
+      {
+       "field": "sold_at",
+       "quote": "www.amazon.com",
+       "start": 925,
+       "end": 939
+      },
+      {
+       "field": "sold_at",
+       "quote": "www.walmart.com",
+       "start": 944,
+       "end": 959
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 272,000",
+       "start": 854,
+       "end": 867
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "refund",
+     "options": [
+      {
+       "type": "refund",
+       "steps": [
+        "stop using the bed rails",
+        "contact Essential Medical Supply"
+       ],
+       "proof_required": [
+        "none"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": "pro-rated based on the age of the bed rail"
+       }
+      }
+     ],
+     "destruction_instruction": null,
+     "registration_url": null,
+     "contact": "800-826-8423",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "will provide a refund",
+       "start": 1246,
+       "end": 1267
+      },
+      {
+       "field": "contact",
+       "quote": "800-826-8423",
+       "start": 2084,
+       "end": 2096
+      }
+     ]
+    }
+   },
+   "notes": "Refund applies only to rails sold or imported on or after November 1, 2015; rails with model numbers ending in R are excluded. Medical supply stores is a generic channel and is not listed.",
+   "baseline_test": false,
+   "synth_source": true
+  },
+  {
+   "source_id": "24184",
+   "recall_date": "2024-04-04",
+   "title": "Zazaba International Recalls Grão de Gente Baby Nests Due to Suffocation Risk and Fall and Entrapment Hazards; Violation of the Federal Safety Regulations; Sold Exclusively on Zazaba.com",
+   "category": "children",
+   "source_text_sha256": "4929a3f4b9b554103810c4b5338b59bdb55779bcd00ec0987c58263809cb347c",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [],
+     "model_label_location": null,
+     "serial_ranges": [],
+     "date_codes": [],
+     "sold_at": [
+      "Zazaba.com"
+     ],
+     "sold_from": "2023-03-01",
+     "sold_to": "2023-08-31",
+     "price_range_cents": {
+      "min_cents": 900,
+      "max_cents": 11000
+     },
+     "units_affected": 430,
+     "evidence": [
+      {
+       "field": "price_range_cents",
+       "quote": "for between $9 and $110",
+       "start": 1887,
+       "end": 1910
+      },
+      {
+       "field": "sold_from",
+       "quote": "March 2023",
+       "start": 1856,
+       "end": 1866
+      },
+      {
+       "field": "sold_to",
+       "quote": "August 2023",
+       "start": 1875,
+       "end": 1886
+      },
+      {
+       "field": "sold_at",
+       "quote": "Zazaba.com",
+       "start": 183,
+       "end": 193
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 430",
+       "start": 1799,
+       "end": 1808
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "refund",
+     "options": [
+      {
+       "type": "refund",
+       "steps": [
+        "stop using the baby nest",
+        "contact Zazaba International Inc.",
+        "dispose of the product as instructed"
+       ],
+       "proof_required": [
+        "none"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": "full refund"
+       }
+      }
+     ],
+     "destruction_instruction": null,
+     "registration_url": null,
+     "contact": "855-425-4640",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "receive a full refund",
+       "start": 2100,
+       "end": 2121
+      },
+      {
+       "field": "contact",
+       "quote": "855-425-4640",
+       "start": 2913,
+       "end": 2925
+      }
+     ]
+    }
+   },
+   "notes": "SKUs are listed in a table but not presented as model numbers. Disposal instructions are given by the firm, not a stated destruction step.",
+   "baseline_test": false,
+   "synth_source": false
+  },
+  {
+   "source_id": "24194",
+   "recall_date": "2024-04-11",
+   "title": "Delta Cycle Recalls Bicycle Stem Raisers Due to Fall Hazard",
+   "category": "outdoor_sports",
+   "source_text_sha256": "ddf0c7734ecfab4a38d3bb9880a595446e0d71320fd9190b1c9aea07eaa89587",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "TD3318B",
+      "TD3318S",
+      "TD3418B",
+      "TD3418S",
+      "SM1977",
+      "SM1979"
+     ],
+     "model_label_location": null,
+     "serial_ranges": [],
+     "date_codes": [],
+     "sold_at": [
+      "REI",
+      "Designbydelta.com",
+      "Amazon.com"
+     ],
+     "sold_from": "1998-01-01",
+     "sold_to": "2024-01-31",
+     "price_range_cents": {
+      "min_cents": 4600,
+      "max_cents": 4600
+     },
+     "units_affected": 500000,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "TD3318B",
+       "start": 164,
+       "end": 171
+      },
+      {
+       "field": "models",
+       "quote": "TD3318S",
+       "start": 173,
+       "end": 180
+      },
+      {
+       "field": "models",
+       "quote": "TD3418B",
+       "start": 182,
+       "end": 189
+      },
+      {
+       "field": "models",
+       "quote": "TD3418S",
+       "start": 195,
+       "end": 202
+      },
+      {
+       "field": "models",
+       "quote": "SM1977",
+       "start": 234,
+       "end": 240
+      },
+      {
+       "field": "models",
+       "quote": "SM1979",
+       "start": 245,
+       "end": 251
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for about $46",
+       "start": 635,
+       "end": 648
+      },
+      {
+       "field": "sold_from",
+       "quote": "January 1998",
+       "start": 601,
+       "end": 613
+      },
+      {
+       "field": "sold_to",
+       "quote": "January 2024",
+       "start": 622,
+       "end": 634
+      },
+      {
+       "field": "sold_at",
+       "quote": "REI",
+       "start": 509,
+       "end": 512
+      },
+      {
+       "field": "sold_at",
+       "quote": "Designbydelta.com",
+       "start": 563,
+       "end": 580
+      },
+      {
+       "field": "sold_at",
+       "quote": "Amazon.com",
+       "start": 585,
+       "end": 595
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 500,000",
+       "start": 438,
+       "end": 451
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "repair",
+     "options": [
+      {
+       "type": "repair",
+       "steps": [
+        "stop using the stem raiser",
+        "contact Delta Cycle to schedule a repair at an independent bicycle dealer"
+       ],
+       "proof_required": [
+        "none"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": null
+       }
+      }
+     ],
+     "destruction_instruction": null,
+     "registration_url": null,
+     "contact": "800-474-6615",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "free repair",
+       "start": 764,
+       "end": 775
+      },
+      {
+       "field": "contact",
+       "quote": "800-474-6615",
+       "start": 1158,
+       "end": 1170
+      }
+     ]
+    }
+   },
+   "notes": "Local bicycle stores is a generic channel and is not listed.",
+   "baseline_test": true,
+   "synth_source": true
+  },
+  {
+   "source_id": "24195",
+   "recall_date": "2024-04-11",
+   "title": "Touchat Area Rugs Recalled Due to Fire Hazard; Violation of Federal Flammability Regulations; Sold Exclusively on Amazon.com by Touchat",
+   "category": "other",
+   "source_text_sha256": "ea9d83403001036d5328ec767f8068dbf40bcaddd769c6318b16b52d52a3694a",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [],
+     "model_label_location": null,
+     "serial_ranges": [],
+     "date_codes": [],
+     "sold_at": [
+      "Amazon.com"
+     ],
+     "sold_from": "2023-10-01",
+     "sold_to": "2023-11-30",
+     "price_range_cents": {
+      "min_cents": 8000,
+      "max_cents": 11300
+     },
+     "units_affected": 356,
+     "evidence": [
+      {
+       "field": "price_range_cents",
+       "quote": "for between $80 and $113",
+       "start": 482,
+       "end": 506
+      },
+      {
+       "field": "sold_from",
+       "quote": "October 2023",
+       "start": 447,
+       "end": 459
+      },
+      {
+       "field": "sold_to",
+       "quote": "November 2023",
+       "start": 468,
+       "end": 481
+      },
+      {
+       "field": "sold_at",
+       "quote": "Amazon.com",
+       "start": 121,
+       "end": 131
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 356",
+       "start": 411,
+       "end": 420
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "refund",
+     "options": [
+      {
+       "type": "refund",
+       "steps": [
+        "stop using the rug",
+        "contact Touchat",
+        "cut the rug in half",
+        "email a photo of the cut product"
+       ],
+       "proof_required": [
+        "destruction_photo"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": "full refund"
+       }
+      }
+     ],
+     "destruction_instruction": "destroy the product by cutting it in half",
+     "registration_url": null,
+     "contact": "909-390-0801",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "full refund",
+       "start": 601,
+       "end": 612
+      },
+      {
+       "field": "destruction_instruction",
+       "quote": "destroy the product by cutting it in half",
+       "start": 641,
+       "end": 682
+      },
+      {
+       "field": "contact",
+       "quote": "909-390-0801",
+       "start": 1157,
+       "end": 1169
+      }
+     ]
+    }
+   },
+   "notes": "",
+   "baseline_test": true,
+   "synth_source": false
+  },
+  {
+   "source_id": "24233",
+   "recall_date": "2024-05-09",
+   "title": "Children's Robes Recall Expansion Announced Due to Burn Hazard and Violation of Federal Flammability Standards; Imported by SIORO; Sold Exclusively on Amazon.com; Additional Units Added",
+   "category": "children",
+   "source_text_sha256": "eb2db3103d0db49af82d4863d4dcb4f69288181be7c87c1a045b7f90424533d9",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [],
+     "model_label_location": null,
+     "serial_ranges": [],
+     "date_codes": [],
+     "sold_at": [
+      "Amazon.com"
+     ],
+     "sold_from": "2021-11-01",
+     "sold_to": "2023-07-31",
+     "price_range_cents": {
+      "min_cents": 2000,
+      "max_cents": 2700
+     },
+     "units_affected": 5000,
+     "evidence": [
+      {
+       "field": "price_range_cents",
+       "quote": "for between $20 and $27",
+       "start": 945,
+       "end": 968
+      },
+      {
+       "field": "sold_from",
+       "quote": "November 2021",
+       "start": 913,
+       "end": 926
+      },
+      {
+       "field": "sold_to",
+       "quote": "July 2023",
+       "start": 935,
+       "end": 944
+      },
+      {
+       "field": "sold_at",
+       "quote": "Amazon.com",
+       "start": 158,
+       "end": 168
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 5,000",
+       "start": 798,
+       "end": 809
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "refund",
+     "options": [
+      {
+       "type": "refund",
+       "steps": [
+        "take the robes away from children",
+        "cut the garments in half",
+        "email a photo of the destroyed garment",
+        "dispose of the garments"
+       ],
+       "proof_required": [
+        "destruction_photo"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": "purchase price"
+       }
+      }
+     ],
+     "destruction_instruction": "destroy the garments by cutting them in half",
+     "registration_url": null,
+     "contact": "amazonus@sioro.com",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "full refund",
+       "start": 1093,
+       "end": 1104
+      },
+      {
+       "field": "destruction_instruction",
+       "quote": "destroy the garments by cutting them in half",
+       "start": 1123,
+       "end": 1167
+      },
+      {
+       "field": "contact",
+       "quote": "amazonus@sioro.com",
+       "start": 1214,
+       "end": 1232
+      }
+     ]
+    }
+   },
+   "notes": "No phone number; email is the only contact. 950 robes from the June 2021 recall are not part of the 5,000.",
+   "baseline_test": false,
+   "synth_source": false
+  },
+  {
+   "source_id": "24235",
+   "recall_date": "2024-05-16",
+   "title": "Electrolux Group Reannounces Recall of Frigidaire and Kenmore Electric Ranges Due to Fire and Burn Hazards; Multiple Fires and Injuries Reported",
+   "category": "appliance_electrical",
+   "source_text_sha256": "a509855b615f5c7bd8eff1231cf1bcaa5c9f8377c2454b63a81d7128cb3900ff",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "FEFBZ90GC*",
+      "FEFLMC55GC*",
+      "FEFLZ87GC*",
+      "GLEF396AB*",
+      "GLEF396AQ*",
+      "GLEF396AS*",
+      "GLEF396CQ*",
+      "GLEF396CS*",
+      "GLEFM397DB*",
+      "GLEFM397DQ*",
+      "GLEFM397DS*",
+      "GLEFM97FPB*",
+      "GLEFM97FPW*",
+      "GLEFM97GPB*",
+      "GLEFM97GPW*",
+      "LEEFM389FE*",
+      "PLEF398AC*",
+      "PLEF398CC*",
+      "PLEF398DC*",
+      "PLEFM399DC*",
+      "PLEFMZ99EC*",
+      "PLEFMZ99GC*",
+      "PLEFZ398EC*",
+      "PLEFZ398GC*",
+      "790.990121*",
+      "790.990131*",
+      "790.990141*",
+      "790.990191*"
+     ],
+     "model_label_location": "on the frame of the drawer at the bottom of the unit when the drawer is opened",
+     "serial_ranges": [
+      {
+       "prefix": null,
+       "start": "VF122xxxxx",
+       "end": "VF334xxxxx",
+       "raw": "VF122xxxxx - VF334xxxxx"
+      }
+     ],
+     "date_codes": [],
+     "sold_at": [
+      "Sears"
+     ],
+     "sold_from": "2001-06-01",
+     "sold_to": "2009-08-31",
+     "price_range_cents": {
+      "min_cents": 100000,
+      "max_cents": 250000
+     },
+     "units_affected": 203000,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "FEFBZ90GC*",
+       "start": 821,
+       "end": 831
+      },
+      {
+       "field": "models",
+       "quote": "FEFLMC55GC*",
+       "start": 832,
+       "end": 843
+      },
+      {
+       "field": "models",
+       "quote": "FEFLZ87GC*",
+       "start": 844,
+       "end": 854
+      },
+      {
+       "field": "models",
+       "quote": "GLEF396AB*",
+       "start": 855,
+       "end": 865
+      },
+      {
+       "field": "models",
+       "quote": "GLEF396AQ*",
+       "start": 866,
+       "end": 876
+      },
+      {
+       "field": "models",
+       "quote": "GLEF396AS*",
+       "start": 877,
+       "end": 887
+      },
+      {
+       "field": "models",
+       "quote": "GLEF396CQ*",
+       "start": 888,
+       "end": 898
+      },
+      {
+       "field": "models",
+       "quote": "GLEF396CS*",
+       "start": 899,
+       "end": 909
+      },
+      {
+       "field": "models",
+       "quote": "GLEFM397DB*",
+       "start": 910,
+       "end": 921
+      },
+      {
+       "field": "models",
+       "quote": "GLEFM397DQ*",
+       "start": 922,
+       "end": 933
+      },
+      {
+       "field": "models",
+       "quote": "GLEFM397DS*",
+       "start": 934,
+       "end": 945
+      },
+      {
+       "field": "models",
+       "quote": "GLEFM97FPB*",
+       "start": 946,
+       "end": 957
+      },
+      {
+       "field": "models",
+       "quote": "GLEFM97FPW*",
+       "start": 958,
+       "end": 969
+      },
+      {
+       "field": "models",
+       "quote": "GLEFM97GPB*",
+       "start": 970,
+       "end": 981
+      },
+      {
+       "field": "models",
+       "quote": "GLEFM97GPW*",
+       "start": 982,
+       "end": 993
+      },
+      {
+       "field": "models",
+       "quote": "LEEFM389FE*",
+       "start": 994,
+       "end": 1005
+      },
+      {
+       "field": "models",
+       "quote": "PLEF398AC*",
+       "start": 1006,
+       "end": 1016
+      },
+      {
+       "field": "models",
+       "quote": "PLEF398CC*",
+       "start": 1017,
+       "end": 1027
+      },
+      {
+       "field": "models",
+       "quote": "PLEF398DC*",
+       "start": 1028,
+       "end": 1038
+      },
+      {
+       "field": "models",
+       "quote": "PLEFM399DC*",
+       "start": 1039,
+       "end": 1050
+      },
+      {
+       "field": "models",
+       "quote": "PLEFMZ99EC*",
+       "start": 1051,
+       "end": 1062
+      },
+      {
+       "field": "models",
+       "quote": "PLEFMZ99GC*",
+       "start": 1063,
+       "end": 1074
+      },
+      {
+       "field": "models",
+       "quote": "PLEFZ398EC*",
+       "start": 1075,
+       "end": 1086
+      },
+      {
+       "field": "models",
+       "quote": "PLEFZ398GC*",
+       "start": 1087,
+       "end": 1098
+      },
+      {
+       "field": "models",
+       "quote": "790.990121*",
+       "start": 1204,
+       "end": 1215
+      },
+      {
+       "field": "models",
+       "quote": "790.990131*",
+       "start": 1216,
+       "end": 1227
+      },
+      {
+       "field": "models",
+       "quote": "790.990141*",
+       "start": 1228,
+       "end": 1239
+      },
+      {
+       "field": "models",
+       "quote": "790.990191*",
+       "start": 1240,
+       "end": 1251
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "VF122xxxxx - VF334xxxxx",
+       "start": 1145,
+       "end": 1168
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for between $1,000 and $2,500",
+       "start": 1569,
+       "end": 1598
+      },
+      {
+       "field": "sold_from",
+       "quote": "June 2001",
+       "start": 1539,
+       "end": 1548
+      },
+      {
+       "field": "sold_to",
+       "quote": "June 2001 through August 2009",
+       "start": 1539,
+       "end": 1568
+      },
+      {
+       "field": "model_label_location",
+       "quote": "located on the frame of the drawer at the bottom of the unit when the drawer is opened",
+       "start": 528,
+       "end": 614
+      },
+      {
+       "field": "sold_at",
+       "quote": "Sears",
+       "start": 1484,
+       "end": 1489
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 203,000",
+       "start": 1407,
+       "end": 1420
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "multiple",
+     "options": [
+      {
+       "type": "repair",
+       "steps": [
+        "contact Electrolux or register online",
+        "schedule a free inspection and repair"
+       ],
+       "proof_required": [
+        "registration"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": null
+       }
+      },
+      {
+       "type": "refund",
+       "steps": [
+        "contact Electrolux or register online",
+        "submit proof of purchase of a new range and the haul-away fee"
+       ],
+       "proof_required": [
+        "registration",
+        "receipt"
+       ],
+       "payout": {
+        "method": "store_credit",
+        "amount_rule": "$50 electronic gift card and reimbursement of up to $60 for the haul-away fee"
+       }
+      }
+     ],
+     "destruction_instruction": null,
+     "registration_url": null,
+     "contact": "888-845-8226",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "Remedy options: Refund, Repair",
+       "start": 2420,
+       "end": 2450
+      },
+      {
+       "field": "contact",
+       "quote": "888-845-8226",
+       "start": 3100,
+       "end": 3112
+      }
+     ]
+    }
+   },
+   "notes": "Model numbers are printed with a trailing * wildcard; kept as printed. The notice says to register online but does not tie a specific URL to registration, so registration_url is null. The description includes a stray list of robe colors that belongs to a different notice (source data error).",
+   "baseline_test": false,
+   "synth_source": true
+  },
+  {
+   "source_id": "24283",
+   "recall_date": "2024-06-27",
+   "title": "REI Recalls Co-op Cycles REV Children's Bicycles with Training Wheels Due to Fall and Injury Hazards",
+   "category": "children",
+   "source_text_sha256": "59602043ee9a203299ee15d4cf064e360d6fe58dfc5d6b34b14590edc0523e07",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "REV 12 Kids Bike",
+      "REV 16 Kids Bike",
+      "REV 20 Kids Bike"
+     ],
+     "model_label_location": null,
+     "serial_ranges": [
+      {
+       "prefix": "ET22",
+       "start": null,
+       "end": null,
+       "raw": "begin with \"ET22,\" \"ET23,\" \"01VX\" or \"07VX.\""
+      },
+      {
+       "prefix": "ET23",
+       "start": null,
+       "end": null,
+       "raw": "begin with \"ET22,\" \"ET23,\" \"01VX\" or \"07VX.\""
+      },
+      {
+       "prefix": "01VX",
+       "start": null,
+       "end": null,
+       "raw": "begin with \"ET22,\" \"ET23,\" \"01VX\" or \"07VX.\""
+      },
+      {
+       "prefix": "07VX",
+       "start": null,
+       "end": null,
+       "raw": "begin with \"ET22,\" \"ET23,\" \"01VX\" or \"07VX.\""
+      }
+     ],
+     "date_codes": [
+      {
+       "format": "model year",
+       "start": "2022",
+       "end": "2024",
+       "raw": "all model years 2022-2024"
+      }
+     ],
+     "sold_at": [
+      "REI",
+      "REI.com"
+     ],
+     "sold_from": "2022-03-01",
+     "sold_to": "2024-05-31",
+     "price_range_cents": {
+      "min_cents": 20000,
+      "max_cents": 30000
+     },
+     "units_affected": 75860,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "REV 12 Kids Bike",
+       "start": 448,
+       "end": 464
+      },
+      {
+       "field": "models",
+       "quote": "REV 16 Kids Bike",
+       "start": 552,
+       "end": 568
+      },
+      {
+       "field": "models",
+       "quote": "REV 20 Kids Bike",
+       "start": 712,
+       "end": 728
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "begin with \"ET22,\" \"ET23,\" \"01VX\" or \"07VX.\"",
+       "start": 267,
+       "end": 311
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "begin with \"ET22,\" \"ET23,\" \"01VX\" or \"07VX.\"",
+       "start": 267,
+       "end": 311
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "begin with \"ET22,\" \"ET23,\" \"01VX\" or \"07VX.\"",
+       "start": 267,
+       "end": 311
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "begin with \"ET22,\" \"ET23,\" \"01VX\" or \"07VX.\"",
+       "start": 267,
+       "end": 311
+      },
+      {
+       "field": "date_codes",
+       "quote": "all model years 2022-2024",
+       "start": 201,
+       "end": 226
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for between $200 and $300",
+       "start": 977,
+       "end": 1002
+      },
+      {
+       "field": "sold_from",
+       "quote": "March 2022",
+       "start": 949,
+       "end": 959
+      },
+      {
+       "field": "sold_to",
+       "quote": "May 2024",
+       "start": 968,
+       "end": 976
+      },
+      {
+       "field": "sold_at",
+       "quote": "REI",
+       "start": 7,
+       "end": 10
+      },
+      {
+       "field": "sold_at",
+       "quote": "REI.com",
+       "start": 936,
+       "end": 943
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 75,860",
+       "start": 877,
+       "end": 889
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "repair",
+     "options": [
+      {
+       "type": "repair",
+       "steps": [
+        "stop using the bicycle if training wheels are used",
+        "contact the local REI store to schedule a free repair"
+       ],
+       "proof_required": [
+        "none"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": null
+       }
+      }
+     ],
+     "destruction_instruction": null,
+     "registration_url": null,
+     "contact": "800-426-4840",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "free repair",
+       "start": 1158,
+       "end": 1169
+      },
+      {
+       "field": "contact",
+       "quote": "800-426-4840",
+       "start": 1825,
+       "end": 1837
+      }
+     ]
+    }
+   },
+   "notes": "Model names come from the Model column of a flattened table; SKU/article numbers are not listed as models. The serial-number location is given, not a model-label location.",
+   "baseline_test": false,
+   "synth_source": true
+  },
+  {
+   "source_id": "24284",
+   "recall_date": "2024-06-27",
+   "title": "At Home Procurement Recalls Toy Trunk Storage Chests Due to Entrapment and Suffocation Hazards",
+   "category": "children",
+   "source_text_sha256": "2dd8c6b8e1ffe7d82a3e31f365104d7bb0413c131211dc2fab531bedf835339e",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [],
+     "model_label_location": null,
+     "serial_ranges": [],
+     "date_codes": [],
+     "sold_at": [
+      "At Home",
+      "athome.com"
+     ],
+     "sold_from": "2023-09-01",
+     "sold_to": "2024-02-29",
+     "price_range_cents": {
+      "min_cents": 5000,
+      "max_cents": 6000
+     },
+     "units_affected": 990,
+     "evidence": [
+      {
+       "field": "price_range_cents",
+       "quote": "for between $50 and $60",
+       "start": 589,
+       "end": 612
+      },
+      {
+       "field": "sold_from",
+       "quote": "September 2023",
+       "start": 552,
+       "end": 566
+      },
+      {
+       "field": "sold_to",
+       "quote": "February 2024",
+       "start": 575,
+       "end": 588
+      },
+      {
+       "field": "sold_at",
+       "quote": "At Home",
+       "start": 7,
+       "end": 14
+      },
+      {
+       "field": "sold_at",
+       "quote": "athome.com",
+       "start": 536,
+       "end": 546
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 990",
+       "start": 476,
+       "end": 485
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "refund",
+     "options": [
+      {
+       "type": "refund",
+       "steps": [
+        "stop using the storage chest",
+        "return it to any At Home store"
+       ],
+       "proof_required": [
+        "product_return"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": "full refund"
+       }
+      }
+     ],
+     "destruction_instruction": null,
+     "registration_url": null,
+     "contact": "888-688-8426",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "full refund",
+       "start": 739,
+       "end": 750
+      },
+      {
+       "field": "contact",
+       "quote": "888-688-8426",
+       "start": 1072,
+       "end": 1084
+      }
+     ]
+    }
+   },
+   "notes": "",
+   "baseline_test": false,
+   "synth_source": false
+  },
+  {
+   "source_id": "24371",
+   "recall_date": "2024-09-19",
+   "title": "Caframo Cabinet Heaters Recalled Due to Electrocution Hazard; Manufactured by Caframo Limited",
+   "category": "furniture",
+   "source_text_sha256": "29c73f8c35532b4b62ca93e0038cfbd21d14c819bff3424272ee8a1d1568ab23",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "9421"
+     ],
+     "model_label_location": "on the top of the heater, near the power cord",
+     "serial_ranges": [],
+     "date_codes": [],
+     "sold_at": [
+      "Graybar Electric Co.",
+      "Keystone Automotive Operations Inc.",
+      "Hamilton Manufacturing Corp.",
+      "Controlled Access of the Midwest",
+      "comfortsolutions.caframobrands.com",
+      "Amazon.com"
+     ],
+     "sold_from": "2023-10-01",
+     "sold_to": "2024-05-31",
+     "price_range_cents": {
+      "min_cents": 15000,
+      "max_cents": 15000
+     },
+     "units_affected": 2140,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "9421",
+       "start": 142,
+       "end": 146
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for about $150",
+       "start": 906,
+       "end": 920
+      },
+      {
+       "field": "sold_from",
+       "quote": "October 2023",
+       "start": 876,
+       "end": 888
+      },
+      {
+       "field": "sold_to",
+       "quote": "May 2024",
+       "start": 897,
+       "end": 905
+      },
+      {
+       "field": "model_label_location",
+       "quote": "located on the top of the heater, near the power cord",
+       "start": 433,
+       "end": 486
+      },
+      {
+       "field": "sold_at",
+       "quote": "Graybar Electric Co.",
+       "start": 590,
+       "end": 610
+      },
+      {
+       "field": "sold_at",
+       "quote": "Keystone Automotive Operations Inc.",
+       "start": 635,
+       "end": 670
+      },
+      {
+       "field": "sold_at",
+       "quote": "Hamilton Manufacturing Corp.",
+       "start": 697,
+       "end": 725
+      },
+      {
+       "field": "sold_at",
+       "quote": "Controlled Access of the Midwest",
+       "start": 749,
+       "end": 781
+      },
+      {
+       "field": "sold_at",
+       "quote": "comfortsolutions.caframobrands.com",
+       "start": 821,
+       "end": 855
+      },
+      {
+       "field": "sold_at",
+       "quote": "Amazon.com",
+       "start": 860,
+       "end": 870
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 2,140",
+       "start": 523,
+       "end": 534
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "multiple",
+     "options": [
+      {
+       "type": "repair",
+       "steps": [
+        "stop using the heater",
+        "unplug the unit",
+        "contact Caframo Limited",
+        "return the product with the pre-paid label"
+       ],
+       "proof_required": [
+        "product_return"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": null
+       }
+      },
+      {
+       "type": "replacement",
+       "steps": [
+        "return the product with the pre-paid label"
+       ],
+       "proof_required": [
+        "product_return"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": null
+       }
+      }
+     ],
+     "destruction_instruction": null,
+     "registration_url": null,
+     "contact": "800-567-3556",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "free repair or replacement unit",
+       "start": 1083,
+       "end": 1114
+      },
+      {
+       "field": "contact",
+       "quote": "800-567-3556",
+       "start": 1652,
+       "end": 1664
+      }
+     ]
+    }
+   },
+   "notes": "Replacement only when the returned unit cannot be repaired.",
+   "baseline_test": false,
+   "synth_source": true
+  },
+  {
+   "source_id": "25109",
+   "recall_date": "2025-01-30",
+   "title": "Johnson Health Tech North America Recalls Matrix-Brand Training Cycles Due to Fall Hazard",
+   "category": "other",
+   "source_text_sha256": "669333b78b2beb047e6cf5e53f2be1cbdd50e4675b379bc0978cbfed8a652bf1",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "CXP-03",
+      "CXC-02",
+      "CXM-03",
+      "CXV",
+      "CXM-02"
+     ],
+     "model_label_location": "on a label on the lower rear area of the cycle frame",
+     "serial_ranges": [
+      {
+       "prefix": "FC32",
+       "start": null,
+       "end": null,
+       "raw": "serial prefix of FC32, ZFC32B, FC33, FC36, FC29D or FC27"
+      },
+      {
+       "prefix": "ZFC32B",
+       "start": null,
+       "end": null,
+       "raw": "serial prefix of FC32, ZFC32B, FC33, FC36, FC29D or FC27"
+      },
+      {
+       "prefix": "FC33",
+       "start": null,
+       "end": null,
+       "raw": "serial prefix of FC32, ZFC32B, FC33, FC36, FC29D or FC27"
+      },
+      {
+       "prefix": "FC36",
+       "start": null,
+       "end": null,
+       "raw": "serial prefix of FC32, ZFC32B, FC33, FC36, FC29D or FC27"
+      },
+      {
+       "prefix": "FC29D",
+       "start": null,
+       "end": null,
+       "raw": "serial prefix of FC32, ZFC32B, FC33, FC36, FC29D or FC27"
+      },
+      {
+       "prefix": "FC27",
+       "start": null,
+       "end": null,
+       "raw": "serial prefix of FC32, ZFC32B, FC33, FC36, FC29D or FC27"
+      }
+     ],
+     "date_codes": [],
+     "sold_at": [
+      "JHTNA"
+     ],
+     "sold_from": "2021-01-01",
+     "sold_to": "2024-10-31",
+     "price_range_cents": {
+      "min_cents": 253000,
+      "max_cents": 730500
+     },
+     "units_affected": 12885,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "CXP-03",
+       "start": 176,
+       "end": 182
+      },
+      {
+       "field": "models",
+       "quote": "CXC-02",
+       "start": 184,
+       "end": 190
+      },
+      {
+       "field": "models",
+       "quote": "CXM-03",
+       "start": 192,
+       "end": 198
+      },
+      {
+       "field": "models",
+       "quote": "CXV",
+       "start": 200,
+       "end": 203
+      },
+      {
+       "field": "models",
+       "quote": "CXM-02",
+       "start": 208,
+       "end": 214
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "serial prefix of FC32, ZFC32B, FC33, FC36, FC29D or FC27",
+       "start": 648,
+       "end": 704
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "serial prefix of FC32, ZFC32B, FC33, FC36, FC29D or FC27",
+       "start": 648,
+       "end": 704
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "serial prefix of FC32, ZFC32B, FC33, FC36, FC29D or FC27",
+       "start": 648,
+       "end": 704
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "serial prefix of FC32, ZFC32B, FC33, FC36, FC29D or FC27",
+       "start": 648,
+       "end": 704
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "serial prefix of FC32, ZFC32B, FC33, FC36, FC29D or FC27",
+       "start": 648,
+       "end": 704
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "serial prefix of FC32, ZFC32B, FC33, FC36, FC29D or FC27",
+       "start": 648,
+       "end": 704
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for between $2,530 and $7,305",
+       "start": 1185,
+       "end": 1214
+      },
+      {
+       "field": "sold_from",
+       "quote": "January 2021",
+       "start": 1151,
+       "end": 1163
+      },
+      {
+       "field": "sold_to",
+       "quote": "October 2024",
+       "start": 1172,
+       "end": 1184
+      },
+      {
+       "field": "model_label_location",
+       "quote": "located on a label on the lower rear area of the cycle frame",
+       "start": 533,
+       "end": 593
+      },
+      {
+       "field": "sold_at",
+       "quote": "JHTNA",
+       "start": 1093,
+       "end": 1098
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 12,885",
+       "start": 968,
+       "end": 980
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "repair",
+     "options": [
+      {
+       "type": "repair",
+       "steps": [
+        "stop using the cycle",
+        "contact Johnson Health Tech North America to schedule a technician"
+       ],
+       "proof_required": [
+        "none"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": null
+       }
+      }
+     ],
+     "destruction_instruction": null,
+     "registration_url": null,
+     "contact": "866-218-3674",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "free repair kit",
+       "start": 1382,
+       "end": 1397
+      },
+      {
+       "field": "contact",
+       "quote": "866-218-3674",
+       "start": 1892,
+       "end": 1904
+      }
+     ]
+    }
+   },
+   "notes": "Sold to commercial fitness facilities directly by JHTNA and through unnamed distributors.",
+   "baseline_test": false,
+   "synth_source": true
+  },
+  {
+   "source_id": "25126",
+   "recall_date": "2025-02-06",
+   "title": "LG Recalls Electric Ranges Due to Fire Hazard",
+   "category": "appliance_electrical",
+   "source_text_sha256": "cf4bd285884b3e1c8fb1f28f35da0d12ee851738cb0fd7f1c3707e708576788e",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "LDE4411ST",
+      "LDE4413ST",
+      "LDE4413BD",
+      "LSE4611ST",
+      "LSE4611BD",
+      "LSE4613ST",
+      "LSE4613BD",
+      "LSEL6337D",
+      "LSEL6337F",
+      "LSEL6331F",
+      "LSEL6333F",
+      "LSEL6333D",
+      "LSEL6335D",
+      "LSEL6335F",
+      "LTE4815BM",
+      "LTE4815BD",
+      "LTE4815ST",
+      "LRE4215ST",
+      "LTEL7337F"
+     ],
+     "model_label_location": "inside the oven door or storage drawer located on the bottom of the oven",
+     "serial_ranges": [
+      {
+       "prefix": null,
+       "start": "607KMXXXXXXX",
+       "end": "807KMXXXXXXX",
+       "raw": "607KMXXXXXXX 807KMXXXXXXX"
+      },
+      {
+       "prefix": null,
+       "start": "506KMXXXXXXX",
+       "end": "408KMXXXXXXX",
+       "raw": "506KMXXXXXXX 408KMXXXXXXX"
+      },
+      {
+       "prefix": null,
+       "start": "606KMXXXXXXX",
+       "end": "901KMXXXXXXX",
+       "raw": "606KMXXXXXXX 901KMXXXXXXX"
+      },
+      {
+       "prefix": null,
+       "start": "607KMXXXXXXX",
+       "end": "206KMXXXXXXX",
+       "raw": "607KMXXXXXXX 206KMXXXXXXX"
+      },
+      {
+       "prefix": null,
+       "start": "704KMXXXXXXX",
+       "end": "704KMXXXXXXX",
+       "raw": "704KMXXXXXXX 704KMXXXXXXX"
+      },
+      {
+       "prefix": null,
+       "start": "510KMXXXXXXX",
+       "end": "106KMXXXXXXX",
+       "raw": "510KMXXXXXXX 106KMXXXXXXX"
+      },
+      {
+       "prefix": null,
+       "start": "604KMXXXXXXX",
+       "end": "106KMXXXXXXX",
+       "raw": "604KMXXXXXXX 106KMXXXXXXX"
+      },
+      {
+       "prefix": null,
+       "start": "102KMXXXXXXX",
+       "end": "304KMXXXXXXX",
+       "raw": "102KMXXXXXXX 304KMXXXXXXX"
+      },
+      {
+       "prefix": null,
+       "start": "102KMXXXXXXX",
+       "end": "312KMXXXXXXX",
+       "raw": "102KMXXXXXXX 312KMXXXXXXX"
+      },
+      {
+       "prefix": null,
+       "start": "201MMXXXXXXX",
+       "end": "312MMXXXXXXX",
+       "raw": "201MMXXXXXXX 312MMXXXXXXX"
+      },
+      {
+       "prefix": null,
+       "start": "310KMXXXXXXX",
+       "end": "312KMXXXXXXX",
+       "raw": "310KMXXXXXXX 312KMXXXXXXX"
+      },
+      {
+       "prefix": null,
+       "start": "107MMXXXXXXX",
+       "end": "311MMXXXXXXX",
+       "raw": "107MMXXXXXXX 311MMXXXXXXX"
+      },
+      {
+       "prefix": null,
+       "start": "308KMXXXXXXX",
+       "end": "312KMXXXXXXX",
+       "raw": "308KMXXXXXXX 312KMXXXXXXX"
+      },
+      {
+       "prefix": null,
+       "start": "107MMXXXXXXX",
+       "end": "312MMXXXXXXX",
+       "raw": "107MMXXXXXXX 312MMXXXXXXX"
+      },
+      {
+       "prefix": null,
+       "start": "309KMXXXXXXX",
+       "end": "312KMXXXXXXX",
+       "raw": "309KMXXXXXXX 312KMXXXXXXX"
+      },
+      {
+       "prefix": null,
+       "start": "802KMXXXXXXX",
+       "end": "001KMXXXXXXX",
+       "raw": "802KMXXXXXXX 001KMXXXXXXX"
+      },
+      {
+       "prefix": null,
+       "start": "802KMXXXXXXX",
+       "end": "207KMXXXXXXX",
+       "raw": "802KMXXXXXXX 207KMXXXXXXX"
+      },
+      {
+       "prefix": null,
+       "start": "801KMXXXXXXX",
+       "end": "205KMXXXXXXX",
+       "raw": "801KMXXXXXXX 205KMXXXXXXX"
+      },
+      {
+       "prefix": null,
+       "start": "601KMXXXXXXX",
+       "end": "903KMXXXXXXX",
+       "raw": "601KMXXXXXXX 903KMXXXXXXX"
+      },
+      {
+       "prefix": null,
+       "start": "206KMXXXXXXX",
+       "end": "312KMXXXXXXX",
+       "raw": "206KMXXXXXXX 312KMXXXXXXX"
+      }
+     ],
+     "date_codes": [],
+     "sold_at": [
+      "Best Buy",
+      "Costco",
+      "The Home Depot",
+      "Lowe's",
+      "LG.com"
+     ],
+     "sold_from": "2015-01-01",
+     "sold_to": "2025-01-31",
+     "price_range_cents": {
+      "min_cents": 140000,
+      "max_cents": 265000
+     },
+     "units_affected": 500000,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "LDE4411ST",
+       "start": 439,
+       "end": 448
+      },
+      {
+       "field": "models",
+       "quote": "LDE4413ST",
+       "start": 475,
+       "end": 484
+      },
+      {
+       "field": "models",
+       "quote": "LDE4413BD",
+       "start": 511,
+       "end": 520
+      },
+      {
+       "field": "models",
+       "quote": "LSE4611ST",
+       "start": 547,
+       "end": 556
+      },
+      {
+       "field": "models",
+       "quote": "LSE4611BD",
+       "start": 583,
+       "end": 592
+      },
+      {
+       "field": "models",
+       "quote": "LSE4613ST",
+       "start": 619,
+       "end": 628
+      },
+      {
+       "field": "models",
+       "quote": "LSE4613BD",
+       "start": 655,
+       "end": 664
+      },
+      {
+       "field": "models",
+       "quote": "LSEL6337D",
+       "start": 691,
+       "end": 700
+      },
+      {
+       "field": "models",
+       "quote": "LSEL6337F",
+       "start": 727,
+       "end": 736
+      },
+      {
+       "field": "models",
+       "quote": "LSEL6331F",
+       "start": 763,
+       "end": 772
+      },
+      {
+       "field": "models",
+       "quote": "LSEL6333F",
+       "start": 835,
+       "end": 844
+      },
+      {
+       "field": "models",
+       "quote": "LSEL6333D",
+       "start": 907,
+       "end": 916
+      },
+      {
+       "field": "models",
+       "quote": "LSEL6335D",
+       "start": 979,
+       "end": 988
+      },
+      {
+       "field": "models",
+       "quote": "LSEL6335F",
+       "start": 1015,
+       "end": 1024
+      },
+      {
+       "field": "models",
+       "quote": "LTE4815BM",
+       "start": 1051,
+       "end": 1060
+      },
+      {
+       "field": "models",
+       "quote": "LTE4815BD",
+       "start": 1087,
+       "end": 1096
+      },
+      {
+       "field": "models",
+       "quote": "LTE4815ST",
+       "start": 1123,
+       "end": 1132
+      },
+      {
+       "field": "models",
+       "quote": "LRE4215ST",
+       "start": 1159,
+       "end": 1168
+      },
+      {
+       "field": "models",
+       "quote": "LTEL7337F",
+       "start": 1195,
+       "end": 1204
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "607KMXXXXXXX 807KMXXXXXXX",
+       "start": 449,
+       "end": 474
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "506KMXXXXXXX 408KMXXXXXXX",
+       "start": 485,
+       "end": 510
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "606KMXXXXXXX 901KMXXXXXXX",
+       "start": 521,
+       "end": 546
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "607KMXXXXXXX 206KMXXXXXXX",
+       "start": 557,
+       "end": 582
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "704KMXXXXXXX 704KMXXXXXXX",
+       "start": 593,
+       "end": 618
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "510KMXXXXXXX 106KMXXXXXXX",
+       "start": 629,
+       "end": 654
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "604KMXXXXXXX 106KMXXXXXXX",
+       "start": 665,
+       "end": 690
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "102KMXXXXXXX 304KMXXXXXXX",
+       "start": 701,
+       "end": 726
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "102KMXXXXXXX 312KMXXXXXXX",
+       "start": 737,
+       "end": 762
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "201MMXXXXXXX 312MMXXXXXXX",
+       "start": 773,
+       "end": 798
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "310KMXXXXXXX 312KMXXXXXXX",
+       "start": 809,
+       "end": 834
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "107MMXXXXXXX 311MMXXXXXXX",
+       "start": 845,
+       "end": 870
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "308KMXXXXXXX 312KMXXXXXXX",
+       "start": 881,
+       "end": 906
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "107MMXXXXXXX 312MMXXXXXXX",
+       "start": 917,
+       "end": 942
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "309KMXXXXXXX 312KMXXXXXXX",
+       "start": 953,
+       "end": 978
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "802KMXXXXXXX 001KMXXXXXXX",
+       "start": 1061,
+       "end": 1086
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "802KMXXXXXXX 207KMXXXXXXX",
+       "start": 1097,
+       "end": 1122
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "801KMXXXXXXX 205KMXXXXXXX",
+       "start": 1133,
+       "end": 1158
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "601KMXXXXXXX 903KMXXXXXXX",
+       "start": 1169,
+       "end": 1194
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "206KMXXXXXXX 312KMXXXXXXX",
+       "start": 1205,
+       "end": 1230
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for between $1,400 and $2,650",
+       "start": 1644,
+       "end": 1673
+      },
+      {
+       "field": "sold_from",
+       "quote": "from 2015",
+       "start": 1613,
+       "end": 1622
+      },
+      {
+       "field": "sold_to",
+       "quote": "January 2025",
+       "start": 1631,
+       "end": 1643
+      },
+      {
+       "field": "model_label_location",
+       "quote": "inside the oven door or storage drawer located on the bottom of the oven",
+       "start": 268,
+       "end": 340
+      },
+      {
+       "field": "sold_at",
+       "quote": "Best Buy",
+       "start": 1464,
+       "end": 1472
+      },
+      {
+       "field": "sold_at",
+       "quote": "Costco",
+       "start": 1474,
+       "end": 1480
+      },
+      {
+       "field": "sold_at",
+       "quote": "The Home Depot",
+       "start": 1482,
+       "end": 1496
+      },
+      {
+       "field": "sold_at",
+       "quote": "Lowe's",
+       "start": 1498,
+       "end": 1504
+      },
+      {
+       "field": "sold_at",
+       "quote": "LG.com",
+       "start": 1558,
+       "end": 1564
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 500,000",
+       "start": 1440,
+       "end": 1453
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "repair",
+     "options": [
+      {
+       "type": "repair",
+       "steps": [
+        "contact LG or request the warning label online",
+        "place the warning label as instructed",
+        "use the Control Lock or Lock Out feature"
+       ],
+       "proof_required": [
+        "registration"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": null
+       }
+      }
+     ],
+     "destruction_instruction": null,
+     "registration_url": "https://lgecares.com/rangerecall",
+     "contact": "800-399-3265",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "free warning label",
+       "start": 1718,
+       "end": 1736
+      },
+      {
+       "field": "registration_url",
+       "quote": "https://lgecares.com/rangerecall",
+       "start": 2838,
+       "end": 2870
+      },
+      {
+       "field": "contact",
+       "quote": "800-399-3265",
+       "start": 2738,
+       "end": 2750
+      }
+     ]
+    }
+   },
+   "notes": "Serial ranges are per model in a flattened table and appear to encode year and month (607 through 206), so lexicographic order does not match recall order. The remedy is a warning label, which CPSC files as Repair. The incidents text mentions lithium-ion batteries, which looks like a source error.",
+   "baseline_test": true,
+   "synth_source": true
+  },
+  {
+   "source_id": "25206",
+   "recall_date": "2025-04-03",
+   "title": "HONEYJOY Recalls Multiple Convertible and Foldable High Chairs Due to Risk of Suffocation; Violation of Federal Regulation for Infant Sleep Products and Inclined Sleepers Ban; Sold Exclusively on Amazon.com",
+   "category": "children",
+   "source_text_sha256": "a2d4f2239a272888beb5b077a5fc7e286e9522b52afdbdca2c3f3274bc6479b7",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "BE10019US-PI",
+      "BE10019US-GR",
+      "AD10025PI",
+      "AD10025GR",
+      "AD10025BE",
+      "AD10004GR",
+      "AD10004LS",
+      "AD10004BE",
+      "BB4640RE",
+      "BB4640CF",
+      "BB4640PU",
+      "BB4640BL",
+      "AD10007GR",
+      "AD10009BE",
+      "AD10014BE",
+      "AD10014SL"
+     ],
+     "model_label_location": "sewn-in label on the top cover of the seat",
+     "serial_ranges": [],
+     "date_codes": [],
+     "sold_at": [
+      "Amazon.com"
+     ],
+     "sold_from": "2023-04-01",
+     "sold_to": "2024-08-31",
+     "price_range_cents": {
+      "min_cents": 7900,
+      "max_cents": 22000
+     },
+     "units_affected": 2750,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "BE10019US-PI",
+       "start": 740,
+       "end": 752
+      },
+      {
+       "field": "models",
+       "quote": "BE10019US-GR",
+       "start": 758,
+       "end": 770
+      },
+      {
+       "field": "models",
+       "quote": "AD10025PI",
+       "start": 966,
+       "end": 975
+      },
+      {
+       "field": "models",
+       "quote": "AD10025GR",
+       "start": 981,
+       "end": 990
+      },
+      {
+       "field": "models",
+       "quote": "AD10025BE",
+       "start": 996,
+       "end": 1005
+      },
+      {
+       "field": "models",
+       "quote": "AD10004GR",
+       "start": 1198,
+       "end": 1207
+      },
+      {
+       "field": "models",
+       "quote": "AD10004LS",
+       "start": 1213,
+       "end": 1222
+      },
+      {
+       "field": "models",
+       "quote": "AD10004BE",
+       "start": 1229,
+       "end": 1238
+      },
+      {
+       "field": "models",
+       "quote": "BB4640RE",
+       "start": 1414,
+       "end": 1422
+      },
+      {
+       "field": "models",
+       "quote": "BB4640CF",
+       "start": 1428,
+       "end": 1436
+      },
+      {
+       "field": "models",
+       "quote": "BB4640PU",
+       "start": 1444,
+       "end": 1452
+      },
+      {
+       "field": "models",
+       "quote": "BB4640BL",
+       "start": 1460,
+       "end": 1468
+      },
+      {
+       "field": "models",
+       "quote": "AD10007GR",
+       "start": 1609,
+       "end": 1618
+      },
+      {
+       "field": "models",
+       "quote": "AD10009BE",
+       "start": 1624,
+       "end": 1633
+      },
+      {
+       "field": "models",
+       "quote": "AD10014BE",
+       "start": 1830,
+       "end": 1839
+      },
+      {
+       "field": "models",
+       "quote": "AD10014SL",
+       "start": 1846,
+       "end": 1855
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for between $79 and $220",
+       "start": 2017,
+       "end": 2041
+      },
+      {
+       "field": "sold_from",
+       "quote": "April 2023",
+       "start": 1986,
+       "end": 1996
+      },
+      {
+       "field": "sold_to",
+       "quote": "August 2024",
+       "start": 2005,
+       "end": 2016
+      },
+      {
+       "field": "model_label_location",
+       "quote": "on the top cover of the seat",
+       "start": 422,
+       "end": 450
+      },
+      {
+       "field": "sold_at",
+       "quote": "Amazon.com",
+       "start": 203,
+       "end": 213
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 2,750",
+       "start": 1926,
+       "end": 1937
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "refund",
+     "options": [
+      {
+       "type": "refund",
+       "steps": [
+        "stop using the high chair",
+        "register with HONEYJOY",
+        "remove the seat",
+        "write RECALLED on the front and rear of the seatback with a marker",
+        "email a photograph of the defaced product",
+        "follow the disposal instructions"
+       ],
+       "proof_required": [
+        "registration",
+        "destruction_photo"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": "full refund"
+       }
+      }
+     ],
+     "destruction_instruction": "write \"RECALLED\" in large letters on the front and rear of the seatback using a marker",
+     "registration_url": null,
+     "contact": "honeyjoyrecall@hotmail.com",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "register for a full refund",
+       "start": 2141,
+       "end": 2167
+      },
+      {
+       "field": "destruction_instruction",
+       "quote": "write \"RECALLED\" in large letters on the front and rear of the seatback using a marker",
+       "start": 2203,
+       "end": 2289
+      },
+      {
+       "field": "contact",
+       "quote": "honeyjoyrecall@hotmail.com",
+       "start": 2340,
+       "end": 2366
+      }
+     ]
+    }
+   },
+   "notes": "No phone number. Registration is by contacting the firm, not a stated URL.",
+   "baseline_test": false,
+   "synth_source": true
+  },
+  {
+   "source_id": "25253",
+   "recall_date": "2025-05-08",
+   "title": "Igloo Expands Recall of 90 Qt. Rolling Coolers Due to Fingertip Amputation and Crushing Hazards; Total Recalled Now Nearly 1.2 Million",
+   "category": "other",
+   "source_text_sha256": "d23391213a839682925ddc0e7785d58ced68ad8df641d4fe2c0b732c8edbef8b",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "34692",
+      "34785",
+      "34790"
+     ],
+     "model_label_location": "on labels affixed to the bottom of the cooler",
+     "serial_ranges": [],
+     "date_codes": [
+      {
+       "format": "MM/YYYY",
+       "start": "07/2020",
+       "end": "09/2021",
+       "raw": "07/2020-09/2021"
+      },
+      {
+       "format": "MM/YYYY",
+       "start": "10/2021",
+       "end": "12/2022",
+       "raw": "10/2021-12/2022"
+      },
+      {
+       "format": "MM/YYYY",
+       "start": "10/2021",
+       "end": "02/2023",
+       "raw": "10/2021-02/2023"
+      },
+      {
+       "format": "Month YYYY",
+       "start": null,
+       "end": "January 2024",
+       "raw": "manufactured prior to January 2024"
+      }
+     ],
+     "sold_at": [
+      "Costco",
+      "Target",
+      "Academy",
+      "Dick's",
+      "Amazon.com",
+      "Igloocoolers.com"
+     ],
+     "sold_from": "2019-01-01",
+     "sold_to": "2025-01-31",
+     "price_range_cents": {
+      "min_cents": 8000,
+      "max_cents": 14000
+     },
+     "units_affected": 130000,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "34692",
+       "start": 872,
+       "end": 877
+      },
+      {
+       "field": "models",
+       "quote": "34785",
+       "start": 916,
+       "end": 921
+      },
+      {
+       "field": "models",
+       "quote": "34790",
+       "start": 960,
+       "end": 965
+      },
+      {
+       "field": "date_codes",
+       "quote": "07/2020-09/2021",
+       "start": 900,
+       "end": 915
+      },
+      {
+       "field": "date_codes",
+       "quote": "10/2021-12/2022",
+       "start": 944,
+       "end": 959
+      },
+      {
+       "field": "date_codes",
+       "quote": "10/2021-02/2023",
+       "start": 996,
+       "end": 1011
+      },
+      {
+       "field": "date_codes",
+       "quote": "manufactured prior to January 2024",
+       "start": 249,
+       "end": 283
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for between $80 and $140",
+       "start": 1415,
+       "end": 1439
+      },
+      {
+       "field": "sold_from",
+       "quote": "January 2019",
+       "start": 1381,
+       "end": 1393
+      },
+      {
+       "field": "sold_to",
+       "quote": "January 2025",
+       "start": 1402,
+       "end": 1414
+      },
+      {
+       "field": "model_label_location",
+       "quote": "located on labels affixed to the bottom of the cooler",
+       "start": 754,
+       "end": 807
+      },
+      {
+       "field": "sold_at",
+       "quote": "Costco",
+       "start": 1252,
+       "end": 1258
+      },
+      {
+       "field": "sold_at",
+       "quote": "Target",
+       "start": 1260,
+       "end": 1266
+      },
+      {
+       "field": "sold_at",
+       "quote": "Academy",
+       "start": 1268,
+       "end": 1275
+      },
+      {
+       "field": "sold_at",
+       "quote": "Dick's",
+       "start": 1277,
+       "end": 1283
+      },
+      {
+       "field": "sold_at",
+       "quote": "Amazon.com",
+       "start": 1327,
+       "end": 1337
+      },
+      {
+       "field": "sold_at",
+       "quote": "Igloocoolers.com",
+       "start": 1339,
+       "end": 1355
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 130,000",
+       "start": 1071,
+       "end": 1084
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "replacement",
+     "options": [
+      {
+       "type": "replacement",
+       "steps": [
+        "stop using the cooler",
+        "contact Igloo"
+       ],
+       "proof_required": [
+        "none"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": null
+       }
+      }
+     ],
+     "destruction_instruction": null,
+     "registration_url": null,
+     "contact": "888-943-5182",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "free replacement handle",
+       "start": 1535,
+       "end": 1558
+      },
+      {
+       "field": "contact",
+       "quote": "888-943-5182",
+       "start": 1992,
+       "end": 2004
+      }
+     ]
+    }
+   },
+   "notes": "Models are listed as Model/SKU numbers. 'Manufactured prior to January 2024' is an exclusive upper bound. Units count is the expansion only.",
+   "baseline_test": false,
+   "synth_source": true
+  },
+  {
+   "source_id": "25402",
+   "recall_date": "2025-07-24",
+   "title": "Apollo Recalls Electric Scooters Due to Fall and Injury Hazards",
+   "category": "battery_power",
+   "source_text_sha256": "4fe6567435c5b18239694466a6d8ad4e8e32538dfd2f622dfe931f55e28252f9",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [],
+     "model_label_location": null,
+     "serial_ranges": [
+      {
+       "prefix": null,
+       "start": "4202240300001",
+       "end": "4202240301236",
+       "raw": "4202240300001 to 4202240301236"
+      },
+      {
+       "prefix": null,
+       "start": "4202240400001",
+       "end": "4202240400764",
+       "raw": "4202240400001 to 4202240400764"
+      }
+     ],
+     "date_codes": [
+      {
+       "format": "model year",
+       "start": "2024",
+       "end": "2024",
+       "raw": "Apollo City 2024 model year"
+      }
+     ],
+     "sold_at": [
+      "Best Buy",
+      "Apolloscooters.co",
+      "Amazon.com",
+      "BestBuy.com"
+     ],
+     "sold_from": "2024-06-01",
+     "sold_to": "2025-04-30",
+     "price_range_cents": {
+      "min_cents": 180000,
+      "max_cents": 180000
+     },
+     "units_affected": 790,
+     "evidence": [
+      {
+       "field": "serial_ranges",
+       "quote": "4202240300001 to 4202240301236",
+       "start": 498,
+       "end": 528
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "4202240400001 to 4202240400764",
+       "start": 533,
+       "end": 563
+      },
+      {
+       "field": "date_codes",
+       "quote": "Apollo City 2024 model year",
+       "start": 132,
+       "end": 159
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for about $1,800",
+       "start": 904,
+       "end": 920
+      },
+      {
+       "field": "sold_from",
+       "quote": "June 2024",
+       "start": 875,
+       "end": 884
+      },
+      {
+       "field": "sold_to",
+       "quote": "April 2025",
+       "start": 893,
+       "end": 903
+      },
+      {
+       "field": "sold_at",
+       "quote": "Best Buy",
+       "start": 780,
+       "end": 788
+      },
+      {
+       "field": "sold_at",
+       "quote": "Apolloscooters.co",
+       "start": 821,
+       "end": 838
+      },
+      {
+       "field": "sold_at",
+       "quote": "Amazon.com",
+       "start": 840,
+       "end": 850
+      },
+      {
+       "field": "sold_at",
+       "quote": "BestBuy.com",
+       "start": 855,
+       "end": 866
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 790",
+       "start": 760,
+       "end": 769
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "replacement",
+     "options": [
+      {
+       "type": "replacement",
+       "steps": [
+        "stop using the scooter",
+        "fill out the online recall form",
+        "take the scooter to a service repair location"
+       ],
+       "proof_required": [
+        "registration"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": null
+       }
+      }
+     ],
+     "destruction_instruction": null,
+     "registration_url": "https://apolloscooters.co/pages/apollo-city/recall",
+     "contact": "888-501-8862",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "free replacement stem",
+       "start": 1018,
+       "end": 1039
+      },
+      {
+       "field": "registration_url",
+       "quote": "https://apolloscooters.co/pages/apollo-city/recall",
+       "start": 1084,
+       "end": 1134
+      },
+      {
+       "field": "contact",
+       "quote": "888-501-8862",
+       "start": 1868,
+       "end": 1880
+      }
+     ]
+    }
+   },
+   "notes": "Apollo City is a product line name with no model code; identification is by serial range. Serial location is given, not a model-label location.",
+   "baseline_test": false,
+   "synth_source": false
+  },
+  {
+   "source_id": "25471",
+   "recall_date": "2025-09-18",
+   "title": "Youbeien Crib Mobiles Recalled Due to Risk of Serious Injury or Death from Battery Ingestion; Violates the Mandatory Toy Standard for Batteries; Sold on Amazon by GKKBSJ",
+   "category": "children",
+   "source_text_sha256": "b301e731437d7cee11d4c4e578ec0322af642caf945ce6066002bdd71cbeb3e3",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "RT668-17"
+     ],
+     "model_label_location": "printed on a white label on the back of the packaging",
+     "serial_ranges": [],
+     "date_codes": [],
+     "sold_at": [
+      "Amazon"
+     ],
+     "sold_from": "2024-05-01",
+     "sold_to": "2025-04-30",
+     "price_range_cents": {
+      "min_cents": 2000,
+      "max_cents": 2000
+     },
+     "units_affected": 3000,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "RT668-17",
+       "start": 760,
+       "end": 768
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for about $20",
+       "start": 911,
+       "end": 924
+      },
+      {
+       "field": "sold_from",
+       "quote": "May 2024",
+       "start": 883,
+       "end": 891
+      },
+      {
+       "field": "sold_to",
+       "quote": "April 2025",
+       "start": 900,
+       "end": 910
+      },
+      {
+       "field": "model_label_location",
+       "quote": "printed on a white label on the back",
+       "start": 770,
+       "end": 806
+      },
+      {
+       "field": "sold_at",
+       "quote": "Amazon",
+       "start": 160,
+       "end": 166
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 3,000",
+       "start": 849,
+       "end": 860
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "refund",
+     "options": [
+      {
+       "type": "refund",
+       "steps": [
+        "stop using the toy",
+        "throw away the product",
+        "email a photo of the disposed product"
+       ],
+       "proof_required": [
+        "destruction_photo"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": "full refund"
+       }
+      },
+      {
+       "type": "refund",
+       "steps": [
+        "throw away only the remote",
+        "email a photo of the disposed remote"
+       ],
+       "proof_required": [
+        "destruction_photo"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": "$8"
+       }
+      }
+     ],
+     "destruction_instruction": "throw away the product and send a photo of the disposed product",
+     "registration_url": null,
+     "contact": "gkkbsjtoys@outlook.com",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "contact GKKBSJ for a refund",
+       "start": 996,
+       "end": 1023
+      },
+      {
+       "field": "destruction_instruction",
+       "quote": "throw away the product and send a photo of the disposed product",
+       "start": 1052,
+       "end": 1115
+      },
+      {
+       "field": "contact",
+       "quote": "gkkbsjtoys@outlook.com",
+       "start": 1119,
+       "end": 1141
+      }
+     ]
+    }
+   },
+   "notes": "The model label is on the product packaging. Disposal with photo proof is treated as the destruction instruction; a partial refund of $8 applies when only the remote is discarded.",
+   "baseline_test": false,
+   "synth_source": false
+  },
+  {
+   "source_id": "26007",
+   "recall_date": "2025-10-09",
+   "title": "Tempo USA Recalls Ambiano Electric Pressure Cookers Due to Serious Burn Hazard, Multiple Burn Injuries Reported; Sold at ALDI",
+   "category": "appliance_electrical",
+   "source_text_sha256": "30008e517d476f9aff8759f978d8c4e7f737c5bebe57e0cf7be44c17ee4b5b31",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "93550",
+      "KY-318B",
+      "96775",
+      "KY-318A",
+      "98527",
+      "6L-PC"
+     ],
+     "model_label_location": "printed on the permanent product label on the bottom of the cooker",
+     "serial_ranges": [],
+     "date_codes": [],
+     "sold_at": [
+      "ALDI"
+     ],
+     "sold_from": "2016-01-01",
+     "sold_to": "2019-12-31",
+     "price_range_cents": {
+      "min_cents": 4000,
+      "max_cents": 4000
+     },
+     "units_affected": 46660,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "93550",
+       "start": 225,
+       "end": 230
+      },
+      {
+       "field": "models",
+       "quote": "KY-318B",
+       "start": 232,
+       "end": 239
+      },
+      {
+       "field": "models",
+       "quote": "96775",
+       "start": 242,
+       "end": 247
+      },
+      {
+       "field": "models",
+       "quote": "KY-318A",
+       "start": 249,
+       "end": 256
+      },
+      {
+       "field": "models",
+       "quote": "98527",
+       "start": 263,
+       "end": 268
+      },
+      {
+       "field": "models",
+       "quote": "6L-PC",
+       "start": 270,
+       "end": 275
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for about $40",
+       "start": 743,
+       "end": 756
+      },
+      {
+       "field": "sold_from",
+       "quote": "between January 2016 and December 2019",
+       "start": 704,
+       "end": 742
+      },
+      {
+       "field": "sold_to",
+       "quote": "between January 2016 and December 2019",
+       "start": 704,
+       "end": 742
+      },
+      {
+       "field": "model_label_location",
+       "quote": "printed on the permanent product label on the bottom of the cooker",
+       "start": 530,
+       "end": 596
+      },
+      {
+       "field": "sold_at",
+       "quote": "ALDI",
+       "start": 128,
+       "end": 132
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 46,660",
+       "start": 651,
+       "end": 663
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "refund",
+     "options": [
+      {
+       "type": "refund",
+       "steps": [
+        "stop using the pressure cooker",
+        "return the fully intact pressure cooker to any ALDI retail location"
+       ],
+       "proof_required": [
+        "product_return"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": "full refund"
+       }
+      },
+      {
+       "type": "refund",
+       "steps": [
+        "stop using the pressure cooker",
+        "cut the unplugged power cord",
+        "email a photo of the cut cord and a photo of the model number and date code to Tempo"
+       ],
+       "proof_required": [
+        "destruction_photo",
+        "label_photo"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": "refund"
+       }
+      }
+     ],
+     "destruction_instruction": "the unplugged power cord cut",
+     "registration_url": null,
+     "contact": "800-325-7894",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "contact Tempo or ALDI for a refund",
+       "start": 841,
+       "end": 875
+      },
+      {
+       "field": "destruction_instruction",
+       "quote": "the unplugged power cord cut",
+       "start": 1030,
+       "end": 1058
+      },
+      {
+       "field": "contact",
+       "quote": "800-325-7894",
+       "start": 1615,
+       "end": 1627
+      }
+     ]
+    }
+   },
+   "notes": "Each model is printed as a number with a factory code in parentheses; both are listed as printed.",
+   "baseline_test": false,
+   "synth_source": true
+  },
+  {
+   "source_id": "26011",
+   "recall_date": "2025-10-09",
+   "title": "ESR HaloLock Wireless Power Banks Recall Expanded to Include Additional Model Due to Risk of Serious Burn Injury and Fire Hazard Due to Fire and Burn Hazards; Distributed by Waymeet",
+   "category": "battery_power",
+   "source_text_sha256": "2a7c696c038bcf90e6dbcae1e14164aaf94a6e8ee67e8aae5b33ae4b04268c22",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "2G505",
+      "2G520",
+      "2G505B",
+      "2G512B"
+     ],
+     "model_label_location": "printed on the right side of the pocket-size power banks",
+     "serial_ranges": [],
+     "date_codes": [],
+     "sold_at": [
+      "Amazon.com",
+      "Esrtech.com",
+      "Homedepot.com"
+     ],
+     "sold_from": "2022-09-01",
+     "sold_to": "2025-07-31",
+     "price_range_cents": {
+      "min_cents": 3200,
+      "max_cents": 5000
+     },
+     "units_affected": 19500,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "2G505",
+       "start": 286,
+       "end": 291
+      },
+      {
+       "field": "models",
+       "quote": "2G520",
+       "start": 315,
+       "end": 320
+      },
+      {
+       "field": "models",
+       "quote": "2G505B",
+       "start": 322,
+       "end": 328
+      },
+      {
+       "field": "models",
+       "quote": "2G512B",
+       "start": 333,
+       "end": 339
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for between $32 and $50",
+       "start": 1105,
+       "end": 1128
+      },
+      {
+       "field": "sold_from",
+       "quote": "September 2022",
+       "start": 1072,
+       "end": 1086
+      },
+      {
+       "field": "sold_to",
+       "quote": "July 2025",
+       "start": 1095,
+       "end": 1104
+      },
+      {
+       "field": "model_label_location",
+       "quote": "printed on the right side of the pocket-size power banks",
+       "start": 428,
+       "end": 484
+      },
+      {
+       "field": "sold_at",
+       "quote": "Amazon.com",
+       "start": 959,
+       "end": 969
+      },
+      {
+       "field": "sold_at",
+       "quote": "Esrtech.com",
+       "start": 984,
+       "end": 995
+      },
+      {
+       "field": "sold_at",
+       "quote": "Homedepot.com",
+       "start": 1013,
+       "end": 1026
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 19,500",
+       "start": 742,
+       "end": 754
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "refund",
+     "options": [
+      {
+       "type": "refund",
+       "steps": [
+        "stop using the power bank",
+        "write Recalled on it in permanent marker",
+        "email a photo showing the model number",
+        "dispose of it as hazardous waste"
+       ],
+       "proof_required": [
+        "destruction_photo",
+        "label_photo"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": "full refund"
+       }
+      }
+     ],
+     "destruction_instruction": "with the word \"Recalled\" written on it in permanent marker",
+     "registration_url": null,
+     "contact": "888-990-0280",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "full refund",
+       "start": 1230,
+       "end": 1241
+      },
+      {
+       "field": "destruction_instruction",
+       "quote": "with the word \"Recalled\" written on it in permanent marker",
+       "start": 1396,
+       "end": 1454
+      },
+      {
+       "field": "contact",
+       "quote": "888-990-0280",
+       "start": 2713,
+       "end": 2725
+      }
+     ]
+    }
+   },
+   "notes": "Units count is the expansion (model 2G505); the earlier 24,000 were recalled in August 2025.",
+   "baseline_test": true,
+   "synth_source": true
+  },
+  {
+   "source_id": "26027",
+   "recall_date": "2025-10-16",
+   "title": "Yamaha Recalls Model Year 2017-2024 Golf Car Vehicles Due to Risk of Serious Injury or Death from Crash Hazard",
+   "category": "outdoor_sports",
+   "source_text_sha256": "a3ea6b487af33bedcdd90f0db45217bd20f56317fbf114c3352a147beae8f515",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "DR2A",
+      "DR2E"
+     ],
+     "model_label_location": null,
+     "serial_ranges": [
+      {
+       "prefix": "J0D",
+       "start": null,
+       "end": null,
+       "raw": "serial numbers that begin with J0D, J0E, and J2D"
+      },
+      {
+       "prefix": "J0E",
+       "start": null,
+       "end": null,
+       "raw": "serial numbers that begin with J0D, J0E, and J2D"
+      },
+      {
+       "prefix": "J2D",
+       "start": null,
+       "end": null,
+       "raw": "serial numbers that begin with J0D, J0E, and J2D"
+      }
+     ],
+     "date_codes": [
+      {
+       "format": "model year",
+       "start": "2017",
+       "end": "2024",
+       "raw": "model year 2017-2024"
+      }
+     ],
+     "sold_at": [
+      "Yamaha dealers"
+     ],
+     "sold_from": "2018-06-01",
+     "sold_to": "2025-07-31",
+     "price_range_cents": {
+      "min_cents": 950000,
+      "max_cents": 1300000
+     },
+     "units_affected": 4300,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "DR2A",
+       "start": 174,
+       "end": 178
+      },
+      {
+       "field": "models",
+       "quote": "DR2E",
+       "start": 183,
+       "end": 187
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "serial numbers that begin with J0D, J0E, and J2D",
+       "start": 233,
+       "end": 281
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "serial numbers that begin with J0D, J0E, and J2D",
+       "start": 233,
+       "end": 281
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "serial numbers that begin with J0D, J0E, and J2D",
+       "start": 233,
+       "end": 281
+      },
+      {
+       "field": "date_codes",
+       "quote": "model year 2017-2024",
+       "start": 153,
+       "end": 173
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for between $9,500 and $13,000",
+       "start": 599,
+       "end": 629
+      },
+      {
+       "field": "sold_from",
+       "quote": "June 2018",
+       "start": 571,
+       "end": 580
+      },
+      {
+       "field": "sold_to",
+       "quote": "July 2025",
+       "start": 589,
+       "end": 598
+      },
+      {
+       "field": "sold_at",
+       "quote": "Yamaha dealers",
+       "start": 540,
+       "end": 554
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 4,300",
+       "start": 518,
+       "end": 529
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "repair",
+     "options": [
+      {
+       "type": "repair",
+       "steps": [
+        "stop using the golf car",
+        "contact an authorized Yamaha Golf Car dealer to schedule the installation"
+       ],
+       "proof_required": [
+        "none"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": null
+       }
+      }
+     ],
+     "destruction_instruction": null,
+     "registration_url": null,
+     "contact": "866-747-4027",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "free installation of new brake shoes and pads",
+       "start": 776,
+       "end": 821
+      },
+      {
+       "field": "contact",
+       "quote": "866-747-4027",
+       "start": 1290,
+       "end": 1302
+      }
+     ]
+    }
+   },
+   "notes": "Serial-number location is given, not a model-label location.",
+   "baseline_test": true,
+   "synth_source": true
+  },
+  {
+   "source_id": "26046",
+   "recall_date": "2025-10-23",
+   "title": "J & D Brush Recalls Bio Ionic Hair Curling Irons Due to Burn Hazard",
+   "category": "other",
+   "source_text_sha256": "38f96372b5c4cad827ff431ed6822cda76df05ece611fa6183d85225b9c3738c",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "LXT-CL-1.0"
+     ],
+     "model_label_location": "the rating label located on the handle of the curling iron",
+     "serial_ranges": [],
+     "date_codes": [
+      {
+       "format": "MMYY",
+       "start": "0722",
+       "end": "1223",
+       "raw": "date code between 0722 and 1223"
+      }
+     ],
+     "sold_at": [
+      "Amazon",
+      "Bioionic.com",
+      "Salon Centric",
+      "Ulta",
+      "Sephora",
+      "Nordstrom"
+     ],
+     "sold_from": "2022-08-01",
+     "sold_to": "2024-07-31",
+     "price_range_cents": {
+      "min_cents": 16500,
+      "max_cents": 16500
+     },
+     "units_affected": 357000,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "LXT-CL-1.0",
+       "start": 171,
+       "end": 181
+      },
+      {
+       "field": "date_codes",
+       "quote": "date code between 0722 and 1223",
+       "start": 189,
+       "end": 220
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for about $165",
+       "start": 1001,
+       "end": 1015
+      },
+      {
+       "field": "sold_from",
+       "quote": "August 2022",
+       "start": 971,
+       "end": 982
+      },
+      {
+       "field": "sold_to",
+       "quote": "July 2024",
+       "start": 991,
+       "end": 1000
+      },
+      {
+       "field": "model_label_location",
+       "quote": "the rating label located on the handle of the curling iron",
+       "start": 526,
+       "end": 584
+      },
+      {
+       "field": "sold_at",
+       "quote": "Amazon",
+       "start": 824,
+       "end": 830
+      },
+      {
+       "field": "sold_at",
+       "quote": "Bioionic.com",
+       "start": 835,
+       "end": 847
+      },
+      {
+       "field": "sold_at",
+       "quote": "Salon Centric",
+       "start": 872,
+       "end": 885
+      },
+      {
+       "field": "sold_at",
+       "quote": "Ulta",
+       "start": 887,
+       "end": 891
+      },
+      {
+       "field": "sold_at",
+       "quote": "Sephora",
+       "start": 893,
+       "end": 900
+      },
+      {
+       "field": "sold_at",
+       "quote": "Nordstrom",
+       "start": 906,
+       "end": 915
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 357,000",
+       "start": 753,
+       "end": 766
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "replacement",
+     "options": [
+      {
+       "type": "replacement",
+       "steps": [
+        "stop using and unplug the curling iron",
+        "register with Bio Ionic",
+        "cut off the plug",
+        "return the plug with the prepaid shipping label"
+       ],
+       "proof_required": [
+        "registration",
+        "product_return"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": null
+       }
+      }
+     ],
+     "destruction_instruction": "cut off the plug",
+     "registration_url": null,
+     "contact": "877-853-9627",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "free replacement curling iron",
+       "start": 1144,
+       "end": 1173
+      },
+      {
+       "field": "destruction_instruction",
+       "quote": "cut off the plug",
+       "start": 1202,
+       "end": 1218
+      },
+      {
+       "field": "contact",
+       "quote": "877-853-9627",
+       "start": 1625,
+       "end": 1637
+      }
+     ]
+    }
+   },
+   "notes": "Salons and beauty supply stores nationwide are a generic channel and are not listed.",
+   "baseline_test": false,
+   "synth_source": true
+  },
+  {
+   "source_id": "26139",
+   "recall_date": "2025-12-11",
+   "title": "Primark Recalls Little Bear 2-Pack Soother Clips Due to Choking and Laceration Hazards",
+   "category": "other",
+   "source_text_sha256": "ad574485497cfb7bd61b087d63e22b04379f9301d91aeab770d534985d718a50",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "991139699"
+     ],
+     "model_label_location": "printed on the price tag located on the back of the product packaging",
+     "serial_ranges": [],
+     "date_codes": [],
+     "sold_at": [
+      "Primark"
+     ],
+     "sold_from": "2025-06-01",
+     "sold_to": "2025-08-31",
+     "price_range_cents": {
+      "min_cents": 500,
+      "max_cents": 500
+     },
+     "units_affected": 1330,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "991139699",
+       "start": 320,
+       "end": 329
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for about $5",
+       "start": 591,
+       "end": 603
+      },
+      {
+       "field": "sold_from",
+       "quote": "June 2025",
+       "start": 561,
+       "end": 570
+      },
+      {
+       "field": "sold_to",
+       "quote": "August 2025",
+       "start": 579,
+       "end": 590
+      },
+      {
+       "field": "model_label_location",
+       "quote": "printed on the price tag located on the back of the product packaging",
+       "start": 334,
+       "end": 403
+      },
+      {
+       "field": "sold_at",
+       "quote": "Primark",
+       "start": 7,
+       "end": 14
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 1,330",
+       "start": 456,
+       "end": 467
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "refund",
+     "options": [
+      {
+       "type": "refund",
+       "steps": [
+        "stop using the soother clips",
+        "return them to a Primark store"
+       ],
+       "proof_required": [
+        "product_return"
+       ],
+       "payout": {
+        "method": "original_payment",
+        "amount_rule": "full refund"
+       }
+      }
+     ],
+     "destruction_instruction": null,
+     "registration_url": null,
+     "contact": "617-946-3236",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "full refund in the original form of payment",
+       "start": 722,
+       "end": 765
+      },
+      {
+       "field": "contact",
+       "quote": "617-946-3236",
+       "start": 1223,
+       "end": 1235
+      }
+     ]
+    }
+   },
+   "notes": "The identifier is presented as a product code; it is the only identifier, so it is listed under models.",
+   "baseline_test": false,
+   "synth_source": false
+  },
+  {
+   "source_id": "26161",
+   "recall_date": "2025-12-18",
+   "title": "ANNQUAN Brand Power Strips Recalled Due to Risk of Serious Injury or Death from Fire; Sold on Amazon by Hefei Juyuan Sporting Development",
+   "category": "appliance_electrical",
+   "source_text_sha256": "f61be8ea3ab7869f1d693a0a185843252160ccd495d003047fe909a96c4cd35e",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "EX-D112-05",
+      "EX-D106-25"
+     ],
+     "model_label_location": "found on the order invoice",
+     "serial_ranges": [],
+     "date_codes": [],
+     "sold_at": [
+      "Amazon.com"
+     ],
+     "sold_from": "2023-12-01",
+     "sold_to": "2025-10-31",
+     "price_range_cents": {
+      "min_cents": 1500,
+      "max_cents": 4000
+     },
+     "units_affected": 11200,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "EX-D112-05",
+       "start": 216,
+       "end": 226
+      },
+      {
+       "field": "models",
+       "quote": "EX-D106-25",
+       "start": 231,
+       "end": 241
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for between $15 and $40",
+       "start": 793,
+       "end": 816
+      },
+      {
+       "field": "sold_from",
+       "quote": "December 2023",
+       "start": 758,
+       "end": 771
+      },
+      {
+       "field": "sold_to",
+       "quote": "October 2025",
+       "start": 780,
+       "end": 792
+      },
+      {
+       "field": "model_label_location",
+       "quote": "found on the order invoice",
+       "start": 607,
+       "end": 633
+      },
+      {
+       "field": "sold_at",
+       "quote": "Amazon.com",
+       "start": 742,
+       "end": 752
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 11,200",
+       "start": 709,
+       "end": 721
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "refund",
+     "options": [
+      {
+       "type": "refund",
+       "steps": [
+        "stop using the power strip",
+        "contact Hefei Juyuan Sporting Development"
+       ],
+       "proof_required": [
+        "none"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": "full refund"
+       }
+      }
+     ],
+     "destruction_instruction": null,
+     "registration_url": null,
+     "contact": "401-998-3366",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "full refund",
+       "start": 951,
+       "end": 962
+      },
+      {
+       "field": "contact",
+       "quote": "401-998-3366",
+       "start": 1489,
+       "end": 1501
+      }
+     ]
+    }
+   },
+   "notes": "The model number is on the order invoice, not on the product.",
+   "baseline_test": false,
+   "synth_source": false
+  },
+  {
+   "source_id": "26199",
+   "recall_date": "2026-01-15",
+   "title": "Curtis International Expands Recall of Frigidaire-brand Minifridges Due to Fire and Burn Hazards",
+   "category": "other",
+   "source_text_sha256": "1936060fbb3b8ff2ce3bbd9135884abfc8f1ed1f518659d2c43250869e5bb7f1",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "EFMIS121"
+     ],
+     "model_label_location": "on a label on the back of the minifridge",
+     "serial_ranges": [
+      {
+       "prefix": null,
+       "start": "A2001",
+       "end": "A2310",
+       "raw": "Between A2001 and A2310"
+      }
+     ],
+     "date_codes": [],
+     "sold_at": [
+      "Target",
+      "Target.com"
+     ],
+     "sold_from": "2020-01-01",
+     "sold_to": "2023-10-31",
+     "price_range_cents": {
+      "min_cents": 3000,
+      "max_cents": 3000
+     },
+     "units_affected": 330000,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "EFMIS121",
+       "start": 193,
+       "end": 201
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "Between A2001 and A2310",
+       "start": 614,
+       "end": 637
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for around $30",
+       "start": 939,
+       "end": 953
+      },
+      {
+       "field": "sold_from",
+       "quote": "January 2020",
+       "start": 905,
+       "end": 917
+      },
+      {
+       "field": "sold_to",
+       "quote": "October 2023",
+       "start": 926,
+       "end": 938
+      },
+      {
+       "field": "model_label_location",
+       "quote": "on a label on the back of the minifridge",
+       "start": 422,
+       "end": 462
+      },
+      {
+       "field": "sold_at",
+       "quote": "Target",
+       "start": 563,
+       "end": 569
+      },
+      {
+       "field": "sold_at",
+       "quote": "Target.com",
+       "start": 889,
+       "end": 899
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 330,000",
+       "start": 731,
+       "end": 744
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "refund",
+     "options": [
+      {
+       "type": "refund",
+       "steps": [
+        "stop using the minifridge",
+        "register online",
+        "unplug and cut the power cord",
+        "write Recall on the front door with a permanent marker",
+        "dispose of the minifridge"
+       ],
+       "proof_required": [
+        "registration"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": "refund"
+       }
+      }
+     ],
+     "destruction_instruction": "unplug and cut the power cord and write \"Recall\" using a permanent marker on the front door of the unit",
+     "registration_url": "www.recallrtr.com/minifridge",
+     "contact": "888-727-0198",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "register for a refund",
+       "start": 1060,
+       "end": 1081
+      },
+      {
+       "field": "destruction_instruction",
+       "quote": "unplug and cut the power cord and write \"Recall\" using a permanent marker on the front door of the unit",
+       "start": 1132,
+       "end": 1235
+      },
+      {
+       "field": "registration_url",
+       "quote": "www.recallrtr.com/minifridge",
+       "start": 1085,
+       "end": 1113
+      },
+      {
+       "field": "contact",
+       "quote": "888-727-0198",
+       "start": 1821,
+       "end": 1833
+      }
+     ]
+    }
+   },
+   "notes": "Models EFMIS129, EFMIS137, EFMIS149 and EFMIS175 belong to the earlier recall and are not part of this expansion. The notice does not say whether a photo is required.",
+   "baseline_test": false,
+   "synth_source": false
+  },
+  {
+   "source_id": "26205",
+   "recall_date": "2026-01-22",
+   "title": "Gagaku Children's Ice Cream Toy Playsets Recalled Due to Risk of Serious Injury or Death from Magnet Ingestion Hazard; Violate Mandatory Standard for Toys; Sold on Amazon by Brandworl.USA",
+   "category": "children",
+   "source_text_sha256": "dd3f97ed4cbd03f041483beb5fd2ea12098b3799ad6ae7dfaaf6e9c8dfe1f1da",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "KABI-0176 G062401IC"
+     ],
+     "model_label_location": "printed on a label on the underside of the toy",
+     "serial_ranges": [],
+     "date_codes": [],
+     "sold_at": [
+      "Amazon.com"
+     ],
+     "sold_from": "2024-10-01",
+     "sold_to": "2025-06-30",
+     "price_range_cents": {
+      "min_cents": 1700,
+      "max_cents": 3000
+     },
+     "units_affected": 340,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "KABI-0176 G062401IC",
+       "start": 659,
+       "end": 678
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for between $17 and $30",
+       "start": 870,
+       "end": 893
+      },
+      {
+       "field": "sold_from",
+       "quote": "October 2024",
+       "start": 839,
+       "end": 851
+      },
+      {
+       "field": "sold_to",
+       "quote": "June 2025",
+       "start": 860,
+       "end": 869
+      },
+      {
+       "field": "model_label_location",
+       "quote": "printed on a label on the underside of the toy",
+       "start": 684,
+       "end": 730
+      },
+      {
+       "field": "sold_at",
+       "quote": "Amazon.com",
+       "start": 823,
+       "end": 833
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 340",
+       "start": 793,
+       "end": 802
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "refund",
+     "options": [
+      {
+       "type": "refund",
+       "steps": [
+        "stop using the toy",
+        "write RECALLED with permanent marker on each piece",
+        "email a photo of the destroyed toy",
+        "dispose of the toy"
+       ],
+       "proof_required": [
+        "destruction_photo"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": "full refund"
+       }
+      }
+     ],
+     "destruction_instruction": "destroy the toy by writing \"RECALLED\" with permanent marker on each piece of the toy",
+     "registration_url": null,
+     "contact": "brandworl@gmail.com",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "full refund",
+       "start": 1024,
+       "end": 1035
+      },
+      {
+       "field": "destruction_instruction",
+       "quote": "destroy the toy by writing \"RECALLED\" with permanent marker on each piece of the toy",
+       "start": 1054,
+       "end": 1138
+      },
+      {
+       "field": "contact",
+       "quote": "brandworl@gmail.com",
+       "start": 1860,
+       "end": 1879
+      }
+     ]
+    }
+   },
+   "notes": "The printed model string may combine a model (KABI-0176) and a batch code (G062401IC); kept as printed.",
+   "baseline_test": true,
+   "synth_source": false
+  },
+  {
+   "source_id": "26239",
+   "recall_date": "2026-02-05",
+   "title": "Semfri Children's Helmets Recalled Due to Risk of Serious Injury or Death from Head Injury; Violates Mandatory Standard for Bicycle Helmets",
+   "category": "children",
+   "source_text_sha256": "e60ad3e827985bb44bba8db4c6f846519642de26215b29a922e7d92384e33026",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [],
+     "model_label_location": null,
+     "serial_ranges": [],
+     "date_codes": [],
+     "sold_at": [
+      "Walmart.com"
+     ],
+     "sold_from": "2025-06-01",
+     "sold_to": "2025-11-30",
+     "price_range_cents": {
+      "min_cents": 1900,
+      "max_cents": 2800
+     },
+     "units_affected": 300,
+     "evidence": [
+      {
+       "field": "price_range_cents",
+       "quote": "for between $19 and $28",
+       "start": 779,
+       "end": 802
+      },
+      {
+       "field": "sold_from",
+       "quote": "June 2025",
+       "start": 747,
+       "end": 756
+      },
+      {
+       "field": "sold_to",
+       "quote": "November 2025",
+       "start": 765,
+       "end": 778
+      },
+      {
+       "field": "sold_at",
+       "quote": "Walmart.com",
+       "start": 730,
+       "end": 741
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 300",
+       "start": 700,
+       "end": 709
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "refund",
+     "options": [
+      {
+       "type": "refund",
+       "steps": [
+        "stop using the helmet",
+        "cut the straps",
+        "email a photo of the destroyed helmet"
+       ],
+       "proof_required": [
+        "destruction_photo"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": "full refund"
+       }
+      }
+     ],
+     "destruction_instruction": "destroy the helmet by cutting the straps",
+     "registration_url": null,
+     "contact": "Semfri_recall@163.com",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "full refund",
+       "start": 899,
+       "end": 910
+      },
+      {
+       "field": "destruction_instruction",
+       "quote": "destroy the helmet by cutting the straps",
+       "start": 929,
+       "end": 969
+      },
+      {
+       "field": "contact",
+       "quote": "Semfri_recall@163.com",
+       "start": 1017,
+       "end": 1038
+      }
+     ]
+    }
+   },
+   "notes": "",
+   "baseline_test": true,
+   "synth_source": false
+  },
+  {
+   "source_id": "26244",
+   "recall_date": "2026-02-09",
+   "title": "Airova Recalls Aroeve Air Purifiers Due to Fire and Burn Hazards",
+   "category": "other",
+   "source_text_sha256": "79043b93a54adae2c0e1334507109a3e2e957a8ae9966486632e377269d465e0",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "MK04"
+     ],
+     "model_label_location": "printed on the product label located on the bottom of the air purifiers",
+     "serial_ranges": [
+      {
+       "prefix": "BN",
+       "start": null,
+       "end": null,
+       "raw": "serial number starting with \"BN\""
+      }
+     ],
+     "date_codes": [
+      {
+       "format": "Month YYYY",
+       "start": null,
+       "end": "July 2025",
+       "raw": "manufactured prior to July 2025"
+      }
+     ],
+     "sold_at": [
+      "Amazon.com",
+      "Shopify.com",
+      "TEMU.com",
+      "TikTok.com"
+     ],
+     "sold_from": "2024-09-01",
+     "sold_to": "2025-06-30",
+     "price_range_cents": {
+      "min_cents": 8000,
+      "max_cents": 13400
+     },
+     "units_affected": 191390,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "MK04",
+       "start": 141,
+       "end": 145
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "serial number starting with \"BN\"",
+       "start": 416,
+       "end": 448
+      },
+      {
+       "field": "date_codes",
+       "quote": "manufactured prior to July 2025",
+       "start": 373,
+       "end": 404
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for between $80 and $134",
+       "start": 618,
+       "end": 642
+      },
+      {
+       "field": "sold_from",
+       "quote": "September 2024",
+       "start": 585,
+       "end": 599
+      },
+      {
+       "field": "sold_to",
+       "quote": "June 2025",
+       "start": 608,
+       "end": 617
+      },
+      {
+       "field": "model_label_location",
+       "quote": "printed on the product label located on the bottom of the air purifiers",
+       "start": 254,
+       "end": 325
+      },
+      {
+       "field": "sold_at",
+       "quote": "Amazon.com",
+       "start": 530,
+       "end": 540
+      },
+      {
+       "field": "sold_at",
+       "quote": "Shopify.com",
+       "start": 542,
+       "end": 553
+      },
+      {
+       "field": "sold_at",
+       "quote": "TEMU.com",
+       "start": 555,
+       "end": 563
+      },
+      {
+       "field": "sold_at",
+       "quote": "TikTok.com",
+       "start": 569,
+       "end": 579
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 191,390",
+       "start": 496,
+       "end": 509
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "replacement",
+     "options": [
+      {
+       "type": "replacement",
+       "steps": [
+        "stop using the air purifier",
+        "contact Airova"
+       ],
+       "proof_required": [
+        "none"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": null
+       }
+      }
+     ],
+     "destruction_instruction": null,
+     "registration_url": null,
+     "contact": "Aroeve-airpure-recall@outlook.com",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "free replacement air purifier",
+       "start": 752,
+       "end": 781
+      },
+      {
+       "field": "contact",
+       "quote": "Aroeve-airpure-recall@outlook.com",
+       "start": 1128,
+       "end": 1161
+      }
+     ]
+    }
+   },
+   "notes": "'Manufactured prior to July 2025' is an exclusive upper bound.",
+   "baseline_test": false,
+   "synth_source": true
+  },
+  {
+   "source_id": "26321",
+   "recall_date": "2026-03-12",
+   "title": "LIVEHOM 11-Drawer Dressers Recalled Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violates Mandatory Standard for Clothing Storage Units; Sold on Amazon by Simplehome",
+   "category": "furniture",
+   "source_text_sha256": "99630e723e9fbef05c01a01d3a694c7420baca62525c19520c4e1384049dd5a8",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [],
+     "model_label_location": null,
+     "serial_ranges": [],
+     "date_codes": [],
+     "sold_at": [
+      "Amazon.com"
+     ],
+     "sold_from": "2025-12-01",
+     "sold_to": "2026-01-31",
+     "price_range_cents": {
+      "min_cents": 11000,
+      "max_cents": 11000
+     },
+     "units_affected": 370,
+     "evidence": [
+      {
+       "field": "price_range_cents",
+       "quote": "for about $110",
+       "start": 670,
+       "end": 684
+      },
+      {
+       "field": "sold_from",
+       "quote": "December 2025",
+       "start": 635,
+       "end": 648
+      },
+      {
+       "field": "sold_to",
+       "quote": "January 2026",
+       "start": 657,
+       "end": 669
+      },
+      {
+       "field": "sold_at",
+       "quote": "Amazon.com",
+       "start": 619,
+       "end": 629
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 370",
+       "start": 589,
+       "end": 598
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "refund",
+     "options": [
+      {
+       "type": "refund",
+       "steps": [
+        "stop using the dresser if it is not anchored",
+        "write RECALL with permanent marker on the dresser",
+        "email a photo of the marked dresser",
+        "dispose of the dresser"
+       ],
+       "proof_required": [
+        "destruction_photo"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": "full refund"
+       }
+      }
+     ],
+     "destruction_instruction": "write \"RECALL\" with permanent marker on the dressers",
+     "registration_url": null,
+     "contact": "livehomerecall@163.com",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "full refund",
+       "start": 874,
+       "end": 885
+      },
+      {
+       "field": "destruction_instruction",
+       "quote": "write \"RECALL\" with permanent marker on the dressers",
+       "start": 914,
+       "end": 966
+      },
+      {
+       "field": "contact",
+       "quote": "livehomerecall@163.com",
+       "start": 1010,
+       "end": 1032
+      }
+     ]
+    }
+   },
+   "notes": "",
+   "baseline_test": true,
+   "synth_source": false
+  },
+  {
+   "source_id": "26394",
+   "recall_date": "2026-04-09",
+   "title": "Seasonal Specialties Recalls Members Mark 7' Pre-Lit Twinkling Bucks Due to Burn Hazard",
+   "category": "other",
+   "source_text_sha256": "da7d4817635d40cac411948bfbad7cd9bc133e691b1344bd34521533089afdd5",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "990404199"
+     ],
+     "model_label_location": "printed on the cord tag near the adaptor wall plug and on the packaging",
+     "serial_ranges": [],
+     "date_codes": [],
+     "sold_at": [
+      "SamsClub.com"
+     ],
+     "sold_from": "2025-08-01",
+     "sold_to": "2025-12-31",
+     "price_range_cents": {
+      "min_cents": 17000,
+      "max_cents": 17000
+     },
+     "units_affected": 2460,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "990404199",
+       "start": 302,
+       "end": 311
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for about $170",
+       "start": 530,
+       "end": 544
+      },
+      {
+       "field": "sold_from",
+       "quote": "August 2025",
+       "start": 496,
+       "end": 507
+      },
+      {
+       "field": "sold_to",
+       "quote": "December 2025",
+       "start": 516,
+       "end": 529
+      },
+      {
+       "field": "model_label_location",
+       "quote": "printed on the cord tag near the adaptor wall plug and on the packaging",
+       "start": 315,
+       "end": 386
+      },
+      {
+       "field": "sold_at",
+       "quote": "SamsClub.com",
+       "start": 478,
+       "end": 490
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 2,460",
+       "start": 446,
+       "end": 457
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "multiple",
+     "options": [
+      {
+       "type": "refund",
+       "steps": [
+        "stop using the decoration",
+        "contact Seasonal Specialties"
+       ],
+       "proof_required": [
+        "none"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": "full refund"
+       }
+      },
+      {
+       "type": "repair",
+       "steps": [
+        "stop using the decoration",
+        "contact Seasonal Specialties for a repair kit",
+        "reconnect the wires per the new instructions"
+       ],
+       "proof_required": [
+        "none"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": null
+       }
+      }
+     ],
+     "destruction_instruction": null,
+     "registration_url": null,
+     "contact": "800-353-3116",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "either a full refund or a repair kit",
+       "start": 682,
+       "end": 718
+      },
+      {
+       "field": "contact",
+       "quote": "800-353-3116",
+       "start": 1217,
+       "end": 1229
+      }
+     ]
+    }
+   },
+   "notes": "",
+   "baseline_test": true,
+   "synth_source": false
+  },
+  {
+   "source_id": "26397",
+   "recall_date": "2026-04-09",
+   "title": "Yeeluzan Pool Drain Covers Recalled Due to Risk of Serious Injury or Death from Entrapment and Drowning Hazards; Violates Virginia Graeme Baker Pool & Spa Safety Act; Sold on Amazon by Yeeluzan",
+   "category": "other",
+   "source_text_sha256": "c4885cca8640c5092605796685345830937e2dba6a913b2e76205b5f9ac3068b",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [],
+     "model_label_location": null,
+     "serial_ranges": [],
+     "date_codes": [],
+     "sold_at": [
+      "Amazon.com"
+     ],
+     "sold_from": "2025-05-01",
+     "sold_to": "2026-03-31",
+     "price_range_cents": {
+      "min_cents": 3200,
+      "max_cents": 3200
+     },
+     "units_affected": 640,
+     "evidence": [
+      {
+       "field": "price_range_cents",
+       "quote": "for about $32",
+       "start": 575,
+       "end": 588
+      },
+      {
+       "field": "sold_from",
+       "quote": "May 2025",
+       "start": 547,
+       "end": 555
+      },
+      {
+       "field": "sold_to",
+       "quote": "March 2026",
+       "start": 564,
+       "end": 574
+      },
+      {
+       "field": "sold_at",
+       "quote": "Amazon.com",
+       "start": 531,
+       "end": 541
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 640",
+       "start": 501,
+       "end": 510
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "refund",
+     "options": [
+      {
+       "type": "refund",
+       "steps": [
+        "stop using pools with the recalled drain covers",
+        "destroy the removed drain cover",
+        "email a photo or video of the destroyed product"
+       ],
+       "proof_required": [
+        "destruction_photo"
+       ],
+       "payout": {
+        "method": "original_payment",
+        "amount_rule": "full refund"
+       }
+      }
+     ],
+     "destruction_instruction": "destroy the removed drain cover",
+     "registration_url": null,
+     "contact": "yeeluzanrecall@163.com",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "full refund to their original payment method",
+       "start": 727,
+       "end": 771
+      },
+      {
+       "field": "destruction_instruction",
+       "quote": "destroy the removed drain cover",
+       "start": 790,
+       "end": 821
+      },
+      {
+       "field": "contact",
+       "quote": "yeeluzanrecall@163.com",
+       "start": 956,
+       "end": 978
+      }
+     ]
+    }
+   },
+   "notes": "Units are two-packs; the notice does not say whether 640 counts packs or covers.",
+   "baseline_test": true,
+   "synth_source": false
+  },
+  {
+   "source_id": "26430",
+   "recall_date": "2026-04-23",
+   "title": "Wiifo Children's Tower Stools Recalled Due to Risk of Serious Injury and Death from Entrapment and Fall Hazards; Imported by Wiifo",
+   "category": "children",
+   "source_text_sha256": "029eddc1ae5c5d7a0f9d1df3c01bbaaa53cc153975bb7fcbad2a7edde759a9ea",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "LT005"
+     ],
+     "model_label_location": "printed on label on the underside of the standing platform",
+     "serial_ranges": [],
+     "date_codes": [],
+     "sold_at": [
+      "Amazon.com"
+     ],
+     "sold_from": "2022-06-01",
+     "sold_to": "2026-03-31",
+     "price_range_cents": {
+      "min_cents": 6000,
+      "max_cents": 6000
+     },
+     "units_affected": 9700,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "LT005",
+       "start": 371,
+       "end": 376
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for about $60",
+       "start": 567,
+       "end": 580
+      },
+      {
+       "field": "sold_from",
+       "quote": "June 2022",
+       "start": 535,
+       "end": 544
+      },
+      {
+       "field": "sold_to",
+       "quote": "March of 2026",
+       "start": 553,
+       "end": 566
+      },
+      {
+       "field": "model_label_location",
+       "quote": "printed on label on the underside of the standing platform",
+       "start": 378,
+       "end": 436
+      },
+      {
+       "field": "sold_at",
+       "quote": "Amazon.com",
+       "start": 519,
+       "end": 529
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 9,700",
+       "start": 487,
+       "end": 498
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "refund",
+     "options": [
+      {
+       "type": "refund",
+       "steps": [
+        "stop using the tower stool",
+        "disassemble the stool",
+        "email a photo of the destroyed stool",
+        "dispose of the product"
+       ],
+       "proof_required": [
+        "destruction_photo"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": "full refund"
+       }
+      }
+     ],
+     "destruction_instruction": "destroy the stool by disassembling it",
+     "registration_url": null,
+     "contact": "888-505-6206",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "full refund",
+       "start": 681,
+       "end": 692
+      },
+      {
+       "field": "destruction_instruction",
+       "quote": "destroy the stool by disassembling it",
+       "start": 721,
+       "end": 758
+      },
+      {
+       "field": "contact",
+       "quote": "888-505-6206",
+       "start": 1371,
+       "end": 1383
+      }
+     ]
+    }
+   },
+   "notes": "",
+   "baseline_test": false,
+   "synth_source": false
+  },
+  {
+   "source_id": "26433",
+   "recall_date": "2026-04-23",
+   "title": "Children's Tower Stools Recalled Due to Risk of Serious Injury and Death from Entrapment and Fall Hazards; Imported by AMZCMJ DGD",
+   "category": "children",
+   "source_text_sha256": "518043f366f8801c9ae2c49d79abd66a63530c99cb6e2e8c151431565f75cfdf",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [],
+     "model_label_location": null,
+     "serial_ranges": [],
+     "date_codes": [],
+     "sold_at": [
+      "Amazon.com"
+     ],
+     "sold_from": "2025-02-01",
+     "sold_to": "2026-03-31",
+     "price_range_cents": {
+      "min_cents": 8500,
+      "max_cents": 10000
+     },
+     "units_affected": 130,
+     "evidence": [
+      {
+       "field": "price_range_cents",
+       "quote": "for between $85 and $100",
+       "start": 576,
+       "end": 600
+      },
+      {
+       "field": "sold_from",
+       "quote": "February 2025",
+       "start": 543,
+       "end": 556
+      },
+      {
+       "field": "sold_to",
+       "quote": "March 2026",
+       "start": 565,
+       "end": 575
+      },
+      {
+       "field": "sold_at",
+       "quote": "Amazon.com",
+       "start": 527,
+       "end": 537
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 130",
+       "start": 497,
+       "end": 506
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "refund",
+     "options": [
+      {
+       "type": "refund",
+       "steps": [
+        "stop using the tower stool",
+        "write recalled in permanent marker on all sides",
+        "disassemble the stool",
+        "email a photo of the destroyed stool",
+        "dispose of the product"
+       ],
+       "proof_required": [
+        "destruction_photo"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": "full refund"
+       }
+      }
+     ],
+     "destruction_instruction": "destroy the stool by writing \"recalled\" in permanent marker on all sides, disassembling it",
+     "registration_url": null,
+     "contact": "dgdtoddlertowerrecall@dchskj.cn",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "full refund",
+       "start": 706,
+       "end": 717
+      },
+      {
+       "field": "destruction_instruction",
+       "quote": "destroy the stool by writing \"recalled\" in permanent marker on all sides, disassembling it",
+       "start": 746,
+       "end": 836
+      },
+      {
+       "field": "contact",
+       "quote": "dgdtoddlertowerrecall@dchskj.cn",
+       "start": 883,
+       "end": 914
+      }
+     ]
+    }
+   },
+   "notes": "",
+   "baseline_test": false,
+   "synth_source": false
+  },
+  {
+   "source_id": "26624",
+   "recall_date": "2026-07-16",
+   "title": "Huish Outdoors Recalls Hollis Diving Regulators Due to Risk of Serious Injury or Death from Drowning",
+   "category": "other",
+   "source_text_sha256": "c30a44a532cda5d258a0d9441e6576e4f56a3be2939205f8e64a11654101379d",
+   "canonicalizer_version": "v1",
+   "label_status": "model-labeled, unaudited",
+   "rules": {
+    "identification": {
+     "models": [
+      "200LX"
+     ],
+     "model_label_location": "engraved on top of the regulator",
+     "serial_ranges": [
+      {
+       "prefix": null,
+       "start": "C3753",
+       "end": "C77735",
+       "raw": "C3753 - C77735"
+      },
+      {
+       "prefix": null,
+       "start": "S73202",
+       "end": "S8442",
+       "raw": "S73202 - S8442"
+      },
+      {
+       "prefix": null,
+       "start": "HA00001",
+       "end": "HA14873",
+       "raw": "HA00001 - HA14873"
+      },
+      {
+       "prefix": null,
+       "start": "LX001698",
+       "end": "LX009896",
+       "raw": "LX001698 - LX009896"
+      }
+     ],
+     "date_codes": [],
+     "sold_at": [],
+     "sold_from": "2017-05-01",
+     "sold_to": "2026-02-28",
+     "price_range_cents": {
+      "min_cents": 33000,
+      "max_cents": 33000
+     },
+     "units_affected": 7200,
+     "evidence": [
+      {
+       "field": "models",
+       "quote": "200LX",
+       "start": 150,
+       "end": 155
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "C3753 - C77735",
+       "start": 481,
+       "end": 495
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "S73202 - S8442",
+       "start": 496,
+       "end": 510
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "HA00001 - HA14873",
+       "start": 511,
+       "end": 528
+      },
+      {
+       "field": "serial_ranges",
+       "quote": "LX001698 - LX009896",
+       "start": 529,
+       "end": 548
+      },
+      {
+       "field": "price_range_cents",
+       "quote": "for about $330",
+       "start": 747,
+       "end": 761
+      },
+      {
+       "field": "sold_from",
+       "quote": "May 2017",
+       "start": 716,
+       "end": 724
+      },
+      {
+       "field": "sold_to",
+       "quote": "February 2026",
+       "start": 733,
+       "end": 746
+      },
+      {
+       "field": "model_label_location",
+       "quote": "engraved on top of the regulator",
+       "start": 303,
+       "end": 335
+      },
+      {
+       "field": "units_affected",
+       "quote": "About 7,200",
+       "start": 612,
+       "end": 623
+      }
+     ]
+    },
+    "remedy": {
+     "remedy_type": "repair",
+     "options": [
+      {
+       "type": "repair",
+       "steps": [
+        "stop using the regulator",
+        "return it to an authorized Hollis dealer or by mail with a prepaid label"
+       ],
+       "proof_required": [
+        "product_return"
+       ],
+       "payout": {
+        "method": null,
+        "amount_rule": null
+       }
+      }
+     ],
+     "destruction_instruction": null,
+     "registration_url": null,
+     "contact": "888-270-8595",
+     "evidence": [
+      {
+       "field": "remedy_type",
+       "quote": "free repair",
+       "start": 916,
+       "end": 927
+      },
+      {
+       "field": "contact",
+       "quote": "888-270-8595",
+       "start": 1542,
+       "end": 1554
+      }
+     ]
+    }
+   },
+   "notes": "Only a generic channel (diving supply stores) is named, so sold_at is empty. Ranges like S73202 - S8442 are only consistent under lexicographic order, not numeric order.",
+   "baseline_test": false,
+   "synth_source": true
+  }
+ ]
+}

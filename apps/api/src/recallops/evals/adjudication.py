@@ -14,7 +14,7 @@ from uuid import UUID
 
 from recallops.claims.rules_only import DECISION_TABLE_VERSION, Adjudication, adjudicate
 from recallops.claims.tools import PHASH_KINDS, TOOLS_VERSION, ClaimFacts, PhotoRef
-from recallops.evals.golden import load_golden
+from recallops.evals.golden import load_program_rules
 from recallops.settings import REPO_ROOT, get_settings
 from recallops.tracing.writer import MemoryTrace
 
@@ -116,9 +116,7 @@ def run(
 ) -> tuple[list[Scored], list[Adjudication]]:
     settings = get_settings()
     payload = json.loads(golden_path.read_text(encoding="utf-8"))
-    rules_by_program = {
-        n.source_id: n.rules for n in load_golden(REPO_ROOT / "evals" / "extraction" / "golden_notices.json")
-    }
+    rules_by_program = load_program_rules(ADJ_DIR / "program_rules.json")
     by_program: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for record in payload["claims"]:
         by_program[record["program"]].append(record)

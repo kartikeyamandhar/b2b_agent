@@ -22,7 +22,7 @@ from recallops.rules.schemas import (
 )
 from recallops.text import find_span, sha256_text
 
-LABEL_STATUS = "model-labeled, unaudited"
+LABEL_STATUS = "model-labeled, assistant-audited (owner delegated)"
 
 
 class GoldenNotice(BaseModel):
@@ -114,6 +114,12 @@ def build_rules(label: dict[str, Any], text: str) -> ExtractedRules:
 def load_golden(path: Path) -> list[GoldenNotice]:
     payload = json.loads(path.read_text(encoding="utf-8"))
     return [GoldenNotice.model_validate(n) for n in payload["notices"]]
+
+
+def load_program_rules(path: Path) -> dict[str, ExtractedRules]:
+    """Frozen rules of the adjudication golden programs (evals/adjudication/program_rules.json)."""
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    return {sid: ExtractedRules.model_validate(r) for sid, r in payload["programs"].items()}
 
 
 def notice_text(notices_dir: Path, source_id: str) -> str:

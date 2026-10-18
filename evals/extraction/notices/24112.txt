@@ -1,0 +1,27 @@
+TITLE:
+GPU Angled Adapters Recalled Due to Fire and Burn Hazards; Manufactured by CableMod
+
+DESCRIPTION:
+This recall involves CableMod's 12VHPWR Angled Adapters, models V1.0 and V1.1, that plug into a graphics processing unit's power port at either a 90-degree or a 180-degree angle. Model V1.1 has a stabilizing pin on the side of the male connector. The adapters were sold in black, blue, gold, green, orange, pink, purple, red, silver, and white, and "CableMod" appears on the side of the adapter. The adapters came in two variations to accommodate power port orientation: Variation A and Variation B. The 90-degree angle adapter is "L" shaped: The V1.0 model measures about 36 mm long, 21mm wide and 21 mm deep; and the V1.1 model measures about 36 mm long, 21 mm wide and 22 mm deep. The 180-degree angle adapter is "U" shaped: The V1.0 model measures 41.5 mm long, 21 mm wide and 17.5 mm deep; and the V1.1 measures about 41 mm long, 21 mm wide and 20 mm deep.
+
+PRODUCTS:
+CableMod Graphics Processing Unit (GPU) V1.0 and V.1.1 Angled Adapters; units: About 25,300
+
+SOLD AT:
+Small independent stores nationwide and online at vprbrands.com from September 2022 through November 2023 for about $18.
+
+REMEDY:
+Consumers should immediately stop using the recalled angled adapters and contact CableMod for instructions on how to safely remove their adapter from the GPU and for a full refund, including cost of shipping, or a $60 store credit for non-customized products, with free standard shipping. Consumers will be asked to destroy the adapter and upload a photo of the destroyed product to https://cablemod.com/adapterrecall/. The instructions on how to safely remove the adapter are also located on that site. Once destroyed, consumers should discard the adapter in accordance with local laws.
+Remedy options: Refund
+
+HAZARD:
+The adapters' male connector can become loose, overheat, and melt into the GPU, posing fire and burn hazards.
+
+INCIDENTS:
+The firm has received 272 reports of the adapters becoming loose, overheating and melting into the GPU, with at least $74,500 in property damage claims in the United States. No injuries have been reported.
+
+FIRMS:
+Manufacturer: CableMod Ltd., of China
+
+CONTACT:
+CableMod toll-free at 888-203-3605 from 9 a.m. to 5 p.m. ET Monday through Friday, email at support@cablemod.com, or online at https://cablemod.com/adapterrecall/ or https://cablemod.com and click on the "Voluntary Safety Recall" banner at the top of the page for more information.

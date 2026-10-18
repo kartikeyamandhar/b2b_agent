@@ -95,7 +95,7 @@
     {
       "source_id": "24184",
       "recall_date": "2024-04-04",
-      "title": "Zazaba International Recalls Gr\u00e3o de Gente Baby Nests Due to Suffocation Risk and Fall and Entrapment Hazards; Violation of the Federal Safety Regulations; Sold Exclusively on Zazaba.com",
+      "title": "Zazaba International Recalls Grão de Gente Baby Nests Due to Suffocation Risk and Fall and Entrapment Hazards; Violation of the Federal Safety Regulations; Sold Exclusively on Zazaba.com",
       "category": "children",
       "identifier_rich": false,
       "source_text_sha256": "4929a3f4b9b554103810c4b5338b59bdb55779bcd00ec0987c58263809cb347c",
@@ -362,5 +362,551 @@
       "source_text_sha256": "c30a44a532cda5d258a0d9441e6576e4f56a3be2939205f8e64a11654101379d",
       "canonicalizer_version": "v1"
     }
-  ]
+  ],
+  "extension": {
+    "seed": 20261018,
+    "prereg": "PREREG.md Revision 1",
+    "notices": [
+      {
+        "source_id": "24080",
+        "recall_date": "2024-01-11",
+        "title": "Daikin Comfort Technologies Manufacturing (formerly Goodman Manufacturing Company L.P.) Expands Recall of Evaporator Coil Drain Pans to Include Additional Units",
+        "category": "other",
+        "identifier_rich": true,
+        "source_text_sha256": "367fb718158b128e2dff52be7b709c014427e48afe2ec891f3c27a31167b16ed",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "24081",
+        "recall_date": "2024-01-11",
+        "title": "Retrospec Recalls Kid's Bike Helmets Due to Risk of Head Injury; Violation of the Federal Safety Regulation for Bicycle Helmets",
+        "category": "outdoor_sports",
+        "identifier_rich": false,
+        "source_text_sha256": "9a649f4e399e5f9770c077ea43d6bcb0c99f92649fcbecc01b02dc97de153935",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "24092",
+        "recall_date": "2024-01-25",
+        "title": "Pacific Cycle Recalls E-Bikes Due to Fire Hazard",
+        "category": "battery_power",
+        "identifier_rich": true,
+        "source_text_sha256": "7fcb6cf3e5591bef0a95b71435d6e438765842dbd08ceb11fd7c4a44276849d5",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "24110",
+        "recall_date": "2024-02-08",
+        "title": "Electrolux Group Recalls Frigidaire Side by Side Refrigerators with Slim Ice Buckets Due to Choking and Laceration Hazards",
+        "category": "appliance_electrical",
+        "identifier_rich": true,
+        "source_text_sha256": "f43c46e089fc2ed5f3716888de96d0a6219d0827f1f00e6910c3a98eef1179be",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "24112",
+        "recall_date": "2024-02-08",
+        "title": "GPU Angled Adapters Recalled Due to Fire and Burn Hazards; Manufactured by CableMod",
+        "category": "other",
+        "identifier_rich": false,
+        "source_text_sha256": "1f87e11815ff7b5a96f430fda4991c4c22b766efcd5f2e9dc05fed20d7bfdbc7",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "24114",
+        "recall_date": "2024-02-08",
+        "title": "Children's Bathrobes Recalled Due to Burn Hazard and Violation of Flammability Regulations; Sold by Nanchang Zhongcangjishi E-commerce",
+        "category": "children",
+        "identifier_rich": false,
+        "source_text_sha256": "cc7c34c1be73894f2ed08471a94052d5966e9ba29b8c3605e04cb2ad55b5b07f",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "24116",
+        "recall_date": "2024-02-15",
+        "title": "Char-Broil Recalls Digital Electric Smokers Due to Risk of Electric Shock",
+        "category": "appliance_electrical",
+        "identifier_rich": true,
+        "source_text_sha256": "09f606a2af8bba64e8432ba305aa9db583fdb151f044b7aa91e2bd73f0285b53",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "24119",
+        "recall_date": "2024-02-15",
+        "title": "BRS and BULin Liquid Fuel Bottles Recalled Due to Risk of Poisoning, Burn, and Flash Fire; Violation of the Children's Gasoline Burn Prevention Safety Act and the Portable Fuel Container Safety Act; Sold Exclusively on Amazon.com by WAOLi",
+        "category": "children",
+        "identifier_rich": true,
+        "source_text_sha256": "3ab4fa704594b8060fb3d7d251fe7fc658ff730b574c4128ed1d9b0b1d156154",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "24121",
+        "recall_date": "2024-02-15",
+        "title": "Ocean State Job Lot Recalls \"Growing Table-Mini Greenhouse and Raised Garden Bed\" Due to Fire Hazard",
+        "category": "furniture",
+        "identifier_rich": false,
+        "source_text_sha256": "08075b5e43856270af287ec1a004a306e4d67b7517d0c5704e34f0186ced9e48",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "24132",
+        "recall_date": "2024-02-29",
+        "title": "Vernier Science Education Recalls \"Go Direct\" Charge Stations Due to Burn Hazard",
+        "category": "other",
+        "identifier_rich": false,
+        "source_text_sha256": "e8b9c24f9b6ec343a95084f42cb1225f2b1cda64d4b49afddc77cee93d4a9b90",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "24134",
+        "recall_date": "2024-02-29",
+        "title": "Mobile Stands for Large Interactive Flat Panel Displays Recalled Due to Tip-Over and Entrapment Hazards; Imported by SMART Technologies",
+        "category": "other",
+        "identifier_rich": true,
+        "source_text_sha256": "29fe2a48fbf7eaa6a84eaef14f45eb672d22acfd336e7fd3f7b5405403894b4b",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "24140",
+        "recall_date": "2024-02-29",
+        "title": "Bombardier Recreational Products (BRP) Recalls Ski-Doo Snowmobiles Due to Risk of Serious Injury and Crash Hazard",
+        "category": "outdoor_sports",
+        "identifier_rich": false,
+        "source_text_sha256": "6b83f853751b35c154ca5899af54af4d3e7d424ca8178a62cae270c34cdac676",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "24160",
+        "recall_date": "2024-03-14",
+        "title": "Textron Specialized Vehicles Recalls Tracker Off Road OX EV Light Utility Vehicles Due to Fire Hazard",
+        "category": "appliance_electrical",
+        "identifier_rich": true,
+        "source_text_sha256": "80ab21af44a06612be990f2b796ae602852f9ed8efceee37e9fdcd3e7726c62e",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "24172",
+        "recall_date": "2024-03-21",
+        "title": "BRS and BULin Liquid Fuel Bottles Recalled Due to Risk of Burn and Poisoning; Violation of the Children's Burn Prevention Safety Act; Sold Exclusively on Amazon.com by Tentock",
+        "category": "children",
+        "identifier_rich": false,
+        "source_text_sha256": "bfa35e2c85904da7d320c2de9e768407db58f0c058436600a5929e9dc60b9e35",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "24183",
+        "recall_date": "2024-04-04",
+        "title": "Lovey & Grink Recalls Children's Pajamas Due to Burn Hazard; Violation of Federal Flammability Regulations for Children's Sleepwear",
+        "category": "children",
+        "identifier_rich": false,
+        "source_text_sha256": "48437e78eea329d3efc4fccb5b95c6b7005a87a1669ab64633ab935f691c0b4e",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "24191",
+        "recall_date": "2024-04-11",
+        "title": "Fischer Sports Recalls Junior Ski Boots Due to Fall Hazard",
+        "category": "outdoor_sports",
+        "identifier_rich": false,
+        "source_text_sha256": "805f56b0d68db579296354074922aef173b6487850779976949554724fe5e1db",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "24198",
+        "recall_date": "2024-04-11",
+        "title": "Innovative Bedding Solutions and SBL Recall GhostBed Natural Mattresses Due to Fire Hazard; Violation of Federal Mattress Flammability Regulation",
+        "category": "furniture",
+        "identifier_rich": true,
+        "source_text_sha256": "6931002898ad8a14b8c9225292e4774630ecc173a614deca5baa95492d8cc6b6",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "24199",
+        "recall_date": "2024-04-11",
+        "title": "Zipline Kits Recalled Due to Fall Hazard; Sold Exclusively on Amazon.com by Jugader",
+        "category": "other",
+        "identifier_rich": false,
+        "source_text_sha256": "8fb883ae288de103c70ed5677ed399f0eae76054f0bb33265d737ca45fc76726",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "24226",
+        "recall_date": "2024-05-09",
+        "title": "ZLINE Recalls Built-In Electric Wall Ovens Due to Impact Injury Hazard",
+        "category": "appliance_electrical",
+        "identifier_rich": true,
+        "source_text_sha256": "3da8f7ad42c9c1f8e2b676f82db1b4fa93be3430a69a6d9d377848ee27ef326f",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "24231",
+        "recall_date": "2024-05-09",
+        "title": "Spin Swivel Chairs Recalled Due to Fall Hazard; Imported by Article",
+        "category": "furniture",
+        "identifier_rich": false,
+        "source_text_sha256": "69b15bae765ad90b3308cefd44f275704adbb878a2443de1a67c6b5626064144",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "24271",
+        "recall_date": "2024-06-20",
+        "title": "myCharge Recalls POWER HUB All-In-One Portable Chargers Due to Fire and Burn Hazards; Sold Exclusively at Costco",
+        "category": "battery_power",
+        "identifier_rich": true,
+        "source_text_sha256": "7c7534c9a8cf7d23524ddb09818502343c69dc42c76d5abafdbf1df2beb23ac9",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "24274",
+        "recall_date": "2024-06-20",
+        "title": "Thousandshores Recalled Theefun Kids Gardening Tools Sets Due to Violation of the Federal Phthalates Ban; Sold Exclusively on Amazon",
+        "category": "children",
+        "identifier_rich": false,
+        "source_text_sha256": "c23469ffd3734929a97b932f83a5bb78c557d39de6e9f078431d0889472e2840",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "24313",
+        "recall_date": "2024-07-25",
+        "title": "Razor Recalls Icon Electric Scooters Due to Fall Hazard",
+        "category": "battery_power",
+        "identifier_rich": true,
+        "source_text_sha256": "c28660b7628662c256aec0267c2c5c4399749a1e2178ae09a6eb4ffea4de481b",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "24330",
+        "recall_date": "2024-08-01",
+        "title": "Mattress Pads Recalled Due to Fire Hazard; Violation of Federal Mattress Pad Flammability Regulation; Manufactured by Avocado Mattress",
+        "category": "furniture",
+        "identifier_rich": false,
+        "source_text_sha256": "fd9745264d4392e8dc82bfdef711e43db85a9f1d8afcd9319f12a3d7214f930b",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "25028",
+        "recall_date": "2024-10-31",
+        "title": "Manhattan Comfort Recalls Floating Wall Theater Entertainment Centers and Panels Due to Injury Hazard",
+        "category": "other",
+        "identifier_rich": false,
+        "source_text_sha256": "ac00321a513a3ea318ffd4def49d4a513cbdb45179f4e823f23cf2488c386400",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "25065",
+        "recall_date": "2024-12-12",
+        "title": "Yoto Reannounces Recall of Yoto Mini Speakers for Children Due to Burn and Fire Hazards; New Full Battery Replacement Kit Now Available",
+        "category": "children",
+        "identifier_rich": true,
+        "source_text_sha256": "089045366c188a9f87072b7a8ac13b282dd95b03c792a51a3a3e82abea06985f",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "25093",
+        "recall_date": "2025-01-16",
+        "title": "Vornado Air Recalls VH2 Whole Room Heaters Due to Electric Shock and Fire Hazards; Sold Exclusively on Amazon.com",
+        "category": "appliance_electrical",
+        "identifier_rich": true,
+        "source_text_sha256": "dc358989d5ebd345984c6970ecf8d2d472a27155565ce048d477f0061b25e758",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "25095",
+        "recall_date": "2025-01-16",
+        "title": "Three61 Recalls Samurai Mini Smoke Alarms Due to Failure to Alert Consumers to a Fire; Sold Exclusively by HSN",
+        "category": "other",
+        "identifier_rich": false,
+        "source_text_sha256": "63b7758a4e8242a65d0f16b95cf5f69b34d5e00edf61ccac901cdf15a3364b23",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "25110",
+        "recall_date": "2025-01-30",
+        "title": "Cabinet Health Recalls 4 oz. Refillable Medicine Bottles Due to Failure to Retain Child-Resistance; Risk of Child Poisoning",
+        "category": "children",
+        "identifier_rich": true,
+        "source_text_sha256": "11178d6e331f25b58e4446bf2fdcc61780533ca10bbee7bdf4c78e226867f583",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "25113",
+        "recall_date": "2025-01-30",
+        "title": "Cozchique Tebbis, and Beeziac Girls Pajamas Recalled Due to Burn Hazard; Violation of Federal Flammability Regulations; Sold Exclusively on Amazon by Tupop",
+        "category": "clothing_textile",
+        "identifier_rich": true,
+        "source_text_sha256": "3251beb9089ce8b9c79c591fd200e32741c8bb7dd11b63ab417a07707755d1ec",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "25124",
+        "recall_date": "2025-02-06",
+        "title": "Ariens Recalls Snow Throwers Due to Laceration Hazard",
+        "category": "other",
+        "identifier_rich": true,
+        "source_text_sha256": "539d19cd8a6d7ec6c4d32998953d08caa6648f7d3f28a1ad4104c365a15252fa",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "25159",
+        "recall_date": "2025-02-27",
+        "title": "Goal Zero Recalls Solar Series Combiner Cables for Solar Panels Due to Fire Hazard",
+        "category": "other",
+        "identifier_rich": false,
+        "source_text_sha256": "b6d2cd172032913a155c4d31337f12b123208b2ab4cc54f92c5df39a45dd5ea3",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "25172",
+        "recall_date": "2025-03-06",
+        "title": "Love Our Home Braided Crib Bumpers Recalled Due to Risk of Serious Injury or Death from Suffocation Hazard; Violation of Federal Ban on Crib Bumpers; Sold Exclusively on Shein.com by Love Our Home",
+        "category": "children",
+        "identifier_rich": false,
+        "source_text_sha256": "56727b40d7462a22c5b1fe99556038c86f5edc0af5919eb043e913b699a61103",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "25191",
+        "recall_date": "2025-03-20",
+        "title": "Sensio Recalls Steam Espresso Machines Due to Burn and Laceration Hazards",
+        "category": "other",
+        "identifier_rich": false,
+        "source_text_sha256": "401d6c3e72a9a1b8c496a1e20394e88489e409063ef5110dfe54257fe897eed2",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "25235",
+        "recall_date": "2025-04-24",
+        "title": "Huffy Recalls Children's Ride-On Tonka Dump Trucks Due to Fire and Burn Hazards",
+        "category": "children",
+        "identifier_rich": true,
+        "source_text_sha256": "65d385dca54ff95d3ba4fa8ef5d38af9159a9ae7f99f320751e049529e905978",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "25239",
+        "recall_date": "2025-04-24",
+        "title": "Huffy Recalls Torex UTV Ride-On Toys Due to Fire Hazard; Sold Exclusively at Walmart",
+        "category": "children",
+        "identifier_rich": true,
+        "source_text_sha256": "e2e9c697f8d695377a6b6c01e8c26dae12d5e31e95a503cba579f3f237625441",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "25314",
+        "recall_date": "2025-06-05",
+        "title": "Hobby Toy Hammer Ball Sets Recalled Due to Risk of Serious Injury or Death from Choking Hazard; Violation of Federal Regulation for Toys with Small Balls; Sold Exclusively on Amazon.com by Shantou Haochengheng Technology",
+        "category": "children",
+        "identifier_rich": false,
+        "source_text_sha256": "b29364044da4ff5c7f96ae4327b88878a3b5c3242cc172b9a1ae5b47731132a3",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "25397",
+        "recall_date": "2025-07-24",
+        "title": "Diamond G Forest Products Recalls Turpentine Bottles Due to Risk of Serious Injury or Death from Child Poisoning; Violates Mandatory Standard for Child Resistant Packaging",
+        "category": "children",
+        "identifier_rich": false,
+        "source_text_sha256": "03e9f7b825ef3c0875a76fe447db4144dd6124e69d6d5af7b700fd8cec3ecefe",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "25434",
+        "recall_date": "2025-08-14",
+        "title": "Firefly Fuel Recalls Firefly Safe & Green 32 oz. Fuel Bottles Due to Risk of Serious Injury or Death from Poisoning to Young Children; Violates Multiple Mandatory Standards",
+        "category": "children",
+        "identifier_rich": false,
+        "source_text_sha256": "7d3031dab9ce5d19f3aa61c359101f91e66ff22cf53ab0af1de45002f6e25a39",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "26006",
+        "recall_date": "2025-10-09",
+        "title": "Calico Brands Recalls Scripto Premium Torches Due to Risk of Injury or Death from Fires and Burns; Violates Mandatory Standard for Multipurpose Lighters",
+        "category": "other",
+        "identifier_rich": false,
+        "source_text_sha256": "012410aff25aeb143d244032e71c0a95446af91885e21fa42b1f5ee3c036a88d",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "26122",
+        "recall_date": "2025-11-26",
+        "title": "Outdoor Master Children's and Youth Helmets Recalled Due to Risk of Serious Injury or Death from Head Injury; Violates Mandatory Standard for Bicycle Helmets; Sold and Imported by Outdoor Master",
+        "category": "children",
+        "identifier_rich": true,
+        "source_text_sha256": "c1844d9d2a4b495be0c0275c6ea742374f9563dba5a6cb94e63a742bf8d4d7cb",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "26181",
+        "recall_date": "2026-01-08",
+        "title": "Joyful Journeys Recalls Baby Loungers Due to Risk of Serious Injury or Death from Entrapment and Fall Hazards; Violates Mandatory Standard for Infant Sleep Products",
+        "category": "children",
+        "identifier_rich": false,
+        "source_text_sha256": "297ccb137bfa69910c282006f54eed2ceb0c871b6a2c8ef752b745e5623e0580",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "26183",
+        "recall_date": "2026-01-15",
+        "title": "Energizer Recalls Rechargeable Lanterns Due to Overheating",
+        "category": "other",
+        "identifier_rich": true,
+        "source_text_sha256": "f95709ae277a7ef07b96ebb8cd5c6ef1517c00d07b26e174b081abbd9832aacc",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "26202",
+        "recall_date": "2026-01-22",
+        "title": "Academy Sports + Outdoors Recalls Magellan Odyssey Rocker Chairs Due to Injury and Fall Hazards",
+        "category": "furniture",
+        "identifier_rich": true,
+        "source_text_sha256": "289c90e760e617b7f242570278a9417773ddc3a506bffdf8b45f2f8618217cdb",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "26224",
+        "recall_date": "2026-01-29",
+        "title": "Northern Tool + Equipment Recalls Hot Water Pressure Washers Due to Fire Hazard",
+        "category": "appliance_electrical",
+        "identifier_rich": true,
+        "source_text_sha256": "c23b7cd7c9569a9390f70887f74dd8526ce0d621f6b0235e2415944182e91563",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "26405",
+        "recall_date": "2026-04-09",
+        "title": "Muscccm Pool Drain Covers Recalled Due to Risk of Serious Injury or Death from Entrapment and Drowning Hazards; Violates Virginia Graeme Baker Pool & Spa Safety Act; Sold on Amazon by SZ Hengxun",
+        "category": "other",
+        "identifier_rich": false,
+        "source_text_sha256": "4790c635109367751306bc8fdc8534950eec1cb8e6bf83b7f40ad244292ad328",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "26438",
+        "recall_date": "2026-04-23",
+        "title": "Cpzzkq Baby Loungers Recalled Due to Risk of Serious Injury or Death from Suffocation Hazard; Violates Mandatory Standard for Infant Support Cushions; Sold on Amazon by CetoPMax",
+        "category": "children",
+        "identifier_rich": false,
+        "source_text_sha256": "e9dec125ec632b60dfb6c0c7d840cf7d0ab2a2b35a790a002b7f691ba8cd0c2a",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "26524",
+        "recall_date": "2026-06-04",
+        "title": "Wyze Labs Recalls Solar Cam Pan Security Cameras Due to Risk of Serious Injury from Fire and Burn Hazards",
+        "category": "other",
+        "identifier_rich": false,
+        "source_text_sha256": "b6cb60f84098b8f0c8ac284a219a233631222ca58d34227ed9f1460f6431a2d5",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "26525",
+        "recall_date": "2026-06-04",
+        "title": "Little Grape Land Recalls Nursing Pillows Due to Risk of Serious Injury or Death from Suffocation; Violate Mandatory Standards for Nursing Pillows and Infant Support Cushions",
+        "category": "children",
+        "identifier_rich": false,
+        "source_text_sha256": "a45fe2764d81975fd6238f4321a88aca89dc399a8f45b43fe4189c9d29759503",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "26526",
+        "recall_date": "2026-06-04",
+        "title": "Tiny Land Children's Play Tents Recalled Due to Risk of Injury from Irritation to Skin and Eyes",
+        "category": "children",
+        "identifier_rich": false,
+        "source_text_sha256": "01b21caab97cc471d93f10af04b500c28afda92f1317ffc3d8e913c68d9e2a99",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "26527",
+        "recall_date": "2026-06-04",
+        "title": "Crenlux Pool Drain Covers Recalled Due to Risk of Serious Injury or Death from Entrapment and Drowning Hazards; Violates Virginia Graeme Baker Pool & Spa Safety Act; Sold on Amazon by Eicong",
+        "category": "other",
+        "identifier_rich": false,
+        "source_text_sha256": "96eb21352799eba1de5ab69fd81993bbd0cafe261d6a5cdd199130783ecab612",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "26721",
+        "recall_date": "2026-08-27",
+        "title": "Kmaier Recalls Infant Walkers Due to Risk of Serious Injury or Death from Fall Hazard; Violate Mandatory Standard for Infant Walkers",
+        "category": "children",
+        "identifier_rich": false,
+        "source_text_sha256": "48766f17d4ce25235f78ea50a7d028ff5fdab06e41d4e21bbbbb14cf3461442a",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "26790",
+        "recall_date": "2026-09-24",
+        "title": "Hyperfuels Recalls Methanol and Ethanol Fuel Containers Due to Risk of Serious Injury or Death from Child Poisoning and Flame Jetting; Violates Multiple Federal Safety Standards",
+        "category": "children",
+        "identifier_rich": false,
+        "source_text_sha256": "324cbb0ff25ab031767cb4437e05e71ee68a14d68a9d3d9b471034788818b9f5",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "26794",
+        "recall_date": "2026-09-24",
+        "title": "Yuyitop Recalls Aitjunz 8-Drawer Dressers Due to Risk of Serious Injury or Death from Tip-Over and Entrapment Hazards; Violate Mandatory Standard for Clothing Storage Units",
+        "category": "furniture",
+        "identifier_rich": false,
+        "source_text_sha256": "cfa399194744cf12f2e44dcbf06df1278b0d809ae8df2400c7cde336d0c97470",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "27004",
+        "recall_date": "2026-10-01",
+        "title": "Gazelle USA Recalls Urban Arrow Cargo Electric Bikes Due to Fall Hazard",
+        "category": "battery_power",
+        "identifier_rich": false,
+        "source_text_sha256": "aace188fe0d9ab0e5be593fcfdc1830d32c7222401174e4faaa925440dade23c",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "27007",
+        "recall_date": "2026-10-01",
+        "title": "Designs Direct Recalls Cupcakes and Cashmere Brand Three-Light Floor Lamps, Due to Risk of Serious Injury from Fire and Burn Hazards",
+        "category": "appliance_electrical",
+        "identifier_rich": false,
+        "source_text_sha256": "ee63ad5dfa7575b485308c8435ab53272c142dfff734f22f02830838afe38cae",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "27010",
+        "recall_date": "2026-10-01",
+        "title": "Walmart Recalls Over 4.4 Million Expert Grill Brushes Due to Ingestion Hazard",
+        "category": "outdoor_sports",
+        "identifier_rich": false,
+        "source_text_sha256": "8fbb6b23fe2ea9d8e5e0dcd7a70e051cd5791d801ed6878f966461b1a396851d",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "27011",
+        "recall_date": "2026-10-01",
+        "title": "Kobayashi Recalls Rechargeable Hand Warmers Due to Risk of Serious Injury from Fire and Burn Hazards",
+        "category": "other",
+        "identifier_rich": false,
+        "source_text_sha256": "80371d2a92e229611c0c280915c87344b180567b2d2a9a45aa7838b6c44c635d",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "27014",
+        "recall_date": "2026-10-01",
+        "title": "Agrish Reannounces and Expands Recall of Adult Portable Bed Rails Due to Risk of Serious Injury or Death from Entrapment and Asphyxiation; Violate Mandatory Standard for Adult Portable Bed Rails; Additional Units Added",
+        "category": "furniture",
+        "identifier_rich": true,
+        "source_text_sha256": "e3964b67ac7db6c81040fc4ea4c630713384b12d7f65e97d087cdacb45a81a3e",
+        "canonicalizer_version": "v1"
+      },
+      {
+        "source_id": "27025",
+        "recall_date": "2026-10-15",
+        "title": "HatsanUSA Recalls Blitz Air Rifles Due to Risk of Serious Injury or Death from Projectile Hazard",
+        "category": "other",
+        "identifier_rich": true,
+        "source_text_sha256": "2f67b480d47c60b1de8f22e47789380f6fc51438bd00b99e3d59f9714f171575",
+        "canonicalizer_version": "v1"
+      }
+    ]
+  }
 }

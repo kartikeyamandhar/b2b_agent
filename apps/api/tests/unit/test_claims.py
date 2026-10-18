@@ -25,7 +25,7 @@ from recallops.claims.tools import (
     check_serial,
 )
 from recallops.claims.tools.checks import date_key, serial_in_range
-from recallops.evals.golden import load_golden
+from recallops.evals.golden import load_golden, load_program_rules
 from recallops.fraud.phash import hamming, phash_bytes
 from recallops.rules.schemas import (
     DateCodeRule,
@@ -105,8 +105,7 @@ def test_check_serial_prefix_and_verdicts() -> None:
 
 
 def test_generator_builds_serials_outside_every_range() -> None:
-    golden = {n.source_id: n for n in load_golden(REPO_ROOT / "evals" / "extraction" / "golden_notices.json")}
-    rules = golden["25126"].rules  # 20 ranges, several wrapping
+    rules = load_program_rules(ADJ / "program_rules.json")["25126"]  # 20 ranges, several wrapping
     for seed in range(20):
         serial = serial_outside(rules, random.Random(seed))
         assert serial is not None
@@ -263,8 +262,9 @@ def test_phash_identity_near_and_far() -> None:
 def program_claims() -> list:  # type: ignore[type-arg]
     golden = {n.source_id: n for n in load_golden(REPO_ROOT / "evals" / "extraction" / "golden_notices.json")}
     planted, policy = load_yaml(ADJ / "planted.yaml"), load_yaml(ADJ / "outcome_policy.yaml")
-    notice = golden["24118"]
-    return [generate_program(notice.rules, "24118", 12, 7, planted, policy, notice.recall_date) for _ in range(2)]
+    rules = load_program_rules(ADJ / "program_rules.json")["24118"]
+    recall_date = golden["24118"].recall_date
+    return [generate_program(rules, "24118", 12, 7, planted, policy, recall_date) for _ in range(2)]
 
 
 def test_generator_is_deterministic(program_claims: list) -> None:  # type: ignore[type-arg]

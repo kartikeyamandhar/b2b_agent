@@ -1,5 +1,5 @@
 {
- "label_status": "model-labeled, unaudited",
+ "label_status": "model-labeled, assistant-audited (owner delegated)",
  "labeled_on": "2026-10-16",
  "guide": "evals/extraction/LABELING_GUIDE.md",
  "labels": [
@@ -93,10 +93,6 @@
    "serial_ranges": [],
    "date_codes": [],
    "sold_at": [
-    [
-     "BMX Race dealers",
-     "BMX Race dealers"
-    ],
     [
      "https://boxcomponents.com",
      "https://boxcomponents.com"
@@ -382,6 +378,10 @@
     [
      "B0726Y",
      "B0726Y"
+    ],
+    [
+     "Soquel",
+     "Soquel"
     ]
    ],
    "model_label_location": [
@@ -487,12 +487,7 @@
      "raw": "date code of either \"06-23\" or \"07-23.\""
     }
    ],
-   "sold_at": [
-    [
-     "AmeriGas' propane cylinder exchange suppliers",
-     "AmeriGas' propane cylinder exchange suppliers"
-    ]
-   ],
+   "sold_at": [],
    "sold_from": [
     "2023-07-01",
     "July 2023"
@@ -2434,10 +2429,7 @@
      "amount_rule": "$8"
     }
    ],
-   "destruction_instruction": [
-    "throw away the product and send a photo of the disposed product",
-    "throw away the product and send a photo of the disposed product"
-   ],
+   "destruction_instruction": null,
    "registration_url": null,
    "contact": [
     "gkkbsjtoys@outlook.com",
@@ -2675,12 +2667,7 @@
      "raw": "model year 2017-2024"
     }
    ],
-   "sold_at": [
-    [
-     "Yamaha dealers",
-     "Yamaha dealers"
-    ]
-   ],
+   "sold_at": [],
    "sold_from": [
     "2018-06-01",
     "June 2018"
@@ -3655,6 +3642,5200 @@
     "888-270-8595"
    ],
    "notes": "Only a generic channel (diving supply stores) is named, so sold_at is empty. Ranges like S73202 - S8442 are only consistent under lexicographic order, not numeric order."
+  },
+  {
+   "source_id": "24080",
+   "models": [],
+   "model_label_location": null,
+   "serial_ranges": [
+    {
+     "prefix": null,
+     "start": "1901",
+     "end": "2101",
+     "raw": "Prefixes ranging from 1901 through 2101"
+    },
+    {
+     "prefix": null,
+     "start": "1811",
+     "end": "1812",
+     "raw": "certain prefixes ranging from 1811-1812"
+    }
+   ],
+   "date_codes": [
+    {
+     "format": "Month YYYY",
+     "start": "January 2019",
+     "end": "February 2020",
+     "raw": "manufactured between January 2019 and February 2020"
+    }
+   ],
+   "sold_at": [],
+   "sold_from": [
+    "2019-01-01",
+    "January 2019"
+   ],
+   "sold_to": [
+    "2021-11-30",
+    "November 2021"
+   ],
+   "price_range": [
+    20000,
+    120000,
+    "for between $200 and $1,200 per unit"
+   ],
+   "units_affected": [
+    3600,
+    "About 3,600 additional units"
+   ],
+   "remedy_type": [
+    "repair",
+    "free repair by a qualified technician"
+   ],
+   "options": [
+    {
+     "type": "repair",
+     "steps": [
+      "contact DCT to determine whether the unit is included",
+      "register for the free repair by a qualified technician"
+     ],
+     "proof_required": [
+      "registration"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "888-520-0579",
+    "888-520-0579"
+   ],
+   "notes": "Recall expansion: units_affected is the 3,600 additional US units, not the 298,300 previously recalled. Serial ranges are ranges of coil serial-number prefixes, and only 'certain' 1811-1812 prefixes are in scope; scope also depends on furnace type, brand and coil configuration. The model_label_location is for the furnace model number, not the drain pan, so it may belong as null. sold_at is empty because the only channel is generic 'independent dealers'; recallrtr.com/drainpan is a verification tool, not stated as a registration URL."
+  },
+  {
+   "source_id": "24081",
+   "models": [
+    [
+     "Scout",
+     "Scout"
+    ]
+   ],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "T Scheels",
+     "T Scheels"
+    ],
+    [
+     "Play it Again Sports",
+     "Play it Again Sports"
+    ],
+    [
+     "Retrospec.com",
+     "Retrospec.com"
+    ],
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ]
+   ],
+   "sold_from": [
+    "2019-02-01",
+    "February 2019"
+   ],
+   "sold_to": [
+    "2023-03-31",
+    "March 2023"
+   ],
+   "price_range": [
+    1800,
+    2300,
+    "for between $18 and $23"
+   ],
+   "units_affected": [
+    72000,
+    "About 72,000"
+   ],
+   "remedy_type": [
+    "refund",
+    "full refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the helmet",
+      "contact Retrospec",
+      "cut off the straps",
+      "mark the helmet with initials and the date near the Retrospec logo",
+      "upload a photo of the destroyed helmet to the recall registration page",
+      "dispose of the helmet"
+     ],
+     "proof_required": [
+      "destruction_photo",
+      "registration"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund"
+    }
+   ],
+   "destruction_instruction": [
+    "destroy the helmet by cutting off the straps and mark the helmet with their initials and the date near the Retrospec logo",
+    "destroy the helmet by cutting off the straps and mark the helmet with their initials and the date near the Retrospec logo"
+   ],
+   "registration_url": [
+    "https://retrospec.com/pages/retrospec-scout-recall",
+    "https://retrospec.com/pages/retrospec-scout-recall"
+   ],
+   "contact": [
+    "888-488-2369",
+    "888-488-2369"
+   ],
+   "notes": "'Scout' is called both the model and the brand name; kept as the model. The HAZARD section describes an evaporator coil drain pan, which contradicts the helmet product (copied from another notice). 'T Scheels' kept as printed; independent bicycle stores omitted as a generic channel. Sizes XS and S only."
+  },
+  {
+   "source_id": "24092",
+   "models": [
+    [
+     "R7583BPS",
+     "R7583BPS"
+    ],
+    [
+     "R7585BPS",
+     "R7585BPS"
+    ],
+    [
+     "R7586BPS",
+     "R7586BPS"
+    ]
+   ],
+   "model_label_location": [
+    "on the service label located on the seat tube above the bottom bracket",
+    "on the service label located on the seat tube above the bottom bracket"
+   ],
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Bass Pro Shops",
+     "Bass Pro Shops"
+    ],
+    [
+     "Cabela's",
+     "Cabela's"
+    ],
+    [
+     "basspro.com",
+     "basspro.com"
+    ],
+    [
+     "cabelas.com",
+     "cabelas.com"
+    ]
+   ],
+   "sold_from": [
+    "2023-01-01",
+    "January 2023"
+   ],
+   "sold_to": [
+    "2023-11-30",
+    "November 2023"
+   ],
+   "price_range": [
+    140000,
+    150000,
+    "for between $1,400 and $1,500"
+   ],
+   "units_affected": [
+    1700,
+    "About 1,700"
+   ],
+   "remedy_type": [
+    "refund",
+    "full refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using and unplug the bike",
+      "enter the serial number online to confirm the bike is recalled",
+      "return the bike to Bass Pro Shops or Cabela's"
+     ],
+     "proof_required": [
+      "product_return"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund"
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "877-564-2261",
+    "877-564-2261"
+   ],
+   "notes": "Serial numbers are checked through the firm's website; the notice gives no serial range. The serial-number page www.pacific-cycle.com/safety-notices-recalls is a lookup, not stated as registration, so registration_url is null."
+  },
+  {
+   "source_id": "24110",
+   "models": [
+    [
+     "DGHK2355TF",
+     "DGHK2355TF"
+    ],
+    [
+     "DGHX2655TF",
+     "DGHX2655TF"
+    ],
+    [
+     "FFSC2323TS",
+     "FFSC2323TS"
+    ],
+    [
+     "FGSC2335TD",
+     "FGSC2335TD"
+    ],
+    [
+     "FGSC2335TF",
+     "FGSC2335TF"
+    ],
+    [
+     "FGSS2635TD",
+     "FGSS2635TD"
+    ],
+    [
+     "FGSS2635TE",
+     "FGSS2635TE"
+    ],
+    [
+     "FGSS2635TF",
+     "FGSS2635TF"
+    ],
+    [
+     "FGSS2635TP",
+     "FGSS2635TP"
+    ],
+    [
+     "FPSC2277RF",
+     "FPSC2277RF"
+    ],
+    [
+     "FPSC2278UF",
+     "FPSC2278UF"
+    ],
+    [
+     "FPSS2677RF",
+     "FPSS2677RF"
+    ],
+    [
+     "LFSC2324VF",
+     "LFSC2324VF"
+    ],
+    [
+     "LGHK2336TD",
+     "LGHK2336TD"
+    ],
+    [
+     "LGHK2336TF",
+     "LGHK2336TF"
+    ],
+    [
+     "LGHX2636TD",
+     "LGHX2636TD"
+    ],
+    [
+     "LGHX2636TF",
+     "LGHX2636TF"
+    ]
+   ],
+   "model_label_location": [
+    "on a serial plate located inside the refrigerator compartment",
+    "on a serial plate located inside the refrigerator compartment"
+   ],
+   "serial_ranges": [],
+   "date_codes": [
+    {
+     "format": "YYYY",
+     "start": "2015",
+     "end": "2019",
+     "raw": "manufactured between 2015 and 2019"
+    }
+   ],
+   "sold_at": [
+    [
+     "Lowe's",
+     "Lowe's"
+    ],
+    [
+     "Home Depot",
+     "Home Depot"
+    ],
+    [
+     "Frigidaire.com",
+     "Frigidaire.com"
+    ]
+   ],
+   "sold_from": [
+    "2015-11-01",
+    "November 2015"
+   ],
+   "sold_to": [
+    "2019-09-30",
+    "September 2019"
+   ],
+   "price_range": [
+    140000,
+    240000,
+    "for between $1,400 and $2,400"
+   ],
+   "units_affected": [
+    383240,
+    "About 383,240"
+   ],
+   "remedy_type": [
+    "repair",
+    "Remedy options: Repair"
+   ],
+   "options": [
+    {
+     "type": "repair",
+     "steps": [
+      "stop using the ice maker",
+      "contact Electrolux Group",
+      "request a replacement ice bucket assembly component"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "888-377-7563",
+    "888-377-7563"
+   ],
+   "notes": "Remedy is a free replacement ice bucket assembly component, which the notice classes as Repair. Only specific serial numbers are included, checked on the Frigidaire website; no serial range is printed. Manufacture years 2015-2019 recorded as a date rule."
+  },
+  {
+   "source_id": "24112",
+   "models": [
+    [
+     "V1.0",
+     "V1.0"
+    ],
+    [
+     "V1.1",
+     "V1.1"
+    ]
+   ],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "vprbrands.com",
+     "vprbrands.com"
+    ]
+   ],
+   "sold_from": [
+    "2022-09-01",
+    "September 2022"
+   ],
+   "sold_to": [
+    "2023-11-30",
+    "November 2023"
+   ],
+   "price_range": [
+    1800,
+    1800,
+    "for about $18"
+   ],
+   "units_affected": [
+    25300,
+    "About 25,300"
+   ],
+   "remedy_type": [
+    "refund",
+    "full refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the adapter",
+      "contact CableMod",
+      "safely remove the adapter from the GPU",
+      "destroy the adapter",
+      "upload a photo of the destroyed product",
+      "discard the adapter"
+     ],
+     "proof_required": [
+      "destruction_photo"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund, including cost of shipping"
+    },
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the adapter",
+      "contact CableMod",
+      "safely remove the adapter from the GPU",
+      "destroy the adapter",
+      "upload a photo of the destroyed product",
+      "discard the adapter"
+     ],
+     "proof_required": [
+      "destruction_photo"
+     ],
+     "payout_method": "store_credit",
+     "amount_rule": "$60 store credit"
+    }
+   ],
+   "destruction_instruction": [
+    "destroy the adapter",
+    "destroy the adapter"
+   ],
+   "registration_url": [
+    "https://cablemod.com/adapterrecall/",
+    "https://cablemod.com/adapterrecall/"
+   ],
+   "contact": [
+    "888-203-3605",
+    "888-203-3605"
+   ],
+   "notes": "PRODUCTS prints the second model as 'V.1.1'; kept 'V1.1' from the description. 12VHPWR is the connector standard, not a model. The $60 store credit is for non-customized products. registration_url is the photo upload page, treated as the claim URL. Small independent stores omitted as a generic channel."
+  },
+  {
+   "source_id": "24114",
+   "models": [],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "lolanta.com",
+     "lolanta.com"
+    ],
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ]
+   ],
+   "sold_from": [
+    "2021-01-01",
+    "January 2021"
+   ],
+   "sold_to": [
+    "2023-10-31",
+    "October 2023"
+   ],
+   "price_range": [
+    3000,
+    3000,
+    "for about $30"
+   ],
+   "units_affected": [
+    16900,
+    "About 16,900"
+   ],
+   "remedy_type": [
+    "refund",
+    "full refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "take the bathrobes away from children",
+      "stop using them",
+      "contact Nanchang Zhongcangjishi E-commerce",
+      "cut the garments in half",
+      "email a photo of the destroyed garment"
+     ],
+     "proof_required": [
+      "destruction_photo"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund of the purchase price"
+    }
+   ],
+   "destruction_instruction": [
+    "destroy the garments by cutting them in half",
+    "destroy the garments by cutting them in half"
+   ],
+   "registration_url": null,
+   "contact": [
+    "business@lolanta.com",
+    "business@lolanta.com"
+   ],
+   "notes": "No model numbers; identified by dinosaur and shark styles, colors and sizes. The photo goes by email, so no registration URL. No phone number given; contact is the email."
+  },
+  {
+   "source_id": "24116",
+   "models": [
+    [
+     "14202002",
+     "14202002"
+    ],
+    [
+     "17202002",
+     "17202002"
+    ],
+    [
+     "14202002-A1",
+     "14202002-A1"
+    ],
+    [
+     "17202002-A1",
+     "17202002-A1"
+    ],
+    [
+     "14202004",
+     "14202004"
+    ],
+    [
+     "17202004",
+     "17202004"
+    ],
+    [
+     "14202004-A1",
+     "14202004-A1"
+    ],
+    [
+     "17202004-A1",
+     "17202004-A1"
+    ],
+    [
+     "19202101",
+     "19202101"
+    ],
+    [
+     "463246619",
+     "463246619"
+    ],
+    [
+     "15202043",
+     "15202043"
+    ],
+    [
+     "17202043",
+     "17202043"
+    ],
+    [
+     "15202043-A1",
+     "15202043-A1"
+    ],
+    [
+     "17202043-A1",
+     "17202043-A1"
+    ]
+   ],
+   "model_label_location": [
+    "The product label is located on the outside back of the unit",
+    "The product label is located on the outside back of the unit"
+   ],
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Lowe's",
+     "Lowe's"
+    ],
+    [
+     "Menards",
+     "Menards"
+    ],
+    [
+     "Ollie's Bargain Outlet",
+     "Ollie's Bargain Outlet"
+    ],
+    [
+     "Target",
+     "Target"
+    ],
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ],
+    [
+     "HSN.com",
+     "HSN.com"
+    ],
+    [
+     "Charbroil.com",
+     "Charbroil.com"
+    ]
+   ],
+   "sold_from": [
+    "2015-04-01",
+    "April 2015"
+   ],
+   "sold_to": [
+    "2024-01-31",
+    "January 2024"
+   ],
+   "price_range": [
+    30000,
+    60000,
+    "for between $300 and $600"
+   ],
+   "units_affected": [
+    211700,
+    "About 211,700"
+   ],
+   "remedy_type": [
+    "repair",
+    "free repair kit"
+   ],
+   "options": [
+    {
+     "type": "repair",
+     "steps": [
+      "stop using the smoker",
+      "contact Char-Broil",
+      "install the GFCI repair kit"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "833-206-4647",
+    "833-206-4647"
+   ],
+   "notes": "The Digital Electric Smoker, XL row lists only a UPC (099143020051) and no model number. UPCs excluded; 99143020020 in the table is a UPC missing its leading zero. Model descriptions (e.g. 'Medallion') are not codes."
+  },
+  {
+   "source_id": "24119",
+   "models": [],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [
+    {
+     "format": "Month YYYY",
+     "start": "February 2023",
+     "end": "July 2023",
+     "raw": "manufactured from February 2023 to July 2023"
+    }
+   ],
+   "sold_at": [
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ]
+   ],
+   "sold_from": [
+    "2023-02-01",
+    "February 2023"
+   ],
+   "sold_to": [
+    "2023-11-30",
+    "November 2023"
+   ],
+   "price_range": [
+    1200,
+    4000,
+    "for between $12 and $40"
+   ],
+   "units_affected": [
+    500,
+    "About 500"
+   ],
+   "remedy_type": [
+    "refund",
+    "full refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the fuel bottles",
+      "place them out of reach of children",
+      "initial and date the bottles",
+      "submit a photo of them in the trash with the refund request"
+     ],
+     "proof_required": [
+      "destruction_photo"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund"
+    }
+   ],
+   "destruction_instruction": [
+    "initial and date the bottles",
+    "initial and date the bottles"
+   ],
+   "registration_url": null,
+   "contact": [
+    "lyuxia3k@163.com",
+    "lyuxia3k@163.com"
+   ],
+   "notes": "BRS and BULin are brand names, not model codes; capacities (500mL, 530mL, 750mL, 1500mL) are not models. Destruction is marking plus a photo of the bottles in the trash."
+  },
+  {
+   "source_id": "24121",
+   "models": [],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Ocean State Job Lot",
+     "Ocean State Job Lot"
+    ],
+    [
+     "Amazon",
+     "Amazon"
+    ],
+    [
+     "Ebay",
+     "Ebay"
+    ],
+    [
+     "Walmart",
+     "Walmart"
+    ]
+   ],
+   "sold_from": [
+    "2019-08-01",
+    "August 2019"
+   ],
+   "sold_to": [
+    "2023-10-31",
+    "October 2023"
+   ],
+   "price_range": [
+    7000,
+    15000,
+    "for between $70 and $90, and nationwide by Home Lot online at Amazon, Ebay and Walmart from August 2019 through October 2023 for between $100 and $150"
+   ],
+   "units_affected": [
+    12800,
+    "About 12,800"
+   ],
+   "remedy_type": [
+    "refund",
+    "full refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the product",
+      "return it to an Ocean State Job Lot store or contact Customer Service"
+     ],
+     "proof_required": [
+      "product_return"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund"
+    },
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the product",
+      "mark DO NOT USE in permanent marker on the product",
+      "dispose of the product",
+      "email a photo of the marked product to Home Lot customer service"
+     ],
+     "proof_required": [
+      "destruction_photo"
+     ],
+     "payout_method": "original_payment",
+     "amount_rule": "full refund"
+    }
+   ],
+   "destruction_instruction": [
+    "prominently mark \"DO NOT USE\" in permanent marker on the product",
+    "prominently mark \"DO NOT USE\" in permanent marker on the product"
+   ],
+   "registration_url": null,
+   "contact": [
+    "833-209-7100",
+    "833-209-7100"
+   ],
+   "notes": "Two channels: Ocean State Job Lot stores ($70-$90, return to store) and Home Lot online on Amazon, Ebay and Walmart ($100-$150, mark and photo, refund to original payment). The sale window is printed only with the online clause; applied to the whole recall. 'Combi' is a product name, not a code. Home Lot contact is 800-647-0783."
+  },
+  {
+   "source_id": "24132",
+   "models": [
+    [
+     "GDX-CRG",
+     "GDX-CRG"
+    ],
+    [
+     "GDXCRG2617R1",
+     "GDXCRG2617R1"
+    ]
+   ],
+   "model_label_location": [
+    "on a label located at the bottom of the Charge Station",
+    "on a label located at the bottom of the Charge Station"
+   ],
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Vernier.com",
+     "Vernier.com"
+    ],
+    [
+     "www.fishersci.com",
+     "www.fishersci.com"
+    ],
+    [
+     "www.flinnsci.com",
+     "www.flinnsci.com"
+    ],
+    [
+     "www.us.vwr.com",
+     "www.us.vwr.com"
+    ]
+   ],
+   "sold_from": [
+    "2017-11-01",
+    "November 2017"
+   ],
+   "sold_to": [
+    "2023-12-31",
+    "December 2023"
+   ],
+   "price_range": [
+    9000,
+    93000,
+    "for between $90 and $930"
+   ],
+   "units_affected": [
+    15000,
+    "About 15,000"
+   ],
+   "remedy_type": [
+    "repair",
+    "free repair"
+   ],
+   "options": [
+    {
+     "type": "repair",
+     "steps": [
+      "stop using the charge station",
+      "contact Vernier for return instructions",
+      "return the charge station for repair"
+     ],
+     "proof_required": [
+      "product_return"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "888-837-6437",
+    "888-837-6437"
+   ],
+   "notes": "GDX-CRG is an order code and GDXCRG2617R1 the model number; both kept. Teacher Pack order codes GDX-TMP-TP and GDX-PH-TP were left out because they identify packs that may contain the unit, not the unit itself."
+  },
+  {
+   "source_id": "24134",
+   "models": [
+    [
+     "FSE-400",
+     "FSE-400"
+    ],
+    [
+     "FSE-410",
+     "FSE-410"
+    ]
+   ],
+   "model_label_location": [
+    "on a label on the back of the mobile stand",
+    "on a label on the back of the mobile stand"
+   ],
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [],
+   "sold_from": [
+    "2023-05-01",
+    "May 2023"
+   ],
+   "sold_to": [
+    "2023-12-31",
+    "December 2023"
+   ],
+   "price_range": [
+    173500,
+    173500,
+    "for about $1,735"
+   ],
+   "units_affected": [
+    750,
+    "About 750"
+   ],
+   "remedy_type": [
+    "replacement",
+    "Remedy options: Replace"
+   ],
+   "options": [
+    {
+     "type": "replacement",
+     "steps": [
+      "check the serial number online",
+      "stop using the stand",
+      "contact SMART Technologies ULC",
+      "receive an on-site replacement of the wheelbase"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "888-427-6278",
+    "888-427-6278"
+   ],
+   "notes": "Remedy is an on-site replacement of the wheelbase only, labeled Replace by the notice (arguably a repair). Serial numbers are checked on the support URL; no range printed. sold_at empty: only 'SMART authorized distributors and resellers' (generic). Sold to businesses."
+  },
+  {
+   "source_id": "24140",
+   "models": [
+    [
+     "MXZ",
+     "MXZ"
+    ],
+    [
+     "Renegade",
+     "Renegade"
+    ]
+   ],
+   "model_label_location": [
+    "printed on the side panels of the vehicles",
+    "printed on the side panels of the vehicles"
+   ],
+   "serial_ranges": [],
+   "date_codes": [
+    {
+     "format": "model year",
+     "start": "2024",
+     "end": "2024",
+     "raw": "model year 2024"
+    }
+   ],
+   "sold_at": [],
+   "sold_from": [
+    "2023-06-01",
+    "June 2023"
+   ],
+   "sold_to": [
+    "2024-01-31",
+    "January 2024"
+   ],
+   "price_range": [
+    1000000,
+    1800000,
+    "for between $10,000 and $18,000"
+   ],
+   "units_affected": [
+    8100,
+    "About 8,100"
+   ],
+   "remedy_type": [
+    "repair",
+    "free inspection and repair"
+   ],
+   "options": [
+    {
+     "type": "repair",
+     "steps": [
+      "stop using the snowmobile",
+      "contact BRP",
+      "schedule a free inspection and repair at the dealership"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "888-272-9222",
+    "888-272-9222"
+   ],
+   "notes": "MXZ and Renegade are model names, kept; only units equipped with Pilot X skis are recalled. Model year 2024 recorded as a date rule. VINs are checked by dealers; no VIN range printed. sold_at empty: only 'Ski-Doo authorized dealers' (generic dealer network)."
+  },
+  {
+   "source_id": "24160",
+   "models": [],
+   "model_label_location": null,
+   "serial_ranges": [
+    {
+     "prefix": null,
+     "start": "8029703",
+     "end": "8031430",
+     "raw": "serial numbers between 8029703 to 8031430"
+    }
+   ],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Bass Pro Shops",
+     "Bass Pro Shops"
+    ],
+    [
+     "Cabela's",
+     "Cabela's"
+    ]
+   ],
+   "sold_from": [
+    "2023-01-01",
+    "January 2023"
+   ],
+   "sold_to": [
+    "2023-12-31",
+    "December 2023"
+   ],
+   "price_range": [
+    1200000,
+    1300000,
+    "for between $12,000 and $13,000"
+   ],
+   "units_affected": [
+    500,
+    "About 500"
+   ],
+   "remedy_type": [
+    "repair",
+    "free inspection and repair of the battery module"
+   ],
+   "options": [
+    {
+     "type": "repair",
+     "steps": [
+      "stop using the vehicle",
+      "contact an authorized Tracker Off Road dealer or service center",
+      "schedule a free inspection and repair of the battery module",
+      "do not charge the vehicle and park it outdoors until repaired"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "888-438-3946",
+    "888-438-3946"
+   ],
+   "notes": "OX EV is the product name; no model code given. The serial number is located under the charger receptacle (serial, not model, location). 'Tracker Marine and off-road dealerships' omitted as a dealer-network channel; it may count as a named retailer."
+  },
+  {
+   "source_id": "24172",
+   "models": [],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ]
+   ],
+   "sold_from": [
+    "2023-01-01",
+    "January 2023"
+   ],
+   "sold_to": [
+    "2023-12-31",
+    "December 2023"
+   ],
+   "price_range": [
+    1000,
+    1300,
+    "for between $10 and $13"
+   ],
+   "units_affected": [
+    290,
+    "About 290"
+   ],
+   "remedy_type": [
+    "refund",
+    "full refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the fuel bottles",
+      "place them out of reach of children",
+      "contact Tentock for disposal instructions",
+      "dispose of the product"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund"
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "squarebird@aliyun.com",
+    "squarebird@aliyun.com"
+   ],
+   "notes": "BRS and BULin are brand names; 1000mL size only. Disposal instructions come from the firm and are not printed, so no destruction instruction and no stated proof requirement."
+  },
+  {
+   "source_id": "24183",
+   "models": [],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Five Loaves Two Fish",
+     "Five Loaves Two Fish"
+    ],
+    [
+     "Sassy Pants",
+     "Sassy Pants"
+    ],
+    [
+     "Wards Terrilee",
+     "Wards Terrilee"
+    ],
+    [
+     "Little Luna",
+     "Little Luna"
+    ],
+    [
+     "Groove",
+     "Groove"
+    ],
+    [
+     "Bean 2 Tween",
+     "Bean 2 Tween"
+    ],
+    [
+     "Reform Kids",
+     "Reform Kids"
+    ],
+    [
+     "Stella Mara",
+     "Stella Mara"
+    ],
+    [
+     "State of Kid",
+     "State of Kid"
+    ],
+    [
+     "Blue Jean Baby",
+     "Blue Jean Baby"
+    ],
+    [
+     "loveyandgrink.com",
+     "loveyandgrink.com"
+    ],
+    [
+     "Saks.com",
+     "Saks.com"
+    ],
+    [
+     "Bloomingdales.com",
+     "Bloomingdales.com"
+    ],
+    [
+     "Maisonette.com",
+     "Maisonette.com"
+    ]
+   ],
+   "sold_from": [
+    "2022-09-01",
+    "September 2022"
+   ],
+   "sold_to": [
+    "2024-01-31",
+    "January 2024"
+   ],
+   "price_range": [
+    3800,
+    4400,
+    "for between $38 and $44"
+   ],
+   "units_affected": [
+    23720,
+    "About 23,720"
+   ],
+   "remedy_type": [
+    "refund",
+    "full refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "take the pajamas away from children",
+      "stop using them",
+      "contact Lovey & Grink",
+      "cut the garments in half",
+      "dispose of them per local and state recycling laws",
+      "send a photo of the destroyed garment"
+     ],
+     "proof_required": [
+      "destruction_photo"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund of the purchase price"
+    }
+   ],
+   "destruction_instruction": [
+    "destroy the garments by cutting them in half",
+    "destroy the garments by cutting them in half"
+   ],
+   "registration_url": null,
+   "contact": [
+    "877-360-5470",
+    "877-360-5470"
+   ],
+   "notes": "RN64664 on the neck label is a registered identification number, not a model number, so models is empty; prints are designs. The photo goes by email to recall@loveyandgrink.com, so no registration URL."
+  },
+  {
+   "source_id": "24191",
+   "models": [
+    [
+     "RC4 50",
+     "RC4 50"
+    ],
+    [
+     "RC4 60",
+     "RC4 60"
+    ],
+    [
+     "RC4 65",
+     "RC4 65"
+    ]
+   ],
+   "model_label_location": [
+    "printed on the outside of the upper cuff, between the two top buckles",
+    "printed on the outside of the upper cuff, between the two top buckles"
+   ],
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "https://www.fischersports.com/us_en/",
+     "https://www.fischersports.com/us_en/"
+    ]
+   ],
+   "sold_from": [
+    "2022-10-01",
+    "October 2022"
+   ],
+   "sold_to": [
+    "2024-02-29",
+    "February 2024"
+   ],
+   "price_range": [
+    20000,
+    27500,
+    "for between $200 and $275"
+   ],
+   "units_affected": [
+    1460,
+    "About 1,460"
+   ],
+   "remedy_type": [
+    "multiple",
+    "Remedy options: Refund, Repair, Replace"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the boots",
+      "contact Fischer Sports for instructions"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    },
+    {
+     "type": "replacement",
+     "steps": [
+      "stop using the boots",
+      "contact Fischer Sports for instructions"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    },
+    {
+     "type": "repair",
+     "steps": [
+      "stop using the boots",
+      "contact Fischer Sports for instructions"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "800-844-7810",
+    "800-844-7810"
+   ],
+   "notes": "Sizes 21.5 to 27.5 only. Proof and steps beyond contacting the firm are not stated. Ski gear stores and 'other websites' omitted as generic channels."
+  },
+  {
+   "source_id": "24198",
+   "models": [
+    [
+     "13GBNAT",
+     "13GBNAT"
+    ],
+    [
+     "Natural",
+     "Natural"
+    ]
+   ],
+   "model_label_location": [
+    "on the white label sewn into the seam of the mattress",
+    "on the white label sewn into the seam of the mattress"
+   ],
+   "serial_ranges": [],
+   "date_codes": [
+    {
+     "format": "MM/YYYY",
+     "start": "June 2021",
+     "end": "March 2023",
+     "raw": "manufactured from June 2021 through March 2023"
+    }
+   ],
+   "sold_at": [
+    [
+     "GhostBed.com",
+     "GhostBed.com"
+    ],
+    [
+     "GhostBedNatural.com",
+     "GhostBedNatural.com"
+    ]
+   ],
+   "sold_from": [
+    "2021-06-01",
+    "June 2021"
+   ],
+   "sold_to": [
+    "2023-03-31",
+    "March 2023"
+   ],
+   "price_range": [
+    120000,
+    250000,
+    "for between about $1,200 and $2,500"
+   ],
+   "units_affected": [
+    1250,
+    "About 1,250"
+   ],
+   "remedy_type": [
+    "repair",
+    "Remedy options: Repair"
+   ],
+   "options": [
+    {
+     "type": "repair",
+     "steps": [
+      "stop using the mattress",
+      "contact GhostBed",
+      "put the free cover on the mattress"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "877-557-5335",
+    "877-557-5335"
+   ],
+   "notes": "13GBNAT is a model-number prefix ('beginning with'), and 'Natural' is the alternative model marking. The notice prints the date format as 'MM/YYY', read as MM/YYYY; the range is printed in words. Remedy is a free compliance cover. 'Other websites' omitted."
+  },
+  {
+   "source_id": "24199",
+   "models": [],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ]
+   ],
+   "sold_from": [
+    "2020-03-01",
+    "March 2020"
+   ],
+   "sold_to": [
+    "2023-06-30",
+    "June 2023"
+   ],
+   "price_range": [
+    14000,
+    14000,
+    "for about $140"
+   ],
+   "units_affected": [
+    6600,
+    "About 6,600"
+   ],
+   "remedy_type": [
+    "repair",
+    "free repair kit"
+   ],
+   "options": [
+    {
+     "type": "repair",
+     "steps": [
+      "stop using the zipline kit",
+      "contact Jugader",
+      "submit a photo of the cable and trolley or the online purchase order number"
+     ],
+     "proof_required": [
+      "label_photo",
+      "receipt"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "800-360-8078",
+    "800-360-8078"
+   ],
+   "notes": "Proof is either a photo of the cable and trolley (a product photo, mapped to label_photo) or the online purchase order number (mapped to receipt); the notice accepts either one. No model codes."
+  },
+  {
+   "source_id": "24226",
+   "models": [
+    [
+     "AWS-30",
+     "AWS-30"
+    ],
+    [
+     "AWD-30",
+     "AWD-30"
+    ],
+    [
+     "AWS-30-BS",
+     "AWS-30-BS"
+    ],
+    [
+     "AWD-30-BS",
+     "AWD-30-BS"
+    ],
+    [
+     "AWSS-30",
+     "AWSS-30"
+    ],
+    [
+     "AWDS-30",
+     "AWDS-30"
+    ]
+   ],
+   "model_label_location": null,
+   "serial_ranges": [
+    {
+     "prefix": null,
+     "start": "207986920110001",
+     "end": "WOAR2112048400",
+     "raw": "serial numbers range between 207986920110001 and WOAR2112048400"
+    }
+   ],
+   "date_codes": [
+    {
+     "format": "YYYYMMDD",
+     "start": "20201101",
+     "end": "20211231",
+     "raw": "shown as 20201101 through 20211231"
+    }
+   ],
+   "sold_at": [
+    [
+     "Best Buy",
+     "Best Buy"
+    ],
+    [
+     "Lowe's",
+     "Lowe's"
+    ],
+    [
+     "The Home Depot",
+     "The Home Depot"
+    ],
+    [
+     "The Range Hood Store",
+     "The Range Hood Store"
+    ],
+    [
+     "www.bestbuy.com",
+     "www.bestbuy.com"
+    ],
+    [
+     "www.build.com",
+     "www.build.com"
+    ],
+    [
+     "www.costco.com",
+     "www.costco.com"
+    ],
+    [
+     "www.homedepot.com",
+     "www.homedepot.com"
+    ],
+    [
+     "www.therangehoodstore.com",
+     "www.therangehoodstore.com"
+    ],
+    [
+     "www.overstock.com",
+     "www.overstock.com"
+    ],
+    [
+     "www.wayfair.com",
+     "www.wayfair.com"
+    ]
+   ],
+   "sold_from": [
+    "2020-12-01",
+    "December 2020"
+   ],
+   "sold_to": [
+    "2022-09-30",
+    "September 2022"
+   ],
+   "price_range": [
+    190000,
+    395000,
+    "for between $1,900 and $3,950"
+   ],
+   "units_affected": [
+    5000,
+    "About 5,000"
+   ],
+   "remedy_type": [
+    "repair",
+    "Remedy options: Repair"
+   ],
+   "options": [
+    {
+     "type": "repair",
+     "steps": [
+      "stop using the oven",
+      "contact ZLINE",
+      "register online to begin the repair process",
+      "install the free replacement door using the instructions"
+     ],
+     "proof_required": [
+      "registration"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": [
+    "https://zlinekitchen.com/recalls-walloven",
+    "https://zlinekitchen.com/recalls-walloven"
+   ],
+   "contact": [
+    "833-256-3603",
+    "833-256-3603"
+   ],
+   "notes": "The serial range bounds use two different formats (all digits versus a WOAR prefix), so a lexical range check may not work. The label inside the right side holds serial number and manufacture date; the model number location is not stated. Remedy is a free replacement door, classed as Repair; a service visit is available on request."
+  },
+  {
+   "source_id": "24231",
+   "models": [],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "article.com",
+     "article.com"
+    ]
+   ],
+   "sold_from": [
+    "2021-07-01",
+    "July 2021"
+   ],
+   "sold_to": [
+    "2023-06-30",
+    "June 2023"
+   ],
+   "price_range": [
+    70000,
+    70000,
+    "for about $700"
+   ],
+   "units_affected": [
+    4500,
+    "About 4,500"
+   ],
+   "remedy_type": [
+    "repair",
+    "Remedy options: Repair"
+   ],
+   "options": [
+    {
+     "type": "repair",
+     "steps": [
+      "stop using the chair",
+      "contact Article",
+      "install the free replacement base"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "888-746-3455",
+    "888-746-3455"
+   ],
+   "notes": "No model code; 'Spin' is the product name. Remedy is a free replacement base with installation instructions, classed as Repair."
+  },
+  {
+   "source_id": "24271",
+   "models": [
+    [
+     "AO10FK-A",
+     "AO10FK-A"
+    ],
+    [
+     "AO10FK-B",
+     "AO10FK-B"
+    ],
+    [
+     "AO10FK-C",
+     "AO10FK-C"
+    ]
+   ],
+   "model_label_location": [
+    "on the back",
+    "The model number is printed on the back"
+   ],
+   "serial_ranges": [],
+   "date_codes": [
+    {
+     "format": "WWYY",
+     "start": null,
+     "end": null,
+     "raw": "Date codes included in this recall end with 21 or 22"
+    },
+    {
+     "format": "WWYY",
+     "start": "0123",
+     "end": "0123",
+     "raw": "0123"
+    },
+    {
+     "format": "WWYY",
+     "start": "0923",
+     "end": "0923",
+     "raw": "0923"
+    },
+    {
+     "format": "WWYY",
+     "start": "1523",
+     "end": "1523",
+     "raw": "1523"
+    },
+    {
+     "format": "WWYY",
+     "start": "1723",
+     "end": "1723",
+     "raw": "1723"
+    }
+   ],
+   "sold_at": [
+    [
+     "Costco",
+     "Costco stores"
+    ],
+    [
+     "Costco.com",
+     "Costco.com"
+    ]
+   ],
+   "sold_from": [
+    "2022-01-01",
+    "January 2022"
+   ],
+   "sold_to": [
+    "2023-11-30",
+    "November 2023"
+   ],
+   "price_range": [
+    4000,
+    4000,
+    "for about $40"
+   ],
+   "units_affected": [
+    567000,
+    "About 567,000"
+   ],
+   "remedy_type": [
+    "replacement",
+    "free replacement portable charger"
+   ],
+   "options": [
+    {
+     "type": "replacement",
+     "steps": [
+      "stop using the portable chargers",
+      "contact myCharge"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "888-251-2026",
+    "888-251-2026"
+   ],
+   "notes": "The 'end with 21 or 22' rule covers every week of 2021 and 2022, so it is recorded with null bounds; the four 2023 codes are listed as single-code entries. Recall URL is for information only."
+  },
+  {
+   "source_id": "24274",
+   "models": [
+    [
+     "HJL-001",
+     "HJL-001"
+    ]
+   ],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ]
+   ],
+   "sold_from": [
+    "2024-01-01",
+    "January 2024"
+   ],
+   "sold_to": [
+    "2024-04-30",
+    "April 2024"
+   ],
+   "price_range": [
+    2700,
+    2900,
+    "for between about $27 and $29"
+   ],
+   "units_affected": [
+    500,
+    "About 500"
+   ],
+   "remedy_type": [
+    "refund",
+    "full refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "take the tools sets away from young children",
+      "contact Thousandshores",
+      "cut off the brown handle strings",
+      "dispose of the strings per local and state recycling laws"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund"
+    }
+   ],
+   "destruction_instruction": [
+    "cut off the brown handle strings from the gardening tools",
+    "cut off the brown handle strings from the gardening tools"
+   ],
+   "registration_url": null,
+   "contact": [
+    "support@theefun.com",
+    "support@theefun.com"
+   ],
+   "notes": "No photo requirement is stated for the refund. The Amazon seller URL is a customer-service contact, not a registration form."
+  },
+  {
+   "source_id": "24313",
+   "models": [
+    [
+     "13110003",
+     "13110003"
+    ],
+    [
+     "13110005",
+     "13110005"
+    ],
+    [
+     "13110040",
+     "13110040"
+    ],
+    [
+     "13110042",
+     "13110042"
+    ],
+    [
+     "13110060",
+     "13110060"
+    ],
+    [
+     "13110061",
+     "13110061"
+    ],
+    [
+     "13110062",
+     "13110062"
+    ],
+    [
+     "13110063",
+     "13110063"
+    ],
+    [
+     "13110084",
+     "13110084"
+    ]
+   ],
+   "model_label_location": [
+    "in the lower right corner of the label located on the bottom of the deck",
+    "printed in the lower right corner of the label located on the bottom of the deck"
+   ],
+   "serial_ranges": [
+    {
+     "prefix": "31EK30-01",
+     "start": null,
+     "end": null,
+     "raw": "31EK30-01"
+    },
+    {
+     "prefix": "31EK30-02",
+     "start": null,
+     "end": null,
+     "raw": "31EK30-02"
+    },
+    {
+     "prefix": "31EK20-01",
+     "start": null,
+     "end": null,
+     "raw": "31EK20-01"
+    },
+    {
+     "prefix": "31EK20-02",
+     "start": null,
+     "end": null,
+     "raw": "31EK20-02"
+    },
+    {
+     "prefix": "31EK60-01",
+     "start": null,
+     "end": null,
+     "raw": "31EK60-01"
+    },
+    {
+     "prefix": "31EK90-01",
+     "start": null,
+     "end": null,
+     "raw": "31EK90-01"
+    },
+    {
+     "prefix": "31EK10-01",
+     "start": null,
+     "end": null,
+     "raw": "31EK10-01"
+    }
+   ],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Target",
+     "Target"
+    ],
+    [
+     "Walmart",
+     "Walmart"
+    ],
+    [
+     "Best Buy",
+     "Best Buy"
+    ],
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ],
+    [
+     "Walmart.com",
+     "Walmart.com"
+    ],
+    [
+     "Razor.com",
+     "Razor.com"
+    ]
+   ],
+   "sold_from": [
+    "2022-09-01",
+    "September 2022"
+   ],
+   "sold_to": [
+    "2024-03-31",
+    "March 2024"
+   ],
+   "price_range": [
+    60000,
+    60000,
+    "for about $600"
+   ],
+   "units_affected": [
+    7300,
+    "About 7,300"
+   ],
+   "remedy_type": [
+    "refund",
+    "receive a refund or coupon"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the scooter",
+      "contact Razor",
+      "remove the handlebar",
+      "return only the handlebar with the prepaid label"
+     ],
+     "proof_required": [
+      "receipt",
+      "product_return"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund for purchases on or after March 11, 2023"
+    },
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the scooter",
+      "contact Razor",
+      "remove the handlebar",
+      "return only the handlebar with the prepaid label"
+     ],
+     "proof_required": [
+      "product_return"
+     ],
+     "payout_method": "store_credit",
+     "amount_rule": "$700 coupon for a future purchase on razor.com"
+    },
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the scooter",
+      "contact Razor",
+      "remove the handlebar",
+      "return only the handlebar with the prepaid label"
+     ],
+     "proof_required": [
+      "product_return"
+     ],
+     "payout_method": null,
+     "amount_rule": "$300 refund"
+    }
+   ],
+   "destruction_instruction": [
+    "remove the handlebar and return only the handlebar to Razor",
+    "remove the handlebar and return only the handlebar to Razor"
+   ],
+   "registration_url": null,
+   "contact": [
+    "866-467-2967",
+    "866-467-2967"
+   ],
+   "notes": "Serial values are 'first 8 digits' prefixes; each is valid only with specific models (e.g., 31EK30-01/02 with 13110003 and 13110005), a pairing this schema cannot hold. Handlebar removal is recorded as the disabling step, though it is also the product return; the coupon is recorded as a store_credit refund."
+  },
+  {
+   "source_id": "24330",
+   "models": [
+    [
+     "SFMPAVORG",
+     "SFMPAVORG"
+    ]
+   ],
+   "model_label_location": [
+    "law label attached to the mattress pad",
+    "Attached to the mattress pad is a law label"
+   ],
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Avocado",
+     "Avocado stores"
+    ],
+    [
+     "www.avocadogreenmattress.com",
+     "www.avocadogreenmattress.com"
+    ]
+   ],
+   "sold_from": [
+    "2019-01-01",
+    "January 2019"
+   ],
+   "sold_to": [
+    "2024-03-31",
+    "March 2024"
+   ],
+   "price_range": [
+    20000,
+    37000,
+    "for between $200 and $370"
+   ],
+   "units_affected": [
+    55480,
+    "About 55,480"
+   ],
+   "remedy_type": [
+    "replacement",
+    "free replacement mattress pad"
+   ],
+   "options": [
+    {
+     "type": "replacement",
+     "steps": [
+      "stop using the mattress pad",
+      "contact Avocado Green Mattress",
+      "cut the mattress pad in two",
+      "write the date and initial the law label",
+      "upload photos of the cut mattress pad and the law label"
+     ],
+     "proof_required": [
+      "destruction_photo",
+      "label_photo"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": [
+    "cut the mattress pad in two",
+    "cut the mattress pad in two"
+   ],
+   "registration_url": [
+    "www.avocadogreenmattress.com/pages/recall",
+    "www.avocadogreenmattress.com/pages/recall"
+   ],
+   "contact": [
+    "844-326-5009",
+    "844-326-5009"
+   ],
+   "notes": "Photos are uploaded at the recall page, so it is recorded as the registration URL. The law label lists 'Model SFMPAVORG'; sizes and pocket versions are not model codes."
+  },
+  {
+   "source_id": "25028",
+   "models": [
+    [
+     "23751",
+     "23751"
+    ],
+    [
+     "23572",
+     "23572"
+    ],
+    [
+     "23753",
+     "23753"
+    ],
+    [
+     "23754",
+     "23754"
+    ],
+    [
+     "23851",
+     "23851"
+    ],
+    [
+     "23852",
+     "23852"
+    ],
+    [
+     "23853",
+     "23853"
+    ],
+    [
+     "23854",
+     "23854"
+    ],
+    [
+     "25151",
+     "25151"
+    ],
+    [
+     "25152",
+     "25152"
+    ],
+    [
+     "25153",
+     "25153"
+    ],
+    [
+     "25251",
+     "25251"
+    ],
+    [
+     "25252",
+     "25252"
+    ],
+    [
+     "25253",
+     "25253"
+    ],
+    [
+     "27951",
+     "27951"
+    ],
+    [
+     "27952",
+     "27952"
+    ]
+   ],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Wayfair",
+     "Wayfair"
+    ],
+    [
+     "Home Depot",
+     "Home Depot"
+    ],
+    [
+     "Target",
+     "Target"
+    ],
+    [
+     "ShopHQ",
+     "ShopHQ"
+    ],
+    [
+     "Walmart",
+     "Walmart"
+    ],
+    [
+     "Overstock",
+     "Overstock"
+    ],
+    [
+     "Macys",
+     "Macys"
+    ],
+    [
+     "Lowes",
+     "Lowes"
+    ],
+    [
+     "ATG Stores",
+     "ATG Stores"
+    ],
+    [
+     "Unbeatable Sales",
+     "Unbeatable Sales"
+    ],
+    [
+     "JET",
+     "JET"
+    ],
+    [
+     "Bed Bath & Beyond",
+     "Bed Bath & Beyond"
+    ],
+    [
+     "Dropship Central",
+     "Dropship Central"
+    ],
+    [
+     "123 Stores",
+     "123 Stores"
+    ],
+    [
+     "OJ Commerce",
+     "OJ Commerce"
+    ],
+    [
+     "Hayneedle",
+     "Hayneedle"
+    ],
+    [
+     "Cymax",
+     "Cymax"
+    ],
+    [
+     "Houzz",
+     "Houzz"
+    ]
+   ],
+   "sold_from": [
+    "2015-03-01",
+    "March 2015"
+   ],
+   "sold_to": [
+    "2024-03-31",
+    "March 2024"
+   ],
+   "price_range": [
+    38000,
+    146500,
+    "for between $380 and $1,465"
+   ],
+   "units_affected": [
+    46750,
+    "About 46,750"
+   ],
+   "remedy_type": [
+    "repair",
+    "free repair"
+   ],
+   "options": [
+    {
+     "type": "repair",
+     "steps": [
+      "clear the space underneath and around the entertainment center",
+      "stay away from it",
+      "contact Manhattan Comfort",
+      "remove and reinstall the unit with the supplied toggle bolts"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    },
+    {
+     "type": "repair",
+     "steps": [
+      "stop using the entertainment center",
+      "contact Manhattan Comfort",
+      "install the supplied replacement safety screw"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "888-230-2225",
+    "888-230-2225"
+   ],
+   "notes": "Models are the 'Model Number and Color' column; the five-digit numbers in the Product Name column (23700, 23800, 25100, 25200, 27900) were left out as product-line numbers. '23572 (White Gloss)' is printed out of sequence (likely 23752) and is kept as printed."
+  },
+  {
+   "source_id": "25065",
+   "models": [
+    [
+     "Yoto Mini",
+     "Yoto Mini"
+    ]
+   ],
+   "model_label_location": [
+    "on the base of the product",
+    "located on the base of the product"
+   ],
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "us.yotoplay.com",
+     "us.yotoplay.com"
+    ],
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ],
+    [
+     "Target.com",
+     "Target.com"
+    ],
+    [
+     "maisonette.com",
+     "maisonette.com"
+    ]
+   ],
+   "sold_from": [
+    "2021-11-01",
+    "November 2021"
+   ],
+   "sold_to": [
+    "2024-04-30",
+    "through April 2024"
+   ],
+   "price_range": [
+    7000,
+    7000,
+    "for about $70"
+   ],
+   "units_affected": [
+    251165,
+    "About 251,165"
+   ],
+   "remedy_type": [
+    "repair",
+    "free battery replacement kit"
+   ],
+   "options": [
+    {
+     "type": "repair",
+     "steps": [
+      "stop using the speakers",
+      "take them away from children",
+      "contact Yoto",
+      "request the battery replacement kit",
+      "dispose of lithium-ion batteries per local and state regulations"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "minihelp@yotoplay.com",
+    "minihelp@yotoplay.com"
+   ],
+   "notes": "Models left empty: 'Yoto Mini' is a model name without a code and 'SKU PRPLXX00860' is presented as a SKU; both are on the base. 'Toy and gift stores nationwide' names no retailer. Battery kit treated as repair per 'Remedy options: Repair'."
+  },
+  {
+   "source_id": "25093",
+   "models": [
+    [
+     "VH2",
+     "VH2"
+    ]
+   ],
+   "model_label_location": [
+    "on the silver rating label on the underside of the heater",
+    "printed on the silver rating label on the underside of the heater"
+   ],
+   "serial_ranges": [],
+   "date_codes": [
+    {
+     "format": "MMMYY",
+     "start": "JUL24",
+     "end": "AUG24",
+     "raw": "\"JUL24\" or \"AUG24\" date code"
+    }
+   ],
+   "sold_at": [
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ]
+   ],
+   "sold_from": [
+    "2024-08-01",
+    "August 2024"
+   ],
+   "sold_to": [
+    "2024-10-31",
+    "October 2024"
+   ],
+   "price_range": [
+    9000,
+    9000,
+    "for about $90"
+   ],
+   "units_affected": [
+    7780,
+    "About 7,780"
+   ],
+   "remedy_type": [
+    "replacement",
+    "free replacement heater"
+   ],
+   "options": [
+    {
+     "type": "replacement",
+     "steps": [
+      "stop using the heaters",
+      "contact Vornado",
+      "confirm the product is part of the recall",
+      "follow instructions to receive a replacement heater"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "844-205-7978",
+    "844-205-7978"
+   ],
+   "notes": "Model taken from 'TYPE VH2' on the rating label. How the consumer confirms eligibility is not stated, so no proof is recorded; the vh2 URL is for checking eligibility, not registering."
+  },
+  {
+   "source_id": "25095",
+   "models": [
+    [
+     "SM1",
+     "SM1"
+    ]
+   ],
+   "model_label_location": [
+    "on the product packaging",
+    "located on the product packaging"
+   ],
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "HSN",
+     "HSN"
+    ],
+    [
+     "HSN.com",
+     "HSN.com"
+    ]
+   ],
+   "sold_from": [
+    "2020-07-01",
+    "July 2020"
+   ],
+   "sold_to": [
+    "2024-11-30",
+    "November 2024"
+   ],
+   "price_range": [
+    4000,
+    5000,
+    "for between $40 and $50"
+   ],
+   "units_affected": [
+    328000,
+    "About 328,000"
+   ],
+   "remedy_type": [
+    "replacement",
+    "free replacement alarm"
+   ],
+   "options": [
+    {
+     "type": "replacement",
+     "steps": [
+      "contact Three61",
+      "write Recalled on the smoke alarm with a permanent marker",
+      "submit a photo of the marked product to the recall website",
+      "keep the recalled alarm installed until the replacement arrives",
+      "install the replacement alarm"
+     ],
+     "proof_required": [
+      "destruction_photo",
+      "registration"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": [
+    "write \"Recalled\" with a permanent marker on the smoke alarm",
+    "write \"Recalled\" with a permanent marker on the smoke alarm"
+   ],
+   "registration_url": [
+    "www.samuraibrands.com/recall",
+    "www.samuraibrands.com/recall"
+   ],
+   "contact": [
+    "recall@samuraibrands.com",
+    "recall@samuraibrands.com"
+   ],
+   "notes": "Consumers keep the marked alarm installed until the replacement arrives, so the marking disables nothing physically. Model number is on the packaging, not the alarm."
+  },
+  {
+   "source_id": "25110",
+   "models": [],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [
+    {
+     "format": "date code",
+     "start": "2029J07223",
+     "end": "2029J07223",
+     "raw": "2029J07223"
+    },
+    {
+     "format": "date code",
+     "start": "2029J07623",
+     "end": "2029J07623",
+     "raw": "2029J07623"
+    },
+    {
+     "format": "date code",
+     "start": "2029J07723",
+     "end": "2029J07723",
+     "raw": "2029J07723"
+    },
+    {
+     "format": "date code",
+     "start": "2265J07323",
+     "end": "2265J07323",
+     "raw": "2265J07323"
+    },
+    {
+     "format": "date code",
+     "start": "2127J06823",
+     "end": "2127J06823",
+     "raw": "2127J06823"
+    },
+    {
+     "format": "date code",
+     "start": "2127J23323",
+     "end": "2127J23323",
+     "raw": "2127J23323"
+    },
+    {
+     "format": "date code",
+     "start": "3040J23323",
+     "end": "3040J23323",
+     "raw": "3040J23323"
+    },
+    {
+     "format": "date code",
+     "start": "3051J23323",
+     "end": "3051J23323",
+     "raw": "3051J23323"
+    },
+    {
+     "format": "date code",
+     "start": "3051J23423",
+     "end": "3051J23423",
+     "raw": "3051J23423"
+    },
+    {
+     "format": "date code",
+     "start": "2286J06323",
+     "end": "2286J06323",
+     "raw": "2286J06323"
+    },
+    {
+     "format": "date code",
+     "start": "2286J06523",
+     "end": "2286J06523",
+     "raw": "2286J06523"
+    },
+    {
+     "format": "date code",
+     "start": "2286J06623",
+     "end": "2286J06623",
+     "raw": "2286J06623"
+    },
+    {
+     "format": "date code",
+     "start": "2287J06623",
+     "end": "2287J06623",
+     "raw": "2287J06623"
+    },
+    {
+     "format": "date code",
+     "start": "2287J06723",
+     "end": "2287J06723",
+     "raw": "2287J06723"
+    },
+    {
+     "format": "date code",
+     "start": "2010J06923",
+     "end": "2010J06923",
+     "raw": "2010J06923"
+    },
+    {
+     "format": "date code",
+     "start": "2010J07023",
+     "end": "2010J07023",
+     "raw": "2010J07023"
+    },
+    {
+     "format": "date code",
+     "start": "3004J29623",
+     "end": "3004J29623",
+     "raw": "3004J29623"
+    },
+    {
+     "format": "date code",
+     "start": "3010J29623",
+     "end": "3010J29623",
+     "raw": "3010J29623"
+    },
+    {
+     "format": "date code",
+     "start": "3025J29623",
+     "end": "3025J29623",
+     "raw": "3025J29623"
+    },
+    {
+     "format": "date code",
+     "start": "3021J06823",
+     "end": "3021J06823",
+     "raw": "3021J06823"
+    },
+    {
+     "format": "date code",
+     "start": "3021J06923",
+     "end": "3021J06923",
+     "raw": "3021J06923"
+    },
+    {
+     "format": "date code",
+     "start": "3034J23423",
+     "end": "3034J23423",
+     "raw": "3034J23423"
+    },
+    {
+     "format": "date code",
+     "start": "3034J23523",
+     "end": "3034J23523",
+     "raw": "3034J23523"
+    }
+   ],
+   "sold_at": [
+    [
+     "cabinethealth.com",
+     "cabinethealth.com"
+    ],
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ],
+    [
+     "Grove.co",
+     "Grove.co"
+    ],
+    [
+     "CVS",
+     "CVS"
+    ]
+   ],
+   "sold_from": [
+    "2023-03-01",
+    "March 2023"
+   ],
+   "sold_to": [
+    "2024-07-31",
+    "July 2024"
+   ],
+   "price_range": [
+    1000,
+    2000,
+    "for between $10 and $20"
+   ],
+   "units_affected": [
+    65000,
+    "About 65,000"
+   ],
+   "remedy_type": [
+    "replacement",
+    "free replacement lid"
+   ],
+   "options": [
+    {
+     "type": "replacement",
+     "steps": [
+      "secure the bottles out of the sight and reach of children",
+      "contact Cabinet Health",
+      "destroy the recalled lid",
+      "submit a photo of the destroyed lid"
+     ],
+     "proof_required": [
+      "destruction_photo"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": [
+    "destruction of the recalled lid",
+    "destruction of the recalled lid"
+   ],
+   "registration_url": null,
+   "contact": [
+    "908-242-6108",
+    "908-242-6108"
+   ],
+   "notes": "Date codes (on a sticker on the bottom) apply only to filled bottles; empty bottles sold on cabinethealth.com are identified by a March 2023 to July 2024 purchase date. The notice requires a destruction photo but gives no method, so the quote is the requirement itself."
+  },
+  {
+   "source_id": "25113",
+   "models": [],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [
+    {
+     "format": "batch number",
+     "start": "20240415TTL",
+     "end": "20240415TTL",
+     "raw": "20240415TTL"
+    },
+    {
+     "format": "batch number",
+     "start": "20240501TTL",
+     "end": "20240501TTL",
+     "raw": "20240501TTL"
+    },
+    {
+     "format": "batch number",
+     "start": "20240509TTL",
+     "end": "20240509TTL",
+     "raw": "20240509TTL"
+    }
+   ],
+   "sold_at": [
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ]
+   ],
+   "sold_from": [
+    "2024-05-01",
+    "May 2024"
+   ],
+   "sold_to": [
+    "2024-09-30",
+    "September 2024"
+   ],
+   "price_range": [
+    1200,
+    1700,
+    "for between $12 and 17"
+   ],
+   "units_affected": [
+    6050,
+    "About 6,050"
+   ],
+   "remedy_type": [
+    "refund",
+    "full refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "take the pajamas away from children",
+      "stop using them",
+      "contact Tupop",
+      "cut the top and bottom in half",
+      "dispose of the garments",
+      "email a photo of the destroyed garments"
+     ],
+     "proof_required": [
+      "destruction_photo"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund"
+    }
+   ],
+   "destruction_instruction": [
+    "destroy the garments by cutting the top and bottom in half",
+    "destroy the garments by cutting the top and bottom in half"
+   ],
+   "registration_url": null,
+   "contact": [
+    "bzzservice@hotmail.com",
+    "bzzservice@hotmail.com"
+   ],
+   "notes": "Batch numbers (on the second sewn-in label) are recorded as date_codes because they embed dates; they could equally be lot/serial identifiers. Style prints are product names, not model codes. Price phrase omits the second dollar sign."
+  },
+  {
+   "source_id": "25124",
+   "models": [],
+   "model_label_location": [
+    "on the white square ID tag on the frame",
+    "located on the white square ID tag on the frame"
+   ],
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Ace Hardware",
+     "Ace Hardware"
+    ],
+    [
+     "Blain's Farm & Fleet",
+     "Blain's Farm & Fleet"
+    ],
+    [
+     "Do It Best",
+     "Do It Best"
+    ],
+    [
+     "Family Farm & Home",
+     "Family Farm & Home"
+    ],
+    [
+     "Mills Fleet Farm",
+     "Mills Fleet Farm"
+    ],
+    [
+     "Northern Tool and Equipment",
+     "Northern Tool and Equipment"
+    ],
+    [
+     "Lowe's",
+     "Lowe's"
+    ],
+    [
+     "True Value",
+     "True Value"
+    ],
+    [
+     "AceHardware.com",
+     "AceHardware.com"
+    ],
+    [
+     "Farmandfleet.com",
+     "Farmandfleet.com"
+    ],
+    [
+     "Doitbest.com",
+     "Doitbest.com"
+    ],
+    [
+     "familyfarmandhome.com",
+     "familyfarmandhome.com"
+    ],
+    [
+     "Lowes.com",
+     "Lowes.com"
+    ],
+    [
+     "fleetfarm.com",
+     "fleetfarm.com"
+    ],
+    [
+     "northerntool.com",
+     "northerntool.com"
+    ],
+    [
+     "TrueValue.com",
+     "TrueValue.com"
+    ]
+   ],
+   "sold_from": [
+    "2024-08-01",
+    "August 2024"
+   ],
+   "sold_to": [
+    "2024-10-31",
+    "October 2024"
+   ],
+   "price_range": [
+    177000,
+    544000,
+    "for between $1,770 and $5,440"
+   ],
+   "units_affected": [
+    6260,
+    "About 6,260"
+   ],
+   "remedy_type": [
+    "repair",
+    "free repair"
+   ],
+   "options": [
+    {
+     "type": "repair",
+     "steps": [
+      "stop using the snow throwers",
+      "contact Ariens Company or an authorized dealer",
+      "have the unit repaired at the local dealership"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "877-740-7060",
+    "877-740-7060"
+   ],
+   "notes": "The notice lists no model or serial numbers; recalled units are listed only at https://www.ariensco.com/safetyrecall. DELUXE, PLATINUM and PROFESSIONAL are series names, not model codes."
+  },
+  {
+   "source_id": "25159",
+   "models": [
+    [
+     "98715",
+     "98715"
+    ]
+   ],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "www.goalzero.com",
+     "www.goalzero.com"
+    ]
+   ],
+   "sold_from": [
+    "2023-10-01",
+    "October 2023"
+   ],
+   "sold_to": [
+    "2024-09-30",
+    "September 2024"
+   ],
+   "price_range": [
+    7000,
+    7000,
+    "for about $70"
+   ],
+   "units_affected": [
+    530,
+    "About 530"
+   ],
+   "remedy_type": [
+    "refund",
+    "refund of the purchase price"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the products",
+      "contact Goal Zero",
+      "register for a refund on the firm's website",
+      "discard the product in the trash"
+     ],
+     "proof_required": [
+      "registration"
+     ],
+     "payout_method": "original_payment",
+     "amount_rule": "purchase price"
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "888-794-6250",
+    "888-794-6250"
+   ],
+   "notes": "Consumers register 'on the firm's website' but no URL is tied to registration (the notices-recalls URL is in CONTACT only), so registration_url is null. Discarding in the trash is disposal, not a destruction instruction."
+  },
+  {
+   "source_id": "25172",
+   "models": [],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Shein.com",
+     "Shein.com"
+    ]
+   ],
+   "sold_from": [
+    "2024-03-01",
+    "March 2024"
+   ],
+   "sold_to": [
+    "2024-11-30",
+    "November 2024"
+   ],
+   "price_range": [
+    1100,
+    3600,
+    "for between $11 and $36"
+   ],
+   "units_affected": [
+    750,
+    "About 750"
+   ],
+   "remedy_type": [
+    "refund",
+    "full refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using and remove the crib bumpers from the crib",
+      "cut the crib bumper in half",
+      "take a photo",
+      "email the photo to the firm"
+     ],
+     "proof_required": [
+      "destruction_photo"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund"
+    }
+   ],
+   "destruction_instruction": [
+    "cut the crib bumper in half",
+    "cut the crib bumper in half"
+   ],
+   "registration_url": null,
+   "contact": [
+    "loveourhomerecall@163.com",
+    "loveourhomerecall@163.com"
+   ],
+   "notes": "No model codes; lengths are sizes. Photo goes by email, so there is no registration URL."
+  },
+  {
+   "source_id": "25191",
+   "models": [
+    [
+     "90195",
+     "90195"
+    ],
+    [
+     "22395",
+     "22395"
+    ]
+   ],
+   "model_label_location": [
+    "as the \"Item\" number on a sticker under the machine",
+    "identified as the \"Item\" number on a sticker under the machine"
+   ],
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "JCPenney",
+     "JCPenney"
+    ],
+    [
+     "BestBuy.com",
+     "BestBuy.com"
+    ],
+    [
+     "JCPenney.com",
+     "JCPenney.com"
+    ]
+   ],
+   "sold_from": [
+    "2023-08-01",
+    "August 2023"
+   ],
+   "sold_to": [
+    "2025-01-31",
+    "January 2025"
+   ],
+   "price_range": [
+    4000,
+    6000,
+    "for between $40 and $60"
+   ],
+   "units_affected": [
+    12300,
+    "About 12,300"
+   ],
+   "remedy_type": [
+    "refund",
+    "contact Sensio for a refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the espresso machines",
+      "contact Sensio"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "855-647-3125",
+    "855-647-3125"
+   ],
+   "notes": "Refund amount and proof are not stated."
+  },
+  {
+   "source_id": "25235",
+   "models": [
+    [
+     "17362",
+     "17362"
+    ],
+    [
+     "17323",
+     "17323"
+    ]
+   ],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [
+    {
+     "format": "DDDYY",
+     "start": "15623",
+     "end": "18724",
+     "raw": "date codes from 15623 to 18724"
+    }
+   ],
+   "sold_at": [
+    [
+     "Target",
+     "Target"
+    ],
+    [
+     "Sam's Club",
+     "Sam's Club"
+    ],
+    [
+     "www.target.com",
+     "www.target.com"
+    ],
+    [
+     "www.samsclub.com",
+     "www.samsclub.com"
+    ]
+   ],
+   "sold_from": [
+    "2023-06-01",
+    "June 2023"
+   ],
+   "sold_to": [
+    "2025-03-31",
+    "March 2025"
+   ],
+   "price_range": [
+    30000,
+    30000,
+    "for about $300"
+   ],
+   "units_affected": [
+    23260,
+    "About 23,260"
+   ],
+   "remedy_type": [
+    "repair",
+    "free replacement controller"
+   ],
+   "options": [
+    {
+     "type": "repair",
+     "steps": [
+      "stop using the dump trucks",
+      "contact Huffy"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "800-872-2453",
+    "800-872-2453"
+   ],
+   "notes": "A replacement controller (part) is recorded as repair per 'Remedy options: Repair'. Date code is day-of-year plus year (DDDYY), printed on a label under the body; the model number location is not stated."
+  },
+  {
+   "source_id": "25239",
+   "models": [
+    [
+     "17249",
+     "17249"
+    ],
+    [
+     "17310",
+     "17310"
+    ]
+   ],
+   "model_label_location": [
+    "under the body of the unit near the rear wheel",
+    "located under the body of the unit near the rear wheel"
+   ],
+   "serial_ranges": [],
+   "date_codes": [
+    {
+     "format": "DDDYY",
+     "start": "16919",
+     "end": "11122",
+     "raw": "date codes between 16919 and 11122"
+    }
+   ],
+   "sold_at": [
+    [
+     "Walmart",
+     "Walmart"
+    ],
+    [
+     "www.walmart.com",
+     "www.walmart.com"
+    ]
+   ],
+   "sold_from": [
+    "2019-08-01",
+    "August 2019"
+   ],
+   "sold_to": [
+    "2024-12-31",
+    "December 2024"
+   ],
+   "price_range": [
+    50000,
+    60000,
+    "for between $500 and $600"
+   ],
+   "units_affected": [
+    24700,
+    "About 24,700"
+   ],
+   "remedy_type": [
+    "repair",
+    "free repair"
+   ],
+   "options": [
+    {
+     "type": "repair",
+     "steps": [
+      "stop using the UTVs",
+      "contact Huffy Corporation",
+      "schedule a free repair"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    },
+    {
+     "type": "repair",
+     "steps": [
+      "stop using the UTVs",
+      "have the repair done by a third party",
+      "request reimbursement from Huffy Corporation"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": "reimbursement up to $50 for third-party repair charges"
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "800-872-2453",
+    "800-872-2453"
+   ],
+   "notes": "DDDYY codes do not sort numerically (16919 is 2019, 11122 is 2022); a range check must decode day and year. No proof is stated for the third-party reimbursement, though a repair bill is likely needed in practice."
+  },
+  {
+   "source_id": "25314",
+   "models": [
+    [
+     "711",
+     "711"
+    ]
+   ],
+   "model_label_location": [
+    "on the label of the product packaging",
+    "printed on the label of the product packaging"
+   ],
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ]
+   ],
+   "sold_from": [
+    "2024-09-01",
+    "September 2024"
+   ],
+   "sold_to": [
+    "2025-04-30",
+    "April 2025"
+   ],
+   "price_range": [
+    3000,
+    3000,
+    "for about $30"
+   ],
+   "units_affected": [
+    2000,
+    "About 2,000"
+   ],
+   "remedy_type": [
+    "refund",
+    "full refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the toys",
+      "contact Shantou Haochengheng Technology",
+      "destroy the product as instructed by the firm"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund"
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "haochenghengkj@outlook.com",
+    "haochenghengkj@outlook.com"
+   ],
+   "notes": "The firm will give 'information on how to destroy the product', but the notice states no destruction method or photo requirement, so destruction_instruction is null and proof is none."
+  },
+  {
+   "source_id": "25397",
+   "models": [],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Nature's Corner Market",
+     "Nature's Corner Market"
+    ],
+    [
+     "Cornerstone Retreat",
+     "Cornerstone Retreat"
+    ],
+    [
+     "Nickel Mine Health Foods",
+     "Nickel Mine Health Foods"
+    ],
+    [
+     "Leaves of The Trees",
+     "Leaves of The Trees"
+    ],
+    [
+     "Country Boy's Mini Mall",
+     "Country Boy's Mini Mall"
+    ],
+    [
+     "Amazon",
+     "Amazon"
+    ]
+   ],
+   "sold_from": [
+    "2021-01-01",
+    "January 2021"
+   ],
+   "sold_to": [
+    "2025-04-30",
+    "April 2025"
+   ],
+   "price_range": [
+    1700,
+    1700,
+    "for about $17"
+   ],
+   "units_affected": [
+    20000,
+    "About 20,000"
+   ],
+   "remedy_type": [
+    "replacement",
+    "free replacement child-resistant closure"
+   ],
+   "options": [
+    {
+     "type": "replacement",
+     "steps": [
+      "secure the bottles out of the sight and reach of children",
+      "contact Diamond G Forest Products"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "912-647-7463",
+    "912-647-7463"
+   ],
+   "notes": "No model codes; the product is identified by its label text and 4-ounce size. The remedy is a replacement closure (a part), recorded as replacement per 'Remedy options: Replace'."
+  },
+  {
+   "source_id": "25434",
+   "models": [],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ],
+    [
+     "Walmart.com",
+     "Walmart.com"
+    ],
+    [
+     "www.fireflyfuel.com",
+     "www.fireflyfuel.com"
+    ]
+   ],
+   "sold_from": [
+    "2019-08-01",
+    "August 2019"
+   ],
+   "sold_to": [
+    "2025-05-31",
+    "May 2025"
+   ],
+   "price_range": [
+    2000,
+    2000,
+    "for about $20"
+   ],
+   "units_affected": [
+    11275,
+    "About 11,275"
+   ],
+   "remedy_type": [
+    "repair",
+    "free corrected label to put on the bottle and a free replacement child-resistant lid"
+   ],
+   "options": [
+    {
+     "type": "repair",
+     "steps": [
+      "remove the nozzle applicator",
+      "reinstall the child-resistant closure",
+      "secure the bottle out of reach of children if the closure is missing",
+      "contact Firefly Fuel",
+      "put the corrected label on the bottle"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "888-472-6740",
+    "888-472-6740"
+   ],
+   "notes": "Corrected label plus a replacement lid only if the original is missing; recorded as repair per 'Remedy options: Repair'. Removing the nozzle is a correction, not destruction."
+  },
+  {
+   "source_id": "26006",
+   "models": [],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Walmart",
+     "Walmart"
+    ],
+    [
+     "Home Depot",
+     "Home Depot"
+    ],
+    [
+     "Walmart.com",
+     "Walmart.com"
+    ],
+    [
+     "Homedepot.com",
+     "Homedepot.com"
+    ]
+   ],
+   "sold_from": [
+    "2024-11-01",
+    "November 2024"
+   ],
+   "sold_to": [
+    "2025-08-31",
+    "August 2025"
+   ],
+   "price_range": [
+    1500,
+    1500,
+    "for about $15"
+   ],
+   "units_affected": [
+    175000,
+    "About 175,000"
+   ],
+   "remedy_type": [
+    "refund",
+    "full refund or store credit"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the torches",
+      "return them to the retailer"
+     ],
+     "proof_required": [
+      "product_return"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund"
+    },
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the torches",
+      "return them to the retailer"
+     ],
+     "proof_required": [
+      "product_return"
+     ],
+     "payout_method": "store_credit",
+     "amount_rule": "store credit"
+    },
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the torches",
+      "contact Calico Brands",
+      "return the torches with the supplied shipping label and hazmat packaging"
+     ],
+     "proof_required": [
+      "product_return"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund"
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "800-544-4837",
+    "800-544-4837"
+   ],
+   "notes": "No model number is given; the only identifier is UPC 0-70257-52226-6 (070257522266), excluded per the guide."
+  },
+  {
+   "source_id": "26122",
+   "models": [
+    [
+     "OM-TD BIKE",
+     "OM-TD BIKE"
+    ],
+    [
+     "OM-KSKB",
+     "OM-KSKB"
+    ]
+   ],
+   "model_label_location": [
+    "on a label inside the helmet",
+    "on a label inside the helmet"
+   ],
+   "serial_ranges": [],
+   "date_codes": [
+    {
+     "format": "MM/YYYY",
+     "start": "05/2024",
+     "end": "05/2024",
+     "raw": "\"05/2024\" (the manufacture date)"
+    },
+    {
+     "format": "MM/YYYY",
+     "start": "11/2022",
+     "end": "11/2022",
+     "raw": "\"11/2022\" (the manufacture date)"
+    }
+   ],
+   "sold_at": [
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ],
+    [
+     "Walmart.com",
+     "Walmart.com"
+    ]
+   ],
+   "sold_from": [
+    "2024-06-01",
+    "June 2024"
+   ],
+   "sold_to": [
+    "2025-02-28",
+    "February 2025"
+   ],
+   "price_range": [
+    2000,
+    3200,
+    "for between $20 and $32"
+   ],
+   "units_affected": [
+    24300,
+    "About 24,300"
+   ],
+   "remedy_type": [
+    "refund",
+    "register for a full refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the helmets",
+      "contact Outdoor Master",
+      "register for a full refund"
+     ],
+     "proof_required": [
+      "registration"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund"
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "care@outdoormaster.com",
+    "care@outdoormaster.com"
+   ],
+   "notes": "The manufacture dates are per-model descriptors printed on the label (05/2024 for OM-TD BIKE, 11/2022 for OM-KSKB), not stated as an inclusion range; labeled as date codes anyway. Registration is via contacting the firm; the recall URL is for information only, so registration_url is null."
+  },
+  {
+   "source_id": "26181",
+   "models": [],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ],
+    [
+     "Walmart.com",
+     "Walmart.com"
+    ]
+   ],
+   "sold_from": [
+    "2023-12-01",
+    "December 2023"
+   ],
+   "sold_to": [
+    "2025-10-31",
+    "October 2025"
+   ],
+   "price_range": [
+    4000,
+    6000,
+    "for between $40 and $60"
+   ],
+   "units_affected": [
+    9300,
+    "About 9,300"
+   ],
+   "remedy_type": [
+    "refund",
+    "full refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the baby loungers",
+      "contact Joyful Journeys",
+      "remove the foam and pads from the cover",
+      "cut the cover, foam, and pad in half",
+      "email photos of the destroyed pieces"
+     ],
+     "proof_required": [
+      "destruction_photo"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund"
+    }
+   ],
+   "destruction_instruction": [
+    "cut the cover, foam, and pad in half",
+    "cut the cover, foam, and pad in half"
+   ],
+   "registration_url": null,
+   "contact": [
+    "joyfuljourneysrecalls@myjoyfuljourneys.com",
+    "joyfuljourneysrecalls@myjoyfuljourneys.com"
+   ],
+   "notes": "No model numbers; only the brand name on a tag. The website URL in CONTACT is malformed in the source (orhttps://myjoyfuljourneys.comand)."
+  },
+  {
+   "source_id": "26183",
+   "models": [
+    [
+     "BGAAL9",
+     "BGAAL9"
+    ]
+   ],
+   "model_label_location": [
+    "on the bottom of the light, on the removable cover that provides access to the charging cord storage area",
+    "on the bottom of the light, on the removable cover that provides access to the charging cord storage area"
+   ],
+   "serial_ranges": [],
+   "date_codes": [
+    {
+     "format": "year and month circles (year \"24\", month \"6\")",
+     "start": "June 2024",
+     "end": "June 2024",
+     "raw": "Only lanterns with a date code of June 2024"
+    }
+   ],
+   "sold_at": [
+    [
+     "Meijer",
+     "Meijer"
+    ],
+    [
+     "Blain",
+     "Blain"
+    ],
+    [
+     "Fleet Wholesale",
+     "Fleet Wholesale"
+    ],
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ]
+   ],
+   "sold_from": [
+    "2025-01-01",
+    "between January and November 2025"
+   ],
+   "sold_to": [
+    "2025-11-30",
+    "November 2025"
+   ],
+   "price_range": [
+    3500,
+    4500,
+    "for between $35 to $45"
+   ],
+   "units_affected": [
+    4100,
+    "About 4,100"
+   ],
+   "remedy_type": [
+    "refund",
+    "full refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the lanterns",
+      "contact Energizer",
+      "register for the recall with proof of the affected date code",
+      "return the lantern using the prepaid shipping materials"
+     ],
+     "proof_required": [
+      "registration",
+      "label_photo",
+      "product_return"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund"
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "800-383-7323",
+    "800-383-7323"
+   ],
+   "notes": "SKU numbers 039800143341 and 039800143334 are excluded as SKUs. Retailer list 'Meijer, Blain, and Fleet Wholesale' is split as printed; it may mean Blain's Farm & Fleet. Bazaarvoice reviewer units are not a sale channel. 'Proof of the affected date code' is labeled label_photo, but the notice does not say photo."
+  },
+  {
+   "source_id": "26202",
+   "models": [],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [
+    {
+     "format": "MM/YYYY",
+     "start": "07/2025",
+     "end": "08/2025",
+     "raw": "date codes 07/2025 or 08/2025"
+    }
+   ],
+   "sold_at": [
+    [
+     "Academy Sports + Outdoors",
+     "Academy Sports + Outdoors"
+    ],
+    [
+     "academy.com",
+     "academy.com"
+    ]
+   ],
+   "sold_from": [
+    "2025-09-01",
+    "September 2025"
+   ],
+   "sold_to": [
+    "2025-10-31",
+    "October 2025"
+   ],
+   "price_range": [
+    5000,
+    5000,
+    "for about $50"
+   ],
+   "units_affected": [
+    35300,
+    "About 35,300"
+   ],
+   "remedy_type": [
+    "refund",
+    "full refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the chairs",
+      "return the chair to any Academy Sports + Outdoors store or by mail through Customer Care"
+     ],
+     "proof_required": [
+      "product_return"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund"
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "888-922-2336",
+    "888-922-2336"
+   ],
+   "notes": "Code \"177296\" is printed on the tracking label but the notice does not call it a model or item number, so it is excluded from models; the date code is on the tracking label sewn onto the seat."
+  },
+  {
+   "source_id": "26224",
+   "models": [
+    [
+     "157310",
+     "157310"
+    ],
+    [
+     "157594",
+     "157594"
+    ],
+    [
+     "157595",
+     "157595"
+    ]
+   ],
+   "model_label_location": [
+    "on a label located on the engine",
+    "on a label located on the engine"
+   ],
+   "serial_ranges": [],
+   "date_codes": [
+    {
+     "format": "MMYY",
+     "start": "0125",
+     "end": "0825",
+     "raw": "MONTHYEAR code in the product serial number between 0125 (January 2025) and 0825 (August 2025)"
+    },
+    {
+     "format": "WWYY",
+     "start": "0125",
+     "end": "2625",
+     "raw": "WEEKYEAR burner date code between 0125 and 2625"
+    }
+   ],
+   "sold_at": [
+    [
+     "Northern Tool + Equipment",
+     "Northern Tool + Equipment"
+    ],
+    [
+     "NorthernTool.com",
+     "NorthernTool.com"
+    ],
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ],
+    [
+     "Ebay.com",
+     "Ebay.com"
+    ],
+    [
+     "GNEDI.com",
+     "GNEDI.com"
+    ]
+   ],
+   "sold_from": [
+    "2025-01-01",
+    "January 2025"
+   ],
+   "sold_to": [
+    "2025-08-31",
+    "August 2025"
+   ],
+   "price_range": [
+    500000,
+    1000000,
+    "for between $5,000 and $10,000"
+   ],
+   "units_affected": [
+    1416,
+    "About 1,416"
+   ],
+   "remedy_type": [
+    "repair",
+    "free repair"
+   ],
+   "options": [
+    {
+     "type": "repair",
+     "steps": [
+      "stop using the pressure washers",
+      "contact Northern Tool + Equipment",
+      "schedule the repair online"
+     ],
+     "proof_required": [
+      "registration"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": [
+    "https://www.northerntool.com/recall-details-pw",
+    "https://www.northerntool.com/recall-details-pw"
+   ],
+   "contact": [
+    "888-518-0342",
+    "888-518-0342"
+   ],
+   "notes": "Both conditions must hold: the MONTHYEAR code inside the serial number (0125 to 0825) AND the WEEKYEAR burner date code (0125 to 2625); the first is embedded in the serial but labeled as a date code, not a serial range. registration_url is the page where the repair is scheduled, which may count as info only."
+  },
+  {
+   "source_id": "26405",
+   "models": [],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ]
+   ],
+   "sold_from": [
+    "2026-02-01",
+    "February 2026"
+   ],
+   "sold_to": [
+    "2026-03-31",
+    "March 2026"
+   ],
+   "price_range": [
+    1900,
+    1900,
+    "for about $19"
+   ],
+   "units_affected": [
+    480,
+    "About 480"
+   ],
+   "remedy_type": [
+    "refund",
+    "To receive a refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using pools with the recalled drain covers",
+      "remove the drain cover from the pool",
+      "take a photo of the removed cover",
+      "email the photo to SZ Hengxun"
+     ],
+     "proof_required": [
+      "label_photo"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "MuscccmRecall@126.com",
+    "MuscccmRecall@126.com"
+   ],
+   "notes": "The photo is of the removed cover, not a destroyed one, so destruction_instruction is null and the proof is labeled label_photo as the closest fit (no enum value for proof of removal). Refund amount not stated."
+  },
+  {
+   "source_id": "26438",
+   "models": [],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ]
+   ],
+   "sold_from": [
+    "2025-10-01",
+    "October 2025"
+   ],
+   "sold_to": [
+    "2025-11-30",
+    "November 2025"
+   ],
+   "price_range": [
+    5000,
+    5000,
+    "for about $50"
+   ],
+   "units_affected": [
+    2100,
+    "About 2,100"
+   ],
+   "remedy_type": [
+    "refund",
+    "contact CetoPMax for a refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the baby loungers",
+      "contact CetoPMax",
+      "remove the foam and pad from the cover",
+      "cut the cover, foam and pad in half",
+      "email photos of the destroyed pieces"
+     ],
+     "proof_required": [
+      "destruction_photo"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": [
+    "cut the cover, foam and pad in half",
+    "cut the cover, foam and pad in half"
+   ],
+   "registration_url": null,
+   "contact": [
+    "CetoPMaxRecall@outlook.com",
+    "CetoPMaxRecall@outlook.com"
+   ],
+   "notes": "No model numbers. The notice says 'a refund', not 'full refund', so amount_rule is null. The email in REMEDY is wrapped in stray '?' characters in the source."
+  },
+  {
+   "source_id": "26524",
+   "models": [
+    [
+     "WYZESCPWH",
+     "WYZESCPWH"
+    ]
+   ],
+   "model_label_location": [
+    "located on the back of the camera",
+    "located on the back of the camera"
+   ],
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Home Depot",
+     "Home Depot"
+    ],
+    [
+     "Micro Center",
+     "Micro Center"
+    ],
+    [
+     "www.wyze.com",
+     "www.wyze.com"
+    ],
+    [
+     "Temu",
+     "Temu"
+    ],
+    [
+     "Amazon",
+     "Amazon"
+    ],
+    [
+     "B2B Renew, Inc.",
+     "B2B Renew, Inc."
+    ],
+    [
+     "ReturnPro",
+     "ReturnPro"
+    ],
+    [
+     "Best Buy",
+     "Best Buy"
+    ]
+   ],
+   "sold_from": [
+    "2025-10-01",
+    "October 2025"
+   ],
+   "sold_to": [
+    "2026-04-30",
+    "April 2026"
+   ],
+   "price_range": [
+    8000,
+    8000,
+    "for about $80"
+   ],
+   "units_affected": [
+    321360,
+    "About 321,360"
+   ],
+   "remedy_type": [
+    "multiple",
+    "a free replacement camera with solar panel accessory, a full refund or a gift card"
+   ],
+   "options": [
+    {
+     "type": "replacement",
+     "steps": [
+      "stop using the camera",
+      "visit the recall website to check whether the device is affected",
+      "attest to disposal of the recalled camera"
+     ],
+     "proof_required": [
+      "registration"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    },
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the camera",
+      "visit the recall website to check whether the device is affected",
+      "attest to disposal of the recalled camera"
+     ],
+     "proof_required": [
+      "registration"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund"
+    },
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the camera",
+      "visit the recall website to check whether the device is affected",
+      "attest to disposal of the recalled camera"
+     ],
+     "proof_required": [
+      "registration"
+     ],
+     "payout_method": "store_credit",
+     "amount_rule": "original purchase price"
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "888-832-7226",
+    "888-832-7226"
+   ],
+   "notes": "Units exclude about 2,560 sold in Canada. Only cameras installed with the long, flat-head screw should participate (not encoded in any field). Disposal attestation is required but no destruction step; the recall URL is described as an eligibility check, not registration, so registration_url is null."
+  },
+  {
+   "source_id": "26525",
+   "models": [],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ]
+   ],
+   "sold_from": [
+    "2025-08-01",
+    "August 2025"
+   ],
+   "sold_to": [
+    "2026-04-30",
+    "April 2026"
+   ],
+   "price_range": [
+    2800,
+    3000,
+    "for between $28 and $30"
+   ],
+   "units_affected": [
+    1430,
+    "About 1,430"
+   ],
+   "remedy_type": [
+    "refund",
+    "full refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the nursing pillows",
+      "contact Little Grape Land",
+      "cut the pillow in half",
+      "send a photo of the destroyed pillow"
+     ],
+     "proof_required": [
+      "destruction_photo"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund"
+    }
+   ],
+   "destruction_instruction": [
+    "cut the pillow in half",
+    "cut the pillow in half"
+   ],
+   "registration_url": null,
+   "contact": [
+    "recall@evermorepartner.com",
+    "recall@evermorepartner.com"
+   ],
+   "notes": "The notice says there are no markings or labels on the product, so no model or label location."
+  },
+  {
+   "source_id": "26526",
+   "models": [],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ],
+    [
+     "Tinylandus.com",
+     "Tinylandus.com"
+    ]
+   ],
+   "sold_from": [
+    "2025-11-01",
+    "November 2025"
+   ],
+   "sold_to": [
+    "2026-03-31",
+    "March 2026"
+   ],
+   "price_range": [
+    5400,
+    7000,
+    "for between $54 and $70"
+   ],
+   "units_affected": [
+    7500,
+    "About 7,500"
+   ],
+   "remedy_type": [
+    "repair",
+    "free repair kit"
+   ],
+   "options": [
+    {
+     "type": "repair",
+     "steps": [
+      "stop using the tents",
+      "disassemble the tents and keep the poles away from children",
+      "contact Tiny Land",
+      "dispose of the fiberglass poles using gloves"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "833-556-5252",
+    "833-556-5252"
+   ],
+   "notes": "\"SKU TLTGTT003BG-XYF1506251\" on a label stitched inside the tent is presented as a SKU, so it is excluded from models. Disposal of the fiberglass poles is required but is not a destruction instruction."
+  },
+  {
+   "source_id": "26527",
+   "models": [],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ]
+   ],
+   "sold_from": [
+    "2025-06-01",
+    "June 2025"
+   ],
+   "sold_to": [
+    "2026-03-31",
+    "March 2026"
+   ],
+   "price_range": [
+    2000,
+    2000,
+    "for about $20"
+   ],
+   "units_affected": [
+    200,
+    "About 200"
+   ],
+   "remedy_type": [
+    "refund",
+    "full refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using pools with the recalled drain covers",
+      "contact Eicong",
+      "write \"Recalled\" on the cover in permanent marker",
+      "send a photo of the destroyed cover"
+     ],
+     "proof_required": [
+      "destruction_photo"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund"
+    }
+   ],
+   "destruction_instruction": [
+    "writing in permanent maker \"Recalled\" on it",
+    "writing in permanent maker \"Recalled\" on it"
+   ],
+   "registration_url": null,
+   "contact": [
+    "Crenlux_recall@outlook.com",
+    "Crenlux_recall@outlook.com"
+   ],
+   "notes": "The source misspells marker as 'maker'; quote kept verbatim. No model numbers."
+  },
+  {
+   "source_id": "26721",
+   "models": [
+    [
+     "RV001",
+     "RV001"
+    ]
+   ],
+   "model_label_location": [
+    "on a label located under the walker's seat",
+    "on a label located under the walker's seat"
+   ],
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Target.com",
+     "Target.com"
+    ]
+   ],
+   "sold_from": [
+    "2026-06-01",
+    "June 2026"
+   ],
+   "sold_to": [
+    "2026-06-30",
+    "June 2026"
+   ],
+   "price_range": [
+    6200,
+    7000,
+    "for between $62 and $70"
+   ],
+   "units_affected": [
+    243,
+    "About 243"
+   ],
+   "remedy_type": [
+    "refund",
+    "full refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the walkers",
+      "contact Kmaier",
+      "disassemble the walker",
+      "cut the walker's fabric seat",
+      "write \"Recalled\" on the top of the tray in permanent marker",
+      "send a photo of the destroyed walker",
+      "dispose of the product"
+     ],
+     "proof_required": [
+      "destruction_photo"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund"
+    }
+   ],
+   "destruction_instruction": [
+    "cutting the walker’s fabric seat and writing in permanent marker “Recalled” on the top of the tray",
+    "cutting the walker’s fabric seat and writing in permanent marker “Recalled” on the top of the tray"
+   ],
+   "registration_url": null,
+   "contact": [
+    "TargetplusSJ@outlook.com",
+    "TargetplusSJ@outlook.com"
+   ],
+   "notes": "Single month of sale (June 2026) expands to the whole month."
+  },
+  {
+   "source_id": "26790",
+   "models": [],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "The Asylum Automotive Store",
+     "The Asylum Automotive Store"
+    ],
+    [
+     "Hyperfuels.com",
+     "Hyperfuels.com"
+    ],
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ]
+   ],
+   "sold_from": [
+    "2024-05-01",
+    "May 2024"
+   ],
+   "sold_to": [
+    "2026-05-31",
+    "May 2026"
+   ],
+   "price_range": [
+    400,
+    400,
+    "for about $4"
+   ],
+   "units_affected": [
+    124,
+    "About 124"
+   ],
+   "remedy_type": [
+    "multiple",
+    "a full refund or a replacement product"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the fuel containers",
+      "contact Hyperfuels",
+      "write \"RECALLED\" on the product in permanent marker",
+      "email a photo",
+      "dispose of the product"
+     ],
+     "proof_required": [
+      "destruction_photo"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund"
+    },
+    {
+     "type": "replacement",
+     "steps": [
+      "stop using the fuel containers",
+      "contact Hyperfuels",
+      "write \"RECALLED\" on the product in permanent marker",
+      "email a photo",
+      "dispose of the product"
+     ],
+     "proof_required": [
+      "destruction_photo"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": [
+    "writing in permanent maker “RECALLED” on the product",
+    "writing in permanent maker “RECALLED” on the product"
+   ],
+   "registration_url": null,
+   "contact": [
+    "833-496-5100",
+    "833-496-5100"
+   ],
+   "notes": "No model numbers; 'E98' is a container marking, not a model. 'Hyperfuels LLC, of Houston, Texas' in SOLD AT is the firm, not a retailer. Source misspells marker as 'maker'."
+  },
+  {
+   "source_id": "26794",
+   "models": [],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ],
+    [
+     "Wayfair",
+     "Wayfair"
+    ],
+    [
+     "TEMU",
+     "TEMU"
+    ],
+    [
+     "Walmart",
+     "Walmart"
+    ]
+   ],
+   "sold_from": [
+    "2025-05-01",
+    "May 2025"
+   ],
+   "sold_to": [
+    "2026-07-31",
+    "July 2026"
+   ],
+   "price_range": [
+    23000,
+    27000,
+    "for between $230 and $270"
+   ],
+   "units_affected": [
+    25073,
+    "About 25,073"
+   ],
+   "remedy_type": [
+    "repair",
+    "free retrofit kit"
+   ],
+   "options": [
+    {
+     "type": "repair",
+     "steps": [
+      "stop using the dressers if they are not anchored to the wall",
+      "place them where children cannot access them",
+      "contact yuyitop by email",
+      "install the retrofit kit"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "986-305-9671",
+    "986-305-9671"
+   ],
+   "notes": "SKUs LDQMFJ8D-BR, -CM, -WH, -BK and -NA on the packaging are presented as SKUs, so they are excluded from models even though they are the only identifying codes."
+  },
+  {
+   "source_id": "27004",
+   "models": [
+    [
+     "Urban Arrow Family",
+     "Urban Arrow Family"
+    ],
+    [
+     "Urban Arrow Shorty",
+     "Urban Arrow Shorty"
+    ],
+    [
+     "Urban Arrow Cargo L/XL",
+     "Urban Arrow Cargo L/XL"
+    ],
+    [
+     "Urban Arrow Tender 1000/1500",
+     "Urban Arrow Tender 1000/1500"
+    ]
+   ],
+   "model_label_location": null,
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [],
+   "sold_from": [
+    "2016-01-01",
+    "from 2016 through 2022"
+   ],
+   "sold_to": [
+    "2022-12-31",
+    "from 2016 through 2022"
+   ],
+   "price_range": [
+    900000,
+    900000,
+    "for about $9,000"
+   ],
+   "units_affected": [
+    1032,
+    "About 1,032"
+   ],
+   "remedy_type": [
+    "repair",
+    "free replacement seat post and saddle"
+   ],
+   "options": [
+    {
+     "type": "repair",
+     "steps": [
+      "stop using the bicycles",
+      "contact Gazelle USA",
+      "fill out the recall registration form",
+      "install the replacement seat post and saddle or have an Urban Arrow dealer install it"
+     ],
+     "proof_required": [
+      "registration"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": [
+    "https://forms.gle/1Nir9NrR7aJcpwRk8",
+    "https://forms.gle/1Nir9NrR7aJcpwRk8"
+   ],
+   "contact": [
+    "800-838-5388",
+    "800-838-5388"
+   ],
+   "notes": "Models are the notice's 'model descriptions' (names, not codes); included because they are the only identifiers. Remedy is a replacement part; labeled repair per 'Remedy options: Repair'. Year-only sale window. Units exclude about 134 sold in Canada."
+  },
+  {
+   "source_id": "27007",
+   "models": [
+    [
+     "7927-OZ",
+     "7927-OZ"
+    ],
+    [
+     "7927-OZ1",
+     "7927-OZ1"
+    ]
+   ],
+   "model_label_location": [
+    "on a sticker on the underside of the base of the lamp",
+    "on a sticker on the underside of the base of the lamp"
+   ],
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "HomeGoods",
+     "HomeGoods"
+    ]
+   ],
+   "sold_from": [
+    "2025-06-01",
+    "June 2025"
+   ],
+   "sold_to": [
+    "2026-07-31",
+    "July 2026"
+   ],
+   "price_range": [
+    7900,
+    8900,
+    "for between $79 and $89"
+   ],
+   "units_affected": [
+    4200,
+    "About 4,200"
+   ],
+   "remedy_type": [
+    "refund",
+    "full refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the lamp, turn it off and unplug it",
+      "cut the cord",
+      "submit a photograph of the destroyed lamp following the online instructions"
+     ],
+     "proof_required": [
+      "destruction_photo"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund"
+    }
+   ],
+   "destruction_instruction": [
+    "cut the cord",
+    "cut the cord"
+   ],
+   "registration_url": [
+    "https://www.designsdirectllc.com/recalls/",
+    "https://www.designsdirectllc.com/recalls/"
+   ],
+   "contact": [
+    "888-425-9692",
+    "888-425-9692"
+   ],
+   "notes": "HomeGoods style numbers (190734, 211918, 192249, 208605, 213058) on the price hangtag are excluded from models. registration_url is where the destruction photo is submitted per the instructions; the notice does not use the word register. Refund issued within 15 days of photo receipt."
+  },
+  {
+   "source_id": "27010",
+   "models": [
+    [
+     "EX5607031616002",
+     "EX5607031616002"
+    ],
+    [
+     "EX5607031616003",
+     "EX5607031616003"
+    ],
+    [
+     "XG1310700206",
+     "XG1310700206"
+    ],
+    [
+     "XG1136178597003",
+     "XG1136178597003"
+    ],
+    [
+     "XG1410700124",
+     "XG1410700124"
+    ]
+   ],
+   "model_label_location": [
+    "on the product packaging or a sticker/tag attached to the brush",
+    "on the product packaging or a sticker/tag attached to the brush"
+   ],
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Walmart",
+     "Walmart"
+    ],
+    [
+     "Walmart.com",
+     "Walmart.com"
+    ]
+   ],
+   "sold_from": [
+    "2021-01-01",
+    "January 2021"
+   ],
+   "sold_to": [
+    "2026-08-31",
+    "August 2026"
+   ],
+   "price_range": [
+    100,
+    2800,
+    "for between $1 and $28"
+   ],
+   "units_affected": [
+    4477655,
+    "About 4,477,655"
+   ],
+   "remedy_type": [
+    "refund",
+    "a full refund or a credit for use at any Walmart store or Walmart.com"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the grill brushes",
+      "contact Walmart",
+      "return the brushes to Walmart or discard them"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund"
+    },
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the grill brushes",
+      "contact Walmart",
+      "return the brushes to Walmart or discard them"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": "store_credit",
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "800-925-6278",
+    "800-925-6278"
+   ],
+   "notes": "Per-model distribution dates in the table are sale windows, not date codes, and are not encoded. Return is optional (return or discard), so product_return is not required."
+  },
+  {
+   "source_id": "27011",
+   "models": [
+    [
+     "H163650",
+     "H163650"
+    ]
+   ],
+   "model_label_location": [
+    "on the hand warmer's underside",
+    "on the hand warmer's underside"
+   ],
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Bass Pro Shops",
+     "Bass Pro Shops"
+    ],
+    [
+     "Meijer",
+     "Meijer"
+    ],
+    [
+     "Target",
+     "Target"
+    ],
+    [
+     "The Home Depot",
+     "The Home Depot"
+    ],
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ]
+   ],
+   "sold_from": [
+    "2025-07-01",
+    "July 2025"
+   ],
+   "sold_to": [
+    "2026-08-31",
+    "August 2026"
+   ],
+   "price_range": [
+    3000,
+    4000,
+    "for between $30 and $40"
+   ],
+   "units_affected": [
+    77000,
+    "About 77,000"
+   ],
+   "remedy_type": [
+    "refund",
+    "full refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the hand warmers",
+      "contact Kobayashi",
+      "obtain a claim number online",
+      "write \"Recalled\" and the claim number on the product in permanent marker",
+      "submit a photo showing the marked hand warmer, model number and batch number",
+      "dispose of the product per hazardous waste rules"
+     ],
+     "proof_required": [
+      "registration",
+      "destruction_photo",
+      "label_photo"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund"
+    }
+   ],
+   "destruction_instruction": [
+    "writing in permanent marker “Recalled” and the claim number on the product",
+    "writing in permanent marker “Recalled” and the claim number on the product"
+   ],
+   "registration_url": [
+    "https://hothands.com/recall-notice-rechargeable",
+    "https://hothands.com/recall-notice-rechargeable"
+   ],
+   "contact": [
+    "866-534-9986",
+    "866-534-9986"
+   ],
+   "notes": "Only units with the white HotHands logo are recalled; the four-digit batch number must appear in the photo but no batch range is given. Units exclude about 72 sold in Canada."
+  },
+  {
+   "source_id": "27014",
+   "models": [
+    [
+     "AG-12011",
+     "AG-12011"
+    ],
+    [
+     "12014",
+     "12014"
+    ],
+    [
+     "12016",
+     "12016"
+    ]
+   ],
+   "model_label_location": [
+    "printed in the owner's manual and labeled on the bed rail's metal post",
+    "printed in the owner's manual and labeled on the bed rail's metal post"
+   ],
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "Amazon.com",
+     "Amazon.com"
+    ]
+   ],
+   "sold_from": [
+    "2025-04-01",
+    "April 2025"
+   ],
+   "sold_to": [
+    "2026-05-31",
+    "May 2026"
+   ],
+   "price_range": [
+    5000,
+    8000,
+    "for between $50 and $80"
+   ],
+   "units_affected": [
+    35083,
+    "About 35,083"
+   ],
+   "remedy_type": [
+    "refund",
+    "full refund"
+   ],
+   "options": [
+    {
+     "type": "refund",
+     "steps": [
+      "stop using the bed rails",
+      "contact Agrish Direct",
+      "register for the recall online",
+      "dispose of the bed rail per the instructions received"
+     ],
+     "proof_required": [
+      "registration"
+     ],
+     "payout_method": null,
+     "amount_rule": "full refund"
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": [
+    "http://www.agrish.online/recall",
+    "http://www.agrish.online/recall"
+   ],
+   "contact": [
+    "agrish.us@outlook.com",
+    "agrish.us@outlook.com"
+   ],
+   "notes": "Units include about 5,000 bed rails previously recalled in January 2026 (reannounced and expanded). Disposal instructions are given after registration and are not stated in the notice."
+  },
+  {
+   "source_id": "27025",
+   "models": [
+    [
+     "BLITZ",
+     "BLITZ"
+    ],
+    [
+     "BLITZ 777",
+     "BLITZ 777"
+    ]
+   ],
+   "model_label_location": [
+    "marked on the left side of the receiver",
+    "marked on the left side of the receiver"
+   ],
+   "serial_ranges": [],
+   "date_codes": [],
+   "sold_at": [
+    [
+     "hatsanairgunsusa.com",
+     "hatsanairgunsusa.com"
+    ],
+    [
+     "Utah Airguns",
+     "Utah Airguns"
+    ],
+    [
+     "Airgun Depot",
+     "Airgun Depot"
+    ],
+    [
+     "Pyramyd Air",
+     "Pyramyd Air"
+    ]
+   ],
+   "sold_from": [
+    "2020-02-01",
+    "February 2020"
+   ],
+   "sold_to": [
+    "2026-03-31",
+    "March 2026"
+   ],
+   "price_range": [
+    80000,
+    110000,
+    "for between $800 and $1,100"
+   ],
+   "units_affected": [
+    16170,
+    "About 16,170"
+   ],
+   "remedy_type": [
+    "replacement",
+    "free trigger assembly replacement"
+   ],
+   "options": [
+    {
+     "type": "replacement",
+     "steps": [
+      "stop using the air rifles and make sure they are unloaded",
+      "contact HatsanUSA",
+      "install the mailed trigger assembly or ship the rifle in the prepaid package"
+     ],
+     "proof_required": [
+      "none"
+     ],
+     "payout_method": null,
+     "amount_rule": null
+    }
+   ],
+   "destruction_instruction": null,
+   "registration_url": null,
+   "contact": [
+    "877-750-3375",
+    "877-750-3375"
+   ],
+   "notes": "All units recalled; no serial or date restriction although serial numbers are engraved on the receiver. Sale channels 'various sporting goods stores and gun shops' are generic."
   }
- ]
+ ],
+ "audited_on": "2026-10-18",
+ "audit_note": "M1 40 labeled 2026-10-16 in the main session; extension 60 labeled blind 2026-10-18 by three labeling sub-agents; all 100 re-read against the notice text by the main session on 2026-10-18 (owner delegated the audit). Changes in audit_log.jsonl."
 }

@@ -95,11 +95,14 @@ def test_extraction_and_adjudication_evals_write_tables(clean_db: Engine, tmp_pa
 def test_synth_build_golden_into_tmp(tmp_path: Path) -> None:
     adj_dir = tmp_path / "adjudication"
     adj_dir.mkdir()
-    for name in ("planted.yaml", "outcome_policy.yaml"):
+    for name in ("planted.yaml", "outcome_policy.yaml", "program_rules.json"):
         shutil.copy(REPO_ROOT / "evals" / "adjudication" / name, adj_dir / name)
-    summary = build_golden(adj_dir, tmp_path / "photos", limit=2)
-    assert summary["claims"] == 30 and summary["programs"] == 2
+    summary = build_golden(adj_dir, tmp_path / "photos")
+    assert summary["claims"] == 300 and summary["programs"] == 20
     payload = json.loads((adj_dir / "golden_claims.json").read_text())
     committed = json.loads((REPO_ROOT / "evals" / "adjudication" / "golden_claims.json").read_text())
-    assert payload["claims"] == committed["claims"][:30], "generation must reproduce the committed golden set"
-    assert len(list((adj_dir / "labels").glob("*.json"))) == 30
+    assert payload["claims"] == committed["claims"], "generation must reproduce all 300 committed golden claims"
+    labels = sorted((adj_dir / "labels").glob("*.json"))
+    assert len(labels) == 300
+    for path in labels:
+        assert path.read_text() == (REPO_ROOT / "evals" / "adjudication" / "labels" / path.name).read_text()
