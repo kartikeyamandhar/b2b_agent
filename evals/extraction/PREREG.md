@@ -45,3 +45,24 @@ Normalization for string comparison: Unicode casefold, collapse whitespace, stri
 - Span-grounded rate: share of predicted non-empty values whose evidence quote occurs verbatim in source_text.
 - Kill rule (CLAUDE.md): if model-based headline minus baseline headline is 5.0 points or less, the model-based extractor is demoted to a fallback. On the M1 set the verdict is provisional; the M2 100-notice audited set decides.
 - LLM_MODEL_ID and the extraction prompt hash used for the kill-deciding run are recorded in the results table header before the run.
+
+## Revision 1 (2026-10-18, before the extension is drawn): the M2 extension to 100 notices
+
+Written before any of the 60 new notices is drawn or read, and before either extractor sees them.
+
+- Pool: the same pool as above (recall_date 2024-01-01 to 2026-10-16, data/raw/cpsc) minus the 40 M1 notices.
+- Draw: 60 notices, keeping the M1 proportions: 15 from the identifier-rich stratum allocated across recall years by largest remainder, 45 from the rest allocated across title categories by largest remainder, Polars `sample(seed=20261018)` within each cell. No redraws, no skips.
+- Labels: blind, from the notice text and LABELING_GUIDE.md only, by at most three labeling sub-agents (the project cap) that never see extractor code or output. The labelers write value-plus-quote records; code computes the spans.
+- Audit: the main session then re-reads every one of the 100 notices against its label and corrects errors. Every change is logged in evals/extraction/audit_log.jsonl with before and after. The owner delegated this audit on 2026-10-18; the status of all 100 becomes "model-labeled, assistant-audited (owner delegated)", never "owner-audited".
+- Scoring: both extractors on all 100, on the 85 outside the 15 baseline-test notices, and on the 60 new notices alone (neither extractor was developed on them). The extractor graph is recorded live once on the 60 new notices (prompt unchanged, sha256 7dc29f49); the 40 M1 recordings are reused.
+- Kill rule unchanged: graph headline minus baseline headline on all 100, 5.0 points or less demotes the graph to a fallback. This run decides the extraction verdict.
+- Expected before the run: baseline on the 60 new notices between 85 and 100 points; graph between 80 and 92; kill criterion met again.
+
+## Revision 2 (2026-10-18, after the audit and before any extractor sees the 60 new notices)
+
+A red-team review of Revision 1 found that the main session, which audited all 100 labels, had already seen both extractors' per-field results on the 40 M1 notices, so corrections there could drift toward one extractor. Adopted:
+
+- The extraction kill verdict is decided on the 60 extension notices alone: their labels were written blind by sub-agents and audited before either extractor ran on them. All 100 and the 85 outside the baseline-test notices are reported as context.
+- The 40 M1 notices are reported under both the pre-audit labels (evals/extraction/golden_notices_m1_preaudit.json, the file as committed at ec609e3) and the audited labels, so any audit drift shows.
+- The audited labels for all 100 are committed (with their sha256 in the results header) before the baseline or the graph is run on the 60, including through make eval or the test suite.
+- The audit made 10 changes (evals/extraction/audit_log.jsonl). Five touch the M1 40 (24105, 24118, 24124, 25471, 26027); two of those, 24124 and 26027, are baseline-test notices (both sold_at). Two of the five, 24118 and 26027, are synthetic-source notices; the adjudication golden claims keep the frozen pre-audit rules (evals/adjudication/program_rules.json), so the 300-claim set is unchanged.

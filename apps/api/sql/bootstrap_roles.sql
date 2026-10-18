@@ -25,3 +25,6 @@ SELECT format('GRANT CONNECT ON DATABASE %I TO recallops_owner, recallops_app, r
 -- The database owner (recallops_owner) owns schema public in Postgres 15+; app roles get USAGE only.
 REVOKE CREATE ON SCHEMA public FROM PUBLIC;
 GRANT USAGE ON SCHEMA public TO recallops_app, recallops_internal;
+
+-- pgvector (document_chunks, M2) is not a trusted extension, so the superuser creates it here, never a migration.
+CREATE EXTENSION IF NOT EXISTS vector;

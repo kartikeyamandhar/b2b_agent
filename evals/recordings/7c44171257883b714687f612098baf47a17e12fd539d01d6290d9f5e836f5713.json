@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[\"EX5607031616002\",\"EX5607031616003\",\"XG1310700206\",\"XG1136178597003\",\"XG1410700124\"],\"model_label_location\":\"on the product packaging or a sticker/tag attached to the brush\",\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"Walmart\",\"Walmart.com\"],\"sold_from\":\"2021-01-01\",\"sold_to\":\"2026-08-31\",\"price_range_cents\":{\"min_cents\":100,\"max_cents\":2800},\"units_affected\":4477655,\"evidence\":[{\"field\":\"models\",\"quote\":\"EX5607031616002\",\"start\":0,\"end\":0},{\"field\":\"models\",\"quote\":\"EX5607031616003\",\"start\":0,\"end\":0},{\"field\":\"models\",\"quote\":\"XG1310700206\",\"start\":0,\"end\":0},{\"field\":\"models\",\"quote\":\"XG1136178597003\",\"start\":0,\"end\":0},{\"field\":\"models\",\"quote\":\"XG1410700124\",\"start\":0,\"end\":0},{\"field\":\"model_label_location\",\"quote\":\"can be found on the product packaging or a sticker/tag attached to the brush\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"Walmart and online, including Walmart.com\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"from January 2021 through August 2026\",\"start\":0,\"end\":0},{\"field\":\"sold_to\",\"quote\":\"from January 2021 through August 2026\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for between $1 and $28\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 4,477,655\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Stop using the recalled grill brushes immediately.\",\"Contact Walmart for a full refund or a credit for use at any Walmart store or Walmart.com.\",\"Return the recalled brushes to Walmart or discard them.\"],\"proof_required\":[],\"payout\":{\"method\":\"store_credit\",\"amount_rule\":\"full refund or credit for use at any Walmart store or Walmart.com\"}}],\"destruction_instruction\":null,\"registration_url\":null,\"contact\":\"Walmart toll-free at 800-925-6278 from 7 a.m. to 9 p.m. CT Monday through Friday, or online at www.walmart.com/help or https://corporate.walmart.com/recalls or www.walmart.com\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Refund\",\"start\":0,\"end\":0},{\"field\":\"options\",\"quote\":\"contact Walmart for a full refund or a credit for use at any Walmart store or Walmart.com\",\"start\":0,\"end\":0},{\"field\":\"options\",\"quote\":\"Consumers will be asked to return their recalled brushes to Walmart or discard them.\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"Walmart toll-free at 800-925-6278 from 7 a.m. to 9 p.m. CT Monday through Friday, or online at www.walmart.com/help or https://corporate.walmart.com/recalls or www.walmart.com\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4223,
+  "output_tokens": 1051,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYt2M1wxZwLr5Rk6HPV",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 3682
+}

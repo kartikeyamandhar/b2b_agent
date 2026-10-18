@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\": {\"models\": [\"OM-TD BIKE\", \"OM-KSKB\"], \"model_label_location\": \"Label inside the helmet\", \"serial_ranges\": [], \"date_codes\": [{\"format\": \"MM/YYYY\", \"start\": \"2024-05\", \"end\": \"2024-05\", \"raw\": \"05/2024\"}, {\"format\": \"MM/YYYY\", \"start\": \"2022-11\", \"end\": \"2022-11\", \"raw\": \"11/2022\"}], \"sold_at\": [\"Amazon.com\", \"Walmart.com\"], \"sold_from\": \"2024-06-01\", \"sold_to\": \"2025-02-28\", \"price_range_cents\": {\"min_cents\": 2000, \"max_cents\": 3200}, \"units_affected\": 24300, \"evidence\": [{\"field\": \"identification.models\", \"quote\": \"OM-TD BIKE\", \"start\": 0, \"end\": 0}, {\"field\": \"identification.models\", \"quote\": \"OM-KSKB\", \"start\": 0, \"end\": 0}, {\"field\": \"identification.model_label_location\", \"quote\": \"printed on a label inside the helmet\", \"start\": 0, \"end\": 0}, {\"field\": \"identification.date_codes\", \"quote\": \"05/2024\", \"start\": 0, \"end\": 0}, {\"field\": \"identification.date_codes\", \"quote\": \"11/2022\", \"start\": 0, \"end\": 0}, {\"field\": \"identification.sold_at\", \"quote\": \"Amazon.com and Walmart.com\", \"start\": 0, \"end\": 0}, {\"field\": \"identification.sold_from\", \"quote\": \"June 2024\", \"start\": 0, \"end\": 0}, {\"field\": \"identification.sold_to\", \"quote\": \"February 2025\", \"start\": 0, \"end\": 0}, {\"field\": \"identification.price_range_cents\", \"quote\": \"between $20 and $32\", \"start\": 0, \"end\": 0}, {\"field\": \"identification.units_affected\", \"quote\": \"About 24,300\", \"start\": 0, \"end\": 0}]}, \"remedy\": {\"remedy_type\": \"refund\", \"options\": [{\"type\": \"refund\", \"steps\": [\"Immediately stop using the recalled helmets\", \"Contact Outdoor Master for instructions on how to register for a full refund\"], \"proof_required\": [], \"payout\": {\"method\": null, \"amount_rule\": \"full refund\"}}], \"destruction_instruction\": null, \"registration_url\": null, \"contact\": \"Outdoor Master by email at care@outdoormaster.com, or online at https://outdoormaster.com/pages/recall\", \"evidence\": [{\"field\": \"remedy.remedy_type\", \"quote\": \"Remedy options: Refund\", \"start\": 0, \"end\": 0}, {\"field\": \"remedy.options\", \"quote\": \"Consumers should immediately stop using the recalled helmets and contact Outdoor Master for instructions on how to register for a full refund.\", \"start\": 0, \"end\": 0}, {\"field\": \"remedy.contact\", \"quote\": \"care@outdoormaster.com\", \"start\": 0, \"end\": 0}]}}",
+ "usage": {
+  "input_tokens": 4158,
+  "output_tokens": 975,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYoYuQhvp4FC6n1MTBf",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 3600
+}

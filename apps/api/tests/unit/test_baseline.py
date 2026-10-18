@@ -22,6 +22,10 @@ NOTICES = REPO_ROOT / "evals" / "extraction" / "notices"
 KNOWN_MISSES = {
     ("24149", "models"),  # the recalled PA-10 is not introduced by "model"; bundled console models are
     ("26205", "models"),  # the label keeps "KABI-0176 G062401IC" as one printed string
+    # The 2026-10-18 label audit removed generic dealer and supplier networks from sold_at (evals/extraction/
+    # audit_log.jsonl); baseline 1.0.0 is frozen and still extracts them. The label changed, not the code.
+    ("24124", "sold_at"),
+    ("26027", "sold_at"),
 }
 
 
@@ -50,7 +54,8 @@ def test_baseline_matches_gold_on_test_notice(notice: GoldenNotice) -> None:
 def test_headline_on_test_subset() -> None:
     pairs = [(n.rules, extract(t), t) for n in TEST_NOTICES for t in [notice_text(Path(NOTICES), n.source_id)]]
     table = score(pairs)
-    assert table.headline >= 98.0
+    # 98.8 on the M1 labels (frozen there); 97.6 on the audited labels, the two new KNOWN_MISSES above.
+    assert table.headline >= 97.6
     assert table.span_grounded_rate == 1.0
 
 

@@ -4,6 +4,7 @@ reported as "not run", never silently scored as an empty extraction."""
 
 from __future__ import annotations
 
+import hashlib
 import json
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
@@ -87,66 +88,19 @@ def _row(name: str, table: FieldTable) -> str:
     return f"| {name} | {table.n} | {cells} | **{table.headline:.1f}** | {grounded} |"
 
 
-def render(
-    notices: list[GoldenNotice],
-    base_all: FieldTable,
-    base_heldout: FieldTable,
-    graph_run: GraphRun,
-    graph_all: FieldTable | None,
-    graph_heldout: FieldTable | None,
-    settings: Settings,
-) -> str:
-    header_fields = " | ".join(HEADLINE_FIELDS)
-    lines = [
-        "# Extraction eval",
-        "",
-        f"Generated {datetime.now(UTC).strftime('%Y-%m-%d %H:%M UTC')} by `make eval`. Pre-registration: "
-        "evals/extraction/PREREG.md.",
-        "",
-        f"- Golden set: {len(notices)} notices, **{notices[0].label_status}** (labeled blind in session 1 before "
-        "either extractor existed; the owner audits them in M2).",
-        f"- Baseline: rules/baseline.py {baseline.EXTRACTOR_VERSION}. It was developed on the 15 baseline-test "
-        "notices, which are inside the golden set, so the 25 held-out notices are the fair baseline number.",
-        f"- Graph: rules/graph.py {graph.EXTRACTOR_VERSION}, LLM_MODEL_ID={settings.llm_model_id}, "
-        f"prompt sha256 {graph.PROMPT_SHA256[:16]}, LLM_MODE={settings.llm_mode}.",
-        "- Scores are points (0 to 100): exact match for scalars, set F1 for lists (both empty counts as 1.0). "
-        "Headline is the unweighted mean of the 11 fields. Grounded is the share of evidence spans whose quote "
-        "equals the text at its offsets.",
-        "",
-        f"| extractor | n | {header_fields} | headline | grounded |",
-        "|" + "---|" * (len(HEADLINE_FIELDS) + 4),
-        _row("baseline, all", base_all),
-        _row("baseline, 25 held-out", base_heldout),
-    ]
-    if graph_run.status == "run" and graph_all and graph_heldout:
-        lines += [_row("graph, all", graph_all), _row("graph, 25 held-out", graph_heldout)]
-        delta = graph_all.headline - base_all.headline
-        verdict = (
-            f"Graph minus baseline headline = {delta:+.1f} points. "
-            + ("Kill criterion met (5.0 or less): " if delta <= 5.0 else "Kill criterion not met: ")
-            + "provisional on the unaudited M1 set; the 100-notice audited set in M2 decides."
-        )
-        lines += [
-            "",
-            f"Graph runs: {graph_run.outcomes}, {graph_run.calls} model calls, {graph_run.cost_usd} USD"
-            + (
-                " as recorded in the live run (replaying the recordings costs nothing)."
-                if settings.llm_mode == "replay"
-                else " spent in this live run."
-            ),
-            "",
-            f"**Kill criterion (provisional):** {verdict}",
-        ]
-    else:
-        lines += [
-            f"| graph | 0 | {' | '.join('not run' for _ in HEADLINE_FIELDS)} | not run | not run |",
-            "",
-            f"**Graph not run:** {graph_run.reason}. Model calls: {graph_run.calls}, spend: {graph_run.cost_usd} USD.",
-            "",
-            "**Kill criterion:** not evaluable in M1. It needs one approved live recording run of the graph "
-            "(estimated below) or the M2 run.",
-        ]
-    return "\n".join(lines) + "\n"
+def _missing_row(name: str, n: int, reason: str) -> str:
+    return f"| {name} | {n} | {' | '.join('-' for _ in HEADLINE_FIELDS)} | {reason} | - |"
+
+
+@dataclass
+class Block:
+    key: str
+    title: str
+    notices: list[GoldenNotice]
+    baseline: FieldTable
+    graph: FieldTable | None
+    graph_draft: FieldTable | None
+    recorded: int
 
 
 def estimate_live_cost(notices: list[GoldenNotice], settings: Settings) -> str:
@@ -169,66 +123,137 @@ def estimate_live_cost(notices: list[GoldenNotice], settings: Settings) -> str:
     return f"{worst:.4f}"
 
 
+def render(blocks: list[Block], graph_run: GraphRun, settings: Settings, label_sha: str, label_status: str) -> str:
+    header_fields = " | ".join(HEADLINE_FIELDS)
+    table_head = [
+        f"| extractor | n | {header_fields} | headline | grounded |",
+        "|" + "---|" * (len(HEADLINE_FIELDS) + 4),
+    ]
+    decide = next(b for b in blocks if b.key == "new60")
+    lines = [
+        "# Extraction eval",
+        "",
+        f"Generated {datetime.now(UTC).strftime('%Y-%m-%d %H:%M UTC')} by `make eval`. Pre-registration: "
+        "evals/extraction/PREREG.md (Revisions 1 and 2).",
+        "",
+        f"- Golden set: 100 notices, **{label_status}**; golden_notices.json sha256 {label_sha[:16]}. The 60 "
+        "extension notices were labeled blind by sub-agents and audited before either extractor ran on them; the "
+        "40 M1 notices were labeled and audited by the main session, which had seen both extractors' M1 results.",
+        f"- Baseline: rules/baseline.py {baseline.EXTRACTOR_VERSION}, developed only on the 15 baseline-test notices.",
+        f"- Graph: rules/graph.py {graph.EXTRACTOR_VERSION}, LLM_MODEL_ID={settings.llm_model_id}, "
+        f"prompt sha256 {graph.PROMPT_SHA256[:16]}, LLM_MODE={settings.llm_mode}.",
+        "- Scores are points (0 to 100): exact match for scalars, set F1 for lists (both empty counts as 1.0). "
+        "Headline is the unweighted mean of the 11 fields. Grounded is the share of evidence spans whose quote "
+        "equals the text at its offsets.",
+        "",
+    ]
+    for block in blocks:
+        lines += [f"**{block.title}**", "", *table_head, _row("baseline", block.baseline)]
+        if block.graph is not None:
+            lines.append(_row("graph", block.graph))
+        else:
+            lines.append(_missing_row("graph", len(block.notices), f"not run ({block.recorded}/{len(block.notices)})"))
+        if block.graph_draft is not None and block.key == "new60":
+            lines.append(_row("graph draft before verify_spans (diagnostic)", block.graph_draft))
+        lines.append("")
+    if decide.graph is not None:
+        delta = decide.graph.headline - decide.baseline.headline
+        verdict = f"on the 60 blind extension notices, graph minus baseline headline = {delta:+.1f} points. " + (
+            "Kill criterion met (5.0 or less): the model-based extractor is demoted to a fallback."
+            if delta <= 5.0
+            else "Kill criterion not met: the model-based extractor stays primary."
+        )
+    else:
+        verdict = f"not evaluable: the graph has recordings for {decide.recorded} of the 60 extension notices."
+    lines += [
+        f"**Kill criterion (decides, PREREG Revision 2):** {verdict}",
+        "",
+        f"Graph runs: {graph_run.outcomes}, {graph_run.calls} model calls, {graph_run.cost_usd} USD nominal"
+        + (" as recorded (replaying costs nothing)." if settings.llm_mode == "replay" else "."),
+        "",
+        f"Values dropped by verify_spans, by field: {dict(sorted(graph_run.dropped.items(), key=lambda kv: -kv[1]))}.",
+    ]
+    return "\n".join(lines) + "\n"
+
+
 def main(results_dir: Path = RESULTS_DIR) -> dict[str, Any]:
     settings = get_settings()
-    notices = load_golden(EXTRACTION_DIR / "golden_notices.json")
+    golden_path = EXTRACTION_DIR / "golden_notices.json"
+    notices = load_golden(golden_path)
+    preaudit = {n.source_id: n for n in load_golden(EXTRACTION_DIR / "golden_notices_m1_preaudit.json")}
     texts = {n.source_id: notice_text(EXTRACTION_DIR / "notices", n.source_id) for n in notices}
-    base_preds = {n.source_id: baseline.extract(texts[n.source_id]) for n in notices}
-
-    def table(preds: dict[str, ExtractedRules | None], subset: list[GoldenNotice]) -> FieldTable:
-        return score([(n.rules, preds.get(n.source_id), texts[n.source_id]) for n in subset])
-
-    heldout = [n for n in notices if not n.baseline_test]
-    base_all, base_heldout = table(dict(base_preds), notices), table(dict(base_preds), heldout)
+    base_preds: dict[str, ExtractedRules | None] = {n.source_id: baseline.extract(texts[n.source_id]) for n in notices}
     try:
         llm: LlmClient | None = build_client(settings)
         reason = ""
     except LiveCallsDisabled as exc:
         llm, reason = None, str(exc)
     graph_run = run_graph(notices, llm, reason)
-    graph_all = graph_heldout = None
-    if graph_run.status == "run":
-        graph_all, graph_heldout = (
-            table(graph_run.predictions, notices),
-            table(graph_run.predictions, heldout),
+    recorded = {sid for sid, rules in graph_run.predictions.items() if rules is not None}
+
+    def table(preds: dict[str, ExtractedRules | None], subset: list[GoldenNotice]) -> FieldTable:
+        return score([(n.rules, preds.get(n.source_id), texts[n.source_id]) for n in subset])
+
+    def block(key: str, title: str, subset: list[GoldenNotice]) -> Block:
+        have = sum(1 for n in subset if n.source_id in recorded)
+        complete = graph_run.status == "run" and have == len(subset)
+        return Block(
+            key,
+            title,
+            subset,
+            table(base_preds, subset),
+            table(graph_run.predictions, subset) if complete else None,
+            table(graph_run.drafts, subset) if complete else None,
+            have,
         )
-    estimate = estimate_live_cost(notices, settings)
-    md = render(notices, base_all, base_heldout, graph_run, graph_all, graph_heldout, settings)
-    graph_draft_all = None
-    if graph_run.status == "run":
-        graph_draft_all = table(graph_run.drafts, notices)
-        md += (
-            "\n**Diagnostic, not kill-deciding:** the same recorded responses scored before verify_spans removes "
-            "values it cannot find verbatim in the notice. The gap between this row and `graph, all` is the cost of "
-            "the verification rule, not of extraction. Values dropped by verification, by field: "
-            f"{dict(sorted(graph_run.dropped.items(), key=lambda kv: -kv[1]))}.\n\n"
-            f"| extractor | n | {' | '.join(HEADLINE_FIELDS)} | headline | grounded |\n"
-            + "|"
-            + "---|" * (len(HEADLINE_FIELDS) + 4)
-            + "\n"
-            + _row("graph draft before verify_spans, all", graph_draft_all)
-            + "\n"
-        )
+
+    m1 = [n for n in notices if n.source_id in preaudit]
+    blocks = [
+        block("new60", "Decides: the 60 blind extension notices", [n for n in notices if n.source_id not in preaudit]),
+        block("all100", "Context: all 100 notices", notices),
+        block(
+            "outside_test85",
+            "Context: the 85 notices outside the baseline-test 15",
+            [n for n in notices if not n.baseline_test],
+        ),
+        block("m1_audited", "Context: the 40 M1 notices, audited labels", m1),
+        block(
+            "m1_preaudit",
+            "Context: the 40 M1 notices, pre-audit labels (audit drift check)",
+            [preaudit[n.source_id] for n in m1],
+        ),
+    ]
+    label_sha = hashlib.sha256(golden_path.read_bytes()).hexdigest()
+    md = render(blocks, graph_run, settings, label_sha, notices[0].label_status)
     md += (
-        f"\nWorst-case cost of one live recording run of the graph on these {len(notices)} notices "
-        f"(conservative token estimate, {settings.extract_max_calls} calls each): {estimate} USD.\n"
+        f"\nWorst-case cost of one live recording run of the graph on all {len(notices)} notices "
+        f"(conservative token estimate, {settings.extract_max_calls} calls each): "
+        f"{estimate_live_cost(notices, settings)} USD.\n"
     )
     results_dir.mkdir(parents=True, exist_ok=True)
     (results_dir / "extraction.md").write_text(md, encoding="utf-8")
+    by_key = {b.key: b for b in blocks}
     payload = {
         "label_status": notices[0].label_status,
+        "golden_sha256": label_sha,
         "n": len(notices),
-        "baseline_all": asdict(base_all),
-        "baseline_heldout": asdict(base_heldout),
+        "baseline_all": asdict(by_key["all100"].baseline),
+        "baseline_heldout": asdict(by_key["outside_test85"].baseline),
+        "blocks": {
+            b.key: {
+                "n": len(b.notices),
+                "baseline": asdict(b.baseline),
+                "graph": asdict(b.graph) if b.graph else None,
+                "graph_draft": asdict(b.graph_draft) if b.graph_draft else None,
+                "graph_recorded": b.recorded,
+            }
+            for b in blocks
+        },
         "graph_status": graph_run.status,
         "graph_reason": graph_run.reason,
-        "graph_all": asdict(graph_all) if graph_all else None,
-        "graph_heldout": asdict(graph_heldout) if graph_heldout else None,
-        "graph_draft_all": asdict(graph_draft_all) if graph_draft_all else None,
         "graph_dropped_by_field": graph_run.dropped,
         "graph_calls": graph_run.calls,
         "graph_cost_usd": graph_run.cost_usd,
-        "live_run_worst_case_usd": estimate,
     }
     (results_dir / "extraction.json").write_text(json.dumps(payload, indent=1) + "\n", encoding="utf-8")
     return payload

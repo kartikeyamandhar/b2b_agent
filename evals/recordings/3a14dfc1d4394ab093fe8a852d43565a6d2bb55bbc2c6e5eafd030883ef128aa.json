@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[\"Sleepy Panda\",\"Pink & Gray Sloth\",\"Stripe Easter Bunny\",\"Cherry\",\"Panda & Donut\",\"Blue Avocado\"],\"model_label_location\":\"Label on the shorts lists size, fabric content, washing instructions and \\\"Made in China\\\"; second sewn-in label has batch ID, manufacture date and location; hang tags print Cozchique, Tebbis or Beeziac\",\"serial_ranges\":[{\"prefix\":null,\"start\":null,\"end\":null,\"raw\":\"batch number 20240415TTL, 20240501TTL or 20240509TTL\"}],\"date_codes\":[],\"sold_at\":[\"Amazon.com\"],\"sold_from\":\"2024-05-01\",\"sold_to\":\"2024-09-30\",\"price_range_cents\":{\"min_cents\":1200,\"max_cents\":1700},\"units_affected\":6050,\"evidence\":[{\"field\":\"models\",\"quote\":\"Sleepy Panda\",\"start\":0,\"end\":0},{\"field\":\"models\",\"quote\":\"Pink & Gray Sloth\",\"start\":0,\"end\":0},{\"field\":\"models\",\"quote\":\"Stripe Easter Bunny\",\"start\":0,\"end\":0},{\"field\":\"models\",\"quote\":\"Cherry\",\"start\":0,\"end\":0},{\"field\":\"models\",\"quote\":\"Panda & Donut\",\"start\":0,\"end\":0},{\"field\":\"models\",\"quote\":\"Blue Avocado\",\"start\":0,\"end\":0},{\"field\":\"serial_ranges\",\"quote\":\"batch number 20240415TTL, 20240501TTL or 20240509TTL\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"Online at Amazon.com from May 2024 through September 2024 for between $12 and 17.\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"Online at Amazon.com from May 2024 through September 2024\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for between $12 and 17.\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 6,050\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Immediately take the recalled pajamas away from children, stop using them, and contact Tupop to receive a full refund.\",\"Destroy the garments by cutting the top and bottom in half and dispose of them.\",\"Email a photo of the destroyed garments to bzzservice@hotmail.com to receive a full refund.\"],\"proof_required\":[\"destruction_photo\"],\"payout\":{\"method\":\"original_payment\",\"amount_rule\":null}}],\"destruction_instruction\":\"Cut the top and bottom in half and dispose of the garments.\",\"registration_url\":null,\"contact\":\"bzzservice@hotmail.com\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Refund\",\"start\":0,\"end\":0},{\"field\":\"options\",\"quote\":\"contact Tupop to receive a full refund\",\"start\":0,\"end\":0},{\"field\":\"destruction_instruction\",\"quote\":\"Consumers should destroy the garments by cutting the top and bottom in half and dispose of them.\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"bzzservice@hotmail.com\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4078,
+  "output_tokens": 1084,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYkFKtvMpZyJvDmiyQw",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 4097
+}

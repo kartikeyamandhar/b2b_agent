@@ -1,0 +1,696 @@
+{
+ "cpsc_recalls": {
+  "records": 1657,
+  "date_range": [
+   "2022-08-04",
+   "2026-10-15"
+  ],
+  "by_year": {
+   "2022": {
+    "recalls": 123,
+    "pct_refund_option": 47.2,
+    "pct_photo_in_remedy": 15.4,
+    "pct_destroy_in_remedy": 22.0,
+    "pct_sold_on_amazon_title": 8.9,
+    "pct_made_in_china": 56.9
+   },
+   "2023": {
+    "recalls": 324,
+    "pct_refund_option": 51.2,
+    "pct_photo_in_remedy": 17.9,
+    "pct_destroy_in_remedy": 27.2,
+    "pct_sold_on_amazon_title": 11.1,
+    "pct_made_in_china": 53.4
+   },
+   "2024": {
+    "recalls": 305,
+    "pct_refund_option": 55.1,
+    "pct_photo_in_remedy": 29.2,
+    "pct_destroy_in_remedy": 36.7,
+    "pct_sold_on_amazon_title": 12.8,
+    "pct_made_in_china": 60.7
+   },
+   "2025": {
+    "recalls": 420,
+    "pct_refund_option": 60.7,
+    "pct_photo_in_remedy": 47.9,
+    "pct_destroy_in_remedy": 50.5,
+    "pct_sold_on_amazon_title": 24.8,
+    "pct_made_in_china": 71.2
+   },
+   "2026": {
+    "recalls": 485,
+    "pct_refund_option": 72.8,
+    "pct_photo_in_remedy": 62.3,
+    "pct_destroy_in_remedy": 65.6,
+    "pct_sold_on_amazon_title": 20.0,
+    "pct_made_in_china": 79.8
+   }
+  },
+  "weekday": {
+   "Thursday": 1605,
+   "Wednesday": 36,
+   "Monday": 6,
+   "Tuesday": 5,
+   "Friday": 5
+  },
+  "republished_after_recall_date": {
+   "n": 352,
+   "pct": 21.2
+  },
+  "field_fill": {
+   "RecallID": {
+    "n": 1657,
+    "pct": 100.0
+   },
+   "RecallNumber": {
+    "n": 1657,
+    "pct": 100.0
+   },
+   "RecallDate": {
+    "n": 1657,
+    "pct": 100.0
+   },
+   "Description": {
+    "n": 1657,
+    "pct": 100.0
+   },
+   "URL": {
+    "n": 1657,
+    "pct": 100.0
+   },
+   "Title": {
+    "n": 1657,
+    "pct": 100.0
+   },
+   "ConsumerContact": {
+    "n": 1657,
+    "pct": 100.0
+   },
+   "LastPublishDate": {
+    "n": 1657,
+    "pct": 100.0
+   },
+   "Products": {
+    "n": 1657,
+    "pct": 100.0
+   },
+   "Inconjunctions": {
+    "n": 367,
+    "pct": 22.1
+   },
+   "Images": {
+    "n": 1657,
+    "pct": 100.0
+   },
+   "Injuries": {
+    "n": 1655,
+    "pct": 99.9
+   },
+   "Manufacturers": {
+    "n": 461,
+    "pct": 27.8
+   },
+   "Retailers": {
+    "n": 1656,
+    "pct": 99.9
+   },
+   "Importers": {
+    "n": 951,
+    "pct": 57.4
+   },
+   "Distributors": {
+    "n": 487,
+    "pct": 29.4
+   },
+   "SoldAtLabel": {
+    "n": 0,
+    "pct": 0.0
+   },
+   "ManufacturerCountries": {
+    "n": 1651,
+    "pct": 99.6
+   },
+   "ProductUPCs": {
+    "n": 62,
+    "pct": 3.7
+   },
+   "Hazards": {
+    "n": 1655,
+    "pct": 99.9
+   },
+   "Remedies": {
+    "n": 1657,
+    "pct": 100.0
+   },
+   "RemedyOptions": {
+    "n": 1657,
+    "pct": 100.0
+   }
+  },
+  "product_subfield_fill": {
+   "Name": {
+    "n": 1657,
+    "pct": 100.0
+   },
+   "NumberOfUnits": {
+    "n": 1656,
+    "pct": 99.9
+   },
+   "Type": {
+    "n": 87,
+    "pct": 5.3
+   },
+   "CategoryID": {
+    "n": 87,
+    "pct": 5.3
+   }
+  },
+  "images_per_record_median": 3,
+  "description_chars": {
+   "median": 449,
+   "p90": 925,
+   "max": 5983
+  },
+  "source_text_chars_median": 1861,
+  "units": {
+   "status": {
+    "ok": 1638,
+    "ambiguous": 17,
+    "unparsed": 2
+   },
+   "median": 5951.0,
+   "p25": 1067,
+   "p75": 31000,
+   "p90": 158486,
+   "total": 315322210,
+   "buckets": {
+    "<1k": 388,
+    "1k-10k": 555,
+    "10k-100k": 481,
+    "100k-1M": 165,
+    ">=1M": 49
+   },
+   "also_sold_in_canada": {
+    "n": 388,
+    "pct": 23.4
+   },
+   "largest": [
+    {
+     "units": 70000000,
+     "recall": "24001",
+     "title": "Candy Dynamics Recalls 70 Million Slime Licker Sour Rolling Liquid Candies Due to Choking Hazard"
+    },
+    {
+     "units": 21000000,
+     "recall": "24281",
+     "title": "MGA Entertainment Recalls Miniverse Make It Mini Sets with Unused Liquid Resins Due to Risk of Skin, Eye and Respiratory Irritation and Sensitization; Violation of the Federal Hazardous Substances Act"
+    },
+    {
+     "units": 15500000,
+     "recall": "24122",
+     "title": "Dynabook Americas Recalls 15.5 Million Toshiba Laptop AC Adapters Due to Burn and Fire Hazards"
+    },
+    {
+     "units": 10200000,
+     "recall": "26339",
+     "title": "Nexgrill Recalls Over 10.2 Million Metal Wire Bristle Grill Brushes Due to Ingestion Hazard; Sold at Home Depot"
+    },
+    {
+     "units": 8200000,
+     "recall": "24189",
+     "title": "Procter & Gamble Recalls 8.2 Million Defective Bags of Tide, Gain, Ace and Ariel Laundry Detergent Packets Distributed in US Due to Risk of Serious Injury"
+    }
+   ]
+  },
+  "remedy_options": {
+   "Refund": 906,
+   "Repair": 404,
+   "Replace": 215,
+   "Refund, Replace": 62,
+   "Refund, Repair": 26,
+   "Repair, Replace": 18,
+   "Dispose": 6,
+   "Refund, Repair, Replace": 5
+  },
+  "remedy_requires_photo": {
+   "n": 669,
+   "pct": 40.4
+  },
+  "remedy_requires_destroy_or_mark": {
+   "n": 757,
+   "pct": 45.7
+  },
+  "hazards": {
+   "fire_burn": {
+    "n": 598,
+    "pct": 36.1
+   },
+   "fall_crash_tipover": {
+    "n": 438,
+    "pct": 26.4
+   },
+   "entrapment_suffocation_strangulation": {
+    "n": 264,
+    "pct": 15.9
+   },
+   "lead_chemical_poisoning": {
+    "n": 299,
+    "pct": 18.0
+   },
+   "ingestion_magnets_batteries": {
+    "n": 242,
+    "pct": 14.6
+   },
+   "laceration": {
+    "n": 118,
+    "pct": 7.1
+   },
+   "choking": {
+    "n": 105,
+    "pct": 6.3
+   },
+   "electric_shock": {
+    "n": 56,
+    "pct": 3.4
+   },
+   "drowning": {
+    "n": 38,
+    "pct": 2.3
+   }
+  },
+  "injuries_none_reported": {
+   "n": 1231,
+   "pct": 74.3
+  },
+  "deaths_mentioned": {
+   "n": 39,
+   "pct": 2.4
+  },
+  "manufacturer_countries": {
+   "China": 1115,
+   "United States": 228,
+   "Vietnam": 56,
+   "Taiwan": 50,
+   "Mexico": 33,
+   "India": 28
+  },
+  "retailer_mentions": {
+   "amazon": {
+    "n": 805,
+    "pct": 48.6
+   },
+   "walmart": {
+    "n": 235,
+    "pct": 14.2
+   },
+   "target": {
+    "n": 117,
+    "pct": 7.1
+   },
+   "home_depot": {
+    "n": 95,
+    "pct": 5.7
+   },
+   "lowes": {
+    "n": 81,
+    "pct": 4.9
+   },
+   "temu": {
+    "n": 23,
+    "pct": 1.4
+   },
+   "shein": {
+    "n": 15,
+    "pct": 0.9
+   },
+   "tiktok": {
+    "n": 10,
+    "pct": 0.6
+   }
+  },
+  "title_sold_on_amazon": {
+   "n": 287,
+   "pct": 17.3
+  },
+  "contact": {
+   "phone": {
+    "n": 1183,
+    "pct": 71.4
+   },
+   "email": {
+    "n": 1334,
+    "pct": 80.5
+   },
+   "email_only": {
+    "n": 465,
+    "pct": 28.1
+   }
+  },
+  "title_category": {
+   "children": 552,
+   "other": 505,
+   "outdoor_sports": 163,
+   "furniture": 162,
+   "appliance_electrical": 148,
+   "battery_power": 110,
+   "clothing_textile": 17
+  },
+  "baseline_measured": {
+   "has_model_numbers": {
+    "n": 793,
+    "pct": 47.9
+   },
+   "models_per_notice_median": 2,
+   "models_per_notice_max": 133,
+   "has_serial_rules": {
+    "n": 98,
+    "pct": 5.9
+   },
+   "has_date_codes": {
+    "n": 132,
+    "pct": 8.0
+   },
+   "has_destruction_instruction": {
+    "n": 495,
+    "pct": 29.9
+   },
+   "price_midpoint_usd": {
+    "parsed": 1567,
+    "median": 70.0,
+    "p25": 24.5,
+    "p75": 360.0,
+    "p90": 3750.0
+   },
+   "sale_window_days": {
+    "parsed": 1597,
+    "median": 487,
+    "p25": 212,
+    "p75": 1064,
+    "over_5_years": 196
+   },
+   "days_from_end_of_sale_to_recall": {
+    "median": 85,
+    "p25": 43,
+    "p75": 157
+   }
+  }
+ },
+ "mpr_spreadsheet": {
+  "MPR": {
+   "snapshot_date": "2026-09-21",
+   "rows": 38,
+   "rows_with_numbers": 17,
+   "joined_to_archive": 17,
+   "total_correction_rate": {
+    "median": 0.087,
+    "p25": 0.04,
+    "p75": 0.128,
+    "mean": 0.116,
+    "under_10pct": 9
+   },
+   "consumer_level_rate_median": 0.053,
+   "median_rate_by": {
+    "remedy": {
+     "Repair": {
+      "n": 7,
+      "median_rate": 0.106
+     },
+     "Replace": {
+      "n": 4,
+      "median_rate": 0.1
+     },
+     "Refund": {
+      "n": 4,
+      "median_rate": 0.02
+     },
+     "Repair+Replace": {
+      "n": 2,
+      "median_rate": 0.107
+     }
+    },
+    "category": {
+     "other": {
+      "n": 7,
+      "median_rate": 0.087
+     },
+     "battery_power": {
+      "n": 4,
+      "median_rate": 0.08
+     },
+     "children": {
+      "n": 3,
+      "median_rate": 0.07
+     },
+     "outdoor_sports": {
+      "n": 1,
+      "median_rate": 0.503
+     },
+     "furniture": {
+      "n": 1,
+      "median_rate": 0.03
+     },
+     "appliance_electrical": {
+      "n": 1,
+      "median_rate": 0.203
+     }
+    },
+    "size": {
+     "10k-100k": {
+      "n": 8,
+      "median_rate": 0.088
+     },
+     "1k-10k": {
+      "n": 4,
+      "median_rate": 0.127
+     },
+     ">=100k": {
+      "n": 4,
+      "median_rate": 0.099
+     },
+     "<1k": {
+      "n": 1,
+      "median_rate": 0.0
+     }
+    },
+    "age": {
+     ">2y": {
+      "n": 17,
+      "median_rate": 0.087
+     }
+    }
+   }
+  },
+  "MPR 08.1.22 and Post 08.1.2 (2)": {
+   "snapshot_date": "2023-06-20",
+   "rows": 245,
+   "rows_with_numbers": 112,
+   "joined_to_archive": 112,
+   "total_correction_rate": {
+    "median": 0.199,
+    "p25": 0.028,
+    "p75": 0.496,
+    "mean": 0.291,
+    "under_10pct": 47
+   },
+   "consumer_level_rate_median": 0.031,
+   "median_rate_by": {
+    "remedy": {
+     "Refund": {
+      "n": 45,
+      "median_rate": 0.11
+     },
+     "Repair": {
+      "n": 43,
+      "median_rate": 0.275
+     },
+     "Replace": {
+      "n": 12,
+      "median_rate": 0.19
+     },
+     "Refund+Replace": {
+      "n": 6,
+      "median_rate": 0.232
+     },
+     "Refund+Repair": {
+      "n": 3,
+      "median_rate": 0.431
+     },
+     "Repair+Replace": {
+      "n": 3,
+      "median_rate": 0.005
+     }
+    },
+    "category": {
+     "other": {
+      "n": 35,
+      "median_rate": 0.371
+     },
+     "children": {
+      "n": 28,
+      "median_rate": 0.042
+     },
+     "outdoor_sports": {
+      "n": 20,
+      "median_rate": 0.275
+     },
+     "appliance_electrical": {
+      "n": 9,
+      "median_rate": 0.062
+     },
+     "furniture": {
+      "n": 9,
+      "median_rate": 0.05
+     },
+     "battery_power": {
+      "n": 8,
+      "median_rate": 0.049
+     },
+     "clothing_textile": {
+      "n": 3,
+      "median_rate": 0.328
+     }
+    },
+    "size": {
+     "10k-100k": {
+      "n": 43,
+      "median_rate": 0.117
+     },
+     "1k-10k": {
+      "n": 40,
+      "median_rate": 0.222
+     },
+     "<1k": {
+      "n": 20,
+      "median_rate": 0.318
+     },
+     ">=100k": {
+      "n": 9,
+      "median_rate": 0.036
+     }
+    },
+    "age": {
+     "180-365d": {
+      "n": 56,
+      "median_rate": 0.292
+     },
+     "0-180d": {
+      "n": 56,
+      "median_rate": 0.136
+     }
+    }
+   }
+  },
+  "recalls_in_both_snapshots": 20,
+  "recall_list_sheet_rows": 123
+ },
+ "recallbench": {
+  "rows": 8341,
+  "columns": [
+   "recall_date",
+   "recall_number",
+   "title",
+   "products",
+   "hazard",
+   "remedy",
+   "retailers",
+   "units",
+   "url"
+  ],
+  "date_range": [
+   "2000-01-04",
+   "2026-10-15"
+  ],
+  "rows_since_2022_08_01": 1657,
+  "by_decade": {
+   "2000s": 3054,
+   "2010s": 2985,
+   "2020s": 2302
+  }
+ },
+ "notices": {
+  "count": 40,
+  "label_status": "model-labeled, unaudited",
+  "years": {
+   "2024": 18,
+   "2025": 12,
+   "2026": 10
+  },
+  "categories": {
+   "other": 14,
+   "children": 12,
+   "appliance_electrical": 5,
+   "outdoor_sports": 3,
+   "battery_power": 3,
+   "furniture": 3
+  },
+  "with_models": 28,
+  "models_total": 126,
+  "with_serial_rules": 11,
+  "serial_rules_total": 61,
+  "with_date_codes": 11,
+  "retailers_total": 90,
+  "remedy_types": {
+   "replacement": 8,
+   "multiple": 4,
+   "repair": 7,
+   "refund": 21
+  },
+  "with_destruction_instruction": 16,
+  "with_registration_url": 5,
+  "evidence_spans": 575
+ },
+ "claims": {
+  "count": 300,
+  "programs": 20,
+  "expected_outcomes": {
+   "deny": 87,
+   "flag": 72,
+   "approve": 102,
+   "needs_info": 39
+  },
+  "violations_per_claim": {
+   "0": 102,
+   "1": 155,
+   "2": 37,
+   "3": 6
+  },
+  "violations": {
+   "purchase_before_window": 45,
+   "retailer_not_listed": 43,
+   "wrong_model": 40,
+   "duplicate_serial": 26,
+   "duplicate_payout": 24,
+   "date_code_out_of_range": 17,
+   "serial_out_of_range": 16,
+   "duplicate_photo": 14,
+   "destruction_not_shown": 12,
+   "duplicate_address": 8,
+   "no_receipt_when_required": 2
+  },
+  "subtypes": {
+   "duplicate_photo:exact": 6,
+   "destruction_not_shown:intact": 5,
+   "duplicate_photo:near": 1,
+   "destruction_not_shown:label_reupload": 4,
+   "destruction_not_shown:missing": 3
+  },
+  "duplicate_clusters": 36,
+  "image_tiers": {
+   "mild": 85,
+   "hard": 36,
+   "clean": 179
+  },
+  "photos_by_kind": {
+   "label": 300,
+   "receipt": 104,
+   "destruction": 72
+  },
+  "remedy": {
+   "replacement": 90,
+   "repair": 135,
+   "refund": 75
+  },
+  "refund_cents_median": 4563
+ }
+}

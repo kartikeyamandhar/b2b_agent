@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[\"FSE-400\",\"FSE-410\"],\"model_label_location\":\"The model number, serial number and SMART logo are located on a label on the back of the mobile stand.\",\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"SMART authorized distributors and resellers\"],\"sold_from\":\"2023-05-01\",\"sold_to\":\"2023-12-31\",\"price_range_cents\":{\"min_cents\":173500,\"max_cents\":173500},\"units_affected\":750,\"evidence\":[{\"field\":\"models\",\"quote\":\"model numbers FSE-400 (worldwide) and FSE-410 (US and Canada)\",\"start\":0,\"end\":0},{\"field\":\"model_label_location\",\"quote\":\"The model number, serial number and SMART logo are located on a label on the back of the mobile stand.\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"SMART authorized distributors and resellers who sold directly to businesses nationwide\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"from May 2023 through December 2023\",\"start\":0,\"end\":0},{\"field\":\"sold_to\",\"quote\":\"from May 2023 through December 2023\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for about $1,735\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 750\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"repair\",\"options\":[{\"type\":\"replacement\",\"steps\":[\"Immediately stop using the recalled mobile stands.\",\"Contact SMART Technologies ULC for an on-site replacement of the wheelbase free of charge.\"],\"proof_required\":[\"none\"],\"payout\":{\"method\":null,\"amount_rule\":null}}],\"destruction_instruction\":null,\"registration_url\":null,\"contact\":\"Contact SMART Technologies ULC toll-free at 888-427-6278 from 6 a.m. to 6 p.m. MT Monday through Friday, or online at https://support.smarttech.com/docs/general-support-info/en/recalls or https://www.smarttech.com/en/connect-with-smart/contact-support or https://www.smarttech.com and click on \\\"RECALLS\\\" at the bottom of the page under \\\"Support and training\\\" for more information.\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Replace\",\"start\":0,\"end\":0},{\"field\":\"options\",\"quote\":\"contact SMART Technologies ULC for an on-site replacement of the wheelbase free of charge\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"Contact SMART Technologies ULC toll-free at 888-427-6278\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4091,
+  "output_tokens": 886,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYf3enejehkxg9uroTs",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 3132
+}

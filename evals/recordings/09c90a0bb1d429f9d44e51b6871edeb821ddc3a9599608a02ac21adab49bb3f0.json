@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[\"23700\",\"23751\",\"23572\",\"23753\",\"23754\",\"23800\",\"23851\",\"23852\",\"23853\",\"23854\",\"25100\",\"25151\",\"25152\",\"25153\",\"25200\",\"25251\",\"25252\",\"25253\",\"27900\",\"27951\",\"27952\"],\"model_label_location\":null,\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"Wayfair\",\"Home Depot\",\"Target\",\"ShopHQ\",\"Walmart\",\"Overstock\",\"Macys\",\"Lowes\",\"ATG Stores\",\"Unbeatable Sales\",\"JET\",\"Bed Bath & Beyond\",\"Dropship Central\",\"123 Stores\",\"OJ Commerce\",\"Hayneedle\",\"Cymax\",\"Houzz\"],\"sold_from\":\"2015-03-01\",\"sold_to\":\"2024-03-31\",\"price_range_cents\":{\"min_cents\":38000,\"max_cents\":146500},\"units_affected\":46750,\"evidence\":[{\"field\":\"models\",\"quote\":\"23700- Cabrini 1.8\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"Online at Wayfair, Home Depot, Target, ShopHQ, Walmart, Overstock, Macys, Lowes, ATG Stores, Unbeatable Sales, JET, Bed Bath & Beyond, Dropship Central,123 Stores, OJ Commerce, Hayneedle, Cymax and Houzz\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"from March 2015 through March 2024\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for between $380 and $1,465\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 46,750\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"repair\",\"options\":[{\"type\":\"repair\",\"steps\":[\"Clear the space underneath and immediately around the entertainment center and stay away from it.\",\"Contact Manhattan Comfort for a free repair.\",\"Receive toggle bolts and instructions on how to remove and reinstall the floating theater.\",\"If the bottom panel is attached to any wall surface without the included safety screw, immediately stop using the entertainment center and contact Manhattan Comfort for a free repair.\",\"Receive a replacement safety screw and instructions on how to apply the safety screw.\"],\"proof_required\":[\"none\"],\"payout\":{\"method\":null,\"amount_rule\":null}}],\"destruction_instruction\":null,\"registration_url\":null,\"contact\":\"Manhattan Comfort toll-free at 888-230-2225 from 9 a.m. to 5 p.m. ET, Monday through Thursday and 9 a.m. to 1 p.m. ET on Friday, email at manhattanrecalls@gmail.com or online at https://www.manhattancomfort.com/recall\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Repair\",\"start\":0,\"end\":0},{\"field\":\"options\",\"quote\":\"Consumers should contact Manhattan Comfort for a free repair.\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"Manhattan Comfort toll-free at 888-230-2225 from 9 a.m. to 5 p.m. ET, Monday through Thursday and 9 a.m. to 1 p.m. ET on Friday, email at manhattanrecalls@gmail.com\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4754,
+  "output_tokens": 1109,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYinLuGceMk9NiRtUy7",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 3704
+}

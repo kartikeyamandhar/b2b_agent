@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[\"Firefly Safe & Green 32 oz. Fuel Bottles\"],\"model_label_location\":\"The fuel bears the \\\"Firefly\\\" brand, \\\"Safe & Green\\\" in large green font, followed by \\\"The One Fuel.\\\"\",\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"Amazon.com\",\"Walmart.com\",\"www.fireflyfuel.com\"],\"sold_from\":\"2019-08-01\",\"sold_to\":\"2025-05-31\",\"price_range_cents\":{\"min_cents\":2000,\"max_cents\":2000},\"units_affected\":11275,\"evidence\":[{\"field\":\"models\",\"quote\":\"Firefly Safe & Green 32 oz. Fuel Bottles\",\"start\":0,\"end\":0},{\"field\":\"model_label_location\",\"quote\":\"The fuel bears the \\\"Firefly\\\" brand, \\\"Safe & Green\\\" in large green font, followed by \\\"The One Fuel.\\\"\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"Amazon.com, Walmart.com and at www.fireflyfuel.com\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"from August 2019 through May 2025\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for about $20\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 11,275\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"repair\",\"options\":[{\"type\":\"repair\",\"steps\":[\"Immediately remove the nozzle applicator from the recalled Safe & Green 32 oz. Fuel bottle and reinstall the child-resistant closure that was included with the product's original packaging.\",\"If the child-resistant closure is not readily available, immediately secure the recalled Safe & Green 32 oz. fuel bottle out of the sight and reach of children.\",\"Contact Firefly Fuel for a free corrected label to put on the bottle and a free replacement child-resistant lid, if the original is missing.\"],\"proof_required\":[\"none\"],\"payout\":{\"method\":null,\"amount_rule\":null}}],\"destruction_instruction\":null,\"registration_url\":null,\"contact\":\"Firefly Fuel Inc. toll-free at 888-472-6740 8 a.m. to 4:30 p.m. ET Monday through Friday, email Firefly Fuel at support@fireflyfuel.com, or online at www.fireflyfuel.com and click \\\"Recall\\\" at the top of the page for more information.\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Repair\",\"start\":0,\"end\":0},{\"field\":\"options\",\"quote\":\"Consumers should immediately remove the nozzle applicator from the recalled Safe & Green 32 oz. Fuel bottle and reinstall the child-resistant closure that was included with the product's original packaging.\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"Firefly Fuel Inc. toll-free at 888-472-6740 8 a.m. to 4:30 p.m. ET Monday through Friday, email Firefly Fuel at support@fireflyfuel.com, or online at www.fireflyfuel.com and click \\\"Recall\\\" at the top of the page for more information.\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4274,
+  "output_tokens": 1092,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYnokr3G66YzxLDzGxc",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 6446
+}

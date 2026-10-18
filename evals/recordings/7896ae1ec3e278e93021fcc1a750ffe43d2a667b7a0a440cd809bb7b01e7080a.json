@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\": {\"models\": [\"711\"], \"model_label_location\": \"label of the product packaging\", \"serial_ranges\": [], \"date_codes\": [], \"sold_at\": [\"Amazon.com\"], \"sold_from\": \"2024-09-01\", \"sold_to\": \"2025-04-30\", \"price_range_cents\": {\"min_cents\": 3000, \"max_cents\": 3000}, \"units_affected\": 2000, \"evidence\": [{\"field\": \"identification.models\", \"quote\": \"model number 711\", \"start\": 0, \"end\": 0}, {\"field\": \"identification.model_label_location\", \"quote\": \"The model number is printed on the label of the product packaging.\", \"start\": 0, \"end\": 0}, {\"field\": \"identification.sold_at\", \"quote\": \"Online at Amazon.com from September 2024 through April 2025 for about $30.\", \"start\": 0, \"end\": 0}, {\"field\": \"identification.sold_from\", \"quote\": \"from September 2024\", \"start\": 0, \"end\": 0}, {\"field\": \"identification.sold_to\", \"quote\": \"through April 2025\", \"start\": 0, \"end\": 0}, {\"field\": \"identification.price_range_cents\", \"quote\": \"for about $30\", \"start\": 0, \"end\": 0}, {\"field\": \"identification.units_affected\", \"quote\": \"About 2,000\", \"start\": 0, \"end\": 0}]}, \"remedy\": {\"remedy_type\": \"refund\", \"options\": [{\"type\": \"refund\", \"steps\": [\"Stop using the recalled toys immediately.\", \"Contact Shantou Haochengheng Technology for information on how to destroy the product and obtain a full refund.\"], \"proof_required\": [], \"payout\": {\"method\": null, \"amount_rule\": null}}], \"destruction_instruction\": \"Contact Shantou Haochengheng Technology for information on how to destroy the product\", \"registration_url\": null, \"contact\": \"Email at haochenghengkj@outlook.com, online at www.hcfjehtoy.com at the top of the page or www.amazon.com/stores/page/2912E5E1-628F-4384-930C-5D8CCB7B8184\", \"evidence\": [{\"field\": \"remedy.remedy_type\", \"quote\": \"Remedy options: Refund\", \"start\": 0, \"end\": 0}, {\"field\": \"remedy.options\", \"quote\": \"obtain a full refund\", \"start\": 0, \"end\": 0}, {\"field\": \"remedy.destruction_instruction\", \"quote\": \"information on how to destroy the product\", \"start\": 0, \"end\": 0}, {\"field\": \"remedy.contact\", \"quote\": \"Email at haochenghengkj@outlook.com\", \"start\": 0, \"end\": 0}]}}",
+ "usage": {
+  "input_tokens": 4075,
+  "output_tokens": 854,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYnEz7kz7uCfFSFconx",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 3384
+}

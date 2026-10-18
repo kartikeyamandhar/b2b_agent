@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[\"LDQMFJ8D-BR\",\"LDQMFJ8D-CM\",\"LDQMFJ8D-WH\",\"LDQMFJ8D-BK\",\"LDQMFJ8D-NA\"],\"model_label_location\":\"SKU is printed on the product packaging\",\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"Amazon.com\",\"Wayfair\",\"TEMU\",\"Walmart\"],\"sold_from\":\"2025-05-01\",\"sold_to\":\"2026-07-31\",\"price_range_cents\":{\"min_cents\":23000,\"max_cents\":27000},\"units_affected\":25073,\"evidence\":[{\"field\":\"models\",\"quote\":\"SKU \u201cLDQMFJ8D-BR,\u201d \u201cLDQMFJ8D-CM,\u201d \u201cLDQMFJ8D-WH,\u201d \u201cLDQMFJ8D-BK,\u201d or \u201cLDQMFJ8D-NA\u201d is printed on the product packaging.\",\"start\":0,\"end\":0},{\"field\":\"model_label_location\",\"quote\":\"SKU \u201cLDQMFJ8D-BR,\u201d \u201cLDQMFJ8D-CM,\u201d \u201cLDQMFJ8D-WH,\u201d \u201cLDQMFJ8D-BK,\u201d or \u201cLDQMFJ8D-NA\u201d is printed on the product packaging.\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"Amazon.com, Wayfair, TEMU, and Walmart\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"from May 2025 through July 2026\",\"start\":0,\"end\":0},{\"field\":\"sold_to\",\"quote\":\"from May 2025 through July 2026\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for between $230 and $270\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 25,073\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"repair\",\"options\":[{\"type\":\"repair\",\"steps\":[\"Stop using the recalled dressers immediately if they are not anchored to the wall and place them in an area that children cannot access.\",\"Contact yuyitop at recall.aitjunz@outlook.com to receive a free retrofit kit containing counterweight blocks with installation instructions.\"],\"proof_required\":[],\"payout\":{\"method\":null,\"amount_rule\":null}}],\"destruction_instruction\":null,\"registration_url\":null,\"contact\":\"Aitjunz at 986-305-9671 from 9 a.m. to 6 p.m. ET Monday through Friday, email at recall.aitjunz@outlook.com or online at https://aitjunzrecall.pages.dev\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Repair\",\"start\":0,\"end\":0},{\"field\":\"options\",\"quote\":\"Consumers will be asked to contact yuyitop at recall.aitjunz@outlook.com to receive a free retrofit kit containing counterweight blocks with installation instructions.\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"Aitjunz at 986-305-9671 from 9 a.m. to 6 p.m. ET Monday through Friday, email at recall.aitjunz@outlook.com or online at https://aitjunzrecall.pages.dev\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4145,
+  "output_tokens": 1089,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYsBQhMuDPYauVn1XTy",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 4153
+}

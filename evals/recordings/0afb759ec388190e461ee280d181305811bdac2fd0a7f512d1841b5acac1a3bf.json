@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[\"AO10FK-A\",\"AO10FK-B\",\"AO10FK-C\"],\"model_label_location\":\"The model number is printed on the back.\",\"serial_ranges\":[],\"date_codes\":[{\"format\":\"WWYY\",\"start\":null,\"end\":null,\"raw\":\"Date codes included in this recall end with 21 or 22, or are one of the following four date codes ending in 23: 0123, 0923, 1523, or 1723.\"}],\"sold_at\":[\"Costco\"],\"sold_from\":\"2022-01-01\",\"sold_to\":\"2023-11-30\",\"price_range_cents\":{\"min_cents\":4000,\"max_cents\":4000},\"units_affected\":567000,\"evidence\":[{\"field\":\"models\",\"quote\":\"model numbers AO10FK-A, AO10FK-B, and AO10FK-C\",\"start\":0,\"end\":0},{\"field\":\"model_label_location\",\"quote\":\"The model number is printed on the back.\",\"start\":0,\"end\":0},{\"field\":\"date_codes\",\"quote\":\"Date codes included in this recall end with 21 or 22, or are one of the following four date codes ending in 23: 0123, 0923, 1523, or 1723.\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"Exclusively at Costco stores nationwide and online at Costco.com from January 2022 through November 2023 for about $40.\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"from January 2022\",\"start\":0,\"end\":0},{\"field\":\"sold_to\",\"quote\":\"through November 2023\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for about $40.\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 567,000\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"replacement\",\"options\":[{\"type\":\"replacement\",\"steps\":[\"Immediately stop using the recalled portable chargers.\",\"Contact myCharge for a free replacement portable charger.\"],\"proof_required\":[],\"payout\":{\"method\":null,\"amount_rule\":null}}],\"destruction_instruction\":null,\"registration_url\":null,\"contact\":\"myCharge toll-free at 888-251-2026 from 9 a.m. to 4 p.m. ET Monday through Friday, by email at compliance@mycharge.com, or online at https://mycharge.com/pages/power-hub-all-in-one-recall\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Replace\",\"start\":0,\"end\":0},{\"field\":\"options\",\"quote\":\"Consumers should immediately stop using the recalled portable chargers, and contact myCharge for a free replacement portable charger.\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"myCharge toll-free at 888-251-2026 from 9 a.m. to 4 p.m. ET Monday through Friday, by email at compliance@mycharge.com, or online at https://mycharge.com/pages/power-hub-all-in-one-recall\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4162,
+  "output_tokens": 990,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYhi1ga4LqGGCHcSs3s",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 3439
+}

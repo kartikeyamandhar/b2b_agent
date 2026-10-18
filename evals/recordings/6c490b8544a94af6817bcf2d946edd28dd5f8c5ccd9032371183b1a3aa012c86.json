@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[\"R7583BPS\",\"R7585BPS\",\"R7586BPS\"],\"model_label_location\":\"The model number and \\\"Pacific Cycle\\\" are printed on the service label located on the seat tube above the bottom bracket.\",\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"Bass Pro Shops\",\"Cabela's\",\"basspro.com\",\"cabelas.com\"],\"sold_from\":\"2023-01-01\",\"sold_to\":\"2023-11-30\",\"price_range_cents\":{\"min_cents\":140000,\"max_cents\":150000},\"units_affected\":1700,\"evidence\":[{\"field\":\"identification.models\",\"quote\":\"R7583BPS and R7585BPS\",\"start\":0,\"end\":0},{\"field\":\"identification.models\",\"quote\":\"R7586BPS\",\"start\":0,\"end\":0},{\"field\":\"identification.model_label_location\",\"quote\":\"The model number and \\\"Pacific Cycle\\\" are printed on the service label located on the seat tube above the bottom bracket.\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_at\",\"quote\":\"Bass Pro Shops and Cabela's stores nationwide and online at basspro.com and cabelas.com\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_from\",\"quote\":\"from January 2023 through November 2023\",\"start\":0,\"end\":0},{\"field\":\"identification.price_range_cents\",\"quote\":\"for between $1,400 and $1,500\",\"start\":0,\"end\":0},{\"field\":\"identification.units_affected\",\"quote\":\"About 1,700\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"refund\",\"options\":[{\"type\":\"refund\",\"steps\":[\"Immediately stop using and unplug the recalled electric bikes.\",\"Enter serial number on www.pacific-cycle.com/safety-notices-recalls to confirm the bike is part of the recall.\",\"Return the recalled bikes to Bass Pro Shops or Cabela's to receive a full refund.\"],\"proof_required\":[],\"payout\":{\"method\":null,\"amount_rule\":null}}],\"destruction_instruction\":null,\"registration_url\":null,\"contact\":\"Pacific Cycle toll-free at 877-564-2261 from 7 a.m. to 6 p.m. CT Monday through Friday, email at customerservice@pacificycle.com or online at www.pacific-cycle.com/safety-notices-recalls\",\"evidence\":[{\"field\":\"remedy.remedy_type\",\"quote\":\"Remedy options: Refund\",\"start\":0,\"end\":0},{\"field\":\"remedy.options\",\"quote\":\"Return the recalled bikes to Bass Pro Shops or Cabela's to receive a full refund.\",\"start\":0,\"end\":0},{\"field\":\"remedy.contact\",\"quote\":\"Pacific Cycle toll-free at 877-564-2261 from 7 a.m. to 6 p.m. CT Monday through Friday, email at customerservice@pacificycle.com\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4136,
+  "output_tokens": 974,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYcqjdeteGq9SK6cX9q",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 3394
+}

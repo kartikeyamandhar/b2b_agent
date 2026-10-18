@@ -16,7 +16,7 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-from recallops.evals.golden import load_golden
+from recallops.evals.golden import load_golden, load_program_rules
 from recallops.settings import REPO_ROOT
 from recallops.synth.generate import SynthClaim, generate_program, load_yaml
 
@@ -63,12 +63,14 @@ def label_record(c: SynthClaim) -> dict[str, Any]:
 def build_golden(out_dir: Path = ADJ_DIR, photo_dir: Path = PHOTO_DIR, limit: int | None = None) -> dict[str, Any]:
     planted = load_yaml(out_dir / "planted.yaml")
     policy = load_yaml(out_dir / "outcome_policy.yaml")
+    # Rules come from the frozen snapshot, not the (since audited) extraction labels, so the set regenerates exactly.
+    frozen = load_program_rules(out_dir / "program_rules.json")
     notices = [n for n in load_golden(REPO_ROOT / "evals" / "extraction" / "golden_notices.json") if n.synth_source]
     notices = notices[:limit] if limit else notices
     claims: list[SynthClaim] = []
     for notice in notices:
         claims += generate_program(
-            notice.rules,
+            frozen[notice.source_id],
             notice.source_id,
             planted["claims_per_program"],
             planted["seed"],

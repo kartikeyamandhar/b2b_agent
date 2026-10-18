@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[\"17362\",\"17323\"],\"model_label_location\":\"label printed under the body of the truck\",\"serial_ranges\":[],\"date_codes\":[{\"format\":\"DDDYY\",\"start\":\"15623\",\"end\":\"18724\",\"raw\":\"date codes from 15623 to 18724 printed on a label under the body of the truck\"}],\"sold_at\":[\"Target\",\"Sam's Club\",\"www.target.com\",\"www.samsclub.com\"],\"sold_from\":\"2023-06-01\",\"sold_to\":\"2025-03-31\",\"price_range_cents\":{\"min_cents\":30000,\"max_cents\":30000},\"units_affected\":23260,\"evidence\":[{\"field\":\"identification.models\",\"quote\":\"models 17362 and 17323\",\"start\":0,\"end\":0},{\"field\":\"identification.date_codes\",\"quote\":\"date codes from 15623 to 18724 printed on a label under the body of the truck\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_at\",\"quote\":\"Target and Sam's Club stores nationwide and online at www.target.com and www.samsclub.com\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_from\",\"quote\":\"from June 2023 through March 2025\",\"start\":0,\"end\":0},{\"field\":\"identification.price_range_cents\",\"quote\":\"for about $300\",\"start\":0,\"end\":0},{\"field\":\"identification.units_affected\",\"quote\":\"About 23,260\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"repair\",\"options\":[{\"type\":\"repair\",\"steps\":[\"Immediately stop using the recalled children's dump trucks\",\"Contact Huffy for a free replacement controller\"],\"proof_required\":[],\"payout\":{\"method\":null,\"amount_rule\":null}}],\"destruction_instruction\":null,\"registration_url\":null,\"contact\":\"Huffy at 800-872-2453 from 8 a.m. to 5 p.m. ET Monday through Friday, by email at service@huffy.com, or online at https://www.huffy.com/tonka-ride-on-toy-recall\",\"evidence\":[{\"field\":\"remedy.options\",\"quote\":\"contact Huffy for a free replacement controller\",\"start\":0,\"end\":0},{\"field\":\"remedy.remedy_type\",\"quote\":\"Remedy options: Repair\",\"start\":0,\"end\":0},{\"field\":\"remedy.contact\",\"quote\":\"Huffy at 800-872-2453 from 8 a.m. to 5 p.m. ET Monday through Friday, by email at service@huffy.com\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4048,
+  "output_tokens": 817,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYmdNUvpzKLpgyfGeoV",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 3477
+}

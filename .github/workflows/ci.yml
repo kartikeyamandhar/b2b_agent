@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-24.04
     services:
       db:
-        image: postgres:16
+        image: pgvector/pgvector:0.8.6-pg16
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres-dev-only
@@ -59,22 +59,36 @@ jobs:
         run: uv run --frozen pytest --cov --cov-report=term --cov-fail-under=85
 
   # ---------------------------------------------------------------------------------------------
-  # WEB HALF: owned by the UI owner (component 2). Enable once apps/web/package.json exists.
+  # WEB HALF: owned by the UI owner (component 2). Runs once apps/web/package-lock.json exists (the starter
+  # code in apps/web has a package.json but no lockfile until the UI owner runs npm install with Node 22.22.0).
+  # hashFiles() is not allowed in a job-level if, so the job detects the lockfile in its first step.
   # ---------------------------------------------------------------------------------------------
   web:
-    name: web (vitest) - owned by the UI owner
-    if: ${{ hashFiles('apps/web/package.json') != '' }}
+    name: web (tsc, vitest) - owned by the UI owner
     runs-on: ubuntu-24.04
-    defaults:
-      run:
-        working-directory: apps/web
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Detect the web lockfile
+        id: detect
+        run: |
+          if [ -f apps/web/package-lock.json ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "apps/web/package-lock.json not present yet; web checks skipped"
+          fi
+      - if: steps.detect.outputs.present == 'true'
+        uses: actions/setup-node@v4
         with:
           node-version: "22.22.0"
           cache: npm
           cache-dependency-path: apps/web/package-lock.json
-      - run: npm ci
-      - run: npx tsc --noEmit
-      - run: npx vitest run
+      - if: steps.detect.outputs.present == 'true'
+        working-directory: apps/web
+        run: npm ci
+      - if: steps.detect.outputs.present == 'true'
+        working-directory: apps/web
+        run: npx tsc --noEmit
+      - if: steps.detect.outputs.present == 'true'
+        working-directory: apps/web
+        run: npx vitest run

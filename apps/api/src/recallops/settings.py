@@ -74,10 +74,13 @@ class Settings(BaseSettings):
     llm_image_patch_px: int = Field(28, description="One image token per patch of this many pixels square.")
     llm_max_output_tokens: int = Field(2048)
     llm_timeout_s: float = Field(30.0)
-    llm_budget_stop_usd: Decimal = Field(Decimal("2.00"), description="Global stop; M1 budget is 2 USD.")
-    llm_budget_warn_usd: Decimal = Field(Decimal("1.50"))
+    llm_budget_stop_usd: Decimal = Field(Decimal("4.00"), description="Global stop (decisions log 2026-10-18).")
+    llm_budget_warn_usd: Decimal = Field(Decimal("3.00"))
     llm_spend_carried_usd: Decimal = Field(Decimal("0"), description="Spend not visible in agent_steps.")
-    replay_dir: Path = Field(REPO_ROOT / "evals" / "recordings")
+    replay_dir: Path = Field(REPO_ROOT / "evals" / "recordings", description="Eval recordings (committed).")
+    llm_record_dir: Path = Field(
+        REPO_ROOT / "data" / "generated" / "llm_recordings", description="Worker recordings (gitignored)."
+    )
 
     # Caps (CLAUDE.md invariant 4) and extraction caps.
     run_cap_steps: int = Field(8)
@@ -86,9 +89,9 @@ class Settings(BaseSettings):
     extract_run_cap_usd: Decimal = Field(Decimal("0.01"))
     extract_max_calls: int = Field(2)
 
-    # Embeddings (M2; provisional, see decisions log).
-    embedding_model_id: str = Field("voyage-3.5-lite")
-    embedding_dim: int = Field(1024)
+    # Embeddings (decisions log 2026-10-18: local deterministic embedder; a provider plugs in behind the protocol).
+    embedding_model_id: str = Field("hash-ngram-v1")
+    embedding_dim: int = Field(1024, description="Must match migration 0002 (vector(1024)).")
 
     # Storage for claim photos. Local directory in dev; Supabase private bucket in prod.
     storage_dir: Path = Field(REPO_ROOT / "data" / "generated" / "storage")
@@ -100,7 +103,7 @@ class Settings(BaseSettings):
     phash_duplicate_bits: int = Field(6)
     default_value_threshold_cents: int = Field(10_000)
 
-    @field_validator("storage_dir", "replay_dir")
+    @field_validator("storage_dir", "replay_dir", "llm_record_dir")
     @classmethod
     def _repo_relative(cls, value: Path) -> Path:
         """Relative paths in .env are relative to the repository root, not the process cwd."""

@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[\"MXZ\",\"Renegade\"],\"model_label_location\":\"Ski-Doo and the model name are printed on the side panels of the vehicles. Pilot X is engraved at the back of the ski, on the upper side. The vehicle identification number (VIN) is on the decal located on the right-hand side of tunnel underneath the seat.\",\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"Ski-Doo authorized dealers nationwide\"],\"sold_from\":\"2023-06-01\",\"sold_to\":\"2024-01-31\",\"price_range_cents\":{\"min_cents\":1000000,\"max_cents\":1800000},\"units_affected\":8100,\"evidence\":[{\"field\":\"models\",\"quote\":\"all model year 2024 Ski-Doo MXZ and Renegade snowmobiles models equipped with Pilot X skis\",\"start\":0,\"end\":0},{\"field\":\"model_label_location\",\"quote\":\"The vehicle identification number (VIN) is on the decal located on the right-hand side of tunnel underneath the seat.\",\"start\":0,\"end\":0},{\"field\":\"sold_at\",\"quote\":\"Ski-Doo authorized dealers nationwide from June 2023 through January 2024\",\"start\":0,\"end\":0},{\"field\":\"sold_from\",\"quote\":\"from June 2023 through January 2024\",\"start\":0,\"end\":0},{\"field\":\"sold_to\",\"quote\":\"from June 2023 through January 2024\",\"start\":0,\"end\":0},{\"field\":\"price_range_cents\",\"quote\":\"for between $10,000 and $18,000\",\"start\":0,\"end\":0},{\"field\":\"units_affected\",\"quote\":\"About 8,100\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"repair\",\"options\":[{\"type\":\"repair\",\"steps\":[\"Consumers should immediately stop using the snowmobiles, and contact BRP to schedule a free inspection and repair at the dealership by replacing the left ski free of cost.\",\"BRP is contacting all purchasers directly.\"],\"proof_required\":[\"none\"],\"payout\":{\"method\":null,\"amount_rule\":null}}],\"destruction_instruction\":null,\"registration_url\":null,\"contact\":\"BRP toll-free at 888-272-9222 from 8 a.m. to 8 p.m. ET Monday through Sunday or online at https://ski-doo.brp.com/us/en/owner-zone/responsible-rider/safety/safety-recalls/left-pilot-x-ski-may-break-loss-of-control.html\",\"evidence\":[{\"field\":\"remedy_type\",\"quote\":\"Remedy options: Repair\",\"start\":0,\"end\":0},{\"field\":\"options\",\"quote\":\"contact BRP to schedule a free inspection and repair at the dealership by replacing the left ski free of cost\",\"start\":0,\"end\":0},{\"field\":\"contact\",\"quote\":\"BRP toll-free at 888-272-9222 from 8 a.m. to 8 p.m. ET Monday through Sunday\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4139,
+  "output_tokens": 976,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYfHGbBCsdQG7mvtmy3",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 3455
+}

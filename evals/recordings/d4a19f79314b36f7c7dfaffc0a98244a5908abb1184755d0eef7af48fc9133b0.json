@@ -1,0 +1,15 @@
+{
+ "text": "{\"identification\":{\"models\":[\"SM1\"],\"model_label_location\":\"The model number is located on the product packaging.\",\"serial_ranges\":[],\"date_codes\":[],\"sold_at\":[\"HSN\",\"HSN.com\"],\"sold_from\":\"2020-07-01\",\"sold_to\":\"2024-11-30\",\"price_range_cents\":{\"min_cents\":4000,\"max_cents\":5000},\"units_affected\":328000,\"evidence\":[{\"field\":\"identification.models\",\"quote\":\"model number SM1\",\"start\":0,\"end\":0},{\"field\":\"identification.model_label_location\",\"quote\":\"The model number is located on the product packaging.\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_at\",\"quote\":\"Through HSN nationwide and online at HSN.com\",\"start\":0,\"end\":0},{\"field\":\"identification.sold_from\",\"quote\":\"from July 2020 through November 2024\",\"start\":0,\"end\":0},{\"field\":\"identification.price_range_cents\",\"quote\":\"for between $40 and $50\",\"start\":0,\"end\":0},{\"field\":\"identification.units_affected\",\"quote\":\"About 328,000\",\"start\":0,\"end\":0}]},\"remedy\":{\"remedy_type\":\"replacement\",\"options\":[{\"type\":\"replacement\",\"steps\":[\"Consumers should immediately contact Three61 for a free replacement alarm, including shipping.\",\"To register, consumers must write \\\"Recalled\\\" with a permanent marker on the smoke alarm and submit a photo of the marked product to the recall website at www.samuraibrands.com/recall.\",\"Once registered, the firm will immediately ship the replacement alarm.\",\"Consumers should keep the recalled smoke alarms installed until receiving the replacement alarm.\",\"Consumers should install the replacement alarms immediately upon receiving them.\"],\"proof_required\":[\"label_photo\"],\"payout\":{\"method\":null,\"amount_rule\":null}}],\"destruction_instruction\":null,\"registration_url\":\"www.samuraibrands.com/recall\",\"contact\":\"Three61 via email at recall@samuraibrands.com, or online at www.samuraibrands.com/recall\",\"evidence\":[{\"field\":\"remedy.remedy_type\",\"quote\":\"Remedy options: Replace\",\"start\":0,\"end\":0},{\"field\":\"remedy.options\",\"quote\":\"Consumers should immediately contact Three61 for a free replacement alarm, including shipping.\",\"start\":0,\"end\":0},{\"field\":\"remedy.registration_url\",\"quote\":\"submit a photo of the marked product to the recall website at www.samuraibrands.com/recall\",\"start\":0,\"end\":0},{\"field\":\"remedy.contact\",\"quote\":\"Three61 via email at recall@samuraibrands.com\",\"start\":0,\"end\":0}]}}",
+ "usage": {
+  "input_tokens": 4105,
+  "output_tokens": 875,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAYjY4wYQg2DKWmtzn42",
+ "purpose": "extract_rules",
+ "max_tokens": 4096,
+ "latency_ms": 3153
+}
