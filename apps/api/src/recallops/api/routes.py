@@ -9,7 +9,7 @@ from typing import Annotated, Any
 from uuid import UUID
 
 from fastapi import APIRouter, Body, File, Form, Header, HTTPException, Query, UploadFile, status
-from fastapi.responses import FileResponse, Response
+from fastapi.responses import Response
 from sqlalchemy import func, select, text
 from sqlalchemy.orm import Session
 
@@ -31,6 +31,7 @@ from recallops.logs import get_logger, log_event
 from recallops.models import Claim, Recall, RecallProgram, WorkerHeartbeat
 from recallops.payouts.db_ledger import DbPayoutLedger
 from recallops.settings import get_settings
+from recallops.storage import InvalidKey, Storage, StorageError, build_storage
 from recallops.tenancy import FirmContext
 
 log = get_logger("api.routes")
@@ -44,6 +45,7 @@ PAYMENT: Responses = {402: {"model": s.Problem, "description": "over the plan's 
 IMAGE: Responses = {200: {"content": {"image/jpeg": {}, "image/png": {}}}}
 PDF: Responses = {200: {"content": {"application/pdf": {}}}}
 MPR_PERIOD = r"^\d{4}-(0[1-9]|1[0-2])$"
+PHOTO_STORAGE_DOWN = "photo storage unavailable"
 
 firm = APIRouter(prefix="/v1", tags=["firm"], responses=AUTH)
 billing = APIRouter(prefix="/v1/billing", tags=["billing (component 3)"], responses={**AUTH, **LATER})
@@ -248,18 +250,29 @@ def get_claim(claim_id: UUID, ctx: FirmDep, db: TenantDb) -> s.ClaimDetail:
 @firm.get(
     "/claims/{claim_id}/photos/{photo_id}",
     responses={**NOT_FOUND, **IMAGE},
-    response_class=FileResponse,
+    response_class=Response,
     summary="Photo bytes (dev stand-in for a signed storage URL)",
 )
-def get_photo(claim_id: UUID, photo_id: UUID, ctx: FirmDep, db: TenantDb) -> FileResponse:
+def get_photo(claim_id: UUID, photo_id: UUID, ctx: FirmDep, db: TenantDb) -> Response:
+    # The bytes are proxied from storage after the RLS lookup, so the bucket stays private and no signed storage URL
+    # reaches a browser. A storage failure answers a fixed 503 detail, never the storage error's text. (A comment,
+    # not a docstring: a docstring would become the route's description in docs/contracts/openapi.json.)
     photo = next((p for p in ClaimsRepo(db, ctx).photos(claim_id) if p.id == photo_id), None)
     if photo is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "photo not found")
-    path = get_settings().storage_dir / photo.storage_path
-    if not path.is_file():
+    try:
+        data = photo_storage().get(photo.storage_path)
+    except InvalidKey:
+        data = None
+    except StorageError as exc:
+        log_event(
+            log, "photo_read_failed", level=40, firm_id=str(ctx.firm_id), claim_id=str(claim_id), error=str(exc)[:300]
+        )
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, PHOTO_STORAGE_DOWN) from exc
+    if data is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "photo file missing from storage")
-    media = "image/png" if path.suffix.lower() == ".png" else "image/jpeg"
-    return FileResponse(path, media_type=media, headers={"X-Content-Type-Options": "nosniff"})
+    media = "image/png" if photo.storage_path.lower().endswith(".png") else "image/jpeg"
+    return Response(content=data, media_type=media, headers={"X-Content-Type-Options": "nosniff"})
 
 
 @firm.get(
@@ -702,6 +715,7 @@ def portal_photo(
 ) -> s.Photo:
     ctx, claim_id = _portal(token, token_ctx)
     settings = get_settings()
+    storage = photo_storage()
     data = file.file.read(settings.max_photo_bytes + 1)
     with tenant_session(ctx) as session:
         pc = _portal_claim_in(session, token, claim_id)
@@ -709,7 +723,7 @@ def portal_photo(
             photo, replaced = portal_service.add_photo(
                 session,
                 pc,
-                settings.storage_dir,
+                storage,
                 kind,
                 file.content_type,
                 data,
@@ -720,9 +734,15 @@ def portal_photo(
             raise HTTPException(status.HTTP_409_CONFLICT, str(exc)) from exc
         except portal_service.PhotoRejected as exc:
             raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(exc)) from exc
+        except StorageError as exc:  # nothing was stored, and the transaction rolls back: no row without its bytes
+            log_event(log, "portal_photo_store_failed", level=40, claim_id=str(claim_id), error=str(exc)[:300])
+            raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, PHOTO_STORAGE_DOWN) from exc
         view = views.photo(photo)
-    for path in replaced:  # only after the commit: a failed commit keeps the old rows and their files
-        path.unlink(missing_ok=True)
+    for key in replaced:  # only after the commit: a failed commit keeps the old rows and their objects
+        try:
+            storage.delete(key)
+        except StorageError as exc:  # the upload is committed; a leftover object is unreferenced, not an error
+            log_event(log, "portal_photo_delete_failed", level=30, claim_id=str(claim_id), error=str(exc)[:300])
     return view
 
 
@@ -820,6 +840,16 @@ def readyz() -> s.Health:
             "no worker heartbeat" if age_s is None else f"worker heartbeat is {age_s} s old",
         )
     return s.Health(status="ok", database=True, worker_heartbeat_age_s=age_s, graph=_graph_status())
+
+
+_STORAGE: dict[str, Storage] = {}
+
+
+def photo_storage() -> Storage:
+    """One claim-photo storage per process (the Supabase client pools connections), built from settings."""
+    if "storage" not in _STORAGE:
+        _STORAGE["storage"] = build_storage(get_settings())
+    return _STORAGE["storage"]
 
 
 _GRAPH: dict[str, Any] = {}

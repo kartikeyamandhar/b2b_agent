@@ -190,7 +190,7 @@ Firm routes:
 - POST /v1/programs  {recall_id | manual fields} -> runs extraction, returns program with rules for review
 - GET /v1/programs, GET /v1/programs/{id}, PATCH /v1/programs/{id} (edit rules, threshold, status)
 - GET /v1/programs/{id}/claims?status=&cursor=  queue with filters
-- GET /v1/claims/{id}  claim, photos (signed URLs), decision, run summary
+- GET /v1/claims/{id}  claim, photos (API paths; the photo route proxies the private bucket, no signed URLs), decision, run summary
 - GET /v1/claims/{id}/trace  agent_steps for the latest run
 - POST /v1/claims/{id}/actions  {action: resume_override|request_info|mark_fraud|mark_delivered, payload}
 - POST /v1/programs/{id}/claims/issue  {n} -> issues n claim tokens (links) for distribution

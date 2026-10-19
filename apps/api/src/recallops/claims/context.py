@@ -4,15 +4,18 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
-from pathlib import Path
 from uuid import UUID
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from recallops.claims.tools import ClaimFacts, PhotoRef
+from recallops.logs import get_logger, log_event
 from recallops.models import Claim, ClaimPhoto, RecallProgram
 from recallops.rules.schemas import ExtractedRules, IdentificationRules, RemedyRules
+from recallops.storage import InvalidKey, Storage
+
+log = get_logger("claims.context")
 
 
 @dataclass(frozen=True)
@@ -98,14 +101,19 @@ def program_claims(session: Session, firm_id: UUID, program_id: UUID, exclude: U
     return [facts_from_rows(c, photos.get(c.id, [])) for c in claims]
 
 
-def photo_reader(storage_dir: Path, paths: dict[str, str]) -> Callable[[str], bytes | None]:
+def photo_reader(storage: Storage, paths: dict[str, str]) -> Callable[[str], bytes | None]:
+    """Bytes by photo kind. None when the claim has no photo of that kind, the object is absent, or the stored key is
+    unsafe (refused by the storage guard, never read). Any other StorageError propagates: the worker logs the failed
+    attempt and retries later, so a storage outage never reads as a claim without photos."""
+
     def read(kind: str) -> bytes | None:
         rel = paths.get(kind)
         if rel is None:
             return None
-        target = (storage_dir / rel).resolve()
-        if storage_dir.resolve() not in target.parents or not target.is_file():
+        try:
+            return storage.get(rel)
+        except InvalidKey:
+            log_event(log, "photo_key_refused", level=30, kind=kind)
             return None
-        return target.read_bytes()
 
     return read

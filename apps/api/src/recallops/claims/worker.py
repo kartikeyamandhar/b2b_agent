@@ -69,6 +69,7 @@ from recallops.payouts.ledger import PayoutLedger
 from recallops.retrieval.embed import build_embedder
 from recallops.retrieval.search import PgRetriever
 from recallops.settings import Settings, get_settings
+from recallops.storage import Storage, build_storage
 from recallops.tenancy import FirmContext
 from recallops.tracing.writer import DbTrace
 
@@ -118,6 +119,7 @@ class Worker:
         ledger: PayoutLedger | None = None,
         worker_id: str | None = None,
         graph: GraphStore | bool | None = True,
+        storage: Storage | None = None,
     ) -> None:
         self.settings = settings or get_settings()
         self.engine = engine or internal_engine()
@@ -134,6 +136,7 @@ class Worker:
             build_graph_store(self.settings) if graph is True else (graph if graph is not False else None)
         )
         self.app_engine = app_engine()
+        self.storage: Storage = storage or build_storage(self.settings)  # the worker's own, read by vision tools
 
     # fraud graph projection (never decides anything)
 
@@ -255,7 +258,7 @@ class Worker:
             program_id=loaded.program_id,
             value_threshold_cents=loaded.value_threshold_cents,
             others=others,
-            photo_bytes=photo_reader(self.settings.storage_dir, loaded.photo_paths),
+            photo_bytes=photo_reader(self.storage, loaded.photo_paths),
             retriever=retriever,
             llm=self.llm,
             phash_bits=self.settings.phash_duplicate_bits,
