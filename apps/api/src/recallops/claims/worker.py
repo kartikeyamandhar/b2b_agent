@@ -11,8 +11,12 @@ firm and model calls across the worker (decisions log 2026-10-18). Each tick doe
    run and thread start. After invoke returns, the worker (never the graph) marks a paused run waiting_human,
    capped, or failed, so a resume is never possible before the interrupt is persisted (durability sync).
 
-A claim that fails WORKER_MAX_ATTEMPTS times is held for a person (status capped). BudgetExhausted stops the
-worker: the global model budget is spent.
+A claim that fails WORKER_MAX_ATTEMPTS times is held for a person (status capped) and its run is closed as failed
+(not resumable; the reviewer's action applies directly). BudgetExhausted stops the worker: the global model budget is
+spent. A firm that is over its plan's limit is skipped for one polling interval, so it never blocks other firms
+(03-payments.md section 8: work resumes within one interval after an upgrade). On start and on idle ticks the worker
+recovers adjudication runs left running by a crash after the claim was decided or held: the claim's status says
+whether the run reached its interrupt (waiting_human, capped) or finished (done).
 """
 
 from __future__ import annotations
@@ -115,6 +119,7 @@ class Worker:
         self.config: AgentConfig = VARIANTS[self.settings.agent_variant]
         self.embedder = build_embedder(self.settings.embedding_model_id, self.settings.embedding_dim)
         self.stopped = False
+        self.blocked_firms: dict[UUID, float] = {}  # firm -> monotonic expiry (not entitled to adjudicate)
 
     @property
     def llm(self) -> LlmClient:
@@ -134,15 +139,22 @@ class Worker:
             )
 
     def lease_claim(self) -> Leased | None:
+        now = time.monotonic()
+        self.blocked_firms = {f: t for f, t in self.blocked_firms.items() if t > now}
         with self.engine.begin() as conn:
             row = conn.execute(
                 text(
                     "UPDATE claims SET lease_owner = :me, lease_until = now() + make_interval(secs => :ttl), "
                     "attempts = attempts + 1 WHERE id = (SELECT id FROM claims WHERE status = 'submitted' "
-                    "AND (lease_until IS NULL OR lease_until < now()) ORDER BY submitted_at NULLS LAST, id "
-                    "FOR UPDATE SKIP LOCKED LIMIT 1) RETURNING id, firm_id, attempts"
+                    "AND (lease_until IS NULL OR lease_until < now()) AND firm_id <> ALL(CAST(:blocked AS uuid[])) "
+                    "ORDER BY submitted_at NULLS LAST, id FOR UPDATE SKIP LOCKED LIMIT 1) "
+                    "RETURNING id, firm_id, attempts"
                 ),
-                {"me": self.worker_id, "ttl": self.settings.worker_lease_s},
+                {
+                    "me": self.worker_id,
+                    "ttl": self.settings.worker_lease_s,
+                    "blocked": [str(f) for f in self.blocked_firms],
+                },
             ).first()
         return Leased(row.id, row.firm_id, row.attempts) if row else None
 
@@ -164,7 +176,8 @@ class Worker:
                     "UPDATE agent_runs SET status = 'running', lease_owner = :me, "
                     "lease_until = now() + make_interval(secs => :ttl) WHERE id = (SELECT id FROM agent_runs "
                     "WHERE graph = 'adjudicate' AND resume_payload IS NOT NULL "
-                    "AND status IN ('waiting_human', 'capped', 'failed') "
+                    "AND (status IN ('waiting_human', 'capped', 'failed') OR (status = 'running' "
+                    "AND lease_owner IS NOT NULL)) "
                     "AND (lease_until IS NULL OR lease_until < now()) ORDER BY started_at, id "
                     "FOR UPDATE SKIP LOCKED LIMIT 1) RETURNING id, claim_id, resume_payload"
                 ),
@@ -194,7 +207,16 @@ class Worker:
 
     def _effects(self, loaded: LoadedClaim, lease_owner: str | None) -> DbEffects:
         ctx = FirmContext(firm_id=loaded.firm_id, user_id="agent", role="admin")
-        return DbEffects(self.engine, ctx, loaded.claim_id, loaded.refund_cents, self.ledger, self.billing, lease_owner)
+        return DbEffects(
+            self.engine,
+            ctx,
+            loaded.claim_id,
+            loaded.refund_cents,
+            self.ledger,
+            self.billing,
+            lease_owner,
+            self.settings.phash_duplicate_bits,
+        )
 
     def _existing_run(self, claim_id: UUID) -> UUID | None:
         with self.engine.connect() as conn:
@@ -357,7 +379,37 @@ class Worker:
                 "claim_status": "capped",
             }
         )
+        with self.engine.begin() as conn:  # the crashed run can never be resumed: close it
+            conn.execute(
+                text(
+                    "UPDATE agent_runs SET status = 'failed', finished_at = now(), lease_owner = NULL, "
+                    "lease_until = NULL, outcome = CAST(:o AS jsonb) WHERE claim_id = :c AND graph = 'adjudicate' "
+                    "AND status = 'running'"
+                ),
+                {"c": leased.claim_id, "o": json.dumps({"exhausted": True, "attempts": leased.attempts - 1})},
+            )
         self.release_claim(leased.claim_id)
+
+    def recover_orphans(self) -> int:
+        """Adjudication runs still running whose claim is no longer submitted and not leased: a crash between the
+        claim's decision (committed by route) and the worker's status write. The claim tells which: a held claim
+        means the interrupt was reached, a decided claim means the run finished."""
+        with self.engine.begin() as conn:
+            rows = conn.execute(
+                text(
+                    "UPDATE agent_runs r SET status = CASE c.status WHEN 'capped' THEN 'capped' "
+                    "WHEN 'flagged' THEN 'waiting_human' WHEN 'under_review' THEN 'waiting_human' ELSE 'done' END, "
+                    "finished_at = CASE WHEN c.status IN ('flagged', 'under_review', 'capped') THEN NULL "
+                    "ELSE now() END, outcome = coalesce(r.outcome, '{}'::jsonb) || '{\"recovered\": true}'::jsonb "
+                    "FROM claims c WHERE c.id = r.claim_id AND r.graph = 'adjudicate' AND r.status = 'running' "
+                    "AND r.resume_payload IS NULL AND c.status NOT IN ('submitted', 'draft') "
+                    "AND (c.lease_until IS NULL OR c.lease_until < now()) "
+                    "AND (r.lease_until IS NULL OR r.lease_until < now()) RETURNING r.id, r.status"
+                )
+            ).all()
+        for row in rows:
+            log_event(log, "worker_run_recovered", level=30, run_id=str(row.id), status=row.status)
+        return len(rows)
 
     def tick(self) -> bool:
         """One unit of work. True when something was done."""
@@ -374,8 +426,9 @@ class Worker:
         ctx = FirmContext(firm_id=leased.firm_id, user_id="agent", role="admin")
         if not self.billing.check_entitlement(ctx, "adjudicate_claim").allowed:
             self.release_claim(leased.claim_id, undo_attempt=True)
+            self.blocked_firms[leased.firm_id] = time.monotonic() + self.settings.worker_poll_s
             log_event(log, "worker_claim_not_entitled", claim_id=str(leased.claim_id), firm_id=str(leased.firm_id))
-            return False
+            return True  # the next lease skips this firm, so other firms' claims are not blocked
         t0 = time.monotonic()
         try:
             outcome = self.adjudicate(leased)
@@ -425,6 +478,7 @@ class Worker:
                 variant=self.config.variant,
                 llm_mode=self.settings.llm_mode,
             )
+            self.recover_orphans()
             while not self.stopped:
                 self.heartbeat({"adjudicator": self.settings.adjudicator, "variant": self.config.variant})
                 try:
@@ -433,6 +487,8 @@ class Worker:
                     log_event(log, "worker_budget_exhausted", level=40, error=str(exc))
                     return 3
                 idle = 0 if did else idle + 1
+                if not did and self.recover_orphans():
+                    idle = 0
                 if max_idle_ticks is not None and idle >= max_idle_ticks:
                     return 0
                 if not did:

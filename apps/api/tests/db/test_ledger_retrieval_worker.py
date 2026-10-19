@@ -9,7 +9,8 @@ import pytest
 from sqlalchemy import Engine, text
 
 from recallops.claims.worker import Worker
-from recallops.payouts.db_ledger import DbPayoutLedger, IllegalTransition, PayoutNotFound
+from recallops.db.session import tenant_session
+from recallops.payouts.db_ledger import DbPayoutLedger, IllegalTransition, NotPayable, PayoutNotFound, hold_for_claim
 from recallops.retrieval.documents import chunk, program_documents
 from recallops.retrieval.embed import HashNgramEmbedder
 from recallops.retrieval.search import PgRetriever, index_program
@@ -42,6 +43,11 @@ def _firm_program_claim(engine: Engine, status: str = "approved") -> tuple[FirmC
     return FirmContext(firm_id=firm, user_id="tester", role="admin"), program, claim
 
 
+def _claim_status(engine: Engine, claim: UUID) -> str:
+    with engine.connect() as conn:
+        return str(conn.execute(text("SELECT status FROM claims WHERE id = :c"), {"c": claim}).scalar_one())
+
+
 def test_payout_state_machine(clean_db: Engine) -> None:
     ctx, _, claim = _firm_program_claim(clean_db)
     ledger = DbPayoutLedger(clean_db)
@@ -49,10 +55,14 @@ def test_payout_state_machine(clean_db: Engine) -> None:
     again = ledger.create_pending(ctx, claim, 4999)
     assert first.payout_id == again.payout_id and first.status == "pending"
     assert ledger.mark_onboarding(ctx, first.payout_id, "acct_test").status == "onboarding"
-    assert ledger.mark_failed(ctx, first.payout_id, "card declined").status == "failed"
+    assert ledger.mark_failed(ctx, first.payout_id, "account restricted").status == "failed"
     assert ledger.get(ctx, first.payout_id).attempts == 1
+    assert ledger.claim_for_transfer(ctx, first.payout_id).status == "transferring"
+    with pytest.raises(NotPayable):
+        ledger.claim_for_transfer(ctx, first.payout_id)  # already claimed: no second transfer
     assert ledger.mark_transferred(ctx, first.payout_id, "tr_1").status == "transferred"
     assert ledger.mark_transferred(ctx, first.payout_id, "tr_1").status == "transferred"  # replayed event
+    assert _claim_status(clean_db, claim) == "paid"
     with pytest.raises(IllegalTransition):
         ledger.mark_onboarding(ctx, first.payout_id, "acct_again")
     with pytest.raises(PayoutNotFound):
@@ -61,22 +71,79 @@ def test_payout_state_machine(clean_db: Engine) -> None:
         actions = (
             conn.execute(text("SELECT action FROM audit_log WHERE target_type = 'payout' ORDER BY at")).scalars().all()
         )
-    assert actions[0] == "payout_created" and "payout_transferred" in actions
+        account = conn.execute(
+            text("SELECT connect_account_id FROM payouts WHERE id = :p"), {"p": first.payout_id}
+        ).scalar_one()
+    assert actions[0] == "payout_created" and actions.count("payout_transferred") == 1
+    assert account == "acct_test"
 
 
-def test_three_transfer_failures_fall_back_to_the_export_file(clean_db: Engine) -> None:
+def test_three_transfer_failures_fall_back_to_the_export_batch(clean_db: Engine) -> None:
     ctx, _, claim = _firm_program_claim(clean_db)
     ledger = DbPayoutLedger(clean_db)
     ref = ledger.create_pending(ctx, claim, 4999)
     for _ in range(2):
-        ledger.mark_failed(ctx, ref.payout_id, "timeout")
-        ledger._move(ctx, ref.payout_id, "pending")  # the retry job puts it back
+        ledger.claim_for_transfer(ctx, ref.payout_id)
+        assert ledger.mark_failed(ctx, ref.payout_id, "timeout").status == "failed"
+    ledger.claim_for_transfer(ctx, ref.payout_id)
     final = ledger.mark_failed(ctx, ref.payout_id, "timeout")
     assert final.status == "pending_export"
-    assert ledger.mark_exported(ctx, ref.payout_id, "batch-1").status == "exported"
+    batch = str(uuid.uuid4())
+    with clean_db.begin() as conn:  # mark_exported needs its batch row (export.py writes both in one transaction)
+        conn.execute(
+            text(
+                "INSERT INTO export_batches (id, firm_id, created_by, row_count, total_cents, sha256, csv) "
+                "VALUES (:b, :f, 'test', 1, 4999, 'x', 'x'::bytea)"
+            ),
+            {"b": batch, "f": ctx.firm_id},
+        )
+    assert ledger.mark_exported(ctx, ref.payout_id, batch).status == "exported"
+    assert _claim_status(clean_db, claim) == "paid"
     ctx2, _, claim2 = _firm_program_claim(clean_db)
     check = ledger.create_pending(ctx2, claim2, 100, method="check_export")
     assert check.status == "pending_export"
+
+
+def test_a_hold_stops_money_and_only_a_reapproval_releases_it(clean_db: Engine) -> None:
+    ctx, _, claim = _firm_program_claim(clean_db)
+    ledger = DbPayoutLedger(clean_db)
+    ref = ledger.create_pending(ctx, claim, 4999, method="check_export")
+    with tenant_session(ctx, clean_db) as session:
+        session.execute(text("UPDATE claims SET status = 'flagged' WHERE id = :c"), {"c": claim})
+        assert hold_for_claim(session, ctx, claim, "duplicate_found_later") == "held"
+        assert hold_for_claim(session, ctx, claim, "again") == "held"  # idempotent
+    with pytest.raises(NotPayable):
+        ledger.claim_for_transfer(ctx, ref.payout_id)
+    with pytest.raises(IllegalTransition):
+        ledger.to_export(ctx, ref.payout_id)  # the portal cannot release a hold
+    with tenant_session(ctx, clean_db) as session:
+        session.execute(text("UPDATE claims SET status = 'approved' WHERE id = :c"), {"c": claim})
+        released = ledger.create_pending(ctx, claim, 4999, method="check_export", session=session)
+    assert released.payout_id == ref.payout_id and released.status == "pending_export"
+
+
+def test_a_transfer_in_flight_records_the_hold_and_the_real_result(clean_db: Engine) -> None:
+    ctx, _, claim = _firm_program_claim(clean_db)
+    ledger = DbPayoutLedger(clean_db)
+    ref = ledger.create_pending(ctx, claim, 4999)
+    ledger.claim_for_transfer(ctx, ref.payout_id)  # component 3 is about to call Transfer.create
+    with tenant_session(ctx, clean_db) as session:
+        session.execute(text("UPDATE claims SET status = 'flagged' WHERE id = :c"), {"c": claim})
+        assert hold_for_claim(session, ctx, claim, "reviewer override") == "transferring"
+    assert ledger.mark_failed(ctx, ref.payout_id, "insufficient balance").status == "held"
+    ctx2, _, claim2 = _firm_program_claim(clean_db)
+    ref2 = ledger.create_pending(ctx2, claim2, 4999)
+    ledger.claim_for_transfer(ctx2, ref2.payout_id)
+    with tenant_session(ctx2, clean_db) as session:
+        session.execute(text("UPDATE claims SET status = 'flagged' WHERE id = :c"), {"c": claim2})
+        hold_for_claim(session, ctx2, claim2, "duplicate_found_later")
+    assert ledger.mark_transferred(ctx2, ref2.payout_id, "tr_9").status == "transferred"  # money moved: record it
+    with clean_db.connect() as conn:
+        alerts = conn.execute(
+            text("SELECT count(*) FROM audit_log WHERE action = 'payout_paid_despite_hold' AND target_id = :p"),
+            {"p": str(ref2.payout_id)},
+        ).scalar_one()
+    assert alerts == 1 and _claim_status(clean_db, claim2) == "flagged"
 
 
 def test_retrieval_keyword_vector_and_none(clean_db: Engine) -> None:

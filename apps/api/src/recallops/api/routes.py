@@ -4,7 +4,6 @@ owner's (component 3): billing checkout and portal, the Stripe webhook, and Conn
 from __future__ import annotations
 
 import base64
-import json
 from datetime import date, datetime
 from typing import Annotated, Any
 from uuid import UUID
@@ -303,6 +302,7 @@ def claim_action(claim_id: UUID, body: s.ClaimAction, ctx: FirmDep, db: TenantDb
             body.message,
             DbPayoutLedger(app_engine()),
             billing_gate(),
+            get_settings().phash_duplicate_bits,
         )
     except ReviewConflict as exc:
         raise HTTPException(status.HTTP_409_CONFLICT, str(exc)) from exc
@@ -413,6 +413,67 @@ def mpr_pdf(program_id: UUID, report_id: UUID, ctx: FirmDep, db: TenantDb) -> Re
         recall.title if recall else "Recall program", row.payload["period"], row.payload["boxes"], row.payload["notes"]
     )
     return Response(body, media_type="application/pdf")
+
+
+# Payout export batches (the check/ACH fallback, invariant 9)
+
+CSV: Responses = {200: {"content": {"text/csv": {}}}}
+
+
+def _batch_view(b: Any) -> s.ExportBatchSummary:
+    return s.ExportBatchSummary(
+        id=b.id,
+        created_at=b.created_at,
+        created_by=b.created_by,
+        row_count=b.row_count,
+        total_cents=b.total_cents,
+        sha256=b.sha256,
+    )
+
+
+@firm.post(
+    "/payouts/exports",
+    response_model=s.ExportBatchSummary | None,
+    summary="Write one export batch of this firm's approved payouts waiting for a check (null when none)",
+)
+def create_export(ctx: AdminDep) -> s.ExportBatchSummary | None:
+    from recallops.models import ExportBatch
+    from recallops.payouts.export import export_firm
+
+    result = export_firm(app_engine(), ctx.firm_id, actor=ctx.user_id, tenant=True)
+    if result is None:
+        return None
+    with tenant_session(ctx) as session:
+        return _batch_view(session.get(ExportBatch, UUID(result["batch"])))
+
+
+@firm.get("/payouts/exports", response_model=s.ExportBatchList, summary="Export batches, newest first")
+def list_exports(ctx: AdminDep, db: TenantDb, limit: int = Query(50, ge=1, le=200)) -> s.ExportBatchList:
+    from recallops.models import ExportBatch
+
+    rows = db.scalars(
+        select(ExportBatch)
+        .where(ExportBatch.firm_id == ctx.firm_id)
+        .order_by(ExportBatch.created_at.desc())
+        .limit(limit)
+    ).all()
+    return s.ExportBatchList(items=[_batch_view(b) for b in rows])
+
+
+@firm.get("/payouts/exports/{batch_id}.csv", responses={**NOT_FOUND, **CSV}, summary="Download an export batch (admin)")
+def download_export(batch_id: UUID, ctx: AdminDep, db: TenantDb) -> Response:
+    from recallops.models import ExportBatch
+
+    batch = db.scalars(
+        select(ExportBatch).where(ExportBatch.firm_id == ctx.firm_id, ExportBatch.id == batch_id)
+    ).first()
+    if batch is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "batch not found")
+    return Response(
+        bytes(batch.csv),
+        media_type="text/csv",
+        headers={"Content-Disposition": f'attachment; filename="{batch.id}.csv"', "Cache-Control": "no-store"},
+    )
 
 
 # Usage
@@ -551,33 +612,20 @@ def portal_answer(token: str, body: s.PortalAnswer, token_ctx: ClaimTokenDep) ->
     summary="Payout destination (Connect onboarding handoff is component 3)",
 )
 def portal_payout(token: str, body: s.PortalPayout, token_ctx: ClaimTokenDep) -> s.PortalView:
-    """The claimant picks how an approved refund is paid. check_export moves the payout to the export file (the
+    """The claimant picks how an approved refund is paid. check_export moves the payout to the export batch (the
     ledger's fallback); stripe_connect onboarding is the payments owner's (component 3) and answers 501 until then."""
-    from recallops.models import Payout
-    from recallops.payouts.db_ledger import IllegalTransition
-
     if body.method == "stripe_connect":
         raise NotYetImplemented("Connect onboarding from the portal", "M4", "payments owner")
     ctx, claim_id = _portal(token, token_ctx)
+    settings = get_settings()
+    secret = settings.graph_key_secret
+    raw = secret.get_secret_value() if hasattr(secret, "get_secret_value") else str(secret)
     with tenant_session(ctx) as session:
         pc = _portal_claim_in(session, token, claim_id)
-        payout = session.scalars(
-            select(Payout).where(Payout.firm_id == ctx.firm_id, Payout.claim_id == claim_id)
-        ).first()
-        if pc.claim.status != "approved" or payout is None:
-            raise HTTPException(status.HTTP_409_CONFLICT, "there is no approved refund to pay out")
-        if body.mailing_address:
-            claimant = {**(pc.claim.claimant or {}), "mailing_address": body.mailing_address[:300]}
-            session.execute(
-                text("UPDATE claims SET claimant = CAST(:c AS jsonb) WHERE id = :id AND firm_id = :f"),
-                {"c": json.dumps(claimant), "id": claim_id, "f": ctx.firm_id},
-            )
-        payout_id, current = payout.id, payout.status
-    if current != "pending_export":
         try:
-            DbPayoutLedger(app_engine()).to_export(ctx, payout_id)
-        except IllegalTransition as exc:
-            raise HTTPException(status.HTTP_409_CONFLICT, f"the payout is already {current}") from exc
+            portal_service.choose_check_payout(session, pc, body.mailing_address, raw)
+        except portal_service.PayoutConflict as exc:
+            raise HTTPException(status.HTTP_409_CONFLICT, str(exc)) from exc
     with tenant_session(ctx) as session:
         return _portal_view(session, _portal_claim_in(session, token, claim_id))
 

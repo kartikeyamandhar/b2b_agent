@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import replace
+from typing import Any
 from uuid import UUID
 
 from recallops.logs import get_logger, log_event
@@ -32,7 +33,12 @@ class FakeLedger:
         return ref
 
     def create_pending(
-        self, ctx: FirmContext, claim_id: UUID, amount_cents: int, method: str = "stripe_connect"
+        self,
+        ctx: FirmContext,
+        claim_id: UUID,
+        amount_cents: int,
+        method: str = "stripe_connect",
+        session: Any = None,
     ) -> PayoutRef:
         existing = next((r for r in self.rows.values() if r.claim_id == claim_id), None)
         if existing is not None:
@@ -52,6 +58,9 @@ class FakeLedger:
 
     def mark_onboarding(self, ctx: FirmContext, payout_id: UUID, connect_account_id: str) -> PayoutRef:
         return self._set(ctx, payout_id, "onboarding", connect_account_id=connect_account_id)
+
+    def claim_for_transfer(self, ctx: FirmContext, payout_id: UUID) -> PayoutRef:
+        return self._set(ctx, payout_id, "transferring")
 
     def mark_transferred(self, ctx: FirmContext, payout_id: UUID, stripe_transfer_id: str) -> PayoutRef:
         return self._set(ctx, payout_id, "transferred", stripe_transfer_id=stripe_transfer_id)

@@ -3,11 +3,12 @@ decisions-log entry and a message to the team (CLAUDE.md, Working in a team)."""
 
 from __future__ import annotations
 
+import re
 from datetime import date, datetime
 from typing import Any, Literal
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from recallops.rules.schemas import IdentificationRules, RemedyRules
 
@@ -16,6 +17,9 @@ ClaimStatus = Literal[
 ]
 Outcome = Literal["approve", "deny", "needs_info", "flag"]
 RunStatus = Literal["running", "done", "capped", "failed", "waiting_human"]
+PayoutStatus = Literal[
+    "pending", "pending_export", "onboarding", "transferring", "transferred", "failed", "exported", "held"
+]
 
 PROGRAM_ID = "6c1f2a8e-1b7d-4d1e-9a6f-2f6f5e0a9b11"
 CLAIM_ID = "0b7f0d8e-3c2a-4b5e-8f1a-7d6c5b4a3e21"
@@ -251,7 +255,7 @@ class PayoutView(Schema):
     amount_cents: int
     currency: str
     method: Literal["stripe_connect", "check_export", "ach_export"]
-    status: Literal["pending", "pending_export", "onboarding", "transferred", "failed", "exported"]
+    status: PayoutStatus
 
 
 class AuditEntry(Schema):
@@ -432,8 +436,21 @@ class PortalView(Schema):
     pending_question: str | None
     decision_reasons: list[str] = Field(description="plain-language reasons once decided")
     photos_uploaded: list[Literal["label", "destruction", "receipt", "other"]] = Field(default_factory=list)
-    payout_status: Literal["pending", "pending_export", "onboarding", "transferred", "failed", "exported"] | None = None
+    payout_status: PayoutStatus | None = None
     messages: list[PortalMessage] = Field(default_factory=list, description="needs_info questions and replies")
+
+
+_CONTROL = re.compile(r"[\x00-\x1f\x7f]")
+
+
+def clean_text(value: Any) -> Any:
+    """Claimant text: control characters (newlines included) become spaces, runs of spaces collapse, the ends are
+    stripped, and a value with no letter or digit left becomes None. A serial of "-" or an address of " " is then no
+    value at all, so it can never match every other claim's missing value (red team, decisions log 2026-10-18)."""
+    if not isinstance(value, str):
+        return value
+    cleaned = " ".join(_CONTROL.sub(" ", value).split())
+    return cleaned if any(ch.isalnum() for ch in cleaned) else None
 
 
 class PortalSubmit(Schema):
@@ -451,6 +468,28 @@ class PortalSubmit(Schema):
     purchase_date: date | None = None
     quantity: int = Field(1, ge=1, le=20)
 
+    _clean = field_validator(
+        "name",
+        "email",
+        "phone",
+        "address_line1",
+        "city",
+        "state",
+        "zip",
+        "model_claimed",
+        "serial_claimed",
+        "date_code_claimed",
+        "retailer_claimed",
+        mode="before",
+    )(clean_text)
+
+    @field_validator("name", "email", "address_line1", "city", "state", "zip")
+    @classmethod
+    def _required(cls, value: str | None) -> str:
+        if value is None:
+            raise ValueError("required")
+        return value
+
 
 class PortalAnswer(Schema):
     message: str = Field(max_length=2000)
@@ -459,6 +498,8 @@ class PortalAnswer(Schema):
 class PortalPayout(Schema):
     method: Literal["stripe_connect", "check_export"]
     mailing_address: str | None = Field(None, max_length=300)
+
+    _clean = field_validator("mailing_address", mode="before")(clean_text)
 
 
 class CheckoutSession(Schema):
@@ -469,3 +510,16 @@ class Health(Schema):
     status: Literal["ok", "degraded"]
     database: bool
     worker_heartbeat_age_s: float | None = Field(None, description="seconds since the worker's last heartbeat")
+
+
+class ExportBatchSummary(Schema):
+    id: UUID
+    created_at: datetime
+    created_by: str
+    row_count: int
+    total_cents: int
+    sha256: str = Field(description="sha256 of the CSV bytes, for the bank upload record")
+
+
+class ExportBatchList(Schema):
+    items: list[ExportBatchSummary]

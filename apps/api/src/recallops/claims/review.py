@@ -39,6 +39,7 @@ def submit_action(
     message: str | None,
     ledger: PayoutLedger,
     billing: BillingGate,
+    phash_bits: int = 6,
 ) -> str:
     """Returns "queued" (the worker resumes the run) or "applied" (decided directly)."""
     if action == "resume_override" and outcome is None:
@@ -52,7 +53,14 @@ def submit_action(
         .order_by(AgentRun.started_at.desc())
         .limit(1)
     ).first()
-    if run is not None and run.graph == "adjudicate" and run.status in WAITING_RUN and claim.status in REVIEWABLE:
+    resumable = run is not None and not (run.outcome or {}).get("exhausted")
+    if (
+        run is not None
+        and resumable
+        and run.graph == "adjudicate"
+        and run.status in WAITING_RUN
+        and claim.status in REVIEWABLE
+    ):
         done = session.execute(
             text(
                 "UPDATE agent_runs SET resume_payload = CAST(:p AS jsonb) WHERE id = :r AND firm_id = :f "
@@ -71,7 +79,9 @@ def submit_action(
     from recallops.claims.graph import _final_from_review
 
     final = _final_from_review(payload, {"decision": claim.decision or {}})
-    effects = DbEffects(engine, ctx, claim.id, claim.refund_cents, ledger, billing, lease_owner=None)
+    effects = DbEffects(
+        engine, ctx, claim.id, claim.refund_cents, ledger, billing, lease_owner=None, phash_bits=phash_bits
+    )
     effects.apply_from(final, DIRECT_REVIEWABLE)
     return "applied"
 

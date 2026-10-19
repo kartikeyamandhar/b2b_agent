@@ -798,6 +798,65 @@
         "title": "Decision",
         "type": "object"
       },
+      "ExportBatchList": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ExportBatchSummary"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "ExportBatchList",
+        "type": "object"
+      },
+      "ExportBatchSummary": {
+        "additionalProperties": false,
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "created_by": {
+            "title": "Created By",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "row_count": {
+            "title": "Row Count",
+            "type": "integer"
+          },
+          "sha256": {
+            "description": "sha256 of the CSV bytes, for the bank upload record",
+            "title": "Sha256",
+            "type": "string"
+          },
+          "total_cents": {
+            "title": "Total Cents",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "created_at",
+          "created_by",
+          "row_count",
+          "total_cents",
+          "sha256"
+        ],
+        "title": "ExportBatchSummary",
+        "type": "object"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -1143,9 +1202,11 @@
               "pending",
               "pending_export",
               "onboarding",
+              "transferring",
               "transferred",
               "failed",
-              "exported"
+              "exported",
+              "held"
             ],
             "title": "Status",
             "type": "string"
@@ -1509,9 +1570,11 @@
                   "pending",
                   "pending_export",
                   "onboarding",
+                  "transferring",
                   "transferred",
                   "failed",
-                  "exported"
+                  "exported",
+                  "held"
                 ],
                 "type": "string"
               },
@@ -2840,7 +2903,7 @@
     },
     "/portal/{token}/payout": {
       "post": {
-        "description": "The claimant picks how an approved refund is paid. check_export moves the payout to the export file (the\nledger's fallback); stripe_connect onboarding is the payments owner's (component 3) and answers 501 until then.",
+        "description": "The claimant picks how an approved refund is paid. check_export moves the payout to the export batch (the\nledger's fallback); stripe_connect onboarding is the payments owner's (component 3) and answers 501 until then.",
         "operationId": "portal_payout_portal__token__payout_post",
         "parameters": [
           {
@@ -3513,6 +3576,190 @@
           }
         },
         "summary": "agent_steps of the claim's latest run (docs/contracts/trace.md)",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/payouts/exports": {
+      "get": {
+        "operationId": "list_exports_v1_payouts_exports_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExportBatchList"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Export batches, newest first",
+        "tags": [
+          "firm"
+        ]
+      },
+      "post": {
+        "operationId": "create_export_v1_payouts_exports_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ExportBatchSummary"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Response Create Export V1 Payouts Exports Post"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "summary": "Write one export batch of this firm's approved payouts waiting for a check (null when none)",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/payouts/exports/{batch_id}.csv": {
+      "get": {
+        "operationId": "download_export_v1_payouts_exports__batch_id__csv_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "batch_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Batch Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              },
+              "text/csv": {}
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Download an export batch (admin)",
         "tags": [
           "firm"
         ]

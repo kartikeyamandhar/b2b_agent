@@ -184,7 +184,29 @@ def test_flagged_claim_waits_and_the_review_resumes_the_same_run(env: dict[str, 
     trace = client.get(f"/v1/claims/{claim_id}/trace", headers=REVIEWER).json()
     assert [s["node"] for s in trace["steps"][steps_before:]] == ["human_review"]
     assert any(a["action"] == "review_submitted" for a in detail["audit"])
-    assert w.tick() is False
+
+    # The earlier approved claim with the same photos and address was reopened when this duplicate was flagged
+    # (decision time, Postgres, no graph): back to submitted with its payout held, so the adjudicator decides it
+    # again with the duplicate in view, and flags it through the interrupt. Both claims end flagged (section 12).
+    earlier = next(
+        c
+        for c in client.get(f"/v1/programs/{program_id}/claims?limit=50", headers=REVIEWER).json()["items"]
+        if c["id"] != claim_id and c["status"] == "submitted"
+    )
+    with engine.connect() as conn:
+        held = conn.execute(
+            text("SELECT status, last_error FROM payouts WHERE claim_id = :c"), {"c": earlier["id"]}
+        ).one()
+        reopened = conn.execute(
+            text("SELECT count(*) FROM audit_log WHERE action = 'claim_reopened_duplicate' AND target_id = :c"),
+            {"c": earlier["id"]},
+        ).scalar_one()
+    assert held.status == "held" and held.last_error == "duplicate_found_later" and reopened == 1
+    w2, _ = worker(engine, [turn(tool_use(1, "check_duplicates")), decide(2, "flag", ["T1"])])
+    assert w2.tick() is True
+    again = client.get(f"/v1/claims/{earlier['id']}", headers=REVIEWER).json()
+    assert again["status"] == "flagged" and again["run"]["status"] == "waiting_human"
+    assert w2.tick() is False
 
 
 def test_direct_review_of_a_rules_only_claim_and_guards(env: dict[str, Any]) -> None:
@@ -256,24 +278,34 @@ def test_check_payout_export_and_a_reconciled_mpr(env: dict[str, Any], tmp_path:
     from recallops.payouts.export import export_pending
 
     client, engine = env["client"], env["engine"]
-    approved = next(
-        c
+    program_id = next(
+        p["id"]
         for p in client.get("/v1/programs", headers=ADMIN).json()["items"]
-        if p["id"] != env["seeded"]["demo"]["program_id"]
-        for c in client.get(f"/v1/programs/{p['id']}/claims?status=approved", headers=ADMIN).json()["items"]
+        if p["status"] == "open" and p["recall_id"] and p["id"] != env["seeded"]["demo"]["program_id"]
     )
-    program_id = approved["program_id"]
-    token = f"dev.{seed.DEMO_FIRM_ID}.{approved['id']}"
+    link = client.post(f"/v1/programs/{program_id}/claims/issue", headers=ADMIN, json={"n": 1}).json()["links"][0]
+    other_person = FIELDS | {"name": "Blake Other", "email": "blake@example.org", "address_line1": "9 Oak Ave"}
+    token = file_claim(client, link["url"], 4242, other_person)
+    w, _ = worker(engine, approve_script())
+    assert w.tick() is True
+    approved = client.get(f"/v1/claims/{link['claim_id']}", headers=ADMIN).json()
+    assert approved["status"] == "approved", approved["decision"]
     stripe = client.post(f"/portal/{token}/payout", json={"method": "stripe_connect"})
     assert stripe.status_code == 501 and "payments owner" in stripe.json()["detail"]
     chose = client.post(
-        f"/portal/{token}/payout", json={"method": "check_export", "mailing_address": "1 Main St, Springfield IL 62701"}
+        f"/portal/{token}/payout", json={"method": "check_export", "mailing_address": "77 Elm Rd, Peoria IL 61602"}
     )
     assert chose.status_code == 200 and chose.json()["payout_status"] == "pending_export"
     written = export_pending(engine, tmp_path)
     assert written and written[0]["rows"] >= 1
-    assert "1 Main St, Springfield IL 62701" in (tmp_path / "exports").rglob("*.csv").__next__().read_text()
-    assert client.get(f"/portal/{token}").json()["payout_status"] == "exported"
+    assert "77 Elm Rd, Peoria IL 61602" in (tmp_path / "exports").rglob("*.csv").__next__().read_text()
+    view = client.get(f"/portal/{token}").json()
+    assert view["payout_status"] == "exported" and view["status"] == "paid"
+    batches = client.get("/v1/payouts/exports", headers=ADMIN).json()["items"]
+    csv_body = client.get(f"/v1/payouts/exports/{batches[0]['id']}.csv", headers=ADMIN)
+    assert csv_body.status_code == 200 and "77 Elm Rd" in csv_body.text
+    assert client.get(f"/v1/payouts/exports/{batches[0]['id']}.csv", headers=REVIEWER).status_code == 403
+    assert client.get(f"/v1/payouts/exports/{batches[0]['id']}.csv", headers=OTHER).status_code == 404
     assert client.post(f"/portal/{token}/payout", json={"method": "check_export"}).status_code == 409
 
     period = datetime.now(UTC).strftime("%Y-%m")
@@ -289,3 +321,32 @@ def test_check_payout_export_and_a_reconciled_mpr(env: dict[str, Any], tmp_path:
     pdf = client.get(f"/v1/programs/{program_id}/mpr/{body['id']}.pdf", headers=ADMIN)
     assert pdf.status_code == 200 and pdf.content.startswith(b"%PDF-1.4") and pdf.content.rstrip().endswith(b"%%EOF")
     assert client.post(f"/v1/programs/{program_id}/mpr/generate?period={period}", headers=REVIEWER).status_code == 403
+
+
+def test_a_mailing_address_shared_with_another_claim_holds_the_payout(env: dict[str, Any]) -> None:
+    """The redirect pattern check_duplicates cannot see: an approved claimant asks for the check at an address another
+    claim of the program uses. The claim goes to a person and its payout is held, in the same transaction."""
+    client, engine = env["client"], env["engine"]
+    program_id = next(
+        p["id"]
+        for p in client.get("/v1/programs", headers=ADMIN).json()["items"]
+        if p["status"] == "open" and p["recall_id"] and p["id"] != env["seeded"]["demo"]["program_id"]
+    )
+    link = client.post(f"/v1/programs/{program_id}/claims/issue", headers=ADMIN, json={"n": 1}).json()["links"][0]
+    person = FIELDS | {"name": "Casey Third", "email": "casey@example.net", "address_line1": "5 Pine Ct"}
+    token = file_claim(client, link["url"], 9191, person)
+    w, _ = worker(engine, approve_script())
+    assert w.tick() is True
+    assert client.get(f"/v1/claims/{link['claim_id']}", headers=ADMIN).json()["status"] == "approved"
+    held = client.post(
+        f"/portal/{token}/payout",
+        json={"method": "check_export", "mailing_address": "  1 Main St, Springfield IL 62701\n"},
+    )
+    assert held.status_code == 200 and held.json()["payout_status"] == "held"
+    assert held.json()["status"] == "under_review"
+    with engine.connect() as conn:
+        audit = conn.execute(
+            text("SELECT after FROM audit_log WHERE action = 'payout_address_changed' AND target_id = :c"),
+            {"c": link["claim_id"]},
+        ).scalar_one()
+    assert set(audit) == {"mailing_fp"} and "Main" not in str(audit)  # a fingerprint, never the address

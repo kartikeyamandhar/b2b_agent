@@ -264,14 +264,16 @@ def answer(session: Session, pc: PortalClaim, message: str) -> None:
     if claim.status != "needs_info":
         raise NotEditable("the claim is not waiting for an answer")
     entry = {"from": "claimant", "text": message[:2000], "at": datetime.now(UTC).isoformat()}
-    session.execute(
+    done = session.execute(
         text(
             "UPDATE claims SET messages = messages || CAST(:m AS jsonb), status = 'submitted', "
-            "submitted_at = now(), decision = NULL, decided_at = NULL, decided_by = NULL "
-            "WHERE id = :c AND firm_id = :f AND status = 'needs_info'"
+            "submitted_at = now(), decision = NULL, decided_at = NULL, decided_by = NULL, attempts = 0 "
+            "WHERE id = :c AND firm_id = :f AND status = 'needs_info' RETURNING id"
         ),
         {"m": json.dumps([entry]), "c": claim.id, "f": claim.firm_id},
-    )
+    ).first()
+    if done is None:  # the claim left needs_info meanwhile (a reviewer, or a duplicate found later)
+        raise NotEditable("the claim is no longer waiting for an answer")
     session.add(
         AuditLog(
             firm_id=claim.firm_id,
@@ -283,3 +285,118 @@ def answer(session: Session, pc: PortalClaim, message: str) -> None:
             after={"status": "submitted"},
         )
     )
+
+
+CHOOSABLE = ("pending", "onboarding", "failed", "pending_export")
+SHARED_MAILING = "shared_mailing_address"
+
+
+class PayoutConflict(ValueError):
+    pass
+
+
+def fingerprint(secret: str, value: str | None) -> str | None:
+    """A keyed fingerprint for audit rows: equal addresses compare equal, the address itself is never stored."""
+    import hashlib
+    import hmac
+
+    from recallops.claims.tools.checks import _norm_text
+
+    norm = _norm_text(value)
+    return hmac.new(secret.encode(), norm.encode(), hashlib.sha256).hexdigest()[:16] if norm else None
+
+
+def _home(person: dict[str, Any]) -> str:
+    return " ".join(str(person.get(k, "")) for k in ("address_line1", "city", "state", "zip"))
+
+
+def choose_check_payout(session: Session, pc: PortalClaim, mailing_address: str | None, secret: str) -> str:
+    """The claimant chose a mailed check (the export batch pays it). One transaction, claim row locked before the
+    payout row (the money paths' lock order). The address can change only while no batch or transfer holds the
+    payout. A mailing address that another claim of the program already uses (as its mailing address or its home
+    address) is the redirect pattern the duplicate check cannot see, because it compares claimant addresses only:
+    every such claim that is approved with money not yet moved goes to a person (under_review) with its payout held.
+    Returns the payout's status."""
+    from recallops.claims.tools.checks import _norm_text
+    from recallops.payouts.db_ledger import hold_for_claim, transition
+    from recallops.tenancy import FirmContext
+
+    claim = pc.claim
+    ctx = FirmContext(firm_id=claim.firm_id, user_id="claimant", role="admin")
+    row = session.execute(
+        text("SELECT status, claimant, program_id FROM claims WHERE id = :c AND firm_id = :f FOR UPDATE"),
+        {"c": claim.id, "f": claim.firm_id},
+    ).one()
+    from recallops.models import Payout
+
+    payout = session.scalars(
+        select(Payout).where(Payout.firm_id == claim.firm_id, Payout.claim_id == claim.id).with_for_update()
+    ).first()
+    if row.status != "approved" or payout is None:
+        raise PayoutConflict("there is no approved refund to pay out")
+    if payout.status not in CHOOSABLE:
+        raise PayoutConflict(f"the payout is already {payout.status}")
+    claimant = dict(row.claimant or {})
+    if mailing_address and _norm_text(mailing_address) != _norm_text(claimant.get("mailing_address")):
+        session.add(
+            AuditLog(
+                firm_id=claim.firm_id,
+                actor="claimant",
+                action="payout_address_changed",
+                target_type="claim",
+                target_id=str(claim.id),
+                before={"mailing_fp": fingerprint(secret, claimant.get("mailing_address"))},
+                after={"mailing_fp": fingerprint(secret, mailing_address)},
+            )
+        )
+        claimant["mailing_address"] = mailing_address[:300]
+        session.execute(
+            text("UPDATE claims SET claimant = CAST(:c AS jsonb) WHERE id = :id AND firm_id = :f"),
+            {"c": json.dumps(claimant), "id": claim.id, "f": claim.firm_id},
+        )
+        target = _norm_text(mailing_address)
+        others = session.execute(
+            text(
+                "SELECT id, status, claimant FROM claims WHERE firm_id = :f AND program_id = :p AND id <> :c "
+                "AND status <> 'draft' ORDER BY id"
+            ),
+            {"f": claim.firm_id, "p": row.program_id, "c": claim.id},
+        ).all()
+        shared = [
+            o.id
+            for o in others
+            if target in (_norm_text((o.claimant or {}).get("mailing_address")), _norm_text(_home(o.claimant or {})))
+        ]
+        if shared:
+            for cid in sorted({claim.id, *shared}):
+                done = session.execute(
+                    text(
+                        "UPDATE claims SET status = 'under_review', decision = coalesce(decision, '{}'::jsonb) || "
+                        "CAST(:d AS jsonb) WHERE id = :c AND firm_id = :f AND status = 'approved' RETURNING id"
+                    ),
+                    {
+                        "d": json.dumps({"routed_to_human": True, "hold_reason": SHARED_MAILING}),
+                        "c": cid,
+                        "f": claim.firm_id,
+                    },
+                ).first()
+                if done is None:
+                    continue
+                hold_for_claim(session, ctx, cid, SHARED_MAILING)
+                session.add(
+                    AuditLog(
+                        firm_id=claim.firm_id,
+                        actor="system",
+                        action="claim_held_shared_mailing",
+                        target_type="claim",
+                        target_id=str(cid),
+                        before={"status": "approved"},
+                        after={"status": "under_review", "shared_with": len(shared)},
+                    )
+                )
+            log_event(log, "payout_shared_mailing", level=30, firm_id=str(claim.firm_id), claim_id=str(claim.id))
+            session.refresh(payout)
+            return str(payout.status)
+    if payout.status != "pending_export":
+        transition(session, ctx, payout, "pending_export", method="check_export")
+    return str(payout.status)
