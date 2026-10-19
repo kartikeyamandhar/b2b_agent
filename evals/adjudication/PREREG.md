@@ -60,3 +60,22 @@ On the 300 golden claims (the kill-criterion block, unchanged): rules_only (the 
 ### Columns
 
 mean counted steps (model calls plus rejected tool calls; rules_only counts 0) and mean written rows are reported separately. Cost is nominal (recorded usage times the price table), identical in live and replay. p50 seconds comes from the replay virtual clock (recorded live latency).
+
+## Outcome of the Revision 2 expectations (recorded 2026-10-19, after the full live run)
+
+Every row ran on every block from recordings (ledger 1.614 USD after the run, 0 errors, 0 missing claims). Numbers are macro F1 from evals/results/ablation.md. Reported as observed; nothing was tuned after the run.
+
+| expectation | observed | verdict |
+|---|---|---|
+| golden300: rules_plus_vision and loop_full at least 0.90 | 0.933 and 0.916 | met |
+| golden300: rules_only unchanged at 0.982 | 0.9817 (pinned exactly by tests/unit/test_freeze.py) | met |
+| kill criterion fires on golden300 (by construction) | loop_full minus rules_only = -0.066 | fired: the agent's case rests on photo reading, fraud routing, and the other blocks |
+| probe60: rules_only at most 0.5 | 0.095 | met |
+| probe60: rules_plus_vision and loop_full at least 0.75 | 0.726 and 0.703 | missed |
+| retrieval: loop_full and loop_no_retrieval within 0.02 on every block | golden300 0.008, probe60 0.004, standin40 0.056 | missed on standin40 (40 claims; 2 claims differ) |
+| loop_full mean cost per claim at most 0.005 USD | 0.0016 | met |
+| capped share at most 5 percent | 0 percent | met |
+| mean counted steps at most 6 | 4.1 to 4.8 | met |
+| total spend for M2 to M4 at most 3 USD | 1.62 USD including M1 | met |
+
+Why probe60 missed: every row that reads photos gets only 3 or 4 of the 10 clean controls right, and 19 of the 30 expected-approve claims go to needs_info. Replaying those claims shows the label reads are correct (legible, the right model, confidence about 0.9); the destruction check rejects the renderer's compliant destruction photos ("an abstract illustration", "no visible cut in the cord", "RECALLED printed rather than handwritten"). The synthetic destruction renders are too schematic to count as evidence for a vision model, which also explains most of the gap between rules_plus_vision (0.933) and rules_only (0.982) on golden300. A real-photo block is needed before the destruction check's numbers mean anything; changing the renderer would change frozen blocks and needs a new revision and new recordings.

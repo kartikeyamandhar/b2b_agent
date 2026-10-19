@@ -10,7 +10,7 @@
   "share_routed_to_human": 0.2533,
   "mean_steps": 7,
   "mean_cost_usd": 0.0,
-  "p50_seconds": 9e-05,
+  "p50_seconds": 8e-05,
   "per_class": {
    "approve": {
     "tp": 102,
