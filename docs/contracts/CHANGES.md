@@ -9,6 +9,10 @@ CLAUDE.md ("Working in a team") requires a decisions-log entry and a message to 
 3. Write routes that were 501 are implemented: program create and patch, link issue, reviewer actions, portal submit, photos, answer, and payout (check), MPR get, generate, and PDF, and the feed pull. The only 501s left are the payments owner's (billing checkout and portal, the Stripe webhook, Connect onboarding from the portal).
 4. `/readyz` gains `graph`: `ok`, `disabled`, or `unavailable`. The graph never makes the service unready; health-check deploys on `/healthz`.
 
+4a. (2026-10-19) **Writes are committed before the response is sent.** Until now the API answered first and committed a moment later, so a read sent right after a write could return the old data, and a commit that failed after a 200 was invisible. Now a successful answer means the write is saved, and a failed commit answers 500. No code change is needed on your side; a re-read after a write is no longer required. Trace: docs/traces/M6-commit-before-response.md.
+4b. (2026-10-19) **Every error is a problem detail.** An unexpected error now answers `application/problem+json` with status 500, a fixed `detail` ("unexpected server error; nothing was saved...") and the `correlation_id` (it was `text/plain` "Internal Server Error"). A 422 `detail` now reads as `field.path: message; ...` (it was a Python list repr). Show `detail` as text; do not parse it.
+4c. (2026-10-19) **A backend test console** is served at `/dev/console` while the dev auth provider is active (never in prod, not in the contract). It calls every route; read its JS for a working request and response per screen. It is not the product UI.
+
 ## UI owner (component 2)
 
 5. **Breaking for strict enums: payout status** gains `transferring` (component 3 is sending a Stripe transfer) and `held` (the claim left approved before money moved: a reviewer override, or a duplicate found later). Both appear in `PayoutView.status` and `PortalView.payout_status`. Treat unknown values as "in progress"; show `held` as "on hold, a person is reviewing".

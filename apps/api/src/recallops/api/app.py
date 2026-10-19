@@ -30,6 +30,10 @@ def create_app() -> FastAPI:
     install_guards(app)
     for router in (routes.firm, routes.billing, routes.portal, routes.internal, routes.health):
         app.include_router(router)
+    from recallops.api import dev_console
+
+    if dev_console.enabled(settings):  # never with the Clerk provider or in prod; not in the contract
+        app.include_router(dev_console.router)
     return app
 
 

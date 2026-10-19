@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import logging
 import time
 import uuid
-from collections.abc import Awaitable, Callable
+from collections.abc import Awaitable, Callable, Sequence
+from typing import Any
 
 from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.exceptions import RequestValidationError
@@ -55,8 +57,19 @@ TITLES = {
     409: "Conflict",
     422: "Unprocessable Entity",
     429: "Too Many Requests",
+    500: "Internal Server Error",
     501: "Not Implemented",
 }
+INTERNAL_DETAIL = "unexpected server error; nothing was saved. Quote the correlation_id when reporting it."
+
+
+def validation_detail(errors: Sequence[Any]) -> str:
+    """'body.recall_id: Field required; query.limit: ...', not a Python repr; input values are never echoed."""
+    parts = []
+    for error in errors:
+        loc = ".".join(str(part) for part in error.get("loc", ()))
+        parts.append(f"{loc}: {error.get('msg', 'invalid')}" if loc else str(error.get("msg", "invalid")))
+    return "; ".join(parts)[:1000] or "invalid request"
 
 
 def install(app: FastAPI) -> None:
@@ -85,7 +98,7 @@ def install(app: FastAPI) -> None:
 
     @app.exception_handler(RequestValidationError)
     async def validation_problem(request: Request, exc: RequestValidationError) -> JSONResponse:
-        return problem(422, TITLES[422], str(exc.errors())[:1000], request)
+        return problem(422, TITLES[422], validation_detail(exc.errors()), request)
 
     @app.exception_handler(NotYetImplemented)
     async def not_yet(request: Request, exc: NotYetImplemented) -> JSONResponse:
@@ -94,3 +107,19 @@ def install(app: FastAPI) -> None:
     @app.exception_handler(PaymentRequired)
     async def payment_required(request: Request, exc: PaymentRequired) -> JSONResponse:
         return problem(402, TITLES[402], exc.detail, request)
+
+    @app.exception_handler(Exception)
+    async def unexpected(request: Request, exc: Exception) -> JSONResponse:
+        """Any other error, including a commit that fails as a session dependency exits: a problem detail with a
+        fixed message (never the exception's text, which can carry SQL or values) and the correlation id."""
+        from recallops.api.guards import redact
+
+        log_event(
+            log,
+            "http_unhandled_error",
+            level=logging.ERROR,
+            path=redact(request.url.path),
+            error=type(exc).__name__,
+            correlation_id=getattr(request.state, "correlation_id", None),
+        )
+        return problem(500, TITLES[500], INTERNAL_DETAIL, request)

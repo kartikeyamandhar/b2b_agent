@@ -13,6 +13,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy import Engine
 
 from recallops import seed
+from recallops.api import problems
 from recallops.api.export_openapi import render
 from recallops.auth.dev import DevAuthProvider, DevClaimTokenVerifier, UnsafeDevAuth
 from recallops.auth.provider import AuthError
@@ -164,3 +165,39 @@ def test_payment_fakes_allow_and_log() -> None:
     assert billing.check_entitlement(ctx, "adjudicate_claim").allowed
     billing.record_usage(ctx, 3, Decimal("0"))
     assert billing.usage == [(str(ctx.firm_id), 3, Decimal("0"))]
+
+
+def test_a_failed_commit_answers_an_error_not_a_success(
+    seeded: dict[str, Any], monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Session dependencies exit before the response is sent (Depends scope="function"): a commit that fails turns
+    into an error answer, and a client that reads right after a write sees it. With the default request scope the
+    200 went out first and the commit ran afterwards (found by the test console's QA, 2026-10-19)."""
+    from contextlib import contextmanager
+
+    from recallops.api import deps
+    from recallops.api.app import create_app
+    from recallops.db.session import tenant_session as real
+
+    @contextmanager
+    def failing_commit(ctx: FirmContext, *args: Any, **kwargs: Any) -> Iterator[Any]:
+        with real(ctx, *args, **kwargs) as session:
+            yield session
+            raise RuntimeError("commit failed")
+
+    monkeypatch.setattr(deps, "tenant_session", failing_commit)
+    with TestClient(create_app(), raise_server_exceptions=False) as c:
+        response = c.get("/v1/programs", headers=DEMO)
+    assert response.status_code == 500
+    assert response.headers["content-type"].startswith("application/problem+json")
+    body = response.json()
+    assert body["detail"] == problems.INTERNAL_DETAIL and body["correlation_id"]
+    assert "commit failed" not in response.text  # the exception's text never reaches the client
+
+
+def test_validation_errors_read_as_field_messages(client: TestClient, seeded: dict[str, Any]) -> None:
+    pid = seeded["demo"]["program_id"]
+    body = client.get(f"/v1/programs/{pid}/claims?limit=nope", headers=DEMO).json()
+    assert body["status"] == 422 and body["detail"].startswith("query.limit: ")
+    assert "{" not in body["detail"] and "'loc'" not in body["detail"]
+    assert problems.validation_detail([]) == "invalid request"

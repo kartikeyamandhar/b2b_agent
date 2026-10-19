@@ -222,6 +222,8 @@ make dev                  # the API on http://127.0.0.1:8000, interactive docs a
 
 `make seed` loads a fixture of 51 real CPSC records, opens a program for the Scotch thermal laminator recall (CPSC 27024) under a demo firm, and generates 500 claims and decides them with the rules-only adjudicator (no model calls). It then moves the approved refunds through the ledger and builds the fraud graph. The ids are deterministic.
 
+To click through everything the backend does without the product UI, open the **test console** at http://127.0.0.1:8000/dev/console while `make dev` runs. It covers the claims queue, each claim's photos, decision, and step-by-step agent trace, reviewer actions, a claimant portal simulator that files a real claim with photos, fraud rings, payout export batches, the monthly report and its PDF, campaigns, and recall search. It exists only with the development sign-in, so it is never served in production; the product UI is the UI owner's `apps/web`.
+
 Then watch new claims get decided, in a second terminal:
 
 ```bash
