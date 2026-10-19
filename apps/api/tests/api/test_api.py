@@ -13,7 +13,6 @@ from fastapi.testclient import TestClient
 from sqlalchemy import Engine
 
 from recallops import seed
-from tests.conftest import CLEAN_ORDER
 from recallops.api.export_openapi import render
 from recallops.auth.dev import DevAuthProvider, DevClaimTokenVerifier, UnsafeDevAuth
 from recallops.auth.provider import AuthError
@@ -21,6 +20,7 @@ from recallops.billing.fake import AllowAllBilling
 from recallops.payouts.fake import FakeLedger
 from recallops.settings import REPO_ROOT, Settings
 from recallops.tenancy import FirmContext
+from tests.conftest import CLEAN_ORDER
 
 pytestmark = pytest.mark.db
 
