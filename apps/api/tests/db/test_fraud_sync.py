@@ -16,7 +16,7 @@ from sqlalchemy import Engine, text
 from recallops.db.session import tenant_session
 from recallops.fraud.__main__ import main as fraud_cli
 from recallops.fraud.cypher import GRAPH_KINDS, GraphKind
-from recallops.fraud.graph import GraphUnavailable, Neo4jGraphStore
+from recallops.fraud.graph import GraphError, GraphUnavailable, Neo4jGraphStore
 from recallops.fraud.graph_admin import purge_namespace
 from recallops.fraud.sync import check_epoch, resync_dirty, sync_claim, sync_program
 from recallops.fraud.view import fraud_graph
@@ -401,6 +401,28 @@ def test_resync_stops_at_the_first_graph_failure(
         misbehaving.append(down)
         resync_dirty(down, clean_db, app_engine_test, settings, 50)
     assert len(calls) == 1 and dirty(clean_db) == before  # rolled back; nothing marked synced
+
+
+def test_resync_skips_a_claim_the_graph_rejects(
+    adversarial: list[ClaimRow],
+    clean_db: Engine,
+    app_engine_test: Engine,
+    graph_store: Neo4jGraphStore,
+    misbehaving: list[Neo4jGraphStore],
+) -> None:
+    settings = get_settings()
+
+    class RejectsOne(Neo4jGraphStore):
+        def project_claim(self, *args: Any, **kwargs: Any) -> None:
+            if args[3].claim_id == cid("chain2"):
+                raise GraphError("rejected")
+            super().project_claim(*args, **kwargs)
+
+    store = RejectsOne(settings)
+    misbehaving.append(store)
+    synced = resync_dirty(store, clean_db, app_engine_test, settings, 50)
+    assert synced == len(adversarial) - 2  # every non-draft claim but the rejected one
+    assert dirty(clean_db) == {cid("chain2")}
 
 
 def test_cli_sync_and_status(

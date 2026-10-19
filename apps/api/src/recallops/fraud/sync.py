@@ -35,7 +35,7 @@ from recallops.claims.context import facts_from_rows, program_claims
 from recallops.claims.tools import PHASH_KINDS, ClaimFacts
 from recallops.db.session import tenant_session
 from recallops.fraud.cypher import GRAPH_KINDS, RING_REL_TYPES, GraphKind
-from recallops.fraud.graph import ClaimProjection, GraphStore, GraphUnavailable, SimilarPhoto
+from recallops.fraud.graph import ClaimProjection, GraphError, GraphStore, GraphUnavailable, SimilarPhoto
 from recallops.fraud.graph_admin import get_epoch, purge_absent, set_epoch
 from recallops.fraud.phash import hamming
 from recallops.logs import get_logger, log_event
@@ -501,21 +501,33 @@ def resync_dirty(
     heartbeat: Callable[[], None] | None = None,
 ) -> int:
     """Re-project up to `limit` dirty non-draft claims across firms, oldest first. Stops at the first
-    GraphUnavailable and re-raises it (the breaker then makes the next tick fail fast). Returns claims processed."""
+    GraphUnavailable and re-raises it (the breaker then makes the next tick fail fast). Any other graph error is
+    logged and skipped, so one claim the graph rejects cannot starve the rest; it stays dirty. Returns the number
+    of claims synced (outcome synced or stale)."""
     with internal_engine.connect() as conn:
         dirty = conn.execute(DIRTY_SQL, {"n": limit}).all()
-    done = 0
+    done = failed = 0
     for row in dirty:
         try:
             sync_claim(store, internal_engine, app_engine, settings, row.firm_id, row.program_id, row.id)
+            done += 1
         except GraphUnavailable:
             log_event(log, "graph_resync_stopped", level=logging.WARNING, done=done, pending=len(dirty) - done)
             raise
-        done += 1
+        except GraphError as exc:
+            failed += 1
+            log_event(
+                log,
+                "graph_sync_failed",
+                level=logging.ERROR,
+                firm_id=str(row.firm_id),
+                claim_id=str(row.id),
+                error=str(exc),
+            )
         if heartbeat is not None:
             heartbeat()
     if dirty:
-        log_event(log, "graph_resync", done=done)
+        log_event(log, "graph_resync", done=done, failed=failed)
     return done
 
 

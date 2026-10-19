@@ -8,7 +8,6 @@ return are dropped. The caller checks that the program exists first (404) and ma
 from __future__ import annotations
 
 import logging
-from typing import Literal
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
@@ -52,7 +51,6 @@ class FraudGraphEdge(_View):
 
 class FraudGraphView(_View):
     program_id: UUID
-    graph: Literal["ok"] = "ok"
     nodes: list[FraudGraphNode]
     edges: list[FraudGraphEdge]
     rings: list[list[UUID]]
