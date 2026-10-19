@@ -6,11 +6,22 @@ from decimal import Decimal
 from functools import lru_cache
 from pathlib import Path
 from typing import Literal
+from urllib.parse import urlsplit
 
-from pydantic import Field, field_validator
+from pydantic import Field, SecretStr, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
+
+# Fraud graph values that must never reach production (the committed defaults and .env.example values).
+EXAMPLE_NEO4J_PASSWORD = "graph-dev-only"
+EXAMPLE_GRAPH_KEY_SECRET = "ZmFrZS1ncmFwaC1rZXktc2VjcmV0LTMyLWJ5dGVz"
+GRAPH_KEY_MIN_BYTES = 32
+LOCAL_HOSTS = frozenset({"localhost", "127.0.0.1", "::1"})
+
+
+def is_local_uri(uri: str) -> bool:
+    return (urlsplit(uri).hostname or "") in LOCAL_HOSTS
 
 
 class Settings(BaseSettings):
@@ -107,16 +118,19 @@ class Settings(BaseSettings):
     # carries a namespace; tests run in their own.
     neo4j_uri: str = Field("bolt://localhost:57687", description="Bolt URI; empty disables the fraud graph.")
     neo4j_user: str = Field("neo4j")
-    neo4j_password: str = Field("graph-dev-only", description="Real password only in .env.")
+    neo4j_password: SecretStr = Field(SecretStr(EXAMPLE_NEO4J_PASSWORD), description="Real password only in .env.")
     neo4j_database: str = Field("neo4j", description="Community and AuraDB Free have one user database.")
     neo4j_namespace: str = Field("dev", pattern=r"^[a-z][a-z0-9_]{0,31}$", description="Separates dev from test.")
     neo4j_timeout_s: float = Field(10.0, description="Connection and per-transaction timeout.")
-    graph_key_secret: str = Field(
-        "ZmFrZS1ncmFwaC1rZXktc2VjcmV0LTMyLWJ5dGVz",
+    graph_key_secret: SecretStr = Field(
+        SecretStr(EXAMPLE_GRAPH_KEY_SECRET),
         description="HMAC key for identity keys in the graph (addresses, emails, payout destinations are never stored "
-        "raw). Rotating it requires make graph-sync.",
+        "raw); its UTF-8 bytes are the key, at least 32 in prod. Rotating it requires make graph-sync.",
     )
     graph_resync_batch: int = Field(25, description="Decided claims the worker re-projects per idle tick.")
+    graph_backoff_s: float = Field(
+        30.0, description="After a graph failure, graph calls fail fast for this long (per-process circuit breaker)."
+    )
 
     # Adjudication defaults.
     phash_duplicate_bits: int = Field(6)
@@ -142,6 +156,32 @@ class Settings(BaseSettings):
     # Campaigns (M5): owner registration uploads.
     registrations_max_bytes: int = Field(5_000_000, description="Largest registrations CSV accepted.")
     registrations_max_rows: int = Field(50_000, description="Rows per registrations CSV.")
+
+    @model_validator(mode="after")
+    def _graph_guards(self) -> Settings:
+        """Production graph settings must be real; development must never write the production namespace. A prod
+        process with the graph disabled (empty NEO4J_URI) needs none of the graph values."""
+        if self.app_env != "prod":
+            if self.neo4j_namespace == "prod":
+                raise ValueError("NEO4J_NAMESPACE=prod is reserved for APP_ENV=prod")
+            return self
+        if not self.neo4j_uri:
+            return self
+        problems = []
+        if self.neo4j_namespace != "prod":
+            problems.append("NEO4J_NAMESPACE must be prod")
+        secret = self.graph_key_secret.get_secret_value()
+        if secret == EXAMPLE_GRAPH_KEY_SECRET:
+            problems.append("GRAPH_KEY_SECRET is the example value")
+        if len(secret.encode("utf-8")) < GRAPH_KEY_MIN_BYTES:
+            problems.append(f"GRAPH_KEY_SECRET is shorter than {GRAPH_KEY_MIN_BYTES} bytes")
+        if self.neo4j_password.get_secret_value() == EXAMPLE_NEO4J_PASSWORD:
+            problems.append("NEO4J_PASSWORD is the development password")
+        if not is_local_uri(self.neo4j_uri) and not urlsplit(self.neo4j_uri).scheme.endswith("+s"):
+            problems.append("a remote NEO4J_URI must use TLS (neo4j+s:// or bolt+s://)")
+        if problems:
+            raise ValueError("unsafe fraud graph settings for APP_ENV=prod: " + "; ".join(problems))
+        return self
 
     @field_validator("storage_dir", "replay_dir", "llm_record_dir")
     @classmethod

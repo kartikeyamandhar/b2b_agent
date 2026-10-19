@@ -144,7 +144,7 @@ def test_dev_provider_refuses_live_keys_and_prod() -> None:
     with pytest.raises(UnsafeDevAuth):
         DevAuthProvider(Settings(), environ={"CLERK_SECRET_KEY": "sk_live_abc"})
     with pytest.raises(UnsafeDevAuth):
-        DevAuthProvider(Settings(app_env="prod"), environ={})
+        DevAuthProvider(Settings(app_env="prod", neo4j_uri=""), environ={})
     provider = DevAuthProvider(Settings(), environ={})
     principal = provider.authenticate({"X-Dev-Firm-Id": str(seed.DEMO_FIRM_ID), "X-Dev-Role": "reviewer"})
     assert provider.firm_context(principal) == FirmContext(seed.DEMO_FIRM_ID, "dev-user", "reviewer")

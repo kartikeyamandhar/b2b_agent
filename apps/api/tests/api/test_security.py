@@ -52,6 +52,10 @@ def test_api_code_never_uses_the_bypassrls_role() -> None:
     ]
     offenders = [p.name for p in api_modules if "internal_engine" in p.read_text()]
     assert offenders == []
+    # Nor the graph's admin functions (purges, schema, epoch): request paths read the graph, never administer it.
+    graph_side = [*api_modules, SRC / "fraud" / "view.py", SRC / "fraud" / "graph.py"]
+    admin_importers = [p.name for p in graph_side if re.search(r"\bgraph_admin\b", p.read_text())]
+    assert admin_importers == []
 
 
 def test_oversized_portal_bodies_are_refused_before_parsing(env: dict[str, Any]) -> None:
@@ -105,7 +109,7 @@ def test_decompression_bombs_are_refused() -> None:
 
 def test_dev_claim_tokens_refuse_prod_and_clerk() -> None:
     with pytest.raises(UnsafeDevAuth):
-        DevClaimTokenVerifier(Settings(app_env="prod"))
+        DevClaimTokenVerifier(Settings(app_env="prod", neo4j_uri=""))
     with pytest.raises(UnsafeDevAuth):
         DevClaimTokenVerifier(Settings(auth_provider="clerk"))
     firm, claim = uuid.uuid4(), uuid.uuid4()
