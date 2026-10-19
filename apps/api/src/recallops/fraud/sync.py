@@ -205,6 +205,12 @@ def _lock_program(session: Session, program_id: UUID) -> None:
     session.execute(LOCK_PROGRAM_SQL, {"cls": SYNC_LOCK_CLASS, "program_id": str(program_id)})
 
 
+def _valid(session: Session, firm_id: UUID, program_id: UUID, ids: set[UUID]) -> set[UUID]:
+    if not ids:
+        return set()
+    return set(session.scalars(VALID_IDS_SQL, {"f": firm_id, "p": program_id, "ids": sorted(ids, key=str)})) & ids
+
+
 def _trusted(
     session: Session,
     internal_engine: Engine | None,
@@ -217,9 +223,7 @@ def _trusted(
     """Intersect graph output with the firm's non-draft claims of the program, read under RLS. Every dropped id is
     an error-level graph_tenant_violation; known_elsewhere counts dropped ids that are claims of another scope."""
     wanted = set(ids)
-    if not wanted:
-        return set()
-    valid = set(session.scalars(VALID_IDS_SQL, {"f": firm_id, "p": program_id, "ids": sorted(wanted, key=str)}))
+    valid = _valid(session, firm_id, program_id, wanted)
     dropped = wanted - valid
     if dropped:
         elsewhere = None
@@ -381,7 +385,7 @@ def _closure(
         for row in found:
             rows[row.id] = row
             fresh = sorted((m for m in row.members if m not in piece_of), key=str)
-            alive = _trusted(session, None, firm_id, program_id, fresh, source=f"{kind}:row") if fresh else set()
+            alive = _valid(session, firm_id, program_id, set(fresh))  # Postgres rows: a dead member just leaves
             for member in fresh:
                 if member not in alive or member in piece_of:
                     continue
