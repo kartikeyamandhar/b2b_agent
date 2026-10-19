@@ -24,5 +24,8 @@ def public_db() -> Iterator[Session]:
         yield session
 
 
-TenantDb = Annotated[Session, Depends(tenant_db)]
-PublicDb = Annotated[Session, Depends(public_db)]
+# scope="function": the session commits (and closes) when the route returns, before the response is sent. With the
+# default request scope the response went out first, so a client reading right after a write could see the old row,
+# and a commit that failed after a 200 was invisible (test console QA, 2026-10-19; test_api.py).
+TenantDb = Annotated[Session, Depends(tenant_db, scope="function")]
+PublicDb = Annotated[Session, Depends(public_db, scope="function")]
