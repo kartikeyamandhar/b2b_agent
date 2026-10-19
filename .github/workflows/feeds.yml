@@ -1,0 +1,27 @@
+name: feeds
+
+# Nightly CPSC feed pull (01-backend.md section 4): POST /internal/feeds/pull on the deployed API with the shared
+# secret. Skips with a notice until the repository has the RECALLOPS_API_URL and INTERNAL_SHARED_SECRET secrets,
+# because nothing is deployed yet (decisions log 2026-10-18).
+
+on:
+  schedule:
+    - cron: "17 7 * * *"
+  workflow_dispatch:
+
+jobs:
+  pull:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Pull the CPSC windows since the last run
+        env:
+          API_URL: ${{ secrets.RECALLOPS_API_URL }}
+          SECRET: ${{ secrets.INTERNAL_SHARED_SECRET }}
+        run: |
+          if [ -z "$API_URL" ] || [ -z "$SECRET" ]; then
+            echo "::notice::RECALLOPS_API_URL or INTERNAL_SHARED_SECRET is not set; nothing is deployed, skipping"
+            exit 0
+          fi
+          curl --fail-with-body --silent --show-error --max-time 300 -X POST \
+            -H "X-Internal-Secret: $SECRET" "$API_URL/internal/feeds/pull"

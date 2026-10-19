@@ -38,7 +38,7 @@ def build_claim_verifier() -> ClaimTokenVerifier:
     settings = get_settings()
     if settings.claim_token_provider == "dev":
         return DevClaimTokenVerifier(settings)
-    raise NotImplementedError("CLAIM_TOKEN_PROVIDER=hmac is supplied by the login owner (auth/hmac_tokens.py)")
+    raise NotImplementedError("CLAIM_TOKEN_PROVIDER=hmac is supplied by the login owner (component 4)")
 
 
 def current_user(request: Request) -> Principal:

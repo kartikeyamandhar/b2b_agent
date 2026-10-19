@@ -1,0 +1,89 @@
+# Render blueprint for the backend (CLAUDE.md layout: infra/ holds render.yaml only). Not applied by this repository:
+# deploying needs accounts and secrets only the owner creates (decisions log 2026-10-18).
+#
+# APP_ENV=prod on purpose: the dev auth provider and dev claim tokens refuse to load in prod, so the API fails closed
+# until the login owner's Clerk provider and HMAC claim tokens land (component 4). Never deploy with APP_ENV=dev: the
+# dev provider trusts request headers. The API uses only DATABASE_URL (recallops_app, RLS enforced); the worker is a
+# separate service holding DATABASE_URL_INTERNAL, so the web process never has the BYPASSRLS role (invariant 2).
+# Render's free tier has no background workers: the worker service needs a paid instance type, or run it elsewhere.
+# The health check is /healthz: /readyz reports a degraded graph or a stale worker but must not restart the API.
+services:
+  - type: web
+    name: recallops-api
+    runtime: python
+    rootDir: apps/api
+    plan: free
+    buildCommand: pip install uv==0.11.21 && uv sync --frozen
+    startCommand: PYTHONPATH=src uv run --frozen uvicorn recallops.api.app:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /healthz
+    envVars:
+      - key: APP_ENV
+        value: prod
+      - key: PYTHON_VERSION
+        value: "3.13"
+      - key: LLM_MODE
+        value: replay
+      - key: AUTH_PROVIDER
+        value: clerk
+      - key: CLAIM_TOKEN_PROVIDER
+        value: hmac
+      - key: DATABASE_URL
+        sync: false
+      - key: NEO4J_URI
+        sync: false
+      - key: NEO4J_USER
+        sync: false
+      - key: NEO4J_PASSWORD
+        sync: false
+      - key: NEO4J_NAMESPACE
+        value: prod
+      - key: GRAPH_KEY_SECRET
+        sync: false
+      - key: INTERNAL_SHARED_SECRET
+        sync: false
+      - key: CLAIM_TOKEN_SECRET
+        sync: false
+      - key: CLERK_SECRET_KEY
+        sync: false
+      - key: CLERK_PUBLISHABLE_KEY
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+  - type: worker
+    name: recallops-worker
+    runtime: python
+    rootDir: apps/api
+    plan: starter
+    buildCommand: pip install uv==0.11.21 && uv sync --frozen
+    startCommand: PYTHONPATH=src uv run --frozen python -m recallops.claims.worker
+    envVars:
+      - key: APP_ENV
+        value: prod
+      - key: PYTHON_VERSION
+        value: "3.13"
+      - key: ADJUDICATOR
+        value: agent
+      - key: LLM_MODE
+        value: live
+      - key: DATABASE_URL_INTERNAL
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: NEO4J_URI
+        sync: false
+      - key: NEO4J_USER
+        sync: false
+      - key: NEO4J_PASSWORD
+        sync: false
+      - key: NEO4J_NAMESPACE
+        value: prod
+      - key: GRAPH_KEY_SECRET
+        sync: false

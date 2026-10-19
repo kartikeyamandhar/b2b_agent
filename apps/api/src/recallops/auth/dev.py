@@ -78,7 +78,7 @@ class DevAuthProvider:
 class DevClaimTokenVerifier:
     """Dev portal tokens are 'dev.<firm uuid>.<claim uuid>'. Not secret, so it refuses to load with APP_ENV=prod or
     next to the Clerk login (CLAIM_TOKEN_PROVIDER=dev only in development); the login owner's HMAC verifier
-    (auth/hmac_tokens.py) replaces it."""
+    (component 4, behind ClaimTokenVerifier) replaces it."""
 
     def __init__(self, settings: Settings | None = None) -> None:
         if settings is not None and (settings.app_env == "prod" or settings.auth_provider == "clerk"):
