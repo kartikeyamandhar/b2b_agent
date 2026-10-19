@@ -226,15 +226,6 @@ Responses are pydantic schemas; errors are RFC 7807 problem details.
 
 Deploy gate (.github/workflows/deploy.yml): runs make eval in replay mode (no network, no model calls) and fails if any headline metric regresses more than its tolerance against the base (a pull request's base branch; a push's previous tip, never the pushed commit): extraction fields 2 points, adjudication outcome accuracy and fraud F1 0.02 on every complete row of every block (a row that was complete and no longer replays fails), reconciliation any discrepancy. It also fails when the tables committed at the commit differ from what replay produces there (wall-clock seconds aside), and when the baseline ref does not resolve. tests/unit/test_freeze.py pins the decision logic and eval-program documents the recordings were made against, and the rules_only numbers exactly.
 
-## 13. Fraud graph (fraud/, Neo4j; owner decision 2026-10-18)
-
-Neo4j does what networkx was planned for: connected-component fraud clusters and the M5 fraud graph. It is a projection of Postgres, never a decision maker: check_duplicates (frozen) decides, money safety lives in the decision transaction (section 6), and a graph outage only delays clusters.
-
-- Model: (:Claim {uid, ns, firm_id, program_id, claim_id}) and (:Identity {uid, ns, firm_id, program_id, kind, key}). Identity kinds: photo_<photo kind> (sha256 of the bytes, so identical bytes under different photo kinds never link), address, email, serial, payout (claimant.payout_destination; only the synthetic generators set it), mailing (the payout mailing address). Keys are HMAC-SHA256 with a firm-scoped key derived from GRAPH_KEY_SECRET, never raw values; empty normalized values make no identity. Relationship types per duplicate kind (SAME_PHOTO, SAME_ADDRESS, SAME_SERIAL, SAME_PAYOUT, SAME_MAILING) plus claim-to-claim SIMILAR_PHOTO for pHash within PHASH_DUPLICATE_BITS on label, destruction, and other photos of the same kind.
-- Tenancy (invariant 2): ns, firm_id, and program_id on every node and relationship; uids built inside Cypher from bound parameters; every traversal hop constrained by them; all Cypher in fraud/cypher.py constants (an AST meta-test refuses interpolated queries); admin statements in graph_admin.py, which api/ may not import; graph output intersected with Postgres under RLS before any write; the fraud_clusters trigger refuses foreign members.
-- Sync (fraud/sync.py): sync_claim after a decision commits (per-program advisory lock; the claim's relationships are deleted and re-merged; components per kind; fraud_clusters rows rewritten, a growing component keeps its oldest id; claims.graph_synced_version fenced on graph_version, which triggers bump on any projected fact change); resync_dirty on worker idle ticks; check_epoch at worker start (an emptied or replaced graph marks every claim dirty); sync_program in bulk for seed and `make graph-sync`.
-- Operations: driver timeouts derive from NEO4J_TIMEOUT_S, a circuit breaker fails fast after an outage, /readyz reports the graph but never goes unready over it, and GET /v1/programs/{id}/fraud-graph answers a fixed 503 when it is down. Prod settings refuse the example secret, the dev password, a non-TLS remote URI, and any namespace but prod; tests run in their own namespace on a local server only.
-
 ## 11. Tasks in order (for Claude Code)
 
 M1 (backend only, plus the team seams)
@@ -254,7 +245,7 @@ M1 (backend only, plus the team seams)
 M2
 12. llm/ vision call path; live model calls only after the meter's estimate is approved.
 13. claims/graph.py with all tools, caps, interrupt, checkpointer; worker; agent_steps tracing.
-14. fraud/: clusters, networkx connected components.
+14. fraud/: the Neo4j projection, clusters and rings (section 13; replaced the planned networkx clustering).
 15. API routes implemented behind the M1 contract (programs, claims, trace, portal).
 16. Golden set extended to 100 owner-audited notices; document_chunks and retrieve_policy.
 17. Runtime trace docs/traces/M2-adjudication.md.
@@ -292,49 +283,3 @@ Neo4j does what networkx was planned for: connected-component fraud clusters and
 - Tenancy (invariant 2): ns, firm_id, and program_id on every node and relationship; uids built inside Cypher from bound parameters; every traversal hop constrained by them; all Cypher in fraud/cypher.py constants (an AST meta-test refuses interpolated queries); admin statements in graph_admin.py, which api/ may not import; graph output intersected with Postgres under RLS before any write; the fraud_clusters trigger refuses foreign members.
 - Sync (fraud/sync.py): sync_claim after a decision commits (per-program advisory lock; the claim's relationships are deleted and re-merged; components per kind; fraud_clusters rows rewritten, a growing component keeps its oldest id; claims.graph_synced_version fenced on graph_version, which triggers bump on any projected fact change); resync_dirty on worker idle ticks; check_epoch at worker start (an emptied or replaced graph marks every claim dirty); sync_program in bulk for seed and `make graph-sync`.
 - Operations: driver timeouts derive from NEO4J_TIMEOUT_S, a circuit breaker fails fast after an outage, /readyz reports the graph but never goes unready over it, and GET /v1/programs/{id}/fraud-graph answers a fixed 503 when it is down. Prod settings refuse the example secret, the dev password, a non-TLS remote URI, and any namespace but prod; tests run in their own namespace on a local server only.
-
-## 11. Tasks in order (for Claude Code)
-
-M1 (backend only, plus the team seams)
-0. Dependency gate: pyproject with exact pins, uv lock, uv sync; API-shape probe tests for the pinned libraries.
-1. Scaffold apps/api with uv, ruff, mypy, pytest; docker-compose.yml at the root; role bootstrap in make setup; Alembic initial migration for every section 3 table except document_chunks; RLS, FORCE, policies, grants; set_config helper; database-level cross-tenant test as recallops_app.
-2. settings.py with every variable; .env.example.
-3. text.py canonicalizer, units.py, cpsc_api.py, and runner with tests on recorded fixtures (data/samples/cpsc_sample.json, 51 records from Sept 15 to Oct 16, 2026); Recall Bench comparison.
-4. Golden set first: seeded stratified sample of 40 notices and blind labels (before any extractor exists); PREREG.md. Then rules/baseline.py with unit tests on 15 of the 40.
-5. llm/ wrapper with the cost meter (pre-call projected cost, run caps, global budget) and model id and prices from settings; fake-transport tests; zero live calls in M1.
-6. rules/graph.py with the span verification step; fake-model test; agent_steps rows per node.
-7. evals/extraction runner and the labeling CLI for the owner's audit.
-8. synth generator with planted violations and rendered photos; fraud/phash.py.
-9. claims/tools (pure code), outcome_policy.yaml, claims/rules_only.py; evals/adjudication baseline row.
-10. Seams: OpenAPI contract for every route; auth seam with the dev provider; payments protocols, fakes, and the webhook stub; read routes over the seeded database; make seed, make api, README curl calls; docs/contracts/trace.md; CI for the backend half; CODEOWNERS; onboarding files.
-11. make eval; first results tables committed.
-
-M2
-12. llm/ vision call path; live model calls only after the meter's estimate is approved.
-13. claims/graph.py with all tools, caps, interrupt, checkpointer; worker; agent_steps tracing.
-14. fraud/: clusters, networkx connected components.
-15. API routes implemented behind the M1 contract (programs, claims, trace, portal).
-16. Golden set extended to 100 owner-audited notices; document_chunks and retrieve_policy.
-17. Runtime trace docs/traces/M2-adjudication.md.
-
-M3 (backend part)
-18. Clerk provider wiring (component 4 implements the provider), API-level cross-tenant test, audit_log on reviewer actions, usage_meters, entitlement hook calls.
-
-M4
-19. payouts ledger state machine and the Stripe hook points (component 3 calls ledger.mark_transferred etc.).
-20. mpr/ aggregation, reconciliation eval, PDF export.
-21. Full ablation run; deploy gate.
-
-## 12. Acceptance tests (must exist and pass)
-
-- The tenancy test connects as recallops_app and first asserts the role is neither superuser nor owner of any table. Then: under firm A's context, raw SQL returns zero rows of firm B in every tenant table, UPDATE and DELETE of B's rows affect zero rows, and an INSERT with B's firm_id is rejected; with no context set, every tenant table returns zero rows. From M2: a request with firm A's dev headers (from M3: Clerk token) to GET /v1/claims/{id} for firm B's claim returns 404.
-- A meta-test asserts every table with a firm_id column has RLS enabled and forced.
-- Replaying the same claim submission twice creates one claim.
-- A claim whose label photo text does not match any rule model is denied with a cited rule.
-- A claim with serial outside range is denied only when serial_ranges exist; otherwise serial is ignored.
-- Two claims with photos within phash distance 6 are both flagged and share a cluster id.
-- A run that would exceed 0.02 USD stops with status capped and an interrupt; resuming after reviewer override completes without re-running prior steps.
-- The meter refuses a call whose projected cost would cross the run cap or the global budget, and the fake transport records zero requests.
-- MPR reconciliation passes on a program with 500 synthetic claims in mixed states.
-- make eval completes in replay mode without network access.
-- The committed docs/contracts/openapi.json equals the document generated from the app.

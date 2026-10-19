@@ -183,10 +183,10 @@ def write_registrations(path: Path, program_id: UUID, n: int, seed: int) -> dict
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    mode = parser.add_mutually_exclusive_group(required=True)
+    mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--golden", action="store_true")
     mode.add_argument("--registrations", type=Path, help="write a synthetic registrations CSV here (needs --program)")
-    parser.add_argument("--program", type=UUID)
+    parser.add_argument("--program", type=UUID, help="claims mode (alone) or the registrations' program")
     parser.add_argument("--n", type=int, default=500)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--violations", type=Path, default=ADJ_DIR / "planted.yaml")
@@ -195,7 +195,7 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(build_golden(), indent=1))
         return 0
     if args.program is None:
-        parser.error("--program is required")
+        parser.error("give --golden, or --program (claims), or --registrations PATH --program")
     if args.registrations:
         print(json.dumps(write_registrations(args.registrations, args.program, args.n, args.seed), indent=1))
         return 0

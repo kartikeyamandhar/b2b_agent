@@ -3983,7 +3983,7 @@
             "description": "Validation Error"
           }
         },
-        "summary": "Reviewer action: resume_override, request_info, mark_fraud (writes audit_log)",
+        "summary": "Reviewer action: resume_override, request_info, mark_fraud, mark_delivered (writes audit_log)",
         "tags": [
           "firm"
         ]

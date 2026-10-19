@@ -132,7 +132,7 @@ class Settings(BaseSettings):
     neo4j_password: SecretStr = Field(SecretStr(EXAMPLE_NEO4J_PASSWORD), description="Real password only in .env.")
     neo4j_database: str = Field("neo4j", description="Community and AuraDB Free have one user database.")
     neo4j_namespace: str = Field("dev", pattern=r"^[a-z][a-z0-9_]{0,31}$", description="Separates dev from test.")
-    neo4j_timeout_s: float = Field(10.0, description="Connection and per-transaction timeout.")
+    neo4j_timeout_s: float = Field(3.0, description="Connection and per-transaction timeout.")
     graph_key_secret: SecretStr = Field(
         SecretStr(EXAMPLE_GRAPH_KEY_SECRET),
         description="HMAC key for identity keys in the graph (addresses, emails, payout destinations are never stored "
@@ -163,6 +163,13 @@ class Settings(BaseSettings):
     portal_rate_per_token_hour: int = Field(60, description="Portal requests per claim link per hour (04-login.md).")
     portal_uploads_per_token_hour: int = Field(10, description="Photo uploads per claim link per hour.")
     portal_rate_per_ip_hour: int = Field(300, description="Portal requests per client IP per hour.")
+    trusted_proxy_hops: int = Field(
+        0,
+        ge=0,
+        le=3,
+        description="Proxies in front of the API that append to X-Forwarded-For (Render: 1). The client is the entry "
+        "that many places from the right; 0 trusts no header and uses the socket peer.",
+    )
 
     # Campaigns (M5): owner registration uploads.
     registrations_max_bytes: int = Field(5_000_000, description="Largest registrations CSV accepted.")

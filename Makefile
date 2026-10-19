@@ -3,12 +3,16 @@ SHELL := /bin/bash
 .DEFAULT_GOAL := help
 
 API := apps/api
--include .env
+# Only the values make itself needs are read from .env, and an environment variable always wins (?=), so
+# `ADJUDICATOR=rules_only make worker` reaches the process. Python reads .env itself (pydantic-settings), where
+# environment variables also win. Including the whole .env would turn every line into a make assignment that
+# overrides the caller's environment (final review, decisions log 2026-10-19).
+env_value = $(shell test -f .env && sed -n 's/^$(1)=//p' .env | tail -n 1)
 
-POSTGRES_PORT ?= 55432
-RECALLOPS_OWNER_PASSWORD ?= owner-dev-only
-RECALLOPS_APP_PASSWORD ?= app-dev-only
-RECALLOPS_INTERNAL_PASSWORD ?= internal-dev-only
+POSTGRES_PORT ?= $(or $(call env_value,POSTGRES_PORT),55432)
+RECALLOPS_OWNER_PASSWORD ?= $(or $(call env_value,RECALLOPS_OWNER_PASSWORD),owner-dev-only)
+RECALLOPS_APP_PASSWORD ?= $(or $(call env_value,RECALLOPS_APP_PASSWORD),app-dev-only)
+RECALLOPS_INTERNAL_PASSWORD ?= $(or $(call env_value,RECALLOPS_INTERNAL_PASSWORD),internal-dev-only)
 
 # psycopg[binary] bundles libpq, so no system libpq is needed. LIBPQ_DIR is only a fallback for the pure-Python
 # implementation; it is passed per command because the macOS system shell strips DYLD_* variables.

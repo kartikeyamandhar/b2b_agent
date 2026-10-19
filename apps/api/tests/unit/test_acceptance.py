@@ -32,6 +32,35 @@ def test_a_label_showing_another_model_is_denied_with_a_cited_rule() -> None:
     assert len(transport.calls) >= 1
 
 
+def test_the_agent_denies_another_model_with_the_model_rule_cited() -> None:
+    """The agent path: the decision must cite a rule or a tool result (citations are validated), and a deny for a
+    label showing another model cites the model rule."""
+    from recallops.claims.graph import build_graph
+    from tests.fakes import decide
+
+    llm, _ = fakes.client(
+        [
+            turn(tool_use(1, "read_label_photo")),
+            label("TL9000Q"),
+            turn(tool_use(2, "check_model", {"model_text": "TL9000Q"})),
+            decide(3, "deny", ["T2", "R:models"]),
+        ]
+    )
+    effects = NoEffects()
+    graph = build_graph(
+        fakes.context(llm, fakes.facts(model="TL9000Q"), fakes.rules()),
+        llm,
+        MemoryTrace("adjudicate"),
+        run_budget(S),
+        VARIANTS["loop_no_retrieval"],
+        effects,
+        human_in_loop=False,
+    )
+    result = summarize(graph.invoke({}))
+    assert result.outcome == "deny"
+    assert effects.applied and "R:models" in effects.applied[0]["cited_rules"]
+
+
 def _with_serials(ranges: list[SerialRange]) -> ExtractedRules:
     base = fakes.rules()
     return ExtractedRules(

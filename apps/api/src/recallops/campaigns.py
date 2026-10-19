@@ -79,12 +79,16 @@ def parse_registrations(raw: bytes, max_rows: int) -> Parsed:
 def _row_problem(row: dict[str, Any], seen: set[str]) -> str | None:
     if not row["external_ref"]:
         return "external_ref is empty"
+    if len(row["external_ref"]) > 80:
+        return "external_ref is longer than 80 characters"
     if row["external_ref"] in seen:
         return "external_ref repeats an earlier row"
     if row["email"] and not SYNTHETIC_EMAIL.match(row["email"]):
         return "email is not synthetic (example.com, example.net, example.org only)"
     if row["phone"] and not SYNTHETIC_PHONE.search(re.sub(r"[\s().]", "", row["phone"])):
         return "phone is not synthetic (555-0100 to 555-0199 only)"
+    if not row["email"] and not row["phone"]:
+        return "no synthetic marker (an example.com, example.net, or example.org email, or a 555-01xx phone)"
     if row["purchase_date"]:
         try:
             row["purchase_date"] = date.fromisoformat(row["purchase_date"])
@@ -155,7 +159,12 @@ def _section(source_text: str, name: str) -> str:
     return source_text[bounds[0] : bounds[1]].strip() if bounds else ""
 
 
-def render(recall: Recall | None, reg: Registration, channel: str, link: str) -> tuple[str, str]:
+LINK_PLACEHOLDER = "{claim_link}"
+
+
+def render(recall: Recall | None, reg: Registration, channel: str, link: str = LINK_PLACEHOLDER) -> tuple[str, str]:
+    """Stored drafts carry the placeholder, never the link: the link holds the claim token, which the system keeps
+    only as a hash (invariant 10). A real sender substitutes a link issued at send time."""
     title = recall.title if recall else "Product safety recall"
     hazard = _section(recall.source_text, "HAZARD") if recall else ""
     remedy = _section(recall.source_text, "REMEDY") if recall else ""
@@ -194,18 +203,16 @@ def draft(
         .order_by(Registration.external_ref)
     ).all()
     needing = [r for r in regs if r.claim_id is None]
-    links: dict[UUID, str] = {}
-    for r, (claim_id, url) in zip(needing, issue(len(needing)) if needing else [], strict=True):
-        r.claim_id, links[r.id] = claim_id, url
+    for r, (claim_id, _url) in zip(needing, issue(len(needing)) if needing else [], strict=True):
+        r.claim_id = claim_id  # the claim exists with its token hash; the raw link is not kept
     counts = dict.fromkeys(channels, 0)
     for r in regs:
-        link = links.get(r.id) or f"(claim {r.claim_id})"
         for channel in channels:
             if (channel == "email" and not r.email) or (channel == "mail" and not r.address):
                 continue
             if channel == "phone_text" and not r.phone:
                 continue
-            subject, body = render(recall, r, channel, link)
+            subject, body = render(recall, r, channel)
             done = session.execute(
                 insert(Notification)
                 .values(

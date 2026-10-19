@@ -42,7 +42,7 @@ Order observed on every claim: the decision's transaction commits (claim status,
 | 06:55:00.195 | POST .../campaign/send email | 36 marked sent (simulated: nothing left the system) |
 | 06:55:00.254 | POST .../mpr/generate 2026-10 | reconciled; notified_email 36, notified_mail 0, notified_phone_text 0 (drafted, not sent) |
 
-The email draft quotes the notice: "Hazard (from the recall notice): The recalled thermal laminators can overheat, posing a fire hazard." and the REMEDY section verbatim, then the owner's own claim link.
+The email draft quotes the notice: "Hazard (from the recall notice): The recalled thermal laminators can overheat, posing a fire hazard." and the REMEDY section verbatim, then the owner's own claim link. (After the final review the stored draft carries a `{claim_link}` placeholder instead, so no claim token is kept in a draft; see CLAUDE.md, 2026-10-19.)
 
 ## Seed timing
 

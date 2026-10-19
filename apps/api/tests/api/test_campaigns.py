@@ -26,6 +26,8 @@ R4,Morgan Lin,morgan@example.com,(312) 555-0104,4 Lin Ln Springfield IL,TL9000Q,
 R5,Real Person,real.person@gmail.com,,5 Real St,TL1302Z,,x
 R6,Bad Phone,bad@example.com,(312) 867-5309,6 Main St,TL1302Z,,x
 R1,Repeat,repeat@example.com,,7 Main St,TL1302Z,,x
+R8,Card Only,,,8 Elm St Springfield IL,TL1302Z,,x
+R99999999999999999999999999999999999999999999999999999999999999999999999999999999,Long Ref,long@example.com,,9 Elm St,TL1302Z,,x
 """
 
 
@@ -46,9 +48,10 @@ def test_a_campaign_from_registrations_to_the_mpr(env: dict[str, Any]) -> None:
     up = client.post(f"/v1/programs/{pid}/registrations", headers=ADMIN, files=files)
     assert up.status_code == 200, up.text
     body = up.json()
-    assert body["accepted"] == 4 and body["rejected_total"] == 3
+    assert body["accepted"] == 4 and body["rejected_total"] == 5
     reasons = {r["row"]: r["reason"] for r in body["rejected"]}
     assert "not synthetic" in reasons[6] and "not synthetic" in reasons[7] and "repeats" in reasons[8]
+    assert "no synthetic marker" in reasons[9] and "longer than 80" in reasons[10]
 
     matched = client.post(f"/v1/programs/{pid}/campaign/match", headers=ADMIN).json()["counts"]
     assert matched == {"matched": 3, "unmatched": 1}
@@ -62,7 +65,8 @@ def test_a_campaign_from_registrations_to_the_mpr(env: dict[str, Any]) -> None:
     summary = client.get(f"/v1/programs/{pid}/campaign", headers=REVIEWER).json()
     assert summary["claim_links"] == 3 and summary["notifications"]["email:draft"] == 3 and summary["simulated"]
     email = next(s for s in summary["sample"] if s["channel"] == "email")
-    assert "Hazard (from the recall notice):" in email["body"] and "/claim/dev." in email["body"]
+    assert "Hazard (from the recall notice):" in email["body"] and "{claim_link}" in email["body"]
+    assert "dev." not in email["body"]  # the claim token is never stored in a draft (invariant 10)
 
     sent = client.post(f"/v1/programs/{pid}/campaign/send", headers=ADMIN, json={"channel": "email"}).json()["counts"]
     assert sent == {"email": 3}

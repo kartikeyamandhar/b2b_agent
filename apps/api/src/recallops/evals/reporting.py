@@ -51,6 +51,7 @@ EXPECTED_COMPOSITION = {
     "answered_next_month": 30,
     "boundary_events": 2,
     "replayed_events": 1,
+    "replay_month": 9,
     "other_program_deliveries": 5,
     "notices_sent": 46,
     "notice_drafts": 5,
@@ -214,9 +215,13 @@ def build_scenario(engine: Engine) -> tuple[dict[str, int], Truth]:
                 if step in ("transferred", "exported"):
                     truth.deliver(f"payout:{payout_id}", at)
                     stats["delivered_events"] += 1
-                    if stats["replayed_events"] == 0:  # a replayed delivery webhook: one more row, still one item
-                        _event(session, "payout", payout_id, f"payout_{step}", at + timedelta(days=40))
+                    if stats["replayed_events"] == 0 and at.month == 8:
+                        # A replayed delivery webhook inside the reported window: one more audit row in September for
+                        # an August delivery. Counting rows instead of first deliveries changes a reported month.
+                        replay_at = datetime(2026, 9, 15, 12, 0, tzinfo=UTC)
+                        _event(session, "payout", payout_id, f"payout_{step}", replay_at)
                         stats["replayed_events"] += 1
+                        stats["replay_month"] = 9
 
         boundary = (
             datetime(2026, 8, 31, 23, 59, 59, 999999, tzinfo=UTC),

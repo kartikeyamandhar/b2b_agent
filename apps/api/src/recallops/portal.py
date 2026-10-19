@@ -311,18 +311,24 @@ def _home(person: dict[str, Any]) -> str:
 
 
 def choose_check_payout(session: Session, pc: PortalClaim, mailing_address: str | None, secret: str) -> str:
-    """The claimant chose a mailed check (the export batch pays it). One transaction, claim row locked before the
-    payout row (the money paths' lock order). The address can change only while no batch or transfer holds the
-    payout. A mailing address that another claim of the program already uses (as its mailing address or its home
-    address) is the redirect pattern the duplicate check cannot see, because it compares claimant addresses only:
-    every such claim that is approved with money not yet moved goes to a person (under_review) with its payout held.
-    Returns the payout's status."""
+    """The claimant chose a mailed check (the export batch pays it). One transaction under the program's money lock,
+    claim row locked before the payout row (the money paths' lock order). The address can change only while no
+    batch or transfer holds the payout.
+
+    The check's destination (the mailing address, or the home address when there is none) is compared on every
+    choice with every other non-draft claim's mailing and home address: a destination another claim uses is the
+    redirect pattern the duplicate check cannot see, because it compares home addresses only. Every such claim that
+    is approved with money not yet moved goes to a person (under_review) with its payout held. The program lock
+    makes two concurrent choices of the same new address see each other. Returns the payout's status."""
     from recallops.claims.tools.checks import _norm_text
-    from recallops.payouts.db_ledger import hold_for_claim, transition
+    from recallops.payouts.db_ledger import hold_for_claim, lock_program_money, transition
     from recallops.tenancy import FirmContext
 
     claim = pc.claim
     ctx = FirmContext(firm_id=claim.firm_id, user_id="claimant", role="admin")
+    if mailing_address and not _norm_text(mailing_address):
+        raise PayoutConflict("the mailing address needs letters or digits a US carrier can read")
+    lock_program_money(session, claim.program_id)
     row = session.execute(
         text("SELECT status, claimant, program_id FROM claims WHERE id = :c AND firm_id = :f FOR UPDATE"),
         {"c": claim.id, "f": claim.firm_id},
@@ -354,49 +360,53 @@ def choose_check_payout(session: Session, pc: PortalClaim, mailing_address: str 
             text("UPDATE claims SET claimant = CAST(:c AS jsonb) WHERE id = :id AND firm_id = :f"),
             {"c": json.dumps(claimant), "id": claim.id, "f": claim.firm_id},
         )
-        target = _norm_text(mailing_address)
-        others = session.execute(
-            text(
-                "SELECT id, status, claimant FROM claims WHERE firm_id = :f AND program_id = :p AND id <> :c "
-                "AND status <> 'draft' ORDER BY id"
-            ),
-            {"f": claim.firm_id, "p": row.program_id, "c": claim.id},
-        ).all()
-        shared = [
-            o.id
-            for o in others
-            if target in (_norm_text((o.claimant or {}).get("mailing_address")), _norm_text(_home(o.claimant or {})))
-        ]
-        if shared:
-            for cid in sorted({claim.id, *shared}):
-                done = session.execute(
-                    text(
-                        "UPDATE claims SET status = 'under_review', decision = coalesce(decision, '{}'::jsonb) || "
-                        "CAST(:d AS jsonb) WHERE id = :c AND firm_id = :f AND status = 'approved' RETURNING id"
-                    ),
-                    {
-                        "d": json.dumps({"routed_to_human": True, "hold_reason": SHARED_MAILING}),
-                        "c": cid,
-                        "f": claim.firm_id,
-                    },
-                ).first()
-                if done is None:
-                    continue
-                hold_for_claim(session, ctx, cid, SHARED_MAILING)
-                session.add(
-                    AuditLog(
-                        firm_id=claim.firm_id,
-                        actor="system",
-                        action="claim_held_shared_mailing",
-                        target_type="claim",
-                        target_id=str(cid),
-                        before={"status": "approved"},
-                        after={"status": "under_review", "shared_with": len(shared)},
-                    )
+    target = _norm_text(claimant.get("mailing_address")) or _norm_text(_home(claimant))
+    others = session.execute(
+        text(
+            "SELECT id, claimant FROM claims WHERE firm_id = :f AND program_id = :p AND id <> :c "
+            "AND status <> 'draft' ORDER BY id"
+        ),
+        {"f": claim.firm_id, "p": row.program_id, "c": claim.id},
+    ).all()
+    shared = [
+        o.id
+        for o in others
+        if target
+        and target
+        in {
+            v for v in (_norm_text((o.claimant or {}).get("mailing_address")), _norm_text(_home(o.claimant or {}))) if v
+        }
+    ]
+    if shared:
+        for cid in sorted({claim.id, *shared}):
+            done = session.execute(
+                text(
+                    "UPDATE claims SET status = 'under_review', decision = coalesce(decision, '{}'::jsonb) || "
+                    "CAST(:d AS jsonb) WHERE id = :c AND firm_id = :f AND status = 'approved' RETURNING id"
+                ),
+                {
+                    "d": json.dumps({"routed_to_human": True, "hold_reason": SHARED_MAILING}),
+                    "c": cid,
+                    "f": claim.firm_id,
+                },
+            ).first()
+            if done is None:
+                continue
+            hold_for_claim(session, ctx, cid, SHARED_MAILING)
+            session.add(
+                AuditLog(
+                    firm_id=claim.firm_id,
+                    actor="system",
+                    action="claim_held_shared_mailing",
+                    target_type="claim",
+                    target_id=str(cid),
+                    before={"status": "approved"},
+                    after={"status": "under_review", "shared_with": len(shared)},
                 )
-            log_event(log, "payout_shared_mailing", level=30, firm_id=str(claim.firm_id), claim_id=str(claim.id))
-            session.refresh(payout)
-            return str(payout.status)
+            )
+        log_event(log, "payout_shared_mailing", level=30, firm_id=str(claim.firm_id), claim_id=str(claim.id))
+        session.refresh(payout)
+        return str(payout.status)
     if payout.status != "pending_export":
         transition(session, ctx, payout, "pending_export", method="check_export")
     return str(payout.status)

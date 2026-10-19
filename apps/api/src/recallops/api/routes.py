@@ -303,7 +303,7 @@ def get_trace(claim_id: UUID, ctx: FirmDep, db: TenantDb) -> s.Trace:
     "/claims/{claim_id}/actions",
     response_model=s.ClaimDetail,
     responses={**NOT_FOUND, **CONFLICT},
-    summary="Reviewer action: resume_override, request_info, mark_fraud (writes audit_log)",
+    summary="Reviewer action: resume_override, request_info, mark_fraud, mark_delivered (writes audit_log)",
 )
 def claim_action(claim_id: UUID, body: s.ClaimAction, ctx: FirmDep, db: TenantDb) -> s.ClaimDetail:
     c = ClaimsRepo(db, ctx).get(claim_id)

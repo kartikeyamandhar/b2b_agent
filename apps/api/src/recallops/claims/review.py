@@ -15,7 +15,7 @@ from sqlalchemy import Engine, select, text
 from sqlalchemy.orm import Session
 
 from recallops.billing.interface import BillingGate
-from recallops.claims.effects import DbEffects
+from recallops.claims.effects import POST_DECISION_HOLDS, DbEffects
 from recallops.models import AgentRun, AuditLog, Claim
 from recallops.payouts.ledger import PayoutLedger
 from recallops.tenancy import FirmContext
@@ -55,7 +55,8 @@ def submit_action(
         .order_by(AgentRun.started_at.desc())
         .limit(1)
     ).first()
-    resumable = run is not None and not (run.outcome or {}).get("exhausted")
+    post_decision = (claim.decision or {}).get("hold_reason") in POST_DECISION_HOLDS  # no interrupt is waiting
+    resumable = run is not None and not (run.outcome or {}).get("exhausted") and not post_decision
     if (
         run is not None
         and resumable

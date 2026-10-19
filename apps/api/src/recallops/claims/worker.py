@@ -53,7 +53,7 @@ from recallops.billing.fake import AllowAllBilling
 from recallops.billing.interface import BillingGate
 from recallops.claims.agent_tools import ToolContext
 from recallops.claims.context import LoadedClaim, load_claim, photo_reader, program_claims
-from recallops.claims.effects import DbEffects
+from recallops.claims.effects import POST_DECISION_HOLDS, DbEffects
 from recallops.claims.graph import VARIANTS, AgentConfig, build_graph, run_budget, summarize
 from recallops.claims.rules_only import adjudicate as rules_only_adjudicate
 from recallops.db.engine import app_engine, internal_engine
@@ -449,6 +449,31 @@ class Worker:
             )
         self.release_claim(leased.claim_id)
 
+    def park_resume(self, run_id: UUID, claim_id: UUID, exc: Exception) -> None:
+        """A resume that raised: count it on the run and release the lease so a later tick retries; after
+        WORKER_MAX_ATTEMPTS the run is closed as failed (exhausted) with the reviewer's payload kept in its outcome,
+        and the claim stays with a person, whose next action applies directly."""
+        error = f"{type(exc).__name__}: {exc}"[:400]
+        with self.engine.begin() as conn:
+            row = conn.execute(
+                text(
+                    "UPDATE agent_runs SET attempts = attempts + 1, lease_owner = NULL, lease_until = NULL, "
+                    "status = CASE WHEN status = 'running' THEN 'waiting_human' ELSE status END "
+                    "WHERE id = :r RETURNING attempts"
+                ),
+                {"r": run_id},
+            ).first()
+            if row is not None and row.attempts >= self.settings.worker_max_attempts:
+                conn.execute(
+                    text(
+                        "UPDATE agent_runs SET status = 'failed', finished_at = now(), outcome = "
+                        "coalesce(outcome, '{}'::jsonb) || jsonb_build_object('exhausted', true, 'resume_error', "
+                        "CAST(:e AS text), 'unapplied_review', resume_payload), resume_payload = NULL WHERE id = :r"
+                    ),
+                    {"r": run_id, "e": error},
+                )
+        log_event(log, "worker_resume_error", level=40, run_id=str(run_id), claim_id=str(claim_id), error=error)
+
     def recover_orphans(self) -> int:
         """Adjudication runs still running whose claim is no longer submitted and not leased: a crash between the
         claim's decision (committed by route) and the worker's status write. The claim tells which: a held claim
@@ -456,15 +481,18 @@ class Worker:
         with self.engine.begin() as conn:
             rows = conn.execute(
                 text(
-                    "UPDATE agent_runs r SET status = CASE c.status WHEN 'capped' THEN 'capped' "
-                    "WHEN 'flagged' THEN 'waiting_human' WHEN 'under_review' THEN 'waiting_human' ELSE 'done' END, "
-                    "finished_at = CASE WHEN c.status IN ('flagged', 'under_review', 'capped') THEN NULL "
-                    "ELSE now() END, outcome = coalesce(r.outcome, '{}'::jsonb) || '{\"recovered\": true}'::jsonb "
+                    "UPDATE agent_runs r SET status = CASE WHEN c.decision->>'hold_reason' = ANY(:post) THEN 'done' "
+                    "WHEN c.status = 'capped' THEN 'capped' "
+                    "WHEN c.status IN ('flagged', 'under_review') THEN 'waiting_human' ELSE 'done' END, "
+                    "finished_at = CASE WHEN c.status IN ('flagged', 'under_review', 'capped') "
+                    "AND coalesce(c.decision->>'hold_reason', '') <> ALL(:post) THEN NULL ELSE now() END, "
+                    "outcome = coalesce(r.outcome, '{}'::jsonb) || '{\"recovered\": true}'::jsonb "
                     "FROM claims c WHERE c.id = r.claim_id AND r.graph = 'adjudicate' AND r.status = 'running' "
                     "AND r.resume_payload IS NULL AND c.status NOT IN ('submitted', 'draft') "
                     "AND (c.lease_until IS NULL OR c.lease_until < now()) "
                     "AND (r.lease_until IS NULL OR r.lease_until < now()) RETURNING r.id, r.status"
-                )
+                ),
+                {"post": list(POST_DECISION_HOLDS)},
             ).all()
         for row in rows:
             log_event(log, "worker_run_recovered", level=30, run_id=str(row.id), status=row.status)
@@ -474,7 +502,13 @@ class Worker:
         """One unit of work. True when something was done."""
         resume = self.lease_resume()
         if resume is not None:
-            self.resume(*resume)
+            try:
+                self.resume(*resume)
+            except BudgetExhausted:
+                raise
+            except Exception as exc:  # noqa: BLE001 - contained: a failing resume must not stop the worker
+                self.park_resume(resume[0], resume[1], exc)
+                return True
             self.graph_sync(resume[1])
             return True
         leased = self.lease_claim()

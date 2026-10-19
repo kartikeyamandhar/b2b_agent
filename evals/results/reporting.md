@@ -1,6 +1,6 @@
 # Reporting eval: MPR reconciliation
 
-Generated 2026-10-19 06:42 UTC by `make eval`.
+Generated 2026-10-19 07:51 UTC by `make eval`.
 
 Scenario: 500 refund claims (256 payouts through every ledger state, held ones included, 1 replayed delivery event), 40 repair and replacement claims (25 marked delivered), 30 claims answered the month after their first submission, 2 deliveries on a month boundary instant, and 5 deliveries in another program of the same firm (must not count); campaign notices: 46 sent, 5 drafts never sent, and 2 in the other program.
 

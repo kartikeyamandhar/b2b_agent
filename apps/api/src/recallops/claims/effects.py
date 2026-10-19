@@ -36,7 +36,7 @@ from recallops.claims.tools import check_duplicates
 from recallops.db.session import tenant_session
 from recallops.logs import get_logger, log_event
 from recallops.models import AuditLog, Claim, ClaimPhoto, Payout
-from recallops.payouts.db_ledger import hold_for_claim
+from recallops.payouts.db_ledger import hold_for_claim, lock_program_money
 from recallops.payouts.ledger import PayoutLedger
 from recallops.tenancy import FirmContext
 
@@ -48,6 +48,17 @@ AUTOMATED = ("agent", "rules_only")
 REOPENABLE = ("approved", "needs_info")
 WITH_A_PERSON = ("under_review", "capped")
 DUPLICATE_HOLD = "duplicate_found_later"
+# Holds set after a decision, outside any LangGraph interrupt: the claim's run has finished, so a reviewer's action
+# applies to the claim directly and a crashed run with one of these is done, not waiting (final review 2026-10-19).
+POST_DECISION_HOLDS = ("payout_held_needs_review", "shared_mailing_address")
+
+
+def lock_claim_program(session: Session, firm_id: UUID, claim_id: UUID) -> None:
+    program_id = session.execute(
+        text("SELECT program_id FROM claims WHERE id = :c AND firm_id = :f"), {"c": claim_id, "f": firm_id}
+    ).scalar_one_or_none()
+    if program_id is not None:
+        lock_program_money(session, program_id)
 
 
 def _audit(
@@ -109,6 +120,15 @@ def reopen_duplicates(
                     {"with": str(claim_id)},
                 )
                 continue
+            session.execute(  # a run a crash left running for this claim is over: the next run starts fresh
+                text(
+                    "UPDATE agent_runs SET status = 'done', finished_at = now(), lease_owner = NULL, "
+                    "lease_until = NULL, outcome = coalesce(outcome, '{}'::jsonb) || "
+                    '\'{"superseded": "reopened"}\'::jsonb '
+                    "WHERE claim_id = :c AND firm_id = :f AND graph = 'adjudicate' AND status = 'running'"
+                ),
+                {"c": pid, "f": ctx.firm_id},
+            )
             session.execute(
                 text(
                     "UPDATE claims SET status = 'submitted', submitted_at = now(), decided_at = NULL, "
@@ -221,6 +241,7 @@ class DbEffects:
         if final.get("fraud"):
             decision["fraud"] = True
         with tenant_session(self.ctx, self.engine) as session:
+            lock_claim_program(session, self.ctx.firm_id, self.claim_id)
             before = session.execute(
                 text("SELECT status FROM claims WHERE id = :c AND firm_id = :f FOR UPDATE"),
                 {"c": self.claim_id, "f": self.ctx.firm_id},
@@ -232,11 +253,13 @@ class DbEffects:
             if not automated:
                 decision["duplicates_ack"] = [str(p) for p in partners]
             status = STATUS[outcome]
-            held_payout = (
-                session.execute(
-                    select(Payout.status).where(Payout.firm_id == self.ctx.firm_id, Payout.claim_id == self.claim_id)
-                ).scalar_one_or_none()
-                == "held"
+            payout_row = session.execute(
+                select(Payout.status, Payout.hold_requested).where(
+                    Payout.firm_id == self.ctx.firm_id, Payout.claim_id == self.claim_id
+                )
+            ).first()
+            held_payout = payout_row is not None and (
+                payout_row.status == "held" or (payout_row.status == "transferring" and payout_row.hold_requested)
             )
             if outcome == "approve" and automated and held_payout:
                 status = "under_review"  # a held payout is released only by a person
@@ -285,6 +308,7 @@ class DbEffects:
         if decision:
             stored = {**decision, "routed_to_human": True, "hold_reason": held["reason"]}
         with tenant_session(self.ctx, self.engine) as session:
+            lock_claim_program(session, self.ctx.firm_id, self.claim_id)
             before = session.execute(
                 text("SELECT status FROM claims WHERE id = :c AND firm_id = :f FOR UPDATE"),
                 {"c": self.claim_id, "f": self.ctx.firm_id},

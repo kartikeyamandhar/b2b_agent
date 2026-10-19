@@ -95,6 +95,18 @@ def _audit(session: Session, ctx: FirmContext, action: str, payout_id: UUID, bef
     )
 
 
+MONEY_LOCK_CLASS = 7_420_019  # pg_advisory_xact_lock(class, hashtext(program_id)); fraud/sync.py uses 7_420_018
+
+
+def lock_program_money(session: Session, program_id: UUID) -> None:
+    """Serialize the transactions that change several claims of one program at once (a decision that reopens
+    duplicates, the portal's shared-address hold), so they cannot deadlock on each other's claim rows and the
+    shared-address check sees concurrent choices. Taken before any claim row lock; released at commit."""
+    session.execute(
+        text("SELECT pg_advisory_xact_lock(:cls, hashtext(:p))"), {"cls": MONEY_LOCK_CLASS, "p": str(program_id)}
+    )
+
+
 def lock_claim_and_payout(session: Session, ctx: FirmContext, payout_id: UUID) -> tuple[Payout, str]:
     """The global lock order: the claim row, then the payout row. Returns the payout and the claim's status."""
     claim_id = session.scalar(select(Payout.claim_id).where(Payout.firm_id == ctx.firm_id, Payout.id == payout_id))
@@ -216,6 +228,14 @@ class DbPayoutLedger:
                 {"status": status, "amount_cents": amount_cents, "method": method, "claim_id": str(claim_id)},
             )
             event = "payout_created_pending"
+        elif row.status in DELIVERED:
+            mark_claim_paid(session, ctx, claim_id)  # the money already reached the claimant (a late result)
+            event = "payout_exists"
+        elif row.status == "transferring" and row.hold_requested:
+            # A person approved the claim again while its transfer is in flight: the hold no longer applies.
+            session.execute(update(Payout).where(Payout.id == row.id).values(hold_requested=False))
+            _audit(session, ctx, "payout_hold_cleared", row.id, {"hold_requested": True}, {"hold_requested": False})
+            event = "payout_hold_cleared"
         elif row.status == "held" and row.stripe_transfer_id is None:
             # A re-approval releases the hold; the row keeps its id (the idempotency key) and its method.
             released = "pending_export" if row.method in EXPORT_METHODS else "pending"

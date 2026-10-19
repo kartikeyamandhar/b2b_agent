@@ -23,6 +23,8 @@ services:
         value: "3.13"
       - key: LLM_MODE
         value: replay
+      - key: TRUSTED_PROXY_HOPS
+        value: "1"
       - key: AUTH_PROVIDER
         value: clerk
       - key: CLAIM_TOKEN_PROVIDER

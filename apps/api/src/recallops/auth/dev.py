@@ -14,7 +14,7 @@ from uuid import UUID
 
 from recallops.auth.provider import AuthError, ClaimTokenContext, NoFirmError, Principal
 from recallops.logs import get_logger, log_event
-from recallops.settings import Settings
+from recallops.settings import Settings, is_local_uri
 from recallops.tenancy import FirmContext
 
 log = get_logger("auth.dev")
@@ -52,6 +52,8 @@ class DevAuthProvider:
         live = live_keys_present(settings, environ)
         if live:
             raise UnsafeDevAuth(f"refusing to load the dev auth provider: live keys present in {live}")
+        if settings.neo4j_uri and not is_local_uri(settings.neo4j_uri):
+            raise UnsafeDevAuth("refusing to load the dev auth provider next to a remote fraud graph (NEO4J_URI)")
         log_event(log, "dev_auth_provider_loaded", app_env=settings.app_env)
 
     def authenticate(self, headers: dict[str, str]) -> Principal:

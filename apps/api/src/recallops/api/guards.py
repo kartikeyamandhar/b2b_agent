@@ -34,6 +34,18 @@ SMALL_BODY = 64_000
 Scope = dict[str, Any]
 
 
+def client_address(scope: Scope, trusted_hops: int) -> str:
+    """The rate-limit key's address. Behind trusted proxies, the right-most entries of X-Forwarded-For were written
+    by them, so the client is the entry trusted_hops from the right; anything further left is client-supplied and
+    could be forged to dodge the limit."""
+    peer = str((scope.get("client") or ("unknown", 0))[0])
+    if trusted_hops <= 0:
+        return peer
+    forwarded = next((v.decode("latin-1") for k, v in scope.get("headers", []) if k == b"x-forwarded-for"), "")
+    hops = [h.strip() for h in forwarded.split(",") if h.strip()]
+    return hops[-trusted_hops] if len(hops) >= trusted_hops else peer
+
+
 def _limit_key(kind: str, value: str) -> str:
     return f"{kind}:{hashlib.sha256(value.encode()).hexdigest()[:32]}"
 
@@ -105,7 +117,7 @@ class PortalGuard:
         if length is not None and length > max_body:
             await _respond(send, 413, f"request body larger than {max_body} bytes")
             return
-        client = (scope.get("client") or ("unknown", 0))[0]
+        client = client_address(scope, settings.trusted_proxy_hops)
         keys = [
             (_limit_key("tok", token), settings.portal_rate_per_token_hour),
             (_limit_key("ip", client), settings.portal_rate_per_ip_hour),
