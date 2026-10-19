@@ -61,7 +61,7 @@ Frontend (apps/web):
 Infrastructure:
 - Postgres 16 with pgvector, hosted on Supabase free tier; local development via Docker Compose (docker-compose.yml at the repository root, pgvector/pgvector:0.8.6-pg16 image).
 - Neo4j 2026.09.0 Community (image neo4j:2026.09.0-community, tagged 2026-09-16) for the fraud graph: docker compose service `graph` locally and a service container in CI; Neo4j AuraDB Free in deploy (the owner creates the instance; credentials only in the deploy environment).
-- Supabase Storage for claim photos (private bucket, signed URLs).
+- Supabase Storage for claim photos (private bucket; the API proxies the bytes after the RLS check, so no storage URL reaches a browser; amended 2026-10-19). Local disk in development; production refuses local disk.
 - Clerk for firm users and organizations. Consumers never get accounts.
 - Stripe test mode: Billing for firm subscriptions, Connect Express for claimant payouts.
 - Vercel for apps/web, Render free tier for apps/api, GitHub Actions cron for the nightly feed pull.
@@ -221,6 +221,7 @@ Append-only. Date, what was tried or considered, why it died, the evidence. Re-p
 - 2026-10-18: check_duplicates does not return cluster ids (01-backend.md section 6 says it should): the tool is frozen with the ablation (evals/adjudication/freeze.json), and clusters form after the decision that creates them. Claim detail and the fraud-graph route carry the cluster ids.
 - 2026-10-18: Known cosmetic defect kept: a capped run's detail repeats its prefix ("usd cap: usd cap: ..."); it is composed in claims/graph.py, frozen with the ablation.
 - 2026-10-18: Starter-code references for the login and UI owners (auth/hmac_tokens.py, an apps/web package.json) were never written; the scope excludes those components, so the references now name the owner instead of a file. infra/render.yaml deploys with APP_ENV=prod so the header-trusting dev provider can never run publicly (the API fails closed until component 4 lands), keeps the BYPASSRLS role out of the web process (the worker is its own service, which Render's free tier does not offer), and health-checks /healthz.
+- 2026-10-19: Claim photos go through a Storage seam (recallops/storage.py): local disk in development, a private Supabase bucket in production through the Storage REST API with the pinned httpx (no new dependency). The API proxies photo bytes after the firm check instead of issuing signed URLs, so no storage URL ever reaches a browser or the portal; a storage outage answers a fixed 503 and fails a worker attempt instead of reading as a claim without photos. Production refuses local disk at startup (the API and the worker share no disk). Settings errors no longer echo their inputs (a bad prod config had printed GRAPH_KEY_SECRET). The Supabase wire format is tested against httpx.MockTransport only; there is no bucket or key yet.
 - 2026-10-19: Graph wiring observed: the projection runs about 25 to 30 ms after each decision commits; make seed rebuilds the seed programs' 58 clusters in 0.5 s. The first seed after wiring took 74.8 s in that step and did not reproduce on two later runs (one right after a full test run); cause unknown, recorded in docs/traces/M5-fraud-graph-and-campaign.md.
 
 ## Attribution

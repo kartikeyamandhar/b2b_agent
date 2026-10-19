@@ -249,9 +249,9 @@ def get_claim(claim_id: UUID, ctx: FirmDep, db: TenantDb) -> s.ClaimDetail:
 
 @firm.get(
     "/claims/{claim_id}/photos/{photo_id}",
-    responses={**NOT_FOUND, **IMAGE},
+    responses={**NOT_FOUND, **IMAGE, 503: {"model": s.Problem, "description": "photo storage unavailable"}},
     response_class=Response,
-    summary="Photo bytes (dev stand-in for a signed storage URL)",
+    summary="Photo bytes, read from the private store after the firm check (no storage URL reaches the browser)",
 )
 def get_photo(claim_id: UUID, photo_id: UUID, ctx: FirmDep, db: TenantDb) -> Response:
     # The bytes are proxied from storage after the RLS lookup, so the bucket stays private and no signed storage URL
@@ -707,7 +707,12 @@ def portal_submit(token: str, body: s.PortalSubmit, token_ctx: ClaimTokenDep) ->
 @portal.post(
     "/{token}/photos",
     response_model=s.Photo,
-    responses={**NOT_FOUND, 409: {"model": s.Problem}, 422: {"model": s.Problem}},
+    responses={
+        **NOT_FOUND,
+        409: {"model": s.Problem},
+        422: {"model": s.Problem},
+        503: {"model": s.Problem, "description": "photo storage unavailable; nothing was saved"},
+    },
     summary="Upload a photo (multipart, JPEG or PNG); sha256 and pHash computed server-side",
 )
 def portal_photo(

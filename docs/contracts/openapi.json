@@ -3205,9 +3205,9 @@
     }
   },
   "info": {
-    "description": "RecallOps backend API (component 1). Contract for the UI (component 2), payments (component 3),\nand login (component 4) owners. In development, authenticate with X-Dev-Firm-Id and X-Dev-Role headers\n(AUTH_PROVIDER=dev); the login owner's Clerk provider replaces them with a bearer token. Errors are RFC 7807\nproblem details with a correlation_id. Routes marked 501 have a final contract and arrive in the named milestone.",
+    "description": "RecallOps backend API (component 1). Contract for the UI (component 2), payments (component 3),\nand login (component 4) owners. In development, authenticate with X-Dev-Firm-Id and X-Dev-Role headers\n(AUTH_PROVIDER=dev); the login owner's Clerk provider replaces them with a bearer token. Errors are RFC 7807\nproblem details with a correlation_id. Routes answering 501 belong to the payments owner (component 3) and keep their\nfinal contract.",
     "title": "RecallOps API",
-    "version": "0.1.0-m1"
+    "version": "0.5.0"
   },
   "openapi": "3.1.0",
   "paths": {
@@ -3599,6 +3599,16 @@
               }
             },
             "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "photo storage unavailable; nothing was saved"
           }
         },
         "summary": "Upload a photo (multipart, JPEG or PNG); sha256 and pHash computed server-side",
@@ -4051,9 +4061,19 @@
               }
             },
             "description": "Validation Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "photo storage unavailable"
           }
         },
-        "summary": "Photo bytes (dev stand-in for a signed storage URL)",
+        "summary": "Photo bytes, read from the private store after the firm check (no storage URL reaches the browser)",
         "tags": [
           "firm"
         ]

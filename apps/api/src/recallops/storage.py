@@ -218,7 +218,11 @@ class SupabaseStorage:
 
 
 def build_storage(settings: Settings) -> Storage:
-    """One per process (the API and the worker each hold theirs); building opens no connection."""
+    """One per process (the API and the worker each hold theirs); building opens no connection. Production refuses
+    local disk: the API and the worker run as separate services that share no disk, so the worker would find no
+    photos."""
+    if settings.app_env == "prod" and settings.storage_backend == "local":
+        raise StorageError("STORAGE_BACKEND=local is not allowed with APP_ENV=prod: use the private bucket (supabase)")
     if settings.storage_backend == "supabase":
         return SupabaseStorage(
             settings.supabase_url, settings.supabase_service_key, settings.supabase_bucket, settings.storage_timeout_s

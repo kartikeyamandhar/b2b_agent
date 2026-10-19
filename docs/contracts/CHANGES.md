@@ -21,6 +21,7 @@ CLAUDE.md ("Working in a team") requires a decisions-log entry and a message to 
    - `POST /v1/programs/{id}/registrations` (admin, multipart CSV; row-level rejections listed), `POST .../campaign/match`, `POST .../campaign/drafts` `{channels}`, `POST .../campaign/send` `{channel?}`, `GET .../campaign`. Sending is simulated; say so in the UI.
 10. `POST /v1/programs/{id}/mpr/generate` takes an optional JSON body of manual boxes (`MprManual`). The report payload now has `boxes` (what the form shows), `computed`, `manual`, `notes`, and `reconciliation`. `period` must be `YYYY-MM` with a real month (422 otherwise).
 11. Responses newly documented: 402 (over the plan's limit) on program create and patch, 409 on patch, issue, actions, and the portal payout step, 413 on the registrations upload.
+12a. Photos: `GET /v1/claims/{id}/photos/{photo_id}` and `POST /portal/{token}/photos` can answer 503 ("photo storage unavailable"; nothing was saved on upload). The photo URL stays an API path in production: the API reads the private bucket after the firm check.
 12. Portal: `POST /portal/{token}/payout` with `check_export` can return `under_review` and `payout_status: held` when the mailing address is one another claim of the program uses. `POST /portal/{token}/answer` answers 409 when the claim is no longer waiting for an answer (instead of silently dropping the reply). Claimant text is cleaned on submit: control characters removed, and a value with no letter or digit (for example a serial of "-") becomes empty.
 
 ## Payments owner (component 3)

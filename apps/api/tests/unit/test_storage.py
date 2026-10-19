@@ -356,7 +356,8 @@ def test_prod_refuses_unsafe_supabase_settings(values: dict[str, object], proble
 
 def test_the_guard_applies_only_to_prod_on_supabase(tmp_path: Path) -> None:
     local = prod(storage_backend="local", supabase_url="http://x", supabase_service_key=EXAMPLE_SUPABASE_SERVICE_KEY)
-    assert isinstance(build_storage(local), LocalStorage)
+    with pytest.raises(StorageError, match="not allowed with APP_ENV=prod"):  # validates, but no disk in prod
+        build_storage(local)
     dev = Settings(_env_file=None, app_env="dev", neo4j_uri="", storage_backend="supabase")
     assert dev.supabase_url == EXAMPLE_SUPABASE_URL
     assert isinstance(build_storage(Settings(_env_file=None, storage_dir=tmp_path)), LocalStorage)
