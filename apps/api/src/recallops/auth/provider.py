@@ -39,6 +39,10 @@ class AuthProvider(Protocol):
 
 @dataclass(frozen=True, slots=True)
 class ClaimTokenContext:
+    """What a verified portal token names. The firm is part of the signed token, so the portal opens a tenant
+    session directly (the API never needs the BYPASSRLS role to find a claim's firm)."""
+
+    firm_id: UUID
     claim_id: UUID
 
 
@@ -50,4 +54,4 @@ class ClaimTokenVerifier(Protocol):
 
     def token_hash(self, token: str) -> str: ...
 
-    def issue(self, claim_id: UUID) -> str: ...
+    def issue(self, firm_id: UUID, claim_id: UUID) -> str: ...

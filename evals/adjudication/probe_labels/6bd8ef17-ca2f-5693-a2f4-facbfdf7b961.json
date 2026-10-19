@@ -1,0 +1,12 @@
+{
+ "claim_id": "6bd8ef17-ca2f-5693-a2f4-facbfdf7b961",
+ "program": "26007",
+ "category": "label_confirms_missing_typed_model",
+ "expected_outcome": "approve",
+ "violations": [
+  "label_confirms_missing_typed_model"
+ ],
+ "label_model_printed": "6L-PC",
+ "label_unreadable": false,
+ "subtypes": {}
+}

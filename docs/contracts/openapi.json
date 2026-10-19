@@ -1213,6 +1213,7 @@
         "additionalProperties": false,
         "properties": {
           "message": {
+            "maxLength": 2000,
             "title": "Message",
             "type": "string"
           }
@@ -1356,16 +1357,19 @@
         "additionalProperties": false,
         "properties": {
           "address_line1": {
+            "maxLength": 200,
             "title": "Address Line1",
             "type": "string"
           },
           "city": {
+            "maxLength": 100,
             "title": "City",
             "type": "string"
           },
           "date_code_claimed": {
             "anyOf": [
               {
+                "maxLength": 40,
                 "type": "string"
               },
               {
@@ -1375,20 +1379,31 @@
             "title": "Date Code Claimed"
           },
           "email": {
+            "maxLength": 200,
             "title": "Email",
             "type": "string"
           },
           "model_claimed": {
-            "title": "Model Claimed",
-            "type": "string"
+            "anyOf": [
+              {
+                "maxLength": 80,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Claimed"
           },
           "name": {
+            "maxLength": 120,
             "title": "Name",
             "type": "string"
           },
           "phone": {
             "anyOf": [
               {
+                "maxLength": 40,
                 "type": "string"
               },
               {
@@ -1411,6 +1426,7 @@
           },
           "quantity": {
             "default": 1,
+            "maximum": 20.0,
             "minimum": 1.0,
             "title": "Quantity",
             "type": "integer"
@@ -1418,6 +1434,7 @@
           "retailer_claimed": {
             "anyOf": [
               {
+                "maxLength": 120,
                 "type": "string"
               },
               {
@@ -1429,6 +1446,7 @@
           "serial_claimed": {
             "anyOf": [
               {
+                "maxLength": 80,
                 "type": "string"
               },
               {
@@ -1438,10 +1456,12 @@
             "title": "Serial Claimed"
           },
           "state": {
+            "maxLength": 40,
             "title": "State",
             "type": "string"
           },
           "zip": {
+            "maxLength": 20,
             "title": "Zip",
             "type": "string"
           }
@@ -1452,8 +1472,7 @@
           "address_line1",
           "city",
           "state",
-          "zip",
-          "model_claimed"
+          "zip"
         ],
         "title": "PortalSubmit",
         "type": "object"
@@ -3343,7 +3362,8 @@
         "responses": {
           "200": {
             "content": {
-              "image/jpeg": {}
+              "image/jpeg": {},
+              "image/png": {}
             },
             "description": "Successful Response"
           },

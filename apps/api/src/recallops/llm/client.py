@@ -13,6 +13,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
+import threading
 import time
 from dataclasses import dataclass, field
 from decimal import Decimal
@@ -309,7 +311,10 @@ class RecordingTransport:
         }
         if response.content and any(b.get("type") != "text" for b in response.content):
             record["content"] = list(response.content)
-        path.write_text(json.dumps(record, indent=1) + "\n", encoding="utf-8")
+        # Atomic: a crash mid-write must not leave a truncated recording that replay-first would load forever.
+        tmp = path.with_suffix(f".{os.getpid()}.{threading.get_ident()}.tmp")
+        tmp.write_text(json.dumps(record, indent=1) + "\n", encoding="utf-8")
+        os.replace(tmp, path)
         self.recorded.append(key)
         return response
 
@@ -366,9 +371,15 @@ class LlmClient:
         )
 
 
-def build_client(settings: Settings, transport: Transport | None = None, record_dir: Path | None = None) -> LlmClient:
+def build_client(
+    settings: Settings,
+    transport: Transport | None = None,
+    record_dir: Path | None = None,
+    ledger_engine: Any = None,
+) -> LlmClient:
     """Production wiring: replay by default; live only with LLM_MODE=live and a real key. Evals record into
-    REPLAY_DIR (committed); the worker passes LLM_RECORD_DIR (gitignored) so real uploads never reach the repo."""
+    REPLAY_DIR (committed); the worker passes LLM_RECORD_DIR (gitignored) so real uploads never reach the repo.
+    The API passes its app engine as ledger_engine (it never uses the internal role)."""
     from recallops.db.engine import internal_engine
 
     directory = record_dir or settings.replay_dir
@@ -383,7 +394,7 @@ def build_client(settings: Settings, transport: Transport | None = None, record_
             raise LiveCallsDisabled("LLM_MODE=fake needs an injected transport")
     meter = CostMeter(
         prices=PriceTable.from_settings(settings),
-        ledger=DbSpendLedger(internal_engine(), settings.llm_spend_carried_usd),
+        ledger=DbSpendLedger(ledger_engine or internal_engine(), settings.llm_spend_carried_usd),
         budget_stop_usd=settings.llm_budget_stop_usd,
         budget_warn_usd=settings.llm_budget_warn_usd,
         call_timeout_s=settings.llm_timeout_s,

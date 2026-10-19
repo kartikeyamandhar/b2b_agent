@@ -1,0 +1,12 @@
+{
+ "claim_id": "62c75bed-8495-5294-95a4-f41ee75aecad",
+ "program": "24118",
+ "category": "label_shows_other_model",
+ "expected_outcome": "deny",
+ "violations": [
+  "label_shows_other_model"
+ ],
+ "label_model_printed": "B0726Q",
+ "label_unreadable": false,
+ "subtypes": {}
+}

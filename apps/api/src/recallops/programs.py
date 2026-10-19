@@ -64,7 +64,7 @@ def extract_rules(source_text: str, settings: Settings, ctx: FirmContext) -> Ext
     if has_identifiers(rules):
         return Extraction(rules, f"baseline {baseline.EXTRACTOR_VERSION}")
     try:
-        llm = build_client(settings)
+        llm = build_client(settings, ledger_engine=app_engine())
     except LiveCallsDisabled:
         return Extraction(rules, f"baseline {baseline.EXTRACTOR_VERSION} (fallback unavailable)")
     trace = DbTrace(app_engine(), "extract_rules", firm_id=ctx.firm_id, model_id=llm.model_id, tenant=True)
@@ -235,7 +235,7 @@ def issue_links(
     links: list[tuple[UUID, str]] = []
     for _ in range(n):
         claim_id = uuid4()
-        token = verifier.issue(claim_id)
+        token = verifier.issue(ctx.firm_id, claim_id)
         session.add(
             Claim(
                 id=claim_id,

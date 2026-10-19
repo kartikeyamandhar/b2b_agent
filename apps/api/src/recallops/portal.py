@@ -9,6 +9,7 @@ only from ids (never from a client-supplied name), with sha256 and pHash compute
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -101,11 +102,45 @@ def view(session: Session, pc: PortalClaim) -> dict[str, Any]:
             "destruction_instruction": remedy.destruction_instruction,
             "required_photos": required_photos(program),
         },
-        "pending_question": decision.get("question_for_claimant") if claim.status == "needs_info" else None,
-        "decision_reasons": decision.get("reasons", []) if claim.status in ("approved", "denied", "needs_info") else [],
+        "pending_question": _safe_question(decision.get("question_for_claimant"))
+        if claim.status == "needs_info"
+        else None,
+        "decision_reasons": claimant_reasons(claim.status, decision),
         "photos_uploaded": kinds,
         "messages": messages,
     }
+
+
+CLAIMANT_REASON = {
+    "R:models": "The model number shown is not part of this recall.",
+    "R:serials": "The serial number is outside the recalled range.",
+    "R:date_codes": "The date code is outside the recalled range.",
+    "R:sold_window": "The purchase date is before the recalled products were sold.",
+}
+_UUID = re.compile(r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")
+
+
+def claimant_reasons(status: str, decision: dict[str, Any]) -> list[str]:
+    """A fixed, claimant-safe wording from the outcome and the cited rule ids: never model prose, reviewer notes,
+    or anything about other claims (red-team finding, decisions log 2026-10-18)."""
+    if status == "approved":
+        return ["Your claim was approved."]
+    if status == "needs_info":
+        return ["More information is needed to finish your claim."]
+    if status == "denied":
+        if decision.get("review_action") == "mark_fraud":
+            return ["Your claim could not be approved. Contact the firm for details."]
+        mapped = [CLAIMANT_REASON[c] for c in decision.get("cited_rules", []) if c in CLAIMANT_REASON]
+        return sorted(set(mapped)) or [
+            "Your claim does not meet the recall's requirements. Contact the firm for details."
+        ]
+    return []
+
+
+def _safe_question(question: Any) -> str | None:
+    if not question:
+        return None
+    return _UUID.sub("another claim", str(question))[:500]
 
 
 def submit(session: Session, pc: PortalClaim, fields: dict[str, Any]) -> bool:
@@ -169,7 +204,9 @@ def add_photo(
     content_type: str | None,
     data: bytes,
     max_bytes: int,
-) -> ClaimPhoto:
+    max_pixels: int,
+) -> tuple[ClaimPhoto, list[Path]]:
+    """Returns the new photo and the files it replaced; the caller deletes those only after the commit."""
     claim = pc.claim
     if claim.status not in EDITABLE:
         raise NotEditable(f"photos can be added while the claim is {' or '.join(EDITABLE)}")
@@ -181,7 +218,7 @@ def add_photo(
     if ext is None:
         raise PhotoRejected("photo must be JPEG or PNG")
     try:
-        facts = inspect(data)
+        facts = inspect(data, max_pixels)
     except InvalidPhoto as exc:
         raise PhotoRejected(str(exc)) from exc
     if facts.exif.get("format") not in ("JPEG", "PNG"):
@@ -209,12 +246,10 @@ def add_photo(
     )
     session.add(photo)
     session.flush()
-    for p in old:
-        (storage_dir / p.storage_path).unlink(missing_ok=True)
     log_event(
         log, "portal_photo_stored", firm_id=str(claim.firm_id), claim_id=str(claim.id), kind=kind, bytes=len(data)
     )
-    return photo
+    return photo, [storage_dir / p.storage_path for p in old]
 
 
 def answer(session: Session, pc: PortalClaim, message: str) -> None:

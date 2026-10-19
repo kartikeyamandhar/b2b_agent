@@ -1,0 +1,12 @@
+{
+ "claim_id": "d6d78351-0e08-5f51-a4aa-7bb94caf3136",
+ "program": "26007",
+ "category": "destruction_photo_intact",
+ "expected_outcome": "needs_info",
+ "violations": [
+  "destruction_photo_intact"
+ ],
+ "label_model_printed": "KY-318A",
+ "label_unreadable": false,
+ "subtypes": {}
+}

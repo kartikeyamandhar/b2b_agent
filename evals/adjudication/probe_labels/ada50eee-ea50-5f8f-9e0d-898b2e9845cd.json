@@ -1,0 +1,12 @@
+{
+ "claim_id": "ada50eee-ea50-5f8f-9e0d-898b2e9845cd",
+ "program": "25206",
+ "category": "label_confirms_typed_typo",
+ "expected_outcome": "approve",
+ "violations": [
+  "label_confirms_typed_typo"
+ ],
+ "label_model_printed": "BB4640PU",
+ "label_unreadable": false,
+ "subtypes": {}
+}

@@ -20,7 +20,7 @@ from recallops.tenancy import FirmContext
 log = get_logger("auth.dev")
 
 LIVE_KEY = re.compile(r"_live_")
-DEV_TOKEN = re.compile(r"^dev\.([0-9a-fA-F-]{36})$")
+DEV_TOKEN = re.compile(r"^dev\.([0-9a-fA-F-]{36})\.([0-9a-fA-F-]{36})$")
 
 
 class UnsafeDevAuth(RuntimeError):
@@ -76,16 +76,25 @@ class DevAuthProvider:
 
 
 class DevClaimTokenVerifier:
-    """Dev portal tokens are 'dev.<claim uuid>'. Not secret; the login owner replaces this with HMAC tokens."""
+    """Dev portal tokens are 'dev.<firm uuid>.<claim uuid>'. Not secret, so it refuses to load with APP_ENV=prod or
+    next to the Clerk login (CLAIM_TOKEN_PROVIDER=dev only in development); the login owner's HMAC verifier
+    (auth/hmac_tokens.py) replaces it."""
+
+    def __init__(self, settings: Settings | None = None) -> None:
+        if settings is not None and (settings.app_env == "prod" or settings.auth_provider == "clerk"):
+            raise UnsafeDevAuth("dev claim tokens are not secret: refusing with APP_ENV=prod or AUTH_PROVIDER=clerk")
 
     def verify(self, token: str) -> ClaimTokenContext:
         m = DEV_TOKEN.match(token)
         if not m:
             raise AuthError("invalid claim token")
-        return ClaimTokenContext(claim_id=UUID(m.group(1)))
+        try:
+            return ClaimTokenContext(firm_id=UUID(m.group(1)), claim_id=UUID(m.group(2)))
+        except ValueError as exc:
+            raise AuthError("invalid claim token") from exc
 
     def token_hash(self, token: str) -> str:
         return hashlib.sha256(token.encode()).hexdigest()
 
-    def issue(self, claim_id: UUID) -> str:
-        return f"dev.{claim_id}"
+    def issue(self, firm_id: UUID, claim_id: UUID) -> str:
+        return f"dev.{firm_id}.{claim_id}"

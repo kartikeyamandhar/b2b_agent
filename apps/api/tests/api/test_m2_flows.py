@@ -52,7 +52,7 @@ def jpeg(kind: str, seed_value: int) -> bytes:
 @pytest.fixture(scope="module")
 def env(internal_engine_test: Engine) -> Iterator[dict[str, Any]]:
     with internal_engine_test.begin() as conn:
-        for table in ("document_chunks", "documents", "payouts", "worker_heartbeats"):
+        for table in ("document_chunks", "documents", "payouts", "worker_heartbeats", "rate_limits"):
             conn.execute(text(f"DELETE FROM {table}"))
         conn.execute(text("DELETE FROM langgraph.checkpoint_writes"))
         conn.execute(text("DELETE FROM langgraph.checkpoint_blobs"))

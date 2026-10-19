@@ -194,3 +194,26 @@ def test_crash_mid_run_resumes_from_the_checkpoint() -> None:
     keys = [s.step_key for s in trace.steps]
     assert keys[: len(rows_before)] == rows_before and len(keys) == len(set(keys))
     assert keys.count("load_context") == 1
+
+
+def test_guard_holds_a_model_more_lenient_than_the_rules() -> None:
+    # The model approves although the label it read shows a model that is not recalled (an injected approve).
+    responses = [
+        turn(tool_use(1, "read_label_photo")),
+        label("TL9999Z"),
+        decide(2, "approve", ["T1"]),
+    ]
+    result, trace, _, _, effects = run_graph(responses, claim=fakes.facts(), variant="loop_no_retrieval")
+    assert result.outcome == "approve" and result.routed_to_human and result.guard_hold
+    assert effects.holds and effects.holds[0]["reason"] == "model_disagrees_with_rules"
+    assert "deny" in effects.holds[0]["detail"]
+    route = next(s for s in trace.steps if s.node == "route")
+    assert route.result is not None and route.result["guard"]["model_more_lenient"] is True
+    assert not effects.applied  # nothing was paid or decided automatically
+
+
+def test_a_stricter_model_is_allowed() -> None:
+    responses = [decide(1, "needs_info", ["R:models"], "Please send a clearer label photo")]
+    result, _, _, _, effects = run_graph(responses)
+    assert result.outcome == "needs_info" and not result.routed_to_human
+    assert effects.applied and effects.applied[0]["outcome"] == "needs_info"

@@ -1,0 +1,12 @@
+{
+ "claim_id": "4d56b353-67e8-5257-80e5-d2a355ee3abc",
+ "program": "26011",
+ "category": "label_confirms_missing_typed_model",
+ "expected_outcome": "approve",
+ "violations": [
+  "label_confirms_missing_typed_model"
+ ],
+ "label_model_printed": "2G512B",
+ "label_unreadable": false,
+ "subtypes": {}
+}

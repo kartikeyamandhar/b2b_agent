@@ -1,0 +1,12 @@
+{
+ "claim_id": "0440daca-20cf-5513-9d29-49887d05b870",
+ "program": "24118",
+ "category": "label_confirms_missing_typed_model",
+ "expected_outcome": "approve",
+ "violations": [
+  "label_confirms_missing_typed_model"
+ ],
+ "label_model_printed": "B0726Y",
+ "label_unreadable": false,
+ "subtypes": {}
+}

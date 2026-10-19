@@ -1,0 +1,12 @@
+{
+ "claim_id": "50440e54-1ec0-5945-99b5-238f1b0aa642",
+ "program": "25206",
+ "category": "label_confirms_typed_typo",
+ "expected_outcome": "approve",
+ "violations": [
+  "label_confirms_typed_typo"
+ ],
+ "label_model_printed": "BE10019US-GR",
+ "label_unreadable": false,
+ "subtypes": {}
+}

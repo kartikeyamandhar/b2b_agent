@@ -48,10 +48,10 @@ downgrade: ## Downgrade the test database to base (reversibility check)
 	cd $(API) && $(ENV) uv run --frozen alembic -x dburl=postgresql://recallops_owner:$(RECALLOPS_OWNER_PASSWORD)@localhost:$(POSTGRES_PORT)/recallops_test downgrade base
 
 api: ## Run the API on http://127.0.0.1:8000
-	$(RUN) uvicorn recallops.api.app:app --host 127.0.0.1 --port 8000
+	$(RUN) uvicorn recallops.api.app:app --host 127.0.0.1 --port 8000 --no-access-log
 
 dev: ## Run the API with auto-reload
-	$(RUN) uvicorn recallops.api.app:app --host 127.0.0.1 --port 8000 --reload --reload-dir $(API)/src
+	$(RUN) uvicorn recallops.api.app:app --host 127.0.0.1 --port 8000 --no-access-log --reload --reload-dir $(API)/src
 
 worker: ## Run the adjudication worker (ADJUDICATOR=agent needs LLM_MODE=live; rules_only runs offline)
 	$(PY) -m recallops.claims.worker $(ARGS)

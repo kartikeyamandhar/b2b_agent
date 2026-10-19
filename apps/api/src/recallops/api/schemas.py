@@ -436,23 +436,23 @@ class PortalView(Schema):
 
 
 class PortalSubmit(Schema):
-    name: str
-    email: str
-    phone: str | None = None
-    address_line1: str
-    city: str
-    state: str
-    zip: str
-    model_claimed: str
-    serial_claimed: str | None = None
-    date_code_claimed: str | None = None
-    retailer_claimed: str | None = None
+    name: str = Field(max_length=120)
+    email: str = Field(max_length=200)
+    phone: str | None = Field(None, max_length=40)
+    address_line1: str = Field(max_length=200)
+    city: str = Field(max_length=100)
+    state: str = Field(max_length=40)
+    zip: str = Field(max_length=20)
+    model_claimed: str | None = Field(None, max_length=80)
+    serial_claimed: str | None = Field(None, max_length=80)
+    date_code_claimed: str | None = Field(None, max_length=40)
+    retailer_claimed: str | None = Field(None, max_length=120)
     purchase_date: date | None = None
-    quantity: int = Field(1, ge=1)
+    quantity: int = Field(1, ge=1, le=20)
 
 
 class PortalAnswer(Schema):
-    message: str
+    message: str = Field(max_length=2000)
 
 
 class PortalPayout(Schema):

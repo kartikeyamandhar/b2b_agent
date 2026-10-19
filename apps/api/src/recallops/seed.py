@@ -54,6 +54,7 @@ OTHER_RECALL = "27025"
 FIXTURE = REPO_ROOT / "data" / "samples" / "cpsc_sample.json"
 STATUS = {"approve": "approved", "deny": "denied", "needs_info": "needs_info", "flag": "flagged"}
 TENANT_DELETE_ORDER = (
+    "document_chunks",
     "agent_steps",
     "agent_runs",
     "payouts",
@@ -74,6 +75,8 @@ def program_id_for(firm_id: uuid.UUID, recall: str) -> uuid.UUID:
 
 
 def _wipe(session: Session, firm_ids: list[uuid.UUID]) -> None:
+    """Reset tooling only: audit_log is append-only (migration 0003) unless app.audit_purge is on."""
+    session.execute(text("SELECT set_config('app.audit_purge', 'on', true)"))
     for table in TENANT_DELETE_ORDER:
         session.execute(text(f"DELETE FROM {table} WHERE firm_id = ANY(:ids)"), {"ids": firm_ids})
     session.execute(text("DELETE FROM firms WHERE id = ANY(:ids)"), {"ids": firm_ids})
@@ -138,7 +141,7 @@ def seed_program(engine: Engine, firm_id: uuid.UUID, recall_source_id: str, n: i
     now = datetime.now(UTC)
     with Session(engine) as session, session.begin():
         for c in claims:
-            token = f"dev.{c.claim_id}"
+            token = f"dev.{firm_id}.{c.claim_id}"
             session.add(
                 Claim(
                     id=c.claim_id,

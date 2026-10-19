@@ -1,0 +1,12 @@
+{
+ "claim_id": "c9f82de8-816e-5b68-b2db-88e912ac3c18",
+ "program": "26011",
+ "category": "label_unreadable",
+ "expected_outcome": "needs_info",
+ "violations": [
+  "label_unreadable"
+ ],
+ "label_model_printed": "2G505B",
+ "label_unreadable": true,
+ "subtypes": {}
+}

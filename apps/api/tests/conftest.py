@@ -56,6 +56,7 @@ CLEAN_ORDER = (
     "recalls",
     "stripe_events",
     "worker_heartbeats",
+    "rate_limits",
 )
 
 
@@ -81,6 +82,7 @@ def internal_engine_test() -> Iterator[Engine]:
 def clean_db(internal_engine_test: Engine) -> Iterator[Engine]:
     """Empty every table before the test; the engine returned is the internal (BYPASSRLS) one."""
     with internal_engine_test.begin() as conn:
+        conn.execute(text("SELECT set_config('app.audit_purge', 'on', true)"))  # test reset tooling only
         for table in CLEAN_ORDER:
             conn.execute(text(f"DELETE FROM {table}"))
     yield internal_engine_test

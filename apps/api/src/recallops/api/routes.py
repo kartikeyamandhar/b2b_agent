@@ -23,7 +23,7 @@ from recallops.auth.deps import AdminDep, ClaimTokenDep, FirmDep, build_claim_ve
 from recallops.billing.fake import AllowAllBilling
 from recallops.billing.interface import BillingGate
 from recallops.claims.review import ReviewConflict, submit_action
-from recallops.db.engine import app_engine, internal_engine
+from recallops.db.engine import app_engine
 from recallops.db.repos import ClaimsRepo, ProgramsRepo, RunsRepo, UsageRepo
 from recallops.db.session import tenant_session
 from recallops.models import Claim, Recall, RecallProgram, WorkerHeartbeat
@@ -35,7 +35,7 @@ Responses = dict[int | str, dict[str, Any]]
 NOT_FOUND: Responses = {404: {"model": s.Problem, "description": "not found, or belongs to another firm"}}
 AUTH: Responses = {401: {"model": s.Problem}, 403: {"model": s.Problem}}
 LATER: Responses = {501: {"model": s.Problem, "description": "contract final, implementation in a later milestone"}}
-IMAGE: Responses = {200: {"content": {"image/jpeg": {}}}}
+IMAGE: Responses = {200: {"content": {"image/jpeg": {}, "image/png": {}}}}
 PDF: Responses = {200: {"content": {"application/pdf": {}}}}
 
 firm = APIRouter(prefix="/v1", tags=["firm"], responses=AUTH)
@@ -251,7 +251,8 @@ def get_photo(claim_id: UUID, photo_id: UUID, ctx: FirmDep, db: TenantDb) -> Fil
     path = get_settings().storage_dir / photo.storage_path
     if not path.is_file():
         raise HTTPException(status.HTTP_404_NOT_FOUND, "photo file missing from storage")
-    return FileResponse(path, media_type="image/jpeg")
+    media = "image/png" if path.suffix.lower() == ".png" else "image/jpeg"
+    return FileResponse(path, media_type=media, headers={"X-Content-Type-Options": "nosniff"})
 
 
 @firm.get(
@@ -370,12 +371,9 @@ def customer_portal(ctx: AdminDep) -> s.CheckoutSession:
 
 
 def _portal(token: str, token_ctx: Any) -> tuple[FirmContext, UUID]:
-    """Map the token's claim to its firm, then run everything else in that firm's tenant session."""
-    with Session(internal_engine()) as session:
-        row = session.execute(select(Claim.firm_id).where(Claim.id == token_ctx.claim_id)).first()
-    if row is None:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, "claim link not found or expired")
-    return FirmContext(firm_id=row.firm_id, user_id="portal", role="reviewer"), token_ctx.claim_id
+    """The verified token names the firm, so the portal opens that firm's tenant session directly (RLS); a token
+    whose firm does not hold the claim finds nothing and answers 404."""
+    return FirmContext(firm_id=token_ctx.firm_id, user_id="portal", role="reviewer"), token_ctx.claim_id
 
 
 def _portal_claim_in(session: Session, token: str, claim_id: UUID) -> portal_service.PortalClaim:
@@ -431,14 +429,24 @@ def portal_photo(
     with tenant_session(ctx) as session:
         pc = _portal_claim_in(session, token, claim_id)
         try:
-            photo = portal_service.add_photo(
-                session, pc, settings.storage_dir, kind, file.content_type, data, settings.max_photo_bytes
+            photo, replaced = portal_service.add_photo(
+                session,
+                pc,
+                settings.storage_dir,
+                kind,
+                file.content_type,
+                data,
+                settings.max_photo_bytes,
+                settings.max_photo_pixels,
             )
         except portal_service.NotEditable as exc:
             raise HTTPException(status.HTTP_409_CONFLICT, str(exc)) from exc
         except portal_service.PhotoRejected as exc:
             raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(exc)) from exc
-        return views.photo(photo)
+        view = views.photo(photo)
+    for path in replaced:  # only after the commit: a failed commit keeps the old rows and their files
+        path.unlink(missing_ok=True)
+    return view
 
 
 @portal.post(
@@ -488,7 +496,7 @@ def feeds_pull(x_internal_secret: Annotated[str | None, Header()] = None) -> dic
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "missing or wrong X-Internal-Secret")
     if settings.app_env == "prod" and settings.internal_shared_secret == "internal-dev-only":
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "the example internal secret is refused in prod")
-    return pull_since_last(internal_engine(), settings)
+    return pull_since_last(app_engine(), settings)  # recalls and feed_runs are public tables (migration 0003)
 
 
 @internal.post("/stripe/webhook", responses=LATER, summary="Stripe webhook (component 3 replaces this stub)")

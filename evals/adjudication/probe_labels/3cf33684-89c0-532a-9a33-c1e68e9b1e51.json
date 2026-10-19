@@ -1,0 +1,12 @@
+{
+ "claim_id": "3cf33684-89c0-532a-9a33-c1e68e9b1e51",
+ "program": "26046",
+ "category": "label_confirms_missing_typed_model",
+ "expected_outcome": "approve",
+ "violations": [
+  "label_confirms_missing_typed_model"
+ ],
+ "label_model_printed": "LXT-CL-1.0",
+ "label_unreadable": false,
+ "subtypes": {}
+}

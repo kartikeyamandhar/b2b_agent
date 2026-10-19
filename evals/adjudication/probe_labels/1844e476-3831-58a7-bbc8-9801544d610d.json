@@ -1,0 +1,12 @@
+{
+ "claim_id": "1844e476-3831-58a7-bbc8-9801544d610d",
+ "program": "25206",
+ "category": "label_shows_other_model",
+ "expected_outcome": "deny",
+ "violations": [
+  "label_shows_other_model"
+ ],
+ "label_model_printed": "AD10314SL",
+ "label_unreadable": false,
+ "subtypes": {}
+}

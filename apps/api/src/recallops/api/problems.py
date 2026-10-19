@@ -33,12 +33,14 @@ class PaymentRequired(Exception):
 
 
 def problem(status: int, title: str, detail: str | None, request: Request) -> JSONResponse:
+    from recallops.api.guards import redact
+
     body = {
         "type": "about:blank",
         "title": title,
         "status": status,
         "detail": detail,
-        "instance": request.url.path,
+        "instance": redact(request.url.path),
         "correlation_id": getattr(request.state, "correlation_id", None),
     }
     return JSONResponse(body, status_code=status, media_type=PROBLEM_JSON)
@@ -64,11 +66,13 @@ def install(app: FastAPI) -> None:
         t0 = time.monotonic()
         response = await call_next(request)
         response.headers["x-request-id"] = request.state.correlation_id
+        from recallops.api.guards import redact
+
         log_event(
             log,
             "http_request",
             method=request.method,
-            path=request.url.path,
+            path=redact(request.url.path),
             status=response.status_code,
             correlation_id=request.state.correlation_id,
             duration_ms=round((time.monotonic() - t0) * 1000, 1),

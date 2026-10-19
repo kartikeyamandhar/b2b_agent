@@ -1,0 +1,2305 @@
+{
+ "seed": 4242,
+ "block": "probe60",
+ "unreadable_render": {
+  "downsample": 14,
+  "blur_radius": 5,
+  "jpeg_quality": 40
+ },
+ "programs": [
+  "24118",
+  "25206",
+  "26007",
+  "26011",
+  "26046",
+  "24082"
+ ],
+ "claims": [
+  {
+   "claim_id": "62c75bed-8495-5294-95a4-f41ee75aecad",
+   "program": "24118",
+   "population": "probe:24118",
+   "model_claimed": "B0726Y",
+   "serial_claimed": "SN48966187",
+   "date_code_claimed": "8/21",
+   "retailer_claimed": "Walmart",
+   "purchase_date": "2018-10-22",
+   "refund_cents": 3114,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Casey Danlin",
+    "email": "synth.probe:24118.0@example.net",
+    "phone": "(867) 555-0180",
+    "address_line1": "79 Fenlin Ct",
+    "city": "Wenzel Falls",
+    "state": "IL",
+    "zip": "51730",
+    "payout_destination": "synth_dest_2e3d71ff0838b51b",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "7c4a6bc48a6360e8dfeba4380428b33546671277e98aff2d5f2825320a7c5ce2",
+     "phash": "e7259cc563a54336",
+     "path": "data/generated/probe_photos/probe_24118/62c75bed-8495-5294-95a4-f41ee75aecad_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "0deecbe0976b5d8fc494462bd84d4e15cfd816847693689281ba449432aae2c7",
+     "phash": "9a9465658e4fc19b",
+     "path": "data/generated/probe_photos/probe_24118/62c75bed-8495-5294-95a4-f41ee75aecad_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "849b3602-9523-5a9d-90ec-bf5c5e7d57e5",
+   "program": "24118",
+   "population": "probe:24118",
+   "model_claimed": "B0726Y",
+   "serial_claimed": "SN51446269",
+   "date_code_claimed": "8/21",
+   "retailer_claimed": "Walmart",
+   "purchase_date": "2017-04-01",
+   "refund_cents": 2981,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Avery Yarlin",
+    "email": "synth.probe:24118.1@example.com",
+    "phone": "(327) 555-0139",
+    "address_line1": "4015 Danbel Rd",
+    "city": "Yarlin Falls",
+    "state": "GA",
+    "zip": "46272",
+    "payout_destination": "synth_dest_d31a39935818cbb4",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "51c308e1e29deb1084e9be2c65fc261323c0a756f739cba4390ac184e75ed259",
+     "phash": "e7479c066dad2570",
+     "path": "data/generated/probe_photos/probe_24118/849b3602-9523-5a9d-90ec-bf5c5e7d57e5_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "e8e8f90d2bced858a695ed200ff2857412e29bbe05de1319d5912b83068d04a5",
+     "phash": "966b69968c979269",
+     "path": "data/generated/probe_photos/probe_24118/849b3602-9523-5a9d-90ec-bf5c5e7d57e5_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "d9f2aa64-11e4-586c-9c56-08032a2a3d7b",
+   "program": "24118",
+   "population": "probe:24118",
+   "model_claimed": "B0726Y",
+   "serial_claimed": "SN48049135",
+   "date_code_claimed": "8/21",
+   "retailer_claimed": "Walmart",
+   "purchase_date": "2021-12-22",
+   "refund_cents": 4014,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Jordan Yarvor",
+    "email": "synth.probe:24118.2@example.org",
+    "phone": "(494) 555-0135",
+    "address_line1": "1873 Garquin Rd",
+    "city": "Vorros Falls",
+    "state": "NY",
+    "zip": "55253",
+    "payout_destination": "synth_dest_9a67026fdad14984",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "c674cf6106c4f94b466c360f9b3facab8b49dc5f5c3fbff7b31403c012dc891d",
+     "phash": "976e6986859ad26c",
+     "path": "data/generated/probe_photos/probe_24118/d9f2aa64-11e4-586c-9c56-08032a2a3d7b_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "4472f3ee3d79489648b33ee454069601b006a062edb3ea73e65b968cb1f4c938",
+     "phash": "e325989c78e09a7d",
+     "path": "data/generated/probe_photos/probe_24118/d9f2aa64-11e4-586c-9c56-08032a2a3d7b_destruction.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "f07ad456-0b5e-534f-9321-3c0d96bd6172",
+   "program": "24118",
+   "population": "probe:24118",
+   "model_claimed": "B0726Y",
+   "serial_claimed": "SN76718951",
+   "date_code_claimed": "8/21",
+   "retailer_claimed": "www.Amazon.com",
+   "purchase_date": "2017-01-08",
+   "refund_cents": 4041,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Harper Beltam",
+    "email": "synth.probe:24118.3@example.com",
+    "phone": "(920) 555-0151",
+    "address_line1": "4839 Danros St",
+    "city": "Gardan Falls",
+    "state": "AZ",
+    "zip": "63407",
+    "payout_destination": "synth_dest_4a11d2237a4e682c",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "144c77c5a95252bbf62e2207a0f7e48c41e759c3a5e9e8e9614cad2dffa76510",
+     "phash": "924f6b9691f11c69",
+     "path": "data/generated/probe_photos/probe_24118/f07ad456-0b5e-534f-9321-3c0d96bd6172_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "3209f9afa9d66e52f96ba7ad697165b635c439b2c21400620fbcfd531f03033a",
+     "phash": "b80588f36df1a4ae",
+     "path": "data/generated/probe_photos/probe_24118/f07ad456-0b5e-534f-9321-3c0d96bd6172_destruction.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "fcf3a864-7f00-51dc-a591-8a9c1f1733ac",
+   "program": "24118",
+   "population": "probe:24118",
+   "model_claimed": "B0726Y",
+   "serial_claimed": "SN27641833",
+   "date_code_claimed": "8/21",
+   "retailer_claimed": "www.Amazon.com",
+   "purchase_date": "2017-11-10",
+   "refund_cents": 3512,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Morgan Cordan",
+    "email": "synth.probe:24118.4@example.com",
+    "phone": "(354) 555-0115",
+    "address_line1": "7939 Pelmar Way",
+    "city": "Yarbel Falls",
+    "state": "GA",
+    "zip": "83693",
+    "payout_destination": "synth_dest_85ecf8a4daa9512d",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "29a3ed34d17d3903867e0368aa30f868286dffafb55c9e61f46a4a31584fef7b",
+     "phash": "d9bc171d269a8d45",
+     "path": "data/generated/probe_photos/probe_24118/fcf3a864-7f00-51dc-a591-8a9c1f1733ac_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "e6293f0a984d534097a099f141a0f92a69519d0fe56a0a4b3d35c206880e3501",
+     "phash": "9a9c6961d607b696",
+     "path": "data/generated/probe_photos/probe_24118/fcf3a864-7f00-51dc-a591-8a9c1f1733ac_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "3417a8d5-af68-5c6b-b006-55e2d7642a60",
+   "program": "24118",
+   "population": "probe:24118",
+   "model_claimed": "B0726Y",
+   "serial_claimed": "SN77228641",
+   "date_code_claimed": "8/21",
+   "retailer_claimed": "Walmart",
+   "purchase_date": "2019-04-08",
+   "refund_cents": 3243,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Logan Tamwen",
+    "email": "synth.probe:24118.5@example.com",
+    "phone": "(550) 555-0137",
+    "address_line1": "2527 Pelvor Rd",
+    "city": "Holhol Falls",
+    "state": "NY",
+    "zip": "92310",
+    "payout_destination": "synth_dest_11f1e50b175b4278",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "7cfbe43954ff8f969e2ba0094c3403bcb71f64917315eacc864e5efcf7af60cb",
+     "phash": "b174cfda2025f632",
+     "path": "data/generated/probe_photos/probe_24118/3417a8d5-af68-5c6b-b006-55e2d7642a60_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "a3dd730354796397e3aeff7f2e1692421d84515c9ef925041d231cbb934415df",
+     "phash": "9f1fe0e0c364d866",
+     "path": "data/generated/probe_photos/probe_24118/3417a8d5-af68-5c6b-b006-55e2d7642a60_receipt.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "b40febb678a460c1f466fb20dce9b157810a111ffcaa9edaf953d6a8daea48d8",
+     "phash": "933a68c7cec99a2c",
+     "path": "data/generated/probe_photos/probe_24118/3417a8d5-af68-5c6b-b006-55e2d7642a60_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "dbab3770-7291-5359-b460-85a930b6b77a",
+   "program": "24118",
+   "population": "probe:24118",
+   "model_claimed": "80726Y",
+   "serial_claimed": "SN75129312",
+   "date_code_claimed": "8/21",
+   "retailer_claimed": "www.Amazon.com",
+   "purchase_date": "2017-06-24",
+   "refund_cents": 4774,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Casey Tamfen",
+    "email": "synth.probe:24118.6@example.net",
+    "phone": "(880) 555-0153",
+    "address_line1": "528 Tamfen Way",
+    "city": "Zelquin Falls",
+    "state": "TX",
+    "zip": "39641",
+    "payout_destination": "synth_dest_b468dad9c267d39e",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "5b461ce928d704b86b319de22fbac5bbd23cec07e571e0a76abbd7b556abadea",
+     "phash": "a5639ed2686dc13c",
+     "path": "data/generated/probe_photos/probe_24118/dbab3770-7291-5359-b460-85a930b6b77a_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "c72fdfd8781f4f11cd913c315e1ad53bed76d073f4ebc42defbe75d12309916c",
+     "phash": "93966d3d866cd892",
+     "path": "data/generated/probe_photos/probe_24118/dbab3770-7291-5359-b460-85a930b6b77a_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "fe9a1685-3a29-5a15-b48e-ddc0922f40b6",
+   "program": "24118",
+   "population": "probe:24118",
+   "model_claimed": "80726Y",
+   "serial_claimed": "SN95383951",
+   "date_code_claimed": "8/21",
+   "retailer_claimed": "www.Amazon.com",
+   "purchase_date": "2017-10-16",
+   "refund_cents": 3785,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Reese Fenros",
+    "email": "synth.probe:24118.7@example.net",
+    "phone": "(862) 555-0133",
+    "address_line1": "1932 Silhol Ct",
+    "city": "Zeldan Falls",
+    "state": "NY",
+    "zip": "41464",
+    "payout_destination": "synth_dest_e0f5548a4fa08bbc",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "a4037dd8977f89901b2bf3b0403c504806003a262634835651850c2ca72346fe",
+     "phash": "9c8aad7e14a1f31c",
+     "path": "data/generated/probe_photos/probe_24118/fe9a1685-3a29-5a15-b48e-ddc0922f40b6_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "726b34056d17088ac05b85ef79963b3d97e53fa0fa251ca42e31e75b2b504227",
+     "phash": "969b6963928d9a96",
+     "path": "data/generated/probe_photos/probe_24118/fe9a1685-3a29-5a15-b48e-ddc0922f40b6_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "0440daca-20cf-5513-9d29-49887d05b870",
+   "program": "24118",
+   "population": "probe:24118",
+   "model_claimed": null,
+   "serial_claimed": "SN89760959",
+   "date_code_claimed": "8/21",
+   "retailer_claimed": "Fred Meyer",
+   "purchase_date": "2023-09-03",
+   "refund_cents": 4509,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Jordan Silzel",
+    "email": "synth.probe:24118.8@example.org",
+    "phone": "(373) 555-0189",
+    "address_line1": "7587 Linros Rd",
+    "city": "Pelwen Falls",
+    "state": "WA",
+    "zip": "10502",
+    "payout_destination": "synth_dest_90340eabd9814a1d",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "b7696a725188e077de4fc32f5124acf1de3fb82f0d81e35eba18e9ff876bb303",
+     "phash": "a165999e52a95736",
+     "path": "data/generated/probe_photos/probe_24118/0440daca-20cf-5513-9d29-49887d05b870_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "8c9def7d88b8936aef0aeb82de5089813b19053873a3fb2b0effef281d94a57e",
+     "phash": "c9d33636c126d9c9",
+     "path": "data/generated/probe_photos/probe_24118/0440daca-20cf-5513-9d29-49887d05b870_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "664f0c1a-e2a2-5aa1-ba24-5a6ae881c8db",
+   "program": "24118",
+   "population": "probe:24118",
+   "model_claimed": null,
+   "serial_claimed": "SN30299524",
+   "date_code_claimed": "8/21",
+   "retailer_claimed": "Fred Meyer",
+   "purchase_date": "2022-05-15",
+   "refund_cents": 4904,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Harper Mardan",
+    "email": "synth.probe:24118.9@example.com",
+    "phone": "(938) 555-0169",
+    "address_line1": "2879 Dandan Rd",
+    "city": "Tamsil Falls",
+    "state": "NC",
+    "zip": "18382",
+    "payout_destination": "synth_dest_ca2bcedff3c202cf",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "54b3eb412bcbd35a9c6f6411bf2007a7c1cb6b8a194256728110ec55d7b2a9ed",
+     "phash": "e1619a9a2f2f9165",
+     "path": "data/generated/probe_photos/probe_24118/664f0c1a-e2a2-5aa1-ba24-5a6ae881c8db_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "37064b3e4a3e84440fb80993c4803405a007efc01a8674948d7d4e10e6e8c447",
+     "phash": "947c68868df69749",
+     "path": "data/generated/probe_photos/probe_24118/664f0c1a-e2a2-5aa1-ba24-5a6ae881c8db_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "c1224e51-d2dd-5556-8c15-8db38566613e",
+   "program": "24118",
+   "population": "probe:24118",
+   "model_claimed": "B0726Y",
+   "serial_claimed": "SN93518963",
+   "date_code_claimed": "8/21",
+   "retailer_claimed": "Walmart",
+   "purchase_date": "2017-05-06",
+   "refund_cents": 4304,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Parker Holros",
+    "email": "synth.probe:24118.10@example.net",
+    "phone": "(365) 555-0167",
+    "address_line1": "4815 Roszel St",
+    "city": "Pelgar Falls",
+    "state": "WA",
+    "zip": "30880",
+    "payout_destination": "synth_dest_f935a3fad05fef75",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "88533d1b65322a38c1d31fa6e25b5922d0dfe874964a50b7f3d75f43f7350ec9",
+     "phash": "946d6996dc236669",
+     "path": "data/generated/probe_photos/probe_24118/c1224e51-d2dd-5556-8c15-8db38566613e_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "773a899b1d3c7a79de8c07cbcb04a85d08fb6667b7b2c15f49c5f58601bf7ddc",
+     "phash": "ed939c4a639c928b",
+     "path": "data/generated/probe_photos/probe_24118/c1224e51-d2dd-5556-8c15-8db38566613e_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "8df94f21ad807426197ccef0587d5355e456f086993b8ab2be552d2681333330",
+     "phash": "9f1e61e04375d8e4",
+     "path": "data/generated/probe_photos/probe_24118/c1224e51-d2dd-5556-8c15-8db38566613e_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "57ac947b-7fb4-5586-9f25-f4d09388b798",
+   "program": "24118",
+   "population": "probe:24118",
+   "model_claimed": "B0726Y",
+   "serial_claimed": "SN79362774",
+   "date_code_claimed": "8/21",
+   "retailer_claimed": "Fred Meyer",
+   "purchase_date": "2021-11-15",
+   "refund_cents": 3457,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Kendall Silsil",
+    "email": "synth.probe:24118.11@example.net",
+    "phone": "(562) 555-0117",
+    "address_line1": "9302 Holros Way",
+    "city": "Zelsil Falls",
+    "state": "GA",
+    "zip": "74884",
+    "payout_destination": "synth_dest_6c1d6bad578b6c5b",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "97eb3cd75f5159c3dfc63b82e0ec1231356d277224bbb6599829ff5178c4a346",
+     "phash": "9b9964709b85cada",
+     "path": "data/generated/probe_photos/probe_24118/57ac947b-7fb4-5586-9f25-f4d09388b798_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "c69920ad83390408d5146e53fa4f029967ee633a86ddd90b5ef4711acdca3617",
+     "phash": "f53788cabe350698",
+     "path": "data/generated/probe_photos/probe_24118/57ac947b-7fb4-5586-9f25-f4d09388b798_destruction.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "1844e476-3831-58a7-bbc8-9801544d610d",
+   "program": "25206",
+   "population": "probe:25206",
+   "model_claimed": "BB4640CF",
+   "serial_claimed": "SN37462484",
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2023-09-21",
+   "refund_cents": 11107,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Harper Marwen",
+    "email": "synth.probe:25206.0@example.org",
+    "phone": "(649) 555-0114",
+    "address_line1": "4647 Wenvor Ave",
+    "city": "Fenlin Falls",
+    "state": "FL",
+    "zip": "11934",
+    "payout_destination": "synth_dest_83dcc09eb1fba67a",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "6299840c5651127d44d28a961bc7769bb4cac549114e58063ef63b02163724c6",
+     "phash": "e93887d2628b5ce5",
+     "path": "data/generated/probe_photos/probe_25206/1844e476-3831-58a7-bbc8-9801544d610d_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "9a9f2caf162fbf7631562cdf4ffb66e8ca347bc023483cf7ef71809c6cd218d4",
+     "phash": "9f1e61e0437758e4",
+     "path": "data/generated/probe_photos/probe_25206/1844e476-3831-58a7-bbc8-9801544d610d_receipt.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "b044f80c7035ac8616c572f798f703fe6a42f007cd98e11367b268be2be2c470",
+     "phash": "9a2c7c978393c72c",
+     "path": "data/generated/probe_photos/probe_25206/1844e476-3831-58a7-bbc8-9801544d610d_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "63adea8c-3da3-5315-9044-f22018a7d978",
+   "program": "25206",
+   "population": "probe:25206",
+   "model_claimed": "BB4640BL",
+   "serial_claimed": "SN46844091",
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2023-04-26",
+   "refund_cents": 13228,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Jordan Yarros",
+    "email": "synth.probe:25206.1@example.org",
+    "phone": "(727) 555-0179",
+    "address_line1": "1640 Holros Ave",
+    "city": "Wenquin Falls",
+    "state": "NC",
+    "zip": "17540",
+    "payout_destination": "synth_dest_0a459f9b2655db4c",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "6238d426d472ab9a84891f9a822e2a7460b7ab7442ab92d45a71997e3b662899",
+     "phash": "b225cdda1f30ec92",
+     "path": "data/generated/probe_photos/probe_25206/63adea8c-3da3-5315-9044-f22018a7d978_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "8cad230285dfab152cd3fbe36273a8c5b5f7a9bd256f95f641f851e9b4348dcd",
+     "phash": "946c61959fb30e69",
+     "path": "data/generated/probe_photos/probe_25206/63adea8c-3da3-5315-9044-f22018a7d978_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "0c585cef-7070-52ce-8003-32a37df8d391",
+   "program": "25206",
+   "population": "probe:25206",
+   "model_claimed": "BE10019US-PI",
+   "serial_claimed": "SN49383129",
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2024-08-02",
+   "refund_cents": 19111,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Reese Fenpel",
+    "email": "synth.probe:25206.2@example.net",
+    "phone": "(293) 555-0130",
+    "address_line1": "9966 Silros Ct",
+    "city": "Vormar Falls",
+    "state": "IL",
+    "zip": "35430",
+    "payout_destination": "synth_dest_2905adefbd10eeb4",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "419271332655496bc2a40b7bea24965503edf7e32cb66fc32d78645fbd2bbb02",
+     "phash": "cbc13461cb0dd38f",
+     "path": "data/generated/probe_photos/probe_25206/0c585cef-7070-52ce-8003-32a37df8d391_label.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "af461facb1e0f7a12eae9a8bc1a8f42c343fb0b4a808e61e99544a183c5fa9b1",
+     "phash": "9f1f70e04327d827",
+     "path": "data/generated/probe_photos/probe_25206/0c585cef-7070-52ce-8003-32a37df8d391_receipt.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "d6530ea2c1d416c198d7e922dbf2e1aa76eef0512f323790d6f550707d3d8228",
+     "phash": "f22ae7651859c671",
+     "path": "data/generated/probe_photos/probe_25206/0c585cef-7070-52ce-8003-32a37df8d391_destruction.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "7501596b-3ec5-5ce2-9614-4835b5cf1f0a",
+   "program": "25206",
+   "population": "probe:25206",
+   "model_claimed": "AD10004BE",
+   "serial_claimed": "SN60847628",
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2024-04-20",
+   "refund_cents": 21751,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Logan Roslin",
+    "email": "synth.probe:25206.3@example.org",
+    "phone": "(343) 555-0123",
+    "address_line1": "5847 Tamyar Rd",
+    "city": "Pellin Falls",
+    "state": "IL",
+    "zip": "49700",
+    "payout_destination": "synth_dest_150b27d87301cbfa",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "5696a157437e0fb843c2ec7d3c5be9617c159b23d640f3cbc7e1ed78e1547e0f",
+     "phash": "9bdb2424da8ee4c9",
+     "path": "data/generated/probe_photos/probe_25206/7501596b-3ec5-5ce2-9614-4835b5cf1f0a_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "4c4d7147d8dbe425388930fde4b9674f1c01168527ff89a4d74af0ac76c1bda4",
+     "phash": "ca97384a8d646fc9",
+     "path": "data/generated/probe_photos/probe_25206/7501596b-3ec5-5ce2-9614-4835b5cf1f0a_destruction.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "48dc9008-a622-505e-b9f8-3dc362f312a7",
+   "program": "25206",
+   "population": "probe:25206",
+   "model_claimed": "AD10007GR",
+   "serial_claimed": "SN16211526",
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2024-06-16",
+   "refund_cents": 16862,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Jules Norros",
+    "email": "synth.probe:25206.4@example.com",
+    "phone": "(799) 555-0194",
+    "address_line1": "2185 Pelnor Ct",
+    "city": "Wennor Falls",
+    "state": "FL",
+    "zip": "40436",
+    "payout_destination": "synth_dest_22e8654fb4d1ad08",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "e0481deddbcf6111f9407c41a1d6a46337cc48c07f6600d93ea3ce8e06b2afda",
+     "phash": "e27b960fb4e849a4",
+     "path": "data/generated/probe_photos/probe_25206/48dc9008-a622-505e-b9f8-3dc362f312a7_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "0aace16d61e352e7addeaee7bd380e8fa0c2a67afc013e5d016163e23613455f",
+     "phash": "9d1f41a147af50a7",
+     "path": "data/generated/probe_photos/probe_25206/48dc9008-a622-505e-b9f8-3dc362f312a7_receipt.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "b983027229003ad9a6d89fad2ac41ee7871213398077df3b9b71d6e98e5a531a",
+     "phash": "93876d68dc6c9992",
+     "path": "data/generated/probe_photos/probe_25206/48dc9008-a622-505e-b9f8-3dc362f312a7_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "64c5083e-89b8-5af1-af13-dbcddf5089ac",
+   "program": "25206",
+   "population": "probe:25206",
+   "model_claimed": "AD10025BE",
+   "serial_claimed": "SN83733513",
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2024-08-31",
+   "refund_cents": 14313,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Dakota Rosros",
+    "email": "synth.probe:25206.5@example.org",
+    "phone": "(362) 555-0142",
+    "address_line1": "5186 Lintam Way",
+    "city": "Danyar Falls",
+    "state": "IL",
+    "zip": "60929",
+    "payout_destination": "synth_dest_318c5e3e9469eabe",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "e6ded64ce4f30ccceafe0c48498264d94c96418a2ed56828fcfe4596b2f7fb04",
+     "phash": "c9a15585b9ec656c",
+     "path": "data/generated/probe_photos/probe_25206/64c5083e-89b8-5af1-af13-dbcddf5089ac_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "fb281c9361aa9ea5b68b75e20b43cc00fd9adc808220baf1689b2189727c290a",
+     "phash": "966b699c9692b469",
+     "path": "data/generated/probe_photos/probe_25206/64c5083e-89b8-5af1-af13-dbcddf5089ac_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "ada50eee-ea50-5f8f-9e0d-898b2e9845cd",
+   "program": "25206",
+   "population": "probe:25206",
+   "model_claimed": "8B4640PU",
+   "serial_claimed": "SN66811115",
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2024-06-18",
+   "refund_cents": 7922,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Avery Norwen",
+    "email": "synth.probe:25206.6@example.net",
+    "phone": "(921) 555-0129",
+    "address_line1": "6431 Noryar Rd",
+    "city": "Norvor Falls",
+    "state": "AZ",
+    "zip": "74319",
+    "payout_destination": "synth_dest_2cbe49c9a5f832db",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "871aa5dc9c35b1d9303c3ffddb36d712001daa42ebb06de21f2d057b11bf1314",
+     "phash": "b238c78f5965ae81",
+     "path": "data/generated/probe_photos/probe_25206/ada50eee-ea50-5f8f-9e0d-898b2e9845cd_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "44cbbbefd4b06a64f373bc63d3e49fd1550b663b4fae70a8f9298202a093afbf",
+     "phash": "96eb699384b4966c",
+     "path": "data/generated/probe_photos/probe_25206/ada50eee-ea50-5f8f-9e0d-898b2e9845cd_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "50440e54-1ec0-5945-99b5-238f1b0aa642",
+   "program": "25206",
+   "population": "probe:25206",
+   "model_claimed": "8E10019US-GR",
+   "serial_claimed": "SN48227777",
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2024-02-10",
+   "refund_cents": 17167,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Rowan Zelfen",
+    "email": "synth.probe:25206.7@example.com",
+    "phone": "(486) 555-0147",
+    "address_line1": "1649 Zellin St",
+    "city": "Pelros Falls",
+    "state": "GA",
+    "zip": "28157",
+    "payout_destination": "synth_dest_18ecd74a7971cece",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "d498b96de78d712a1180d2bb102c9acd812449cfa7a44f9f9fdba836b812a910",
+     "phash": "8fc17070cf8f127c",
+     "path": "data/generated/probe_photos/probe_25206/50440e54-1ec0-5945-99b5-238f1b0aa642_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "a833a82edfd12a0cf36b9b5ecf3277330e41fb2abb73e479aadf8144ffdb7803",
+     "phash": "9218613f9ec596cd",
+     "path": "data/generated/probe_photos/probe_25206/50440e54-1ec0-5945-99b5-238f1b0aa642_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "1d1c72af-d526-5611-89ee-f7c68bdd8221",
+   "program": "25206",
+   "population": "probe:25206",
+   "model_claimed": null,
+   "serial_claimed": "SN75900208",
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2023-05-17",
+   "refund_cents": 19521,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Casey Garlin",
+    "email": "synth.probe:25206.8@example.com",
+    "phone": "(383) 555-0107",
+    "address_line1": "3589 Norquin Ct",
+    "city": "Holdan Falls",
+    "state": "OH",
+    "zip": "34241",
+    "payout_destination": "synth_dest_199f2fbd0b2878e0",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "51f7d8a65d01c73ca16f9c9e12661fdc51bdf06a820088df386f4c65eeeb6ec3",
+     "phash": "b263cd81345eda95",
+     "path": "data/generated/probe_photos/probe_25206/1d1c72af-d526-5611-89ee-f7c68bdd8221_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "2212cc416c9f118342f26550ee95b3d847bd4c083d8a6c9d57ce0eb1672a8af9",
+     "phash": "9b9c6c9c8e1c92ce",
+     "path": "data/generated/probe_photos/probe_25206/1d1c72af-d526-5611-89ee-f7c68bdd8221_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "acecc16b-1528-5fc5-864c-a5c198c69d4b",
+   "program": "25206",
+   "population": "probe:25206",
+   "model_claimed": null,
+   "serial_claimed": "SN57021945",
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2024-01-22",
+   "refund_cents": 17441,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Avery Linhol",
+    "email": "synth.probe:25206.9@example.net",
+    "phone": "(476) 555-0178",
+    "address_line1": "9880 Norpel Ln",
+    "city": "Tamtam Falls",
+    "state": "CA",
+    "zip": "74223",
+    "payout_destination": "synth_dest_4d8d7d411ed9ebc6",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "297419e721b782784b7607a29e9ce335ce6ab45b9d4ea71758a674133210ab75",
+     "phash": "b632c1c95acd8d36",
+     "path": "data/generated/probe_photos/probe_25206/acecc16b-1528-5fc5-864c-a5c198c69d4b_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "71cabef79d2459599a2b6a2b69afaf17658cc077b68b511db689752285bde048",
+     "phash": "9f1f70e04327d827",
+     "path": "data/generated/probe_photos/probe_25206/acecc16b-1528-5fc5-864c-a5c198c69d4b_receipt.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "829ba061c23bef7bfc16c43afbc9eb37419f3d101f42269ea4615d18e6bede94",
+     "phash": "cb6524d2f29be42c",
+     "path": "data/generated/probe_photos/probe_25206/acecc16b-1528-5fc5-864c-a5c198c69d4b_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "b8e7b45f-17cb-5fef-a6b6-5ccacec66339",
+   "program": "25206",
+   "population": "probe:25206",
+   "model_claimed": "AD10014SL",
+   "serial_claimed": "SN20090237",
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2024-01-07",
+   "refund_cents": 21604,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Avery Norsil",
+    "email": "synth.probe:25206.10@example.org",
+    "phone": "(268) 555-0141",
+    "address_line1": "7532 Garfen Ln",
+    "city": "Corlin Falls",
+    "state": "GA",
+    "zip": "19013",
+    "payout_destination": "synth_dest_c52432f78ca19362",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "4f76a998c00faf90e7982c206fcbf17cc67136a008729caa2c3c90630437127e",
+     "phash": "ddd827228c4353de",
+     "path": "data/generated/probe_photos/probe_25206/b8e7b45f-17cb-5fef-a6b6-5ccacec66339_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "61456456323eb5d91d25b5fe441d02e741048f7ed52fe1ad2dfa7bb4485c7975",
+     "phash": "f030cf8fc92cc68e",
+     "path": "data/generated/probe_photos/probe_25206/b8e7b45f-17cb-5fef-a6b6-5ccacec66339_destruction.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "486fe8da-f45c-5be8-8aa6-4472b1205d29",
+   "program": "25206",
+   "population": "probe:25206",
+   "model_claimed": "BB4640CF",
+   "serial_claimed": "SN84145775",
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2023-10-30",
+   "refund_cents": 9402,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Hayden Belfen",
+    "email": "synth.probe:25206.11@example.org",
+    "phone": "(532) 555-0167",
+    "address_line1": "6324 Norlin Way",
+    "city": "Vortam Falls",
+    "state": "IL",
+    "zip": "53228",
+    "payout_destination": "synth_dest_a9651d30dde97d43",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "f0c681de2473c4f3d7ec06619de1747e60f670c6e09efc0c9a7537aa87f52ddb",
+     "phash": "db8f34648aa6999a",
+     "path": "data/generated/probe_photos/probe_25206/486fe8da-f45c-5be8-8aa6-4472b1205d29_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "640e2273584bf6bdf866523fe64468368bc4845e6964eec92d68da47fb4b0f23",
+     "phash": "b174c399ae211b76",
+     "path": "data/generated/probe_photos/probe_25206/486fe8da-f45c-5be8-8aa6-4472b1205d29_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "a92a6fbb17ed74dcf0937bd5bb36b52f0232d82b40c59798686b8a0b4615f048",
+     "phash": "9f1e70e04367d8e4",
+     "path": "data/generated/probe_photos/probe_25206/486fe8da-f45c-5be8-8aa6-4472b1205d29_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "544a090b-9db7-5173-85ea-aa08adf82cc8",
+   "program": "26007",
+   "population": "probe:26007",
+   "model_claimed": "KY-318A",
+   "serial_claimed": "SN39304556",
+   "date_code_claimed": null,
+   "retailer_claimed": "ALDI",
+   "purchase_date": "2018-06-01",
+   "refund_cents": 4000,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Skyler Yarsil",
+    "email": "synth.probe:26007.0@example.org",
+    "phone": "(706) 555-0177",
+    "address_line1": "8951 Yarsil Rd",
+    "city": "Peltam Falls",
+    "state": "AZ",
+    "zip": "60972",
+    "payout_destination": "synth_dest_89ddad472ba8d2a4",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "24ff8aede6ac5cc8b079d15338c53c339ab66df4fe884182c5988b47b8f5cdd5",
+     "phash": "a9052d99c0fddf12",
+     "path": "data/generated/probe_photos/probe_26007/544a090b-9db7-5173-85ea-aa08adf82cc8_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "a82fbbae8caaafac76c2f28a59d0cfab792ff0c9e5fb36156fc69e9a5547e47e",
+     "phash": "954a51f0417f5cf4",
+     "path": "data/generated/probe_photos/probe_26007/544a090b-9db7-5173-85ea-aa08adf82cc8_receipt.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "5df3fd8ed81818296c8da43f8f250f2163f0428e75b281ca86c5bb6924c7a557",
+     "phash": "979568686c6ab78c",
+     "path": "data/generated/probe_photos/probe_26007/544a090b-9db7-5173-85ea-aa08adf82cc8_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "05ca0768-923d-5fa9-86c4-659c428aa27e",
+   "program": "26007",
+   "population": "probe:26007",
+   "model_claimed": "93550",
+   "serial_claimed": "SN85808909",
+   "date_code_claimed": null,
+   "retailer_claimed": "ALDI",
+   "purchase_date": "2018-06-20",
+   "refund_cents": 4000,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Kendall Lingar",
+    "email": "synth.probe:26007.1@example.com",
+    "phone": "(779) 555-0166",
+    "address_line1": "9962 Danpel St",
+    "city": "Pelquin Falls",
+    "state": "IL",
+    "zip": "19564",
+    "payout_destination": "synth_dest_459bd847d4eb0f8b",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "da7f958269e4d2c59972ef05bb53768a2213150243374ec1baec641dfe5d8873",
+     "phash": "a1619e9b64f4f464",
+     "path": "data/generated/probe_photos/probe_26007/05ca0768-923d-5fa9-86c4-659c428aa27e_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "5f9b5fa5d4a31c029858a230f69a04b16b7bf7cb7525f5afb66992845ed53eee",
+     "phash": "969f696992c83396",
+     "path": "data/generated/probe_photos/probe_26007/05ca0768-923d-5fa9-86c4-659c428aa27e_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "96d0783a-3f91-5acf-ab0f-e01fdbdeb207",
+   "program": "26007",
+   "population": "probe:26007",
+   "model_claimed": "KY-318A",
+   "serial_claimed": "SN30886768",
+   "date_code_claimed": null,
+   "retailer_claimed": "ALDI",
+   "purchase_date": "2018-10-05",
+   "refund_cents": 4000,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Kendall Bellin",
+    "email": "synth.probe:26007.2@example.org",
+    "phone": "(500) 555-0103",
+    "address_line1": "9911 Belquin Ave",
+    "city": "Silzel Falls",
+    "state": "OH",
+    "zip": "10531",
+    "payout_destination": "synth_dest_907ea172a1f5962b",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "f627b770776650f879e5b2128a7703a0b3247450e7ab7fb89e697067bb1b46eb",
+     "phash": "9b8b3c349bda2493",
+     "path": "data/generated/probe_photos/probe_26007/96d0783a-3f91-5acf-ab0f-e01fdbdeb207_label.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "e81f5e7cbdc17cef429f8464f2288ba3c60f68cced3e1558f1a7ddf70646cb70",
+     "phash": "9f1f60e0472cd867",
+     "path": "data/generated/probe_photos/probe_26007/96d0783a-3f91-5acf-ab0f-e01fdbdeb207_receipt.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "0e57ad43e616d564cb8ef153dced0b87031118a6525a09c5486f86ee8ae300b2",
+     "phash": "b678c3873dc1323c",
+     "path": "data/generated/probe_photos/probe_26007/96d0783a-3f91-5acf-ab0f-e01fdbdeb207_destruction.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "d6d78351-0e08-5f51-a4aa-7bb94caf3136",
+   "program": "26007",
+   "population": "probe:26007",
+   "model_claimed": "KY-318A",
+   "serial_claimed": "SN80093681",
+   "date_code_claimed": null,
+   "retailer_claimed": "ALDI",
+   "purchase_date": "2018-06-03",
+   "refund_cents": 4000,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Logan Peldan",
+    "email": "synth.probe:26007.3@example.net",
+    "phone": "(477) 555-0183",
+    "address_line1": "7281 Yarwen Rd",
+    "city": "Yarzel Falls",
+    "state": "TX",
+    "zip": "70095",
+    "payout_destination": "synth_dest_64d123f2486acbad",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "44f60aee20bae0f9b7d6df1db8db16f5603dbc9a8d99e25024be0767f95fea0f",
+     "phash": "939a6d3c9e649a92",
+     "path": "data/generated/probe_photos/probe_26007/d6d78351-0e08-5f51-a4aa-7bb94caf3136_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "47407e74fd993491e4ec65e439da952dc7b9f3e0300b0708411399436336506a",
+     "phash": "f2a73f549c401fe0",
+     "path": "data/generated/probe_photos/probe_26007/d6d78351-0e08-5f51-a4aa-7bb94caf3136_destruction.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "f3e9d161-e0d6-515e-a278-5f418112dac4",
+   "program": "26007",
+   "population": "probe:26007",
+   "model_claimed": "96775",
+   "serial_claimed": "SN18333864",
+   "date_code_claimed": null,
+   "retailer_claimed": "ALDI",
+   "purchase_date": "2017-04-17",
+   "refund_cents": 4000,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Rowan Roshol",
+    "email": "synth.probe:26007.4@example.org",
+    "phone": "(349) 555-0141",
+    "address_line1": "2337 Garhol St",
+    "city": "Silyar Falls",
+    "state": "CA",
+    "zip": "37817",
+    "payout_destination": "synth_dest_2fe8884052999744",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "e57eabfda2bd3d0a4dcb938fbd825f5164072be6022067374c309de8634707e3",
+     "phash": "e867981a6376b466",
+     "path": "data/generated/probe_photos/probe_26007/f3e9d161-e0d6-515e-a278-5f418112dac4_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "5d3293851a6e1495815bf002fb06cc87711fbbfb580bf11788d183d1fae6c6ed",
+     "phash": "92926d6c7c7c509b",
+     "path": "data/generated/probe_photos/probe_26007/f3e9d161-e0d6-515e-a278-5f418112dac4_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "5e702c5a-5dec-579b-898e-c7f470eb5ec8",
+   "program": "26007",
+   "population": "probe:26007",
+   "model_claimed": "93550",
+   "serial_claimed": "SN46451159",
+   "date_code_claimed": null,
+   "retailer_claimed": "ALDI",
+   "purchase_date": "2016-06-28",
+   "refund_cents": 4000,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Rowan Wengar",
+    "email": "synth.probe:26007.5@example.net",
+    "phone": "(353) 555-0114",
+    "address_line1": "3521 Corsil Ct",
+    "city": "Danros Falls",
+    "state": "FL",
+    "zip": "27861",
+    "payout_destination": "synth_dest_74071b37ab6ab1fd",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "162a978602bb2f99adbc2b92a3cc7ec015f394168c98ad23860ecc20a6e33c51",
+     "phash": "f264cf8e2425da33",
+     "path": "data/generated/probe_photos/probe_26007/5e702c5a-5dec-579b-898e-c7f470eb5ec8_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "3659e4a0e0c562f98ffe8746a35574ae1c50b39d7dd6878fd771f4013d4c85ba",
+     "phash": "c88b373d2b34d8c3",
+     "path": "data/generated/probe_photos/probe_26007/5e702c5a-5dec-579b-898e-c7f470eb5ec8_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "48ff2f6e-43ab-54b7-b102-bef304ea12e7",
+   "program": "26007",
+   "population": "probe:26007",
+   "model_claimed": "KY-3I8B",
+   "serial_claimed": "SN92882336",
+   "date_code_claimed": null,
+   "retailer_claimed": "ALDI",
+   "purchase_date": "2016-06-07",
+   "refund_cents": 4000,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Avery Danbel",
+    "email": "synth.probe:26007.6@example.org",
+    "phone": "(271) 555-0110",
+    "address_line1": "5975 Coryar St",
+    "city": "Garvor Falls",
+    "state": "GA",
+    "zip": "55045",
+    "payout_destination": "synth_dest_e45b09ca3c93764b",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "777d74e5e5cdec47754cfbb8ac2ef4228642774fd35161769a50b12dfcbd2bfd",
+     "phash": "b476cbcb7cc13032",
+     "path": "data/generated/probe_photos/probe_26007/48ff2f6e-43ab-54b7-b102-bef304ea12e7_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "c4e12f46a77e50cded5a41f957d83eabf66d96f1e1340e5d330f9406441992f6",
+     "phash": "92a368ce8739974e",
+     "path": "data/generated/probe_photos/probe_26007/48ff2f6e-43ab-54b7-b102-bef304ea12e7_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "11b11776-a327-5fb1-8fa5-aafbd6b975aa",
+   "program": "26007",
+   "population": "probe:26007",
+   "model_claimed": "KY-3I8A",
+   "serial_claimed": "SN61924755",
+   "date_code_claimed": null,
+   "retailer_claimed": "ALDI",
+   "purchase_date": "2016-02-11",
+   "refund_cents": 4000,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Skyler Coryar",
+    "email": "synth.probe:26007.7@example.com",
+    "phone": "(793) 555-0120",
+    "address_line1": "2865 Yarfen St",
+    "city": "Sillin Falls",
+    "state": "TX",
+    "zip": "89195",
+    "payout_destination": "synth_dest_5cc6196bfee58f53",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "42406f772a96dc9a0ddc6512de263856f851f7547f81ab344261ddbf7043d2b1",
+     "phash": "f4308bda70dbd630",
+     "path": "data/generated/probe_photos/probe_26007/11b11776-a327-5fb1-8fa5-aafbd6b975aa_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "7287720b609b185f25825bfa6bda0e8a3d6de9f1009f10afd7064f8f596822ee",
+     "phash": "96c168fd443193cf",
+     "path": "data/generated/probe_photos/probe_26007/11b11776-a327-5fb1-8fa5-aafbd6b975aa_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "6bd8ef17-ca2f-5693-a2f4-facbfdf7b961",
+   "program": "26007",
+   "population": "probe:26007",
+   "model_claimed": null,
+   "serial_claimed": "SN33302158",
+   "date_code_claimed": null,
+   "retailer_claimed": "ALDI",
+   "purchase_date": "2016-03-27",
+   "refund_cents": 4000,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Harper Margar",
+    "email": "synth.probe:26007.8@example.org",
+    "phone": "(343) 555-0197",
+    "address_line1": "4161 Tamnor Ave",
+    "city": "Belnor Falls",
+    "state": "NC",
+    "zip": "39379",
+    "payout_destination": "synth_dest_d07cae992a4fa4b8",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "ce94f726e270558adc5aa167dc3e1c029e6e0a41b4b5fcf61c5127ed6fe1acab",
+     "phash": "b2728f8f2d25863a",
+     "path": "data/generated/probe_photos/probe_26007/6bd8ef17-ca2f-5693-a2f4-facbfdf7b961_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "2b9758f9df945287bd909dc05f472622de6c4ddec0726c17697a6dcf48ff012b",
+     "phash": "9f1f70f0417cd864",
+     "path": "data/generated/probe_photos/probe_26007/6bd8ef17-ca2f-5693-a2f4-facbfdf7b961_receipt.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "77ee639996b1322eba3875d55d06904ce0cbda40f43cde5d417d196ed080d437",
+     "phash": "9796684ecc29979c",
+     "path": "data/generated/probe_photos/probe_26007/6bd8ef17-ca2f-5693-a2f4-facbfdf7b961_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "67c12b4a-5c0e-55e8-9e0a-4825126a0b58",
+   "program": "26007",
+   "population": "probe:26007",
+   "model_claimed": null,
+   "serial_claimed": "SN93387657",
+   "date_code_claimed": null,
+   "retailer_claimed": "ALDI",
+   "purchase_date": "2018-02-06",
+   "refund_cents": 4000,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Reese Belpel",
+    "email": "synth.probe:26007.9@example.com",
+    "phone": "(817) 555-0100",
+    "address_line1": "238 Garnor Ln",
+    "city": "Yarsil Falls",
+    "state": "WA",
+    "zip": "52191",
+    "payout_destination": "synth_dest_b9bf1b576a1aeada",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "98e2fdaf5cc99b18995984707ef05a8ea50aa7702a23b594e80371d19a656a72",
+     "phash": "e839db1d694d25c8",
+     "path": "data/generated/probe_photos/probe_26007/67c12b4a-5c0e-55e8-9e0a-4825126a0b58_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "0d1e9774b0d51766ba0d15aa9510298646230ac2ab503c67f40531f516af6d01",
+     "phash": "9a4d61d39c35a4ad",
+     "path": "data/generated/probe_photos/probe_26007/67c12b4a-5c0e-55e8-9e0a-4825126a0b58_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "335dd887-af7c-5de0-8337-1123236f8a0f",
+   "program": "26007",
+   "population": "probe:26007",
+   "model_claimed": "96775",
+   "serial_claimed": "SN18354102",
+   "date_code_claimed": null,
+   "retailer_claimed": "ALDI",
+   "purchase_date": "2018-08-07",
+   "refund_cents": 4000,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Dakota Tamzel",
+    "email": "synth.probe:26007.10@example.net",
+    "phone": "(670) 555-0119",
+    "address_line1": "1853 Linvor St",
+    "city": "Holyar Falls",
+    "state": "OH",
+    "zip": "16547",
+    "payout_destination": "synth_dest_59c9f936382f88ff",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "313cfcb2c27afeed7bb131b09b7590edb07e3b226528cd8d678c997e3004a8ed",
+     "phash": "9768698727978669",
+     "path": "data/generated/probe_photos/probe_26007/335dd887-af7c-5de0-8337-1123236f8a0f_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "004a3fc4d5a7bca333741ed5f8865c778ae98f95b36e9c2150f12b0e69824d4b",
+     "phash": "cac7254e80eded2c",
+     "path": "data/generated/probe_photos/probe_26007/335dd887-af7c-5de0-8337-1123236f8a0f_destruction.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "632caf35-7564-5ed1-bb6f-b507c75bdf1a",
+   "program": "26007",
+   "population": "probe:26007",
+   "model_claimed": "96775",
+   "serial_claimed": "SN79923170",
+   "date_code_claimed": null,
+   "retailer_claimed": "ALDI",
+   "purchase_date": "2018-02-11",
+   "refund_cents": 4000,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Taylor Pelnor",
+    "email": "synth.probe:26007.11@example.org",
+    "phone": "(852) 555-0186",
+    "address_line1": "7070 Norfen Rd",
+    "city": "Vorquin Falls",
+    "state": "WA",
+    "zip": "75540",
+    "payout_destination": "synth_dest_78c36d3569015dc4",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "b83f2df1d621e3d8772aa188719cd39b68500f6239b1b26c4a06abea64e364bc",
+     "phash": "c9c93634cb8674d9",
+     "path": "data/generated/probe_photos/probe_26007/632caf35-7564-5ed1-bb6f-b507c75bdf1a_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "cbd2b2e2821394247f1545081bbc35b6a1104d46ea1d5573727c827a2bb6537b",
+     "phash": "b02acdc8cff017cc",
+     "path": "data/generated/probe_photos/probe_26007/632caf35-7564-5ed1-bb6f-b507c75bdf1a_destruction.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "97d5494f-e81a-5e77-8ca5-5f8074179a64",
+   "program": "26011",
+   "population": "probe:26011",
+   "model_claimed": "2G520",
+   "serial_claimed": "SN53168985",
+   "date_code_claimed": null,
+   "retailer_claimed": "Esrtech.com",
+   "purchase_date": "2024-03-20",
+   "refund_cents": 3699,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Avery Fenwen",
+    "email": "synth.probe:26011.0@example.com",
+    "phone": "(940) 555-0162",
+    "address_line1": "4365 Silnor St",
+    "city": "Zeltam Falls",
+    "state": "WA",
+    "zip": "71793",
+    "payout_destination": "synth_dest_784d14a84260a8f6",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "f5867ac951fc4662ce6578b1dc9a709819bd925d10c3ecbaecded74e578b8236",
+     "phash": "fa0d9492a5d26e74",
+     "path": "data/generated/probe_photos/probe_26011/97d5494f-e81a-5e77-8ca5-5f8074179a64_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "7482f6e8949cea8fb3cbe183bbdf6e8d536f922570e3f5b2ae9feeaceb23ea18",
+     "phash": "97ae68654c3895c7",
+     "path": "data/generated/probe_photos/probe_26011/97d5494f-e81a-5e77-8ca5-5f8074179a64_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "cd9b1857-26da-59a1-95c9-1589d90fbba6",
+   "program": "26011",
+   "population": "probe:26011",
+   "model_claimed": "2G520",
+   "serial_claimed": "SN18706367",
+   "date_code_claimed": null,
+   "retailer_claimed": "Homedepot.com",
+   "purchase_date": "2023-09-16",
+   "refund_cents": 3486,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Skyler Fenlin",
+    "email": "synth.probe:26011.1@example.org",
+    "phone": "(329) 555-0169",
+    "address_line1": "6690 Wengar Ct",
+    "city": "Zeldan Falls",
+    "state": "GA",
+    "zip": "53301",
+    "payout_destination": "synth_dest_2326db2e4a3c451f",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "cc35754cf10aca1535682be7566081abc0ad88f52798941ff71da8eee950e4e6",
+     "phash": "86e765fad8070768",
+     "path": "data/generated/probe_photos/probe_26011/cd9b1857-26da-59a1-95c9-1589d90fbba6_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "af4bb11582d26b2f0e84a271b7312c1e99597a14f1745821c013a4fcc51069d8",
+     "phash": "96dc6963e9c06c96",
+     "path": "data/generated/probe_photos/probe_26011/cd9b1857-26da-59a1-95c9-1589d90fbba6_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "304fbfe1-56a8-5b24-b55f-a8b0e1d182ce",
+   "program": "26011",
+   "population": "probe:26011",
+   "model_claimed": "2G520",
+   "serial_claimed": "SN94588134",
+   "date_code_claimed": null,
+   "retailer_claimed": "Esrtech.com",
+   "purchase_date": "2025-03-06",
+   "refund_cents": 4072,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Casey Vorvor",
+    "email": "synth.probe:26011.2@example.net",
+    "phone": "(953) 555-0147",
+    "address_line1": "5924 Tamnor Ave",
+    "city": "Corcor Falls",
+    "state": "GA",
+    "zip": "36185",
+    "payout_destination": "synth_dest_9f4fdc54a40923f8",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "59cb3a8e509c506c534f0ea93c0087dbce6027ea88b35f8820770185f26fc770",
+     "phash": "9a6d61929d73a568",
+     "path": "data/generated/probe_photos/probe_26011/304fbfe1-56a8-5b24-b55f-a8b0e1d182ce_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "b44574cbb78702d9722e277af178668a8cd1ff7c2f1fd5a42d70409a624948f2",
+     "phash": "a6511266fa5bc4da",
+     "path": "data/generated/probe_photos/probe_26011/304fbfe1-56a8-5b24-b55f-a8b0e1d182ce_destruction.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "c5375e27-e925-51e7-a6f4-7ad241c49652",
+   "program": "26011",
+   "population": "probe:26011",
+   "model_claimed": "2G505",
+   "serial_claimed": "SN60237569",
+   "date_code_claimed": null,
+   "retailer_claimed": "Esrtech.com",
+   "purchase_date": "2024-06-01",
+   "refund_cents": 3952,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Reese Corzel",
+    "email": "synth.probe:26011.3@example.org",
+    "phone": "(615) 555-0195",
+    "address_line1": "5205 Zelgar St",
+    "city": "Zelvor Falls",
+    "state": "NC",
+    "zip": "92280",
+    "payout_destination": "synth_dest_af18a6e9da2e6f0c",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "ecb0c91b41686eebdbcea3c7542b1a21f5be0e6a466a84c16f112dde510bc2c5",
+     "phash": "946b6b948776886b",
+     "path": "data/generated/probe_photos/probe_26011/c5375e27-e925-51e7-a6f4-7ad241c49652_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "a6264df6451115c2c4a71a252cbd2ccc6dd096194c04fa6c2a6bd0217c695afe",
+     "phash": "b449c9cd339e3334",
+     "path": "data/generated/probe_photos/probe_26011/c5375e27-e925-51e7-a6f4-7ad241c49652_destruction.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "ea9a4f1f-60e4-5431-b98a-740ade73ff6b",
+   "program": "26011",
+   "population": "probe:26011",
+   "model_claimed": "2G505B",
+   "serial_claimed": "SN16672268",
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2023-11-19",
+   "refund_cents": 4426,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Finley Quintam",
+    "email": "synth.probe:26011.4@example.net",
+    "phone": "(492) 555-0104",
+    "address_line1": "9229 Silfen Rd",
+    "city": "Tamnor Falls",
+    "state": "FL",
+    "zip": "29750",
+    "payout_destination": "synth_dest_30fe785901f229a0",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "89f5a47f9d0142869a3aafe78e5937835e23f1d7b6bf4d185d397bd151d75455",
+     "phash": "8ba537c88db1323d",
+     "path": "data/generated/probe_photos/probe_26011/ea9a4f1f-60e4-5431-b98a-740ade73ff6b_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "3b3be4384ef8f093b6daf4ea8813e383f0035f27c6762979abedf9660f1b0359",
+     "phash": "9f1e60e0c367d8e4",
+     "path": "data/generated/probe_photos/probe_26011/ea9a4f1f-60e4-5431-b98a-740ade73ff6b_receipt.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "c76adb07d5fa500863e527f6806d9e937291c9a97a32b205af88dcff59d4adea",
+     "phash": "da18254be71ec3c6",
+     "path": "data/generated/probe_photos/probe_26011/ea9a4f1f-60e4-5431-b98a-740ade73ff6b_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "c9f82de8-816e-5b68-b2db-88e912ac3c18",
+   "program": "26011",
+   "population": "probe:26011",
+   "model_claimed": "2G505B",
+   "serial_claimed": "SN50687739",
+   "date_code_claimed": null,
+   "retailer_claimed": "Homedepot.com",
+   "purchase_date": "2024-04-26",
+   "refund_cents": 4985,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Dakota Quindan",
+    "email": "synth.probe:26011.5@example.com",
+    "phone": "(428) 555-0165",
+    "address_line1": "945 Danhol Way",
+    "city": "Danmar Falls",
+    "state": "GA",
+    "zip": "26606",
+    "payout_destination": "synth_dest_0d0e53d8b3dba3db",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "cfbbe75ea39192397d70a85e24082df50a10fe66dbe58ee696177ca55e26e87c",
+     "phash": "e9323c5ec4cd630b",
+     "path": "data/generated/probe_photos/probe_26011/c9f82de8-816e-5b68-b2db-88e912ac3c18_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "f471f50211581039d30fa75882b063aa8bcec4eb921ee4ec8e2302cdf3ff50e5",
+     "phash": "d9d0373da22738d8",
+     "path": "data/generated/probe_photos/probe_26011/c9f82de8-816e-5b68-b2db-88e912ac3c18_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "31c4a98a-7551-5d76-8b93-874655b85b9f",
+   "program": "26011",
+   "population": "probe:26011",
+   "model_claimed": "ZG512B",
+   "serial_claimed": "SN18608212",
+   "date_code_claimed": null,
+   "retailer_claimed": "Homedepot.com",
+   "purchase_date": "2022-12-30",
+   "refund_cents": 3305,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Hayden Marros",
+    "email": "synth.probe:26011.6@example.org",
+    "phone": "(348) 555-0180",
+    "address_line1": "2284 Marmar Rd",
+    "city": "Wenyar Falls",
+    "state": "IL",
+    "zip": "15146",
+    "payout_destination": "synth_dest_c95caf5b77bd678f",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "ea9f167299660b6a7b9dcf89fe611a4c5a43642f80dc8ca07b44edbd45a357e4",
+     "phash": "e125d68ade468a9d",
+     "path": "data/generated/probe_photos/probe_26011/31c4a98a-7551-5d76-8b93-874655b85b9f_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "188928516fc8bb2db9fce06c9425c92e52832419fb95c1c1e47e56a974a5f491",
+     "phash": "96db6124dbe46893",
+     "path": "data/generated/probe_photos/probe_26011/31c4a98a-7551-5d76-8b93-874655b85b9f_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "833c6484-77f3-5e66-b39c-5071ebd3135f",
+   "program": "26011",
+   "population": "probe:26011",
+   "model_claimed": "ZG520",
+   "serial_claimed": "SN92150171",
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2024-04-24",
+   "refund_cents": 4733,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Riley Norwen",
+    "email": "synth.probe:26011.7@example.com",
+    "phone": "(833) 555-0100",
+    "address_line1": "4761 Quinsil St",
+    "city": "Pelcor Falls",
+    "state": "AZ",
+    "zip": "90097",
+    "payout_destination": "synth_dest_5759501dd9fd5a0a",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "1487eec138bcd6673318800579825501171ac9eb7fa2378ca28d9613f14d29e1",
+     "phash": "d3463783c85ae5d2",
+     "path": "data/generated/probe_photos/probe_26011/833c6484-77f3-5e66-b39c-5071ebd3135f_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "726673837f9d898e4bd201b76e6987e5994cd5e218aeb7c4aa37e4f5fa84fd5a",
+     "phash": "954a51f047775cf0",
+     "path": "data/generated/probe_photos/probe_26011/833c6484-77f3-5e66-b39c-5071ebd3135f_receipt.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "12b38a422e53578bc93152fd81e5883e81f579a1b856e73d3bc3aee5ea2bff68",
+     "phash": "d26d6e95349cc638",
+     "path": "data/generated/probe_photos/probe_26011/833c6484-77f3-5e66-b39c-5071ebd3135f_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "e432eac8-18e1-5fd3-a36d-27b24226ae47",
+   "program": "26011",
+   "population": "probe:26011",
+   "model_claimed": null,
+   "serial_claimed": "SN22377959",
+   "date_code_claimed": null,
+   "retailer_claimed": "Esrtech.com",
+   "purchase_date": "2024-05-12",
+   "refund_cents": 3215,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Riley Norcor",
+    "email": "synth.probe:26011.8@example.org",
+    "phone": "(524) 555-0132",
+    "address_line1": "3063 Norpel St",
+    "city": "Peltam Falls",
+    "state": "OH",
+    "zip": "48876",
+    "payout_destination": "synth_dest_5db29749394b949b",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "5da70602b2a4f955132f0420b63a0d26dc5d5d6aa94fdbec35e0a309c30983a2",
+     "phash": "efa99c94c38ad065",
+     "path": "data/generated/probe_photos/probe_26011/e432eac8-18e1-5fd3-a36d-27b24226ae47_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "cc21b1fb2eff381163ac1c77aec27b63aa12d17717dd5b5fba12450fcc142b19",
+     "phash": "bf1f60e0c367d064",
+     "path": "data/generated/probe_photos/probe_26011/e432eac8-18e1-5fd3-a36d-27b24226ae47_receipt.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "fd04ab2681b99d966526771098a25f7417220c2c3e47e6d5bc64d7388f67a9a3",
+     "phash": "9b8f3470d086cadb",
+     "path": "data/generated/probe_photos/probe_26011/e432eac8-18e1-5fd3-a36d-27b24226ae47_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "4d56b353-67e8-5257-80e5-d2a355ee3abc",
+   "program": "26011",
+   "population": "probe:26011",
+   "model_claimed": null,
+   "serial_claimed": "SN43222952",
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2023-06-21",
+   "refund_cents": 4801,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Kendall Corcor",
+    "email": "synth.probe:26011.9@example.net",
+    "phone": "(617) 555-0128",
+    "address_line1": "3078 Garhol St",
+    "city": "Cormar Falls",
+    "state": "IL",
+    "zip": "48854",
+    "payout_destination": "synth_dest_b073bb98e17ed62c",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "a95225524f78cc92f24a635317f15fd05327efaf805e696c4212f4346f45d843",
+     "phash": "e125d6d28b5666e2",
+     "path": "data/generated/probe_photos/probe_26011/4d56b353-67e8-5257-80e5-d2a355ee3abc_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "ba1cb7bb76ce4196e72e11294ee062891e7065ae6020b40a96e502ffd0e758b8",
+     "phash": "930d64f2ca3993ce",
+     "path": "data/generated/probe_photos/probe_26011/4d56b353-67e8-5257-80e5-d2a355ee3abc_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "5c4e387e-1df0-54d6-8ddb-ea2b3711b7fa",
+   "program": "26011",
+   "population": "probe:26011",
+   "model_claimed": "2G512B",
+   "serial_claimed": "SN98376701",
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2024-04-15",
+   "refund_cents": 4991,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Rowan Pelhol",
+    "email": "synth.probe:26011.10@example.net",
+    "phone": "(907) 555-0185",
+    "address_line1": "5594 Garpel Ct",
+    "city": "Norhol Falls",
+    "state": "NC",
+    "zip": "12293",
+    "payout_destination": "synth_dest_12579250a908cfa6",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "ae89de76fc304cf38477101e0731512338b08cee3478bb41a4263ad109306060",
+     "phash": "d3cc20240f7f6d93",
+     "path": "data/generated/probe_photos/probe_26011/5c4e387e-1df0-54d6-8ddb-ea2b3711b7fa_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "39b12e1a380f0eb6fd2cf6c272138c2aa5719195951ab1629a158bd9421cbd63",
+     "phash": "f2749983ad098dcd",
+     "path": "data/generated/probe_photos/probe_26011/5c4e387e-1df0-54d6-8ddb-ea2b3711b7fa_destruction.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "ab0ad9c6-b02f-559a-a9d4-bf5c75b96475",
+   "program": "26011",
+   "population": "probe:26011",
+   "model_claimed": "2G512B",
+   "serial_claimed": "SN39705570",
+   "date_code_claimed": null,
+   "retailer_claimed": "Esrtech.com",
+   "purchase_date": "2024-01-22",
+   "refund_cents": 4331,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Finley Marquin",
+    "email": "synth.probe:26011.11@example.org",
+    "phone": "(319) 555-0170",
+    "address_line1": "3831 Rosnor Ln",
+    "city": "Belvor Falls",
+    "state": "WA",
+    "zip": "97749",
+    "payout_destination": "synth_dest_e3a537e67c80dc24",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "ae98dbce5b3421150ae7649d73f0ddec4f049ea103d558ef3eb6fd915e827fbe",
+     "phash": "d2c2256e6a253dd3",
+     "path": "data/generated/probe_photos/probe_26011/ab0ad9c6-b02f-559a-a9d4-bf5c75b96475_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "b3f33ee61cd6cd10e2849db0d2e12f428120431588a97aa48d4bdfd88ec43ad6",
+     "phash": "bc728d87d284cdca",
+     "path": "data/generated/probe_photos/probe_26011/ab0ad9c6-b02f-559a-a9d4-bf5c75b96475_destruction.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "259a3000-060e-54bc-994b-014881cd27f6",
+   "program": "26046",
+   "population": "probe:26046",
+   "model_claimed": "LXT-CL-1.0",
+   "serial_claimed": "SN55709051",
+   "date_code_claimed": "0722",
+   "retailer_claimed": "Amazon",
+   "purchase_date": "2024-02-16",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Casey Quinnor",
+    "email": "synth.probe:26046.0@example.org",
+    "phone": "(238) 555-0116",
+    "address_line1": "1880 Wenquin Way",
+    "city": "Yarsil Falls",
+    "state": "CA",
+    "zip": "90305",
+    "payout_destination": "synth_dest_6df4fe1fd37cef7d",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "f6f5f7f5bde9bf19dce369e702a190c16ac4361858f902838403c64dc6426329",
+     "phash": "fa69cf94302ab532",
+     "path": "data/generated/probe_photos/probe_26046/259a3000-060e-54bc-994b-014881cd27f6_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "a4a6b0a7ac08b38f14403880cc55eac0310952ab0b3759218b7167c20eacdaae",
+     "phash": "951f40a55fad5827",
+     "path": "data/generated/probe_photos/probe_26046/259a3000-060e-54bc-994b-014881cd27f6_receipt.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "5e89af9a320d664c468b0777312412d9c6ed6bb2767cd6ed1a2a390eaacd92e3",
+     "phash": "92826d7c606f98bb",
+     "path": "data/generated/probe_photos/probe_26046/259a3000-060e-54bc-994b-014881cd27f6_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "70ff2ed9-09b3-5a29-a49a-e50b67c04912",
+   "program": "26046",
+   "population": "probe:26046",
+   "model_claimed": "LXT-CL-1.0",
+   "serial_claimed": "SN59909457",
+   "date_code_claimed": "0722",
+   "retailer_claimed": "Amazon",
+   "purchase_date": "2023-11-13",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Finley Rosmar",
+    "email": "synth.probe:26046.1@example.net",
+    "phone": "(747) 555-0164",
+    "address_line1": "5748 Marzel St",
+    "city": "Silsil Falls",
+    "state": "AZ",
+    "zip": "16330",
+    "payout_destination": "synth_dest_e3ab057fc4449d8b",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "a055901f77d1690f63624300dc43f7cfbe51cde1200694095bd89eb961dff14e",
+     "phash": "c298273f68771c96",
+     "path": "data/generated/probe_photos/probe_26046/70ff2ed9-09b3-5a29-a49a-e50b67c04912_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "9a0cb6d7af0fba93f8cd95ba6e79b48706d9caeee76b3eb2ff8c83848a8c6df0",
+     "phash": "b030cdcd6a346b73",
+     "path": "data/generated/probe_photos/probe_26046/70ff2ed9-09b3-5a29-a49a-e50b67c04912_destruction.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "85f7daf6-73c0-5901-b391-dbf64fcf0439",
+   "program": "26046",
+   "population": "probe:26046",
+   "model_claimed": "LXT-CL-1.0",
+   "serial_claimed": "SN84366301",
+   "date_code_claimed": "0722",
+   "retailer_claimed": "Bioionic.com",
+   "purchase_date": "2023-10-27",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Emerson Belcor",
+    "email": "synth.probe:26046.2@example.com",
+    "phone": "(723) 555-0111",
+    "address_line1": "7316 Wenwen Way",
+    "city": "Norpel Falls",
+    "state": "AZ",
+    "zip": "12445",
+    "payout_destination": "synth_dest_99c4244a358a1a57",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "e64fed8ab1cf3b5cfe6235a38ca3bbf1ed54d23af2799329cd43366a0dad33d0",
+     "phash": "cb263489cb67d166",
+     "path": "data/generated/probe_photos/probe_26046/85f7daf6-73c0-5901-b391-dbf64fcf0439_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "9b704599977d53471acd2fa862857bde96be3633f1af7d89d7b09f3b6e899feb",
+     "phash": "b0248a897d9ef639",
+     "path": "data/generated/probe_photos/probe_26046/85f7daf6-73c0-5901-b391-dbf64fcf0439_destruction.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "1bfc2451-84f4-5a5d-ba3b-413341242d23",
+   "program": "26046",
+   "population": "probe:26046",
+   "model_claimed": "LXT-CL-1.0",
+   "serial_claimed": "SN62961311",
+   "date_code_claimed": "0722",
+   "retailer_claimed": "Salon Centric",
+   "purchase_date": "2023-05-08",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Parker Vorquin",
+    "email": "synth.probe:26046.3@example.net",
+    "phone": "(897) 555-0147",
+    "address_line1": "4668 Vorros St",
+    "city": "Belvor Falls",
+    "state": "AZ",
+    "zip": "90363",
+    "payout_destination": "synth_dest_4e74ba5f694b5440",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "75bcd569af30b3c91a2c19b16c26d7099a6f036a5c10ec6b5414921dcf17ab4c",
+     "phash": "e961572b6194b27a",
+     "path": "data/generated/probe_photos/probe_26046/1bfc2451-84f4-5a5d-ba3b-413341242d23_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "5e1a4bc1aefce19a6b996d3505de40ee90f9f336c69185aab5edabdd76581382",
+     "phash": "924f6961969c9e96",
+     "path": "data/generated/probe_photos/probe_26046/1bfc2451-84f4-5a5d-ba3b-413341242d23_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "146ba6c5-2476-5fe9-a794-1a99be31da21",
+   "program": "26046",
+   "population": "probe:26046",
+   "model_claimed": "LXT-CL-I.0",
+   "serial_claimed": "SN69424688",
+   "date_code_claimed": "0722",
+   "retailer_claimed": "Nordstrom",
+   "purchase_date": "2023-05-13",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Kendall Quingar",
+    "email": "synth.probe:26046.4@example.com",
+    "phone": "(732) 555-0197",
+    "address_line1": "7050 Quinros Rd",
+    "city": "Silros Falls",
+    "state": "WA",
+    "zip": "45939",
+    "payout_destination": "synth_dest_44d4678e30fc4506",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "bbc2017632bce74bd40b9996aacc4446200857f6505c2ee51a82e637a2577c62",
+     "phash": "e503949d2f5ada64",
+     "path": "data/generated/probe_photos/probe_26046/146ba6c5-2476-5fe9-a794-1a99be31da21_destruction.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "dc53f6f72762134afb0a7ccf09ca0e4c825035e4e4d5d542f1a13ec3bd3bb2e4",
+     "phash": "979c6a9d6e329426",
+     "path": "data/generated/probe_photos/probe_26046/146ba6c5-2476-5fe9-a794-1a99be31da21_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "3cf33684-89c0-532a-9a33-c1e68e9b1e51",
+   "program": "26046",
+   "population": "probe:26046",
+   "model_claimed": null,
+   "serial_claimed": "SN36680478",
+   "date_code_claimed": "0722",
+   "retailer_claimed": "Amazon",
+   "purchase_date": "2023-07-30",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Morgan Garquin",
+    "email": "synth.probe:26046.5@example.com",
+    "phone": "(530) 555-0135",
+    "address_line1": "6601 Corlin Rd",
+    "city": "Wenzel Falls",
+    "state": "OH",
+    "zip": "70173",
+    "payout_destination": "synth_dest_ec8b9c70e048e8b9",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "destruction",
+     "sha256": "0092b1c24cf9082738dbdde1b098fea6aeb20f2a544496ad480d185101506155",
+     "phash": "a2d4cf4b6126366d",
+     "path": "data/generated/probe_photos/probe_26046/3cf33684-89c0-532a-9a33-c1e68e9b1e51_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "6d7d7bfb6e4f3f31d60dba4f051363280f855bbba495d750c031da1bbc9ce7f0",
+     "phash": "9f1fe0e0c364d866",
+     "path": "data/generated/probe_photos/probe_26046/3cf33684-89c0-532a-9a33-c1e68e9b1e51_receipt.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "18b2a58a0cde29229fd1418045d5c08019cc0b8dfb8c08f5cb4ad59042d5c12a",
+     "phash": "96ad6996daf09468",
+     "path": "data/generated/probe_photos/probe_26046/3cf33684-89c0-532a-9a33-c1e68e9b1e51_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "f095d96a-37d8-5de4-8ef9-0c6fc7153345",
+   "program": "26046",
+   "population": "probe:26046",
+   "model_claimed": "LXT-CL-1.0",
+   "serial_claimed": "SN77946288",
+   "date_code_claimed": "0722",
+   "retailer_claimed": "Nordstrom",
+   "purchase_date": "2024-01-19",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Sage Quinwen",
+    "email": "synth.probe:26046.6@example.com",
+    "phone": "(365) 555-0102",
+    "address_line1": "8365 Silgar Way",
+    "city": "Linfen Falls",
+    "state": "OH",
+    "zip": "52033",
+    "payout_destination": "synth_dest_45595594cc44ff65",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "475e2961d47279949e5253ddc9aad1d84e75350305fb0def9a47454c8c526200",
+     "phash": "91fc698b864396ce",
+     "path": "data/generated/probe_photos/probe_26046/f095d96a-37d8-5de4-8ef9-0c6fc7153345_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "ce58603309ab0c44a56d1272016fc4e5b1ea3b78551c8004b8bee004e0e6c9f1",
+     "phash": "e1e69e9266392565",
+     "path": "data/generated/probe_photos/probe_26046/f095d96a-37d8-5de4-8ef9-0c6fc7153345_destruction.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "c6ea79ca-e91b-58b8-acfa-a6052ef349cb",
+   "program": "24082",
+   "population": "probe:24082",
+   "model_claimed": "SE4570",
+   "serial_claimed": "SN16149734",
+   "date_code_claimed": "07/22",
+   "retailer_claimed": "Safety Shoes Distributors",
+   "purchase_date": "2023-08-07",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Parker Quingar",
+    "email": "synth.probe:24082.0@example.org",
+    "phone": "(357) 555-0106",
+    "address_line1": "4317 Dansil Rd",
+    "city": "Fenzel Falls",
+    "state": "FL",
+    "zip": "66965",
+    "payout_destination": "synth_dest_bca96e507c119445",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "c7b14042c54445f13c2f65896aed0441061040664a76c46fd1658334ce723a5f",
+     "phash": "934e65e4c0b99b1e",
+     "path": "data/generated/probe_photos/probe_24082/c6ea79ca-e91b-58b8-acfa-a6052ef349cb_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "ea9055e9-45fa-51df-8093-1b895a046ad7",
+   "program": "24082",
+   "population": "probe:24082",
+   "model_claimed": "SE4570",
+   "serial_claimed": "SN13124251",
+   "date_code_claimed": "07/22",
+   "retailer_claimed": "Grainger",
+   "purchase_date": "2023-05-10",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Reese Fenpel",
+    "email": "synth.probe:24082.1@example.net",
+    "phone": "(513) 555-0106",
+    "address_line1": "1318 Holfen St",
+    "city": "Tamnor Falls",
+    "state": "FL",
+    "zip": "40545",
+    "payout_destination": "synth_dest_832f10f229d7ec24",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "4df818e6efbc7dc4c0508cb907c1e23f65553324030b4ca7db99fab8cad78153",
+     "phash": "969e696387899396",
+     "path": "data/generated/probe_photos/probe_24082/ea9055e9-45fa-51df-8093-1b895a046ad7_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "b0e4e54b-a46b-5bd8-bfd0-114686e011db",
+   "program": "24082",
+   "population": "probe:24082",
+   "model_claimed": "5E4570",
+   "serial_claimed": "SN56577065",
+   "date_code_claimed": "07/22",
+   "retailer_claimed": "www.justinboots.com",
+   "purchase_date": "2023-05-02",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Sage Marquin",
+    "email": "synth.probe:24082.2@example.org",
+    "phone": "(958) 555-0138",
+    "address_line1": "1602 Holcor Ln",
+    "city": "Lingar Falls",
+    "state": "NY",
+    "zip": "94355",
+    "payout_destination": "synth_dest_e18a6a50f36290e9",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "receipt",
+     "sha256": "41eea9cbdda710028c3b173f04626c8035ab4d2f67fc949f18f04e1bb0e9596f",
+     "phash": "9f1a70e047e7c8e4",
+     "path": "data/generated/probe_photos/probe_24082/b0e4e54b-a46b-5bd8-bfd0-114686e011db_receipt.jpg"
+    },
+    {
+     "kind": "label",
+     "sha256": "a2b15df1fe3f8b64c4d41534f74c2e9e2041af7fd799755ef17e9c20135b55ba",
+     "phash": "8b2636cbcf347164",
+     "path": "data/generated/probe_photos/probe_24082/b0e4e54b-a46b-5bd8-bfd0-114686e011db_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "24bc02f8-0a44-59ac-bf6a-c067a4edd1e1",
+   "program": "24082",
+   "population": "probe:24082",
+   "model_claimed": null,
+   "serial_claimed": "SN57122332",
+   "date_code_claimed": "07/22",
+   "retailer_claimed": "www.grainger.com",
+   "purchase_date": "2022-10-10",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Harper Quinros",
+    "email": "synth.probe:24082.3@example.com",
+    "phone": "(921) 555-0156",
+    "address_line1": "4740 Garcor St",
+    "city": "Holwen Falls",
+    "state": "NY",
+    "zip": "66123",
+    "payout_destination": "synth_dest_7ee696346cd9057e",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "7f30e1ecede4b29b37c5cad6eabb215aa113f58d8a88bda6dc711b940e10d1ab",
+     "phash": "969f6b6190699696",
+     "path": "data/generated/probe_photos/probe_24082/24bc02f8-0a44-59ac-bf6a-c067a4edd1e1_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "f4d71c13-8c86-5e4b-8b4c-4aa2a4cf91c2",
+   "program": "24082",
+   "population": "probe:24082",
+   "model_claimed": "SE4570",
+   "serial_claimed": "SN92074507",
+   "date_code_claimed": "07/22",
+   "retailer_claimed": "Saf-Gard Safety Shoe Company",
+   "purchase_date": "2023-03-13",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Kendall Yarzel",
+    "email": "synth.probe:24082.4@example.org",
+    "phone": "(619) 555-0145",
+    "address_line1": "9943 Holbel Ct",
+    "city": "Mardan Falls",
+    "state": "AZ",
+    "zip": "38297",
+    "payout_destination": "synth_dest_25a3af3def3ba030",
+    "synthetic": true
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "2db3f92406d6ace217c234318ca82c59ea668c3983ccbe8235c662c7c3782822",
+     "phash": "928f6928d57cd2c3",
+     "path": "data/generated/probe_photos/probe_24082/f4d71c13-8c86-5e4b-8b4c-4aa2a4cf91c2_label.jpg"
+    }
+   ]
+  }
+ ]
+}

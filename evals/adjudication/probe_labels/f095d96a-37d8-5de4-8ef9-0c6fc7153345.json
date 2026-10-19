@@ -1,0 +1,10 @@
+{
+ "claim_id": "f095d96a-37d8-5de4-8ef9-0c6fc7153345",
+ "program": "26046",
+ "category": "clean",
+ "expected_outcome": "approve",
+ "violations": [],
+ "label_model_printed": "LXT-CL-1.0",
+ "label_unreadable": false,
+ "subtypes": {}
+}

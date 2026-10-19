@@ -33,6 +33,8 @@ def seeded(internal_engine_test: Engine) -> dict[str, Any]:
     from sqlalchemy import text
 
     with internal_engine_test.begin() as conn:
+        conn.execute(text("SELECT set_config('app.audit_purge', 'on', true)"))
+        conn.execute(text("DELETE FROM rate_limits"))
         for table in (
             "agent_steps",
             "agent_runs",
@@ -131,9 +133,12 @@ def test_recall_search_usage_portal_and_health(client: TestClient, seeded: dict[
     assert any(r["source_id"] == "27024" for r in found["items"])
     usage = client.get("/v1/usage", headers=DEMO).json()
     assert usage["claims_adjudicated"] == 20 and usage["open_programs"] == 1
-    portal = client.get(f"/portal/dev.{seeded['demo']['first_claim_id']}").json()
+    first = seeded["demo"]["first_claim_id"]
+    portal = client.get(f"/portal/dev.{seed.DEMO_FIRM_ID}.{first}").json()
     assert portal["program"]["models"] == ["TL1302Z"] and "label" in portal["program"]["required_photos"]
-    assert client.get(f"/portal/dev.{uuid4()}").status_code == 404
+    assert client.get(f"/portal/dev.{seed.DEMO_FIRM_ID}.{uuid4()}").status_code == 404
+    assert client.get(f"/portal/dev.{seed.OTHER_FIRM_ID}.{first}").status_code == 404  # wrong firm in the token
+    assert client.get(f"/portal/dev.{first}").status_code == 404  # the M1 format is gone
     assert client.get("/portal/not-a-token").status_code == 404
     assert client.get("/healthz").json()["status"] == "ok"
     assert client.get("/readyz").status_code in (200, 503)  # 503 until a worker heartbeat exists

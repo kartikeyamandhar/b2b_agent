@@ -1,0 +1,12 @@
+{
+ "claim_id": "cd9b1857-26da-59a1-95c9-1589d90fbba6",
+ "program": "26011",
+ "category": "label_shows_other_model",
+ "expected_outcome": "deny",
+ "violations": [
+  "label_shows_other_model"
+ ],
+ "label_model_printed": "2G515B",
+ "label_unreadable": false,
+ "subtypes": {}
+}

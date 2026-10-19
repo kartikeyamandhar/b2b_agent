@@ -43,6 +43,9 @@ class Settings(BaseSettings):
     clerk_jwks_url: str = Field("https://example.clerk.accounts.dev/.well-known/jwks.json")
     clerk_allowed_origins: str = Field("http://localhost:3000", description="Comma-separated azp values.")
     claim_token_secret: str = Field("ZmFrZS1jbGFpbS10b2tlbi1zZWNyZXQtMzItYnl0ZXM=")
+    claim_token_provider: Literal["dev", "hmac"] = Field(
+        "dev", description="dev: dev.<firm>.<claim> links (development only); hmac: the login owner's signed links."
+    )
 
     # Payments seam (component 3).
     stripe_secret_key: str = Field("sk_test_fake", description="Stripe test-mode secret key only.")
@@ -115,6 +118,10 @@ class Settings(BaseSettings):
     # Portal (component 4 owns the token format; the backend owns the routes).
     portal_base_url: str = Field("http://localhost:3000/claim", description="Base of issued claim links.")
     max_photo_bytes: int = Field(8_000_000, description="Largest accepted upload.")
+    max_photo_pixels: int = Field(40_000_000, description="Larger images are refused (decompression bombs).")
+    portal_rate_per_token_hour: int = Field(60, description="Portal requests per claim link per hour (04-login.md).")
+    portal_uploads_per_token_hour: int = Field(10, description="Photo uploads per claim link per hour.")
+    portal_rate_per_ip_hour: int = Field(300, description="Portal requests per client IP per hour.")
 
     @field_validator("storage_dir", "replay_dir", "llm_record_dir")
     @classmethod

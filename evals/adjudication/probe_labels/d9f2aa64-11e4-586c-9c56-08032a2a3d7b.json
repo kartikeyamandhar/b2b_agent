@@ -1,0 +1,12 @@
+{
+ "claim_id": "d9f2aa64-11e4-586c-9c56-08032a2a3d7b",
+ "program": "24118",
+ "category": "destruction_photo_intact",
+ "expected_outcome": "needs_info",
+ "violations": [
+  "destruction_photo_intact"
+ ],
+ "label_model_printed": "B0726Y",
+ "label_unreadable": false,
+ "subtypes": {}
+}

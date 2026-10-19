@@ -37,7 +37,10 @@ from recallops.claims.agent_tools import (
     tool_specs,
     validate_decision,
 )
-from recallops.claims.policy import POLICY_TEXT
+from recallops.claims.policy import POLICY_TEXT, PRECEDENCE, TableInputs, decide_table
+from recallops.claims.tools import check_date_code, check_duplicates, check_model, check_purchase, check_serial
+from recallops.claims.tools.checks import check_destruction_presence, destruction_required
+from recallops.claims.vision import DestructionReading, LabelReading
 from recallops.llm.client import Completion, LlmClient, ModelCallFailed, ModelRequest
 from recallops.llm.meter import RunBudget, RunCapExceeded
 from recallops.logs import get_logger, log_event
@@ -175,6 +178,41 @@ def _final_from_review(payload: dict[str, Any], held: dict[str, Any]) -> dict[st
         "agent_outcome": agent_decision.get("outcome"),
         "fraud": action == "mark_fraud",
     }
+
+
+def table_check(ctx: ToolContext, results: dict[str, dict[str, Any]]) -> tuple[str, list[str]]:
+    """The policy decision table over this run's own evidence: pure-code checks recomputed from the claim, plus the
+    vision readings the run made. The model may be stricter than this, never more lenient (red-team finding: an
+    injected or mistaken approve must not reach a payout)."""
+    claim, rules = ctx.claim, ctx.rules
+    label: LabelReading | None = None
+    destruction: DestructionReading | None = None
+    for r in results.values():
+        result = {k: v for k, v in r["result"].items() if k != "result_id"}
+        if r["tool"] == "read_label_photo" and "error" not in result:
+            label = LabelReading.model_validate(result)
+        if r["tool"] == "check_destruction_photo" and result.get("verdict") == "checked":
+            destruction = DestructionReading.model_validate({k: v for k, v in result.items() if k != "verdict"})
+    label_model = None
+    if label is not None and label.legible and label.model_text:
+        label_model = check_model(claim.model_copy(update={"model_claimed": label.model_text}), rules.identification)
+    presence = check_destruction_presence(claim, rules.remedy, ctx.phash_bits)
+    table = decide_table(
+        TableInputs(
+            typed_model=check_model(claim, rules.identification),
+            serial=check_serial(claim, rules.identification),
+            date_code=check_date_code(claim, rules.identification),
+            purchase=check_purchase(claim, rules),
+            duplicates=check_duplicates(claim, ctx.other_claims(), ctx.phash_bits, ctx.phash_kinds),
+            destruction_required=destruction_required(rules.remedy),
+            destruction_presence=presence.verdict,
+            destruction_reason=presence.reason,
+            label=label,
+            label_model=label_model,
+            destruction=destruction,
+        )
+    )
+    return table.outcome, table.reasons
 
 
 def _cost_fields(done: Completion | None) -> dict[str, Any]:
@@ -465,10 +503,22 @@ def build_graph(
         status = state.get("status", "failed")
         held: dict[str, Any] | None = None
         final: dict[str, Any] | None = None
+        guard: dict[str, Any] | None = None
         if status == "decided":
             final = _final_from_decision(state["decision"] or {}, "agent")
+            table_outcome, table_reasons = table_check(ctx, state.get("results", {}))
+            lenient = PRECEDENCE.index(final["outcome"]) > PRECEDENCE.index(table_outcome)
+            guard = {"table_outcome": table_outcome, "model_more_lenient": lenient}
             over = final["outcome"] == "approve" and (ctx.claim.refund_cents or 0) > ctx.value_threshold_cents
-            if final["outcome"] == "flag" or over:
+            if lenient:
+                held = {
+                    "reason": "model_disagrees_with_rules",
+                    "detail": f"the rules say {table_outcome}: " + "; ".join(table_reasons[:3]),
+                    "decision": final,
+                    "claim_status": "flagged" if table_outcome == "flag" else "under_review",
+                    "run_status": "waiting_human",
+                }
+            elif final["outcome"] == "flag" or over:
                 held = {
                     "reason": "flagged" if final["outcome"] == "flag" else "over_value_threshold",
                     "detail": None,
@@ -491,6 +541,7 @@ def build_graph(
                 "outcome": (final or {}).get("outcome"),
                 "routed_to_human": held is not None,
                 "hold_reason": (held or {}).get("reason"),
+                **({"guard": guard} if guard else {}),
             },
             step_key="route",
         )
@@ -556,6 +607,7 @@ class RunResult:
     final: dict[str, Any] | None
     held: dict[str, Any] | None
     interrupted: bool
+    guard_hold: bool = False
 
 
 def summarize(values: dict[str, Any]) -> RunResult:
@@ -568,6 +620,7 @@ def summarize(values: dict[str, Any]) -> RunResult:
         final=final,
         held=held,
         interrupted="__interrupt__" in values,
+        guard_hold=(held or {}).get("reason") == "model_disagrees_with_rules",
     )
 
 

@@ -1,0 +1,12 @@
+{
+ "claim_id": "ea9055e9-45fa-51df-8093-1b895a046ad7",
+ "program": "24082",
+ "category": "label_unreadable",
+ "expected_outcome": "needs_info",
+ "violations": [
+  "label_unreadable"
+ ],
+ "label_model_printed": "SE4570",
+ "label_unreadable": true,
+ "subtypes": {}
+}

@@ -1,0 +1,12 @@
+{
+ "claim_id": "05ca0768-923d-5fa9-86c4-659c428aa27e",
+ "program": "26007",
+ "category": "label_shows_other_model",
+ "expected_outcome": "deny",
+ "violations": [
+  "label_shows_other_model"
+ ],
+ "label_model_printed": "KY-348A",
+ "label_unreadable": false,
+ "subtypes": {}
+}
