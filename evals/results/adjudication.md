@@ -1,6 +1,6 @@
 # Adjudication eval
 
-Generated 2026-10-19 06:21 UTC by `make eval`. Pre-registration: evals/adjudication/PREREG.md.
+Generated 2026-10-19 06:41 UTC by `make eval`. Pre-registration: evals/adjudication/PREREG.md.
 
 - Golden claims: 300 synthetic claims from 20 golden notices (gold rules), planted violations, expected outcomes from outcome_policy.yaml (decided 2026-10-17). The 60 owner-reviewed and 40 classmate claims arrive in M2.
 - Rules-only decision table 1.0.0; pure-code tools; destruction photo presence only (no vision).

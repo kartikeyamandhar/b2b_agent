@@ -71,6 +71,139 @@
         "title": "Body_portal_photo_portal__token__photos_post",
         "type": "object"
       },
+      "Body_upload_registrations_v1_programs__program_id__registrations_post": {
+        "properties": {
+          "file": {
+            "contentMediaType": "application/octet-stream",
+            "description": "CSV with external_ref",
+            "title": "File",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file"
+        ],
+        "title": "Body_upload_registrations_v1_programs__program_id__registrations_post",
+        "type": "object"
+      },
+      "CampaignCounts": {
+        "additionalProperties": false,
+        "properties": {
+          "counts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Counts",
+            "type": "object"
+          }
+        },
+        "required": [
+          "counts"
+        ],
+        "title": "CampaignCounts",
+        "type": "object"
+      },
+      "CampaignDraftRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "channels": {
+            "items": {
+              "enum": [
+                "email",
+                "mail",
+                "phone_text"
+              ],
+              "type": "string"
+            },
+            "maxItems": 3,
+            "minItems": 1,
+            "title": "Channels",
+            "type": "array"
+          }
+        },
+        "required": [
+          "channels"
+        ],
+        "title": "CampaignDraftRequest",
+        "type": "object"
+      },
+      "CampaignSendRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "channel": {
+            "anyOf": [
+              {
+                "enum": [
+                  "email",
+                  "mail",
+                  "phone_text"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "send one channel's drafts; all channels when omitted",
+            "title": "Channel"
+          }
+        },
+        "title": "CampaignSendRequest",
+        "type": "object"
+      },
+      "CampaignSummary": {
+        "additionalProperties": false,
+        "properties": {
+          "claim_links": {
+            "title": "Claim Links",
+            "type": "integer"
+          },
+          "matched": {
+            "title": "Matched",
+            "type": "integer"
+          },
+          "notifications": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "description": "channel:status -> count",
+            "title": "Notifications",
+            "type": "object"
+          },
+          "registrations": {
+            "title": "Registrations",
+            "type": "integer"
+          },
+          "sample": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Sample",
+            "type": "array"
+          },
+          "simulated": {
+            "default": true,
+            "description": "sending is simulated: no message leaves the system",
+            "title": "Simulated",
+            "type": "boolean"
+          },
+          "unmatched": {
+            "title": "Unmatched",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "registrations",
+          "matched",
+          "unmatched",
+          "claim_links",
+          "notifications",
+          "sample"
+        ],
+        "title": "CampaignSummary",
+        "type": "object"
+      },
       "Caps": {
         "additionalProperties": false,
         "properties": {
@@ -2377,6 +2510,35 @@
         "title": "RecallSummary",
         "type": "object"
       },
+      "RegistrationUpload": {
+        "additionalProperties": false,
+        "properties": {
+          "accepted": {
+            "title": "Accepted",
+            "type": "integer"
+          },
+          "rejected": {
+            "description": "row number (1-based, header is row 1) and reason; first 50",
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Rejected",
+            "type": "array"
+          },
+          "rejected_total": {
+            "title": "Rejected Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "accepted",
+          "rejected",
+          "rejected_total"
+        ],
+        "title": "RegistrationUpload",
+        "type": "object"
+      },
       "RemedyOption": {
         "additionalProperties": false,
         "properties": {
@@ -4320,6 +4482,328 @@
         ]
       }
     },
+    "/v1/programs/{program_id}/campaign": {
+      "get": {
+        "operationId": "campaign_summary_v1_programs__program_id__campaign_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "program_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Program Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignSummary"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Campaign status: registrations, matches, notices by channel and status, three sample drafts",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/programs/{program_id}/campaign/drafts": {
+      "post": {
+        "operationId": "campaign_drafts_v1_programs__program_id__campaign_drafts_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "program_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Program Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CampaignDraftRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignCounts"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "the resource is not in a state that allows this"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Draft notices for matched owners (quotes the notice verbatim; one claim link per owner)",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/programs/{program_id}/campaign/match": {
+      "post": {
+        "operationId": "campaign_match_v1_programs__program_id__campaign_match_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "program_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Program Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignCounts"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Match registrations against the program's identification rules",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/programs/{program_id}/campaign/send": {
+      "post": {
+        "operationId": "campaign_send_v1_programs__program_id__campaign_send_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "program_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Program Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CampaignSendRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignCounts"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Mark drafts sent (simulated: no message leaves the system); feeds the MPR notified_* boxes",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
     "/v1/programs/{program_id}/claims": {
       "get": {
         "operationId": "list_claims_v1_programs__program_id__claims_get",
@@ -4804,6 +5288,99 @@
           }
         },
         "summary": "MPR as PDF",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/programs/{program_id}/registrations": {
+      "post": {
+        "operationId": "upload_registrations_v1_programs__program_id__registrations_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "program_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Program Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_registrations_v1_programs__program_id__registrations_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationUpload"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Content Too Large"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Upload product-owner registrations (CSV, synthetic rows only); upserts on external_ref",
         "tags": [
           "firm"
         ]

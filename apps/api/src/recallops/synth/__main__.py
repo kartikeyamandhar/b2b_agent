@@ -6,6 +6,11 @@ python -m recallops.synth --golden
     sidecar per claim under evals/adjudication/labels/ (what only the scorer reads). Photos go to
     data/generated/golden_photos/ (gitignored, reproducible from the seed).
 
+python -m recallops.synth --registrations owners.csv --program <uuid> --n 200 --seed 7
+    Synthetic product-owner registrations for the M5 campaign demo: about 70 percent own a recalled model (serial
+    inside any stated range), the rest own another model or a unit outside the range. Upload with
+    POST /v1/programs/{id}/registrations.
+
 python -m recallops.synth --program <uuid> --n 500 --seed 42 [--violations evals/adjudication/planted.yaml]
     The M2 demo (01-backend.md section 7): generates n synthetic claims from an open program's rules, stores their
     photos like portal uploads, and inserts them as submitted, so `make worker` adjudicates them. Labels are not
@@ -132,17 +137,67 @@ def load_program(program_id: UUID) -> dict[str, Any]:
     return {"engine": engine, "firm_id": firm_id, "rules": rules, "recall_date": recall_date}
 
 
+def write_registrations(path: Path, program_id: UUID, n: int, seed: int) -> dict[str, Any]:
+    import csv
+    import random
+
+    from recallops.synth.claimants import person
+    from recallops.synth.generate import date_code_inside, serial_inside, serial_outside
+
+    loaded = load_program(program_id)
+    rules = loaded["rules"]
+    models = rules.identification.models or ["UNLISTED-1"]
+    rng = random.Random(seed)
+    kinds: dict[str, int] = {}
+    with path.open("w", newline="", encoding="utf-8") as fh:
+        writer = csv.writer(fh)
+        writer.writerow(
+            ["external_ref", "name", "email", "phone", "address", "model", "serial", "date_code", "purchase_date"]
+        )
+        for i in range(n):
+            who = person(rng, f"reg{seed}", i)
+            roll = rng.random()
+            model, serial = rng.choice(models), serial_inside(rules, rng)
+            kind = "recalled"
+            if roll > 0.85:
+                model, kind = f"{models[0]}-X{rng.randint(1, 9)}", "other_model"
+            elif roll > 0.70 and rules.identification.serial_ranges:
+                serial, kind = serial_outside(rules, rng), "serial_outside"
+            kinds[kind] = kinds.get(kind, 0) + 1
+            address = f"{who['address_line1']}, {who['city']} {who['state']} {who['zip']}"
+            writer.writerow(
+                [
+                    f"R{seed}-{i:05d}",
+                    who["name"],
+                    who["email"],
+                    who["phone"],
+                    address,
+                    model,
+                    serial or "",
+                    date_code_inside(rules, rng) or "",
+                    "",
+                ]
+            )
+    return {"path": str(path), "rows": n, "kinds": kinds}
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--golden", action="store_true")
-    mode.add_argument("--program", type=UUID)
+    mode.add_argument("--registrations", type=Path, help="write a synthetic registrations CSV here (needs --program)")
+    parser.add_argument("--program", type=UUID)
     parser.add_argument("--n", type=int, default=500)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--violations", type=Path, default=ADJ_DIR / "planted.yaml")
     args = parser.parse_args(argv)
     if args.golden:
         print(json.dumps(build_golden(), indent=1))
+        return 0
+    if args.program is None:
+        parser.error("--program is required")
+    if args.registrations:
+        print(json.dumps(write_registrations(args.registrations, args.program, args.n, args.seed), indent=1))
         return 0
     from recallops.seed import insert_claims
 

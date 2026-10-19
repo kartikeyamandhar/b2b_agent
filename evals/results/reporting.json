@@ -8,7 +8,10 @@
   "boundary_events": 2,
   "remedy_claims": 40,
   "remedies_delivered": 25,
-  "other_program_deliveries": 5
+  "other_program_deliveries": 5,
+  "notices_sent": 46,
+  "notice_drafts": 5,
+  "other_program_notices": 2
  },
  "composition_ok": true,
  "months": [
@@ -19,21 +22,30 @@
     "corrections_this_period": 19,
     "cumulative_corrections": 19,
     "units_with_consumers": 53615,
-    "contacts_email": 161
+    "contacts_email": 161,
+    "notified_email": 6,
+    "notified_mail": 6,
+    "notified_phone_text": 8
    },
    "recount": {
     "total_units_affected": 53634,
     "corrections_this_period": 19,
     "cumulative_corrections": 19,
     "units_with_consumers": 53615,
-    "contacts_email": 161
+    "contacts_email": 161,
+    "notified_email": 6,
+    "notified_mail": 6,
+    "notified_phone_text": 8
    },
    "truth": {
     "total_units_affected": 53634,
     "corrections_this_period": 19,
     "cumulative_corrections": 19,
     "units_with_consumers": 53615,
-    "contacts_email": 161
+    "contacts_email": 161,
+    "notified_email": 6,
+    "notified_mail": 6,
+    "notified_phone_text": 8
    },
    "boxes": {
     "total_units_affected": 53634,
@@ -49,9 +61,9 @@
     "injuries_after": 0,
     "deaths_before": 0,
     "deaths_after": 0,
-    "notified_phone_text": 0,
-    "notified_email": 0,
-    "notified_mail": 0,
+    "notified_phone_text": 8,
+    "notified_email": 6,
+    "notified_mail": 6,
     "contacts_phone": 0,
     "contacts_email": 161,
     "contacts_mail": 0,
@@ -72,21 +84,30 @@
     "corrections_this_period": 87,
     "cumulative_corrections": 106,
     "units_with_consumers": 52528,
-    "contacts_email": 188
+    "contacts_email": 188,
+    "notified_email": 8,
+    "notified_mail": 3,
+    "notified_phone_text": 6
    },
    "recount": {
     "total_units_affected": 53634,
     "corrections_this_period": 87,
     "cumulative_corrections": 106,
     "units_with_consumers": 52528,
-    "contacts_email": 188
+    "contacts_email": 188,
+    "notified_email": 8,
+    "notified_mail": 3,
+    "notified_phone_text": 6
    },
    "truth": {
     "total_units_affected": 53634,
     "corrections_this_period": 87,
     "cumulative_corrections": 106,
     "units_with_consumers": 52528,
-    "contacts_email": 188
+    "contacts_email": 188,
+    "notified_email": 8,
+    "notified_mail": 3,
+    "notified_phone_text": 6
    },
    "boxes": {
     "total_units_affected": 53634,
@@ -102,9 +123,9 @@
     "injuries_after": 0,
     "deaths_before": 0,
     "deaths_after": 0,
-    "notified_phone_text": 0,
-    "notified_email": 0,
-    "notified_mail": 0,
+    "notified_phone_text": 6,
+    "notified_email": 8,
+    "notified_mail": 3,
     "contacts_phone": 0,
     "contacts_email": 188,
     "contacts_mail": 0,
@@ -128,21 +149,30 @@
     "corrections_this_period": 68,
     "cumulative_corrections": 174,
     "units_with_consumers": 53460,
-    "contacts_email": 153
+    "contacts_email": 153,
+    "notified_email": 1,
+    "notified_mail": 6,
+    "notified_phone_text": 2
    },
    "recount": {
     "total_units_affected": 53634,
     "corrections_this_period": 68,
     "cumulative_corrections": 174,
     "units_with_consumers": 53460,
-    "contacts_email": 153
+    "contacts_email": 153,
+    "notified_email": 1,
+    "notified_mail": 6,
+    "notified_phone_text": 2
    },
    "truth": {
     "total_units_affected": 53634,
     "corrections_this_period": 68,
     "cumulative_corrections": 174,
     "units_with_consumers": 53460,
-    "contacts_email": 153
+    "contacts_email": 153,
+    "notified_email": 1,
+    "notified_mail": 6,
+    "notified_phone_text": 2
    },
    "boxes": {
     "total_units_affected": 53634,
@@ -158,9 +188,9 @@
     "injuries_after": 0,
     "deaths_before": 0,
     "deaths_after": 0,
-    "notified_phone_text": 0,
-    "notified_email": 0,
-    "notified_mail": 0,
+    "notified_phone_text": 2,
+    "notified_email": 1,
+    "notified_mail": 6,
     "contacts_phone": 0,
     "contacts_email": 999,
     "contacts_mail": 0,

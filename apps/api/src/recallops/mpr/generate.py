@@ -5,6 +5,9 @@ Definitions (the independent recount in mpr/recount.py restates them in its own 
 - A correction is a remedy delivered, counted once, in the month of its first delivery event: a refund payout that
   reached transferred or exported (its audit row), or a repair or replacement claim a reviewer marked delivered (the
   remedy_delivered audit row on the claim).
+- notified_email, notified_mail, notified_phone_text: owners (distinct registrations) whose campaign notice on that
+  channel was sent in the month (campaigns.py; sending is simulated). A firm that notified outside the system enters
+  the box by hand, which overrides it and is noted.
 - contacts_email: claims whose first submission (claims.first_submitted_at, set once by a trigger) falls in the month;
   portal submissions count as email contacts, and a needs_info answer is not a new contact.
 - total_units_affected comes from the program's rules first (a firm can correct it), then the recall record.
@@ -52,13 +55,16 @@ MANUAL_DEFAULTS: dict[str, Any] = {
     "social_posts": {},
     "marketplace_monitoring": {},
 }
-OVERRIDABLE_COMPUTED = ("contacts_email",)
+OVERRIDABLE_COMPUTED = ("contacts_email", "notified_email", "notified_mail", "notified_phone_text")
 COMPUTED = (
     "total_units_affected",
     "corrections_this_period",
     "cumulative_corrections",
     "units_with_consumers",
     "contacts_email",
+    "notified_email",
+    "notified_mail",
+    "notified_phone_text",
 )
 BOX_ORDER = (
     "total_units_affected",
@@ -153,10 +159,22 @@ def counts(session: Session, firm_id: UUID, program_id: UUID, period: Period) ->
         ),
         params,
     ).scalar_one()
+    notified: dict[str, int] = dict(
+        session.execute(
+            text(
+                "SELECT channel, count(DISTINCT registration_id) FROM notifications WHERE firm_id = :f "
+                "AND program_id = :p AND status = 'sent' AND sent_at BETWEEN :s AND :e GROUP BY channel"
+            ),
+            params,
+        ).all()
+    )
     return {
         "corrections_this_period": int(delivered.this_period),
         "cumulative_corrections": int(delivered.cumulative),
         "contacts_email": int(contacts),
+        "notified_email": int(notified.get("email", 0)),
+        "notified_mail": int(notified.get("mail", 0)),
+        "notified_phone_text": int(notified.get("phone_text", 0)),
     }
 
 
@@ -179,7 +197,10 @@ def build_payload(
     entered = {k: v for k, v in (manual or {}).items() if k in MANUAL_DEFAULTS or k in OVERRIDABLE_COMPUTED}
     computed: dict[str, Any] = {"total_units_affected": total_units(session, firm_id, program_id)}
     computed.update(counts(session, firm_id, program_id, period))
-    boxes: dict[str, Any] = {**MANUAL_DEFAULTS, **{k: v for k, v in entered.items() if k in MANUAL_DEFAULTS}}
+    boxes: dict[str, Any] = {
+        **MANUAL_DEFAULTS,
+        **{k: v for k, v in entered.items() if k in MANUAL_DEFAULTS and k not in OVERRIDABLE_COMPUTED},
+    }
     held = boxes["units_with_manufacturer"] + boxes["units_with_distributor"] + boxes["units_with_retailers"]
     computed["units_with_consumers"] = max(
         0, computed["total_units_affected"] - held - computed["cumulative_corrections"]
@@ -191,6 +212,8 @@ def build_payload(
         "Corrections count each refund payout that reached transferred or exported, and each repair or replacement "
         "marked delivered, once, in the month of its first delivery.",
         "Portal submissions count as email contacts in the month of first submission.",
+        "Notified boxes count owners whose campaign notice was sent in the month (sending is simulated in this "
+        "system) unless entered by hand.",
         "Manual boxes use their documented defaults unless entered.",
         "units_with_consumers = total units minus units held by manufacturer, distributor, and retailers, minus "
         "cumulative corrections.",

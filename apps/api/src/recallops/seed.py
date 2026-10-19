@@ -60,6 +60,8 @@ TENANT_DELETE_ORDER = (
     "document_chunks",
     "agent_steps",
     "agent_runs",
+    "notifications",
+    "registrations",
     "payouts",
     "export_batches",
     "claim_photos",

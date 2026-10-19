@@ -33,6 +33,8 @@ TENANT_TABLES = (
     "fraud_clusters",
     "payouts",
     "export_batches",
+    "registrations",
+    "notifications",
     "mpr_reports",
     "audit_log",
     "usage_meters",
@@ -69,6 +71,9 @@ def _seed_firm(conn: object, name: str) -> FirmRows:
         "INSERT INTO payouts (firm_id, claim_id, amount_cents, method) VALUES (:f, :c, 1000, 'check_export')",
         "INSERT INTO export_batches (firm_id, created_by, row_count, total_cents, sha256, csv) "
         "VALUES (:f, 'system', 1, 1000, 'x', 'payout_id'::bytea)",
+        "INSERT INTO registrations (id, firm_id, program_id, external_ref) VALUES (:r, :f, :p, 'reg-1')",
+        "INSERT INTO notifications (firm_id, program_id, registration_id, channel, subject, body) "
+        "VALUES (:f, :p, :r, 'email', 's', 'b')",
         "INSERT INTO mpr_reports (firm_id, program_id, period_start, period_end, payload, generated_by) "
         "VALUES (:f, :p, '2026-10-01', '2026-10-31', '{}', 'system')",
         "INSERT INTO audit_log (firm_id, actor, action, target_type, target_id) VALUES (:f, 'system', 'seed', 'claim', 'x')",

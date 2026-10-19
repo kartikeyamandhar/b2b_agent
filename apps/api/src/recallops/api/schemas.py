@@ -553,3 +553,34 @@ class ExportBatchSummary(Schema):
 
 class ExportBatchList(Schema):
     items: list[ExportBatchSummary]
+
+
+Channel = Literal["email", "mail", "phone_text"]
+
+
+class RegistrationUpload(Schema):
+    accepted: int
+    rejected: list[dict[str, Any]] = Field(description="row number (1-based, header is row 1) and reason; first 50")
+    rejected_total: int
+
+
+class CampaignCounts(Schema):
+    counts: dict[str, int]
+
+
+class CampaignDraftRequest(Schema):
+    channels: list[Channel] = Field(min_length=1, max_length=3)
+
+
+class CampaignSendRequest(Schema):
+    channel: Channel | None = Field(None, description="send one channel's drafts; all channels when omitted")
+
+
+class CampaignSummary(Schema):
+    registrations: int
+    matched: int
+    unmatched: int
+    claim_links: int
+    notifications: dict[str, int] = Field(description="channel:status -> count")
+    sample: list[dict[str, Any]]
+    simulated: bool = Field(True, description="sending is simulated: no message leaves the system")

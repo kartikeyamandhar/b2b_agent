@@ -310,6 +310,45 @@ class ExportBatch(Base):
     csv: Mapped[bytes] = mapped_column(LargeBinary)
 
 
+class Registration(Base):
+    """A product owner the firm already knows (0005). Synthetic only."""
+
+    __tablename__ = "registrations"
+    id: Mapped[UUID] = _pk()
+    firm_id: Mapped[UUID]
+    program_id: Mapped[UUID]
+    external_ref: Mapped[str]
+    name: Mapped[str | None]
+    email: Mapped[str | None]
+    phone: Mapped[str | None]
+    address: Mapped[str | None]
+    model: Mapped[str | None]
+    serial: Mapped[str | None]
+    date_code: Mapped[str | None]
+    purchase_date: Mapped[date | None]
+    matched: Mapped[bool | None]
+    match_reasons: Mapped[list[str]] = mapped_column(JSONB, server_default="[]")
+    claim_id: Mapped[UUID | None]
+    created_at: Mapped[datetime] = _now()
+    updated_at: Mapped[datetime] = _now()
+
+
+class Notification(Base):
+    """One outreach per registration and channel (0005); sending is simulated."""
+
+    __tablename__ = "notifications"
+    id: Mapped[UUID] = _pk()
+    firm_id: Mapped[UUID]
+    program_id: Mapped[UUID]
+    registration_id: Mapped[UUID]
+    channel: Mapped[str]
+    status: Mapped[str] = mapped_column(server_default="draft")
+    subject: Mapped[str]
+    body: Mapped[str]
+    drafted_at: Mapped[datetime] = _now()
+    sent_at: Mapped[datetime | None]
+
+
 class MprReport(Base):
     __tablename__ = "mpr_reports"
     id: Mapped[UUID] = _pk()
@@ -357,6 +396,8 @@ TENANT_MODELS: tuple[type[Base], ...] = (
     FraudCluster,
     Payout,
     ExportBatch,
+    Registration,
+    Notification,
     MprReport,
     AuditLog,
     UsageMeter,

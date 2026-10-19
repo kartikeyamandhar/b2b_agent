@@ -52,6 +52,9 @@ EXPECTED_COMPOSITION = {
     "boundary_events": 2,
     "replayed_events": 1,
     "other_program_deliveries": 5,
+    "notices_sent": 46,
+    "notice_drafts": 5,
+    "other_program_notices": 2,
 }
 
 
@@ -71,6 +74,10 @@ class Truth:
     def __init__(self) -> None:
         self.delivered: dict[str, str] = {}
         self.contacts: Counter[str] = Counter()
+        self.notified: dict[tuple[str, str], set[str]] = {}
+
+    def notify(self, owner: str, channel: str, at: datetime) -> None:
+        self.notified.setdefault((_month(at), channel), set()).add(owner)
 
     def deliver(self, item: str, at: datetime) -> None:
         month = _month(at)
@@ -89,6 +96,7 @@ class Truth:
             "cumulative_corrections": cumulative,
             "units_with_consumers": max(0, UNITS - held - cumulative),
             "contacts_email": self.contacts[period],
+            **{f"notified_{c}": len(self.notified.get((period, c), set())) for c in ("email", "mail", "phone_text")},
         }
 
 
@@ -126,7 +134,15 @@ def build_scenario(engine: Engine) -> tuple[dict[str, int], Truth]:
     stats: Counter[str] = Counter()
     with Session(engine) as session, session.begin():
         session.execute(text("SELECT set_config('app.audit_purge', 'on', true)"))  # reset tooling only
-        for table in ("payouts", "export_batches", "audit_log", "claims", "recall_programs"):
+        for table in (
+            "notifications",
+            "registrations",
+            "payouts",
+            "export_batches",
+            "audit_log",
+            "claims",
+            "recall_programs",
+        ):
             session.execute(text(f"DELETE FROM {table} WHERE firm_id = :f"), {"f": FIRM})
         session.execute(text("DELETE FROM firms WHERE id = :f"), {"f": FIRM})
         session.execute(text("INSERT INTO firms (id, name, plan) VALUES (:f, 'MPR Eval', 'growth')"), {"f": FIRM})
@@ -281,6 +297,44 @@ def build_scenario(engine: Engine) -> tuple[dict[str, int], Truth]:
             )
             _event(session, "payout", payout_id, "payout_exported", first + timedelta(days=3))
             stats["other_program_deliveries"] += 1
+
+        channels = ("email", "mail", "phone_text")
+        for k in range(52):  # owners a campaign reached: sent in some month, a few drafts never sent
+            program = PROGRAM if k < 50 else OTHER_PROGRAM
+            reg = uuid.uuid5(NS, f"registration:{k}")
+            session.execute(
+                text(
+                    "INSERT INTO registrations (id, firm_id, program_id, external_ref, model, matched) "
+                    "VALUES (:r, :f, :p, :ref, 'TL1302Z', true)"
+                ),
+                {"r": reg, "f": FIRM, "p": program, "ref": f"reg-{k}"},
+            )
+            plans = [channels[k % 3]] + (["phone_text"] if k == 7 else [])  # one owner reached on two channels
+            for channel in plans:
+                sent = k < 45 or k == 7 or program == OTHER_PROGRAM
+                at = _ts(rng, window, 92)
+                session.execute(
+                    text(
+                        "INSERT INTO notifications (firm_id, program_id, registration_id, channel, status, subject, "
+                        "body, drafted_at, sent_at) VALUES (:f, :p, :r, :c, :s, 'Safety recall', 'notice', :d, :at)"
+                    ),
+                    {
+                        "f": FIRM,
+                        "p": program,
+                        "r": reg,
+                        "c": channel,
+                        "s": "sent" if sent else "draft",
+                        "d": at,
+                        "at": at if sent else None,
+                    },
+                )
+                if program == OTHER_PROGRAM:
+                    stats["other_program_notices"] += 1
+                elif sent:
+                    truth.notify(str(reg), channel, at)
+                    stats["notices_sent"] += 1
+                else:
+                    stats["notice_drafts"] += 1
     return dict(stats), truth
 
 
@@ -333,14 +387,16 @@ def render(result: dict[str, Any]) -> str:
         f"included, {sc['replayed_events']} replayed delivery event), {sc['remedy_claims']} repair and replacement "
         f"claims ({sc['remedies_delivered']} marked delivered), {sc['answered_next_month']} claims answered the month "
         f"after their first submission, {sc['boundary_events']} deliveries on a month boundary instant, and "
-        f"{sc['other_program_deliveries']} deliveries in another program of the same firm (must not count).",
+        f"{sc['other_program_deliveries']} deliveries in another program of the same firm (must not count); "
+        f"campaign notices: {sc['notices_sent']} sent, {sc['notice_drafts']} drafts never sent, and "
+        f"{sc['other_program_notices']} in the other program.",
         "",
         "Three counts per computed box: the SQL report (mpr/generate.py), the independent Polars recount over row "
         "exports (mpr/recount.py), and the truth the scenario builder kept. Zero tolerance.",
         "",
         "| period | corrections (report / recount / truth) | cumulative | units with consumers | email contacts "
-        "| boxes entered by hand | discrepancies |",
-        "|---|---|---|---|---|---|---|",
+        "| notified email / mail / text | boxes entered by hand | discrepancies |",
+        "|---|---|---|---|---|---|---|---|",
     ]
     for m in result["months"]:
         r, c, t = m["report"], m["recount"], m["truth"]
@@ -351,6 +407,7 @@ def render(result: dict[str, Any]) -> str:
         lines.append(
             f"| {m['period']} | {triple('corrections_this_period')} | {triple('cumulative_corrections')} | "
             f"{triple('units_with_consumers')} | {triple('contacts_email')} | "
+            f"{triple('notified_email')}; {triple('notified_mail')}; {triple('notified_phone_text')} | "
             f"{', '.join(f'{k}={v}' for k, v in m['manual'].items()) or 'none'} | {len(m['diffs'])} |"
         )
     lines += [

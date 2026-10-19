@@ -139,6 +139,10 @@ class Settings(BaseSettings):
     portal_uploads_per_token_hour: int = Field(10, description="Photo uploads per claim link per hour.")
     portal_rate_per_ip_hour: int = Field(300, description="Portal requests per client IP per hour.")
 
+    # Campaigns (M5): owner registration uploads.
+    registrations_max_bytes: int = Field(5_000_000, description="Largest registrations CSV accepted.")
+    registrations_max_rows: int = Field(50_000, description="Rows per registrations CSV.")
+
     @field_validator("storage_dir", "replay_dir", "llm_record_dir")
     @classmethod
     def _repo_relative(cls, value: Path) -> Path:

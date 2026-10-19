@@ -13,6 +13,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy import Engine
 
 from recallops import seed
+from tests.conftest import CLEAN_ORDER
 from recallops.api.export_openapi import render
 from recallops.auth.dev import DevAuthProvider, DevClaimTokenVerifier, UnsafeDevAuth
 from recallops.auth.provider import AuthError
@@ -34,19 +35,7 @@ def seeded(internal_engine_test: Engine) -> dict[str, Any]:
 
     with internal_engine_test.begin() as conn:
         conn.execute(text("SELECT set_config('app.audit_purge', 'on', true)"))
-        conn.execute(text("DELETE FROM rate_limits"))
-        for table in (
-            "agent_steps",
-            "agent_runs",
-            "claim_photos",
-            "fraud_clusters",
-            "audit_log",
-            "claims",
-            "recall_programs",
-            "usage_meters",
-            "firm_members",
-            "firms",
-        ):
+        for table in CLEAN_ORDER:  # every table, in foreign-key order, so rows other modules left cannot block it
             conn.execute(text(f"DELETE FROM {table}"))
     return seed.run(internal_engine_test, n=20)
 

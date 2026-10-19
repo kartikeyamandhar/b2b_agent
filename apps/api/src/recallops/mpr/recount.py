@@ -46,6 +46,13 @@ def export(session: Session, firm_id: UUID, program_id: UUID) -> dict[str, pl.Da
             q("SELECT target_type, target_id, action, at FROM audit_log WHERE firm_id = :f"),
             {"target_type": pl.String, "target_id": pl.String, "action": pl.String, "at": ts},
         ),
+        "notices": _frame(
+            q(
+                "SELECT registration_id::text AS owner, program_id::text AS program_id, channel, status, sent_at "
+                "FROM notifications WHERE firm_id = :f"
+            ),
+            {"owner": pl.String, "program_id": pl.String, "channel": pl.String, "status": pl.String, "sent_at": ts},
+        ).filter(pl.col("program_id") == str(program_id)),
         "program": _frame(
             session.execute(
                 text(
@@ -93,12 +100,22 @@ def recount(frames: dict[str, pl.DataFrame], period: str, manual: dict[str, Any]
     feed_units = program["feed_units"][0] if program.height else None
     total = int(rules_units) if rules_units not in (None, "") else int(feed_units or 0)
     held = sum(int((manual or {}).get(k, 0)) for k in HOLDERS)
+    notices = frames["notices"]
+    reached = (
+        notices.filter((pl.col("status") == "sent") & pl.col("sent_at").is_not_null() & (_month("sent_at") == period))
+        .group_by("channel")
+        .agg(pl.col("owner").n_unique().alias("n"))
+    )
+    per_channel = {str(row["channel"]): int(row["n"]) for row in reached.iter_rows(named=True)}
     return {
         "total_units_affected": total,
         "corrections_this_period": this_period,
         "cumulative_corrections": cumulative,
         "units_with_consumers": max(0, total - held - cumulative),
         "contacts_email": contacted,
+        "notified_email": per_channel.get("email", 0),
+        "notified_mail": per_channel.get("mail", 0),
+        "notified_phone_text": per_channel.get("phone_text", 0),
     }
 
 

@@ -430,6 +430,99 @@ def mpr_pdf(program_id: UUID, report_id: UUID, ctx: FirmDep, db: TenantDb) -> Re
     return Response(body, media_type="application/pdf")
 
 
+# Notification campaigns (M5): registrations, matching, drafts, simulated send
+
+
+def _open_program(db: Session, ctx: FirmContext, program_id: UUID) -> RecallProgram:
+    program = ProgramsRepo(db, ctx).get(program_id)
+    if program is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "program not found")
+    return program
+
+
+@firm.post(
+    "/programs/{program_id}/registrations",
+    response_model=s.RegistrationUpload,
+    responses={**NOT_FOUND, 413: {"model": s.Problem}},
+    summary="Upload product-owner registrations (CSV, synthetic rows only); upserts on external_ref",
+)
+async def upload_registrations(
+    program_id: UUID, ctx: AdminDep, file: Annotated[UploadFile, File(description="CSV with external_ref")]
+) -> s.RegistrationUpload:
+    from recallops import campaigns
+
+    settings = get_settings()
+    raw = await file.read(settings.registrations_max_bytes + 1)
+    if len(raw) > settings.registrations_max_bytes:
+        raise HTTPException(status.HTTP_413_CONTENT_TOO_LARGE, "registrations CSV too large")
+    try:
+        parsed = campaigns.parse_registrations(raw, settings.registrations_max_rows)
+    except campaigns.UploadRejected as exc:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(exc)) from exc
+    with tenant_session(ctx) as db:
+        _open_program(db, ctx, program_id)
+        accepted = campaigns.upsert_registrations(db, ctx, program_id, parsed.rows)
+    return s.RegistrationUpload(accepted=accepted, rejected=parsed.rejected[:50], rejected_total=len(parsed.rejected))
+
+
+@firm.post(
+    "/programs/{program_id}/campaign/match",
+    response_model=s.CampaignCounts,
+    responses=NOT_FOUND,
+    summary="Match registrations against the program's identification rules",
+)
+def campaign_match(program_id: UUID, ctx: AdminDep, db: TenantDb) -> s.CampaignCounts:
+    from recallops import campaigns
+
+    return s.CampaignCounts(counts=campaigns.match(db, ctx, _open_program(db, ctx, program_id)))
+
+
+@firm.post(
+    "/programs/{program_id}/campaign/drafts",
+    response_model=s.CampaignCounts,
+    responses={**NOT_FOUND, **CONFLICT},
+    summary="Draft notices for matched owners (quotes the notice verbatim; one claim link per owner)",
+)
+def campaign_drafts(program_id: UUID, body: s.CampaignDraftRequest, ctx: AdminDep, db: TenantDb) -> s.CampaignCounts:
+    from recallops import campaigns
+
+    program = _open_program(db, ctx, program_id)
+
+    def issue(n: int) -> list[tuple[UUID, str]]:
+        return program_service.issue_links(db, ctx, get_settings(), build_claim_verifier(), program, n)
+
+    try:
+        return s.CampaignCounts(counts=campaigns.draft(db, ctx, program, list(dict.fromkeys(body.channels)), issue))
+    except program_service.Conflict as exc:
+        raise HTTPException(status.HTTP_409_CONFLICT, str(exc)) from exc
+
+
+@firm.post(
+    "/programs/{program_id}/campaign/send",
+    response_model=s.CampaignCounts,
+    responses=NOT_FOUND,
+    summary="Mark drafts sent (simulated: no message leaves the system); feeds the MPR notified_* boxes",
+)
+def campaign_send(program_id: UUID, body: s.CampaignSendRequest, ctx: AdminDep, db: TenantDb) -> s.CampaignCounts:
+    from recallops import campaigns
+
+    _open_program(db, ctx, program_id)
+    return s.CampaignCounts(counts=campaigns.send(db, ctx, program_id, body.channel))
+
+
+@firm.get(
+    "/programs/{program_id}/campaign",
+    response_model=s.CampaignSummary,
+    responses=NOT_FOUND,
+    summary="Campaign status: registrations, matches, notices by channel and status, three sample drafts",
+)
+def campaign_summary(program_id: UUID, ctx: FirmDep, db: TenantDb) -> s.CampaignSummary:
+    from recallops import campaigns
+
+    _open_program(db, ctx, program_id)
+    return s.CampaignSummary(**campaigns.summary(db, ctx, program_id))
+
+
 # Payout export batches (the check/ACH fallback, invariant 9)
 
 CSV: Responses = {200: {"content": {"text/csv": {}}}}

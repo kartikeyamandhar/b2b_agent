@@ -27,6 +27,7 @@ from recallops.settings import get_settings
 log = get_logger("api.guards")
 
 PORTAL = re.compile(r"^/portal/([^/]+)(/[a-z]+)?$")
+REGISTRATIONS = re.compile(r"^/v1/programs/[^/]+/registrations$")
 FORM_OVERHEAD = 64_000
 SMALL_BODY = 64_000
 
@@ -89,6 +90,9 @@ class PortalGuard:
         if scope["type"] != "http":
             await self.app(scope, receive, send)
             return
+        if REGISTRATIONS.match(scope.get("path", "")):
+            await self._bounded(scope, receive, send, get_settings().registrations_max_bytes + FORM_OVERHEAD)
+            return
         m = PORTAL.match(scope.get("path", ""))
         if m is None:
             await self.app(scope, receive, send)
@@ -135,6 +139,28 @@ class PortalGuard:
 
         try:
             await self.app(scope, counted_receive, guarded_send)
+        except BodyTooLarge:
+            await _respond(send, 413, f"request body larger than {max_body} bytes")
+
+    async def _bounded(self, scope: Scope, receive: Any, send: Any, max_body: int) -> None:
+        """A firm upload (registrations CSV): size-bounded before parsing, like the portal's uploads."""
+        length = next((int(v) for k, v in scope.get("headers", []) if k == b"content-length" and v.isdigit()), None)
+        if length is not None and length > max_body:
+            await _respond(send, 413, f"request body larger than {max_body} bytes")
+            return
+        received = 0
+
+        async def counted_receive() -> Any:
+            nonlocal received
+            message = await receive()
+            if message["type"] == "http.request":
+                received += len(message.get("body", b""))
+                if received > max_body:
+                    raise BodyTooLarge()
+            return message
+
+        try:
+            await self.app(scope, counted_receive, send)
         except BodyTooLarge:
             await _respond(send, 413, f"request body larger than {max_body} bytes")
 
