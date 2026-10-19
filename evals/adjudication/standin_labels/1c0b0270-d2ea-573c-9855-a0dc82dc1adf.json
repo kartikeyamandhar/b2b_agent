@@ -1,0 +1,10 @@
+{
+ "claim_id": "1c0b0270-d2ea-573c-9855-a0dc82dc1adf",
+ "spec_id": "S25",
+ "program": "24082",
+ "category": "expect_deny",
+ "expected_outcome": "deny",
+ "rationale": "Date code 06/22 NH, typed and on the legible label, is one month before the July and August 2022 manufacture the notice recalls (07/22 NH or 08/22 NH), so date_code_out_of_range denies.",
+ "violations": [],
+ "subtypes": {}
+}

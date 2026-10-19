@@ -1,0 +1,10 @@
+{
+ "claim_id": "7d500029-64b9-5287-bdb8-7f6277e6c941",
+ "spec_id": "S36",
+ "program": "25206",
+ "category": "expect_deny",
+ "expected_outcome": "deny",
+ "rationale": "The March 27, 2023 purchase precedes the April 2023 start of the Amazon.com sale window in notice 25206, so purchase_before_window denies even though the model and the marked seatback pass.",
+ "violations": [],
+ "subtypes": {}
+}

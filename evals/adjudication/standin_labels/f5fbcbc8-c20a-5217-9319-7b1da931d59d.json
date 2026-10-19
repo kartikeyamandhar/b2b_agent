@@ -1,0 +1,10 @@
+{
+ "claim_id": "f5fbcbc8-c20a-5217-9319-7b1da931d59d",
+ "spec_id": "S01",
+ "program": "26007",
+ "category": "expect_approve",
+ "expected_outcome": "approve",
+ "rationale": "Notice 26007 recalls model 93550 sold at ALDI from January 2016 through December 2019 and asks for a cut-cord photo; every check passes, so the policy's clean outcome applies: approve.",
+ "violations": [],
+ "subtypes": {}
+}

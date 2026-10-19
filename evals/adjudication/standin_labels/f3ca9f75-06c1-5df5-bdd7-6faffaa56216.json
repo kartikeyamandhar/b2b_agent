@@ -1,0 +1,10 @@
+{
+ "claim_id": "f3ca9f75-06c1-5df5-bdd7-6faffaa56216",
+ "spec_id": "S37",
+ "program": "25206",
+ "category": "expect_needs_info",
+ "expected_outcome": "needs_info",
+ "rationale": "Notice 25206 says the chairs were sold exclusively on Amazon.com, so a Walmart.com purchase triggers retailer_not_listed, which is needs_info rather than deny because gift and secondhand owners exist.",
+ "violations": [],
+ "subtypes": {}
+}

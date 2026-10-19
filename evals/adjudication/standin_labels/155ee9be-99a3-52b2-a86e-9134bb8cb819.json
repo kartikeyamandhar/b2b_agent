@@ -1,0 +1,10 @@
+{
+ "claim_id": "155ee9be-99a3-52b2-a86e-9134bb8cb819",
+ "spec_id": "S30",
+ "program": "24082",
+ "category": "expect_flag",
+ "expected_outcome": "flag",
+ "rationale": "Its label photo is S29's exact image, so duplicate_photo flags it, and flag outranks the deny from the August 19, 2022 purchase before the September 2022 window (purchase_before_window).",
+ "violations": [],
+ "subtypes": {}
+}

@@ -1,0 +1,10 @@
+{
+ "claim_id": "0b093122-31f1-51c2-9c25-20a81f21cc2a",
+ "spec_id": "S12",
+ "program": "26244",
+ "category": "expect_approve",
+ "expected_outcome": "approve",
+ "rationale": "Date code 06/2025 is the last month that still counts as 'manufactured prior to July 2025', the serial starts with BN, and the June 28, 2025 TikTok.com purchase is inside the window that runs through June 2025, so the claim is clean: approve.",
+ "violations": [],
+ "subtypes": {}
+}

@@ -1,0 +1,10 @@
+{
+ "claim_id": "627c0872-efba-5672-855a-4e1a2a91dd40",
+ "spec_id": "S06",
+ "program": "26007",
+ "category": "expect_deny",
+ "expected_outcome": "deny",
+ "rationale": "The typed model 98527 is recalled, but the legible label reads 98572, a transposition that is none of 93550, 96775, or 98527 (and carries no recalled KY or 6L designation), so photo_rules.label_shows_other_model denies whatever was typed.",
+ "violations": [],
+ "subtypes": {}
+}

@@ -1,0 +1,10 @@
+{
+ "claim_id": "d2d7eb07-b9e0-580e-b88d-e3dd7844fb2d",
+ "spec_id": "S26",
+ "program": "24082",
+ "category": "expect_deny",
+ "expected_outcome": "deny",
+ "rationale": "The typed code 08/22 NH is in range, but the legible label reads 09/22 NH, outside the notice's 07/22 NH or 08/22 NH, so the unit's real date code is out of range and date_code_out_of_range denies whatever was typed.",
+ "violations": [],
+ "subtypes": {}
+}

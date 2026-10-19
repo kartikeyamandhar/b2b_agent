@@ -1,0 +1,10 @@
+{
+ "claim_id": "649fbd8d-2f92-5a46-a204-9ae585c10b0b",
+ "spec_id": "S31",
+ "program": "25206",
+ "category": "expect_approve",
+ "expected_outcome": "approve",
+ "rationale": "Notice 25206 lists AD10025GR, sold only on Amazon.com from April 2023 through August 2024, and the photo shows the removed seat with RECALLED written on the seatback as instructed, so the claim is clean: approve.",
+ "violations": [],
+ "subtypes": {}
+}

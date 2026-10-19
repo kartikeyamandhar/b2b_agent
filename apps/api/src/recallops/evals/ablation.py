@@ -487,6 +487,8 @@ def main(argv: list[str] | None = None, results_dir: Path = RESULTS) -> dict[str
         if not block.claims_file.exists():
             log_event(log, "ablation_block_missing", block=block_key)
             continue
+        if live:
+            verify_frozen(block_key)
         results[block_key] = {}
         for row in args.rows:
             if row != "rules_only" and llm is None:
@@ -514,3 +516,28 @@ def _summary(payload: dict[str, Any]) -> dict[str, Any]:
 if __name__ == "__main__":
     configure(get_settings().log_level)
     print(json.dumps(_summary(main(sys.argv[1:])), indent=1))
+
+
+MANIFEST = ADJ / "blocks.json"
+
+
+def block_hashes(block: Block) -> dict[str, str]:
+    """sha256 of the claims file and of the labels (sorted by file name), the freeze evidence (PREREG Revision 2)."""
+    labels = hashlib.sha256()
+    for path in sorted(block.labels_dir.glob("*.json")):
+        labels.update(path.name.encode())
+        labels.update(path.read_bytes())
+    return {
+        "claims_sha256": hashlib.sha256(block.claims_file.read_bytes()).hexdigest(),
+        "labels_sha256": labels.hexdigest(),
+    }
+
+
+def verify_frozen(block_key: str) -> None:
+    """Live runs refuse a block whose files changed after the freeze recorded in blocks.json."""
+    frozen = json.loads(MANIFEST.read_text(encoding="utf-8"))["blocks"].get(block_key)
+    if frozen is None:
+        raise SystemExit(f"{block_key} is not frozen in {MANIFEST}")
+    now = block_hashes(BLOCKS[block_key])
+    if {k: frozen[k] for k in now} != now:
+        raise SystemExit(f"{block_key} changed after it was frozen; log a PREREG revision before running it")

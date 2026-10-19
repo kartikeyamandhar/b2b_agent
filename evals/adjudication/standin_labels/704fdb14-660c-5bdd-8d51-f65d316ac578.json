@@ -1,0 +1,10 @@
+{
+ "claim_id": "704fdb14-660c-5bdd-8d51-f65d316ac578",
+ "spec_id": "S24",
+ "program": "24082",
+ "category": "expect_approve",
+ "expected_outcome": "approve",
+ "rationale": "Boot Barn is not named, but notice 24082 says the boots were sold at the named retailers 'and other stores nationwide', so the seller is covered and retailer_not_listed does not apply; every other check passes, so approve.",
+ "violations": [],
+ "subtypes": {}
+}

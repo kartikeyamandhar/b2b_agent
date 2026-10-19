@@ -1,0 +1,10 @@
+{
+ "claim_id": "9f67563e-2eae-5dd4-b2ed-ba9497bf09c9",
+ "spec_id": "S28",
+ "program": "24082",
+ "category": "expect_needs_info",
+ "expected_outcome": "needs_info",
+ "rationale": "The shaft label photo is unreadable, so neither the model nor the date code that decides this recall can be confirmed from it, and photo_rules.label_unreadable gives needs_info.",
+ "violations": [],
+ "subtypes": {}
+}

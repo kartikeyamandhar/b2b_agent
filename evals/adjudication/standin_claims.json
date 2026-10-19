@@ -1,0 +1,1546 @@
+{
+ "block": "standin40",
+ "author": "one sub-agent, blind to the generator, tools, and labels",
+ "claims": [
+  {
+   "claim_id": "f5fbcbc8-c20a-5217-9319-7b1da931d59d",
+   "spec_id": "S01",
+   "program": "26007",
+   "population": "standin:26007",
+   "model_claimed": "93550",
+   "serial_claimed": null,
+   "date_code_claimed": "2017-08",
+   "retailer_claimed": "ALDI",
+   "purchase_date": "2017-11-24",
+   "refund_cents": 4000,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Marisol Venterra",
+    "email": "marisol.venterra@example.com",
+    "address_line1": "2214 Larkspur Hollow Rd",
+    "city": "Brennick",
+    "state": "OH",
+    "zip": "44721",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s01"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "6aa768252b42a2c39b77adc7e649639af3d7197a28ad0f21d1cdd1a2ee43b4a5",
+     "phash": "d22d2dcaafd8c22c",
+     "path": "data/generated/standin_photos/26007/f5fbcbc8-c20a-5217-9319-7b1da931d59d_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "b94dd0f39443665009a5654b7044048597c920b45a3533e4e393c68c554eff2c",
+     "phash": "82788397f516fa49",
+     "path": "data/generated/standin_photos/26007/f5fbcbc8-c20a-5217-9319-7b1da931d59d_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "0caa9cbffa9c4f06109b384bbeb766b3efaee2765758c2c9fcfb94e210ecb3ad",
+     "phash": "9f1f40a15f2c58a7",
+     "path": "data/generated/standin_photos/26007/f5fbcbc8-c20a-5217-9319-7b1da931d59d_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "7a94107f-d2b2-5151-8e30-9aeb506c678b",
+   "spec_id": "S02",
+   "program": "26007",
+   "population": "standin:26007",
+   "model_claimed": "KY-318A",
+   "serial_claimed": null,
+   "date_code_claimed": null,
+   "retailer_claimed": "ALDI",
+   "purchase_date": "2016-01-09",
+   "refund_cents": 3999,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Theodore Quillan",
+    "email": "theodore.quillan@example.com",
+    "address_line1": "87 Saltmarsh Bend",
+    "city": "Pellham Ridge",
+    "state": "PA",
+    "zip": "17402",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s02"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "9dd198fe585ffa87402f6aed1209131d5ce94f2a6cba5786bbbb72fdd29ae0e2",
+     "phash": "d38c2c70dbc49bc3",
+     "path": "data/generated/standin_photos/26007/7a94107f-d2b2-5151-8e30-9aeb506c678b_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "320b684d02c14a9d2187da7a3ed2d9401928074f599775818bdf136698fdb8c9",
+     "phash": "e02dcbcb299e7434",
+     "path": "data/generated/standin_photos/26007/7a94107f-d2b2-5151-8e30-9aeb506c678b_destruction.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "4a1a1e18-ad30-5a5f-ac2b-1295847092d9",
+   "spec_id": "S03",
+   "program": "26007",
+   "population": "standin:26007",
+   "model_claimed": "98S27",
+   "serial_claimed": null,
+   "date_code_claimed": "2019-04",
+   "retailer_claimed": "ALDI",
+   "purchase_date": "2019-12-30",
+   "refund_cents": 4000,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Anika Drovetti",
+    "email": "anika.drovetti@example.com",
+    "address_line1": "5530 Copperwhistle Ave",
+    "city": "Durnley",
+    "state": "IL",
+    "zip": "60593",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s03"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "59457f91216359188de8a91a654d4f89d6af65f20e3e8df0c888ff458521cc42",
+     "phash": "966b6a9688d39768",
+     "path": "data/generated/standin_photos/26007/4a1a1e18-ad30-5a5f-ac2b-1295847092d9_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "cd76abb29dc729707af674b5be2f6cdc9483a5e64defcc51e203e5c8af397a12",
+     "phash": "fd7d868760b52522",
+     "path": "data/generated/standin_photos/26007/4a1a1e18-ad30-5a5f-ac2b-1295847092d9_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "37ef5ad1a3ce453ac5b1e789aa92852549fc7942ed3c519339ee4e98ef20ef66",
+     "phash": "9f1f70e0432e58a7",
+     "path": "data/generated/standin_photos/26007/4a1a1e18-ad30-5a5f-ac2b-1295847092d9_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "1df21538-4302-5817-a28c-d2f4e536b06c",
+   "spec_id": "S04",
+   "program": "26007",
+   "population": "standin:26007",
+   "model_claimed": null,
+   "serial_claimed": null,
+   "date_code_claimed": "2018-02",
+   "retailer_claimed": "Aldi",
+   "purchase_date": "2018-06-02",
+   "refund_cents": 4000,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Rufus Hallenbeck",
+    "email": "rufus.hallenbeck@example.com",
+    "address_line1": "312 Tamarind Gate Ct",
+    "city": "Ellsworth Falls",
+    "state": "GA",
+    "zip": "30349",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s04"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "9b717acdba48dbe1d8fd94101700deb1c16b8df3f8ed71ab89007cb0e41a3f45",
+     "phash": "954a68ab6c799794",
+     "path": "data/generated/standin_photos/26007/1df21538-4302-5817-a28c-d2f4e536b06c_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "ac41dda732d34575c10f59f5b8d4244c15c94beac1c4aad5dcb3f9102d4bfeb4",
+     "phash": "ce7b34d1d9b50b08",
+     "path": "data/generated/standin_photos/26007/1df21538-4302-5817-a28c-d2f4e536b06c_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "3ef24d9f7dafd79120d2cf93a3e776b58a42071f05bcaa26546c1136bb5c7bab",
+     "phash": "9f1fe0e0c36cd864",
+     "path": "data/generated/standin_photos/26007/1df21538-4302-5817-a28c-d2f4e536b06c_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "2c61ba8d-2829-5443-a275-da5170fd4da0",
+   "spec_id": "S05",
+   "program": "26007",
+   "population": "standin:26007",
+   "model_claimed": "93550",
+   "serial_claimed": null,
+   "date_code_claimed": "2015-09",
+   "retailer_claimed": "ALDI",
+   "purchase_date": "2015-12-19",
+   "refund_cents": 4000,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Delphine Marchetti-Ross",
+    "email": "delphine.marchettiross@example.com",
+    "address_line1": "19 Bramblecote Way",
+    "city": "Holloway Springs",
+    "state": "TX",
+    "zip": "75432",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s05"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "f5c1ee74c7e9c16a00162c072f4bed184e0b7c5eec8171112bdb30a18e44a331",
+     "phash": "c2253dcae3d2d22d",
+     "path": "data/generated/standin_photos/26007/2c61ba8d-2829-5443-a275-da5170fd4da0_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "c61cf32c111f3761cfa1b64677c3eb371688e7d9a8963b8227f324a36e0041c6",
+     "phash": "b410cf8b767c9632",
+     "path": "data/generated/standin_photos/26007/2c61ba8d-2829-5443-a275-da5170fd4da0_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "1706f6f1b6331a249294c3743c6dd5674ed1bae657e1673bf341e8be494c672c",
+     "phash": "9f1f60e0c77cd860",
+     "path": "data/generated/standin_photos/26007/2c61ba8d-2829-5443-a275-da5170fd4da0_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "627c0872-efba-5672-855a-4e1a2a91dd40",
+   "spec_id": "S06",
+   "program": "26007",
+   "population": "standin:26007",
+   "model_claimed": "98527",
+   "serial_claimed": null,
+   "date_code_claimed": "2019-01",
+   "retailer_claimed": "ALDI",
+   "purchase_date": "2019-05-11",
+   "refund_cents": 4000,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Gideon Paskewitz",
+    "email": "gideon.paskewitz@example.com",
+    "address_line1": "4408 Fennimore Crest Dr",
+    "city": "Lowell Bay",
+    "state": "FL",
+    "zip": "33914",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s06"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "d4a3244887eed966590d54ab874ee6def4734a44114ba59dddd8b06232c6ecdf",
+     "phash": "9393642585e5cbda",
+     "path": "data/generated/standin_photos/26007/627c0872-efba-5672-855a-4e1a2a91dd40_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "30fc4c59156284d7796b31cd5461a57f882f21a3a92b229ecafe8b5bd8596c05",
+     "phash": "ac5bca5a3ca332a5",
+     "path": "data/generated/standin_photos/26007/627c0872-efba-5672-855a-4e1a2a91dd40_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "95a67debdc5c777540cb24574aa31d5d22702c0cb18160f50ee6756a017310c6",
+     "phash": "951f50a15f2e58a7",
+     "path": "data/generated/standin_photos/26007/627c0872-efba-5672-855a-4e1a2a91dd40_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "57358129-2f76-5775-9b95-fc7aa55751f5",
+   "spec_id": "S07",
+   "program": "26007",
+   "population": "standin:26007",
+   "model_claimed": "96775",
+   "serial_claimed": null,
+   "date_code_claimed": "2016-09",
+   "retailer_claimed": "ALDI",
+   "purchase_date": "2017-02-14",
+   "refund_cents": 3999,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Priyanka Solvane",
+    "email": "priyanka.solvane@example.com",
+    "address_line1": "760 Juniper Thicket Ln",
+    "city": "Marrowfield",
+    "state": "NC",
+    "zip": "27613",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s07"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "c516180f8c0e4d206067551c0d2f507b0c27bb2721c8d75aa8ceda0e51062931",
+     "phash": "902849d68e2ff65d",
+     "path": "data/generated/standin_photos/26007/57358129-2f76-5775-9b95-fc7aa55751f5_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "1593fb81d2399afbb7f3d6336afde47490064889bd40f44d4c3972f116628d5a",
+     "phash": "e1608fce3265da35",
+     "path": "data/generated/standin_photos/26007/57358129-2f76-5775-9b95-fc7aa55751f5_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "90746df33a0833b897c40521dad80d8cad3480e29196559a729886f5d94e8bda",
+     "phash": "851f50a15f2f58a7",
+     "path": "data/generated/standin_photos/26007/57358129-2f76-5775-9b95-fc7aa55751f5_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "19fe806a-3d79-56cb-8d99-d73af10bc561",
+   "spec_id": "S08",
+   "program": "26007",
+   "population": "standin:26007",
+   "model_claimed": "93550",
+   "serial_claimed": null,
+   "date_code_claimed": "2018-05",
+   "retailer_claimed": "ALDI",
+   "purchase_date": "2018-10-30",
+   "refund_cents": 4000,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Cormac Ellingsworth",
+    "email": "cormac.ellingsworth@example.com",
+    "address_line1": "1123 Gristmill Terrace",
+    "city": "Oakhurst Glen",
+    "state": "MI",
+    "zip": "48322",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s08"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "48cbb7f8fee77edfed474f0adb15516a8901d44d6cfada464432a912c0c26662",
+     "phash": "96926969d2696d93",
+     "path": "data/generated/standin_photos/26007/19fe806a-3d79-56cb-8d99-d73af10bc561_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "4b8ea560c39b8317da5e94879c8eb7a56e4d396c71e431862c5f9c4099ab7bd1",
+     "phash": "e161979a1ba59e61",
+     "path": "data/generated/standin_photos/26007/19fe806a-3d79-56cb-8d99-d73af10bc561_destruction.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "0fe1c263-b3d2-5888-8005-9b2a22b9ebf2",
+   "spec_id": "S09",
+   "program": "26007",
+   "population": "standin:26007",
+   "model_claimed": "98527",
+   "serial_claimed": null,
+   "date_code_claimed": "2017-03",
+   "retailer_claimed": "ALDI",
+   "purchase_date": "2017-07-04",
+   "refund_cents": 4000,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Beatrix Hallowell",
+    "email": "beatrix.hallowell@example.com",
+    "address_line1": "58 Pennywort Circle",
+    "city": "Ravensdale",
+    "state": "WI",
+    "zip": "53188",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s09"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "725d4a0557fe761037e25202ecccb61dca92840df2d5d9bf257d640b3aa8841b",
+     "phash": "94ce6b268f6495cc",
+     "path": "data/generated/standin_photos/26007/0fe1c263-b3d2-5888-8005-9b2a22b9ebf2_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "77b31d7e316df79216bb53fc61bb350472ae2d880c8c8378a1e83efad316576b",
+     "phash": "b4cac38c76ac71a6",
+     "path": "data/generated/standin_photos/26007/0fe1c263-b3d2-5888-8005-9b2a22b9ebf2_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "9e1c3a8535c9d9a8c12ce6f04fafc57a79d21fa1774c6f04ec141b9c056e6789",
+     "phash": "9f1f61e0472cd8a6",
+     "path": "data/generated/standin_photos/26007/0fe1c263-b3d2-5888-8005-9b2a22b9ebf2_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "d7c5dc8d-bb03-5f6f-8fbf-195b17b6a5e2",
+   "spec_id": "S10",
+   "program": "26007",
+   "population": "standin:26007",
+   "model_claimed": "98527",
+   "serial_claimed": null,
+   "date_code_claimed": "2017-03",
+   "retailer_claimed": "ALDI",
+   "purchase_date": "2018-01-20",
+   "refund_cents": 4000,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Lorenzo Tavishi",
+    "email": "lorenzo.tavishi@example.com",
+    "address_line1": "2901 Kestrel Run Pkwy",
+    "city": "Saddlebrook",
+    "state": "MO",
+    "zip": "63376",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s10"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "725d4a0557fe761037e25202ecccb61dca92840df2d5d9bf257d640b3aa8841b",
+     "phash": "94ce6b268f6495cc",
+     "path": "data/generated/standin_photos/26007/d7c5dc8d-bb03-5f6f-8fbf-195b17b6a5e2_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "2f702b8de6de7bea4a861b235956a5aea787113b5476517928c3ba943f215493",
+     "phash": "9887246399dce2fc",
+     "path": "data/generated/standin_photos/26007/d7c5dc8d-bb03-5f6f-8fbf-195b17b6a5e2_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "e7f7b39ffa62740cf2be90b2135c6fdaee02dc44485296c761f11c4e30354f2d",
+     "phash": "9f1f40a15f2c58a7",
+     "path": "data/generated/standin_photos/26007/d7c5dc8d-bb03-5f6f-8fbf-195b17b6a5e2_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "c7692196-6282-5bea-8dcd-7de75f8fccdb",
+   "spec_id": "S11",
+   "program": "26244",
+   "population": "standin:26244",
+   "model_claimed": "MK04",
+   "serial_claimed": "BN2410A07731",
+   "date_code_claimed": "10/2024",
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2024-11-29",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Wren Castellanos-Pike",
+    "email": "wren.castellanospike@example.com",
+    "address_line1": "640 Driftwood Arbor St",
+    "city": "Calloway Point",
+    "state": "CA",
+    "zip": "94539",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s11"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "91d71290224013a5a35d53b9a08dcbbd15cbd6cfb04c7e31b09708b34a292565",
+     "phash": "c23d2d907cc8da2f",
+     "path": "data/generated/standin_photos/26244/c7692196-6282-5bea-8dcd-7de75f8fccdb_label.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "e19481df5830629724b1cc8ff69c79b4967b89eca3a16aef8b3b2784cb2efb30",
+     "phash": "9f1e70e0c367d864",
+     "path": "data/generated/standin_photos/26244/c7692196-6282-5bea-8dcd-7de75f8fccdb_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "0b093122-31f1-51c2-9c25-20a81f21cc2a",
+   "spec_id": "S12",
+   "program": "26244",
+   "population": "standin:26244",
+   "model_claimed": "MK04",
+   "serial_claimed": "BN2506C11408",
+   "date_code_claimed": "06/2025",
+   "retailer_claimed": "TikTok.com",
+   "purchase_date": "2025-06-28",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Osric Bellamonte",
+    "email": "osric.bellamonte@example.com",
+    "address_line1": "1777 Sunvale Orchard Rd",
+    "city": "Pinecrest Hollow",
+    "state": "WA",
+    "zip": "98052",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s12"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "f0d38d38c5b8dbc8f35e1cfbd33ab2c18670ca0f6cee4a7497c923dc87c40beb",
+     "phash": "95f06a9f450b9d70",
+     "path": "data/generated/standin_photos/26244/0b093122-31f1-51c2-9c25-20a81f21cc2a_label.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "a8394cb37a391484efdcdaef1b6090e546972a6a47bec0b5d5679d82d55a8cc9",
+     "phash": "951f50a157af5827",
+     "path": "data/generated/standin_photos/26244/0b093122-31f1-51c2-9c25-20a81f21cc2a_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "f6dc823a-3101-524c-8d4e-663a682e386c",
+   "spec_id": "S13",
+   "program": "26244",
+   "population": "standin:26244",
+   "model_claimed": "MKO4",
+   "serial_claimed": "BN2408B02265",
+   "date_code_claimed": "08/2024",
+   "retailer_claimed": "TEMU.com",
+   "purchase_date": "2024-09-02",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Halima Varnsworth",
+    "email": "halima.varnsworth@example.com",
+    "address_line1": "23 Thistledown Mews",
+    "city": "Clearbrook",
+    "state": "AZ",
+    "zip": "85226",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s13"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "cb509e7e9508f2cc9e512be550dd3e96250bfb8185f4a531e5c56a2b0cf67b4b",
+     "phash": "9b64659bde28a265",
+     "path": "data/generated/standin_photos/26244/f6dc823a-3101-524c-8d4e-663a682e386c_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "6989a419-d415-5217-9acb-c5230fb9ed9c",
+   "spec_id": "S14",
+   "program": "26244",
+   "population": "standin:26244",
+   "model_claimed": null,
+   "serial_claimed": "BN2412D19950",
+   "date_code_claimed": "12/2024",
+   "retailer_claimed": "Shopify.com",
+   "purchase_date": "2025-02-14",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Jasper Moravec-Lind",
+    "email": "jasper.moraveclind@example.com",
+    "address_line1": "9015 Ironleaf Ridge Ln",
+    "city": "Westerfold",
+    "state": "CO",
+    "zip": "80134",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s14"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "6fea10f8a2f5dd3234177f24eed806528676a1c6e56bf45d83c6932f9834b8d2",
+     "phash": "9e96696196d99c94",
+     "path": "data/generated/standin_photos/26244/6989a419-d415-5217-9acb-c5230fb9ed9c_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "af40e444-ee8c-5312-9a21-b041a4abd776",
+   "spec_id": "S15",
+   "program": "26244",
+   "population": "standin:26244",
+   "model_claimed": "MK04",
+   "serial_claimed": "BM2411A05582",
+   "date_code_claimed": "11/2024",
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2025-01-06",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Celestine Abernook",
+    "email": "celestine.abernook@example.com",
+    "address_line1": "432 Marigold Ferry Rd",
+    "city": "Hartwell Cove",
+    "state": "NV",
+    "zip": "89052",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s15"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "e7f48d84ab7dfebdf14df8ac6bea353a3b931232252e40ec2ef36c827b6a2161",
+     "phash": "c93436c9c9cac937",
+     "path": "data/generated/standin_photos/26244/af40e444-ee8c-5312-9a21-b041a4abd776_label.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "13b183e769d63d18ffe808a185a2333305a745da5ca4898c22fa67cc53a08f8c",
+     "phash": "9f1fe0e0c367d064",
+     "path": "data/generated/standin_photos/26244/af40e444-ee8c-5312-9a21-b041a4abd776_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "f02db4a5-2e29-550f-94d5-bd0d6700a91d",
+   "spec_id": "S16",
+   "program": "26244",
+   "population": "standin:26244",
+   "model_claimed": "MK04",
+   "serial_claimed": "BN2507A00312",
+   "date_code_claimed": "07/2025",
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2025-07-19",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Tobias Kettleby",
+    "email": "tobias.kettleby@example.com",
+    "address_line1": "1601 Starling Reach Dr",
+    "city": "Amberlane",
+    "state": "OR",
+    "zip": "97229",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s16"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "decf45f14df4d3bd5991eaff5d9759d26550c1a191b26693dbd7df3709cf102a",
+     "phash": "9795686b6568b193",
+     "path": "data/generated/standin_photos/26244/f02db4a5-2e29-550f-94d5-bd0d6700a91d_label.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "e0beec4f1e526643a8cb81753bcd001136f81b5be1041dce20e9dae241cc6313",
+     "phash": "9f1f60e0c367d864",
+     "path": "data/generated/standin_photos/26244/f02db4a5-2e29-550f-94d5-bd0d6700a91d_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "184e65fa-ab91-5849-b013-2fa2af77e9d2",
+   "spec_id": "S17",
+   "program": "26244",
+   "population": "standin:26244",
+   "model_claimed": "MK04",
+   "serial_claimed": "BN2503C14476",
+   "date_code_claimed": "03/2025",
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2025-04-22",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Yusra Delacourt",
+    "email": "yusra.delacourt@example.com",
+    "address_line1": "77 Ashgrove Pocket Rd",
+    "city": "Fallowmere",
+    "state": "MN",
+    "zip": "55124",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s17"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "ea05b4e85d66a9f4192b1c989afdea0be07a423e8204ff32fbbd762f780278ae",
+     "phash": "96cb697793999206",
+     "path": "data/generated/standin_photos/26244/184e65fa-ab91-5849-b013-2fa2af77e9d2_label.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "bb717c850a8dffbf4b8964a7724d6b7769548ea1b5dae8af5a8c39e208137b88",
+     "phash": "bf1f60e0c367d064",
+     "path": "data/generated/standin_photos/26244/184e65fa-ab91-5849-b013-2fa2af77e9d2_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "453c4ec8-a9a6-5e9c-98a9-44e1f65fe3ee",
+   "spec_id": "S18",
+   "program": "26244",
+   "population": "standin:26244",
+   "model_claimed": "MK04",
+   "serial_claimed": "BN2501B08803",
+   "date_code_claimed": "01/2025",
+   "retailer_claimed": "Walmart.com",
+   "purchase_date": "2025-03-09",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Emeric Saltonstall",
+    "email": "emeric.saltonstall@example.com",
+    "address_line1": "3350 Bluegill Shoals Ave",
+    "city": "Northcote",
+    "state": "NJ",
+    "zip": "08540",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s18"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "902a397d28a12710061b2aa5b2478f7280b5d13603f7668dfe00d95c744d238d",
+     "phash": "9ac62c309362dbcf",
+     "path": "data/generated/standin_photos/26244/453c4ec8-a9a6-5e9c-98a9-44e1f65fe3ee_label.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "56203f980de11e77748c9c63bd6bbc40552c7cb1e12e5e8aed78b77ea3f3c28b",
+     "phash": "951a51f043f758f4",
+     "path": "data/generated/standin_photos/26244/453c4ec8-a9a6-5e9c-98a9-44e1f65fe3ee_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "c02b790b-365e-5529-aa5e-52f3a264772b",
+   "spec_id": "S19",
+   "program": "26244",
+   "population": "standin:26244",
+   "model_claimed": "MK04",
+   "serial_claimed": "BN2411C16624",
+   "date_code_claimed": "11/2024",
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2024-12-20",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Ingrid Pemberly-Shaw",
+    "email": "ingrid.pemberlyshaw@example.com",
+    "address_line1": "905 Cinderwood Lane",
+    "city": "Lakemont Vale",
+    "state": "VA",
+    "zip": "22193",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s19"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "4b35aca423262015732cfa64da690aa0050a73716034bc666528af1b8ca7e9c2",
+     "phash": "cb6434d9cb998b26",
+     "path": "data/generated/standin_photos/26244/c02b790b-365e-5529-aa5e-52f3a264772b_label.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "3d8252a9a0c1c325573a03ba894380db0f1f20dfc7bc0b3e52595a127d7e12fe",
+     "phash": "9f1e70e0c367d864",
+     "path": "data/generated/standin_photos/26244/c02b790b-365e-5529-aa5e-52f3a264772b_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "66997b46-6fb9-50a9-92c1-636e69e52dc5",
+   "spec_id": "S20",
+   "program": "26244",
+   "population": "standin:26244",
+   "model_claimed": "MK04",
+   "serial_claimed": "BN2502A09917",
+   "date_code_claimed": "02/2025",
+   "retailer_claimed": "eBay",
+   "purchase_date": "2025-05-03",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Rafferty Nolasco",
+    "email": "rafferty.nolasco@example.com",
+    "address_line1": "905 Cinderwood Lane",
+    "city": "Lakemont Vale",
+    "state": "VA",
+    "zip": "22193",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s20"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "f339b7ffc1874a353f2104a5667e3e60bb132e67e33ca056e61e79a125f8ea50",
+     "phash": "93332df0b3c49aa5",
+     "path": "data/generated/standin_photos/26244/66997b46-6fb9-50a9-92c1-636e69e52dc5_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "a703c259-dbc0-5421-86e3-8691aa4ac97d",
+   "spec_id": "S21",
+   "program": "24082",
+   "population": "standin:24082",
+   "model_claimed": "SE4570",
+   "serial_claimed": null,
+   "date_code_claimed": "07/22 NH",
+   "retailer_claimed": "Grainger",
+   "purchase_date": "2022-10-14",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Dashiell Ormsby",
+    "email": "dashiell.ormsby@example.com",
+    "address_line1": "2480 Haybale Junction Rd",
+    "city": "Cottonwood Flats",
+    "state": "TX",
+    "zip": "76117",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s21"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "238b1638eaa9cd1cdbd3281243fa158a2a2d5a6bc249925d0ac83ee4eabba21e",
+     "phash": "9a5a65619e9ba296",
+     "path": "data/generated/standin_photos/24082/a703c259-dbc0-5421-86e3-8691aa4ac97d_label.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "7344e94337d583fb37df9096dc81ba7994d4206d9177a04cf069bfecbda17a54",
+     "phash": "9f1e60e04377d8e4",
+     "path": "data/generated/standin_photos/24082/a703c259-dbc0-5421-86e3-8691aa4ac97d_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "78e4eb34-4813-5d34-bc8d-39712d49afda",
+   "spec_id": "S22",
+   "program": "24082",
+   "population": "standin:24082",
+   "model_claimed": "SE4570",
+   "serial_claimed": null,
+   "date_code_claimed": "08/22 NH",
+   "retailer_claimed": "justinboots.com",
+   "purchase_date": "2023-09-30",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Leontyne Barrowcliffe",
+    "email": "leontyne.barrowcliffe@example.com",
+    "address_line1": "141 Quarrystone Pl",
+    "city": "Granite Hollow",
+    "state": "KY",
+    "zip": "40509",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s22"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "c1593b6cb8babec9b4d35ae47651e36eb3a67a941ccf83dca0c1a4f985600a5b",
+     "phash": "c07d35c02fc8d32f",
+     "path": "data/generated/standin_photos/24082/78e4eb34-4813-5d34-bc8d-39712d49afda_label.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "831c59b40f88e28deafedf612ca6e95f79e157f194643df0e988492139283a4b",
+     "phash": "951f51a147af50a7",
+     "path": "data/generated/standin_photos/24082/78e4eb34-4813-5d34-bc8d-39712d49afda_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "51802cab-eca9-553f-8714-e524f20edd54",
+   "spec_id": "S23",
+   "program": "24082",
+   "population": "standin:24082",
+   "model_claimed": "SE457O",
+   "serial_claimed": null,
+   "date_code_claimed": "08/22 NH",
+   "retailer_claimed": "Saf-Gard Safety Shoe Company",
+   "purchase_date": "2023-02-06",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Mateo Vandersloot",
+    "email": "mateo.vandersloot@example.com",
+    "address_line1": "6620 Rivetworks Blvd",
+    "city": "Forgeton",
+    "state": "IN",
+    "zip": "46224",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s23"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "0e1e1ed92065224f7d78c2aad7790ab16da0e7befa944d7e88d0255978ac3dd3",
+     "phash": "c8c0373ec1379fc1",
+     "path": "data/generated/standin_photos/24082/51802cab-eca9-553f-8714-e524f20edd54_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "704fdb14-660c-5bdd-8d51-f65d316ac578",
+   "spec_id": "S24",
+   "program": "24082",
+   "population": "standin:24082",
+   "model_claimed": "SE4570",
+   "serial_claimed": null,
+   "date_code_claimed": "07/22 NH",
+   "retailer_claimed": "Boot Barn",
+   "purchase_date": "2023-05-20",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Shanice Albermarle-Tate",
+    "email": "shanice.albermarletate@example.com",
+    "address_line1": "389 Prairiefire Ct",
+    "city": "Dustwater",
+    "state": "OK",
+    "zip": "73099",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s24"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "c6226f6fabd4c12ca893830b371ab85335527bd69cdc61d507df1f610c519dba",
+     "phash": "cb3c34cbc9316b64",
+     "path": "data/generated/standin_photos/24082/704fdb14-660c-5bdd-8d51-f65d316ac578_label.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "15710f8be69168de96d3a6a79d88a3e3e2dc3c9658a0784229775aba5be59672",
+     "phash": "951f50a557ae5827",
+     "path": "data/generated/standin_photos/24082/704fdb14-660c-5bdd-8d51-f65d316ac578_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "1c0b0270-d2ea-573c-9855-a0dc82dc1adf",
+   "spec_id": "S25",
+   "program": "24082",
+   "population": "standin:24082",
+   "model_claimed": "SE4570",
+   "serial_claimed": null,
+   "date_code_claimed": "06/22 NH",
+   "retailer_claimed": "Grainger",
+   "purchase_date": "2022-11-03",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Hollis Fenwright",
+    "email": "hollis.fenwright@example.com",
+    "address_line1": "1218 Steelbridge Row",
+    "city": "Ironvale",
+    "state": "AL",
+    "zip": "35216",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s25"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "04a11f68afd6163f34d984f31e1860674f2b18784cb64aa64f81a13edcd66321",
+     "phash": "96616196dcb7ce60",
+     "path": "data/generated/standin_photos/24082/1c0b0270-d2ea-573c-9855-a0dc82dc1adf_label.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "4c621a54877a33ec8413eb4ca1372dc3f73f8a606788985294c434c28f8f8860",
+     "phash": "8f1f70f0c324d867",
+     "path": "data/generated/standin_photos/24082/1c0b0270-d2ea-573c-9855-a0dc82dc1adf_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "d2d7eb07-b9e0-580e-b88d-e3dd7844fb2d",
+   "spec_id": "S26",
+   "program": "24082",
+   "population": "standin:24082",
+   "model_claimed": "SE4570",
+   "serial_claimed": null,
+   "date_code_claimed": "08/22 NH",
+   "retailer_claimed": "Safety Shoes Distributors",
+   "purchase_date": "2022-12-09",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Petra Kowalczyk-Ames",
+    "email": "petra.kowalczykames@example.com",
+    "address_line1": "47 Hammerstone Alley",
+    "city": "Brickhaven",
+    "state": "OH",
+    "zip": "43230",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s26"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "8b6328cc68e2df225f28a94a66214291ebd8d6bfc3717dce91f5258d2bed247d",
+     "phash": "970e6a378ea591ca",
+     "path": "data/generated/standin_photos/24082/d2d7eb07-b9e0-580e-b88d-e3dd7844fb2d_label.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "2b17a5311c2d942ca2e32e6ff10edc3631d131c5478dca5ce00950ec6d49791e",
+     "phash": "9f1f60e0c7acd826",
+     "path": "data/generated/standin_photos/24082/d2d7eb07-b9e0-580e-b88d-e3dd7844fb2d_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "c61c190a-fa31-5044-86fd-b1f6fb515e24",
+   "spec_id": "S27",
+   "program": "24082",
+   "population": "standin:24082",
+   "model_claimed": "SE4570",
+   "serial_claimed": null,
+   "date_code_claimed": "07/22 NH",
+   "retailer_claimed": "grainger.com",
+   "purchase_date": "2022-08-26",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Augustin Rennerfeldt",
+    "email": "augustin.rennerfeldt@example.com",
+    "address_line1": "8802 Coalchute Dr",
+    "city": "Pitchfork Mesa",
+    "state": "NM",
+    "zip": "87121",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s27"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "316c33ac46fd3068bf8e23caf5201ee571fe183f21c83d6e5a9de89d6264f001",
+     "phash": "96856d3ae73898c3",
+     "path": "data/generated/standin_photos/24082/c61c190a-fa31-5044-86fd-b1f6fb515e24_label.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "31ab7ae57b9572fee6b7d5eb05da728fe3f78dd1803f82fac2f7e72316c559a3",
+     "phash": "9f1e70e0c367d864",
+     "path": "data/generated/standin_photos/24082/c61c190a-fa31-5044-86fd-b1f6fb515e24_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "9f67563e-2eae-5dd4-b2ed-ba9497bf09c9",
+   "spec_id": "S28",
+   "program": "24082",
+   "population": "standin:24082",
+   "model_claimed": "SE4570",
+   "serial_claimed": null,
+   "date_code_claimed": "07/22 NH",
+   "retailer_claimed": "Grainger",
+   "purchase_date": "2023-01-17",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Marguerite Oyelaran",
+    "email": "marguerite.oyelaran@example.com",
+    "address_line1": "530 Lumberjack Spur",
+    "city": "Timberwick",
+    "state": "ME",
+    "zip": "04074",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s28"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "fff29388b7b03716d66fc8a772ffe2d0178c3bf254b24bd61c095b16595742d6",
+     "phash": "96d26961964db396",
+     "path": "data/generated/standin_photos/24082/9f67563e-2eae-5dd4-b2ed-ba9497bf09c9_label.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "ed2908e7-84b2-5fa5-91a8-919a2cf990ad",
+   "spec_id": "S29",
+   "program": "24082",
+   "population": "standin:24082",
+   "model_claimed": "SE4570",
+   "serial_claimed": null,
+   "date_code_claimed": "08/22 NH",
+   "retailer_claimed": "justinboots.com",
+   "purchase_date": "2023-03-11",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Fitzgerald Dunmore",
+    "email": "fitzgerald.dunmore@example.com",
+    "address_line1": "2015 Welders Lane",
+    "city": "Sparkton",
+    "state": "LA",
+    "zip": "70816",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s29"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "d87fd6f84ae5e991b867445d03449928fcf9722c23de54d2c013e54a75713f5f",
+     "phash": "c2153de8678cc2e7",
+     "path": "data/generated/standin_photos/24082/ed2908e7-84b2-5fa5-91a8-919a2cf990ad_label.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "2f2bd70434897178b019b8a8723d2e8b694e0c5d9b31a634960b90ba3e96f044",
+     "phash": "954a51f045f74cf2",
+     "path": "data/generated/standin_photos/24082/ed2908e7-84b2-5fa5-91a8-919a2cf990ad_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "155ee9be-99a3-52b2-a86e-9134bb8cb819",
+   "spec_id": "S30",
+   "program": "24082",
+   "population": "standin:24082",
+   "model_claimed": "SE4570",
+   "serial_claimed": null,
+   "date_code_claimed": "08/22 NH",
+   "retailer_claimed": "Grainger",
+   "purchase_date": "2022-08-19",
+   "refund_cents": null,
+   "remedy": "replacement",
+   "claimant": {
+    "name": "Nadia Brennerhoff",
+    "email": "nadia.brennerhoff@example.com",
+    "address_line1": "714 Rebar Crossing",
+    "city": "Girderville",
+    "state": "SC",
+    "zip": "29681",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s30"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "d87fd6f84ae5e991b867445d03449928fcf9722c23de54d2c013e54a75713f5f",
+     "phash": "c2153de8678cc2e7",
+     "path": "data/generated/standin_photos/24082/155ee9be-99a3-52b2-a86e-9134bb8cb819_label.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "b3389a379fc2299db75ad93989787774d4a68838bb3df160423531644b1c6734",
+     "phash": "9f1e70f04167d8e4",
+     "path": "data/generated/standin_photos/24082/155ee9be-99a3-52b2-a86e-9134bb8cb819_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "649fbd8d-2f92-5a46-a204-9ae585c10b0b",
+   "spec_id": "S31",
+   "program": "25206",
+   "population": "standin:25206",
+   "model_claimed": "AD10025GR",
+   "serial_claimed": null,
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2023-08-12",
+   "refund_cents": 11999,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Clementine Ashworth-Ruiz",
+    "email": "clementine.ashworthruiz@example.com",
+    "address_line1": "1450 Lullaby Meadow Dr",
+    "city": "Cradleford",
+    "state": "UT",
+    "zip": "84043",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s31"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "e8e8064a3c74083ff2f4b1383cfb1858bc9e3b112e388ed1b50553a518f0b95f",
+     "phash": "95236b9e8cf39468",
+     "path": "data/generated/standin_photos/25206/649fbd8d-2f92-5a46-a204-9ae585c10b0b_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "d914ef8c35c10e6a21013f77b6678886abc383f89bc5f38a2db1446df7bddd2b",
+     "phash": "e4318fce9965d823",
+     "path": "data/generated/standin_photos/25206/649fbd8d-2f92-5a46-a204-9ae585c10b0b_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "85e463ae19077e05b41a112622719fca101789cb43c865b6f4d480bf4f3f19de",
+     "phash": "9f1e61e0c767c0e4",
+     "path": "data/generated/standin_photos/25206/649fbd8d-2f92-5a46-a204-9ae585c10b0b_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "2d7ee96b-85a0-55c3-9488-9c1afaade85b",
+   "spec_id": "S32",
+   "program": "25206",
+   "population": "standin:25206",
+   "model_claimed": "BB4640CF",
+   "serial_claimed": null,
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2024-08-31",
+   "refund_cents": 15999,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Benedikt Sorrentine",
+    "email": "benedikt.sorrentine@example.com",
+    "address_line1": "2207 Peppercorn Hollow",
+    "city": "Spicewood Bend",
+    "state": "TN",
+    "zip": "37027",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s32"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "8a7c3f5e24ae19b4a26b1587afac40087dba1a8d41629bc448990dc1fe3b6cc8",
+     "phash": "9a6564d69790df24",
+     "path": "data/generated/standin_photos/25206/2d7ee96b-85a0-55c3-9488-9c1afaade85b_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "2c1973fd7b507fa622276ed88955bb1dcf7984118a5b3f61381d09c74fbe933a",
+     "phash": "e685c36de90d34b2",
+     "path": "data/generated/standin_photos/25206/2d7ee96b-85a0-55c3-9488-9c1afaade85b_destruction.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "38ccadb7-8e58-59ae-82bc-8455cba7d371",
+   "spec_id": "S33",
+   "program": "25206",
+   "population": "standin:25206",
+   "model_claimed": "AD1OO14SL",
+   "serial_claimed": null,
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2024-01-05",
+   "refund_cents": 8999,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Ottilie Vanderhoek",
+    "email": "ottilie.vanderhoek@example.com",
+    "address_line1": "318 Butterchurn Rd",
+    "city": "Dairyvale",
+    "state": "IA",
+    "zip": "50266",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s33"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "2a6067a8e4259a3c26b854074bae452fbf87206670355f2cfd484c12aef62668",
+     "phash": "cb2674cbcb19ae24",
+     "path": "data/generated/standin_photos/25206/38ccadb7-8e58-59ae-82bc-8455cba7d371_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "7423e0489db62a337185f565dbf0c208321981016bdac360147956751eb92b0d",
+     "phash": "c7929e9009bc7a2f",
+     "path": "data/generated/standin_photos/25206/38ccadb7-8e58-59ae-82bc-8455cba7d371_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "4c1e5b59ab678007d14a014ca78a9308580724bdeea7b31a6f714e8ad00ccb9e",
+     "phash": "9f1f60e0c367d864",
+     "path": "data/generated/standin_photos/25206/38ccadb7-8e58-59ae-82bc-8455cba7d371_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "46170806-b734-5f01-98f4-610282f32465",
+   "spec_id": "S34",
+   "program": "25206",
+   "population": "standin:25206",
+   "model_claimed": null,
+   "serial_claimed": null,
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon",
+   "purchase_date": "2023-04-03",
+   "refund_cents": 19999,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Ezequiel Montclair",
+    "email": "ezequiel.montclair@example.com",
+    "address_line1": "4091 Rattlebrook Ct",
+    "city": "Willowmere",
+    "state": "MD",
+    "zip": "21044",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s34"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "f4bb8c7c62c26c4404e8e0f0a176fe214cc2d74c219f62173a6ad5c62b271f73",
+     "phash": "9c6b6b9098379669",
+     "path": "data/generated/standin_photos/25206/46170806-b734-5f01-98f4-610282f32465_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "93978af781252b12c31ad1eb9ca49a8ed66a203fd834172c5979ade2933fdb76",
+     "phash": "f290ccc385d5e497",
+     "path": "data/generated/standin_photos/25206/46170806-b734-5f01-98f4-610282f32465_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "f394fe235688051eb6c50c1b8ad438e81b1014f2aab4c89efc0f256e6f7e1f5a",
+     "phash": "9f1fe0e0c364d8e4",
+     "path": "data/generated/standin_photos/25206/46170806-b734-5f01-98f4-610282f32465_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "9136a7e5-6258-5eba-bed1-d03e205f467d",
+   "spec_id": "S35",
+   "program": "25206",
+   "population": "standin:25206",
+   "model_claimed": "AD10007GR",
+   "serial_claimed": null,
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2023-09-21",
+   "refund_cents": 9999,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Saoirse Delgadillo-Penn",
+    "email": "saoirse.delgadillopenn@example.com",
+    "address_line1": "1702 Mossbank Trail",
+    "city": "Fernhollow",
+    "state": "MA",
+    "zip": "01803",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s35"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "ae084e159322ab7bb8c20d118d0c8734c4a777d5dfeaf6907d1e28d793ab65d8",
+     "phash": "965e6b699c31b292",
+     "path": "data/generated/standin_photos/25206/9136a7e5-6258-5eba-bed1-d03e205f467d_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "df39eb5a971e217723cfdfb8362b4a6f6eec2fa6f6ba550cc22dad0179a3af4b",
+     "phash": "b43587d30dcde138",
+     "path": "data/generated/standin_photos/25206/9136a7e5-6258-5eba-bed1-d03e205f467d_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "334781be6d3d013d99cd5435dc194a7e3e26b6fbdf0fc23d1d99833b163f45a9",
+     "phash": "9f1e60e0c767d0e4",
+     "path": "data/generated/standin_photos/25206/9136a7e5-6258-5eba-bed1-d03e205f467d_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "7d500029-64b9-5287-bdb8-7f6277e6c941",
+   "spec_id": "S36",
+   "program": "25206",
+   "population": "standin:25206",
+   "model_claimed": "AD10004LS",
+   "serial_claimed": null,
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2023-03-27",
+   "refund_cents": 12999,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Barnaby Ostrowski",
+    "email": "barnaby.ostrowski@example.com",
+    "address_line1": "255 Silverbirch Commons",
+    "city": "Elmstead",
+    "state": "CT",
+    "zip": "06460",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s36"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "20a7b89268463b44c46da726c51bd952cdc27b6db8112f47f046f6a78f1fa9f2",
+     "phash": "962d61929e734d6c",
+     "path": "data/generated/standin_photos/25206/7d500029-64b9-5287-bdb8-7f6277e6c941_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "8a3d2fa3270a593c24053db9072cf9aee83bcf2c640ccba35170544bba7df025",
+     "phash": "b43087d758c3cfc1",
+     "path": "data/generated/standin_photos/25206/7d500029-64b9-5287-bdb8-7f6277e6c941_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "06fd79da355dbd137856cf503ae7a1a2c947758eb7ba26c26fd54d5b2533b554",
+     "phash": "bf1e61e1c764c0e4",
+     "path": "data/generated/standin_photos/25206/7d500029-64b9-5287-bdb8-7f6277e6c941_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "f3ca9f75-06c1-5df5-bdd7-6faffaa56216",
+   "spec_id": "S37",
+   "program": "25206",
+   "population": "standin:25206",
+   "model_claimed": "AD10025BE",
+   "serial_claimed": null,
+   "date_code_claimed": null,
+   "retailer_claimed": "Walmart.com",
+   "purchase_date": "2024-02-17",
+   "refund_cents": 10999,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Imogen Raskolnik",
+    "email": "imogen.raskolnik@example.com",
+    "address_line1": "8134 Goldfinch Hollow Rd",
+    "city": "Sunnybrae",
+    "state": "KS",
+    "zip": "66062",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s37"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "ead2f5d1f4f03871ce2e241d4d3ed7de9b3c90897d400fe1f2cbafd06c2b0c41",
+     "phash": "92f96d87ce80324f",
+     "path": "data/generated/standin_photos/25206/f3ca9f75-06c1-5df5-bdd7-6faffaa56216_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "bb07fd93d46cb54faab11e50e3286b91d188cfc0e8c96741a87690ed280c3f1a",
+     "phash": "a5209edf610df433",
+     "path": "data/generated/standin_photos/25206/f3ca9f75-06c1-5df5-bdd7-6faffaa56216_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "080974cf6f08d52ea79691634de11b830b101591140b31aee0c8b4ef2f4bfe94",
+     "phash": "9f1f61e14724d0a7",
+     "path": "data/generated/standin_photos/25206/f3ca9f75-06c1-5df5-bdd7-6faffaa56216_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "51277e43-ee89-5ac6-ab9e-18cd67e105a1",
+   "spec_id": "S38",
+   "program": "25206",
+   "population": "standin:25206",
+   "model_claimed": "AD10014BE",
+   "serial_claimed": null,
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2024-04-09",
+   "refund_cents": 8499,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Thaddeus Lyle-Okafor",
+    "email": "thaddeus.lyleokafor@example.com",
+    "address_line1": "603 Cobblestone Nook",
+    "city": "Brightwater",
+    "state": "NE",
+    "zip": "68022",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s38"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "adf64d0d4f1e11642d9c8c75749c280affe7b00d0742af9c8ed1339ba7ab11ae",
+     "phash": "96e2691ed43c91cd",
+     "path": "data/generated/standin_photos/25206/51277e43-ee89-5ac6-ab9e-18cd67e105a1_label.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "37812787332a84e1df9639dff3e754330879452d09e4447241f9ecd47afd069e",
+     "phash": "9f1f60e14727d066",
+     "path": "data/generated/standin_photos/25206/51277e43-ee89-5ac6-ab9e-18cd67e105a1_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "b9412cf7-9cd8-5bdb-8572-7f26fffbb45a",
+   "spec_id": "S39",
+   "program": "25206",
+   "population": "standin:25206",
+   "model_claimed": "BB4640PU",
+   "serial_claimed": null,
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2024-05-26",
+   "refund_cents": 14999,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Lucinda Farrowgate",
+    "email": "lucinda.farrowgate@example.com",
+    "address_line1": "1880 Wrenfield Lane",
+    "city": "Hollyhock",
+    "state": "ID",
+    "zip": "83646",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s39"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "f3b7821d13e5be118c78249e3ee1b8406bed001e84aab1359472b350ed25201e",
+     "phash": "c39b2c358d63389b",
+     "path": "data/generated/standin_photos/25206/b9412cf7-9cd8-5bdb-8572-7f26fffbb45a_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "806aff8c29007ecd94e3974aa8f37a13c806fc2b6157b3a2242c5ad9983f9148",
+     "phash": "f02283d869cdbc73",
+     "path": "data/generated/standin_photos/25206/b9412cf7-9cd8-5bdb-8572-7f26fffbb45a_destruction.jpg"
+    },
+    {
+     "kind": "receipt",
+     "sha256": "335097fd5785323415bd700650ac602090f0fd45c3a02efcfd48ddc24a4174ae",
+     "phash": "8f1ff0e0c367d860",
+     "path": "data/generated/standin_photos/25206/b9412cf7-9cd8-5bdb-8572-7f26fffbb45a_receipt.jpg"
+    }
+   ]
+  },
+  {
+   "claim_id": "dac25b34-46c4-573c-a433-5f55176188b9",
+   "spec_id": "S40",
+   "program": "25206",
+   "population": "standin:25206",
+   "model_claimed": "AD10004GR",
+   "serial_claimed": null,
+   "date_code_claimed": null,
+   "retailer_claimed": "Amazon.com",
+   "purchase_date": "2024-07-30",
+   "refund_cents": 13999,
+   "remedy": "refund",
+   "claimant": {
+    "name": "Caspian Merriwether",
+    "email": "caspian.merriwether@example.com",
+    "address_line1": "1880 Wrenfield Ln",
+    "city": "Hollyhock",
+    "state": "ID",
+    "zip": "83646",
+    "synthetic": true,
+    "payout_destination": "synth_dest_standin_s40"
+   },
+   "photos": [
+    {
+     "kind": "label",
+     "sha256": "0eb51ac99fe758a27ff3bba1babc7c0f5c37c64d657ddec27b4b14880eaf0f91",
+     "phash": "96876818673e96c7",
+     "path": "data/generated/standin_photos/25206/dac25b34-46c4-573c-a433-5f55176188b9_label.jpg"
+    },
+    {
+     "kind": "destruction",
+     "sha256": "9fe5a5c28c7abbf725691674e43a66ec7d75d173d2fc6f3e3981377c72d0013a",
+     "phash": "f538b58a6a51c731",
+     "path": "data/generated/standin_photos/25206/dac25b34-46c4-573c-a433-5f55176188b9_destruction.jpg"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,10 @@
+{
+ "claim_id": "51802cab-eca9-553f-8714-e524f20edd54",
+ "spec_id": "S23",
+ "program": "24082",
+ "category": "expect_approve",
+ "expected_outcome": "approve",
+ "rationale": "Typed 'SE457O' ends in a letter O, a confusable typo that the legible shaft label (STYLE SE4570) corrects, so photo_rules.label_confirms_typed_typo approves, and Saf-Gard Safety Shoe Company is a seller the notice names.",
+ "violations": [],
+ "subtypes": {}
+}

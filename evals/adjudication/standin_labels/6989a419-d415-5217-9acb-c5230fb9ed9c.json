@@ -1,0 +1,10 @@
+{
+ "claim_id": "6989a419-d415-5217-9acb-c5230fb9ed9c",
+ "spec_id": "S14",
+ "program": "26244",
+ "category": "expect_approve",
+ "expected_outcome": "approve",
+ "rationale": "No model was typed but the legible label shows MK04 with a BN serial and a 12/2024 date, which photo_rules.label_confirms_missing_typed_model approves; Shopify.com is a named seller and notice 26244 requires no receipt.",
+ "violations": [],
+ "subtypes": {}
+}

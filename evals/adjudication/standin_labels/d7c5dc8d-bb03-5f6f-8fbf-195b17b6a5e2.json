@@ -1,0 +1,10 @@
+{
+ "claim_id": "d7c5dc8d-bb03-5f6f-8fbf-195b17b6a5e2",
+ "spec_id": "S10",
+ "program": "26007",
+ "category": "expect_flag",
+ "expected_outcome": "flag",
+ "rationale": "Its label photo is an exact reuse of S09's, and duplicate_photo flags both claims of the pair even though every typed field would otherwise pass notice 26007.",
+ "violations": [],
+ "subtypes": {}
+}

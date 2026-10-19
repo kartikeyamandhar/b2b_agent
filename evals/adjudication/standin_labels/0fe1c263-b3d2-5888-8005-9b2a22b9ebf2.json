@@ -1,0 +1,10 @@
+{
+ "claim_id": "0fe1c263-b3d2-5888-8005-9b2a22b9ebf2",
+ "spec_id": "S09",
+ "program": "26007",
+ "category": "expect_flag",
+ "expected_outcome": "flag",
+ "rationale": "S10 submitted this claim's label photo unchanged, and duplicate_photo flags both claims in the pair even though S09 alone is a clean 98527 ALDI claim under notice 26007.",
+ "violations": [],
+ "subtypes": {}
+}

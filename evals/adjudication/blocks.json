@@ -1,0 +1,21 @@
+{
+ "note": "Freeze evidence (PREREG Revision 2): hashes recorded before any row that reads photos ran. Live ablation runs refuse a block whose hashes changed.",
+ "blocks": {
+  "golden300": {
+   "claims_sha256": "3d9b67bd50d69444334867478492ed30e109d7e2eeceed4be498a43d5f763a8a",
+   "labels_sha256": "63d7d563792dee47b60242fbfab9f8ab856178f73e7abef90b7152f99a4c2d02",
+   "frozen_at": "2026-10-19T00:18:56Z"
+  },
+  "probe60": {
+   "claims_sha256": "5ed82727f9edce8db5308828edbc60f16c6676ef6698321b7bccccdd71d94dff",
+   "labels_sha256": "8f0c749b324dc671858ae22deb6236b89cd9fa97591ed223d90da4f402d40fbc",
+   "frozen_at": "2026-10-19T00:18:56Z"
+  },
+  "standin40": {
+   "claims_sha256": "39ed6d20a6824bb188c17aacb7c7a4e5991bab377ad70e0cd0a4c07c099d2437",
+   "labels_sha256": "a4c27b34f9d4eb8db5bea17e6fd300608142ad431a9449a8b55168665780d71f",
+   "frozen_at": "2026-10-19T00:18:56Z",
+   "specs_sha256": "7d850c423f5adce5e796f4daf45930fd8a7a2491cd72f05d864f240492994ae9"
+  }
+ }
+}

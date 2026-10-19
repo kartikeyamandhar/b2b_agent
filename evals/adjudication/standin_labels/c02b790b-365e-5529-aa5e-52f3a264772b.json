@@ -1,0 +1,10 @@
+{
+ "claim_id": "c02b790b-365e-5529-aa5e-52f3a264772b",
+ "spec_id": "S19",
+ "program": "26244",
+ "category": "expect_flag",
+ "expected_outcome": "flag",
+ "rationale": "S20 gives the identical street address, city, state, and ZIP under another name, and duplicate_address flags both claims even though S19 alone is clean under notice 26244.",
+ "violations": [],
+ "subtypes": {}
+}

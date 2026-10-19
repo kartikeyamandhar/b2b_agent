@@ -1,0 +1,10 @@
+{
+ "claim_id": "dac25b34-46c4-573c-a433-5f55176188b9",
+ "spec_id": "S40",
+ "program": "25206",
+ "category": "expect_flag",
+ "expected_outcome": "flag",
+ "rationale": "Its address is S39's with 'Lane' abbreviated, so duplicate_address flags it, and flag outranks the needs_info from the unmarked seatback photo (destruction_photo_intact).",
+ "violations": [],
+ "subtypes": {}
+}
