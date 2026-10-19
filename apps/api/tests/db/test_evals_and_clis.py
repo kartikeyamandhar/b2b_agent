@@ -6,6 +6,7 @@ import json
 import shutil
 from datetime import date
 from pathlib import Path
+from typing import Any
 
 import polars as pl
 import pytest
@@ -106,3 +107,34 @@ def test_synth_build_golden_into_tmp(tmp_path: Path) -> None:
     assert len(labels) == 300
     for path in labels:
         assert path.read_text() == (REPO_ROOT / "evals" / "adjudication" / "labels" / path.name).read_text()
+
+
+def test_an_agent_row_replays_with_the_network_blocked(clean_db: Engine, monkeypatch: Any) -> None:
+    """01-backend.md section 12: make eval runs in replay without network access. Python sockets to anything but
+    loopback raise; the committed recordings must answer every model request of the row."""
+    import json as _json
+    import socket
+
+    from recallops.evals import ablation
+    from recallops.settings import REPO_ROOT, get_settings
+
+    real_connect = socket.socket.connect
+
+    def loopback_only(self: socket.socket, address: Any) -> Any:
+        host = address[0] if isinstance(address, tuple) else str(address)
+        if host not in ("127.0.0.1", "::1", "localhost"):
+            raise OSError(f"network blocked in this test: {host}")
+        return real_connect(self, address)
+
+    monkeypatch.setattr(socket.socket, "connect", loopback_only)
+    monkeypatch.setenv("LLM_MODE", "replay")
+    get_settings.cache_clear()
+    try:
+        payload = ablation.main(["--rows", "loop_full", "--blocks", "standin40", "--no-write"])
+    finally:
+        monkeypatch.undo()
+        get_settings.cache_clear()
+    fresh = payload["blocks"]["standin40"]["loop_full"]
+    committed = _json.loads((REPO_ROOT / "evals" / "results" / "ablation.json").read_text())["blocks"]["standin40"]
+    assert "macro_f1" in fresh, fresh  # every claim answered from recordings
+    assert fresh["macro_f1"] == committed["loop_full"]["macro_f1"]

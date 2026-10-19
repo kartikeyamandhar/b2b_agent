@@ -65,7 +65,7 @@ jobs:
           if [ "$EVENT" = "pull_request" ]; then REF="origin/$BASE_REF";
           elif [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then REF="$BEFORE";
           else REF="HEAD~1"; fi
-          PYTHONPATH=apps/api/src uv run --project apps/api --frozen python -m recallops.evals.gate --baseline-ref "$REF"
+          PYTHONPATH=apps/api/src uv run --project apps/api --frozen python -m recallops.evals.gate --baseline-ref "$REF" --self-ref HEAD
 
   deploy:
     name: deploy (not configured; tested locally)

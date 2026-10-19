@@ -58,3 +58,13 @@ def test_the_legacy_adjudication_file_still_gates_rules_only() -> None:
 def test_a_ref_that_does_not_resolve_fails_the_gate(capsys: Any) -> None:
     assert main(["--baseline-ref", "no-such-ref-for-the-gate"]) == 1
     assert "does not resolve" in capsys.readouterr().out
+
+
+def test_self_consistency_ignores_wall_clock_seconds_only() -> None:
+    from recallops.evals.gate import _differences
+
+    base = {"blocks": {"g": {"row": {"macro_f1": 0.9, "p50_seconds": 1.2, "per_class": {"flag": {"f1": 1.0}}}}}}
+    same = {"blocks": {"g": {"row": {"macro_f1": 0.9, "p50_seconds": 9.9, "per_class": {"flag": {"f1": 1.0}}}}}}
+    moved = {"blocks": {"g": {"row": {"macro_f1": 0.9, "p50_seconds": 1.2, "per_class": {"flag": {"f1": 0.99}}}}}}
+    assert _differences(base, same) == []
+    assert _differences(base, moved) == [".blocks.g.row.per_class.flag.f1"]

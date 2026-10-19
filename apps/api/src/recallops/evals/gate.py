@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -145,6 +146,39 @@ def check_reporting(now: dict[str, Any]) -> list[str]:
     return problems
 
 
+SELF_CHECKED = ("extraction.json", "adjudication.json", "ablation.json", "reporting.json")
+VOLATILE = re.compile(r"seconds|generated|duration")
+
+
+def _differences(a: Any, b: Any, path: str = "") -> list[str]:
+    if isinstance(a, dict) and isinstance(b, dict):
+        out: list[str] = []
+        for key in sorted(set(a) | set(b)):
+            if VOLATILE.search(str(key)):
+                continue
+            out += _differences(a.get(key), b.get(key), f"{path}.{key}")
+        return out
+    if isinstance(a, list) and isinstance(b, list) and len(a) == len(b):
+        return [d for i, (x, y) in enumerate(zip(a, b, strict=True)) for d in _differences(x, y, f"{path}[{i}]")]
+    return [] if a == b else [path or "."]
+
+
+def check_self_consistency(ref: str, results: Path = RESULTS) -> list[str]:
+    """The committed tables at ref must be exactly what replay produces now (wall-clock seconds aside): a stale
+    table, or a recording that no longer matches its request, fails here even when no number regressed."""
+    problems = []
+    for name in SELF_CHECKED:
+        base = committed(ref, name)
+        if base is None:
+            problems.append(f"self-consistency: {name} is not committed at {ref}")
+            continue
+        diffs = _differences(base, fresh(name, results))
+        if diffs:
+            shown = ", ".join(diffs[:5]) + (f" and {len(diffs) - 5} more" if len(diffs) > 5 else "")
+            problems.append(f"self-consistency: {name} differs from {ref} at {shown} (commit the regenerated table)")
+    return problems
+
+
 def run(ref: str, results: Path = RESULTS) -> tuple[list[str], list[str]]:
     """(problems, notes). Notes name every check that had no baseline, so a skip is visible in the CI log."""
     verify_ref(ref)
@@ -172,9 +206,15 @@ def run(ref: str, results: Path = RESULTS) -> tuple[list[str], list[str]]:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--baseline-ref", default="HEAD")
+    parser.add_argument(
+        "--self-ref", default=None, help="also require the tables committed at this ref to equal the fresh replay"
+    )
     args = parser.parse_args(argv)
     try:
         problems, notes = run(args.baseline_ref)
+        if args.self_ref:
+            verify_ref(args.self_ref)
+            problems += check_self_consistency(args.self_ref)
     except BaselineRefMissing as exc:
         print(f"gate: FAIL ({exc})")
         return 1

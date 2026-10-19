@@ -261,7 +261,7 @@
     "mean_counted_steps": 1.23,
     "mean_rows": 8.23,
     "mean_cost_usd": 0.000201,
-    "p50_seconds": 1.306,
+    "p50_seconds": 1.305,
     "per_class": {
      "approve": {
       "f1": 0.9091,
@@ -502,7 +502,7 @@
     "mean_counted_steps": 2.37,
     "mean_rows": 10.01,
     "mean_cost_usd": 0.00091,
-    "p50_seconds": 5.395,
+    "p50_seconds": 5.398,
     "per_class": {
      "approve": {
       "f1": 0.8995,
@@ -745,7 +745,7 @@
     "mean_counted_steps": 4.06,
     "mean_rows": 11.6,
     "mean_cost_usd": 0.001594,
-    "p50_seconds": 6.759,
+    "p50_seconds": 6.763,
     "per_class": {
      "approve": {
       "f1": 0.8791,
@@ -986,7 +986,7 @@
     "mean_counted_steps": 4.03,
     "mean_rows": 11.41,
     "mean_cost_usd": 0.001512,
-    "p50_seconds": 6.802,
+    "p50_seconds": 6.801,
     "per_class": {
      "approve": {
       "f1": 0.8865,
@@ -1552,7 +1552,7 @@
     "mean_counted_steps": 1.92,
     "mean_rows": 8.92,
     "mean_cost_usd": 0.000312,
-    "p50_seconds": 2.576,
+    "p50_seconds": 2.578,
     "per_class": {
      "approve": {
       "f1": 0.5238,
@@ -1716,7 +1716,7 @@
     "mean_counted_steps": 4.83,
     "mean_rows": 12.6,
     "mean_cost_usd": 0.001799,
-    "p50_seconds": 8.469,
+    "p50_seconds": 8.47,
     "per_class": {
      "approve": {
       "f1": 0.4762,
@@ -1799,7 +1799,7 @@
     "mean_counted_steps": 4.83,
     "mean_rows": 12.48,
     "mean_cost_usd": 0.001724,
-    "p50_seconds": 8.46,
+    "p50_seconds": 8.455,
     "per_class": {
      "approve": {
       "f1": 0.4762,
@@ -1881,7 +1881,7 @@
     "mean_counted_steps": 4.85,
     "mean_rows": 12.63,
     "mean_cost_usd": 0.001815,
-    "p50_seconds": 8.495,
+    "p50_seconds": 8.496,
     "per_class": {
      "approve": {
       "f1": 0.4651,
@@ -2206,7 +2206,7 @@
     "mean_counted_steps": 4.45,
     "mean_rows": 11.53,
     "mean_cost_usd": 0.001675,
-    "p50_seconds": 7.343,
+    "p50_seconds": 7.346,
     "per_class": {
      "approve": {
       "f1": 0.6923,
@@ -2284,7 +2284,7 @@
     "mean_counted_steps": 4.35,
     "mean_rows": 11.22,
     "mean_cost_usd": 0.001555,
-    "p50_seconds": 7.485,
+    "p50_seconds": 7.457,
     "per_class": {
      "approve": {
       "f1": 0.6667,
@@ -2363,7 +2363,7 @@
     "mean_counted_steps": 4.45,
     "mean_rows": 11.53,
     "mean_cost_usd": 0.001678,
-    "p50_seconds": 7.335,
+    "p50_seconds": 7.336,
     "per_class": {
      "approve": {
       "f1": 0.6923,
