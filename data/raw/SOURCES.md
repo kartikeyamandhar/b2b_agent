@@ -97,3 +97,11 @@ Provenance for every downloaded file. data/raw/ is gitignored except this file; 
 - sha256: 269d75082641c609e81bf2dd45ac6e29a71760450dfeebbbeb0a477687bc3e9f
 - Columns: recall_date, recall_number, title, products, hazard, remedy, retailers, units, url
 - Comparison against the API archive (2026-10-16, `python -m recallops.ingest.recallbench --csv data/raw/recallbench/cpsc-recalls-full.csv --archive data/raw/cpsc`): 30 rows sampled at seed 20261016 from Recall Bench rows dated inside the archive window (2022-08-04 to 2026-10-15); recall number (digits only), recall date, and canonicalized title compared with the API record. Result: 0 of 30 missing from the API, 0 number, 0 date, 0 title mismatches. Mismatch rate 0.0 percent (stop threshold 2 percent).
+
+## 4. CPSC recall photos (vision block)
+
+- Source: the `Images` URLs of the cached CPSC records in section 2 (www.cpsc.gov), chosen by the seeded rule in evals/cpsc_photos/PREREG.md (`python -m recallops.evals.cpsc_photos select`)
+- Saved as: data/raw/cpsc_images/<sha256>.<ext> (gitignored); evals/cpsc_photos/manifest.json commits every URL, caption, sha256, byte size, and the size the model receives
+- Downloaded: 2026-10-19T20:45:14+00:00, HTTP 200 for all 64 photos, one request at a time with the project User-Agent; 0 skipped
+- Size: 16,271,458 bytes in total (42 PNG, 19 JPEG, 3 GIF)
+- Use: images CPSC publishes with its recall notices; the files are not redistributed by this repository
