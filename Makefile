@@ -19,7 +19,7 @@ PY := $(RUN) python
 PSQL := docker compose exec -T db psql -U postgres -v ON_ERROR_STOP=1 -q
 DATABASES := recallops recallops_test
 
-.PHONY: help setup db-up db-bootstrap migrate downgrade api dev worker seed test lint format typecheck check eval ingest label profile openapi
+.PHONY: help setup db-up db-bootstrap migrate downgrade api dev worker export-payouts seed test lint format typecheck check eval ingest label profile openapi
 
 help: ## List targets
 	@grep -hE '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-14s %s\n", $$1, $$2}'
@@ -55,6 +55,9 @@ dev: ## Run the API with auto-reload
 
 worker: ## Run the adjudication worker (ADJUDICATOR=agent needs LLM_MODE=live; rules_only runs offline)
 	$(PY) -m recallops.claims.worker $(ARGS)
+
+export-payouts: ## Write the check/ACH export file for payouts in pending_export and mark them exported
+	$(PY) -m recallops.payouts.export $(ARGS)
 
 seed: ## Load one real recall, open a program, generate and adjudicate 500 synthetic claims
 	$(PY) -m recallops.seed

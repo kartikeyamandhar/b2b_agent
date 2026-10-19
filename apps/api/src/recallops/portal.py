@@ -91,6 +91,11 @@ def view(session: Session, pc: PortalClaim) -> dict[str, Any]:
     messages = [
         {"sender": m.get("from", "firm"), "text": m.get("text", ""), "at": m.get("at")} for m in (claim.messages or [])
     ]
+    from recallops.models import Payout
+
+    payout_status = session.scalar(
+        select(Payout.status).where(Payout.claim_id == claim.id, Payout.firm_id == claim.firm_id)
+    )
     return {
         "claim_id": claim.id,
         "status": claim.status,
@@ -108,6 +113,7 @@ def view(session: Session, pc: PortalClaim) -> dict[str, Any]:
         "decision_reasons": claimant_reasons(claim.status, decision),
         "photos_uploaded": kinds,
         "messages": messages,
+        "payout_status": payout_status,
     }
 
 

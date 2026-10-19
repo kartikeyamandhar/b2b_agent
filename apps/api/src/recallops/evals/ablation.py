@@ -304,7 +304,14 @@ def run_claim(
 
 
 def run_row(
-    row: str, block: Block, llm: LlmClient | None, settings: Settings, engine: Engine, live: bool, workers: int
+    row: str,
+    block: Block,
+    llm: LlmClient | None,
+    settings: Settings,
+    engine: Engine,
+    live: bool,
+    workers: int,
+    limit: int | None = None,
 ) -> RowResult:
     claims, labels = load_block(block)
     rules = load_program_rules(ADJ / "program_rules.json")
@@ -313,7 +320,7 @@ def run_row(
     for record in claims:
         by_population[str(record.get(block.population_key) or record["program"])].append(facts_from_record(record))
     jobs = []
-    for record in claims:
+    for record in claims[:limit] if limit else claims:
         pid = str(record["program"])
         population = by_population[str(record.get(block.population_key) or pid)]
         jobs.append((record, labels[record["claim_id"]], rules[pid], population, program_ids.get(pid, NS)))
@@ -467,57 +474,6 @@ def render(results: dict[str, dict[str, RowResult]], settings: Settings) -> tupl
     return "\n".join(lines) + "\n", payload
 
 
-def main(argv: list[str] | None = None, results_dir: Path = RESULTS) -> dict[str, Any]:
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--rows", nargs="*", default=list(ROWS), choices=ROWS)
-    parser.add_argument("--blocks", nargs="*", default=list(BLOCKS), choices=list(BLOCKS))
-    parser.add_argument("--workers", type=int, default=1, help="concurrent claims in a live run")
-    parser.add_argument("--no-write", action="store_true", help="record only; do not rewrite the results table")
-    args = parser.parse_args(argv or [])
-    settings = get_settings()
-    live = settings.llm_mode == "live"
-    engine = internal_engine()
-    try:
-        llm: LlmClient | None = build_client(settings)
-    except LiveCallsDisabled:
-        llm = None
-    results: dict[str, dict[str, RowResult]] = {}
-    for block_key in args.blocks:
-        block = BLOCKS[block_key]
-        if not block.claims_file.exists():
-            log_event(log, "ablation_block_missing", block=block_key)
-            continue
-        if live:
-            verify_frozen(block_key)
-        results[block_key] = {}
-        for row in args.rows:
-            if row != "rules_only" and llm is None:
-                continue
-            try:
-                results[block_key][row] = run_row(row, block, llm, settings, engine, live, args.workers)
-            except BudgetExhausted as exc:
-                log_event(log, "ablation_budget_exhausted", level=40, error=str(exc))
-                raise
-    md, payload = render(results, settings)
-    if not args.no_write:
-        results_dir.mkdir(parents=True, exist_ok=True)
-        (results_dir / "ablation.md").write_text(md, encoding="utf-8")
-        (results_dir / "ablation.json").write_text(json.dumps(payload, indent=1, default=str) + "\n", encoding="utf-8")
-    return payload
-
-
-def _summary(payload: dict[str, Any]) -> dict[str, Any]:
-    return {
-        block: {row: (m.get("macro_f1") if "macro_f1" in m else m.get("status")) for row, m in rows.items()}
-        for block, rows in payload["blocks"].items()
-    }
-
-
-if __name__ == "__main__":
-    configure(get_settings().log_level)
-    print(json.dumps(_summary(main(sys.argv[1:])), indent=1))
-
-
 MANIFEST = ADJ / "blocks.json"
 
 
@@ -541,3 +497,55 @@ def verify_frozen(block_key: str) -> None:
     now = block_hashes(BLOCKS[block_key])
     if {k: frozen[k] for k in now} != now:
         raise SystemExit(f"{block_key} changed after it was frozen; log a PREREG revision before running it")
+
+
+def main(argv: list[str] | None = None, results_dir: Path = RESULTS) -> dict[str, Any]:
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--rows", nargs="*", default=list(ROWS), choices=ROWS)
+    parser.add_argument("--blocks", nargs="*", default=list(BLOCKS), choices=list(BLOCKS))
+    parser.add_argument("--workers", type=int, default=1, help="concurrent claims in a live run")
+    parser.add_argument("--no-write", action="store_true", help="record only; do not rewrite the results table")
+    parser.add_argument("--limit", type=int, default=None, help="first N claims of each block (smoke runs only)")
+    args = parser.parse_args(argv or [])
+    settings = get_settings()
+    live = settings.llm_mode == "live"
+    engine = internal_engine()
+    try:
+        llm: LlmClient | None = build_client(settings)
+    except LiveCallsDisabled:
+        llm = None
+    results: dict[str, dict[str, RowResult]] = {}
+    for block_key in args.blocks:
+        block = BLOCKS[block_key]
+        if not block.claims_file.exists():
+            log_event(log, "ablation_block_missing", block=block_key)
+            continue
+        if live:
+            verify_frozen(block_key)
+        results[block_key] = {}
+        for row in args.rows:
+            if row != "rules_only" and llm is None:
+                continue
+            try:
+                results[block_key][row] = run_row(row, block, llm, settings, engine, live, args.workers, args.limit)
+            except BudgetExhausted as exc:
+                log_event(log, "ablation_budget_exhausted", level=40, error=str(exc))
+                raise
+    md, payload = render(results, settings)
+    if not args.no_write:
+        results_dir.mkdir(parents=True, exist_ok=True)
+        (results_dir / "ablation.md").write_text(md, encoding="utf-8")
+        (results_dir / "ablation.json").write_text(json.dumps(payload, indent=1, default=str) + "\n", encoding="utf-8")
+    return payload
+
+
+def _summary(payload: dict[str, Any]) -> dict[str, Any]:
+    return {
+        block: {row: (m.get("macro_f1") if "macro_f1" in m else m.get("status")) for row, m in rows.items()}
+        for block, rows in payload["blocks"].items()
+    }
+
+
+if __name__ == "__main__":
+    configure(get_settings().log_level)
+    print(json.dumps(_summary(main(sys.argv[1:])), indent=1))

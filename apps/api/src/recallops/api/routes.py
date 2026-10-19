@@ -4,12 +4,13 @@ can build against `make seed`; write routes keep their final contract and return
 from __future__ import annotations
 
 import base64
+import json
 from datetime import date, datetime
 from typing import Annotated, Any
 from uuid import UUID
 
 from fastapi import APIRouter, File, Form, Header, HTTPException, Query, UploadFile, status
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from sqlalchemy import func, select, text
 from sqlalchemy.orm import Session
 
@@ -313,29 +314,103 @@ def claim_action(claim_id: UUID, body: s.ClaimAction, ctx: FirmDep, db: TenantDb
 # MPR (M4)
 
 
+def _mpr_view(r: Any) -> s.MprReport:
+    return s.MprReport(
+        id=r.id,
+        program_id=r.program_id,
+        period_start=r.period_start,
+        period_end=r.period_end,
+        payload=r.payload,
+        reconciled=r.reconciled,
+        generated_at=r.generated_at,
+    )
+
+
 @firm.get(
     "/programs/{program_id}/mpr",
     response_model=s.MprReport,
-    responses={**NOT_FOUND, **LATER},
-    summary="MPR for a period (YYYY-MM)",
+    responses=NOT_FOUND,
+    summary="Latest MPR generated for a period (YYYY-MM)",
 )
-def get_mpr(program_id: UUID, ctx: FirmDep, period: str = Query(pattern=r"^\d{4}-\d{2}$")) -> s.MprReport:
-    raise NotYetImplemented("GET /v1/programs/{id}/mpr", "M4")
+def get_mpr(program_id: UUID, ctx: FirmDep, db: TenantDb, period: str = Query(pattern=r"^\d{4}-\d{2}$")) -> s.MprReport:
+    from recallops.models import MprReport
+    from recallops.mpr.generate import Period
+
+    p = Period.parse(period)
+    row = db.scalars(
+        select(MprReport)
+        .where(MprReport.firm_id == ctx.firm_id, MprReport.program_id == program_id, MprReport.period_start == p.start)
+        .order_by(MprReport.generated_at.desc())
+        .limit(1)
+    ).first()
+    if row is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "no report for that period; generate one first")
+    return _mpr_view(row)
 
 
 @firm.post(
     "/programs/{program_id}/mpr/generate",
     response_model=s.MprReport,
-    responses={**NOT_FOUND, **LATER},
-    summary="Generate the MPR for a period",
+    responses=NOT_FOUND,
+    summary="Generate the MPR for a period; reconciled is true when the independent recount agrees",
 )
-def generate_mpr(program_id: UUID, ctx: AdminDep, period: str = Query(pattern=r"^\d{4}-\d{2}$")) -> s.MprReport:
-    raise NotYetImplemented("POST /v1/programs/{id}/mpr/generate", "M4")
+def generate_mpr(
+    program_id: UUID, ctx: AdminDep, db: TenantDb, period: str = Query(pattern=r"^\d{4}-\d{2}$")
+) -> s.MprReport:
+    from recallops.models import AuditLog, MprReport
+    from recallops.mpr.generate import Period, build_payload
+    from recallops.mpr.recount import export, reconcile, recount
+
+    if ProgramsRepo(db, ctx).get(program_id) is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "program not found")
+    p = Period.parse(period)
+    payload = build_payload(db, ctx.firm_id, program_id, p)
+    diffs = reconcile(payload["boxes"], recount(export(db, ctx.firm_id, program_id), p))
+    payload["reconciliation"] = {"discrepancies": diffs}
+    row = MprReport(
+        firm_id=ctx.firm_id,
+        program_id=program_id,
+        period_start=p.start,
+        period_end=p.end,
+        payload=payload,
+        reconciled=not diffs,
+        generated_by=ctx.user_id,
+    )
+    db.add(row)
+    db.flush()
+    db.add(
+        AuditLog(
+            firm_id=ctx.firm_id,
+            actor=ctx.user_id,
+            action="mpr_generated",
+            target_type="program",
+            target_id=str(program_id),
+            before=None,
+            after={"period": period, "reconciled": not diffs},
+        )
+    )
+    db.refresh(row)
+    return _mpr_view(row)
 
 
-@firm.get("/programs/{program_id}/mpr/{report_id}.pdf", responses={**NOT_FOUND, **LATER, **PDF}, summary="MPR as PDF")
-def mpr_pdf(program_id: UUID, report_id: UUID, ctx: FirmDep) -> None:
-    raise NotYetImplemented("GET /v1/programs/{id}/mpr/{report_id}.pdf", "M4")
+@firm.get("/programs/{program_id}/mpr/{report_id}.pdf", responses={**NOT_FOUND, **PDF}, summary="MPR as PDF")
+def mpr_pdf(program_id: UUID, report_id: UUID, ctx: FirmDep, db: TenantDb) -> Response:
+    from recallops.models import MprReport
+    from recallops.mpr.pdf import render_pdf
+
+    row = db.scalars(
+        select(MprReport).where(
+            MprReport.firm_id == ctx.firm_id, MprReport.program_id == program_id, MprReport.id == report_id
+        )
+    ).first()
+    if row is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "report not found")
+    program = ProgramsRepo(db, ctx).get(program_id)
+    recall = db.get(Recall, program.recall_id) if program and program.recall_id else None
+    body = render_pdf(
+        recall.title if recall else "Recall program", row.payload["period"], row.payload["boxes"], row.payload["notes"]
+    )
+    return Response(body, media_type="application/pdf")
 
 
 # Usage
@@ -474,7 +549,35 @@ def portal_answer(token: str, body: s.PortalAnswer, token_ctx: ClaimTokenDep) ->
     summary="Payout destination (Connect onboarding handoff is component 3)",
 )
 def portal_payout(token: str, body: s.PortalPayout, token_ctx: ClaimTokenDep) -> s.PortalView:
-    raise NotYetImplemented("POST /portal/{token}/payout", "M4", "backend owner with payments owner")
+    """The claimant picks how an approved refund is paid. check_export moves the payout to the export file (the
+    ledger's fallback); stripe_connect onboarding is the payments owner's (component 3) and answers 501 until then."""
+    from recallops.models import Payout
+    from recallops.payouts.db_ledger import IllegalTransition
+
+    if body.method == "stripe_connect":
+        raise NotYetImplemented("Connect onboarding from the portal", "M4", "payments owner")
+    ctx, claim_id = _portal(token, token_ctx)
+    with tenant_session(ctx) as session:
+        pc = _portal_claim_in(session, token, claim_id)
+        payout = session.scalars(
+            select(Payout).where(Payout.firm_id == ctx.firm_id, Payout.claim_id == claim_id)
+        ).first()
+        if pc.claim.status != "approved" or payout is None:
+            raise HTTPException(status.HTTP_409_CONFLICT, "there is no approved refund to pay out")
+        if body.mailing_address:
+            claimant = {**(pc.claim.claimant or {}), "mailing_address": body.mailing_address[:300]}
+            session.execute(
+                text("UPDATE claims SET claimant = CAST(:c AS jsonb) WHERE id = :id AND firm_id = :f"),
+                {"c": json.dumps(claimant), "id": claim_id, "f": ctx.firm_id},
+            )
+        payout_id, current = payout.id, payout.status
+    if current != "pending_export":
+        try:
+            DbPayoutLedger(app_engine()).to_export(ctx, payout_id)
+        except IllegalTransition as exc:
+            raise HTTPException(status.HTTP_409_CONFLICT, f"the payout is already {current}") from exc
+    with tenant_session(ctx) as session:
+        return _portal_view(session, _portal_claim_in(session, token, claim_id))
 
 
 # Internal

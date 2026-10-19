@@ -1259,6 +1259,7 @@
           "mailing_address": {
             "anyOf": [
               {
+                "maxLength": 300,
                 "type": "string"
               },
               {
@@ -1500,6 +1501,25 @@
             },
             "title": "Messages",
             "type": "array"
+          },
+          "payout_status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "pending",
+                  "pending_export",
+                  "onboarding",
+                  "transferred",
+                  "failed",
+                  "exported"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Payout Status"
           },
           "pending_question": {
             "anyOf": [
@@ -2820,6 +2840,7 @@
     },
     "/portal/{token}/payout": {
       "post": {
+        "description": "The claimant picks how an approved refund is paid. check_export moves the payout to the export file (the\nledger's fallback); stripe_connect onboarding is the payments owner's (component 3) and answers 501 until then.",
         "operationId": "portal_payout_portal__token__payout_post",
         "parameters": [
           {
@@ -4058,19 +4079,9 @@
               }
             },
             "description": "Validation Error"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "contract final, implementation in a later milestone"
           }
         },
-        "summary": "MPR for a period (YYYY-MM)",
+        "summary": "Latest MPR generated for a period (YYYY-MM)",
         "tags": [
           "firm"
         ]
@@ -4151,19 +4162,9 @@
               }
             },
             "description": "Validation Error"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "contract final, implementation in a later milestone"
           }
         },
-        "summary": "Generate the MPR for a period",
+        "summary": "Generate the MPR for a period; reconciled is true when the independent recount agrees",
         "tags": [
           "firm"
         ]
@@ -4243,16 +4244,6 @@
               }
             },
             "description": "Validation Error"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "contract final, implementation in a later milestone"
           }
         },
         "summary": "MPR as PDF",

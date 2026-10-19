@@ -248,3 +248,44 @@ def test_readyz_reports_the_worker_heartbeat(env: dict[str, Any]) -> None:
     Worker(engine=engine, llm=fakes.client([])[0], worker_id="hb").heartbeat({"adjudicator": "agent"})
     ready = client.get("/readyz")
     assert ready.status_code == 200 and ready.json()["worker_heartbeat_age_s"] < 60
+
+
+def test_check_payout_export_and_a_reconciled_mpr(env: dict[str, Any], tmp_path: Any) -> None:
+    from datetime import UTC, datetime
+
+    from recallops.payouts.export import export_pending
+
+    client, engine = env["client"], env["engine"]
+    approved = next(
+        c
+        for p in client.get("/v1/programs", headers=ADMIN).json()["items"]
+        if p["id"] != env["seeded"]["demo"]["program_id"]
+        for c in client.get(f"/v1/programs/{p['id']}/claims?status=approved", headers=ADMIN).json()["items"]
+    )
+    program_id = approved["program_id"]
+    token = f"dev.{seed.DEMO_FIRM_ID}.{approved['id']}"
+    stripe = client.post(f"/portal/{token}/payout", json={"method": "stripe_connect"})
+    assert stripe.status_code == 501 and "payments owner" in stripe.json()["detail"]
+    chose = client.post(
+        f"/portal/{token}/payout", json={"method": "check_export", "mailing_address": "1 Main St, Springfield IL 62701"}
+    )
+    assert chose.status_code == 200 and chose.json()["payout_status"] == "pending_export"
+    written = export_pending(engine, tmp_path)
+    assert written and written[0]["rows"] >= 1
+    assert "1 Main St, Springfield IL 62701" in (tmp_path / "exports").rglob("*.csv").__next__().read_text()
+    assert client.get(f"/portal/{token}").json()["payout_status"] == "exported"
+    assert client.post(f"/portal/{token}/payout", json={"method": "check_export"}).status_code == 409
+
+    period = datetime.now(UTC).strftime("%Y-%m")
+    assert client.get(f"/v1/programs/{program_id}/mpr?period={period}", headers=ADMIN).status_code == 404
+    report = client.post(f"/v1/programs/{program_id}/mpr/generate?period={period}", headers=ADMIN)
+    assert report.status_code == 200, report.text
+    body = report.json()
+    assert body["reconciled"] is True
+    assert body["payload"]["boxes"]["corrections_this_period"] >= 1
+    assert body["payload"]["boxes"]["total_units_affected"] == 53634
+    again = client.get(f"/v1/programs/{program_id}/mpr?period={period}", headers=ADMIN).json()
+    assert again["id"] == body["id"]
+    pdf = client.get(f"/v1/programs/{program_id}/mpr/{body['id']}.pdf", headers=ADMIN)
+    assert pdf.status_code == 200 and pdf.content.startswith(b"%PDF-1.4") and pdf.content.rstrip().endswith(b"%%EOF")
+    assert client.post(f"/v1/programs/{program_id}/mpr/generate?period={period}", headers=REVIEWER).status_code == 403

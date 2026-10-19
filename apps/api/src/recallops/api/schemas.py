@@ -432,6 +432,7 @@ class PortalView(Schema):
     pending_question: str | None
     decision_reasons: list[str] = Field(description="plain-language reasons once decided")
     photos_uploaded: list[Literal["label", "destruction", "receipt", "other"]] = Field(default_factory=list)
+    payout_status: Literal["pending", "pending_export", "onboarding", "transferred", "failed", "exported"] | None = None
     messages: list[PortalMessage] = Field(default_factory=list, description="needs_info questions and replies")
 
 
@@ -457,7 +458,7 @@ class PortalAnswer(Schema):
 
 class PortalPayout(Schema):
     method: Literal["stripe_connect", "check_export"]
-    mailing_address: str | None = None
+    mailing_address: str | None = Field(None, max_length=300)
 
 
 class CheckoutSession(Schema):
