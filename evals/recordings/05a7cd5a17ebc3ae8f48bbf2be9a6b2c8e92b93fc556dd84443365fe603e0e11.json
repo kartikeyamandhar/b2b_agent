@@ -1,0 +1,62 @@
+{
+ "text": "The duplicate check found another claim sharing the same payout destination, which triggers a flag under the policy. I'm recording that outcome now.",
+ "usage": {
+  "input_tokens": 3543,
+  "output_tokens": 449,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Sh55rrT6LsViUGBcA",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2261,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing the same payout destination, which triggers a flag under the policy. I'm recording that outcome now."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01R6ocrcsRk1aQ4wcVsqoy28",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program (6d09be8a-9deb-5262-ab8a-b8885d4b6a10) shares the same payout destination with this claim. Under the policy, any shared payout account triggers a flag for review.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model 96775, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "R:models"
+      ]
+     },
+     {
+      "text": "Retailer is ALDI, which is listed, and the purchase date 2019-01-21 falls inside the sale window. No receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the device with the power cord cut, which matches the required destruction.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

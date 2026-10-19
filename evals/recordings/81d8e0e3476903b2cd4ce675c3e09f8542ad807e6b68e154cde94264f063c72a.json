@@ -1,0 +1,77 @@
+{
+ "text": "Every check passes: the model is recalled, the date code is in range, the retailer and purchase date are within the window, there are no duplicates, and the destruction photo shows the plug cut off. The serial check was skipped because the program has no serial rule, so it doesn't count against the claim. The claim is for repair or replacement, so the refund threshold doesn't apply.",
+ "usage": {
+  "input_tokens": 3688,
+  "output_tokens": 597,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB47Ypq9eqB3Xx5WKTd5",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2750,
+ "content": [
+  {
+   "type": "text",
+   "text": "Every check passes: the model is recalled, the date code is in range, the retailer and purchase date are within the window, there are no duplicates, and the destruction photo shows the plug cut off. The serial check was skipped because the program has no serial rule, so it doesn't count against the claim. The claim is for repair or replacement, so the refund threshold doesn't apply."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Y14pLwWTKznzuRDc2HtpxR",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows the recalled model LXT-CL-1.0, which matches the program's recalled models.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T7"
+      ]
+     },
+     {
+      "text": "The label's date code 0722 falls within the recalled range 0722 to 1223.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The claimant bought from Amazon, a listed retailer, on 2023-11-13, which is inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the device with the cord cut off, which is the destruction the recall requires.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claim requests repair or replacement, not a refund, so the $100 refund review threshold does not apply.",
+      "cites": [
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

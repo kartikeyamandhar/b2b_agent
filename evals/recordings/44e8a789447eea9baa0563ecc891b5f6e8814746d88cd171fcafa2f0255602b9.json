@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": false, \"complies\": false, \"observed\": \"The photo shows a red rounded rectangle with a black line and a gray vertical stripe over colorful circles, with no recognizable helmet or cut straps visible.\", \"confidence\": 0.8}",
+ "usage": {
+  "input_tokens": 1187,
+  "output_tokens": 84,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAe6mqLJHNvKgzwyFNjC",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 1081
+}

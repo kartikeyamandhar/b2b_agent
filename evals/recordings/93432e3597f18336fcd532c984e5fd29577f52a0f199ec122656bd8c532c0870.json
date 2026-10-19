@@ -1,0 +1,56 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: T1 reads the label as legible and showing A17B3. T2 confirms A17B3 is not on the recalled list (A17B0, A17A0, A17A1, A17A2). A legible label showing a non-recalled model means deny.\n- Purchase: T3 says the purchase date is before the sale window (2023-05-01 to 2023-09-30), so it is a deny. The retailer is listed, so that does not change the outcome.\n- Duplicates: T5 found no matches, so no flag applies.\n- Destruction: not required (T4), and the remedy is replacement.\n\nModel mismatch and a pre-window purchase both independently lead to deny. Flag does not apply, so deny is the outcome.",
+ "usage": {
+  "input_tokens": 2757,
+  "output_tokens": 578,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeJYZDEBYm6iqhBk5eU",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 5096,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: T1 reads the label as legible and showing A17B3. T2 confirms A17B3 is not on the recalled list (A17B0, A17A0, A17A1, A17A2). A legible label showing a non-recalled model means deny.\n- Purchase: T3 says the purchase date is before the sale window (2023-05-01 to 2023-09-30), so it is a deny. The retailer is listed, so that does not change the outcome.\n- Duplicates: T5 found no matches, so no flag applies.\n- Destruction: not required (T4), and the remedy is replacement.\n\nModel mismatch and a pre-window purchase both independently lead to deny. Flag does not apply, so deny is the outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QvD3tT2CJuqiXezdvJZFFn",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model A17B3, which is not on the recalled model list (A17B0, A17A0, A17A1, A17A2), so the unit is not part of this recall.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase date of 2022-10-27 is before the sale window of 2023-05-01 to 2023-09-30, so the purchase is not eligible.",
+      "cites": [
+       "R:sold_window",
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not flagged.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

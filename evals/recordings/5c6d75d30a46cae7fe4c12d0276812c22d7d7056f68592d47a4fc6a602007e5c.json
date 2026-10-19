@@ -1,0 +1,69 @@
+{
+ "text": "The model is confirmed as recalled, the purchase is valid, and there are no duplicates. The destruction photo does not show the required cut cord, so the claim needs more information rather than approval.",
+ "usage": {
+  "input_tokens": 3454,
+  "output_tokens": 528,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB48jvqcCMKGBobtV7EB",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2727,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed as recalled, the purchase is valid, and there are no duplicates. The destruction photo does not show the required cut cord, so the claim needs more information rather than approval."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_012dra1ML22FDf72Ybdo9iwH",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 93550, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase is at ALDI, a listed retailer, and the purchase date of 2018-06-02 falls inside the sale window. No receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the required destruction. It shows the cord intact with no visible cut, so the remedy has not been completed.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The date code 2018-02 was not checked against recalled date codes, because the date-code check was skipped and the program has no date-code rule.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new destruction photo showing the unplugged power cord cut through. The current photo shows the cord intact.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

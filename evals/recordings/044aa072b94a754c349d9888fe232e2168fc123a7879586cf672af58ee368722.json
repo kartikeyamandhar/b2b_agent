@@ -1,0 +1,75 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: T1 reads the label as legible, showing 200LX, which is recalled (R:models, T2 match). Confirmed.\n- Serial: LX007920 falls in LX001698 - LX009896 (R:serials, T3 in_range). Passes.\n- Purchase: 2023-10-25 is inside the sale window (R:sold_window, T4). Receipt not required. Passes.\n- Destruction: not required, since the remedy is repair (T5, T7). Passes.\n- Duplicates: none found (T6). No flag.\n\nNo rule triggers a flag, deny, or needs_info, so the claim is approved. The refund field is empty (repair or replacement), so the value threshold does not apply.",
+ "usage": {
+  "input_tokens": 2685,
+  "output_tokens": 664,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB36EEjhbFruXKkqL9tZ",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3001,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: T1 reads the label as legible, showing 200LX, which is recalled (R:models, T2 match). Confirmed.\n- Serial: LX007920 falls in LX001698 - LX009896 (R:serials, T3 in_range). Passes.\n- Purchase: 2023-10-25 is inside the sale window (R:sold_window, T4). Receipt not required. Passes.\n- Destruction: not required, since the remedy is repair (T5, T7). Passes.\n- Duplicates: none found (T6). No flag.\n\nNo rule triggers a flag, deny, or needs_info, so the claim is approved. The refund field is empty (repair or replacement), so the value threshold does not apply."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01HcfRYr4Zy1Ds9Jo7DVDLgt",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 200LX, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Serial LX007920 is within the recalled range LX001698 - LX009896.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The purchase date 2023-10-25 falls inside the sale window, and no receipt is required.",
+      "cites": [
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "The remedy is repair, so no destruction photo is required.",
+      "cites": [
+       "T5",
+       "T7"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "No refund is requested, so the value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

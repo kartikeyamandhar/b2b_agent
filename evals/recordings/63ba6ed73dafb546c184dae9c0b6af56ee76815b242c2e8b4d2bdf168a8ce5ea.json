@@ -1,0 +1,65 @@
+{
+ "text": "The model is confirmed, but the flag rule governs the outcome. I'll record the decision.",
+ "usage": {
+  "input_tokens": 3740,
+  "output_tokens": 485,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3DJZ8qMnU1756nidRL",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2353,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed, but the flag rule governs the outcome. I'll record the decision."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01XbYAWV724RNATeuMcnhru9",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo for this claim is identical (same sha256) to the label photo on another claim in the program, so the claim is flagged for review under the duplicate-photo rule.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The model on the legible label (SE4570) is a recalled model, and the date code 07/22 is in the recalled range, so the model and date code would otherwise be satisfied.",
+      "cites": [
+       "T1",
+       "T5",
+       "T6",
+       "R:models",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (www.grainger.com) and falls inside the sale window, with no receipt required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The serial on the label reads SN65977978, but the typed serial is SN84187110. The serial check was skipped because the program has no serial rule, so this mismatch is noted for the reviewer but was not used to decide.",
+      "cites": [
+       "T1",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

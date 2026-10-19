@@ -1,0 +1,55 @@
+{
+ "text": "The label is legible and shows the recalled model 200LX, and the serial is in range. The purchase date of 2016-05-11 falls before the sale window (which starts 2017-05-01), so the purchase check says it was bought before the window. Per policy, a purchase before the window is a denial. I'll record that.",
+ "usage": {
+  "input_tokens": 3292,
+  "output_tokens": 431,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3YaaaQVXzF3pH2ZeW4",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2228,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows the recalled model 200LX, and the serial is in range. The purchase date of 2016-05-11 falls before the sale window (which starts 2017-05-01), so the purchase check says it was bought before the window. Per policy, a purchase before the window is a denial. I'll record that."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01En4YfibbHR1TX6Ni45imjt",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 200LX, which is a recalled model, and the serial LX005538 is inside the recalled range LX001698 - LX009896.",
+      "cites": [
+       "R:models",
+       "R:serials",
+       "T1",
+       "T4"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2016-05-11 is before the program's sale window (2017-05-01 to 2026-02-28), so the unit was not sold within the covered period.",
+      "cites": [
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

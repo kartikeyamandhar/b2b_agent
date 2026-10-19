@@ -1,0 +1,68 @@
+{
+ "text": "Checking the results: the label photo is legible and shows 200LX, a recalled model (T1, T2, R:models). The serial QQ58710406 is outside all recalled serial ranges (T3, R:serials). Under policy, serial outside ranges is deny. Duplicates: none (T6). Purchase date 2018-10-14 is inside the sale window (T4, R:sold_window), so that doesn't trigger a denial. Destruction not required (T5). The serial rule is the deciding factor: deny.",
+ "usage": {
+  "input_tokens": 2691,
+  "output_tokens": 624,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAfztYV2W3D3SsvX76HD",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3568,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results: the label photo is legible and shows 200LX, a recalled model (T1, T2, R:models). The serial QQ58710406 is outside all recalled serial ranges (T3, R:serials). Under policy, serial outside ranges is deny. Duplicates: none (T6). Purchase date 2018-10-14 is inside the sale window (T4, R:sold_window), so that doesn't trigger a denial. Destruction not required (T5). The serial rule is the deciding factor: deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_016GnekzXF9kfZMpH9wkCS5M",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 200LX, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial number QQ58710406 is outside every recalled serial range (C3753 - C77735; S73202 - S8442; HA00001 - HA14873; LX001698 - LX009896), so the unit is not part of the recall.",
+      "cites": [
+       "R:serials",
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase date of 2018-10-14 falls inside the sale window, and no receipt is required, so purchase does not change the outcome.",
+      "cites": [
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this claim, so there is no duplicate flag.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy, so no destruction-photo issue applies.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

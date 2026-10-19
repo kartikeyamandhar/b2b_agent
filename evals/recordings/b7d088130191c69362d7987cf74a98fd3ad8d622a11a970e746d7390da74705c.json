@@ -1,0 +1,77 @@
+{
+ "text": "The call failed validation because two required fields were missing. I'll resubmit with the question for the claimant and a confidence value.",
+ "usage": {
+  "input_tokens": 4273,
+  "output_tokens": 673,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeMrSa1tJKFiU7JgCAw",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3507,
+ "content": [
+  {
+   "type": "text",
+   "text": "The call failed validation because two required fields were missing. I'll resubmit with the question for the claimant and a confidence value."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01YMfshYmyFrhju8pnrJaRPx",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model GLEFM397DBA1, which matches the recalled model pattern GLEFM397DB*.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial number VF12294579 falls within the recalled range VF122xxxxx - VF334xxxxx.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The claimed retailer, Corner Hardware Co, is not on the list of stores where the product was sold (Sears only). Under the policy, a purchase from a store not on the list requires proof of ownership to be requested rather than a decision made.",
+      "cites": [
+       "R:sold_at",
+       "R:policy",
+       "T4",
+       "T7"
+      ]
+     },
+     {
+      "text": "The purchase date of 2008-08-07 is inside the sale window, and a receipt is present, so the only open question is the retailer.",
+      "cites": [
+       "R:sold_window",
+       "R:receipt",
+       "T4"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not flagged.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your receipt is on file, but the store named on your claim, Corner Hardware Co, is not a retailer where this product was sold under the recall. Please confirm where you bought the unit and provide proof of ownership that shows the store name, such as the receipt header or a bill of sale. If you received the unit as a gift or bought it secondhand, please say so and provide whatever proof of ownership you have.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

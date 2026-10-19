@@ -1,0 +1,63 @@
+{
+ "text": "The model matches a recalled model, and the serial is in range. The retailer, however, is \"Corner Hardware Co,\" which is not on the Sears-only list. Per policy, an unlisted retailer means proof of ownership is requested, so this needs more information rather than a denial.",
+ "usage": {
+  "input_tokens": 3777,
+  "output_tokens": 654,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3KyqhR87rMC3NxVsCc",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3676,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model matches a recalled model, and the serial is in range. The retailer, however, is \"Corner Hardware Co,\" which is not on the Sears-only list. Per policy, an unlisted retailer means proof of ownership is requested, so this needs more information rather than a denial."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QvafAA8UUgcJ8oLsnTgsML",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PLEFZ398ECA1, which matches the recalled model series PLEFZ398EC* (R:models).",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial VF12257005 falls within the recalled range VF122xxxxx - VF334xxxxx (R:serials).",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The purchase date of 2008-01-05 is inside the sale window, and a receipt is present, but the claimed retailer 'Corner Hardware Co' is not on the program's list of sellers (Sears only). A retailer not on the list requires further proof of ownership before approval (R:sold_at, R:sold_window, R:receipt).",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window",
+       "R:receipt"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account (T3).",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your claim lists the retailer as Corner Hardware Co, but the program covers units sold at Sears. Please tell us where this unit was actually purchased, and provide proof of ownership (such as a receipt showing the purchase location and date) if the seller was not Sears. If you bought it used or as a gift, please say so and describe how you came to own it.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

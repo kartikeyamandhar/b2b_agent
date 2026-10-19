@@ -1,0 +1,63 @@
+{
+ "text": "The duplicate check found another claim sharing this serial number, and the flag rule takes priority over the other outcomes. I'll record a flag.",
+ "usage": {
+  "input_tokens": 3574,
+  "output_tokens": 480,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAe1uoBR4R6vBb3QCYyD",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2814,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing this serial number, and the flag rule takes priority over the other outcomes. I'll record a flag."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01J4vrSG3HRmYDfdrbj8kS22",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program (e63ad499-0399-5b98-918a-7a38d8bd0933) shares the same serial number, SN48572698. Under the flag rule, a shared serial requires review before any outcome.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The label date code 07/22 is within the recalled date codes.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The retailer 'Corner Hardware Co' is not on the sold-at list, so the purchase cannot be confirmed as a qualifying sale. The purchase date 2022-09-16 is inside the sale window. This is a further reason for review, though the flag takes priority.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

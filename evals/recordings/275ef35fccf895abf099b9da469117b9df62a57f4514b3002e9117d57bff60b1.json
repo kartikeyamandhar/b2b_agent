@@ -1,0 +1,61 @@
+{
+ "text": "The label model 230LX is not recalled, and the purchase predates the sale window. Either finding alone is a denial.",
+ "usage": {
+  "input_tokens": 3297,
+  "output_tokens": 391,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB42j8JNfid2vX7RJNnK",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2452,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label model 230LX is not recalled, and the purchase predates the sale window. Either finding alone is a denial."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01YKrSuUF4UvuTjvjyNjEruJ",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model 230LX, which is not a recalled model. The only recalled model is 200LX.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase date of 2016-12-04 is before the program's sale window (2017-05-01 to 2026-02-28), so the purchase is not eligible.",
+      "cites": [
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial LX002970 falls within a recalled range, but that does not cure the model mismatch or the out-of-window purchase.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

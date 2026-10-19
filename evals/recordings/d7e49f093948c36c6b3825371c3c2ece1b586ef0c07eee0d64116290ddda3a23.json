@@ -1,0 +1,67 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 2891,
+  "output_tokens": 497,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeU8VdmMEZhAmdBaWYd",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2489,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01NUmE4ZsaxW6XmpD3YgeY9a",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Duplicate check found another claim (6d09be8a-9deb-5262-ab8a-b8885d4b6a10) sharing the same payout destination, so the claim must be sent to a person for review.",
+      "cites": [
+       "T5",
+       "R:policy",
+       "T6"
+      ]
+     },
+     {
+      "text": "Label photo is legible and shows model 96775, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "Retailer ALDI is on the list and the purchase date 2019-01-21 is inside the 2016-01-01 to 2019-12-31 sale window; no receipt is required.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "Destruction photo shows the unplugged power cord cut, as instructed, and is not a repeat of the label photo.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "Serial number SN45755438 is present and no date code rule applies; the refund of $40.00 is under the $100 review threshold.",
+      "cites": [
+       "T1",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

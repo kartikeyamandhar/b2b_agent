@@ -1,0 +1,74 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3750,
+  "output_tokens": 501,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB47vhDWdyWCTmEKFjox",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2361,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_018k45xgVyB2YsVsQmXExU3E",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model LXT-CL-1.0, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T7"
+      ]
+     },
+     {
+      "text": "The label date code 0722 falls within the recalled range 0722 to 1223.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "Nordstrom is a listed retailer and the purchase date 2024-01-19 is inside the sale window, and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the power cord cut near the plug, which is the destruction the recall requires.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The program has no serial number rule, so the serial was not checked. The claim is otherwise eligible for repair or replacement, and no refund is requested, so the value threshold does not apply.",
+      "cites": [
+       "T5",
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

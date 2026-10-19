@@ -1,0 +1,69 @@
+{
+ "text": "Checking the policy against the results:\n\n- Flag: T5 found no duplicates, so no flag.\n- Model: T1 reads the label legibly as KY-318A, which is recalled (R:models), and T2 confirms the match. Model confirmed.\n- Serial/date code: the program's rules here don't include a serial or date code range check, so no action.\n- Purchase: T3 shows ALDI (listed, R:sold_at) and the 2018-10-05 date falls inside the window (R:sold_window). No receipt is required per T3, though one was supplied anyway.\n- Destruction: R:destruction requires the unplugged power cord cut. T4 reports the cord appears intact with no visible cut, and the check does not comply. Per the policy, a destruction photo that does not show the instructed destruction is needs_info.\n- Refund is $40.00, under the $100 review threshold (R:value_threshold).\n\nThe outcome is needs_info, asking for a new destruction photo showing the cord cut.",
+ "usage": {
+  "input_tokens": 2844,
+  "output_tokens": 819,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB382wdrK434cJo3WCPW",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3820,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy against the results:\n\n- Flag: T5 found no duplicates, so no flag.\n- Model: T1 reads the label legibly as KY-318A, which is recalled (R:models), and T2 confirms the match. Model confirmed.\n- Serial/date code: the program's rules here don't include a serial or date code range check, so no action.\n- Purchase: T3 shows ALDI (listed, R:sold_at) and the 2018-10-05 date falls inside the window (R:sold_window). No receipt is required per T3, though one was supplied anyway.\n- Destruction: R:destruction requires the unplugged power cord cut. T4 reports the cord appears intact with no visible cut, and the check does not comply. Per the policy, a destruction photo that does not show the instructed destruction is needs_info.\n- Refund is $40.00, under the $100 review threshold (R:value_threshold).\n\nThe outcome is needs_info, asking for a new destruction photo showing the cord cut."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01EnoKua4ijFTgfSGJGVXWvw",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model KY-318A, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase was at ALDI, a listed retailer, on 2018-10-05, which is inside the sale window.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the instructed destruction. The program requires the unplugged power cord to be cut, but the cord in the photo appears intact, so the photo is not compliant and must be resubmitted.",
+      "cites": [
+       "R:destruction",
+       "T4",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The $40.00 refund is under the $100.00 review threshold, so no person review is triggered by the amount.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo showing the power cord of your Ambiano cooker cut after being unplugged. The photo should show the cut cord clearly and should not be the same photo as your label photo.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

@@ -1,0 +1,64 @@
+{
+ "text": "The model matches, but the serial falls outside the recalled \"BN\" range, so the claim fails on serial regardless of the other checks.",
+ "usage": {
+  "input_tokens": 3660,
+  "output_tokens": 446,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3XgU1nTmD6jWpxtzQo",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2200,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model matches, but the serial falls outside the recalled \"BN\" range, so the claim fails on serial regardless of the other checks."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01S8zMd5FghFXYSbuF66i1A6",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number QQ75936211 does not start with \"BN\" and is outside the recalled serial ranges, so the unit is not covered by the recall.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code June 2025 is within the recalled range (manufactured prior to July 2025), and the retailer TEMU.com and purchase date 2024-10-22 are valid under the sale rules. These checks do not offset the serial failure.",
+      "cites": [
+       "R:date_codes",
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T5"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

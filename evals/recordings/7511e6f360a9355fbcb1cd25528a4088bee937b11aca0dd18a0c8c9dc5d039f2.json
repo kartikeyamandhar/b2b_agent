@@ -1,0 +1,56 @@
+{
+ "text": "Policy order: flag takes precedence. check_duplicates (T7) found a same_serial match with another claim, so the outcome is flag.",
+ "usage": {
+  "input_tokens": 2939,
+  "output_tokens": 489,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAfFSvAbLkZHTVBwJpHF",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3458,
+ "content": [
+  {
+   "type": "text",
+   "text": "Policy order: flag takes precedence. check_duplicates (T7) found a same_serial match with another claim, so the outcome is flag."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01886KZFsDG1cXijousFtKLM",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim sharing the same serial number (13a0197e-c63b-5e50-891e-87d220fb596c). Under the claim policy, any shared serial number must go to a person for review together with the matching claim.",
+      "cites": [
+       "T7",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The other eligibility checks all pass, so this claim is not denied on the merits: the label photo is legible and shows model DR2A, which is recalled (T1, T2); serial J0E5490210 is in the recalled range (T3); date code 2017 is in the recalled model year range (T4); the Yamaha dealer purchase on 2019-02-01 is inside the sale window with no receipt required (T5); no destruction photo is required because the remedy is repair (T6).",
+      "cites": [
+       "T1",
+       "T2",
+       "T3",
+       "T4",
+       "T5",
+       "T6",
+       "R:models",
+       "R:serials",
+       "R:date_codes",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

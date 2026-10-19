@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and shows DR2E, a recalled model. The purchase date of 2017-09-17 falls before the sale window (which starts 2018-06-01), so the purchase rule denies the claim. I'll confirm the model against the recalled list before recording the decision.",
+ "usage": {
+  "input_tokens": 3526,
+  "output_tokens": 139,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3UzvBQWJXUFuUQH9y8",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1280,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows DR2E, a recalled model. The purchase date of 2017-09-17 falls before the sale window (which starts 2018-06-01), so the purchase rule denies the claim. I'll confirm the model against the recalled list before recording the decision."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_014R7zW5JEJ1BDTLZQTaAN1x",
+   "name": "check_model",
+   "input": {
+    "model_text": "DR2E"
+   }
+  }
+ ]
+}

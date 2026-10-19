@@ -1,0 +1,65 @@
+{
+ "text": "Applying the policy in order:\n\n- Flag: T6 shows no duplicates. Not triggered.\n- Model: T1 reads the label legibly as 2G512B, a recalled model. Per policy, the label confirms the model despite the typed \"ZG512B\" typo (T2 ambiguous, T3 match on the label reading). Model is confirmed.\n- Serial: the typed serial SN18608212 matches the label reading in T1. The program has no serial range rule in R:models, so no serial denial applies.\n- Purchase: T4 shows Homedepot.com is listed and the date 2022-12-30 is inside the window. No receipt is required.\n- Destruction: required by R:destruction. T5 shows the photo depicts the device with \"RECALLED\" on its screen in white lettering, not handwritten in permanent marker on the product, and the checker's confidence is only 0.6. Per the FAQ, a destruction photo that does not show the instructed destruction is asked for again. This triggers needs_info.\n\nNo flag or deny rule applies, so the outcome is needs_info, asking for a new destruction photo.",
+ "usage": {
+  "input_tokens": 2887,
+  "output_tokens": 857,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB38t3dLTwPmxuRY6KDv",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4459,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order:\n\n- Flag: T6 shows no duplicates. Not triggered.\n- Model: T1 reads the label legibly as 2G512B, a recalled model. Per policy, the label confirms the model despite the typed \"ZG512B\" typo (T2 ambiguous, T3 match on the label reading). Model is confirmed.\n- Serial: the typed serial SN18608212 matches the label reading in T1. The program has no serial range rule in R:models, so no serial denial applies.\n- Purchase: T4 shows Homedepot.com is listed and the date 2022-12-30 is inside the window. No receipt is required.\n- Destruction: required by R:destruction. T5 shows the photo depicts the device with \"RECALLED\" on its screen in white lettering, not handwritten in permanent marker on the product, and the checker's confidence is only 0.6. Per the FAQ, a destruction photo that does not show the instructed destruction is asked for again. This triggers needs_info.\n\nNo flag or deny rule applies, so the outcome is needs_info, asking for a new destruction photo."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01HMBQdF7HSLgDTDKyB87BXR",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2G512B, which is a recalled model, so the model is confirmed despite the typed typo 'ZG512B'.",
+      "cites": [
+       "R:models",
+       "R:policy",
+       "T1",
+       "T2",
+       "T3"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The Homedepot.com purchase on 2022-12-30 is inside the sale window and the retailer is listed; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the instructed destruction: the 'RECALLED' wording appears to be a display on the device screen rather than written in permanent marker on the product. FAQ says such a photo is asked for again.",
+      "cites": [
+       "R:destruction",
+       "T5",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new destruction photo showing your recalled power bank with the word \"Recalled\" written on it in permanent marker. The photo should show the product itself, not a screen display, and should be different from your label photo.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

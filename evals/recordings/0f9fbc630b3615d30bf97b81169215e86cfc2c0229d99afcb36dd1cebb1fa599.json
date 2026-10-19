@@ -1,0 +1,77 @@
+{
+ "text": "The policy does not list serial ranges, and the serial tool returned \"skipped\" with no verdict. The serial rule's outcome only denies a serial outside the recalled ranges, or asks for info when it is missing. Here the serial is present, the check just didn't complete, and the claim has no duplicates, a legible recalled label, a purchase inside the window at a listed retailer, and a compliant destruction photo. The FAQ says claims the checker could not finish are sent to a person for review, so I'll flag the claim rather than approve it outright.",
+ "usage": {
+  "input_tokens": 4701,
+  "output_tokens": 680,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4EVUMS5WiyQg4bX7eL",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3218,
+ "content": [
+  {
+   "type": "text",
+   "text": "The policy does not list serial ranges, and the serial tool returned \"skipped\" with no verdict. The serial rule's outcome only denies a serial outside the recalled ranges, or asks for info when it is missing. Here the serial is present, the check just didn't complete, and the claim has no duplicates, a legible recalled label, a purchase inside the window at a listed retailer, and a compliant destruction photo. The FAQ says claims the checker could not finish are sent to a person for review, so I'll flag the claim rather than approve it outright."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01YMDeXW1x7WHD7o6oaqCB9K",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 98527, which is on the recall list, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase is at ALDI, a listed retailer, dated 2018-10-11, which is inside the 2016-2019 sale window. No receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the product with its power cord cut, which matches the required destruction.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The serial check did not return a verdict (skipped both times), so the serial could not be verified against the recalled ranges. The FAQ sends claims the checker could not finish to a person for review.",
+      "cites": [
+       "T5",
+       "T7",
+       "T8",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The refund is $40.00, under the $100.00 threshold, so the amount alone does not require review.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.6
+   }
+  }
+ ]
+}

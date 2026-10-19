@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and shows model 200LX, which is recalled. The serial QQ58710406 is out of range for the recalled serial ranges. Next I'll confirm the model against the program list.",
+ "usage": {
+  "input_tokens": 3304,
+  "output_tokens": 112,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Y3u6sFgMDAtQ3YXg4",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1077,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows model 200LX, which is recalled. The serial QQ58710406 is out of range for the recalled serial ranges. Next I'll confirm the model against the program list."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_011GQHzhHGw3dLe8Q6jgwxrP",
+   "name": "check_model",
+   "input": {
+    "model_text": "200LX"
+   }
+  }
+ ]
+}

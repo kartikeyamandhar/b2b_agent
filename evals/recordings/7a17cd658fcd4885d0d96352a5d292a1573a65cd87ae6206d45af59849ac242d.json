@@ -1,0 +1,66 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3562,
+  "output_tokens": 444,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAg19zfX6C3Wx9g63qEy",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 1958,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_013PeFqEpDQqVGyEMii3kqgS",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim sharing the same serial number, so the claim must be sent to a person for review together with the matched claim.",
+      "cites": [
+       "R:policy",
+       "T6",
+       "T7"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows the recalled model 200LX, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The label photo reads serial HA06279, which falls within the recalled range HA00001 - HA14873. The typed serial QQ41130245 is outside the recalled ranges, which conflicts with the label and is part of why a person should review.",
+      "cites": [
+       "T1",
+       "T3",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The purchase date of 2023-04-11 is inside the sale window, and no receipt is required.",
+      "cites": [
+       "T4",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for a repair or replacement remedy.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

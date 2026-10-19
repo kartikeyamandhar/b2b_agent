@@ -1,0 +1,66 @@
+{
+ "text": "Checking the policy against the results:\n\n- Model: label legible (T1) and shows REV 12 Kids Bike, a recalled model (R:models, T2). Confirmed.\n- Serial: \"01VX56532856\" begins with 01VX, in range (R:serials, T3).\n- Date code: typed and label date code is 2025, outside the recalled 2022-2024 range (R:date_codes, T4). Policy says outside the recalled ranges is deny.\n- Purchase: REI.com is listed, but the purchase date 2021-11-22 is before the sale window 2022-03-01 (R:sold_window, T5). Before the window is deny.\n- Duplicates: none (T7), so no flag.\n\nFlag does not apply. Deny applies on two independent grounds: the date code is out of range and the purchase predates the sale window. Both are cited.",
+ "usage": {
+  "input_tokens": 3004,
+  "output_tokens": 717,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeNcNWuLL7tFHXGyp6i",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 5293,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy against the results:\n\n- Model: label legible (T1) and shows REV 12 Kids Bike, a recalled model (R:models, T2). Confirmed.\n- Serial: \"01VX56532856\" begins with 01VX, in range (R:serials, T3).\n- Date code: typed and label date code is 2025, outside the recalled 2022-2024 range (R:date_codes, T4). Policy says outside the recalled ranges is deny.\n- Purchase: REI.com is listed, but the purchase date 2021-11-22 is before the sale window 2022-03-01 (R:sold_window, T5). Before the window is deny.\n- Duplicates: none (T7), so no flag.\n\nFlag does not apply. Deny applies on two independent grounds: the date code is out of range and the purchase predates the sale window. Both are cited."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01PLL9W6TLbqYL9LHAegA9E2",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows REV 12 Kids Bike, a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code on the label is 2025, which is outside the recalled date code range of model years 2022-2024.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase date of 2021-11-22 is before the sale window (2022-03-01 to 2024-05-31). Purchases before the window are not eligible, even though REI.com is a listed retailer.",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "T5",
+       "faq#2"
+      ]
+     },
+     {
+      "text": "The serial number begins with 01VX and is in range, and no duplicate claims were found, so neither a flag nor a needs-info result applies. The denial rests on the date code and purchase date.",
+      "cites": [
+       "T3",
+       "T7",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

@@ -1,0 +1,62 @@
+{
+ "text": "Reviewing the checks:\n\n- Label photo (T1) is legible and shows LXT-DL-1.0, which is not a recalled model. The typed model LXT-CL-1.0 (T2) matches, but under policy the legible label controls: a legible label showing a non-recalled model means deny (R:policy, R:models, T1, T3).\n- Serial and date code are in range (T4), purchase is inside window at a listed retailer (T5), destruction photo complies (T6), no duplicates (T7).\n\nThe label photo is the controlling evidence, and it shows a model outside the recall, so the claim is denied.",
+ "usage": {
+  "input_tokens": 2986,
+  "output_tokens": 632,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB399Sq9KPW5ebq4QoRZ",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3076,
+ "content": [
+  {
+   "type": "text",
+   "text": "Reviewing the checks:\n\n- Label photo (T1) is legible and shows LXT-DL-1.0, which is not a recalled model. The typed model LXT-CL-1.0 (T2) matches, but under policy the legible label controls: a legible label showing a non-recalled model means deny (R:policy, R:models, T1, T3).\n- Serial and date code are in range (T4), purchase is inside window at a listed retailer (T5), destruction photo complies (T6), no duplicates (T7).\n\nThe label photo is the controlling evidence, and it shows a model outside the recall, so the claim is denied."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01FePa7YGrGAm8SFajJj66WF",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model LXT-DL-1.0, which is not a recalled model. Under the claim policy a legible label showing a non-recalled model means the unit is not part of the recall, even though the typed model reads LXT-CL-1.0.",
+      "cites": [
+       "R:policy",
+       "R:models",
+       "T1",
+       "T3"
+      ]
+     },
+     {
+      "text": "The typed model LXT-CL-1.0 matches the recall, but the label photo overrides the typed model when the label is legible.",
+      "cites": [
+       "R:policy",
+       "T2",
+       "T1"
+      ]
+     },
+     {
+      "text": "Other checks passed: the date code 0722 is in range, the purchase at Amazon falls inside the sale window, the destruction photo shows the cut plug, and no duplicate claims were found. These do not overcome the model mismatch.",
+      "cites": [
+       "T4",
+       "T5",
+       "T6",
+       "T7",
+       "R:date_codes",
+       "R:sold_window",
+       "R:destruction"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

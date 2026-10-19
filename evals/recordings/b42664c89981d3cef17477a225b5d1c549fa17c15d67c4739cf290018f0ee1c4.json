@@ -1,0 +1,69 @@
+{
+ "text": "The label is legible and shows model KY-311A, which is not recalled (the recalled list is 93550, KY-318B, 96775, KY-318A, 98527, 6L-PC). Under the model rule that is a deny. The flag rule takes precedence over deny, though: the policy says that when several rules apply, the first triggered outcome applies, and flag comes first. The shared payout account with another claim means this must be flagged.",
+ "usage": {
+  "input_tokens": 3716,
+  "output_tokens": 582,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3T9TqMyxtPwNEBFfvH",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3528,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows model KY-311A, which is not recalled (the recalled list is 93550, KY-318B, 96775, KY-318A, 98527, 6L-PC). Under the model rule that is a deny. The flag rule takes precedence over deny, though: the policy says that when several rules apply, the first triggered outcome applies, and flag comes first. The shared payout account with another claim means this must be flagged."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01To1FzcP1zPseJMUmcxCtBH",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "This claim shares a payout destination with another claim in the program, so it must be flagged for review.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The legible label photo shows model KY-311A, which is not one of the recalled models, so the model is not confirmed. This would otherwise be a denial.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase was at ALDI on 2016-07-21, inside the sale window, and no receipt is required, so the purchase checks pass.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the unplugged power cord cut, as the remedy requires.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The typed serial could not be checked against the recalled ranges because the serial check was skipped; the program has no serial rule here, so it does not change the outcome.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.8
+   }
+  }
+ ]
+}

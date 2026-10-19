@@ -1,0 +1,64 @@
+{
+ "text": "The label is legible and shows a recalled model (T1, T6), but the serial is outside the recalled ranges (T4). The serial rule is a deny condition, and no other rule triggers a flag or needs_info.",
+ "usage": {
+  "input_tokens": 3794,
+  "output_tokens": 487,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3MRaHEwmQzuSoDWREL",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2784,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows a recalled model (T1, T6), but the serial is outside the recalled ranges (T4). The serial rule is a deny condition, and no other rule triggers a flag or needs_info."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01CHdSMCCKiZCE8MfA7R46th",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows REV 12 Kids Bike, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number QQ66014935 is outside the recalled serial ranges. Recalled serials must begin with ET22, ET23, 01VX, or 07VX.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The date code 2022 is within the recalled range, and the purchase from REI.com on 2023-08-21 is inside the sale window at a listed retailer. No receipt is required. These checks do not offset the out-of-range serial.",
+      "cites": [
+       "T5",
+       "T2",
+       "R:date_codes",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

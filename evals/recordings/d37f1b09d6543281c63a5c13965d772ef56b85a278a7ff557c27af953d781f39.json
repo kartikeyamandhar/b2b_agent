@@ -1,0 +1,72 @@
+{
+ "text": "The legible label shows CD10004LS, which is not a recalled model (T6 mismatch), so the claim is denied on the model rule. Duplicate-flag and policy rules put the same-address match under flag, and that takes precedence over deny under the stated ordering. The claim therefore goes to a person.",
+ "usage": {
+  "input_tokens": 4473,
+  "output_tokens": 632,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3QSF4AeogVYgom5TGj",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3247,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows CD10004LS, which is not a recalled model (T6 mismatch), so the claim is denied on the model rule. Duplicate-flag and policy rules put the same-address match under flag, and that takes precedence over deny under the stated ordering. The claim therefore goes to a person."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_019t2hpLY225kA76cwTGX9ws",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The check found another claim (b23dacd4-9aa7-58cd-929f-2810aea341e3) sharing this claim's address. Under the policy, any shared address is a flag, and the claim goes to a person together with the matching claim.",
+      "cites": [
+       "T3",
+       "T7",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The legible label photo reads model CD10004LS, which is not one of the recalled models. Without a flag, this would be a denial under the model rule.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show a seatback with RECALLED marked on both the front and rear, so it would also need a new photo if the claim were continued.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The purchase is at Amazon.com on 2023-06-06, inside the sale window, and no receipt is required, so the purchase rules pass.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The serial check was skipped, so no serial result is available. The refund of $207.13 is over the $100 threshold and would be reviewed by a person regardless.",
+      "cites": [
+       "T5",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

@@ -1,0 +1,55 @@
+{
+ "text": "Flag takes precedence: check_duplicates (T6) found a shared payout account with another claim, so the policy requires a person to review it, regardless of the other checks passing.",
+ "usage": {
+  "input_tokens": 2898,
+  "output_tokens": 416,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeTrJK3inComcEWP27Q",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2543,
+ "content": [
+  {
+   "type": "text",
+   "text": "Flag takes precedence: check_duplicates (T6) found a shared payout account with another claim, so the policy requires a person to review it, regardless of the other checks passing."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01WSGuiQKUSK4Vy642Fz2jLh",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim (75208e15-32ad-504c-b057-57e39d1b053b) sharing the same payout destination. Claims sharing a payout account must be sent to a person for review, together with the matching claim.",
+      "cites": [
+       "T6",
+       "R:policy",
+       "T7"
+      ]
+     },
+     {
+      "text": "All other checks pass: the label photo is legible and shows recalled model 34790, the December 2023 date code is in range, the Target purchase is inside the sale window, and no destruction photo is required. These do not override the duplicate flag.",
+      "cites": [
+       "T1",
+       "T2",
+       "T3",
+       "T4",
+       "T5",
+       "R:models",
+       "R:date_codes",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

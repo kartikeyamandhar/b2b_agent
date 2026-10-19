@@ -1,0 +1,29 @@
+{
+ "text": "The label reads CD10004LS, which is not on the recalled list, and the duplicate check found a shared address. Let me confirm the model against the recalled list, since the typed model matches the label.",
+ "usage": {
+  "input_tokens": 3496,
+  "output_tokens": 114,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3uBTcMTw8Bz32ThKwr",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1363,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label reads CD10004LS, which is not on the recalled list, and the duplicate check found a shared address. Let me confirm the model against the recalled list, since the typed model matches the label."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01AQFB48mbXu4by6ajV78WoK",
+   "name": "check_model",
+   "input": {
+    "model_text": "CD10004LS"
+   }
+  }
+ ]
+}

@@ -1,0 +1,58 @@
+{
+ "text": "The check confirms that 2G805 is not a recalled model.",
+ "usage": {
+  "input_tokens": 3601,
+  "output_tokens": 393,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB46gZ8p2Q1Y1AyiuHJK",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2076,
+ "content": [
+  {
+   "type": "text",
+   "text": "The check confirms that 2G805 is not a recalled model."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_015KxFqRTZw61fqwbhdV9Mcg",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model 2G805, which is not a recalled model. Under the claim policy the label is the evidence, so the claimed product is not covered by the recall, even though the typed model 2G520 is recalled.",
+      "cites": [
+       "R:policy",
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (Esrtech.com) within the sale window, and no duplicate claims were found, but these checks do not cure the model mismatch.",
+      "cites": [
+       "T2",
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the product marked RECALLED as required, but eligibility fails on the model.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

@@ -1,0 +1,62 @@
+{
+ "text": "The model check confirms P1441 is not a recalled model. Under the policy, flag takes precedence over deny when a rule triggers it, and the duplicate photo hit (T3) triggers flag, so I'm recording a flag.",
+ "usage": {
+  "input_tokens": 3556,
+  "output_tokens": 473,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3JJgiYaBeWu7shPqNG",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2942,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model check confirms P1441 is not a recalled model. Under the policy, flag takes precedence over deny when a rule triggers it, and the duplicate photo hit (T3) triggers flag, so I'm recording a flag."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01WUEebjCbRytQr2y6k5KSge",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo for this claim is the same image (same sha256) as a photo on another claim in the program, so the claim is flagged for review under the duplicate-photo rule.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The legible label shows model P1441, which is not one of the recalled models (P1410, P1410-P, P1411, P1411-P), so the model does not qualify.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (www.walmart.com) and inside the sale window, and no receipt is required, so the purchase rules are satisfied.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial check was skipped, so no serial-range result is available.",
+      "cites": [
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

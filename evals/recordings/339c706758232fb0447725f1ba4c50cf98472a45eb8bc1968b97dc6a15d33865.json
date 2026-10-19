@@ -1,0 +1,57 @@
+{
+ "text": "The model matches, but the serial is out of range. The policy says an out-of-range serial is a denial, and no other rule overrides it, so I'm recording the decision now.",
+ "usage": {
+  "input_tokens": 3462,
+  "output_tokens": 388,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3XqPXWh3hopa8BvN3h",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2063,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model matches, but the serial is out of range. The policy says an out-of-range serial is a denial, and no other rule overrides it, so I'm recording the decision now."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01LQjWsBYi3gdiE4GsDwRYuB",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 200LX, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial number QQ29553555 (confirmed on the label) is outside all recalled serial ranges, so the unit is not covered by the recall.",
+      "cites": [
+       "R:serials",
+       "T1",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase date of 2023-06-27 is inside the sale window, and no duplicate claims were found, but these do not overcome the serial mismatch.",
+      "cites": [
+       "R:sold_window",
+       "T2",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

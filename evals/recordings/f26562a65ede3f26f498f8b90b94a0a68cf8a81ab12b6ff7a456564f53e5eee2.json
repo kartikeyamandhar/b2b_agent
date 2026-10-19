@@ -1,0 +1,47 @@
+{
+ "text": "I'll read the label photo, check the purchase, check for duplicates, and check the typed serial, all in parallel since none depend on each other.",
+ "usage": {
+  "input_tokens": 2620,
+  "output_tokens": 176,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB42TkbD8JwxT2SBDCxv",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1291,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll read the label photo, check the purchase, check for duplicates, and check the typed serial, all in parallel since none depend on each other."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0158azwrGBQsJwX8Hh6KUhit",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_018YoDVcz6g2a54tULRLv44h",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Kz18wYYwrB3ZhtYVbHBNWZ",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_012Dop16CK5VNM3m8xmzDoDk",
+   "name": "check_serial",
+   "input": {
+    "serial": "QQ29553555"
+   }
+  }
+ ]
+}

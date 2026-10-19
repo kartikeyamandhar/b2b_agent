@@ -1,0 +1,63 @@
+{
+ "text": "Model is confirmed as recalled. The date code is out of range, which triggers a denial under the date code rule.",
+ "usage": {
+  "input_tokens": 3535,
+  "output_tokens": 426,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3hSyBZyChzcetjiv3F",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2197,
+ "content": [
+  {
+   "type": "text",
+   "text": "Model is confirmed as recalled. The date code is out of range, which triggers a denial under the date code rule."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01JVt6xLhbbwKXTtHrxbmwPc",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The date code on the label and the typed date code is 08/23, which is not one of the recalled date codes (07/22 NH or 08/22 NH). Under the date code rule, an out-of-range date code is a denial.",
+      "cites": [
+       "T5",
+       "R:date_codes",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (www.grainger.com) dated 2023-04-19, inside the sale window, and no receipt is required. This does not change the outcome.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

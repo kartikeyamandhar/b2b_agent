@@ -1,0 +1,63 @@
+{
+ "text": "Checking the results against policy:\n\n- Model: T1 label is legible and shows 200LX, a recalled model. Confirmed (R:models, T2).\n- Serial: typed serial QQ29553555 is outside all recalled ranges (T3). Per policy, serial outside recalled ranges is deny. The serial rule applies to the typed value, and the check returned out_of_range. Note the serial prefix \"QQ\" does not match any listed prefix (C, S, HA, LX).\n- Purchase: 2023-06-27 is inside the sale window (T4, R:sold_window), retailer check skipped since no receipt is required.\n- Duplicates: none (T6).\n- Destruction photo: not required (T5), remedy is repair.\n\nSince the serial number rule produces a deny and deny takes precedence over needs_info and approve (no flag triggered), the outcome is deny.",
+ "usage": {
+  "input_tokens": 2695,
+  "output_tokens": 646,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3645JWzhXFetJoHttw",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3097,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against policy:\n\n- Model: T1 label is legible and shows 200LX, a recalled model. Confirmed (R:models, T2).\n- Serial: typed serial QQ29553555 is outside all recalled ranges (T3). Per policy, serial outside recalled ranges is deny. The serial rule applies to the typed value, and the check returned out_of_range. Note the serial prefix \"QQ\" does not match any listed prefix (C, S, HA, LX).\n- Purchase: 2023-06-27 is inside the sale window (T4, R:sold_window), retailer check skipped since no receipt is required.\n- Duplicates: none (T6).\n- Destruction photo: not required (T5), remedy is repair.\n\nSince the serial number rule produces a deny and deny takes precedence over needs_info and approve (no flag triggered), the outcome is deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01592KXUQCH2rE9k3J3Dt4Br",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 200LX, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The typed serial number QQ29553555 is outside all recalled serial number ranges, so the unit is not part of this recall.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The purchase date of 2023-06-27 falls inside the sale window, and no duplicate claims were found.",
+      "cites": [
+       "R:sold_window",
+       "T4",
+       "T6"
+      ]
+     },
+     {
+      "text": "No destruction photo is required because the remedy is repair, so that check does not change the outcome.",
+      "cites": [
+       "T5",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

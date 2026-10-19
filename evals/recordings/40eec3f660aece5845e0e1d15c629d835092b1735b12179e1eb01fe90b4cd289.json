@@ -1,0 +1,69 @@
+{
+ "text": "Checking the results: the label is legible and shows 790.990191A1, which matches recalled model 790.990191*. Serial VF12242255 is within VF122xxxxx\u2013VF334xxxxx. Retailer is Sears (listed). Purchase date 2000-07-31 is before the sale window opening 2001-06-01, so under the policy this is a denial. No duplicates were found, and no destruction photo is required for this remedy. Flag does not apply, so the purchase-date rule drives the outcome.",
+ "usage": {
+  "input_tokens": 3239,
+  "output_tokens": 607,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeMjC1VRMv6iqtyqykq",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3408,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results: the label is legible and shows 790.990191A1, which matches recalled model 790.990191*. Serial VF12242255 is within VF122xxxxx\u2013VF334xxxxx. Retailer is Sears (listed). Purchase date 2000-07-31 is before the sale window opening 2001-06-01, so under the policy this is a denial. No duplicates were found, and no destruction photo is required for this remedy. Flag does not apply, so the purchase-date rule drives the outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01HnLcSZRY7jDYoc7RrWsX6C",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model 790.990191A1, which matches the recalled model 790.990191*, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number VF12242255 falls within the recalled range VF122xxxxx - VF334xxxxx.",
+      "cites": [
+       "T3",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2000-07-31 is before the sale window opening of 2001-06-01. Purchases before the sale window are not eligible, so the claim is denied even though the retailer (Sears) is listed and a receipt is present.",
+      "cites": [
+       "T4",
+       "R:sold_window",
+       "R:policy",
+       "T7"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so no review flag applies.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this repair-or-replacement remedy.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

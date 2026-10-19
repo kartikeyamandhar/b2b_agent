@@ -1,0 +1,68 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: T1 reads the label legibly as 6L-PC, a recalled model (R:models). T2 confirms a match.\n- Serial/date code: the program has no serial or date code rule in the policy, so these don't apply.\n- Purchase: ALDI is listed (R:sold_at, T3), and 2017-11-29 is inside the window 2016-01-01 to 2019-12-31 (R:sold_window, T3). No receipt is required (T3).\n- Destruction: T4 shows the product with the power cord cut, and the photo is distinct from the label photo (R:destruction). It complies.\n- Duplicates: T5 found no matches.\n- Refund: $40.00, under the $100 threshold (R:value_threshold).\n\nNo rule triggers a flag, deny, or needs_info, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2842,
+  "output_tokens": 686,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeUeXv5rX4UQopbm5CU",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3070,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: T1 reads the label legibly as 6L-PC, a recalled model (R:models). T2 confirms a match.\n- Serial/date code: the program has no serial or date code rule in the policy, so these don't apply.\n- Purchase: ALDI is listed (R:sold_at, T3), and 2017-11-29 is inside the window 2016-01-01 to 2019-12-31 (R:sold_window, T3). No receipt is required (T3).\n- Destruction: T4 shows the product with the power cord cut, and the photo is distinct from the label photo (R:destruction). It complies.\n- Duplicates: T5 found no matches.\n- Refund: $40.00, under the $100 threshold (R:value_threshold).\n\nNo rule triggers a flag, deny, or needs_info, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017EbUXwjkuJwdZyu3Vj3UZn",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 6L-PC, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase was at ALDI, a listed retailer, on 2017-11-29, which is inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the unit with the power cord cut, as instructed, and is not a repeat of the label photo.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The $40.00 refund is below the $100.00 person-review threshold.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

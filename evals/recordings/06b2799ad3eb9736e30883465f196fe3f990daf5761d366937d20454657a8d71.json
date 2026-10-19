@@ -1,0 +1,70 @@
+{
+ "text": "Let me work through the policy.\n\n- Flag: check_duplicates (T6) found no hits. No flag.\n- Model: label photo is legible (T1) and shows BE10019US-GR, a recalled model. Model confirmed despite the typed typo (T2 ambiguous, but the label governs). No deny.\n- Serial/date code: no serial or date code rule in this program. Not applicable.\n- Purchase: Amazon.com is listed (T4), date 2024-02-10 is inside the window, no receipt required. No deny or needs_info.\n- Destruction: required. T5 says the photo shows a single face with a cable-like line, not clearly a seatback with front and rear marking. Per policy, a destruction photo that does not show the instructed destruction is needs_info. The check confidence is 0.6 and it reports complies: false.\n- Value: $171.67 exceeds $100, so a person reviews it afterward, but that does not change the outcome.\n\nThe outcome is needs_info, asking for a clearer destruction photo.",
+ "usage": {
+  "input_tokens": 2959,
+  "output_tokens": 884,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB37h35EzhUsGGC7FnrV",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4028,
+ "content": [
+  {
+   "type": "text",
+   "text": "Let me work through the policy.\n\n- Flag: check_duplicates (T6) found no hits. No flag.\n- Model: label photo is legible (T1) and shows BE10019US-GR, a recalled model. Model confirmed despite the typed typo (T2 ambiguous, but the label governs). No deny.\n- Serial/date code: no serial or date code rule in this program. Not applicable.\n- Purchase: Amazon.com is listed (T4), date 2024-02-10 is inside the window, no receipt required. No deny or needs_info.\n- Destruction: required. T5 says the photo shows a single face with a cable-like line, not clearly a seatback with front and rear marking. Per policy, a destruction photo that does not show the instructed destruction is needs_info. The check confidence is 0.6 and it reports complies: false.\n- Value: $171.67 exceeds $100, so a person reviews it afterward, but that does not change the outcome.\n\nThe outcome is needs_info, asking for a clearer destruction photo."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01SBydmyBThnNUYJ6Jcbetbz",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model BE10019US-GR, which is a recalled model, so the model is confirmed despite the typo in the typed model number.",
+      "cites": [
+       "R:models",
+       "R:policy",
+       "T1",
+       "T3"
+      ]
+     },
+     {
+      "text": "The purchase is from Amazon.com, a listed retailer, dated 2024-02-10 inside the sale window, and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this claim.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the instructed destruction. It shows a single face with a cable-like line rather than a seatback marked RECALLED on both front and rear, so it does not meet the destruction requirement.",
+      "cites": [
+       "R:destruction",
+       "T5",
+       "faq#3"
+      ]
+     },
+     {
+      "text": "The refund of $171.67 is over the $100 threshold, so a person will review it after approval, but this does not change the outcome here.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a clearer photo of the destroyed product showing the word RECALLED written in large letters on both the front and the rear of the seatback, using a marker, so the destruction can be verified.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

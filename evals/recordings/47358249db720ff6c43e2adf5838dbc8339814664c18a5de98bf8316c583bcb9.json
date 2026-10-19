@@ -1,0 +1,68 @@
+{
+ "text": "The model is confirmed as recalled. The destruction photo does not show the required \"RECALLED\" marker writing on the seatback, so the claim needs more information before a refund.",
+ "usage": {
+  "input_tokens": 3794,
+  "output_tokens": 545,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3QXiCvTEhcEHRMpESg",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2406,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed as recalled. The destruction photo does not show the required \"RECALLED\" marker writing on the seatback, so the claim needs more information before a refund."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01ViZxPwwwFpdSY3cpbQXLm5",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model AD10004BE, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase is from Amazon.com on 2023-11-04, which is a listed retailer inside the sale window, and no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo shows a sign or card reading RECALLED, not the required marker writing on the front and rear of the seatback, so it does not show the instructed destruction.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The serial check was skipped because the program has no serial rule that was triggered here, so the serial is not a basis for denial.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new destruction photo showing the word \"RECALLED\" written in large letters with a marker on both the front and the rear of the seatback of the recalled seat.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

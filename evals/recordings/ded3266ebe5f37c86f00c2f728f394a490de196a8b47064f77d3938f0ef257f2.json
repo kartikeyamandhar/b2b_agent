@@ -1,0 +1,62 @@
+{
+ "text": "The model is confirmed, and no duplicates were found. The purchase predates the sale window, which is grounds for denial.",
+ "usage": {
+  "input_tokens": 3513,
+  "output_tokens": 419,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3vegzLEe4Kg2uyb2D3",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2960,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed, and no duplicates were found. The purchase predates the sale window, which is grounds for denial."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01NnWjypuMVy1UwYoNcXvW2r",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The purchase date of 2017-12-20 is before the program's sale window, which opens 2019-01-01. Purchases before the window are ineligible.",
+      "cites": [
+       "R:sold_window",
+       "R:policy",
+       "T2"
+      ]
+     },
+     {
+      "text": "The legible label photo shows model 34790, which is a recalled model, so the model is confirmed. The model is not the reason for denial.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The label's date code (December 2023) is within the recalled range (manufactured before January 2024), so the date code is not the reason for denial.",
+      "cites": [
+       "T5",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,65 @@
+{
+ "text": "Checking the policy against the results:\n\n- Duplicates: T5 found no hits, so no flag.\n- Model: T1 reads the label legibly as \"2K512B\". That is not on the recalled list (2G505, 2G520, 2G505B, 2G512B). Per R:policy, a legible label showing a non-recalled model means deny. T2 confirms the mismatch.\n- Serial/date code: no date code rule applies to the decision beyond the model check; the policy outcome is already determined.\n- Purchase: retailer listed and date inside the window (T3), so no issue there.\n- Destruction: T4 indicates the marking \"Recalled\" in permanent marker is not confirmed, which would otherwise be needs_info, but the deny from the model check takes precedence in the policy order.\n\nThe outcome is deny.",
+ "usage": {
+  "input_tokens": 2836,
+  "output_tokens": 716,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeUtGuLXwpA82aXGhgK",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 5131,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy against the results:\n\n- Duplicates: T5 found no hits, so no flag.\n- Model: T1 reads the label legibly as \"2K512B\". That is not on the recalled list (2G505, 2G520, 2G505B, 2G512B). Per R:policy, a legible label showing a non-recalled model means deny. T2 confirms the mismatch.\n- Serial/date code: no date code rule applies to the decision beyond the model check; the policy outcome is already determined.\n- Purchase: retailer listed and date inside the window (T3), so no issue there.\n- Destruction: T4 indicates the marking \"Recalled\" in permanent marker is not confirmed, which would otherwise be needs_info, but the deny from the model check takes precedence in the policy order.\n\nThe outcome is deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_015Mv3u9zwPer6FYQKHP6i5g",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and reads model 2K512B, which is not on the recalled model list (2G505, 2G520, 2G505B, 2G512B). A legible label showing a non-recalled model means the unit is not part of this recall.",
+      "cites": [
+       "R:policy",
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The typed model matches the label reading and is also not a recalled model, so the claim cannot be confirmed as a recalled unit.",
+      "cites": [
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, and the retailer and purchase date are within the eligible list and window, so those checks do not change the outcome.",
+      "cites": [
+       "T3",
+       "T5",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the instructed permanent-marker 'Recalled' marking, which would otherwise require a new photo, but the model denial takes precedence.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

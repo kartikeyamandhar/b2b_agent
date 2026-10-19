@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and shows LDE4413BD, which is recalled. The serial is in range, the purchase is at a listed retailer within the window, and there are no duplicates. I'll confirm the model against the check tool before deciding.",
+ "usage": {
+  "input_tokens": 4002,
+  "output_tokens": 128,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3QDd32pjgETeK9ULyj",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1671,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows LDE4413BD, which is recalled. The serial is in range, the purchase is at a listed retailer within the window, and there are no duplicates. I'll confirm the model against the check tool before deciding."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01AY1YXcMFbLL2NuJ8vZ1oBy",
+   "name": "check_model",
+   "input": {
+    "model_text": "LDE4413BD"
+   }
+  }
+ ]
+}

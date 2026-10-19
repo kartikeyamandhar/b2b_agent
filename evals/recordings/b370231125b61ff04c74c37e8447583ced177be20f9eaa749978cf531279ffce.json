@@ -1,0 +1,67 @@
+{
+ "text": "The legible label reads \"TEV 16 Kids Bike\", which does not match any recalled model (T6). The typed model \"TEV 16\" is the same non-recalled string. The claimant's typed model reads as \"TEV 16\" and the label reads \"TEV 16\", so there is no evidence the label is an unreadable or typo-ed \"REV 16\"; the label is legible and shows a non-recalled model. Under the policy, a legible label showing a non-recalled model is a deny, regardless of the serial and date code being in range.",
+ "usage": {
+  "input_tokens": 3832,
+  "output_tokens": 616,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3qR82nYMqw9SCqApG5",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3112,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label reads \"TEV 16 Kids Bike\", which does not match any recalled model (T6). The typed model \"TEV 16\" is the same non-recalled string. The claimant's typed model reads as \"TEV 16\" and the label reads \"TEV 16\", so there is no evidence the label is an unreadable or typo-ed \"REV 16\"; the label is legible and shows a non-recalled model. Under the policy, a legible label showing a non-recalled model is a deny, regardless of the serial and date code being in range."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_014y7QS76KZgcWVVsfZafsKN",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 'TEV 16 Kids Bike', which is not one of the recalled models (REV 12, REV 16, REV 20 Kids Bike).",
+      "cites": [
+       "R:models",
+       "R:policy",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The typed model 'TEV 16 Kids Bike' also does not match a recalled model, so the typed model gives no basis for approval.",
+      "cites": [
+       "R:models",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number ET2342024992 is in a recalled range and the date code 2022 is in the recalled range, but these do not cure a legible non-recalled model.",
+      "cites": [
+       "R:serials",
+       "R:date_codes",
+       "T4",
+       "T5"
+      ]
+     },
+     {
+      "text": "Purchase at REI.com on 2022-03-11 is within the sale window and the retailer is listed; no duplicate claims were found.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

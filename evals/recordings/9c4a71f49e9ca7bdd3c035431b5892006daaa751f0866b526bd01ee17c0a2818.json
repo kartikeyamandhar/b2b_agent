@@ -1,0 +1,64 @@
+{
+ "text": "Checking the policy in order: flag (duplicates) \u2014 T5 found none. Model \u2014 T1 legible, shows AD10025GR, recalled; T2 match. Serial/date code \u2014 program has no such rule here (R:models lists none), so not applied. Purchase \u2014 T3: Amazon.com listed, inside window, receipt not required. Destruction \u2014 R:destruction requires marking; T4 could not confirm the instructed marking (rear not visible, unclear it's a seatback, marker use unconfirmed). Per policy, a destruction photo that does not show the instructed destruction is needs_info, and the claimant is asked again. Refund $119.99 exceeds $100 threshold, but that only adds person review after approval; it doesn't change the outcome here.",
+ "usage": {
+  "input_tokens": 2906,
+  "output_tokens": 749,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Baz49jyvjnhrbLYEt",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3805,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy in order: flag (duplicates) \u2014 T5 found none. Model \u2014 T1 legible, shows AD10025GR, recalled; T2 match. Serial/date code \u2014 program has no such rule here (R:models lists none), so not applied. Purchase \u2014 T3: Amazon.com listed, inside window, receipt not required. Destruction \u2014 R:destruction requires marking; T4 could not confirm the instructed marking (rear not visible, unclear it's a seatback, marker use unconfirmed). Per policy, a destruction photo that does not show the instructed destruction is needs_info, and the claimant is asked again. Refund $119.99 exceeds $100 threshold, but that only adds person review after approval; it doesn't change the outcome here."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Y1DodtQuKqCB6BLUSZxMcB",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model AD10025GR, which is on the recalled list, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, or payout account with this claim.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The Amazon.com purchase on 2023-08-12 is inside the sale window and the retailer is listed; no receipt is required for this claim.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the instructed destruction: it is unclear the item is a seatback, the RECALLED marking is not confirmed as hand-drawn with a marker, and the rear of the seatback is not visible. Per program policy, the destruction photo must be asked for again.",
+      "cites": [
+       "R:destruction",
+       "R:policy",
+       "T4",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new destruction photo showing the seatback with \"RECALLED\" written in large letters with a marker on both the front and the rear of the seatback. Make sure the whole seatback and both sides are visible in the photo.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

@@ -1,0 +1,65 @@
+{
+ "text": "The label is legible and shows FCRG3054BB, which is not on the recalled model list. The recall criteria require a recalled model, a recalled serial, and a recalled date code, and the model and date code both fail. Under the policy, a legible label showing a non-recalled model is a deny.",
+ "usage": {
+  "input_tokens": 3842,
+  "output_tokens": 478,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3ikQSqRKEV6YbUCjXK",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2449,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows FCRG3054BB, which is not on the recalled model list. The recall criteria require a recalled model, a recalled serial, and a recalled date code, and the model and date code both fail. Under the policy, a legible label showing a non-recalled model is a deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01YDPg46qRueB3dtZfMAwyQZ",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model FCRG3054BB, which is not one of the recalled models.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label's date code, November 2024, is outside the recalled production window of October through November 2023.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial number VF34521607 falls within a recalled range, but that does not cure the model and date code mismatch.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase at Lowe's on 2023-11-24 is inside the sale window and no duplicate claims were found, but these do not establish recall eligibility.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

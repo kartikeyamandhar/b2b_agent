@@ -1,0 +1,69 @@
+{
+ "text": "Checking the results against the policy:\n\n- Duplicates (T5): no hits, so no flag.\n- Model (T1, T2): the label is legible and shows BB4640CF, a recalled model. Model confirmed.\n- Serial/date code: the program has no serial or date code rule in this recall, so these don't apply.\n- Purchase (T3): Amazon.com is listed, the date 2024-08-31 is inside the window, and no receipt is required.\n- Destruction (T4): the destruction photo does not show the instructed destruction. It is a stylized graphic on a blurred background, not a seatback, and no marker writing on the front and rear is visible. Under R:destruction and faq#3, this means needs_info, asking for a new destruction photo.\n- Refund: $159.99 is over the $100 threshold (R:value_threshold), but that only means a person reviews it after approval. It doesn't change the outcome.\n\nThe earliest triggered rule is needs_info, from the destruction photo.",
+ "usage": {
+  "input_tokens": 2891,
+  "output_tokens": 858,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3BaxKUqTSx4a8Ec5Tu",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3910,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Duplicates (T5): no hits, so no flag.\n- Model (T1, T2): the label is legible and shows BB4640CF, a recalled model. Model confirmed.\n- Serial/date code: the program has no serial or date code rule in this recall, so these don't apply.\n- Purchase (T3): Amazon.com is listed, the date 2024-08-31 is inside the window, and no receipt is required.\n- Destruction (T4): the destruction photo does not show the instructed destruction. It is a stylized graphic on a blurred background, not a seatback, and no marker writing on the front and rear is visible. Under R:destruction and faq#3, this means needs_info, asking for a new destruction photo.\n- Refund: $159.99 is over the $100 threshold (R:value_threshold), but that only means a person reviews it after approval. It doesn't change the outcome.\n\nThe earliest triggered rule is needs_info, from the destruction photo."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01SKXU54vAwsiZfu7LDDf8U5",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model BB4640CF, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase was at Amazon.com, which is the listed retailer, on 2024-08-31, which is inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, or payout account with this one.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the instructed destruction. It is a graphic on a blurred background, not a seatback, and there is no marker writing on the front and rear. Under the destruction rule, a photo that does not show the instructed destruction must be requested again.",
+      "cites": [
+       "R:destruction",
+       "T4",
+       "faq#3"
+      ]
+     },
+     {
+      "text": "The $159.99 refund is over the $100 threshold, so a person will review it after approval. This does not change the outcome.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo of the product showing \"RECALLED\" written in large letters on the front and rear of the seatback in marker. The photo should show the actual seatback, not an image or graphic.",
+    "confidence": 0.9
+   }
+  }
+ ]
+}

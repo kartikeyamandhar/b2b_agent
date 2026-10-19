@@ -1,0 +1,62 @@
+{
+ "text": "The model matches a recalled model (T6), and the duplicate check was clear (T3). The claim still can't be approved: the retailer is not on the list (T2), and the recall requires a destruction photo showing \"Recalled\" in permanent marker, which is missing (T5). Under the policy, these are needs_info, and the first-listed trigger does not apply because there are no duplicates.",
+ "usage": {
+  "input_tokens": 3503,
+  "output_tokens": 694,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3xcAEiPgDQanFTp8ib",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3356,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model matches a recalled model (T6), and the duplicate check was clear (T3). The claim still can't be approved: the retailer is not on the list (T2), and the recall requires a destruction photo showing \"Recalled\" in permanent marker, which is missing (T5). Under the policy, these are needs_info, and the first-listed trigger does not apply because there are no duplicates."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01YMoveY2ZEdd2nP2FZYNEMu",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2G520, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The claimed retailer, Corner Hardware Co, is not on the program's list of eligible sellers (Amazon.com, Esrtech.com, Homedepot.com). The purchase date of 2022-10-25 is inside the sale window, but the retailer is unverified, so proof of ownership is needed.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No destruction photo was provided. The recall requires the unit to be destroyed with the word \"Recalled\" written on it in permanent marker, and a missing destruction photo requires more information.",
+      "cites": [
+       "T5",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send (1) proof of purchase showing where you bought the power bank, since Corner Hardware Co is not one of the approved retailers (Amazon.com, Esrtech.com, or Homedepot.com), or the retailer where you actually bought it if it was one of those; and (2) a photo of the recalled power bank with the word \"Recalled\" written on it in permanent marker, as the recall requires.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

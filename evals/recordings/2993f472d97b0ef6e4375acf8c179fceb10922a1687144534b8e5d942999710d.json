@@ -1,0 +1,82 @@
+{
+ "text": "Checking the claim against the policy in order:\n\n- Duplicates (T7): no hits, so no flag.\n- Model (T1, T2): legible label reads MK04, a recalled model. Confirmed.\n- Serial (T3): BN60782175 starts with \"BN\", in range.\n- Date code (T4): June 2025 is prior to July 2025, in range.\n- Purchase (T5): purchase date 2025-04-22 is inside the sale window. The retailer, Corner Hardware Co, is not on the list. Per policy, an unlisted retailer is needs_info: proof of ownership is requested rather than a denial.\n- Receipt: T5 states receipt not required for this check, so no receipt is needed.\n- Destruction (T6): not required for this remedy.\n\nThe retailer rule is the only open item. The policy asks for proof of ownership in this case, so the outcome is needs_info.",
+ "usage": {
+  "input_tokens": 2904,
+  "output_tokens": 900,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "max_tokens",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB35qjdzryJ1tf7rcgK3",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4021,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the claim against the policy in order:\n\n- Duplicates (T7): no hits, so no flag.\n- Model (T1, T2): legible label reads MK04, a recalled model. Confirmed.\n- Serial (T3): BN60782175 starts with \"BN\", in range.\n- Date code (T4): June 2025 is prior to July 2025, in range.\n- Purchase (T5): purchase date 2025-04-22 is inside the sale window. The retailer, Corner Hardware Co, is not on the list. Per policy, an unlisted retailer is needs_info: proof of ownership is requested rather than a denial.\n- Receipt: T5 states receipt not required for this check, so no receipt is needed.\n- Destruction (T6): not required for this remedy.\n\nThe retailer rule is the only open item. The policy asks for proof of ownership in this case, so the outcome is needs_info."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01NG3W2b3Gq2ZJ7VvYBuZnAR",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model MK04, a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial number BN60782175 starts with BN, which is in the recalled range.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The date code June 2025 is prior to July 2025, which is in the recalled range.",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase date of 2025-04-22 falls inside the sale window of 2024-09-01 to 2025-06-30.",
+      "cites": [
+       "R:sold_window",
+       "T5"
+      ]
+     },
+     {
+      "text": "The retailer, Corner Hardware Co, is not on the list of sales channels. Under the policy, an unlisted retailer requires proof of ownership rather than a denial.",
+      "cites": [
+       "R:sold_at",
+       "T5",
+       "T8",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account, so no flag is raised.",
+      "cites": [
+       "T7"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy, and no receipt is required for this check.",
+      "cites": [
+       "T5",
+       "T6"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

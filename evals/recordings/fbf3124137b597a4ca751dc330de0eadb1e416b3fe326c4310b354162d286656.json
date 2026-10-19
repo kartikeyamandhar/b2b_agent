@@ -1,0 +1,15 @@
+{
+ "text": "{\"legible\": true, \"model_text\": \"KY-318A\", \"serial_text\": \"SN61924755\", \"date_code_text\": null, \"confidence\": 0.93}",
+ "usage": {
+  "input_tokens": 1372,
+  "output_tokens": 52,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeCz2jJ3jLcYKRDL4RW",
+ "purpose": "read_label_photo",
+ "max_tokens": 400,
+ "latency_ms": 1027
+}

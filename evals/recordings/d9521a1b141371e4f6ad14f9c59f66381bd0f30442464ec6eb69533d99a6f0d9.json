@@ -1,0 +1,70 @@
+{
+ "text": "Checking the results against the policy:\n\n- Duplicates: T6 found no matches, so no flag.\n- Model: T1 reads a legible label showing B0726Y, which is recalled (T2 match, R:models). Confirmed.\n- Date code: 8/21 is within the recalled range (T3, R:date_codes).\n- Serial: the program has no serial number rule, so it is not a factor.\n- Purchase: Walmart is a listed retailer, the date 2021-12-22 is inside the sale window, and no receipt is required (T4, R:sold_window, R:sold_at).\n- Destruction: the policy requires a photo showing the helmet with cut straps (R:destruction). T5 says the attached photo shows an abstract illustration with no helmet, so it does not show the instructed destruction. Per the FAQ (T7, faq#2), the claimant must be asked for a new destruction photo.\n\nOutcome: needs_info, asking for a destruction photo that shows the helmet with its straps cut off.",
+ "usage": {
+  "input_tokens": 2918,
+  "output_tokens": 802,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB36qCRyR3TVSrtgtD9N",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3704,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Duplicates: T6 found no matches, so no flag.\n- Model: T1 reads a legible label showing B0726Y, which is recalled (T2 match, R:models). Confirmed.\n- Date code: 8/21 is within the recalled range (T3, R:date_codes).\n- Serial: the program has no serial number rule, so it is not a factor.\n- Purchase: Walmart is a listed retailer, the date 2021-12-22 is inside the sale window, and no receipt is required (T4, R:sold_window, R:sold_at).\n- Destruction: the policy requires a photo showing the helmet with cut straps (R:destruction). T5 says the attached photo shows an abstract illustration with no helmet, so it does not show the instructed destruction. Per the FAQ (T7, faq#2), the claimant must be asked for a new destruction photo.\n\nOutcome: needs_info, asking for a destruction photo that shows the helmet with its straps cut off."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_013wGg6LRXVyWFsSunTU5HDr",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model B0726Y, a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 8/21 is within the recalled range.",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "Walmart is a listed retailer, the purchase date falls inside the sale window, and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show a helmet or cut straps; it is an abstract illustration. A destruction photo that does not show the instructed destruction must be requested again.",
+      "cites": [
+       "R:destruction",
+       "T5",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": "Thank you for your claim. The destruction photo you sent does not show a helmet. Please send a new photo showing the helmet with its straps cut off, as the recall instructs.",
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,66 @@
+{
+ "text": "The policy confirms that a legible label showing a model not on the list means the unit is not part of the recall. The label is clear (confidence 0.95), and it reads LTG4815BM, not the recalled LTE4815BM. The serial is in range, but the model rule controls, and the claim is denied.",
+ "usage": {
+  "input_tokens": 5632,
+  "output_tokens": 563,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Q68KqKemNQyAp6LYo",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2823,
+ "content": [
+  {
+   "type": "text",
+   "text": "The policy confirms that a legible label showing a model not on the list means the unit is not part of the recall. The label is clear (confidence 0.95), and it reads LTG4815BM, not the recalled LTE4815BM. The serial is in range, but the model rule controls, and the claim is denied."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01AARuMh8dcoTmZZ5fFcYTPp",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model LTG4815BM, which is not on the recalled model list. The recalled model is LTE4815BM, a different model number. A legible label showing a non-recalled model means the unit is not part of the recall.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5",
+       "T6",
+       "T7"
+      ]
+     },
+     {
+      "text": "The typed model LTE4815BM would match the recall, but the label photo is the evidence for the model and the typed value does not override a clear label reading of a different model.",
+      "cites": [
+       "R:policy",
+       "T1",
+       "T6",
+       "T7"
+      ]
+     },
+     {
+      "text": "The serial number 308KM5452036 falls within a recalled range, but the model is the controlling test, so the serial match does not make the unit eligible.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The retailer (LG.com is not on the listed sellers, but the purchase date is inside the window), the duplicate check, and the no-receipt requirement raise no issue; they do not change the outcome.",
+      "cites": [
+       "T2",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

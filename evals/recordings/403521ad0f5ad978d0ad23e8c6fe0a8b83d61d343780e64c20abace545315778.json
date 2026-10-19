@@ -1,0 +1,55 @@
+{
+ "text": "The label is legible and shows model A47A1, which is not on the recalled list. The duplicate check also found another claim sharing this serial, which triggers a flag. The flag takes precedence under the policy, so I'll record that outcome.",
+ "usage": {
+  "input_tokens": 3370,
+  "output_tokens": 421,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3FgFRKTDToUxnYZmZ5",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2311,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows model A47A1, which is not on the recalled list. The duplicate check also found another claim sharing this serial, which triggers a flag. The flag takes precedence under the policy, so I'll record that outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_019nViYuSezH6ZcZMiNvt1Uc",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim in the program sharing this serial number, so the claim must be flagged for review.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The legible label photo shows model A47A1, which is not one of the recalled models (A17B0, A17A0, A17A1, A17A2), so the product does not appear to be covered by the recall.",
+      "cites": [
+       "T1",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (TD Synnex) and within the sale window, and no receipt is required, so the purchase rules are satisfied.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

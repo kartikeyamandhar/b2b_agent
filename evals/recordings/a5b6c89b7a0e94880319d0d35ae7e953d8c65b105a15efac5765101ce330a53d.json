@@ -1,0 +1,63 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 2846,
+  "output_tokens": 416,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeKHzeDAwZE6VAwB1DM",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2945,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_012VcZqpefanjT2UrrGfheSK",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PC-10, which is not a recalled model. The recalled model is PA-10, so the unit is not part of this recall.",
+      "cites": [
+       "R:models",
+       "R:policy",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "Model mismatch is the controlling check; the typed model matches the label reading, so no typo exception applies.",
+      "cites": [
+       "T1",
+       "T2",
+       "T7"
+      ]
+     },
+     {
+      "text": "Date code 2126 is in range, and the purchase (2022-01-17 at www.usa.yamaha.com, inside the sale window) passes, but these do not cure the model mismatch.",
+      "cites": [
+       "T3",
+       "T4",
+       "R:date_codes",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No duplicate claims found, and no destruction photo is required for this remedy.",
+      "cites": [
+       "T5",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

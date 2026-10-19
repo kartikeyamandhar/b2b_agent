@@ -1,0 +1,67 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3614,
+  "output_tokens": 471,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3iGjo8PFS1kGXRhF3v",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2764,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01Dug2Zt64VuUnYRvybrUsYb",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo has the same sha256 as another claim in the program (605fbae8-3557-5f4e-9d2e-f9b013a03984), so the claim is flagged for duplicate review under the flag rule.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The label is legible and shows model SE4570, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label date code 07/22 is within the recalled date codes.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The retailer www.grainger.com is on the sold-at list and the purchase date 2022-09-08 is inside the sale window, with no receipt required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The label serial SN65977978 differs from the typed serial SN84187110, and the serial check was skipped because no serial rule applies here. This is noted for the reviewer.",
+      "cites": [
+       "T1",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

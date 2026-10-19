@@ -1,0 +1,59 @@
+{
+ "text": "The legible label shows 6L-PD, which is not a recalled model (T6), even though the typed model KY-318A is recalled (T7). Under policy, a legible label showing a non-recalled model means deny, and the typed model does not override it. The destruction photo also does not show the cut cord (T4), though the denial rests on the model.",
+ "usage": {
+  "input_tokens": 3629,
+  "output_tokens": 471,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB45kAeKQemCsU52XPCP",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2392,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows 6L-PD, which is not a recalled model (T6), even though the typed model KY-318A is recalled (T7). Under policy, a legible label showing a non-recalled model means deny, and the typed model does not override it. The destruction photo also does not show the cut cord (T4), though the denial rests on the model."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01E1pJPbeuhZg8Z3H7ZkX3DJ",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 6L-PD, which is not one of the recalled models. The typed model KY-318A is recalled, but the legible label takes precedence over the typed value.",
+      "cites": [
+       "R:models",
+       "R:policy",
+       "T1",
+       "T6",
+       "T7"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the required cut power cord; the cord appears intact. This is an additional deficiency.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase is at a listed retailer (ALDI) within the sale window, and no duplicate claims were found, but these do not cure the model mismatch.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

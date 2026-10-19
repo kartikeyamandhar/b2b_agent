@@ -1,0 +1,70 @@
+{
+ "text": "The policy says a claimant who bought from a store not on the list is still eligible, but must be asked for proof of ownership. So the outcome is needs_info.",
+ "usage": {
+  "input_tokens": 4498,
+  "output_tokens": 625,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4F368L9qkDkhoRB7NN",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3047,
+ "content": [
+  {
+   "type": "text",
+   "text": "The policy says a claimant who bought from a store not on the list is still eligible, but must be asked for proof of ownership. So the outcome is needs_info."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DasWCY1tEsAD3AToPWJAvr",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number BN60782175 starts with BN and is in the recalled range.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code June 2025 is prior to July 2025, so it is within the recalled date codes.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase date of 2025-04-22 is inside the sale window, but the retailer Corner Hardware Co is not on the list of sales channels. Under the FAQ, buyers from unlisted stores are still eligible but must provide proof of ownership rather than being denied.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T7"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": "We could not match the store you bought this unit from (Corner Hardware Co) to the list of retailers covered by this recall. Please send proof of ownership, such as a receipt, order confirmation, or other document showing the purchase from Corner Hardware Co on or around April 22, 2025 (or proof of how you came to own the unit if it was a gift or secondhand purchase).",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

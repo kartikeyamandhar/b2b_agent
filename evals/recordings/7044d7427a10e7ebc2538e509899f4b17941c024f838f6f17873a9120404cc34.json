@@ -1,0 +1,70 @@
+{
+ "text": "Per the policy, a retailer not on the list means the claimant must provide proof of ownership, since secondhand and gift owners remain eligible. The claim has no receipt requirement and the typed purchase date falls inside the window, so the outcome is needs_info.",
+ "usage": {
+  "input_tokens": 4498,
+  "output_tokens": 739,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3XCLLVtatCZKQA42JQ",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3462,
+ "content": [
+  {
+   "type": "text",
+   "text": "Per the policy, a retailer not on the list means the claimant must provide proof of ownership, since secondhand and gift owners remain eligible. The claim has no receipt requirement and the typed purchase date falls inside the window, so the outcome is needs_info."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Ch3NkVgDxgF9rTc3D2kzX7",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model, and the typed model matches it.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number BN60782175 starts with BN, which is in the recalled serial range.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code June 2025 is prior to July 2025, so it is in the recalled date range.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase date 2025-04-22 is inside the sale window, but the retailer Corner Hardware Co is not on the list of sales channels. Under the policy, an unlisted retailer requires proof of ownership rather than a denial.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T7"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim, so it does not need duplicate review.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your unit is an MK04 with a serial starting BN and a June 2025 date code, which matches the recall. However, Corner Hardware Co is not one of the retailers where this product was sold under the program (Amazon.com, Shopify.com, TEMU.com, or TikTok.com). Please send proof of ownership, such as a receipt, order confirmation, or other document showing the purchase from Corner Hardware Co on or around April 22, 2025. If you did not buy the unit yourself (for example, you bought it secondhand or received it as a gift), please tell us how you obtained it and provide whatever documentation you have.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

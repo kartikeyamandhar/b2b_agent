@@ -1,0 +1,37 @@
+{
+ "text": "The label is unreadable, so the typed model decides. The serial check was skipped, so I'll check the typed model and retry the serial check.",
+ "usage": {
+  "input_tokens": 3390,
+  "output_tokens": 143,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB46xtta8id2ttmLUkqi",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1636,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is unreadable, so the typed model decides. The serial check was skipped, so I'll check the typed model and retry the serial check."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DH4WDDsfwP4PFcCpZ31fzY",
+   "name": "check_model",
+   "input": {
+    "model_text": "2G505B"
+   }
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01BhCCkj7mQPBQhYxEDqQsPK",
+   "name": "check_serial",
+   "input": {
+    "serial": "16672268"
+   }
+  }
+ ]
+}

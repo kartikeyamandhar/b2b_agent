@@ -1,0 +1,64 @@
+{
+ "text": "The policy says claims the checker could not finish are reviewed by a person. The serial verification could not be completed, so this claim goes to a person rather than being approved automatically. The model, purchase, and duplicate checks all passed.",
+ "usage": {
+  "input_tokens": 4405,
+  "output_tokens": 505,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3MoPwWdEQtvGCQZZ1k",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2412,
+ "content": [
+  {
+   "type": "text",
+   "text": "The policy says claims the checker could not finish are reviewed by a person. The serial verification could not be completed, so this claim goes to a person rather than being approved automatically. The model, purchase, and duplicate checks all passed."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017X6SNmM2fWCrszWBiyyh4b",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 9421, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (comfortsolutions.caframobrands.com) on 2024-04-20, inside the sale window, and no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The serial number SN91574452 could not be verified: the serial check returned 'skipped' both times, so it was never checked against the recalled ranges. The FAQ says claims the checker could not finish are reviewed by a person, so this claim is sent for human review rather than approved or denied.",
+      "cites": [
+       "T4",
+       "T6",
+       "T7",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.6
+   }
+  }
+ ]
+}

@@ -1,0 +1,71 @@
+{
+ "text": "The purchase date of 2017-11-25 falls before the sale window (which starts 2018-06-01), so the purchase check fails and the claim must be denied.",
+ "usage": {
+  "input_tokens": 3478,
+  "output_tokens": 506,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3zE7EujRT1Apstn5ve",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2617,
+ "content": [
+  {
+   "type": "text",
+   "text": "The purchase date of 2017-11-25 falls before the sale window (which starts 2018-06-01), so the purchase check fails and the claim must be denied."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Mu7HZJMU9gcCsH8yafxv1i",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The claimed purchase date, 2017-11-25, is before the program's sale window, which opens 2018-06-01. Purchases before the window are ineligible.",
+      "cites": [
+       "R:sold_window",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model DR2E, which is a recalled model, so the model requirement is met.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial J0E25826544 is in a recalled range and the 2017 date code is within the recalled model years. Neither changes the outcome, since the purchase date is outside the window.",
+      "cites": [
+       "T4",
+       "T5",
+       "R:serials",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The retailer, Yamaha dealers, is on the list, so the failure is on timing alone.",
+      "cites": [
+       "T2",
+       "R:sold_at"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

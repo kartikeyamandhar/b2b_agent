@@ -1,0 +1,15 @@
+{
+ "text": "{\"legible\": true, \"model_text\": \"MODEL NO. 96775 KY-318A\", \"serial_text\": null, \"date_code_text\": \"2016-09\", \"confidence\": 0.85}",
+ "usage": {
+  "input_tokens": 1372,
+  "output_tokens": 62,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeENYqs48rvPt4popn8",
+ "purpose": "read_label_photo",
+ "max_tokens": 400,
+ "latency_ms": 1500
+}

@@ -1,0 +1,68 @@
+{
+ "text": "The typed model 2G505B is recalled (T6), but the label photo is unreadable (T1). Under the policy, a legible label is required to confirm the model from the photo, so a usable reading is missing. The typed model is recalled, so it decides the model question. The other checks pass: retailer and window (T2), no duplicates (T3), and a compliant destruction photo (T4). The serial check was skipped (T5) because the serial rule isn't in the program rules, so it doesn't apply.\n\nBecause the label photo is unreadable, the claim can't be confirmed from the label. The policy says that without a usable label reading, the typed model decides, and it matches a recalled model. So the claim can be approved on the typed model.",
+ "usage": {
+  "input_tokens": 3668,
+  "output_tokens": 636,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3bto2u5Bx2n1bv1hKu",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3117,
+ "content": [
+  {
+   "type": "text",
+   "text": "The typed model 2G505B is recalled (T6), but the label photo is unreadable (T1). Under the policy, a legible label is required to confirm the model from the photo, so a usable reading is missing. The typed model is recalled, so it decides the model question. The other checks pass: retailer and window (T2), no duplicates (T3), and a compliant destruction photo (T4). The serial check was skipped (T5) because the serial rule isn't in the program rules, so it doesn't apply.\n\nBecause the label photo is unreadable, the claim can't be confirmed from the label. The policy says that without a usable label reading, the typed model decides, and it matches a recalled model. So the claim can be approved on the typed model."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01799kkcEtaYWizMsNVhUAb6",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The typed model 2G505B is a recalled model. The label photo was unreadable, so the typed model decides the model question.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "Purchased at Amazon.com on 2023-11-19, which is a listed retailer and inside the sale window.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the device with 'RECALLED' written on it, which matches the required destruction.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "The refund of $44.26 is under the $100 review threshold, so no person review is required.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "",
+    "confidence": 0.7
+   }
+  }
+ ]
+}

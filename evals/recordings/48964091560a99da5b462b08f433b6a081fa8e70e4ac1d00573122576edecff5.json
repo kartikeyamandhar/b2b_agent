@@ -1,0 +1,75 @@
+{
+ "text": "The model is confirmed and the other checks pass, but the destruction photo does not show the required strap cutting (T4 complies: false, confidence 0.35). Under R:destruction, that means the claim needs more information.",
+ "usage": {
+  "input_tokens": 3879,
+  "output_tokens": 613,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3EvgZ1FQR9t67Qsq7V",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2943,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed and the other checks pass, but the destruction photo does not show the required strap cutting (T4 complies: false, confidence 0.35). Under R:destruction, that means the claim needs more information."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_015F5k79bN17to5qSJRuc1MT",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model B0726Y, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T7"
+      ]
+     },
+     {
+      "text": "The serial number was not checked against recalled ranges because the program rule for serials was not applicable here; the typed serial is not used to decide.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The date code 8/21 is within the recalled range (August 2021 or earlier).",
+      "cites": [
+       "R:date_codes",
+       "T6"
+      ]
+     },
+     {
+      "text": "The retailer www.Amazon.com is on the sold-at list and the purchase date 2018-04-18 is inside the sale window, with no receipt required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the helmet with its straps cut off, so it does not meet the required destruction. A new destruction photo is needed.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo of the destroyed helmet showing that the straps have been cut off. The photo should clearly show the helmet and the cut strap ends.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

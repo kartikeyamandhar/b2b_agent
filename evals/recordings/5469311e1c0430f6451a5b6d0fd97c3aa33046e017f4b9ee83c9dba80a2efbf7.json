@@ -1,0 +1,47 @@
+{
+ "text": "I'll start by reading the label photo, checking the purchase, checking for duplicates, and checking the serial, since these are all independent of each other.",
+ "usage": {
+  "input_tokens": 2777,
+  "output_tokens": 175,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3FkjnkC4n1CQ2ZV1QG",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1259,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll start by reading the label photo, checking the purchase, checking for duplicates, and checking the serial, since these are all independent of each other."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01RwRp8MBrXjNwFxpU3yeAh7",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_016SWy9Ncqc2zKbppFcdhauc",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0144Hv1LU93Yvn57GVxdXBw1",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Ej7ZkLb77UoVjGFoxV83zp",
+   "name": "check_serial",
+   "input": {
+    "serial": "SN58120174"
+   }
+  }
+ ]
+}

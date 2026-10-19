@@ -1,0 +1,58 @@
+{
+ "text": "Label photo is legible and shows PLGFMZ99GC, which is not a typed typo of PLGFMZ99GC... wait, check: recalled list includes PLEFMZ99GC*, but the label reads PLGFMZ99GC (no \"E\"). The check_model tool returned mismatch against the first patterns only, and the label reading \"PLGFMZ99GC\" does not match any listed pattern (PLEFMZ99GC* differs at the second letter). So the legible label shows a model that is not recalled: deny.\n\nChecking the other rules: serial in range, purchase at Sears within window with receipt present, no destruction photo required, no duplicates. But the model rule controls, and it triggers a deny. No flag applies since duplicates are empty.",
+ "usage": {
+  "input_tokens": 3301,
+  "output_tokens": 627,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeMDnwQNHTWsVDPh7o6",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3326,
+ "content": [
+  {
+   "type": "text",
+   "text": "Label photo is legible and shows PLGFMZ99GC, which is not a typed typo of PLGFMZ99GC... wait, check: recalled list includes PLEFMZ99GC*, but the label reads PLGFMZ99GC (no \"E\"). The check_model tool returned mismatch against the first patterns only, and the label reading \"PLGFMZ99GC\" does not match any listed pattern (PLEFMZ99GC* differs at the second letter). So the legible label shows a model that is not recalled: deny.\n\nChecking the other rules: serial in range, purchase at Sears within window with receipt present, no destruction photo required, no duplicates. But the model rule controls, and it triggers a deny. No flag applies since duplicates are empty."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01VGsrv8eHm7o63N1vaVFVX9",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and reads model PLGFMZ99GC. The recalled list includes PLEFMZ99GC* and PLEFMZ99EC*, but not PLGFMZ99GC, so the legible label shows a model that is not recalled.",
+      "cites": [
+       "R:models",
+       "R:policy",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial number VF12204449 is within the recalled range, and the purchase (Sears, 2003-07-26, receipt present) is eligible, but these do not override the model result.",
+      "cites": [
+       "R:serials",
+       "T3",
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

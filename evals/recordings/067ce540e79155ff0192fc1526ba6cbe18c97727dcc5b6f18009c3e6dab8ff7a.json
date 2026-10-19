@@ -1,0 +1,53 @@
+{
+ "text": "I'll start by reading the label photo, checking the purchase, checking for duplicates, checking the destruction photo, and checking the serial, since the program has serial and destruction rules. The claimant did not provide a date code, and the program has no date code rule, so I'll skip that check.",
+ "usage": {
+  "input_tokens": 2652,
+  "output_tokens": 246,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB46pMSb2L3QFqBjSr9A",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1943,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll start by reading the label photo, checking the purchase, checking for duplicates, checking the destruction photo, and checking the serial, since the program has serial and destruction rules. The claimant did not provide a date code, and the program has no date code rule, so I'll skip that check."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0171PYok7KvNWjeq7FCGB83H",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QgCiCr6Vjv1PqFtWeqpzTK",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QEJUw1yG1vZ7M7JwJBpKwy",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Ww9rv7xDH5zmrfsxNPxeob",
+   "name": "check_destruction_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01LAz4yYn4HLzvy759WAh2MA",
+   "name": "check_serial",
+   "input": {
+    "serial": "SN16672268"
+   }
+  }
+ ]
+}

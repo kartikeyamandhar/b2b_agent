@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and shows model DT2E, so I'll check that model against the recall list.",
+ "usage": {
+  "input_tokens": 3356,
+  "output_tokens": 80,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3ykvNfJutDZE6zdJyd",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1297,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows model DT2E, so I'll check that model against the recall list."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01TN2a4FbVBCPoofhzaWJj5r",
+   "name": "check_model",
+   "input": {
+    "model_text": "DT2E"
+   }
+  }
+ ]
+}

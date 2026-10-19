@@ -1,0 +1,71 @@
+{
+ "text": "Checking the results against the policy:\n\n- Duplicates (T6): no hits, so no flag.\n- Model (T1, T2): label is legible and shows 34790, a recalled model. Confirmed.\n- Date code (T3): December 2023 is manufactured prior to January 2024, so in range.\n- Serial: the serial SN45358227 is typed, and the program's serial rules are not listed as applicable, so no serial check applies.\n- Purchase (T4): Igloocoolers.com is on the sold-at list; the purchase date 2017-12-20 is before the 2019-01-01 sale window, so this is a deny.\n- Destruction (T5): not required.\n- Refund: none requested; remedy is repair or replacement.\n\nThe purchase date falls before the sale window, which the policy makes a denial. The retailer being listed does not override that.",
+ "usage": {
+  "input_tokens": 2851,
+  "output_tokens": 725,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeTUGVdr7bAiikmWPV3",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3460,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Duplicates (T6): no hits, so no flag.\n- Model (T1, T2): label is legible and shows 34790, a recalled model. Confirmed.\n- Date code (T3): December 2023 is manufactured prior to January 2024, so in range.\n- Serial: the serial SN45358227 is typed, and the program's serial rules are not listed as applicable, so no serial check applies.\n- Purchase (T4): Igloocoolers.com is on the sold-at list; the purchase date 2017-12-20 is before the 2019-01-01 sale window, so this is a deny.\n- Destruction (T5): not required.\n- Refund: none requested; remedy is repair or replacement.\n\nThe purchase date falls before the sale window, which the policy makes a denial. The retailer being listed does not override that."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_012Rt5jh9Jx6zWCSPdUSjfWV",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 34790, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The date code December 2023 is manufactured prior to January 2024, so it is within the recalled range.",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2017-12-20 is before the sale window of 2019-01-01 to 2025-01-31. Purchases before the window are not eligible, even though the retailer (Igloocoolers.com) is on the list.",
+      "cites": [
+       "T4",
+       "R:sold_window",
+       "R:sold_at",
+       "faq#1"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so no review flag applies.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy, and no refund over the threshold is requested.",
+      "cites": [
+       "T5",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

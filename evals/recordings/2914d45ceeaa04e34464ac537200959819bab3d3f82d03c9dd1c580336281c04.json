@@ -1,0 +1,84 @@
+{
+ "text": "Checking against policy: duplicates none (T6), label legible and shows LXT-CL-1.0 (T1, T2), date code 0722 in range (T3), serial typed SN36680478 matches label reading (T1), retailer Amazon listed and purchase 2023-07-30 inside window with no receipt required (T4), destruction photo shows cut plug (T5, complies). Refund not requested, so no value threshold issue. Approve with replacement.",
+ "usage": {
+  "input_tokens": 2897,
+  "output_tokens": 686,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB39RuYeGqPusSTk8Hgw",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3314,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking against policy: duplicates none (T6), label legible and shows LXT-CL-1.0 (T1, T2), date code 0722 in range (T3), serial typed SN36680478 matches label reading (T1), retailer Amazon listed and purchase 2023-07-30 inside window with no receipt required (T4), destruction photo shows cut plug (T5, complies). Refund not requested, so no value threshold issue. Approve with replacement."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01JzzsFmNqHa8hgNMZ6ezijn",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows the recalled model LXT-CL-1.0, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Date code 0722 falls within the recalled range 0722 to 1223.",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The typed serial matches the serial read from the label; no serial-range rule applies beyond the date code.",
+      "cites": [
+       "T1",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Amazon is a listed retailer and the purchase date of 2023-07-30 is inside the sale window; no receipt is required for this result.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the device with the plug cut off, as the remedy requires, and it is not a repeat of the label photo.",
+      "cites": [
+       "T5",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The remedy is replacement, no refund is requested, so the value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

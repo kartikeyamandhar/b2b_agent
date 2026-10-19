@@ -1,0 +1,69 @@
+{
+ "text": "The call failed validation because I left out two required fields. Resubmitting with the claimant question and a confidence value added.",
+ "usage": {
+  "input_tokens": 3750,
+  "output_tokens": 613,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeK6CV3f6y7TPPFAKfL",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2557,
+ "content": [
+  {
+   "type": "text",
+   "text": "The call failed validation because I left out two required fields. Resubmitting with the claimant question and a confidence value added."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01TA9zZYsY9TziehgaaftbKD",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model A17A2, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase date of 2023-05-24 falls inside the sale window of 2023-05-01 to 2023-09-30.",
+      "cites": [
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "The retailer 'Corner Hardware Co' is not on the list of sellers (Best Buy, TD Synnex, kickstarter.com). Claims from unlisted retailers are asked for proof of ownership rather than denied.",
+      "cites": [
+       "R:sold_at",
+       "T3",
+       "T6"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for the photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The remedy is replacement, so no destruction photo is required, and no refund is requested, so the value threshold does not apply.",
+      "cites": [
+       "T4",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your cooler's model and serial number were confirmed, and your purchase date is within the sale period. However, the store where you bought it (Corner Hardware Co) is not one of the program's listed sellers. Please send proof of ownership, such as a receipt or order confirmation showing the purchase from Corner Hardware Co on or around 2023-05-24.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

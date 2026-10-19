@@ -1,0 +1,64 @@
+{
+ "text": "Checking the results against the policy:\n\n- Duplicates: T6 found no matches, so no flag.\n- Model: T1 reads the label as legible showing 200LX, which is recalled (R:models, T2). Confirmed.\n- Serial: LX005538 falls within LX001698 - LX009896 (R:serials, T3). In range.\n- Purchase: The purchase date 2016-05-11 is before the sale window of 2017-05-01 to 2026-02-28 (R:sold_window, T4). Under policy, a purchase before the window is a deny. The retailer is \"Online marketplace,\" but the window result alone triggers denial.\n- Destruction: Not required for this remedy (T5), so no issue there.\n- Refund: None requested (repair or replacement), so the value threshold doesn't apply.\n\nSince no flag applies, the purchase-window rule produces a deny.",
+ "usage": {
+  "input_tokens": 2684,
+  "output_tokens": 679,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB36Vta9jeVvEc3kwJCc",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4100,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Duplicates: T6 found no matches, so no flag.\n- Model: T1 reads the label as legible showing 200LX, which is recalled (R:models, T2). Confirmed.\n- Serial: LX005538 falls within LX001698 - LX009896 (R:serials, T3). In range.\n- Purchase: The purchase date 2016-05-11 is before the sale window of 2017-05-01 to 2026-02-28 (R:sold_window, T4). Under policy, a purchase before the window is a deny. The retailer is \"Online marketplace,\" but the window result alone triggers denial.\n- Destruction: Not required for this remedy (T5), so no issue there.\n- Refund: None requested (repair or replacement), so the value threshold doesn't apply.\n\nSince no flag applies, the purchase-window rule produces a deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01GzDNFhgWG4aNUGoiZw9XSn",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The unit's model (200LX) is confirmed as recalled from the legible label photo, and the serial number LX005538 is within the recalled range.",
+      "cites": [
+       "T1",
+       "T2",
+       "T3",
+       "R:models",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2016-05-11 is before the program's sale window (2017-05-01 to 2026-02-28), so the unit is not eligible under the purchase rule.",
+      "cites": [
+       "T4",
+       "R:sold_window",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so no review flag applies.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "A destruction photo is not required for this repair/replacement remedy, and no refund over the threshold was requested.",
+      "cites": [
+       "T5",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

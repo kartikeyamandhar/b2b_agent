@@ -1,0 +1,55 @@
+{
+ "text": "I'll read the label photo and run the purchase, duplicate, serial, and model checks in parallel, since they don't depend on each other.",
+ "usage": {
+  "input_tokens": 2605,
+  "output_tokens": 223,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3nuRYTJ7MuyTcp6Y9A",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2408,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll read the label photo and run the purchase, duplicate, serial, and model checks in parallel, since they don't depend on each other."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01PAN8emsFbzJUzz3YeBm8fM",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DbuqE6qv347Pn19baE9bkQ",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01CpU6xr7mrno1JW9zB3r5rN",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Vz2WiiuP7D7owg1KDfUp7E",
+   "name": "check_serial",
+   "input": {
+    "serial": "SN22905783"
+   }
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017D6k9F4QH4kX8aa1f9oode",
+   "name": "check_model",
+   "input": {
+    "model_text": "P1413-P"
+   }
+  }
+ ]
+}

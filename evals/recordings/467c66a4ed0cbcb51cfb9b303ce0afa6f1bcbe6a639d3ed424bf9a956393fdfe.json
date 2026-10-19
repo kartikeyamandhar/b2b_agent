@@ -1,0 +1,65 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: label legible, shows SE4570 (recalled). T1, T2 confirm.\n- Serial/date code: date code 07/22 is in range (T3). Serial is not a rule for this program per the rules listed.\n- Purchase: retailer \"Corner Hardware Co\" is not on the list (T4), so it's needs_info asking for proof of ownership. Date 2022-10-12 is inside the window (T4).\n- Destruction: not required (T5), repair/replacement remedy.\n- Duplicates: none (T6), so no flag.\n\nThe policy order: flag does not trigger; deny does not trigger (model confirmed, date in range, purchase inside window); needs_info triggers because the retailer is not on the list. The claimant must provide proof of ownership.",
+ "usage": {
+  "input_tokens": 2787,
+  "output_tokens": 762,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeGThTq5Fg1ovxAMdtf",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4558,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: label legible, shows SE4570 (recalled). T1, T2 confirm.\n- Serial/date code: date code 07/22 is in range (T3). Serial is not a rule for this program per the rules listed.\n- Purchase: retailer \"Corner Hardware Co\" is not on the list (T4), so it's needs_info asking for proof of ownership. Date 2022-10-12 is inside the window (T4).\n- Destruction: not required (T5), repair/replacement remedy.\n- Duplicates: none (T6), so no flag.\n\nThe policy order: flag does not trigger; deny does not trigger (model confirmed, date in range, purchase inside window); needs_info triggers because the retailer is not on the list. The claimant must provide proof of ownership."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01AAwZfP4aeymB6wPmmwJ6fZ",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 07/22 is within the recalled date codes.",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "The purchase date of 2022-10-12 is inside the sale window, but the retailer 'Corner Hardware Co' is not on the list of stores that sold the product. Owners who bought from a store not on the list are asked for proof of ownership rather than denied.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "R:policy",
+       "T4",
+       "T7"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, and no destruction photo is required for a repair or replacement remedy.",
+      "cites": [
+       "T5",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": "Corner Hardware Co is not one of the stores that sold this recalled product. Please send proof of ownership, such as a receipt, order confirmation, or bill of sale showing the purchase of this boot, or explain how you came to own it (for example, if you bought it secondhand or received it as a gift).",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

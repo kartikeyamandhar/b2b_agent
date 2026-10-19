@@ -1,0 +1,71 @@
+{
+ "text": "The call failed validation because I left out two required fields. Retrying with the question for the claimant and a confidence value.",
+ "usage": {
+  "input_tokens": 3894,
+  "output_tokens": 589,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB37kE4MHjAQqrrxiqZJ",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3036,
+ "content": [
+  {
+   "type": "text",
+   "text": "The call failed validation because I left out two required fields. Retrying with the question for the claimant and a confidence value."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_013sUM4vmjA5w3C9eZfg4Gqb",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo could not be read, so the typed model AD10007GR decides; it is on the recalled list.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The retailer Amazon.com is listed and the purchase date 2024-06-16 is inside the sale window, so purchase is acceptable.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo shows \"RECALLED\" only on the front of the seatback; the instruction requires it on both the front and rear, so the destruction photo does not show the instructed destruction.",
+      "cites": [
+       "T4",
+       "R:destruction",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The refund of $168.62 is over the $100 threshold, so a person will review it after approval; this does not change the outcome.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send two things: (1) a clearer photo of the sewn-in model label on the top cover of the seat, so the model number can be read; and (2) a destruction photo showing \"RECALLED\" written in large letters on both the front and the rear of the seatback with a marker.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

@@ -1,0 +1,62 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 2904,
+  "output_tokens": 414,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAfr7Dj1Mse59oZzePSt",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3195,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01Up9nPvU2hP3DzCuYmErVyx",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The serial number QQ75936211 does not start with \"BN\", so it is outside the recalled serial number range and the unit is not part of this recall.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "Duplicate check found no other claims sharing a photo, address, email, serial, or payout account, so no flag applies.",
+      "cites": [
+       "T7"
+      ]
+     },
+     {
+      "text": "The label is legible and shows the recalled model MK04, the date code is in range, and the purchase is inside the sale window from a listed retailer; these do not override the out-of-range serial number.",
+      "cites": [
+       "T1",
+       "T2",
+       "T4",
+       "T5",
+       "R:models",
+       "R:date_codes",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "Under the claim policy, a serial number outside the recalled range results in denial.",
+      "cites": [
+       "R:policy",
+       "T8"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

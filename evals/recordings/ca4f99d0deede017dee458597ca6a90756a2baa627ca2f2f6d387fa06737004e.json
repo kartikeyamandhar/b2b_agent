@@ -1,0 +1,66 @@
+{
+ "text": "The legible label reads AF10025PI, which is not on the recalled model list (the list has AD10025PI, not AF10025PI). The label is legible, so this is a non-recalled model and the policy says deny. The destruction photo is also missing, but deny takes precedence in the ordering, and the model result alone settles it.",
+ "usage": {
+  "input_tokens": 3881,
+  "output_tokens": 577,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3RAPqkVxbW1euYjoj1",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3455,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label reads AF10025PI, which is not on the recalled model list (the list has AD10025PI, not AF10025PI). The label is legible, so this is a non-recalled model and the policy says deny. The destruction photo is also missing, but deny takes precedence in the ordering, and the model result alone settles it."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01SW9smSSzjQBreaiZi6N9yz",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model AF10025PI. That model is not on the recalled list. The recalled list includes AD10025PI, but AF10025PI is a different model. The typed model matches the label, so there is no typo to correct.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Because the legible label shows a non-recalled model, the claim is denied under the model rule, regardless of the typed model.",
+      "cites": [
+       "R:policy",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase is valid: Amazon.com is a listed retailer and the purchase date of 2023-08-02 falls inside the sale window. No duplicate claims were found. These checks do not change the denial.",
+      "cites": [
+       "T2",
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo duplicates the label photo and does not show the required destruction, so it is also not satisfactory. The serial check was skipped and was not used in this decision.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

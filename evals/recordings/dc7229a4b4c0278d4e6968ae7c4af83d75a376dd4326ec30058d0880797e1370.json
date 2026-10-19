@@ -1,0 +1,76 @@
+{
+ "text": "The label is legible and shows the recalled model LXT-CL-1.0, but the date code 1224 falls outside the recalled range. Under the policy, an out-of-range date code is a denial. The other checks passed: no duplicates, a listed retailer within the sale window, and a destruction photo showing the plug cut off.",
+ "usage": {
+  "input_tokens": 3869,
+  "output_tokens": 591,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3WL1BHyrGWmXLPzQF8",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3623,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows the recalled model LXT-CL-1.0, but the date code 1224 falls outside the recalled range. Under the policy, an out-of-range date code is a denial. The other checks passed: no duplicates, a listed retailer within the sale window, and a destruction photo showing the plug cut off."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QAnTM4MpHnqpeRsVRjUvka",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The legible label shows the recalled model LXT-CL-1.0, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T7"
+      ]
+     },
+     {
+      "text": "The label's date code 1224 is outside the recalled date code range of 0722 to 1223, so the unit is not covered by the recall.",
+      "cites": [
+       "R:date_codes",
+       "T6",
+       "T1"
+      ]
+     },
+     {
+      "text": "The purchase is from Nordstrom, a listed retailer, dated 2023-03-05 inside the sale window, and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found sharing a photo, address, email, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the cord cut off near the body, consistent with the required cut-off-the-plug destruction.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "The serial check was skipped because the program has no serial rule, so it does not affect the outcome.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

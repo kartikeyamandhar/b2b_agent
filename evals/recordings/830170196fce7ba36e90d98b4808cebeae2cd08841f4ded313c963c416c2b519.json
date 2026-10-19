@@ -1,0 +1,61 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3732,
+  "output_tokens": 561,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeK75JtXU7mZH66Tupq",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2916,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01SAc3XJesF6cBs12V175nyZ",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model A17A2, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase date of 2023-09-05 falls inside the sale window, but the retailer 'Corner Hardware Co' is not on the list of sellers (Best Buy, TD Synnex, kickstarter.com). Under the purchase rule, an unlisted retailer requires proof of ownership rather than denial.",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "T3",
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for a replacement remedy, and no refund is requested, so the value threshold does not apply.",
+      "cites": [
+       "T4",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your cooler's model is confirmed as part of the recall, but the store you bought it from (Corner Hardware Co) is not one of the approved sellers for this recall. Please send proof of ownership, such as a receipt, order confirmation, or a photo showing you bought or were given the cooler (for example, a secondhand purchase or gift), so we can continue your claim.",
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,59 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 2755,
+  "output_tokens": 395,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeM4GT6oNvPRWuB9gqm",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2120,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01PJGHmTLmuzJ875MtwcmJn4",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Duplicate check found another claim sharing the same serial number (72e24bd0-df6d-5f8e-a274-b65dbd017a7c), so the claim must be sent to a person for review under the flag rule.",
+      "cites": [
+       "T5",
+       "R:policy",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows SM1977, a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "Retailer Designbydelta.com is on the sold-at list and the purchase date 2008-12-24 falls inside the sale window; no receipt is required.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for the repair remedy.",
+      "cites": [
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

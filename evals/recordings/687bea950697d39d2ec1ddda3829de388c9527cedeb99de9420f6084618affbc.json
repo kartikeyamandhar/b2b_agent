@@ -1,0 +1,62 @@
+{
+ "text": "The model is confirmed and the other checks pass, but the shared payout account with another claim (T3) requires a flag regardless of the rest.",
+ "usage": {
+  "input_tokens": 3516,
+  "output_tokens": 453,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3HkKYoyFtS3RrsZCKc",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2334,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed and the other checks pass, but the shared payout account with another claim (T3) requires a flag regardless of the rest."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_011AvBnXyP1sSDZVw1VugpQR",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Duplicate check found another claim (f5bd7d58-fd32-56d8-92d7-3d398d4c2b53) that shares this claim's payout destination. The policy requires a flag for any shared payout account.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model P1410, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The retailer www.walmart.com is on the sold-at list and the purchase date of 2007-09-10 falls inside the sale window; no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The serial check was skipped, so no serial range verdict was recorded for SN19576337. The flag is the deciding factor here.",
+      "cites": [
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

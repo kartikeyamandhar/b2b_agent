@@ -1,0 +1,81 @@
+{
+ "text": "The citation failed because I used the FAQ passage ids instead of the tool result id. The correct id for that retrieval is T9, so I'm resubmitting with that.",
+ "usage": {
+  "input_tokens": 3831,
+  "output_tokens": 577,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3ApJiR9monMDn4diYe",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2752,
+ "content": [
+  {
+   "type": "text",
+   "text": "The citation failed because I used the FAQ passage ids instead of the tool result id. The correct id for that retrieval is T9, so I'm resubmitting with that."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_014s6sBH7AW947W2Dzi4Adro",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T8",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model. The typed model 'MKO4' is a typo, and the label confirms the model.",
+      "cites": [
+       "T1",
+       "T3",
+       "R:models",
+       "R:policy",
+       "T9"
+      ]
+     },
+     {
+      "text": "Serial number BN2408B02265 starts with 'BN', which is in the recalled range.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "Date code 08/2024 is manufactured prior to July 2025, which is in the recalled range.",
+      "cites": [
+       "T5",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Purchase on 2024-09-02 falls inside the sale window, and TEMU.com is a listed retailer. No receipt is required.",
+      "cites": [
+       "T6",
+       "R:sold_window",
+       "R:sold_at",
+       "T9"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy, and the claimant requests repair or replacement, not a refund, so no value threshold review applies.",
+      "cites": [
+       "T7",
+       "R:value_threshold",
+       "T9"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

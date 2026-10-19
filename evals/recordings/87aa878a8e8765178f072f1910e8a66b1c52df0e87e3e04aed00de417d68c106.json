@@ -1,0 +1,66 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: label legible, shows MK04 (T1, T2). Confirmed.\n- Serial: starts with \"BN\" (T3). In range.\n- Date code: 07/2025 is not prior to July 2025 (T4). Out of range, so deny per R:date_codes.\n- Purchase: Amazon.com is listed, date 2025-07-19 is after the sale window (T5). That would be needs_info, but the date code denial already applies.\n- Duplicates: none (T7), so no flag.\n- Destruction photo not required (T6); remedy is replacement.\n\nPolicy order: flag doesn't apply, deny applies (date code out of range), so the outcome is deny.",
+ "usage": {
+  "input_tokens": 2910,
+  "output_tokens": 646,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Ads9pNoe4SUfDD9Yd",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3158,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: label legible, shows MK04 (T1, T2). Confirmed.\n- Serial: starts with \"BN\" (T3). In range.\n- Date code: 07/2025 is not prior to July 2025 (T4). Out of range, so deny per R:date_codes.\n- Purchase: Amazon.com is listed, date 2025-07-19 is after the sale window (T5). That would be needs_info, but the date code denial already applies.\n- Duplicates: none (T7), so no flag.\n- Destruction photo not required (T6); remedy is replacement.\n\nPolicy order: flag doesn't apply, deny applies (date code out of range), so the outcome is deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QB85vEJeDzVjxxELZpvfuF",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label's date code reads 07/2025, which is not manufactured prior to July 2025, so the unit is outside the recalled date codes.",
+      "cites": [
+       "R:date_codes",
+       "T4",
+       "T1"
+      ]
+     },
+     {
+      "text": "The model is confirmed as MK04 from a legible label photo and the serial number starts with BN, so those criteria are met; the date code is the deciding factor.",
+      "cites": [
+       "R:models",
+       "R:serials",
+       "T1",
+       "T2",
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not flagged for review.",
+      "cites": [
+       "T7"
+      ]
+     },
+     {
+      "text": "The purchase date of 2025-07-19 is after the sale window, which would otherwise call for a follow-up question, but the date-code denial takes precedence under the claim policy.",
+      "cites": [
+       "T5",
+       "R:sold_window",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

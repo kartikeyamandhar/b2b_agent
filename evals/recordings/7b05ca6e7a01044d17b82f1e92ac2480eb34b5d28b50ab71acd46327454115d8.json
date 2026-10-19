@@ -1,0 +1,64 @@
+{
+ "text": "The label is legible and reads 2G523, which is not on the recalled list (T6), so the policy says the unit is not part of this recall. That is a denial regardless of the other checks. The destruction photo also does not show the instructed marker writing (T4).",
+ "usage": {
+  "input_tokens": 4603,
+  "output_tokens": 565,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4EksKJYW6wc53uzjGU",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2580,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and reads 2G523, which is not on the recalled list (T6), so the policy says the unit is not part of this recall. That is a denial regardless of the other checks. The destruction photo also does not show the instructed marker writing (T4)."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01FKFDXDaRcJnN1BSdCVQRht",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model 2G523, which is not one of the recalled models (2G505, 2G520, 2G505B, 2G512B). Under the program's FAQ, a label showing a model not on the list means the unit is not part of this recall. The typed model matches the label, so it does not change the result.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6",
+       "T7"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the word RECALLED in printed or digital lettering rather than handwritten in permanent marker on the product, so it does not show the instructed destruction. This is a secondary issue; the denial rests on the model.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase is valid: Homedepot.com is a listed retailer and 2025-06-06 falls inside the sale window. No duplicate claims were found.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T3"
+      ]
+     },
+     {
+      "text": "The serial check was skipped because the program has no serial rule for this recall, so it did not affect the outcome.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

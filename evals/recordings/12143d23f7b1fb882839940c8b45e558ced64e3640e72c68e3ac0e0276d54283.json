@@ -1,0 +1,65 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3520,
+  "output_tokens": 432,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3wfhnZ3RRPzgnNge31",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2084,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01QpzNMExuK2ycyKzPoqFtPa",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim (92cd95e1-1b01-50bf-b217-0794b5294bb9) sharing this claim's payout destination, so the claim is flagged for review before any payment.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The legible label shows model 98527, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase at ALDI on 2016-05-20 is within the sale window and from a listed retailer; no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the device with a cut power cord, which meets the required destruction.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The serial number was not checked because the program has no serial rule, so it does not affect the outcome.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

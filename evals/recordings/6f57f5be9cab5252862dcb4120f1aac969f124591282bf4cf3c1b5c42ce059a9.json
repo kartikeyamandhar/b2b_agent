@@ -1,0 +1,64 @@
+{
+ "text": "Applying the policy in order: the duplicate check (T5) finds a same_serial hit with another claim, so the first-triggered rule is flag. Flag takes precedence over deny, needs_info, and approve.\n\nThe label photo is legible (T1) and reads P4410-P, which is not a recalled model (T2), which would otherwise be a deny. But flag is checked first, so the claim goes to a person.",
+ "usage": {
+  "input_tokens": 2802,
+  "output_tokens": 565,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeKh9RoM7FByrLUBhM5",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 7768,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: the duplicate check (T5) finds a same_serial hit with another claim, so the first-triggered rule is flag. Flag takes precedence over deny, needs_info, and approve.\n\nThe label photo is legible (T1) and reads P4410-P, which is not a recalled model (T2), which would otherwise be a deny. But flag is checked first, so the claim goes to a person."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01LxzbbL8D3FuoaPqzofPV22",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim sharing this claim's serial number, so the claim must be sent to a person for review together with the matching claim.",
+      "cites": [
+       "T5",
+       "R:policy",
+       "T6"
+      ]
+     },
+     {
+      "text": "The legible label photo reads model P4410-P, which is not on the recalled model list, so the model would not qualify on its own. The flag takes precedence, but this finding should be noted for the reviewer.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase at Corner Hardware Co is not on the listed retailers, but the purchase date is inside the sale window and no receipt is required, so this does not change the outcome.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo is not required for this remedy, and the refund of $56.43 is under the $100 review threshold.",
+      "cites": [
+       "T4",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

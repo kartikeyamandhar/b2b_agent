@@ -1,0 +1,47 @@
+{
+ "text": "I'll start by reading the label photo, checking the purchase, checking for duplicates, and checking the typed serial, since the rules call for those checks.",
+ "usage": {
+  "input_tokens": 2993,
+  "output_tokens": 181,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Nw5pvxCPTVUqKXRb9",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1531,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll start by reading the label photo, checking the purchase, checking for duplicates, and checking the typed serial, since the rules call for those checks."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01PnyLqaN6Mpw7yWXNcPnVgy",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_012FmW6VGCiV29EcUD8hhhg8",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01JXsF5SR5FdpDEM2WPNYPMW",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01LoYFJLhgmtNoYMLNTu5zRY",
+   "name": "check_serial",
+   "input": {
+    "serial": "ZFC32B26123106"
+   }
+  }
+ ]
+}

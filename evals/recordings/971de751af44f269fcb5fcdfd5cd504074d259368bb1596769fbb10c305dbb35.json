@@ -1,0 +1,65 @@
+{
+ "text": "Checking the policy: no duplicates (T5 empty), label legible and shows recalled model 2G505B (T1, T2), serial present, no date code rule applies here (program has serial rules per the policy; serial SN48156927 is typed and label matches; no recalled range provided to test against, so no deny basis). Purchase inside window at a listed retailer, receipt not required (T3). Destruction photo missing (T4), and the remedy requires destruction, so needs_info.",
+ "usage": {
+  "input_tokens": 2728,
+  "output_tokens": 607,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAfDWadbjyJ3isu4nW2U",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4046,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy: no duplicates (T5 empty), label legible and shows recalled model 2G505B (T1, T2), serial present, no date code rule applies here (program has serial rules per the policy; serial SN48156927 is typed and label matches; no recalled range provided to test against, so no deny basis). Purchase inside window at a listed retailer, receipt not required (T3). Destruction photo missing (T4), and the remedy requires destruction, so needs_info."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QgncUgAX8mm6owAV34ggjP",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2G505B, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (Esrtech.com) and dated 2025-04-30, inside the sale window; no receipt is required.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The remedy requires destruction, and no destruction photo was provided. A missing destruction photo requires the claimant to submit one.",
+      "cites": [
+       "T4",
+       "R:destruction",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a photo of the recalled power bank that has been destroyed, with the word \"Recalled\" written on it in permanent marker. The photo must show the destruction itself, not the label photo you already sent.",
+    "confidence": 0.9
+   }
+  }
+ ]
+}

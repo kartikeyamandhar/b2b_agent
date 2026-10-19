@@ -1,0 +1,48 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 2722,
+  "output_tokens": 349,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeLZ5WuSwnke48nfMn4",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2180,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01DHHqT74i5LihgodbSPh7aT",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and reads model SM4979, which is not on the recalled model list (TD3318B, TD3318S, TD3418B, TD3418S, SM1977, SM1979). The typed model matches this non-recalled reading, so the unit is not part of the recall.",
+      "cites": [
+       "R:models",
+       "R:policy",
+       "T1",
+       "T2",
+       "T6"
+      ]
+     },
+     {
+      "text": "Purchase details are otherwise acceptable (listed retailer, date inside the sale window, no receipt required), and there are no duplicate hits, but these do not make a non-recalled model eligible.",
+      "cites": [
+       "T3",
+       "T5",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

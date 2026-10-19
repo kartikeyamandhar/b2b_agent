@@ -1,0 +1,70 @@
+{
+ "text": "The model is recalled, the serial is in range, the purchase is at a listed retailer within the window with no receipt required, and there are no duplicate claims. The claim is approved. The claimant requested repair or replacement with no refund amount, so the value threshold does not apply.",
+ "usage": {
+  "input_tokens": 4100,
+  "output_tokens": 525,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3PnBaH8ihqaVHkN2L2",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2528,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is recalled, the serial is in range, the purchase is at a listed retailer within the window with no receipt required, and there are no duplicate claims. The claim is approved. The claimant requested repair or replacement with no refund amount, so the value threshold does not apply."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01TZoz6Y6iQQPrkFeKS2LfSr",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model LDE4413BD, which matches the typed model and is on the recalled model list.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The label serial 704KM5319755 falls within a recalled serial range.",
+      "cites": [
+       "T1",
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "Costco is a listed retailer, and the 2016-09-08 purchase date is inside the 2015-01-01 to 2025-01-31 sale window. No receipt is required under this check.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claimant asked for repair or replacement with no refund amount, so the $100 value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

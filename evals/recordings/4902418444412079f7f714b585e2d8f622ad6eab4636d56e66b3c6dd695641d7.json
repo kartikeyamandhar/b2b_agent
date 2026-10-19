@@ -1,0 +1,58 @@
+{
+ "text": "The model check returns a match, which conflicts with my reading of R:models. The rule list reads CXP-03, CXC-02, CXM-03, CXV, CXM-02, and the tool confirms CXP-03 as a match. I'll rely on the tool's verdict for the model, but the purchase fails regardless: the retailer is not JHTNA and the purchase date is before the sale window.",
+ "usage": {
+  "input_tokens": 3537,
+  "output_tokens": 508,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3snAcooZPi3UrSz8Va",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2579,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model check returns a match, which conflicts with my reading of R:models. The rule list reads CXP-03, CXC-02, CXM-03, CXV, CXM-02, and the tool confirms CXP-03 as a match. I'll rely on the tool's verdict for the model, but the purchase fails regardless: the retailer is not JHTNA and the purchase date is before the sale window."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01G2rB5y982pf4N6jLckHjDt",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The purchase date of 2019-12-07 falls before the program's sale window of 2021-01-01 to 2024-10-31, so the purchase is outside eligibility.",
+      "cites": [
+       "R:sold_window",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The claimed retailer, Corner Hardware Co, is not on the program's list of eligible sellers (JHTNA), so the sale does not qualify.",
+      "cites": [
+       "R:sold_at",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label is legible and the model (CXP-03) and serial (FC2739136621, in range) match the recall, and no duplicate claims were found, but these do not overcome the failed purchase checks.",
+      "cites": [
+       "T1",
+       "T4",
+       "T5",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

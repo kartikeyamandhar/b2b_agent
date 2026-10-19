@@ -1,0 +1,60 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3612,
+  "output_tokens": 484,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB34v82pTsZHNBamtHHC",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2278,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_016XkP7FoZrLFboGAmSJgTGs",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2G512B, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase date of 2023-12-03 is inside the sale window, and Esrtech.com is a listed retailer, so no proof of purchase receipt is required.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this claim.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the product with the word RECALLED, but it appears to be printed or digital text rather than handwritten in permanent marker, so the instructed destruction is not clearly shown.",
+      "cites": [
+       "T4",
+       "R:destruction",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new destruction photo showing the recalled power bank with the word \"Recalled\" written on it in permanent marker (handwritten, not a printed or on-screen label), and make sure the product is clearly visible in the photo.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

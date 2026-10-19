@@ -1,0 +1,76 @@
+{
+ "text": "Key checks: label photo unreadable (T1: legible false, no model text). Per policy, without a usable label reading, the typed model decides: LXT-CL-1.0 matches recalled model (T2), so model is confirmed by typed value. Date code 0722 in range (T3). Retailer Salon Centric listed, purchase 2023-05-08 inside window (T4). Destruction photo shows a cut cord, complies (T5), and is not a repeat of label photo per the tool (T5 shows product, cut). Duplicates: none (T6). No serial rule in program. Refund not requested; replacement, so no threshold issue.\n\nOne concern: the destruction photo check has confidence 0.6, but it reports complies true and shows the product cut. Policy-wise it passes. Everything else passes; the label photo being unreadable is the only issue, and policy says the typed model decides when the label is unreadable, so no clarification is required for the model.\n\nApproving.",
+ "usage": {
+  "input_tokens": 2893,
+  "output_tokens": 794,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB39NtxztjK1k1M8KHV8",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3848,
+ "content": [
+  {
+   "type": "text",
+   "text": "Key checks: label photo unreadable (T1: legible false, no model text). Per policy, without a usable label reading, the typed model decides: LXT-CL-1.0 matches recalled model (T2), so model is confirmed by typed value. Date code 0722 in range (T3). Retailer Salon Centric listed, purchase 2023-05-08 inside window (T4). Destruction photo shows a cut cord, complies (T5), and is not a repeat of label photo per the tool (T5 shows product, cut). Duplicates: none (T6). No serial rule in program. Refund not requested; replacement, so no threshold issue.\n\nOne concern: the destruction photo check has confidence 0.6, but it reports complies true and shows the product cut. Policy-wise it passes. Everything else passes; the label photo being unreadable is the only issue, and policy says the typed model decides when the label is unreadable, so no clarification is required for the model.\n\nApproving."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_012WXS9F4zqHr7QNYpb9Uhoo",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo could not be read, so the typed model LXT-CL-1.0 decides; it matches the recalled model.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The typed date code 0722 falls within the recalled range 0722 to 1223.",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Retailer Salon Centric is on the sold-at list, the purchase date 2023-05-08 is inside the sale window, and no receipt is required.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the device with a cut cord, which complies with the instructed destruction (cut off the plug).",
+      "cites": [
+       "T5",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "No duplicate claim shares a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The remedy is repair or replacement with no refund requested, so the value threshold does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.8
+   }
+  }
+ ]
+}

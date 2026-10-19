@@ -1,0 +1,76 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: T1 reads the label as legible with model 34692, a recalled model. T2 confirms the match.\n- Date code: T3 shows 10/2021 is in range 10/2021-12/2022.\n- Serial: no serial rule exists in the program rules, so it is not applied.\n- Purchase: T4 shows Academy is a listed retailer, the date 2019-10-22 is inside the sale window, and no receipt is required.\n- Destruction: T5 says not required (remedy is replacement).\n- Duplicates: T6 found no matches, so no flag.\n- No refund requested, so the value threshold does not apply.\n\nEvery rule passes, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2844,
+  "output_tokens": 682,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeTbSrPvpVGY4dnGvFE",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3326,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: T1 reads the label as legible with model 34692, a recalled model. T2 confirms the match.\n- Date code: T3 shows 10/2021 is in range 10/2021-12/2022.\n- Serial: no serial rule exists in the program rules, so it is not applied.\n- Purchase: T4 shows Academy is a listed retailer, the date 2019-10-22 is inside the sale window, and no receipt is required.\n- Destruction: T5 says not required (remedy is replacement).\n- Duplicates: T6 found no matches, so no flag.\n- No refund requested, so the value threshold does not apply.\n\nEvery rule passes, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_019TWnCewBE1X7XdBN2gxW2y",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 34692, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "Date code 10/2021 falls within the recalled range 10/2021-12/2022.",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "Academy is a listed retailer, and the purchase date 2019-10-22 is inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No destruction photo is required because the remedy is replacement.",
+      "cites": [
+       "T5",
+       "T7"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "No refund is requested, so the value threshold review does not apply. All policy checks pass.",
+      "cites": [
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": true, \"complies\": false, \"observed\": \"The photo shows a dark gray device with a cord on a blurred background, with the word RECALLED printed in white on its front face, but the instruction requires it to be written with a marker on the front and rear of a seatback, and the rear is not visible.\", \"confidence\": 0.6}",
+ "usage": {
+  "input_tokens": 1199,
+  "output_tokens": 107,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeCVgR9nfrnY9rT7tVe",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 1403
+}

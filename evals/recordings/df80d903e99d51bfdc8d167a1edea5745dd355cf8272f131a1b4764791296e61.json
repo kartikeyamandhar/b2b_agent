@@ -1,0 +1,79 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3208,
+  "output_tokens": 508,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeHB1e9rj9wiTcYRoYA",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2375,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01DtzgPds9eVik7iQibu2Ytx",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "Label photo is legible and shows model FCRE306CAS, which is on the recalled model list.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "Serial number VF34601529 falls within the recalled range VF34601466 thru VF34601608.",
+      "cites": [
+       "T3",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "Date code October 2023 is within the recalled production range (October through November 2023).",
+      "cites": [
+       "T4",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Purchase at Lowe's on 2023-11-29 is a listed retailer and inside the sale window; no receipt required.",
+      "cites": [
+       "T5",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "Destruction photo not required for this remedy (repair or replacement).",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "No duplicate claims found sharing a photo, address, email, serial, or payout account.",
+      "cites": [
+       "T7"
+      ]
+     },
+     {
+      "text": "Claim meets all program eligibility checks; no refund requested so the value threshold does not apply.",
+      "cites": [
+       "R:policy",
+       "R:value_threshold",
+       "T8"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

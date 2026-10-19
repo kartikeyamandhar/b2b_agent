@@ -1,0 +1,74 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: T1 is legible and reads \"MODEL 9421\", a recalled model. The label confirms the model, so T3's mismatch on \"MODEL 9421\" (typed text with prefix) is a formatting artifact; the label photo governs. T2 matches the typed model too.\n- Serial: typed serial SN15759834 matches the label reading SN15759834. The program has no serial range rule for this recall beyond the record, so no denial applies.\n- Date code: not a required rule here (no date code range in the program rules), so it is not needed.\n- Purchase: retailer comfortsolutions.caframobrands.com is on the list (T4), date 2024-04-20 is inside the window (T4). No receipt required.\n- Destruction: not required (T5), the remedy is repair or replacement.\n- Duplicates: none (T6).\n- Refund: none requested, so the value threshold does not apply.\n\nNo rule triggers flag, deny, or needs_info, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2790,
+  "output_tokens": 791,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeNqJ9scGTuUBHMS4s5",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 8349,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: T1 is legible and reads \"MODEL 9421\", a recalled model. The label confirms the model, so T3's mismatch on \"MODEL 9421\" (typed text with prefix) is a formatting artifact; the label photo governs. T2 matches the typed model too.\n- Serial: typed serial SN15759834 matches the label reading SN15759834. The program has no serial range rule for this recall beyond the record, so no denial applies.\n- Date code: not a required rule here (no date code range in the program rules), so it is not needed.\n- Purchase: retailer comfortsolutions.caframobrands.com is on the list (T4), date 2024-04-20 is inside the window (T4). No receipt required.\n- Destruction: not required (T5), the remedy is repair or replacement.\n- Duplicates: none (T6).\n- Refund: none requested, so the value threshold does not apply.\n\nNo rule triggers flag, deny, or needs_info, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_018wPTYy3wbKJQhGdHRDRMTa",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows MODEL 9421, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The typed serial SN15759834 matches the serial on the label photo, and no serial range rule blocks the claim.",
+      "cites": [
+       "T1",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The retailer comfortsolutions.caframobrands.com is on the sales list and the purchase date 2024-04-20 falls inside the sale window; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No destruction photo is required because the remedy is repair or replacement.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "No refund is requested, so the refund value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

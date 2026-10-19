@@ -1,0 +1,68 @@
+{
+ "text": "Checking the policy in order: flag (duplicates) \u2014 T6 has no hits, so no flag. Model: T1 legible, model CXP-03 recalled, T2 match \u2014 confirmed. Serial: T3 in range. Purchase: T4 says the purchase was before the sale window (2019-12-07 is before 2021-01-01), so deny. The retailer \"Corner Hardware Co\" is also not on the list, but the window rule for a before-window purchase is a denial; the FAQ's eligibility exemption for secondhand/gift/unlisted-store owners applies to the retailer question, not to a purchase dated before the window. The claimant's purchase date is the typed value and T4 confirms it is before the window.",
+ "usage": {
+  "input_tokens": 3008,
+  "output_tokens": 617,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeRFCdNXRxCxPDk67qX",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 5269,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy in order: flag (duplicates) \u2014 T6 has no hits, so no flag. Model: T1 legible, model CXP-03 recalled, T2 match \u2014 confirmed. Serial: T3 in range. Purchase: T4 says the purchase was before the sale window (2019-12-07 is before 2021-01-01), so deny. The retailer \"Corner Hardware Co\" is also not on the list, but the window rule for a before-window purchase is a denial; the FAQ's eligibility exemption for secondhand/gift/unlisted-store owners applies to the retailer question, not to a purchase dated before the window. The claimant's purchase date is the typed value and T4 confirms it is before the window."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01C8m92GXgmJgTm81FKFXvqC",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The purchase date of 2019-12-07 is before the program's sale window (2021-01-01 to 2024-10-31), and a purchase before the window is not eligible.",
+      "cites": [
+       "R:sold_window",
+       "T4",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows CXP-03, a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number FC2739136621 falls within the recalled serial prefixes.",
+      "cites": [
+       "T3",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not flagged.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

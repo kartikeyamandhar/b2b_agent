@@ -1,0 +1,58 @@
+{
+ "text": "Checking the policy against the results:\n\n- Flag: check_duplicates (T5) returned no hits, so no flag.\n- Model: label photo is legible (T1) and shows P1411, a recalled model (R:models, T2 match). Confirmed.\n- Serial/date code: the program's rules here don't include serial or date code checks, so these don't apply.\n- Purchase: retailer www.walmart.com is listed (T3, R:sold_at). Purchase date 2006-05-22 is before the sale window opening 2006-10-01 (R:sold_window, T3 \"before\"). Under policy, a purchase before the window is a deny.\n- Destruction: not required for this remedy (T4).\n\nDeny is the outcome. The purchase predates the sale window, which is a deny condition regardless of the other passing checks.",
+ "usage": {
+  "input_tokens": 2724,
+  "output_tokens": 627,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeLGbpo654ThfBemueC",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3897,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy against the results:\n\n- Flag: check_duplicates (T5) returned no hits, so no flag.\n- Model: label photo is legible (T1) and shows P1411, a recalled model (R:models, T2 match). Confirmed.\n- Serial/date code: the program's rules here don't include serial or date code checks, so these don't apply.\n- Purchase: retailer www.walmart.com is listed (T3, R:sold_at). Purchase date 2006-05-22 is before the sale window opening 2006-10-01 (R:sold_window, T3 \"before\"). Under policy, a purchase before the window is a deny.\n- Destruction: not required for this remedy (T4).\n\nDeny is the outcome. The purchase predates the sale window, which is a deny condition regardless of the other passing checks."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01FMMJEP52SxhgBXdDVXGdQv",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model P1411, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2006-05-22 is before the product's sale window, which opens 2006-10-01. Purchases before the window are denied under the claim policy, even though the retailer (www.walmart.com) is on the list.",
+      "cites": [
+       "R:policy",
+       "R:sold_window",
+       "R:sold_at",
+       "T3",
+       "faq#1"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, and no destruction photo is required for this remedy, so neither of those checks changes the outcome.",
+      "cites": [
+       "T5",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

@@ -1,0 +1,29 @@
+{
+ "text": "The typed model matches the recalled list (T5). The label is unreadable, so the typed model is the only usable reading. The date code check was unparsed (T4), so I'll look at the policy text for how to handle it before deciding.",
+ "usage": {
+  "input_tokens": 3608,
+  "output_tokens": 155,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3fM4RU6Jy4bMwxn6uh",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1539,
+ "content": [
+  {
+   "type": "text",
+   "text": "The typed model matches the recalled list (T5). The label is unreadable, so the typed model is the only usable reading. The date code check was unparsed (T4), so I'll look at the policy text for how to handle it before deciding."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Wnx6oSQQNph7UD46WTADtv",
+   "name": "retrieve_policy",
+   "input": {
+    "query": "label photo unreadable needs_info clearer label photo; date code format 07/22 NH recalled date codes"
+   }
+  }
+ ]
+}

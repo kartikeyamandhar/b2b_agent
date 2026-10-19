@@ -1,0 +1,60 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 4075,
+  "output_tokens": 358,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3u568LwrsE4LuH3Lim",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2023,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01PsFFFe7F6nMUaF4K24BiNL",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program shares this claim's payout destination, which requires a flag for review before any payment.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The legible label photo shows model LSEL6337D, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The label serial 801KM6335282 falls within a recalled serial range.",
+      "cites": [
+       "T1",
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The Home Depot is a listed retailer and the purchase date 2017-02-23 is inside the sale window; no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

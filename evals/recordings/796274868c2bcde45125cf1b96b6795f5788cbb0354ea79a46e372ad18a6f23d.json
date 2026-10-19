@@ -1,0 +1,58 @@
+{
+ "text": "The model matches a recalled model, but the date code is out of range, so the claim is denied.",
+ "usage": {
+  "input_tokens": 3748,
+  "output_tokens": 375,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3zpdtXMzhuRadrnyyo",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2375,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model matches a recalled model, but the date code is out of range, so the claim is denied."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01X8RhB3GwQH6Y7XowFf1Rkg",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model LXT-CL-1.0, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T7"
+      ]
+     },
+     {
+      "text": "The date code on the label and claim, 1224, is outside the recalled date code range of 0722 to 1223, so the unit is not covered by the recall.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (Nordstrom) within the sale window, and no duplicate claims were found, but these do not overcome the date code mismatch.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

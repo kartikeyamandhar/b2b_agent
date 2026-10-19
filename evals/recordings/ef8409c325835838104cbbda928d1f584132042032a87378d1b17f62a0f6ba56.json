@@ -1,0 +1,62 @@
+{
+ "text": "The model matches a recalled model, but the purchase date is before the sale window, which is a denial under the purchase rule.",
+ "usage": {
+  "input_tokens": 3645,
+  "output_tokens": 426,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3qHVtR72gFPjFcA5p2",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2582,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model matches a recalled model, but the purchase date is before the sale window, which is a denial under the purchase rule."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01RsrEuAMi7QJEBbcHa5b8e6",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label is legible and shows model 790.990191A1, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number VF12242255 is within the recalled range VF122xxxxx - VF334xxxxx.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2000-07-31 is before the program's sale window (2001-06-01 to 2009-08-31), so the unit was not sold within the recalled sale period. Purchase at Sears and the receipt were otherwise present.",
+      "cites": [
+       "T2",
+       "R:sold_window",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

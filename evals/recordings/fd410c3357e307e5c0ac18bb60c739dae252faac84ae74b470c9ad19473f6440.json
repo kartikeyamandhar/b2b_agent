@@ -1,0 +1,63 @@
+{
+ "text": "The model is confirmed. The purchase predates the sale window, which is a deny under the purchase rule. The duplicate check was clear and the serial is in range, but the purchase timing controls the outcome.",
+ "usage": {
+  "input_tokens": 4021,
+  "output_tokens": 460,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3tXxdVhkj5hGVQ9nky",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2268,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed. The purchase predates the sale window, which is a deny under the purchase rule. The duplicate check was clear and the serial is in range, but the purchase timing controls the outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01AG9EpGYxSswSi6DQKXnwin",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model LSE4611ST, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number 102KM1595452 falls within a recalled serial range.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2014-11-18 is before the program's sale window (2015-01-01 to 2025-01-31), so the purchase does not qualify even though Lowe's is an eligible retailer.",
+      "cites": [
+       "T2",
+       "R:sold_window",
+       "R:sold_at"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim, so there is no duplicate concern.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

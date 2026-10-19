@@ -1,0 +1,59 @@
+{
+ "text": "The label shows LTG4815BM, which is not on the recalled model list. The typed model LTG4815BM also doesn't match. The serial is in range, but the model is not recalled, so the claim is denied.",
+ "usage": {
+  "input_tokens": 3991,
+  "output_tokens": 463,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3twqpBCueetF4bt41V",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2727,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label shows LTG4815BM, which is not on the recalled model list. The typed model LTG4815BM also doesn't match. The serial is in range, but the model is not recalled, so the claim is denied."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01TTv1fKrRviQoUNgAe2ayo6",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model LTG4815BM, and the typed model is the same. This model is not on the program's recalled model list.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial number 308KM5452036 falls within a recalled serial range, but the model is what disqualifies the unit, and a recalled serial does not override a non-recalled model.",
+      "cites": [
+       "R:serials",
+       "T4",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The retailer (LG.com is not on the list, but Best Buy/Costco/Home Depot/Lowe's are), purchase date (2023-12-31, inside the sale window), and duplicate check (no hits) do not change the outcome.",
+      "cites": [
+       "T2",
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

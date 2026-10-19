@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and shows model 200LX, serial HA03695, which is in range. Next I'll confirm the model against the recalled list.",
+ "usage": {
+  "input_tokens": 3129,
+  "output_tokens": 95,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB43U6i4dZNGEUnL8J1w",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1626,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows model 200LX, serial HA03695, which is in range. Next I'll confirm the model against the recalled list."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01SSkbKzHVSX8JsrnqyV323i",
+   "name": "check_model",
+   "input": {
+    "model_text": "200LX"
+   }
+  }
+ ]
+}

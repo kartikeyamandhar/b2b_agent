@@ -1,0 +1,82 @@
+{
+ "text": "The typed model B0726Y matches the recalled model, and the label is unreadable, so the typed model decides. The destruction photo does not show the required strap cutting, so under the policy it is needs_info. Flags come first, but there are no duplicates, so I'll record the decision.",
+ "usage": {
+  "input_tokens": 3846,
+  "output_tokens": 701,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3ZJNGw2bBeNak7C5jT",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3076,
+ "content": [
+  {
+   "type": "text",
+   "text": "The typed model B0726Y matches the recalled model, and the label is unreadable, so the typed model decides. The destruction photo does not show the required strap cutting, so under the policy it is needs_info. Flags come first, but there are no duplicates, so I'll record the decision."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01AmbyWShBzmJ94ra2SW9gy2",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The typed model B0726Y is a recalled model, so the model rule is met using the typed value because the label photo could not be read.",
+      "cites": [
+       "R:models",
+       "T7",
+       "T1"
+      ]
+     },
+     {
+      "text": "The label photo is unreadable, so the model and serial could not be confirmed from the label itself.",
+      "cites": [
+       "T1",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The typed serial SN27641833 was not checked against the recalled serial ranges, so the serial rule is not verified.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The typed date code 8/21 is in the recalled range (August 2021 or earlier).",
+      "cites": [
+       "R:date_codes",
+       "T6"
+      ]
+     },
+     {
+      "text": "The retailer www.Amazon.com is on the sold-at list and the purchase date 2017-11-10 is inside the sale window, with no receipt required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the helmet with its straps cut off, so it does not show the required destruction.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a clearer photo of the white label inside the helmet so the model and serial number can be read. Please also send a new photo showing the helmet with its straps cut off, as the recall instructs, and confirm the serial number printed on the helmet.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

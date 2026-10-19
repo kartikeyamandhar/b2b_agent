@@ -1,0 +1,75 @@
+{
+ "text": "The typed model matches a recalled model (T6). The serial check was skipped (T4) because the program has no serial rule, and the date code is in range (T5). Purchase, retailer, and window are all valid (T2), and there are no duplicates (T3). The label is unreadable, so I'll ask for a clearer photo before approving.",
+ "usage": {
+  "input_tokens": 3472,
+  "output_tokens": 593,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB482UUZLbmqrJxPVAKA",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3210,
+ "content": [
+  {
+   "type": "text",
+   "text": "The typed model matches a recalled model (T6). The serial check was skipped (T4) because the program has no serial rule, and the date code is in range (T5). Purchase, retailer, and window are all valid (T2), and there are no duplicates (T3). The label is unreadable, so I'll ask for a clearer photo before approving."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01JUd3F82q2tEDZiGEkVbt9w",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is unreadable, so no model, serial, or date code could be read from it.",
+      "cites": [
+       "T1",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The typed model SE4570 matches the recalled model list, so the typed model is the only usable model reading.",
+      "cites": [
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The typed date code 07/22 falls within the recalled date codes.",
+      "cites": [
+       "T5",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Purchase at Grainger on 2023-05-10 is within the sale window and the retailer is listed; no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "Because the label cannot be read, the policy requires a clearer label photo before the claim can be approved.",
+      "cites": [
+       "T1",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your label photo could not be read. Please send a clearer, well-lit photo of the label showing the model number, serial number, and date code.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

@@ -1,0 +1,55 @@
+{
+ "text": "I'm checking the label photo, purchase details, duplicates, and the typed serial in parallel, since the rules require serial and purchase checks.",
+ "usage": {
+  "input_tokens": 2775,
+  "output_tokens": 224,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3XrBf5D7q8JAxfKCkQ",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1511,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'm checking the label photo, purchase details, duplicates, and the typed serial in parallel, since the rules require serial and purchase checks."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01VUQWq87VuRoocnFMtYkhgb",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01XZA4wtrA3YztTqytWza6KX",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0125d3xPu9PhQvhD64uDCo2T",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_019EJ62aveypSmLxXJbmiUSQ",
+   "name": "check_serial",
+   "input": {
+    "serial": "LX002970"
+   }
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Q6tPYt3nCNWzFaKfvH4gZW",
+   "name": "check_model",
+   "input": {
+    "model_text": "230LX"
+   }
+  }
+ ]
+}

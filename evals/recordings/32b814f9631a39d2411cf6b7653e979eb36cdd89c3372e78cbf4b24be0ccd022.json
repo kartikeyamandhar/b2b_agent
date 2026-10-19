@@ -1,0 +1,75 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 2851,
+  "output_tokens": 511,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB39fmU9A6S1KrTTvaUW",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2376,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01PemjXSgAKzBxpC8r4Tyniw",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model. Per the claim policy, the label photo confirms the model even though the typed model 5E4570 is a typo.",
+      "cites": [
+       "R:policy",
+       "R:models",
+       "T1",
+       "T3",
+       "T8"
+      ]
+     },
+     {
+      "text": "The date code 07/22 is in the recalled range (07/22 NH).",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     },
+     {
+      "text": "The serial number is not a program rule for this recall, so no serial check applies.",
+      "cites": [
+       "R:policy",
+       "T1"
+      ]
+     },
+     {
+      "text": "The purchase at www.justinboots.com on 2023-05-02 is within the sale window and from a listed retailer; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T5"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy, and no other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T6",
+       "T7"
+      ]
+     },
+     {
+      "text": "The remedy is repair or replacement with no refund requested, so the value threshold does not apply.",
+      "cites": [
+       "R:value_threshold",
+       "T8"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.92
+   }
+  }
+ ]
+}

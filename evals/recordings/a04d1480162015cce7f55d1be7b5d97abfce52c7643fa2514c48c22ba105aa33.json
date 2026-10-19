@@ -1,0 +1,62 @@
+{
+ "text": "Applying the policy in order:\n\n- Flag: T6 found no duplicates. Not triggered.\n- Model: T1 label is legible and shows MODEL NO. 93550, a recalled model. Confirmed, despite T3 (typed text mismatch, which is superseded by the label reading).\n- Serial/date code: The program's rules here cover only model and date-related checks as described; no serial rule applies (serial not required by the recall rules in R:models). Date code 2015-09 is on the label but the purchase is what the window governs.\n- Purchase: T4 shows purchase date 2015-12-19 is before the sale window (2016-01-01 to 2019-12-31). Per policy, a purchase before the window is deny. Retailer ALDI is listed, but the date controls.\n- Destruction: T5 shows the cord is intact, not cut. Would be needs_info, but the deny from purchase date takes precedence in the order of rules.\n\nOutcome: deny, because the purchase predates the sale window.",
+ "usage": {
+  "input_tokens": 2923,
+  "output_tokens": 716,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3A1z9xjUnxaGjXDn5J",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4012,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order:\n\n- Flag: T6 found no duplicates. Not triggered.\n- Model: T1 label is legible and shows MODEL NO. 93550, a recalled model. Confirmed, despite T3 (typed text mismatch, which is superseded by the label reading).\n- Serial/date code: The program's rules here cover only model and date-related checks as described; no serial rule applies (serial not required by the recall rules in R:models). Date code 2015-09 is on the label but the purchase is what the window governs.\n- Purchase: T4 shows purchase date 2015-12-19 is before the sale window (2016-01-01 to 2019-12-31). Per policy, a purchase before the window is deny. Retailer ALDI is listed, but the date controls.\n- Destruction: T5 shows the cord is intact, not cut. Would be needs_info, but the deny from purchase date takes precedence in the order of rules.\n\nOutcome: deny, because the purchase predates the sale window."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01APUVP68URyTkQLKj7br8Gu",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The purchase date of 2015-12-19 is before the sale window (2016-01-01 to 2019-12-31), so the claim is not eligible.",
+      "cites": [
+       "R:sold_window",
+       "T4",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model 93550, which is a recalled model, so the model itself is confirmed. The typed-model mismatch does not change this.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim does not need to be flagged.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the power cord cut as instructed. This would also require a new photo, but the pre-window purchase date is the controlling denial.",
+      "cites": [
+       "T5",
+       "R:destruction"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

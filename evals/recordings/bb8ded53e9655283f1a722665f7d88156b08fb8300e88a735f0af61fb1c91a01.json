@@ -1,0 +1,69 @@
+{
+ "text": "The model, retailer, and purchase window all check out, and there are no duplicates. The destruction photo shows an intact cord, so the required destruction has not been shown. Under the policy, a destruction photo that does not show the instructed destruction is asked for again, which means needs_info rather than deny.",
+ "usage": {
+  "input_tokens": 4525,
+  "output_tokens": 609,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3bEhKckk6eQSHR5PAc",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2833,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model, retailer, and purchase window all check out, and there are no duplicates. The destruction photo shows an intact cord, so the required destruction has not been shown. Under the policy, a destruction photo that does not show the instructed destruction is asked for again, which means needs_info rather than deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01K9X4CDh97d5qKW3gP6QHtL",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model KY-318A, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase is at ALDI, inside the 2016-01-01 to 2019-12-31 sale window, and no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo shows an intact, uncut power cord, so it does not show the required destruction (unplugged power cord cut). Under the claims FAQ, a destruction photo that does not show the instructed destruction is asked for again.",
+      "cites": [
+       "T4",
+       "R:destruction",
+       "T7"
+      ]
+     },
+     {
+      "text": "The serial check was skipped, so the serial was not verified against recalled ranges; this is not a basis for denial.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your destruction photo does not show the required destruction. Please send a new photo of the unplugged power cord cut through, showing the cut cord on the cooker. The photo should not be a copy of the label photo.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

@@ -1,0 +1,53 @@
+{
+ "text": "Duplicate check T5 finds a same-photo match with another claim, so the policy requires flag regardless of other checks.",
+ "usage": {
+  "input_tokens": 2770,
+  "output_tokens": 382,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeP1P7cdtZMoHhSjhD2",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 5943,
+ "content": [
+  {
+   "type": "text",
+   "text": "Duplicate check T5 finds a same-photo match with another claim, so the policy requires flag regardless of other checks."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DUjiMKfZ3JfgKH1ckEtt9K",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo is shared with another claim (cdb0533c-ae66-5749-8cad-d9df45692ab3), so the claim must be sent to a person for review together with the matching claim.",
+      "cites": [
+       "T5",
+       "R:policy",
+       "T6"
+      ]
+     },
+     {
+      "text": "Apart from the duplicate, the claim otherwise checks out: the label is legible and shows recalled model 9421, the purchase is at a listed retailer within the sale window, and no receipt or destruction photo is required for this repair/replacement remedy.",
+      "cites": [
+       "T1",
+       "T2",
+       "T3",
+       "T4",
+       "R:models",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

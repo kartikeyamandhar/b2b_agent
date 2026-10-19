@@ -1,0 +1,70 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: T1 reads the label as TD3418S, legible, and T2 confirms it matches a recalled model (R:models). Confirmed.\n- Serial/date code: the program's rules here use the serial number only for the checks already run; no serial range rule is listed in R:models or the sale rules, so no deny applies. The date code is not required by the listed rules.\n- Purchase: REI is a listed retailer (T3, R:sold_at), and 2010-08-06 falls inside the sale window (T3, R:sold_window). Receipt not required (T3).\n- Destruction: not required for this remedy (T4; FAQ T6 says the remedy offered is repair).\n- Duplicates: none found (T5), so no flag.\n- Refund: none requested (repair or replacement), so the value threshold does not apply.\n\nNo rule triggers flag, deny, or needs_info, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2693,
+  "output_tokens": 714,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeLXWGMfLyxA2PBk7Jp",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3707,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: T1 reads the label as TD3418S, legible, and T2 confirms it matches a recalled model (R:models). Confirmed.\n- Serial/date code: the program's rules here use the serial number only for the checks already run; no serial range rule is listed in R:models or the sale rules, so no deny applies. The date code is not required by the listed rules.\n- Purchase: REI is a listed retailer (T3, R:sold_at), and 2010-08-06 falls inside the sale window (T3, R:sold_window). Receipt not required (T3).\n- Destruction: not required for this remedy (T4; FAQ T6 says the remedy offered is repair).\n- Duplicates: none found (T5), so no flag.\n- Refund: none requested (repair or replacement), so the value threshold does not apply.\n\nNo rule triggers flag, deny, or needs_info, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01AQA6tSmBhUPkz7MUxxqGPc",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model TD3418S, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The claimant bought the unit at REI, a listed retailer, on 2010-08-06, which is inside the sale window. No receipt is required.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for the repair remedy.",
+      "cites": [
+       "T4",
+       "T6"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one, so it is not flagged.",
+      "cites": [
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The claim requests repair or replacement, not a refund, so the $100 value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

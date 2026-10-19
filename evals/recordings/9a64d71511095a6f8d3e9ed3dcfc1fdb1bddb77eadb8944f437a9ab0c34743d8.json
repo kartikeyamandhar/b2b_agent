@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and shows the recalled model, the date code is in range, the purchase is in window at a listed retailer, and there are no duplicates. The destruction photo does not show the plug cut off, so the claim needs more information. The serial check was skipped because the program has no serial rule, so it doesn't factor in.\n\nI'll verify the model against the label reading before deciding.",
+ "usage": {
+  "input_tokens": 3521,
+  "output_tokens": 175,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB47ZK6sjcbXLHPBfZ2q",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1459,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows the recalled model, the date code is in range, the purchase is in window at a listed retailer, and there are no duplicates. The destruction photo does not show the plug cut off, so the claim needs more information. The serial check was skipped because the program has no serial rule, so it doesn't factor in.\n\nI'll verify the model against the label reading before deciding."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01SajMKhRqq68HP6PY5SyfJn",
+   "name": "check_model",
+   "input": {
+    "model_text": "LXT-CL-1.0"
+   }
+  }
+ ]
+}

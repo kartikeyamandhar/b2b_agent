@@ -1,0 +1,76 @@
+{
+ "text": "Checking the policy against the results:\n\n- Duplicates: T6 has no hits, so no flag.\n- Model: T1 is legible and shows LXT-CL-1.0, a recalled model (T2 match).\n- Serial/date code: date code 0722 is in range (T3). Serial is present; the program's rules only use date codes for range checks here.\n- Purchase: Salon Centric is on the list (T4), date 2021-10-08 is before the sale window (2022-08-01 to 2024-07-31), so this is a deny.\n- Destruction photo would be fine (T5), but the purchase deny takes precedence.\n\nOutcome: deny, based on the purchase date before the sale window.",
+ "usage": {
+  "input_tokens": 2915,
+  "output_tokens": 664,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAfiPgwtnBjsKExKibLv",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3339,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy against the results:\n\n- Duplicates: T6 has no hits, so no flag.\n- Model: T1 is legible and shows LXT-CL-1.0, a recalled model (T2 match).\n- Serial/date code: date code 0722 is in range (T3). Serial is present; the program's rules only use date codes for range checks here.\n- Purchase: Salon Centric is on the list (T4), date 2021-10-08 is before the sale window (2022-08-01 to 2024-07-31), so this is a deny.\n- Destruction photo would be fine (T5), but the purchase deny takes precedence.\n\nOutcome: deny, based on the purchase date before the sale window."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01M4fAn5MPTSZipEAC9w9hck",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The purchase date of 2021-10-08 is before the recall's sale window, so the unit is not eligible.",
+      "cites": [
+       "R:sold_window",
+       "T4",
+       "T7"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows the recalled model LXT-CL-1.0, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 0722 is within the recalled range.",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "The retailer Salon Centric is on the sold-at list, so the retailer itself is not a problem.",
+      "cites": [
+       "R:sold_at",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the product with the plug cut off, as instructed.",
+      "cites": [
+       "R:destruction",
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,66 @@
+{
+ "text": "Checking the policy against the results:\n\n- Duplicates (T7): no hits, so no flag.\n- Model: label legible and shows FCRE306CAS, a recalled model (T1, T2, R:models). Confirmed.\n- Serial VF34410338 is within the single-value range VF34410338 thru VF34410338 (T3, R:serials).\n- Date code October 2023 is within October through November 2023 (T4, R:date_codes).\n- Purchase: Lowe's is listed, and 2023-01-04 is before the sale window of 2023-10-01 to 2023-12-31 (T5, R:sold_window, R:sold_at). The check reports \"before,\" and under policy a purchase before the window is a denial.\n- Destruction photo: not required for this remedy (T6).\n- Refund: none requested, repair or replacement only, so the value threshold doesn't apply.\n\nThe purchase date is the deciding fact. It falls before the sale window, so the claim is denied regardless of the other matching checks.",
+ "usage": {
+  "input_tokens": 3207,
+  "output_tokens": 770,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeHAsD2xoWpLwDMikWb",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3628,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy against the results:\n\n- Duplicates (T7): no hits, so no flag.\n- Model: label legible and shows FCRE306CAS, a recalled model (T1, T2, R:models). Confirmed.\n- Serial VF34410338 is within the single-value range VF34410338 thru VF34410338 (T3, R:serials).\n- Date code October 2023 is within October through November 2023 (T4, R:date_codes).\n- Purchase: Lowe's is listed, and 2023-01-04 is before the sale window of 2023-10-01 to 2023-12-31 (T5, R:sold_window, R:sold_at). The check reports \"before,\" and under policy a purchase before the window is a denial.\n- Destruction photo: not required for this remedy (T6).\n- Refund: none requested, repair or replacement only, so the value threshold doesn't apply.\n\nThe purchase date is the deciding fact. It falls before the sale window, so the claim is denied regardless of the other matching checks."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01V7rqfQdAQwqbFQvcav2tpg",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model FCRE306CAS, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number VF34410338 is within the recalled serial range, and the date code October 2023 is within the recalled production dates.",
+      "cites": [
+       "T3",
+       "T4",
+       "R:serials",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase date of 2023-01-04 is before the sale window of 2023-10-01 to 2023-12-31. Under the policy, a purchase before the window is denied. Lowe's is a listed retailer, so the retailer does not change this result.",
+      "cites": [
+       "T5",
+       "R:sold_window",
+       "R:sold_at",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not flagged. No destruction photo is required for a repair or replacement remedy.",
+      "cites": [
+       "T7",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

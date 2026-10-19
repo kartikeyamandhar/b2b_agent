@@ -1,0 +1,29 @@
+{
+ "text": "The date code tool returns \"unparsed\" for both the typed and label values, so it does not settle the date question. The policy rule for date codes says a code outside the recalled codes is a denial. The label photo is the evidence and reads 09/22 NH, which is not recalled, while the typed 08/22 NH is recalled. I'll check the policy text on how to resolve a conflict between the typed and label date codes.",
+ "usage": {
+  "input_tokens": 3793,
+  "output_tokens": 199,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3fERZWGibh7wPpe9iC",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1431,
+ "content": [
+  {
+   "type": "text",
+   "text": "The date code tool returns \"unparsed\" for both the typed and label values, so it does not settle the date question. The policy rule for date codes says a code outside the recalled codes is a denial. The label photo is the evidence and reads 09/22 NH, which is not recalled, while the typed 08/22 NH is recalled. I'll check the policy text on how to resolve a conflict between the typed and label date codes."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01PtHdqb997Ldq4U39am2Wvj",
+   "name": "retrieve_policy",
+   "input": {
+    "query": "date code conflict between typed claim and label photo; which date code controls"
+   }
+  }
+ ]
+}

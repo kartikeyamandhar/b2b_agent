@@ -1,0 +1,47 @@
+{
+ "text": "Before checking, I'll read the label photo, check the purchase, check for duplicates, and check the typed serial, since those results decide most of the outcome.",
+ "usage": {
+  "input_tokens": 2620,
+  "output_tokens": 179,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB436k57aiUHLDV6EDeq",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1523,
+ "content": [
+  {
+   "type": "text",
+   "text": "Before checking, I'll read the label photo, check the purchase, check for duplicates, and check the typed serial, since those results decide most of the outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017NzuyviJ6emerGRMN6CwKk",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01EPm3bc4H6r3Ne1GcajFb24",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01NhWQwdTFCBkCVWF7ZtW9Td",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01CNSupAi4TVrWMzDCwdtFF6",
+   "name": "check_serial",
+   "input": {
+    "serial": "QQ19420553"
+   }
+  }
+ ]
+}

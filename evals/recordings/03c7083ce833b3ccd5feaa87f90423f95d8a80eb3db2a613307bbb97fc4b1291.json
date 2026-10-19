@@ -1,0 +1,70 @@
+{
+ "text": "The model matches. Because the purchase predates the window, I'm recording the denial now.",
+ "usage": {
+  "input_tokens": 3650,
+  "output_tokens": 480,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3rP9zSd9hcWRkH4Ykp",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2702,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model matches. Because the purchase predates the window, I'm recording the denial now."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DJ7voogyRg5og4266mJp3m",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label is legible and shows REV 12 Kids Bike, a recalled model.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2021-11-22 is before the sale window of 2022-03-01 to 2024-05-31, so the purchase does not qualify even though the retailer (REI.com) is listed.",
+      "cites": [
+       "T2",
+       "R:sold_window",
+       "R:sold_at",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The date code 2025 is outside the recalled range of model years 2022-2024, which is a further mismatch with the recall.",
+      "cites": [
+       "T5",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The serial 01VX56532856 is within the recalled serial ranges, but this does not offset the purchase and date code failures.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

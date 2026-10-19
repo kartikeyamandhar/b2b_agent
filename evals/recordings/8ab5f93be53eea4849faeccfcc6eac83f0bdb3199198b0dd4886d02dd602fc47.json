@@ -1,0 +1,67 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: T1 legible label shows MK04, a recalled model. Confirmed (T2 match).\n- Serial: T3 \"BN26216610\" starts with BN, in range.\n- Date code: T4 June 2025 is prior to July 2025, in range.\n- Purchase: T5 Amazon.com is listed; the purchase date 2024-06-30 is before the sale window starting 2024-09-01, so the claim is denied under the sale-window rule. No receipt is required, but the date rule is decisive.\n- Destruction photo: not required (T6), so no issue there.\n- Duplicates: none (T7), so no flag.\n\nFlag does not apply, and deny takes precedence over needs_info and approve. The purchase predates the window, so the outcome is deny.",
+ "usage": {
+  "input_tokens": 2898,
+  "output_tokens": 702,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAfhYG7A1PH5YM6XaRsy",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3563,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: T1 legible label shows MK04, a recalled model. Confirmed (T2 match).\n- Serial: T3 \"BN26216610\" starts with BN, in range.\n- Date code: T4 June 2025 is prior to July 2025, in range.\n- Purchase: T5 Amazon.com is listed; the purchase date 2024-06-30 is before the sale window starting 2024-09-01, so the claim is denied under the sale-window rule. No receipt is required, but the date rule is decisive.\n- Destruction photo: not required (T6), so no issue there.\n- Duplicates: none (T7), so no flag.\n\nFlag does not apply, and deny takes precedence over needs_info and approve. The purchase predates the window, so the outcome is deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_018SYBXLmfxbzMUpppJwRHMn",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial number BN26216610 starts with BN and the date code June 2025 is prior to July 2025, so both are within the recalled ranges.",
+      "cites": [
+       "R:serials",
+       "R:date_codes",
+       "T3",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase date of 2024-06-30 is before the sale window (2024-09-01 to 2025-06-30). Purchases before the window are not eligible, so the claim is denied even though the retailer, Amazon.com, is on the list.",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "R:policy",
+       "T5",
+       "T8"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, and no destruction photo is required for this remedy, so neither changes the outcome.",
+      "cites": [
+       "T6",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

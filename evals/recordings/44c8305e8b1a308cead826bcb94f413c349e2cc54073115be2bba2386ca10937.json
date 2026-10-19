@@ -1,0 +1,70 @@
+{
+ "text": "The label photo is legible and reads model 93580, which is not on the recalled list (T1). The typed model \"93580\" also mismatches (T2). Under policy, a legible label showing a non-recalled model means deny, regardless of the other checks. The typed model's match doesn't override the label reading. Duplicates are clear (T5), purchase is fine (T3), and destruction complies (T4), but the deny rule takes precedence in the ordering only if no flag applies; no flag applies here, so deny stands.",
+ "usage": {
+  "input_tokens": 2839,
+  "output_tokens": 601,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeU7JTdfqZ9A8LDKowo",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3284,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label photo is legible and reads model 93580, which is not on the recalled list (T1). The typed model \"93580\" also mismatches (T2). Under policy, a legible label showing a non-recalled model means deny, regardless of the other checks. The typed model's match doesn't override the label reading. Duplicates are clear (T5), purchase is fine (T3), and destruction complies (T4), but the deny rule takes precedence in the ordering only if no flag applies; no flag applies here, so deny stands."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_018nmFJ68re7yiv8CKdS8RFp",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 93580, which is not a recalled model. Under the claim policy, a legible label showing a model that is not recalled means the unit is not part of this recall.",
+      "cites": [
+       "R:policy",
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The typed model also does not match any recalled model, so the typed value provides no basis for approval.",
+      "cites": [
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so no flag applies.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase was at a listed retailer (ALDI) within the sale window, and no receipt is required; this does not change the outcome.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the cord cut as instructed; this does not change the outcome because the unit is not a recalled model.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

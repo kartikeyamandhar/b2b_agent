@@ -1,0 +1,63 @@
+{
+ "text": "Checking the policy in order: flag (duplicates: none, T5), deny (model confirmed by legible label T1/T2, serial/date code not applicable since the program's serial rule isn't listed, purchase inside window at listed retailer T3, no receipt required T3), needs_info (destruction photo missing T4, and the destruction requirement applies per R:destruction).\n\nSince the destruction photo is missing, the claim cannot be approved yet. Per the FAQ and policy, the claimant is asked for a destruction photo.",
+ "usage": {
+  "input_tokens": 2793,
+  "output_tokens": 610,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3BvpQX7rLYfwPTX1zs",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2995,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy in order: flag (duplicates: none, T5), deny (model confirmed by legible label T1/T2, serial/date code not applicable since the program's serial rule isn't listed, purchase inside window at listed retailer T3, no receipt required T3), needs_info (destruction photo missing T4, and the destruction requirement applies per R:destruction).\n\nSince the destruction photo is missing, the claim cannot be approved yet. Per the FAQ and policy, the claimant is asked for a destruction photo."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01XJrigQox4iDReeudh8ncgf",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows AD10014BE, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase date of 2024-04-09 is inside the sale window at Amazon.com, which is a listed retailer. No receipt is required for this claim.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The remedy requires destruction, and no destruction photo was provided. The program asks for a new photo in this case.",
+      "cites": [
+       "R:destruction",
+       "T4",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a photo of the product after destruction, showing the word \"RECALLED\" written in large letters with a marker on both the front and the rear of the seatback. The photo must be different from the label photo you already sent.",
+    "confidence": 0.9
+   }
+  }
+ ]
+}

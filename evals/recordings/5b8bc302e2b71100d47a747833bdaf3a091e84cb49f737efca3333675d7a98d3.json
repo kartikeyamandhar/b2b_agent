@@ -1,0 +1,52 @@
+{
+ "text": "The duplicate check found another claim sharing the same label photo, which triggers a flag under the policy before any other outcome applies. I'll record that decision now.",
+ "usage": {
+  "input_tokens": 3301,
+  "output_tokens": 399,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4AMpdDrjCdGsiYi2tq",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2144,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing the same label photo, which triggers a flag under the policy before any other outcome applies. I'll record that decision now."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0148L8cT7pEc29SeuNtu6bSG",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo on this claim is the same image (same sha256) as the label photo on another claim in the program, so the claim is flagged for review under the duplicate-photo policy.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Other checks were favorable but do not override the flag: the label is legible and shows model SE4570 (recalled), the date code 08/22 NH matches a recalled code, and the retailer justinboots.com is on the sold-at list with a purchase date of 2023-03-11 inside the sale window.",
+      "cites": [
+       "T1",
+       "T2",
+       "T4",
+       "R:models",
+       "R:date_codes",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,74 @@
+{
+ "text": "The label is legible and shows B0726Y, so the model is confirmed. The date code is in range. The serial check was skipped because the program has no serial rule. The retailer is not on the list, so the purchase needs proof of ownership. The destruction photo does not clearly show the straps cut, so it needs more evidence. No duplicates were found. Because the retailer and destruction issues both need the claimant's input, the outcome is needs_info.",
+ "usage": {
+  "input_tokens": 3540,
+  "output_tokens": 728,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3jUSY7cdbhgbx89RBi",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3777,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows B0726Y, so the model is confirmed. The date code is in range. The serial check was skipped because the program has no serial rule. The retailer is not on the list, so the purchase needs proof of ownership. The destruction photo does not clearly show the straps cut, so it needs more evidence. No duplicates were found. Because the retailer and destruction issues both need the claimant's input, the outcome is needs_info."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01EFDZEjdoBzVfKXrhcExv8e",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model B0726Y, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The date code 8/21 is within the recalled range (August 2021 or earlier).",
+      "cites": [
+       "R:date_codes",
+       "T6"
+      ]
+     },
+     {
+      "text": "The claimed retailer, Corner Hardware Co, is not on the list of sales locations (Fred Meyer, Walmart, Amazon), so proof of where the helmet was bought is needed.",
+      "cites": [
+       "R:sold_at",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase date of 2017-11-08 is inside the sale window, so the date itself is acceptable.",
+      "cites": [
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the helmet with its straps cut off, as the recall requires, so a clearer destruction photo is needed.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send (1) proof of purchase from Corner Hardware Co, or tell us where else you bought the helmet if it was from Fred Meyer, Walmart, or Amazon, and (2) a clearer photo of the destroyed helmet showing the straps cut off, as the recall instructs.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

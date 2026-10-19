@@ -1,0 +1,69 @@
+{
+ "text": "Checking the results against the policy:\n\n- Duplicates: T5 found no hits, so no flag.\n- Model: T1 reads the label as legible with model A17A0, which is recalled (R:models, T2 match).\n- Serial/date code: the program has no serial or date code rules in the policy, so none apply.\n- Purchase: Best Buy is on the list (R:sold_at, T3), and 2023-07-24 is inside the window (R:sold_window, T3). No receipt is required (T3).\n- Destruction: not required for this remedy (T4).\n- Refund: the remedy is repair or replacement, not a refund, so the value threshold does not apply.\n\nNo rule triggers a flag, deny, or needs_info, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2740,
+  "output_tokens": 680,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeJVp1iqL2CW2kgzeba",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3096,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Duplicates: T5 found no hits, so no flag.\n- Model: T1 reads the label as legible with model A17A0, which is recalled (R:models, T2 match).\n- Serial/date code: the program has no serial or date code rules in the policy, so none apply.\n- Purchase: Best Buy is on the list (R:sold_at, T3), and 2023-07-24 is inside the window (R:sold_window, T3). No receipt is required (T3).\n- Destruction: not required for this remedy (T4).\n- Refund: the remedy is repair or replacement, not a refund, so the value threshold does not apply.\n\nNo rule triggers a flag, deny, or needs_info, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01T9SRT1ye49L8YEbJB7uXSg",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model A17A0, which is on the recalled model list, so the model is confirmed even though the typed model matches as well.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Best Buy is an authorized retailer and the purchase date of 2023-07-24 falls inside the sale window of 2023-05-01 to 2023-09-30. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for the replacement or repair remedy.",
+      "cites": [
+       "T4"
+      ]
+     },
+     {
+      "text": "The program has no serial or date code rules, and no refund is requested, so the value threshold does not apply.",
+      "cites": [
+       "R:policy",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

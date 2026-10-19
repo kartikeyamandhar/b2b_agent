@@ -1,0 +1,29 @@
+{
+ "text": "The duplicate check found another claim sharing this label photo, which triggers a flag under the policy before anything else matters. The serial check was skipped, and the label reads P1441, which is not on the recalled list, so I'll confirm the model against the recalled list before deciding.",
+ "usage": {
+  "input_tokens": 3356,
+  "output_tokens": 136,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3JCHjgWZ9CFHJsaw9B",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1412,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing this label photo, which triggers a flag under the policy before anything else matters. The serial check was skipped, and the label reads P1441, which is not on the recalled list, so I'll confirm the model against the recalled list before deciding."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017ghTWEA2mt3Q94zEM65ooo",
+   "name": "check_model",
+   "input": {
+    "model_text": "P1441"
+   }
+  }
+ ]
+}

@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": true, \"complies\": true, \"observed\": \"A gray device sits on a pink background with a black power cord that appears cut apart, with a visible gap between the two cord segments where the plug would have been removed.\", \"confidence\": 0.85}",
+ "usage": {
+  "input_tokens": 1178,
+  "output_tokens": 80,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeDwxzZ5Gvz1jXnMYvb",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 2040
+}

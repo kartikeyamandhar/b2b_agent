@@ -1,0 +1,29 @@
+{
+ "text": "The duplicate check found another claim sharing this claim's payout destination, which triggers the flag rule and overrides the other outcomes. I'll check the model against the legible label reading before recording the decision.",
+ "usage": {
+  "input_tokens": 3402,
+  "output_tokens": 113,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3wEL4YUnj9kw3zFm76",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1121,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing this claim's payout destination, which triggers the flag rule and overrides the other outcomes. I'll check the model against the legible label reading before recording the decision."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01KAK52XL54t4WCqnVVsGdQM",
+   "name": "check_model",
+   "input": {
+    "model_text": "34692"
+   }
+  }
+ ]
+}

@@ -1,0 +1,76 @@
+{
+ "text": "Retrying with the missing required fields.",
+ "usage": {
+  "input_tokens": 4249,
+  "output_tokens": 643,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeMmq1BnSm7GwuxjLiA",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4570,
+ "content": [
+  {
+   "type": "text",
+   "text": "Retrying with the missing required fields."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_016DTWyA5m9VTfM8RPVZdnKZ",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model GLEF396ASA1, which matches the recalled model GLEF396AS*, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial number VF12242635 falls within the recalled range VF122xxxxx - VF334xxxxx.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The purchase date 2003-02-20 is inside the sale window (2001-06-01 to 2009-08-31), and a receipt is present.",
+      "cites": [
+       "R:sold_window",
+       "R:receipt",
+       "T4"
+      ]
+     },
+     {
+      "text": "The retailer 'Corner Hardware Co' is not on the Sears-only list. Unlisted retailers are not denied; the claimant is asked for proof of ownership.",
+      "cites": [
+       "R:sold_at",
+       "T4",
+       "T7"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": "Our records show the product was bought from Corner Hardware Co, which is not on the list of stores for this recall (Sears). Can you confirm where and when you bought the unit and provide proof of ownership? The receipt you attached may be enough if it shows the store name and purchase date; if it does not, please send another document, such as a bill of sale, order confirmation, or a statement showing the purchase or transfer of the unit to you.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

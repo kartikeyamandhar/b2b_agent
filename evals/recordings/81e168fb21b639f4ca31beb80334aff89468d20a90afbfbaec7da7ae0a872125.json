@@ -1,0 +1,64 @@
+{
+ "text": "The label confirms a recalled model (GLEFM397DB*), the serial is in range, the purchase window is valid, and there are no duplicates. However, the retailer \"Corner Hardware Co\" is not Sears, the only listed retailer, so under the policy the purchase needs more information.",
+ "usage": {
+  "input_tokens": 3679,
+  "output_tokens": 645,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3q43GZyQ9eY1AJXckb",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3292,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label confirms a recalled model (GLEFM397DB*), the serial is in range, the purchase window is valid, and there are no duplicates. However, the retailer \"Corner Hardware Co\" is not Sears, the only listed retailer, so under the policy the purchase needs more information."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01R2qJVPBVvbaAMF2fYrg4nY",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model GLEFM397DBA1, which matches the recalled model pattern GLEFM397DB*, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number VF12294579 falls within the recalled range VF122xxxxx - VF334xxxxx.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2008-08-07 is inside the sale window, and a receipt is present, but the retailer 'Corner Hardware Co' is not on the list of sellers (Sears only). The retailer must be confirmed before the purchase can be accepted.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window",
+       "R:receipt",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": "Thank you for your claim. The retailer on your claim is listed as Corner Hardware Co, but this recall program only covers units sold at Sears. Can you tell us where the unit was purchased? If it was bought at Sears under a different name or location, please provide the receipt showing the Sears store name. If the unit was bought somewhere else, please let us know where.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and shows a recalled model, and the serial is in range. However, the purchase date of 2014-11-18 falls before the sale window of 2015-01-01, so the purchase check says \"before.\" I'll confirm the model check with the label reading before deciding.",
+ "usage": {
+  "input_tokens": 3833,
+  "output_tokens": 139,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3tSMH2N4mZPKTG6UeV",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1285,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows a recalled model, and the serial is in range. However, the purchase date of 2014-11-18 falls before the sale window of 2015-01-01, so the purchase check says \"before.\" I'll confirm the model check with the label reading before deciding."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01LVGiVMnf61z8w14JYQVD9C",
+   "name": "check_model",
+   "input": {
+    "model_text": "LSE4611ST"
+   }
+  }
+ ]
+}

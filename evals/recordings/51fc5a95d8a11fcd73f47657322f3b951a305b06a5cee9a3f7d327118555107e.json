@@ -1,0 +1,65 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3564,
+  "output_tokens": 436,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3nV6ZTi4PpQ9uCrrNF",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2050,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01UwG2Lnj9SSLCwdHbpiepqC",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PA-10, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label's date code 2126 falls within the recalled range of 2126 to 2319.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase was made at Amazon.com, a listed retailer, on 2021-08-27, which is inside the sale window of 2021-06-01 to 2023-11-30. No receipt is required for this retailer.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The remedy requested is repair or replacement with no refund, so the value threshold does not apply and no destruction photo is required.",
+      "cites": [
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

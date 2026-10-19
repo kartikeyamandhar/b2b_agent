@@ -1,0 +1,70 @@
+{
+ "text": "Key points: label photo is unreadable (T1 legible false), so the typed model decides: 2G505B is recalled (T2 match), so model is confirmed by typed value. Serial/date code: program has serial rules? R:models lists no serial rule explicitly; the policy mentions serial/date code only \"when the program has those rules\" \u2014 no serial range given in the program rules, so not applicable. Purchase: Amazon.com listed, 2023-11-19 inside window (T3). Destruction photo shows RECALLED written, complies (T4), confidence 0.8, not a repeat of label photo. Duplicates: none (T5). No flag triggers; refund $44.26 under threshold.\n\nApprove.",
+ "usage": {
+  "input_tokens": 2789,
+  "output_tokens": 680,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB38qWLVds8ssVPQfWk6",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3341,
+ "content": [
+  {
+   "type": "text",
+   "text": "Key points: label photo is unreadable (T1 legible false), so the typed model decides: 2G505B is recalled (T2 match), so model is confirmed by typed value. Serial/date code: program has serial rules? R:models lists no serial rule explicitly; the policy mentions serial/date code only \"when the program has those rules\" \u2014 no serial range given in the program rules, so not applicable. Purchase: Amazon.com listed, 2023-11-19 inside window (T3). Destruction photo shows RECALLED written, complies (T4), confidence 0.8, not a repeat of label photo. Duplicates: none (T5). No flag triggers; refund $44.26 under threshold.\n\nApprove."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01VcaHJaiDLz2EuVNZZ8d63P",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "No duplicate claim shares a photo, address, email, serial number, or payout account with this claim.",
+      "cites": [
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo was unreadable, so the typed model is used; typed model 2G505B is on the recalled list and matches.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Retailer Amazon.com is on the sold-at list and the purchase date 2023-11-19 falls inside the sale window; no receipt was required for this check.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the product with the word RECALLED written on it, matching the instructed destruction and not repeating the label photo.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The requested refund of $44.26 is below the $100.00 review threshold, so no person review is required.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

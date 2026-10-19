@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and reads LTG4815BM, which is not on the recalled list. The only match is LTE4815BM, which differs by one letter (G vs. E). The policy says a legible label showing a non-recalled model means deny. The label reading is the evidence, so I'll deny, but I want to confirm the label's model text with a policy lookup before concluding that a G/E misread is not plausible.",
+ "usage": {
+  "input_tokens": 4354,
+  "output_tokens": 196,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3PyoKqFtKfy4VyQJCq",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1465,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and reads LTG4815BM, which is not on the recalled list. The only match is LTE4815BM, which differs by one letter (G vs. E). The policy says a legible label showing a non-recalled model means deny. The label reading is the evidence, so I'll deny, but I want to confirm the label's model text with a policy lookup before concluding that a G/E misread is not plausible."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0143N6v4sBmFbect6oRjt8Xt",
+   "name": "retrieve_policy",
+   "input": {
+    "query": "model number mismatch on label versus recalled model, typo handling"
+   }
+  }
+ ]
+}

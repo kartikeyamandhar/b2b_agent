@@ -1,0 +1,62 @@
+{
+ "text": "The label is legible and shows 500LX, which is not a recalled model (only 200LX is recalled), and the serial is out of range. The duplicate serial hit means the flag rule takes precedence.",
+ "usage": {
+  "input_tokens": 3510,
+  "output_tokens": 418,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Y9MH8BLcJXyjG1bma",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2099,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows 500LX, which is not a recalled model (only 200LX is recalled), and the serial is out of range. The duplicate serial hit means the flag rule takes precedence."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01XRLx7dPxyx6aX7iQ3FZgFW",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program shares this claim's serial number, so the claim is flagged for review under the duplicate rule.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model 500LX, which is not a recalled model; only 200LX is recalled.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The typed serial QQ41130245 falls outside all recalled serial ranges.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase date of 2019-01-04 is inside the sale window and no receipt is required for this claim.",
+      "cites": [
+       "R:sold_window",
+       "T2"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

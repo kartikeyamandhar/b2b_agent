@@ -1,0 +1,70 @@
+{
+ "text": "The policy requires the word \"Recalled\" written in permanent marker. The destruction photo shows the word as a printed label across the face, not written in marker. Per the policy, a destruction photo that does not show the instructed destruction is sent back for a new photo, so this is needs_info. The serial check returned \"skipped\" in both attempts, and the policy does not establish a serial range, so I'm not treating the serial as a denial basis. The claim has no duplicates, the model is confirmed, and the purchase is in the window at a listed retailer.",
+ "usage": {
+  "input_tokens": 4775,
+  "output_tokens": 675,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4EmSHnvkmZXtNZi9wr",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3208,
+ "content": [
+  {
+   "type": "text",
+   "text": "The policy requires the word \"Recalled\" written in permanent marker. The destruction photo shows the word as a printed label across the face, not written in marker. Per the policy, a destruction photo that does not show the instructed destruction is sent back for a new photo, so this is needs_info. The serial check returned \"skipped\" in both attempts, and the policy does not establish a serial range, so I'm not treating the serial as a denial basis. The claim has no duplicates, the model is confirmed, and the purchase is in the window at a listed retailer."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01BSc1AveUFy3KebhGzzRopo",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2G520, which is on the recalled list, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "Purchase from Homedepot.com on 2022-11-12 falls inside the sale window and at a listed retailer; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the instructed destruction. The word RECALLED appears as a printed label, not written on the unit in permanent marker, so the photo is asked for again.",
+      "cites": [
+       "R:destruction",
+       "T4",
+       "T8"
+      ]
+     },
+     {
+      "text": "The serial number check was skipped and gave no recalled-range result, so it is not a basis for denial.",
+      "cites": [
+       "T5",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo of your power bank showing the model number with the word \"Recalled\" written on it in permanent marker. The current photo shows the word as a printed label, not handwritten marker.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

@@ -1,0 +1,65 @@
+{
+ "text": "The model matches. The date code is the deciding factor: the label shows 06/22 NH, which is outside the recalled codes of 07/22 NH and 08/22 NH. The date-code check returned \"unparsed,\" but the label reading is clear and 06/22 is not in the recalled list, so the rule for out-of-range codes applies and the claim is denied.",
+ "usage": {
+  "input_tokens": 3414,
+  "output_tokens": 535,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4ALvYjWkqcXzcxXsF4",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2447,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model matches. The date code is the deciding factor: the label shows 06/22 NH, which is outside the recalled codes of 07/22 NH and 08/22 NH. The date-code check returned \"unparsed,\" but the label reading is clear and 06/22 is not in the recalled list, so the rule for out-of-range codes applies and the claim is denied."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01K89nm4d7BVWj4S29rNnCzZ",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The label's date code is 06/22 NH. The recalled date codes are only 07/22 NH and 08/22 NH, so this unit falls outside the recalled date codes.",
+      "cites": [
+       "T1",
+       "R:date_codes",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The date-code tool returned 'unparsed', but the label reading is clear and the code is not in the recalled list, so the date code is not covered by the recall.",
+      "cites": [
+       "T4",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (Grainger) within the sale window, and no duplicate claims were found, so these checks do not change the outcome.",
+      "cites": [
+       "T2",
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

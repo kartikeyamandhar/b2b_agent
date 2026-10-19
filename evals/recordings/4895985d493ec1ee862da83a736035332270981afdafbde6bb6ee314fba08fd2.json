@@ -1,0 +1,68 @@
+{
+ "text": "The model matches, the serial is in range, the purchase is inside the sale window, and there are no duplicates. The remedy is repair or replacement, so no destruction photo or refund-threshold review applies. The retailer is \"Online marketplace,\" which the purchase check skipped, but the rules say secondhand and marketplace owners are eligible, and the receipt is not required. I'll record an approval.",
+ "usage": {
+  "input_tokens": 3449,
+  "output_tokens": 542,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3YQFDPcbEkZLcY8nSo",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2428,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model matches, the serial is in range, the purchase is inside the sale window, and there are no duplicates. The remedy is repair or replacement, so no destruction photo or refund-threshold review applies. The retailer is \"Online marketplace,\" which the purchase check skipped, but the rules say secondhand and marketplace owners are eligible, and the receipt is not required. I'll record an approval."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01ByYjX3KArrwQsA9BWHA2CG",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model 200LX, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial LX009837 falls within the recalled range LX001698 - LX009896.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase date of 2018-10-02 is inside the sale window 2017-05-01 to 2026-02-28, and no receipt is required.",
+      "cites": [
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claimant requests repair or replacement, not a refund, so the value threshold review and destruction photo requirements do not apply.",
+      "cites": [
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

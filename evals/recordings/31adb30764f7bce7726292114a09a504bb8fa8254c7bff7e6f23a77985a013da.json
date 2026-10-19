@@ -1,0 +1,68 @@
+{
+ "text": "The duplicate check found another claim sharing the same label photo, which triggers a flag and overrides the other outcomes. The label itself reads P1441, which is not a recalled model, while the typed model P1410-P is recalled. I'm recording the decision as a flag.",
+ "usage": {
+  "input_tokens": 3461,
+  "output_tokens": 564,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3HumKmtU96dw2J2cBY",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3391,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing the same label photo, which triggers a flag and overrides the other outcomes. The label itself reads P1441, which is not a recalled model, while the typed model P1410-P is recalled. I'm recording the decision as a flag."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01JB2uSbYivU5GY9dEgcjKBi",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo is the same image (identical sha256) as a photo on another claim in the program, so this claim is flagged for duplicate review.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The legible label photo reads model P1441, which is not on the recalled list (recalled: P1410, P1410-P, P1411, P1411-P). The typed model P1410-P matches the recall list, but the label evidence conflicts with it.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (www.walmart.com) and dated 2018-08-05, inside the sale window; no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The serial number check was skipped because the program has no serial rule for this recall, so it was not a factor.",
+      "cites": [
+       "T4"
+      ]
+     },
+     {
+      "text": "The refund of $70.27 is under the $100.00 review threshold, so the amount alone does not require person review.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,70 @@
+{
+ "text": "Applying the policy in order: flag first.\n\nT5 reports a same_address match with another claim (ff9ff144...). Under the policy, any shared address triggers flag, which takes precedence over all other outcomes. The other checks (model match, purchase in window at a listed retailer, destruction photo doubtful) would otherwise lead to needs_info, but flag overrides them.",
+ "usage": {
+  "input_tokens": 2946,
+  "output_tokens": 654,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeSgb92qKfrmiMeTSGa",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3075,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: flag first.\n\nT5 reports a same_address match with another claim (ff9ff144...). Under the policy, any shared address triggers flag, which takes precedence over all other outcomes. The other checks (model match, purchase in window at a listed retailer, destruction photo doubtful) would otherwise lead to needs_info, but flag overrides them."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01XgebWBdf2JsB511VAc2DWq",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "This claim shares an address with another claim (ff9ff144-82bc-52b1-bbfe-c388c3398321). Under the program's claim policy, any shared address sends the claim to a person for review together with the matched claim.",
+      "cites": [
+       "R:policy",
+       "T5",
+       "T6"
+      ]
+     },
+     {
+      "text": "The sewn-in label photo is legible and shows model AD10004LS, which is on the recalled list, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The retailer Amazon.com is on the sale list and the purchase date 2024-02-13 is inside the sale window, so the purchase check passes with no receipt required.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo is not yet confirmed as compliant: the instructed 'RECALLED' marking on the rear of the seatback is not visible, so the destruction check is incomplete. A person reviewing the flag should also check this.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The refund requested is $180.23, which is over the $100.00 threshold, so a person reviews it regardless.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

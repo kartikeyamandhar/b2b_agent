@@ -1,0 +1,84 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: T1 reads the label as legible and showing \"REV 12 Kids Bike\", a recalled model (R:models, T2 match).\n- Serial: \"ET224938413\" begins with \"ET22,\" which is in range (R:serials, T3).\n- Date code: 2022 is within 2022-2024 (R:date_codes, T4).\n- Purchase: REI.com is a listed retailer and 2024-02-25 is inside the sale window (R:sold_at, R:sold_window, T5). No receipt is required for this check, and the claimant attached one anyway.\n- Destruction photo: not required, since the remedy is repair (T6, and FAQ says repair).\n- Duplicates: none found (T7), so no flag.\n- Refund: none requested, so the value threshold does not apply.\n\nEvery rule passes and nothing triggers a flag, deny, or needs_info.",
+ "usage": {
+  "input_tokens": 3004,
+  "output_tokens": 824,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeMyz17udcVHMzGukDE",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3523,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: T1 reads the label as legible and showing \"REV 12 Kids Bike\", a recalled model (R:models, T2 match).\n- Serial: \"ET224938413\" begins with \"ET22,\" which is in range (R:serials, T3).\n- Date code: 2022 is within 2022-2024 (R:date_codes, T4).\n- Purchase: REI.com is a listed retailer and 2024-02-25 is inside the sale window (R:sold_at, R:sold_window, T5). No receipt is required for this check, and the claimant attached one anyway.\n- Destruction photo: not required, since the remedy is repair (T6, and FAQ says repair).\n- Duplicates: none found (T7), so no flag.\n- Refund: none requested, so the value threshold does not apply.\n\nEvery rule passes and nothing triggers a flag, deny, or needs_info."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01BtHAc7Bo4SZ4PAwKwpzFEM",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows REV 12 Kids Bike, a recalled model, so the model is confirmed even though the typed model matches as well.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial number ET224938413 begins with ET22, which is within the recalled serial ranges.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The date code 2022 falls within the recalled model years 2022-2024.",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase was from REI.com, a listed retailer, on 2024-02-25, which is inside the 2022-03-01 to 2024-05-31 sale window.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T5"
+      ]
+     },
+     {
+      "text": "The remedy is repair, so no destruction photo is required.",
+      "cites": [
+       "T6",
+       "T8"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T7",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No refund is requested, so the $100 value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

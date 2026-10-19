@@ -1,0 +1,76 @@
+{
+ "text": "All checks pass: the model is confirmed, the serial and date code are in range, the retailer and purchase date are within the window, no duplicates exist, and no receipt or destruction photo is required for a repair or replacement.",
+ "usage": {
+  "input_tokens": 3757,
+  "output_tokens": 559,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3MHQebs45w5AzVW5D3",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2969,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass: the model is confirmed, the serial and date code are in range, the retailer and purchase date are within the window, no duplicates exist, and no receipt or destruction photo is required for a repair or replacement."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01SuTSZeTZ4jhyV7zLeEtMT7",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows REV 20 Kids Bike, a recalled model, so the model is confirmed even though the typed model text differs slightly in form.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial ET2259563942 begins with ET22 and is within the recalled serial ranges.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code 2022 is within the recalled model years 2022-2024.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "REI.com is a listed retailer and the purchase date 2022-07-31 falls inside the sale window; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claimant requests repair or replacement, not a refund, so the refund value threshold does not apply and no destruction photo is required.",
+      "cites": [
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

@@ -1,0 +1,68 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: label legible, reads CXV, which is recalled (T1, T2, R:models). Confirmed.\n- Serial: FC29D90257014 has a recalled prefix (T3, R:serials). In range.\n- Purchase: retailer \"Corner Hardware Co\" is not JHTNA, so it is not on the list (T4). The purchase date 2020-03-20 is before the sale window of 2021-01-01 to 2024-10-31 (T4, R:sold_window). Per policy, a purchase before the window is denied. The FAQ's proof-of-ownership exception applies to secondhand, gift, or unlisted-store owners, but the policy's order is that a before-window date is a denial. The date check here is the decisive one (T4 reports window \"before\").\n- Duplicates: none (T6), so no flag.\n- Destruction photo: not required (T5).\n\nThe purchase date falls before the sale window, so the claim is denied.",
+ "usage": {
+  "input_tokens": 3003,
+  "output_tokens": 727,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeRf5KDDy656xVQSHPr",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3604,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: label legible, reads CXV, which is recalled (T1, T2, R:models). Confirmed.\n- Serial: FC29D90257014 has a recalled prefix (T3, R:serials). In range.\n- Purchase: retailer \"Corner Hardware Co\" is not JHTNA, so it is not on the list (T4). The purchase date 2020-03-20 is before the sale window of 2021-01-01 to 2024-10-31 (T4, R:sold_window). Per policy, a purchase before the window is denied. The FAQ's proof-of-ownership exception applies to secondhand, gift, or unlisted-store owners, but the policy's order is that a before-window date is a denial. The date check here is the decisive one (T4 reports window \"before\").\n- Duplicates: none (T6), so no flag.\n- Destruction photo: not required (T5).\n\nThe purchase date falls before the sale window, so the claim is denied."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01AFskfTJ191TZEozmCwhJ9M",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model CXV, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number FC29D90257014 has a recalled prefix (FC29D) and is in range.",
+      "cites": [
+       "T3",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2020-03-20 is before the program's sale window (2021-01-01 to 2024-10-31). Under the policy, a purchase before the window is denied.",
+      "cites": [
+       "T4",
+       "R:sold_window",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account, so no flag applies.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and shows CXM-02, the serial is in range, the purchase is at a listed retailer within the window, and there are no duplicates. I'll confirm the model against the recalled list.",
+ "usage": {
+  "input_tokens": 3542,
+  "output_tokens": 115,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Ny8cCpozXbNGV6u8K",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1046,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows CXM-02, the serial is in range, the purchase is at a listed retailer within the window, and there are no duplicates. I'll confirm the model against the recalled list."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01TSZbxAzXoR1iAaNswKWMiC",
+   "name": "check_model",
+   "input": {
+    "model_text": "CXM-02"
+   }
+  }
+ ]
+}

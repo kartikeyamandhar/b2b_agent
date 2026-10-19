@@ -1,0 +1,68 @@
+{
+ "text": "Key analysis: The label photo is legible and shows model \"200LQ\", which is not on the recalled list (200LX). Per policy, a legible label showing a non-recalled model means deny. The typed model \"200LQ\" also mismatches (T2). The serial is in range, but the model rule controls. No duplicates (T6), purchase inside window (T4), destruction not required (T5). Flag checks don't trigger, so the outcome is deny.",
+ "usage": {
+  "input_tokens": 2691,
+  "output_tokens": 547,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB36KhQL3NHPxB2Zf47U",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2925,
+ "content": [
+  {
+   "type": "text",
+   "text": "Key analysis: The label photo is legible and shows model \"200LQ\", which is not on the recalled list (200LX). Per policy, a legible label showing a non-recalled model means deny. The typed model \"200LQ\" also mismatches (T2). The serial is in range, but the model rule controls. No duplicates (T6), purchase inside window (T4), destruction not required (T5). Flag checks don't trigger, so the outcome is deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_015rAExNeMbLaL5sKKycQLNq",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and reads model 200LQ, which is not a recalled model. The recall covers only model 200LX, so the unit is not part of this recall.",
+      "cites": [
+       "T1",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The typed model 200LQ does not match the recalled model 200LX.",
+      "cites": [
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number LX003221 falls within a recalled range, but that does not cure the non-recalled model shown on the label.",
+      "cites": [
+       "T3",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not flagged for review.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase date of 2021-07-20 is inside the sale window, and no receipt is required.",
+      "cites": [
+       "T4",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

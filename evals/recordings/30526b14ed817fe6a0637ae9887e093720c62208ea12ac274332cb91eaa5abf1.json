@@ -1,0 +1,58 @@
+{
+ "text": "The legible label reads model 2421, which does not match the recalled model 9421. The typed model matches the label, so the label controls and the claim is not for a recalled model.",
+ "usage": {
+  "input_tokens": 3543,
+  "output_tokens": 397,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3NNYFHoJX2hBkeNNvu",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2338,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label reads model 2421, which does not match the recalled model 9421. The typed model matches the label, so the label controls and the claim is not for a recalled model."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01WB6JqSn4vu1n71XQpjZpDe",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2421, which is not a recalled model. The program's recalled model is 9421.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The typed model '2421' matches the label reading, so there is no typo that would make it the recalled model 9421.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The claim is otherwise in order: the retailer is listed, the purchase date is inside the sale window, no receipt is required, and no duplicate claims were found. These do not change the model result.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

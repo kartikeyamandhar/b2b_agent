@@ -1,0 +1,68 @@
+{
+ "text": "Checking the results: label legible showing 9421 (recalled) \u2014 model confirmed. Serial/date code: program has no serial/date rule applied here per the policy text (only model, purchase, destruction, duplicates, threshold). Purchase: retailer \"comfortsolutions.caframobrands.com\" is on the list, date 2024-04-20 is inside the window, no receipt required. Destruction not required. No duplicates. Remedy is repair or replacement, no refund over threshold.\n\nEverything passes, so approve.",
+ "usage": {
+  "input_tokens": 2720,
+  "output_tokens": 593,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeNehAe1pn7dniHijti",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4753,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results: label legible showing 9421 (recalled) \u2014 model confirmed. Serial/date code: program has no serial/date rule applied here per the policy text (only model, purchase, destruction, duplicates, threshold). Purchase: retailer \"comfortsolutions.caframobrands.com\" is on the list, date 2024-04-20 is inside the window, no receipt required. Destruction not required. No duplicates. Remedy is repair or replacement, no refund over threshold.\n\nEverything passes, so approve."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01W5ppeau6KP5WBLZaZD6wFw",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 9421, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase date 2024-04-20 falls inside the sale window, and the retailer comfortsolutions.caframobrands.com is on the list of sellers. No receipt is required for this purchase.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy, so that check does not apply.",
+      "cites": [
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this claim.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The remedy is repair or replacement with no refund requested, so the refund value threshold does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.92
+   }
+  }
+ ]
+}

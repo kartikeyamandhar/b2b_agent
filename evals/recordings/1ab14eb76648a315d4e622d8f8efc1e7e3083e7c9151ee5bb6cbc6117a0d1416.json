@@ -1,0 +1,84 @@
+{
+ "text": "I'll resubmit with the citations corrected to the valid ids (the FAQ passages are covered by T8).",
+ "usage": {
+  "input_tokens": 3799,
+  "output_tokens": 551,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3AbBB887u1fUR68wLT",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2454,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll resubmit with the citations corrected to the valid ids (the FAQ passages are covered by T8)."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01CRwvbnohT4Xt5CukbQn3Rj",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial number BN2506C11408 starts with BN, which is in the recalled range.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The date code 06/2025 is manufactured prior to July 2025, which is within the recalled date codes.",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     },
+     {
+      "text": "TikTok.com is a listed retailer and the purchase date 2025-06-28 is inside the sale window; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T5"
+      ]
+     },
+     {
+      "text": "The remedy is replacement, so no destruction photo is required.",
+      "cites": [
+       "T6",
+       "T8"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one, so no flag applies.",
+      "cites": [
+       "T7",
+       "T8"
+      ]
+     },
+     {
+      "text": "No refund is requested, so the refund value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

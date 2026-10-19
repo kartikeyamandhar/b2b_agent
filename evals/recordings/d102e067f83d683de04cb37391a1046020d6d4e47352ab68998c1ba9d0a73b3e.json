@@ -1,0 +1,62 @@
+{
+ "text": "The duplicate check found another claim sharing the same payout destination, which the flag rule requires me to act on. Because flag takes precedence over every other outcome, I'll record that decision now.",
+ "usage": {
+  "input_tokens": 4066,
+  "output_tokens": 479,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Q5DWEEk7Tx9jBtZEu",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2493,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing the same payout destination, which the flag rule requires me to act on. Because flag takes precedence over every other outcome, I'll record that decision now."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_012WEtDZ9vanWfXwDkedoBGC",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Duplicate check found another claim (1c9c7a0e-db85-57bd-95e2-fe8634bef859) sharing the same payout destination as this claim. Under the flag rule, any shared payout account must be flagged for review before any payment.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model LSEL6337D, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The serial 801KM6335282 falls within the recalled range, so the serial check passes.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The retailer The Home Depot is on the sold-at list and the purchase date of 2017-02-23 is inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,77 @@
+{
+ "text": "I cited \"faq#2\" by mistake. The destruction rule is R:destruction, and the FAQ passage is in T7. I'll resubmit with the correct citation.",
+ "usage": {
+  "input_tokens": 3818,
+  "output_tokens": 540,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB35fFcBR88RptuDd8Zg",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2119,
+ "content": [
+  {
+   "type": "text",
+   "text": "I cited \"faq#2\" by mistake. The destruction rule is R:destruction, and the FAQ passage is in T7. I'll resubmit with the correct citation."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01XAbCWZJWaNrpygVjLyuQMb",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows LXT-CL-1.0, a recalled model, and the typed model matches.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "Date code 0722 falls within the recalled range 0722 to 1223.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T3"
+      ]
+     },
+     {
+      "text": "Sephora is a listed retailer, the purchase date 2023-05-02 is inside the sale window, and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the device with the cord visibly severed, consistent with the instructed plug cut-off, and it is not a repeat of the label photo.",
+      "cites": [
+       "R:destruction",
+       "T5",
+       "T7"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The remedy is replacement with no refund requested, so the value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

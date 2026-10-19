@@ -1,0 +1,62 @@
+{
+ "text": "The model is confirmed, and the purchase and duplicate checks are clean. The destruction photo does not show the required \"Recalled\" marking, so the claim needs more information.",
+ "usage": {
+  "input_tokens": 3712,
+  "output_tokens": 510,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3bpCTSp3FTAkFDTF11",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2638,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed, and the purchase and duplicate checks are clean. The destruction photo does not show the required \"Recalled\" marking, so the claim needs more information."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01GNMYPyH64HBeHMPqfphBvp",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2G505, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The retailer Esrtech.com is on the sold-at list, and the purchase date of 2024-06-01 falls inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the word 'Recalled' written on the device in permanent marker, so the required destruction is not shown.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": "Thank you for your claim. Your label and purchase details check out, but the destruction photo does not show the word \"Recalled\" written on the power bank in permanent marker. Please send a new photo of the destroyed power bank with \"Recalled\" clearly written on it in permanent marker.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

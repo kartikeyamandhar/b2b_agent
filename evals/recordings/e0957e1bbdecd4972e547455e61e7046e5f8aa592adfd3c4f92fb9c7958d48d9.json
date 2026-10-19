@@ -1,0 +1,77 @@
+{
+ "text": "Checking the results against the policy:\n\n- Duplicates (T6): no hits, so no flag.\n- Model (T1, T2): the label is legible and shows SE4570, a recalled model. Confirmed.\n- Date code (T3): 07/22 is in range.\n- Serial (T1): the program has no serial rule, so it isn't applied.\n- Purchase (T4): Grainger is listed, the date 2023-06-10 is inside the sale window, and no receipt is required.\n- Destruction (T5): not required, since the remedy is replacement.\n- Refund: none requested, so the value threshold does not apply.\n\nNo rule triggers a flag, deny, or needs_info, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2780,
+  "output_tokens": 683,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeG8oezhDQmsaf6P2yL",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4074,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Duplicates (T6): no hits, so no flag.\n- Model (T1, T2): the label is legible and shows SE4570, a recalled model. Confirmed.\n- Date code (T3): 07/22 is in range.\n- Serial (T1): the program has no serial rule, so it isn't applied.\n- Purchase (T4): Grainger is listed, the date 2023-06-10 is inside the sale window, and no receipt is required.\n- Destruction (T5): not required, since the remedy is replacement.\n- Refund: none requested, so the value threshold does not apply.\n\nNo rule triggers a flag, deny, or needs_info, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DJZ7SRfFizkJdi1j6rQMJJ",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 07/22 is within the recalled date codes.",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "Purchased at Grainger, a listed retailer, on 2023-06-10, which is inside the sale window; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The remedy is replacement, so no destruction photo is required.",
+      "cites": [
+       "T5",
+       "T7"
+      ]
+     },
+     {
+      "text": "No refund is requested, so the value threshold review does not apply. The claim meets every policy check and is approved.",
+      "cites": [
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

@@ -1,0 +1,75 @@
+{
+ "text": "Every check passes: the model is confirmed by the legible label, the date code is in range, the purchase is at a listed retailer within the sale window, there are no duplicate claims, and the destruction photo shows the cord cut. The claim qualifies for approval. The refund field is empty (repair or replacement), so the value threshold doesn't apply.",
+ "usage": {
+  "input_tokens": 3707,
+  "output_tokens": 572,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3zyF55W6T4XZ9EZ28t",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2560,
+ "content": [
+  {
+   "type": "text",
+   "text": "Every check passes: the model is confirmed by the legible label, the date code is in range, the purchase is at a listed retailer within the sale window, there are no duplicate claims, and the destruction photo shows the cord cut. The claim qualifies for approval. The refund field is empty (repair or replacement), so the value threshold doesn't apply."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_013fZgrbUSBwwazcTnNTbL98",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model LXT-CL-1.0, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T7"
+      ]
+     },
+     {
+      "text": "The date code 0722 is inside the recalled range of 0722 to 1223.",
+      "cites": [
+       "R:date_codes",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase was made at Nordstrom, a listed retailer, on 2022-11-04, which is inside the sale window. No receipt is required for this retailer.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the power cord cut through, as the recall requires.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claimant requests repair or replacement, not a refund, so the refund value threshold does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

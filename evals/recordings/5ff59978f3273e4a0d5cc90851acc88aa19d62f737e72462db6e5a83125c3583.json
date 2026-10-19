@@ -1,0 +1,70 @@
+{
+ "text": "The serial check was skipped because the program has no serial rule, so it does not apply. The typed model 93550 is a recalled model, the purchase is at ALDI inside the sale window, there are no duplicates, and the destruction photo shows a cut cord. The only open issue is that the label photo is unreadable. Under the policy, when the label is unreadable the typed model decides, and it is a recalled match, so the claim can be approved. The refund is $40, below the $100 review threshold.",
+ "usage": {
+  "input_tokens": 4502,
+  "output_tokens": 587,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4CJZUj6QhHYpRYmsow",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3411,
+ "content": [
+  {
+   "type": "text",
+   "text": "The serial check was skipped because the program has no serial rule, so it does not apply. The typed model 93550 is a recalled model, the purchase is at ALDI inside the sale window, there are no duplicates, and the destruction photo shows a cut cord. The only open issue is that the label photo is unreadable. Under the policy, when the label is unreadable the typed model decides, and it is a recalled match, so the claim can be approved. The refund is $40, below the $100 review threshold."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01BhdyBM1EEFuFmhkshshuFy",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is not legible, so the typed model decides. The typed model 93550 matches a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6",
+       "T7"
+      ]
+     },
+     {
+      "text": "Purchased at ALDI on 2016-06-28, which is a listed retailer and inside the 2016-2019 sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the unplugged power cord cut, as the remedy requires.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The serial rule does not apply to this program, so the serial result is not used. The $40 refund is below the $100 person-review threshold.",
+      "cites": [
+       "T5",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.8
+   }
+  }
+ ]
+}

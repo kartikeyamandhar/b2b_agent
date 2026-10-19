@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and shows CXV, which is recalled. The purchase date (2020-03-20) falls before the sale window, which is a denial trigger under the purchase rule. No duplicates were found. I'll check the model against the registry to confirm.",
+ "usage": {
+  "input_tokens": 3382,
+  "output_tokens": 130,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3t3tAutVsjNsHa7Mkx",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1155,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows CXV, which is recalled. The purchase date (2020-03-20) falls before the sale window, which is a denial trigger under the purchase rule. No duplicates were found. I'll check the model against the registry to confirm."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Px8JKMvFciSCUJeYtTmeQg",
+   "name": "check_model",
+   "input": {
+    "model_text": "CXV"
+   }
+  }
+ ]
+}

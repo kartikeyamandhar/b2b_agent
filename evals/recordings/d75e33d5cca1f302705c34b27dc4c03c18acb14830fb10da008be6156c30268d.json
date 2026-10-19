@@ -1,0 +1,63 @@
+{
+ "text": "Applying the policy in order: flag takes precedence.\n\n- T5 reports a same_serial hit with another claim (d3662cb5...). Under the flag rule, any shared serial number triggers a flag, which takes precedence over deny, needs_info, and approve.\n- The label is legible (T1) and shows model A47A1, which is not on the recall list (T2 mismatch against A17B0, A17A0, A17A1, A17A2). That alone would be a deny, but flag comes first.\n- Purchase is at a listed retailer (TD Synnex) within the sale window (T3), with no receipt required.\n- No destruction photo is required for this remedy (T4).\n\nThe outcome is flag, because the duplicate-serial hit must go to a person along with the matched claim, even though the model mismatch points toward denial.",
+ "usage": {
+  "input_tokens": 2811,
+  "output_tokens": 684,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeJHjjQFymgbFfdobPf",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3482,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: flag takes precedence.\n\n- T5 reports a same_serial hit with another claim (d3662cb5...). Under the flag rule, any shared serial number triggers a flag, which takes precedence over deny, needs_info, and approve.\n- The label is legible (T1) and shows model A47A1, which is not on the recall list (T2 mismatch against A17B0, A17A0, A17A1, A17A2). That alone would be a deny, but flag comes first.\n- Purchase is at a listed retailer (TD Synnex) within the sale window (T3), with no receipt required.\n- No destruction photo is required for this remedy (T4).\n\nThe outcome is flag, because the duplicate-serial hit must go to a person along with the matched claim, even though the model mismatch points toward denial."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01RUtayjZZ6kAiNrgsVqsYJg",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim sharing the same serial number (SN10458848), so the claim must be sent to a person for review together with the matched claim.",
+      "cites": [
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The legible label photo shows model A47A1, which is not on the recalled model list (A17B0, A17A0, A17A1, A17A2), so the unit does not appear to be part of this recall. This would be a denial if no duplicate flag applied.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (TD Synnex) dated 2023-08-22, inside the sale window, and no receipt is required.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for the replacement or repair remedy.",
+      "cites": [
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,50 @@
+{
+ "text": "The label is legible and shows 2K512B, which is not a recalled model (the recalled model is 2G512B). Under the policy, a legible label showing a non-recalled model is a denial.",
+ "usage": {
+  "input_tokens": 3549,
+  "output_tokens": 353,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3yFW4fytgdbXVMWFQV",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1880,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows 2K512B, which is not a recalled model (the recalled model is 2G512B). Under the policy, a legible label showing a non-recalled model is a denial."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01T6ArAJQxJyHMMuRr5DkUnd",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2K512B. The recalled models are 2G505, 2G520, 2G505B and 2G512B, so this model is not covered by the recall.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The claimed model does not match any recalled model, so the claim cannot be approved for refund even though the retailer, purchase window, and destruction photo are acceptable.",
+      "cites": [
+       "T2",
+       "T4",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,60 @@
+{
+ "text": "Label photo is legible and shows AF10025PI, which is not on the recalled list (T1, T2). Per policy, a legible label showing a non-recalled model means deny. Other checks (purchase, duplicates) pass, but the model rule is decisive. Destruction photo is also missing/duplicate (T4), which would otherwise need info, but deny takes precedence.",
+ "usage": {
+  "input_tokens": 2842,
+  "output_tokens": 481,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeSuNaCUkE5FhMrt9fc",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2843,
+ "content": [
+  {
+   "type": "text",
+   "text": "Label photo is legible and shows AF10025PI, which is not on the recalled list (T1, T2). Per policy, a legible label showing a non-recalled model means deny. Other checks (purchase, duplicates) pass, but the model rule is decisive. Destruction photo is also missing/duplicate (T4), which would otherwise need info, but deny takes precedence."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01EQd2vRF1uphw5XzjwW85At",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The legible product label photo shows model AF10025PI, which is not on the recalled model list. A label showing a non-recalled model means the unit is not part of this recall.",
+      "cites": [
+       "R:models",
+       "R:policy",
+       "T1",
+       "T2",
+       "T6"
+      ]
+     },
+     {
+      "text": "The typed model matches the label reading and is likewise not a recalled model, so there is no typo that could confirm a recalled model.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "Other checks passed (Amazon.com purchase inside the sale window, no duplicate claims), but they do not overcome the model mismatch.",
+      "cites": [
+       "T3",
+       "T5",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

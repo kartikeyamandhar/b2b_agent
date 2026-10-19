@@ -1,0 +1,67 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3938,
+  "output_tokens": 601,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeHf28H6X4eHNH59MTg",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2476,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_018enFanQsQDC2HdwN62TDFW",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model B0726Y, a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 8/21 is within the recalled range (August 2021 or earlier).",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "The purchase date of 2017-11-08 is inside the sale window, but the retailer Corner Hardware Co is not on the list of sellers. Owners who bought from a store not on the list are asked for proof of ownership rather than denied.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4",
+       "T7"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the helmet with its straps cut off, which is the instructed destruction. A photo that does not show the instructed destruction is asked for again.",
+      "cites": [
+       "R:destruction",
+       "T5",
+       "T7"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not flagged.",
+      "cites": [
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": "Thank you for your claim. To continue, please send: (1) proof of ownership for this helmet, such as a receipt, order confirmation, or other document showing where and when you bought it, since Corner Hardware Co is not one of the listed retailers (Fred Meyer, Walmart, or www.Amazon.com); and (2) a new destruction photo showing the helmet with both straps cut off, as instructed.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

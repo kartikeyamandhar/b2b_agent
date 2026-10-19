@@ -1,0 +1,71 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: T1 shows a legible label reading model 9421, which is recalled (R:models, T2 match). Confirmed.\n- Serial/date code: the program has no serial or date code rule in this recall, so no check applies.\n- Purchase: retailer Keystone Automotive Operations Inc. is on the list (R:sold_at, T3). Purchase date 2023-11-15 is inside the window 2023-10-01 to 2024-05-31 (R:sold_window, T3). No receipt required (T3).\n- Destruction: not required for this remedy (T4).\n- Duplicates: none found (T5).\n- Refund: none requested; repair or replacement, so the value threshold does not apply.\n\nNo flag, deny, or needs_info trigger applies, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2719,
+  "output_tokens": 721,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAePTU1oJgbvzgHtTftY",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 9664,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: T1 shows a legible label reading model 9421, which is recalled (R:models, T2 match). Confirmed.\n- Serial/date code: the program has no serial or date code rule in this recall, so no check applies.\n- Purchase: retailer Keystone Automotive Operations Inc. is on the list (R:sold_at, T3). Purchase date 2023-11-15 is inside the window 2023-10-01 to 2024-05-31 (R:sold_window, T3). No receipt required (T3).\n- Destruction: not required for this remedy (T4).\n- Duplicates: none found (T5).\n- Refund: none requested; repair or replacement, so the value threshold does not apply.\n\nNo flag, deny, or needs_info trigger applies, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01M5aJPSmwfihVkmRi6xnb5P",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 9421, which is a recalled model, so the model is confirmed even though the typed model matches as well.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase was from Keystone Automotive Operations Inc., a listed retailer, on 2023-11-15, which falls inside the sale window; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The remedy is repair or replacement, so no destruction photo is required, and no refund is requested, so the value threshold review does not apply.",
+      "cites": [
+       "T4",
+       "R:value_threshold",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The program has no serial or date code rule for this recall, so no serial check is needed.",
+      "cites": [
+       "R:policy",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

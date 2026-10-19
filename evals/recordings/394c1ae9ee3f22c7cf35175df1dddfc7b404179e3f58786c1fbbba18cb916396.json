@@ -1,0 +1,72 @@
+{
+ "text": "I'll resubmit with the missing fields filled in.",
+ "usage": {
+  "input_tokens": 3914,
+  "output_tokens": 553,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeTSY4n81iZrVMgkSHX",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2690,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll resubmit with the missing fields filled in."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01AVarnTWNJcwZ5Txr942T4G",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model BB4640RE, which is on the recalled list, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Amazon.com is a listed retailer and the purchase date of 2024-03-09 is inside the sale window, so no receipt is required and purchase is not a problem.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the required destruction. The instruction is to write RECALLED in large letters on both the front and rear of the seatback, but only one face with a cord is visible.",
+      "cites": [
+       "T4",
+       "R:destruction",
+       "T6"
+      ]
+     },
+     {
+      "text": "Per program guidance, a destruction photo that does not show the instructed destruction is asked for again rather than denied.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo of the destroyed seat showing \"RECALLED\" written in large letters on both the front and the rear of the seatback, using a marker. The current photo shows only one side.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

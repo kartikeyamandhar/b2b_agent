@@ -1,0 +1,76 @@
+{
+ "text": "Everything checks out: the model is recalled, the date code is in range, the purchase is at a listed retailer within the window, there are no duplicates, and the destruction photo shows the plug cut off. The serial check was skipped because the program has no serial rule. The claim is for repair or replacement with no refund, so the value threshold does not apply.",
+ "usage": {
+  "input_tokens": 3866,
+  "output_tokens": 580,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3W4M5o9FNf2QLomtmE",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2827,
+ "content": [
+  {
+   "type": "text",
+   "text": "Everything checks out: the model is recalled, the date code is in range, the purchase is at a listed retailer within the window, there are no duplicates, and the destruction photo shows the plug cut off. The serial check was skipped because the program has no serial rule. The claim is for repair or replacement with no refund, so the value threshold does not apply."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01KdHeWknH4xBADEv3JkEm9o",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model LXT-CL-1.0, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T7"
+      ]
+     },
+     {
+      "text": "The label date code 0722 falls within the recalled range of 0722 to 1223.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase was at Salon Centric, a listed retailer, on 2023-03-07, inside the sale window. No receipt is required for this retailer.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the device with the cord severed, consistent with the required cut-off of the plug.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claim requests repair or replacement, not a refund, so the $100 value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

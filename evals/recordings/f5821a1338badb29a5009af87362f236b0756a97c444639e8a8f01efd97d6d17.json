@@ -1,0 +1,53 @@
+{
+ "text": "I'll start by reading the label photo, checking the purchase, checking for duplicates, checking the destruction photo, and checking the typed serial, since the rules require all of these.",
+ "usage": {
+  "input_tokens": 2811,
+  "output_tokens": 213,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3TpzMxj1xT1w7ogpYC",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1461,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll start by reading the label photo, checking the purchase, checking for duplicates, checking the destruction photo, and checking the typed serial, since the rules require all of these."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01XjXZXRuLMjnkF5ywqduLkm",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01MErqPm3xMP7orkiDYeRfES",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DUAqhXTaQCe2gxnmZrj11A",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DE2Ud7ueszaeytKPRpbjk4",
+   "name": "check_destruction_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01YC3HHW2hyEfuVnh2veiaa4",
+   "name": "check_serial",
+   "input": {
+    "serial": "SN20315889"
+   }
+  }
+ ]
+}

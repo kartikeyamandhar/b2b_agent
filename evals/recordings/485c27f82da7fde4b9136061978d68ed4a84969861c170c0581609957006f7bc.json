@@ -1,0 +1,72 @@
+{
+ "text": "Checking the results:\n\n- Model: label legible, shows B0726Y, recalled. Confirmed (T1, T2, R:models).\n- Date code 8/21 is in range (T3, R:date_codes).\n- Retailer Amazon is listed; purchase 2017-01-08 is inside the window; receipt not required (T4, R:sold_window, R:sold_at).\n- Duplicates: none (T6), so no flag.\n- Destruction: policy requires a photo showing the helmet destroyed by cutting off the straps. T5 reports the photo shows a red object with a black strap and no clear evidence of a cut helmet; confidence is only 0.5 and complies is false. Per policy, a destruction photo that does not show the instructed destruction is needs_info, asking for a new one.\n\nOutcome: needs_info.",
+ "usage": {
+  "input_tokens": 2936,
+  "output_tokens": 787,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB36qEAPE2NYrfmPgrqm",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4010,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results:\n\n- Model: label legible, shows B0726Y, recalled. Confirmed (T1, T2, R:models).\n- Date code 8/21 is in range (T3, R:date_codes).\n- Retailer Amazon is listed; purchase 2017-01-08 is inside the window; receipt not required (T4, R:sold_window, R:sold_at).\n- Duplicates: none (T6), so no flag.\n- Destruction: policy requires a photo showing the helmet destroyed by cutting off the straps. T5 reports the photo shows a red object with a black strap and no clear evidence of a cut helmet; confidence is only 0.5 and complies is false. Per policy, a destruction photo that does not show the instructed destruction is needs_info, asking for a new one.\n\nOutcome: needs_info."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01KvtSDzPRg9VjtyzzB6cLRk",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model B0726Y, a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The date code 8/21 is within the recalled range (August 2021 or earlier).",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The retailer Amazon is on the list, the purchase date 2017-01-08 is inside the sale window, and no receipt is required.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the helmet destroyed by cutting off the straps; it shows a red object with a strap and the check's confidence is low. Under the destruction rule this is asked for again.",
+      "cites": [
+       "T5",
+       "T7",
+       "R:destruction",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo showing the helmet destroyed by cutting off the straps. The photo should clearly show the helmet itself with the straps cut, and should not be the same as your label photo.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

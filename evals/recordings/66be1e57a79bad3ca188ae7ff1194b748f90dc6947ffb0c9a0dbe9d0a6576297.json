@@ -1,0 +1,71 @@
+{
+ "text": "Checking the results against the policy:\n\n- Duplicates (T6): no hits, so no flag.\n- Model (T1, T2): the label is legible and shows SE4570, a recalled model. Model confirmed.\n- Date code (T3): the typed date code \"07/22 NH\" matches the recalled code, and the label reading (T1) also shows \"07/22 NH\". The check tool returned \"unparsed\" only because of formatting, but the value is a literal match to a recalled code, so the date code is confirmed by both the typed value and the label photo.\n- Serial number: the program does not rely on serial numbers for this recall (R:date_codes is the applicable rule, and serial_text is null), so there is no serial requirement.\n- Purchase (T4): Grainger is on the list, and 2022-10-14 is inside the sale window. Receipt not required, and the claimant attached one anyway.\n- Destruction (T5): not required, since the remedy is replacement or repair.\n- Refund: none requested, so the value threshold does not apply.\n\nEverything passes, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2787,
+  "output_tokens": 822,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3B277kpvgYQbZmgD4N",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3956,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Duplicates (T6): no hits, so no flag.\n- Model (T1, T2): the label is legible and shows SE4570, a recalled model. Model confirmed.\n- Date code (T3): the typed date code \"07/22 NH\" matches the recalled code, and the label reading (T1) also shows \"07/22 NH\". The check tool returned \"unparsed\" only because of formatting, but the value is a literal match to a recalled code, so the date code is confirmed by both the typed value and the label photo.\n- Serial number: the program does not rely on serial numbers for this recall (R:date_codes is the applicable rule, and serial_text is null), so there is no serial requirement.\n- Purchase (T4): Grainger is on the list, and 2022-10-14 is inside the sale window. Receipt not required, and the claimant attached one anyway.\n- Destruction (T5): not required, since the remedy is replacement or repair.\n- Refund: none requested, so the value threshold does not apply.\n\nEverything passes, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QTy4CJ6mKDVVNV9fcegxps",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 07/22 NH matches a recalled date code. The typed value and the label reading agree, and the checker's 'unparsed' verdict is a formatting artifact, not a mismatch.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T3"
+      ]
+     },
+     {
+      "text": "Retailer Grainger is on the sold-at list and the purchase date of 2022-10-14 falls inside the sale window, so the purchase is eligible.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for a repair or replacement remedy, and no refund is requested, so the value threshold does not apply.",
+      "cites": [
+       "T5",
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

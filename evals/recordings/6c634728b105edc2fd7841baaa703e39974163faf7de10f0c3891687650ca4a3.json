@@ -1,0 +1,78 @@
+{
+ "text": "Applying the policy in order: flag takes precedence. T7 shows a same-serial duplicate with another claim, so the claim is flagged for person review regardless of the other checks.\n\nThe other results for context: the model is confirmed (T1, T2), the date code is in range (T4), and the purchase is inside the window (T5). The serial is out of range (T3), which would be a deny on its own, and the retailer is not on the list, which would be needs_info. But flag comes first, so the outcome is flag.",
+ "usage": {
+  "input_tokens": 3274,
+  "output_tokens": 719,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeHALU2YdkD2iECzbZH",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3619,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: flag takes precedence. T7 shows a same-serial duplicate with another claim, so the claim is flagged for person review regardless of the other checks.\n\nThe other results for context: the model is confirmed (T1, T2), the date code is in range (T4), and the purchase is inside the window (T5). The serial is out of range (T3), which would be a deny on its own, and the retailer is not on the list, which would be needs_info. But flag comes first, so the outcome is flag."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01F9EVhDUX2QhPUmdrmjL9Tr",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The check for duplicates found another claim (ac02a97c-ba74-5eb3-9577-467aa37f72c3) sharing the same serial number, so this claim must go to a person for review together with the matching claim.",
+      "cites": [
+       "T7",
+       "R:policy",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows FCRG3051BS, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The typed serial QQ31048759 falls outside the recalled serial ranges. On its own this would be a denial, but the duplicate flag takes precedence, so the claim is sent for review instead.",
+      "cites": [
+       "T3",
+       "R:serials",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The date code October 2023 is within the recalled range.",
+      "cites": [
+       "T4",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase date of 2023-11-09 is inside the sale window. The retailer Corner Hardware Co is not on the Lowe's list, so proof of ownership would be requested if the claim were not flagged. No receipt is required.",
+      "cites": [
+       "T5",
+       "R:sold_window",
+       "R:sold_at"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for the repair remedy.",
+      "cites": [
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

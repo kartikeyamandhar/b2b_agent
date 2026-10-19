@@ -1,0 +1,76 @@
+{
+ "text": "The call failed validation because I left out two required fields. Resubmitting with `question_for_claimant` and `confidence` included.",
+ "usage": {
+  "input_tokens": 4315,
+  "output_tokens": 578,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeHAqEWBvcP56mQvRpJ",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2266,
+ "content": [
+  {
+   "type": "text",
+   "text": "The call failed validation because I left out two required fields. Resubmitting with `question_for_claimant` and `confidence` included."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DcaVF6dQ5ff4CtBYALmArS",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model FCRE3052BW, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial number VF34508573 falls within a recalled serial range.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The date code on the label reads November 2024. The recalled date codes are only those produced from October 2023 through November 2023, so this unit is outside the recall.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T7"
+      ]
+     },
+     {
+      "text": "The purchase date of 2023-10-31 is inside the sale window. The retailer, Corner Hardware Co, is not on the Lowe's list, which would normally call for a proof-of-ownership request. That is a lower-priority issue and does not change the outcome, because the date code denial takes precedence.",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "T5"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy, and the claim requests repair or replacement, so no refund review applies.",
+      "cites": [
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

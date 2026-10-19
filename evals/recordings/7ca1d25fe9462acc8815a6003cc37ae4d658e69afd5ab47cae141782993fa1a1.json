@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": true, \"complies\": false, \"observed\": \"The photo shows a red rectangular object with a thin blue line running down its middle and a black line extending from its right edge, with no visible straps cut off, so the instructed destruction is not clearly visible.\", \"confidence\": 0.6}",
+ "usage": {
+  "input_tokens": 1187,
+  "output_tokens": 94,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAe6bw2smqUUKASQRwe1",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 1323
+}

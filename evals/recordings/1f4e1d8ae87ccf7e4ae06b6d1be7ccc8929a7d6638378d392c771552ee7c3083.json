@@ -1,0 +1,71 @@
+{
+ "text": "Per the policy, the flag rule takes precedence: check_duplicates (T6) found a same_payout match with another claim, so the outcome must be flag, even though model, date code, purchase, and destruction checks all pass.",
+ "usage": {
+  "input_tokens": 2906,
+  "output_tokens": 561,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeU2J5kSmtxtnmL2kS9",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2682,
+ "content": [
+  {
+   "type": "text",
+   "text": "Per the policy, the flag rule takes precedence: check_duplicates (T6) found a same_payout match with another claim, so the outcome must be flag, even though model, date code, purchase, and destruction checks all pass."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_019KcbALB25BumX31MnW6WyB",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim (ee6c9d50-8fbb-5519-bcb0-04927d9a38e2) sharing the same payout destination. Claims sharing a payout account must be sent to a person for review, together with the matching claim.",
+      "cites": [
+       "R:policy",
+       "T6",
+       "T7"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model 34692, which is a recalled model, so the model is confirmed despite the typed value matching.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The date code December 2023 is manufactured prior to January 2024, so it is within the recalled range.",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Purchase at Dick's on 2020-02-06 is inside the sale window and at a listed retailer; no receipt is required.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The remedy is replacement, so no destruction photo is required, and no refund exceeds the value threshold.",
+      "cites": [
+       "T5",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

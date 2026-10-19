@@ -1,0 +1,82 @@
+{
+ "text": "All checks pass: the label is legible and shows a recalled model, the date code is in range, the retailer and purchase date are within the window, there are no duplicates, and the destruction photo shows the plug cut off.",
+ "usage": {
+  "input_tokens": 3696,
+  "output_tokens": 598,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3zktui8empv5YLDDq6",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3580,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass: the label is legible and shows a recalled model, the date code is in range, the retailer and purchase date are within the window, there are no duplicates, and the destruction photo shows the plug cut off."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01XeAc2mU45oVdUcDbjVZzqW",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model LXT-CL-1.0, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T7"
+      ]
+     },
+     {
+      "text": "The label's date code 0722 falls within the recalled range of 0722 to 1223.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase was from Salon Centric, a listed retailer, on 2023-12-26, which is inside the sale window. No receipt is required for this claim.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the device with the cord cut near the plug, which matches the required destruction (cut off the plug).",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The program has no serial rule for this recall, so the serial check does not affect the outcome.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The claim requests repair or replacement, not a refund, so the refund value threshold does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

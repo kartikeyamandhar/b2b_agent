@@ -1,0 +1,69 @@
+{
+ "text": "Let me apply the policy in order.\n\n- Flag: check_duplicates (T6) found no hits. No flag.\n- Model: label photo is legible and shows KY-318B, a recalled model (T1, R:models). Model confirmed, despite the typed \"KY-3I8B\" typo.\n- Serial/date code: the program has no serial or date code rules here, so these don't apply.\n- Purchase: ALDI is listed, the date 2016-06-07 is inside the window, and no receipt is required (T4, R:sold_at, R:sold_window).\n- Destruction: the photo does not show the instructed destruction. T5 reports the power cord is intact with no visible cut (complies: false). Per R:destruction and the FAQ, this needs a new destruction photo, so the outcome is needs_info.\n\nFlag, deny, and needs_info are checked in that order. Flag does not apply and deny does not apply, so needs_info is the outcome.",
+ "usage": {
+  "input_tokens": 2917,
+  "output_tokens": 784,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB38KjgecfFWkcsMcSv7",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3663,
+ "content": [
+  {
+   "type": "text",
+   "text": "Let me apply the policy in order.\n\n- Flag: check_duplicates (T6) found no hits. No flag.\n- Model: label photo is legible and shows KY-318B, a recalled model (T1, R:models). Model confirmed, despite the typed \"KY-3I8B\" typo.\n- Serial/date code: the program has no serial or date code rules here, so these don't apply.\n- Purchase: ALDI is listed, the date 2016-06-07 is inside the window, and no receipt is required (T4, R:sold_at, R:sold_window).\n- Destruction: the photo does not show the instructed destruction. T5 reports the power cord is intact with no visible cut (complies: false). Per R:destruction and the FAQ, this needs a new destruction photo, so the outcome is needs_info.\n\nFlag, deny, and needs_info are checked in that order. Flag does not apply and deny does not apply, so needs_info is the outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_018rBD9mhTJ7Det1SyNeoNxM",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model KY-318B, which is a recalled model, so the model is confirmed despite the typo in the typed model.",
+      "cites": [
+       "T1",
+       "T3",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase is at ALDI, a listed retailer, dated 2016-06-07, which is inside the sale window. No receipt is required.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the instructed destruction. It shows the power cord intact with no cut, so the destruction requirement is not met.",
+      "cites": [
+       "T5",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The program has no serial or date code rules for this recall, so those do not affect the outcome.",
+      "cites": [
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo showing the unplugged power cord of the cooker cut, as the recall instructs. The photo must show the cut cord and must not be the same as your label photo.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

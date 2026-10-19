@@ -1,0 +1,63 @@
+{
+ "text": "The duplicate check found another claim sharing the same payout destination, which triggers a flag under the policy and takes precedence. The label also shows P1413-P, which is not a recalled model, and the purchase date falls before the sale window.",
+ "usage": {
+  "input_tokens": 3323,
+  "output_tokens": 556,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3o67UrKc747SnvtR1a",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3314,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing the same payout destination, which triggers a flag under the policy and takes precedence. The label also shows P1413-P, which is not a recalled model, and the purchase date falls before the sale window."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01LBydSuPf3GNgKTLipzHhj1",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Duplicate check found another claim (08f1dbd6-dd98-5df3-bbbf-18468e91a10a) sharing the same payout destination as this claim. Under the policy, a shared payout account requires a flag.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model P1413-P, which is not one of the recalled models (P1410, P1410-P, P1411, P1411-P). On the model rule alone this would be a denial.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2006-01-05 is before the sale window opens on 2006-10-01, so the purchase falls outside the eligible period. This would also be a denial on its own.",
+      "cites": [
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The retailer (www.amazon.com) is on the sold-at list, so retailer eligibility is not the issue. The serial check was skipped because the program has no serial rule for this recall.",
+      "cites": [
+       "R:sold_at",
+       "T2",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

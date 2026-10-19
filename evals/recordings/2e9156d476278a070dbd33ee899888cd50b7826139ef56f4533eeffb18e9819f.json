@@ -1,0 +1,54 @@
+{
+ "text": "Policy order: flag takes precedence. check_duplicates (T5) found a same_payout hit with another claim, so the outcome is flag.",
+ "usage": {
+  "input_tokens": 2782,
+  "output_tokens": 470,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeLC2ExR2461sHZG7q6",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3967,
+ "content": [
+  {
+   "type": "text",
+   "text": "Policy order: flag takes precedence. check_duplicates (T5) found a same_payout hit with another claim, so the outcome is flag."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01VVThwWxFqtjY2Uftc2SGtP",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim (a8975c59-c3ef-564c-a5d4-9ba2778a739d) sharing the same payout destination. Under the program's duplicate rule, claims sharing a payout account are sent to a person for review together with the matched claim.",
+      "cites": [
+       "T5",
+       "R:policy",
+       "T6"
+      ]
+     },
+     {
+      "text": "The other checks pass: the label photo is legible and shows model P1410, which is recalled; the serial number SN30006718 is present on the label; the retailer www.amazon.com is listed; and the 2019-09-28 purchase date is inside the sale window. No destruction photo is required. The refund of $87.54 is under the $100 review threshold, so the flag rests on the duplicate match alone.",
+      "cites": [
+       "T1",
+       "T2",
+       "T3",
+       "T4",
+       "R:models",
+       "R:sold_at",
+       "R:sold_window",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

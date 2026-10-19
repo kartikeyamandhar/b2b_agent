@@ -1,0 +1,76 @@
+{
+ "text": "All checks pass: label legible showing SE4570 (recalled), date code 07/22 in range, retailer listed (justinboots.com), purchase 2022-12-19 inside the window, no destruction photo required (remedy is replacement), no duplicates found. Refund not requested, so the value threshold does not apply.",
+ "usage": {
+  "input_tokens": 2784,
+  "output_tokens": 600,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeG8nArkFfogkqQuxeB",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3964,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass: label legible showing SE4570 (recalled), date code 07/22 in range, retailer listed (justinboots.com), purchase 2022-12-19 inside the window, no destruction photo required (remedy is replacement), no duplicates found. Refund not requested, so the value threshold does not apply."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01X7ccDM29HGQcpmxQqbb1Cj",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model, so the model is confirmed even though the typed model matches as well.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "T7"
+      ]
+     },
+     {
+      "text": "The date code 07/22 is within the recalled date codes (07/22 NH or 08/22 NH).",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "The retailer www.justinboots.com is on the sold-at list and the purchase date 2022-12-19 falls inside the sale window; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No destruction photo is required because the remedy is replacement or repair, not a refund requiring destruction.",
+      "cites": [
+       "T5",
+       "T7"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this claim, so it is not flagged as a duplicate.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "No refund is requested, so the refund value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

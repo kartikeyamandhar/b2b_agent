@@ -1,0 +1,61 @@
+{
+ "text": "The label is legible and shows CXC-02, a recalled model. The serial is in range and there are no duplicates. However, the purchase date of 2020-06-03 falls before the sale window (2021-01-01 to 2024-10-31), which makes the claim a denial under the purchase rule.\n\nI'll record the decision.",
+ "usage": {
+  "input_tokens": 3402,
+  "output_tokens": 477,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3sRFmP3K3SB9sdzggF",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2222,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows CXC-02, a recalled model. The serial is in range and there are no duplicates. However, the purchase date of 2020-06-03 falls before the sale window (2021-01-01 to 2024-10-31), which makes the claim a denial under the purchase rule.\n\nI'll record the decision."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_011NUo9iB61HQQwzAMJUG16R",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model CXC-02, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The serial number FC29D5788327 is within the recalled serial prefixes.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2020-06-03 is before the program's sale window of 2021-01-01 to 2024-10-31, so the purchase is not eligible even though the retailer JHTNA is listed.",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

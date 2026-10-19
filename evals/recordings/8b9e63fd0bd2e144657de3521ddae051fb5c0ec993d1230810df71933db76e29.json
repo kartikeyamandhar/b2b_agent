@@ -1,0 +1,57 @@
+{
+ "text": "The label is legible and shows model 64785, which is not a recalled model (recalled: 34692, 34785, 34790). Under the policy, a legible label showing a non-recalled model is a denial, regardless of the in-range date code.",
+ "usage": {
+  "input_tokens": 3654,
+  "output_tokens": 446,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3SAeVG5rTZfzEk8DxV",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2218,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows model 64785, which is not a recalled model (recalled: 34692, 34785, 34790). Under the policy, a legible label showing a non-recalled model is a denial, regardless of the in-range date code."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01L8HgmjzdaLbPdPCHTi25bb",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 64785, which is not one of the recalled models (34692, 34785, 34790). The claimant's typed model matches this non-recalled number, so the product is not covered.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The date code 10/2021 falls in a recalled range, but the model is not recalled, so the date code cannot make the unit eligible.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (Amazon.com) within the sale window and no duplicate claims were found, but these checks do not cure the non-recalled model.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

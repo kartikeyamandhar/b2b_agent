@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and shows REV 20 Kids Bike, which is recalled. I'll confirm the model check against the label reading.",
+ "usage": {
+  "input_tokens": 3603,
+  "output_tokens": 101,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3MAsFavV3f3TyNXaiE",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1501,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows REV 20 Kids Bike, which is recalled. I'll confirm the model check against the label reading."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01REPeBW8UDgLjdLWagqNptj",
+   "name": "check_model",
+   "input": {
+    "model_text": "REV 20 Kids Bike"
+   }
+  }
+ ]
+}

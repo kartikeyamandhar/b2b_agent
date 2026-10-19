@@ -1,0 +1,68 @@
+{
+ "text": "The typed model matches a recalled model. The serial check still returns \"skipped\", and the program's serial rule (R:serials) is not among the listed rules, so the serial does not decide the outcome. The label is unreadable, so the typed model decides; the model matches, the purchase is inside the window at a listed retailer, there are no duplicates, and the destruction photo shows the cut cord. The label-unreadable case is a needs_info trigger only when the typed model is missing or ambiguous, which it is not here, so I'll approve.",
+ "usage": {
+  "input_tokens": 3593,
+  "output_tokens": 574,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4693K8gSdw9r6WeaFM",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2662,
+ "content": [
+  {
+   "type": "text",
+   "text": "The typed model matches a recalled model. The serial check still returns \"skipped\", and the program's serial rule (R:serials) is not among the listed rules, so the serial does not decide the outcome. The label is unreadable, so the typed model decides; the model matches, the purchase is inside the window at a listed retailer, there are no duplicates, and the destruction photo shows the cut cord. The label-unreadable case is a needs_info trigger only when the typed model is missing or ambiguous, which it is not here, so I'll approve."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017e5BTmxhvemj8g6dYasPkf",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo was not legible, so the typed model 93550 decides; it matches a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "Purchase at ALDI on 2016-06-28 falls inside the sale window and at a listed retailer; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the power cord visibly cut, which satisfies the required destruction.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The $40.00 refund is below the $100.00 review threshold, so no person review is required.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.8
+   }
+  }
+ ]
+}

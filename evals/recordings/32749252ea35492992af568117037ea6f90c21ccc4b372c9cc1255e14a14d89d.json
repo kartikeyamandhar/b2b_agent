@@ -1,0 +1,65 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: label legible, shows B0726Y (T1), recalled (T2, R:models). Confirmed.\n- Date code 8/21 is in range (T3, R:date_codes).\n- Purchase: Amazon is listed, date 2016-06-23 is before the window 2017-01-01 (T4, R:sold_window), so this is a deny.\n- Duplicates: none (T6).\n- Destruction photo: shows a red rounded object with a strap, no visible cut (T5), so it is not compliant. That would be needs_info on its own.\n\nPriority order: flag (none), then deny (purchase before window). Deny takes precedence over needs_info.",
+ "usage": {
+  "input_tokens": 2929,
+  "output_tokens": 648,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeHnXpLdt6ExyRmRjxb",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3417,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: label legible, shows B0726Y (T1), recalled (T2, R:models). Confirmed.\n- Date code 8/21 is in range (T3, R:date_codes).\n- Purchase: Amazon is listed, date 2016-06-23 is before the window 2017-01-01 (T4, R:sold_window), so this is a deny.\n- Duplicates: none (T6).\n- Destruction photo: shows a red rounded object with a strap, no visible cut (T5), so it is not compliant. That would be needs_info on its own.\n\nPriority order: flag (none), then deny (purchase before window). Deny takes precedence over needs_info."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01E1L7bKrBN2x5nADNFeVRwA",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The purchase date of 2016-06-23 is before the program's sale window, which starts 2017-01-01, so the unit is not eligible.",
+      "cites": [
+       "R:sold_window",
+       "T4",
+       "R:policy",
+       "T7"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows the recalled model B0726Y, and the date code 8/21 is in range, so the product itself is confirmed as recalled. The denial rests on the purchase date alone.",
+      "cites": [
+       "T1",
+       "T2",
+       "T3",
+       "R:models",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the helmet with its straps cut off, so it would also fail the destruction requirement if the claim were otherwise eligible.",
+      "cites": [
+       "T5",
+       "R:destruction"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

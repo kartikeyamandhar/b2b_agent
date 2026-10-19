@@ -1,0 +1,84 @@
+{
+ "text": "The policy says a store not on the list is still eligible, but the owner must provide proof of ownership. The receipt was attached, and the receipt rule is \"not_required\" for this purchase. The claimant's receipt photo is on file, so proof of ownership is satisfied. Everything else checks out, so the claim is approved.",
+ "usage": {
+  "input_tokens": 4813,
+  "output_tokens": 671,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4DbC8Pe262Ekz5KaKr",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2976,
+ "content": [
+  {
+   "type": "text",
+   "text": "The policy says a store not on the list is still eligible, but the owner must provide proof of ownership. The receipt was attached, and the receipt rule is \"not_required\" for this purchase. The claimant's receipt photo is on file, so proof of ownership is satisfied. Everything else checks out, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QUMjHSKbH7F31csxH2GqLD",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model FCRG3052BW, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial VF34413519 falls within the recalled range VF34413405 through VF34413692.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code October 2023 is within the recalled production range (October through November 2023).",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase date 2023-12-17 is inside the sale window of 2023-10-01 to 2023-12-31.",
+      "cites": [
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "Corner Hardware Co is not on the Lowe's list, but the FAQ says owners from stores not on the list are still eligible and only need proof of ownership. A receipt photo was provided, so proof of ownership is met.",
+      "cites": [
+       "R:sold_at",
+       "R:policy",
+       "T2",
+       "T7"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claimant requested repair or replacement, not a refund, so the refund value threshold does not apply, and no destruction photo is required for this remedy.",
+      "cites": [
+       "R:value_threshold",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

@@ -1,0 +1,64 @@
+{
+ "text": "The label's date code 09/2025 falls outside every recalled range, and the policy says a unit outside the listed date codes is not part of the recall. The model matches, but the date code controls, so the claim is denied. The purchase is inside the window and at a listed retailer, and there are no duplicates.",
+ "usage": {
+  "input_tokens": 4469,
+  "output_tokens": 546,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3RjKzMeYmivSD3hoGC",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3517,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label's date code 09/2025 falls outside every recalled range, and the policy says a unit outside the listed date codes is not part of the recall. The model matches, but the date code controls, so the claim is denied. The purchase is inside the window and at a listed retailer, and there are no duplicates."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01GD2Zrx98PmuXPfjnzWUDav",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 34790, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The label date code 09/2025 is outside every recalled date code range (07/2020-09/2021, 10/2021-12/2022, 10/2021-02/2023, and manufactured before January 2024). Per the claims FAQ, a date code outside these is not part of the recall.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:date_codes",
+       "T7"
+      ]
+     },
+     {
+      "text": "The purchase at Target on 2023-07-22 is inside the sale window and at a listed retailer, and no receipt is required, so the purchase rules are met. This does not change the outcome, since the date code is outside the recall.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

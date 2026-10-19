@@ -1,0 +1,47 @@
+{
+ "text": "I'll start by reading the label photo, checking the purchase, checking for duplicates, and checking the typed date code, since those all bear on the outcome.",
+ "usage": {
+  "input_tokens": 2810,
+  "output_tokens": 181,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3f5PLgLTotecNXkNEK",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1095,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll start by reading the label photo, checking the purchase, checking for duplicates, and checking the typed date code, since those all bear on the outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01PtAwrcqCZXWTdrSoq7pNq1",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01HvoD3QKuZRhFGyBAeQrhEn",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_013ATZTxED7fh2QuFmJkGnwL",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_011wL5o1YzgiKDUJoHhPVqsb",
+   "name": "check_date_code",
+   "input": {
+    "date_code": "07/22 NH"
+   }
+  }
+ ]
+}

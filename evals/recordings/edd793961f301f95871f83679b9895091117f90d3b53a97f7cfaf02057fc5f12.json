@@ -1,0 +1,63 @@
+{
+ "text": "Applying the policy in order: flag rules come first. check_duplicates (T8) found a same_photo match with another claim, so the outcome is flag regardless of the other checks.\n\nOther notes: the label photo is legible and shows REV 12 Kids Bike, a recalled model (T1), which overrides the typed \"REV 16\" (T2 matched, but the label governs). Serial ET22... is in range (T4), date code 2022 is in range (T5), purchase at REI on 2024-04-04 is inside the window with no receipt required (T6), and no destruction photo is needed since the remedy is repair (T7). The duplicate hit is what drives the outcome.",
+ "usage": {
+  "input_tokens": 3125,
+  "output_tokens": 641,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeNMATySEn6mQjFUxSw",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3467,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: flag rules come first. check_duplicates (T8) found a same_photo match with another claim, so the outcome is flag regardless of the other checks.\n\nOther notes: the label photo is legible and shows REV 12 Kids Bike, a recalled model (T1), which overrides the typed \"REV 16\" (T2 matched, but the label governs). Serial ET22... is in range (T4), date code 2022 is in range (T5), purchase at REI on 2024-04-04 is inside the window with no receipt required (T6), and no destruction photo is needed since the remedy is repair (T7). The duplicate hit is what drives the outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_015naeMWiUrfVtWe3WM3QUMz",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo shares the same image (sha256) with another claim, so this claim must go to a person for duplicate review together with the matching claim.",
+      "cites": [
+       "T8",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Under the flag rule, a shared photo with another claim overrides all other results, so the claim is flagged rather than approved or denied.",
+      "cites": [
+       "R:policy",
+       "T8",
+       "T9"
+      ]
+     },
+     {
+      "text": "The other checks pass: the legible label shows REV 12 Kids Bike, a recalled model; the serial ET22 prefix and 2022 date code are in range; the REI purchase on 2024-04-04 is inside the sale window and no receipt is needed; no destruction photo is required for a repair remedy.",
+      "cites": [
+       "T1",
+       "T4",
+       "T5",
+       "T6",
+       "T7",
+       "R:models",
+       "R:serials",
+       "R:date_codes",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

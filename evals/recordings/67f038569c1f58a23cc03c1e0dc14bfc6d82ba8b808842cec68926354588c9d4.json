@@ -1,0 +1,69 @@
+{
+ "text": "The model is confirmed as recalled, the purchase is valid, and there are no duplicates. The destruction photo does not show the cut power cord required by R:destruction, so the claim needs more information before a refund.",
+ "usage": {
+  "input_tokens": 3526,
+  "output_tokens": 509,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3xD1TLgLAMdaUdsar8",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2599,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed as recalled, the purchase is valid, and there are no duplicates. The destruction photo does not show the cut power cord required by R:destruction, so the claim needs more information before a refund."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DH7PqGCqFFpfhJYooJ6CPA",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model KY-318A, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The ALDI purchase on 2018-09-06 falls inside the sale window and at a listed retailer; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the required unplugged power cord cut; the cord appears intact.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "The claim cannot be approved until the destruction requirement is met with a valid photo.",
+      "cites": [
+       "R:destruction",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new destruction photo showing the unplugged power cord of the cooker cut through. The photo we received shows the cord intact.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

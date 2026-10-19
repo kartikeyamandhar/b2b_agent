@@ -1,0 +1,69 @@
+{
+ "text": "The date code 08/22 is in range, the label photo shows the same date code, the model is a confirmed match, the retailer and purchase window are valid, no receipt is required, and there are no duplicate claims. The remedy is repair or replacement, so no refund threshold applies and no destruction photo is needed.",
+ "usage": {
+  "input_tokens": 3668,
+  "output_tokens": 537,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4A7tiW5qLzjYkLGBdq",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3008,
+ "content": [
+  {
+   "type": "text",
+   "text": "The date code 08/22 is in range, the label photo shows the same date code, the model is a confirmed match, the retailer and purchase window are valid, no receipt is required, and there are no duplicate claims. The remedy is repair or replacement, so no refund threshold applies and no destruction photo is needed."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_019HSWS35CyJycm6YgRc2cz6",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The date code 08/22 (typed as '08/22 NH') is in the recalled set; the label photo shows 08/22 as well.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The retailer justinboots.com is on the sold-at list and the purchase date 2023-09-30 falls inside the sale window; no receipt is required for this retailer.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "No serial rule applies to this program and the remedy is repair or replacement, so no destruction photo or refund-threshold review is needed.",
+      "cites": [
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

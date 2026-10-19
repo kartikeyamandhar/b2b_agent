@@ -1,0 +1,60 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3825,
+  "output_tokens": 410,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3ikSw6Mnw82WuRywit",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2066,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01GA5pdoccJUSfaaepQa7Dw5",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label is legible and shows model FCRE3052BS, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase date of 2023-06-08 is before the recall sale window of 2023-10-01 to 2023-12-31, so the purchase is outside the program's eligibility.",
+      "cites": [
+       "T2",
+       "R:sold_window",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial number QQ66988261 is outside all recalled serial ranges, so the unit is not covered by the recall.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The date code October 2023 is within the recalled range, and no duplicate claims were found, but these do not offset the purchase-window and serial failures.",
+      "cites": [
+       "T5",
+       "T3",
+       "R:date_codes"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

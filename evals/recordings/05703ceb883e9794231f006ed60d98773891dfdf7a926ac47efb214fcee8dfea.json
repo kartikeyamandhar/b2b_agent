@@ -1,0 +1,71 @@
+{
+ "text": "Checking the results against the policy in order:\n\n- Duplicates (T6): no hits, so no flag.\n- Model: the label photo is legible (T1) and reads \"KY-348A\", which is not on the recalled list (T3 mismatch). The typed model \"93550\" matches (T2), but policy says a legible label showing a non-recalled model means deny. The label controls over the typed value.\n- Destruction (T5): the photo shows the product with an intact cord, not the instructed cut. That would be needs_info, but the model denial takes precedence.\n- Purchase (T4): ALDI, inside the window, no receipt required. Fine.\n- Serial/date code: no serial rule in the program, so not applicable.\n\nThe first triggered rule is the model denial, so the outcome is deny.",
+ "usage": {
+  "input_tokens": 2908,
+  "output_tokens": 710,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB37zvbwU1Q3GtNs7nnE",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3405,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy in order:\n\n- Duplicates (T6): no hits, so no flag.\n- Model: the label photo is legible (T1) and reads \"KY-348A\", which is not on the recalled list (T3 mismatch). The typed model \"93550\" matches (T2), but policy says a legible label showing a non-recalled model means deny. The label controls over the typed value.\n- Destruction (T5): the photo shows the product with an intact cord, not the instructed cut. That would be needs_info, but the model denial takes precedence.\n- Purchase (T4): ALDI, inside the window, no receipt required. Fine.\n- Serial/date code: no serial rule in the program, so not applicable.\n\nThe first triggered rule is the model denial, so the outcome is deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01HNBveWwgvM8V2msXWiS77r",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model KY-348A, which is not a recalled model. Under the claim policy, a legible label showing a non-recalled model means the unit is not part of the recall, even though the typed model 93550 matches.",
+      "cites": [
+       "R:policy",
+       "R:models",
+       "T1",
+       "T3"
+      ]
+     },
+     {
+      "text": "The typed model 93550 is recalled, but the label photo controls because it is legible and shows a different model.",
+      "cites": [
+       "R:policy",
+       "T2",
+       "T1"
+      ]
+     },
+     {
+      "text": "Purchase at ALDI on 2018-06-20 is inside the sale window and the retailer is listed, so purchase is not a problem.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The destruction photo does not appear to show the cut power cord, which would also need a follow-up, but the model denial already decides the outcome.",
+      "cites": [
+       "R:destruction",
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

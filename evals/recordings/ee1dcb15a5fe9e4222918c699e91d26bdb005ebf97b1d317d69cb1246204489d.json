@@ -1,0 +1,75 @@
+{
+ "text": "Checking the policy in order: flag (duplicates) \u2014 T6 has no hits, so no flag. Deny \u2014 label legible and recalled model (T1, T2), serial in range (T3), purchase inside window at a listed retailer (T4). No deny trigger. Needs_info \u2014 receipt is required (R:receipt) and T4 shows it missing. Destruction not required (T5). So the outcome is needs_info, asking for proof of purchase.",
+ "usage": {
+  "input_tokens": 3237,
+  "output_tokens": 687,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeMV9uXr4BzJt2CUVeK",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3737,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy in order: flag (duplicates) \u2014 T6 has no hits, so no flag. Deny \u2014 label legible and recalled model (T1, T2), serial in range (T3), purchase inside window at a listed retailer (T4). No deny trigger. Needs_info \u2014 receipt is required (R:receipt) and T4 shows it missing. Destruction not required (T5). So the outcome is needs_info, asking for proof of purchase."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01CWHNTyV8DHkMz5pR6JvE7A",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 790.990141A1, which matches the recalled model 790.990141*.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number VF12298621 falls within the recalled range VF122xxxxx - VF334xxxxx.",
+      "cites": [
+       "T3",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The purchase was from Sears, a listed retailer, on 2008-08-19, which is inside the sale window of 2001-06-01 to 2009-08-31.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "A receipt is required for this claim, and none was provided.",
+      "cites": [
+       "T4",
+       "R:receipt"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one, so no duplicate review is needed.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a copy of your proof of purchase for the Sears purchase made on 2008-08-19, such as a receipt or other document showing the purchase. If you bought the unit secondhand or received it as a gift, please say so and send whatever proof of ownership you have.",
+    "confidence": 0.9
+   }
+  }
+ ]
+}

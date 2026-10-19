@@ -1,0 +1,75 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: label photo legible and shows PA-10, a recalled model (T1, T2). Confirmed.\n- Date code: 2126 is within 2126\u20132319 (T3). Passes.\n- Serial: no serial rule in the program, so not applicable.\n- Purchase: 2022-03-04 is inside the sale window (T4). Retailer \"Corner Hardware Co\" is not on the list, so it needs proof of ownership, per the FAQ (T7, faq#1) and T4 receipt \"not_required\".\n- Destruction: not required, since the remedy is repair or replacement (T5, T7 faq#2 says replacement).\n- Duplicates: none (T6). Flag does not apply.\n\nRule order: flag does not trigger. Deny does not trigger (model recalled, date code in range, purchase inside window). needs_info is triggered by the retailer not being on the list, so proof of ownership is requested. The policy says owners from unlisted stores are \"asked for proof of ownership instead of being denied,\" so this is needs_info rather than deny.",
+ "usage": {
+  "input_tokens": 2843,
+  "output_tokens": 900,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "max_tokens",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeK5r9Jte3DJ4MYw5Tr",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4204,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: label photo legible and shows PA-10, a recalled model (T1, T2). Confirmed.\n- Date code: 2126 is within 2126\u20132319 (T3). Passes.\n- Serial: no serial rule in the program, so not applicable.\n- Purchase: 2022-03-04 is inside the sale window (T4). Retailer \"Corner Hardware Co\" is not on the list, so it needs proof of ownership, per the FAQ (T7, faq#1) and T4 receipt \"not_required\".\n- Destruction: not required, since the remedy is repair or replacement (T5, T7 faq#2 says replacement).\n- Duplicates: none (T6). Flag does not apply.\n\nRule order: flag does not trigger. Deny does not trigger (model recalled, date code in range, purchase inside window). needs_info is triggered by the retailer not being on the list, so proof of ownership is requested. The policy says owners from unlisted stores are \"asked for proof of ownership instead of being denied,\" so this is needs_info rather than deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01TyTdX3yhSNUzsXDFk36QaF",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PA-10, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 2126 falls within the recalled range of 2126 to 2319.",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "The purchase date of 2022-03-04 is inside the sale window of 2021-06-01 to 2023-11-30.",
+      "cites": [
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "The retailer 'Corner Hardware Co' is not on the list of authorized sellers. Under the policy, an unlisted retailer is not denied; the claimant is asked for proof of ownership.",
+      "cites": [
+       "R:sold_at",
+       "R:policy",
+       "T4",
+       "T7"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account, so no flag applies.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The remedy is repair or replacement, so no destruction photo is required.",
+      "cites": [
+       "T5",
+       "T7"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

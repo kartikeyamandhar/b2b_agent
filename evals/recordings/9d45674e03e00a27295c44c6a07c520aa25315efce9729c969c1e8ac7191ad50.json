@@ -1,0 +1,64 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3656,
+  "output_tokens": 507,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3ThYtdC2MPszYcNpT6",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2388,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01TdNLWVKBN2nu3Jh6F8KeKm",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2G520, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (Homedepot.com) and inside the sale window, and no receipt is required, so the purchase is eligible.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The remedy requires destruction with the word 'Recalled' written in permanent marker. The destruction photo duplicates the label photo and does not show the instructed destruction, so it is missing.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The serial rule does not apply to this claim, so the serial check was skipped and is not a reason for the outcome.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo of the recalled power bank (model 2G520) with the word \"Recalled\" written on it in permanent marker. The photo must be different from the label photo and must clearly show that marking.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

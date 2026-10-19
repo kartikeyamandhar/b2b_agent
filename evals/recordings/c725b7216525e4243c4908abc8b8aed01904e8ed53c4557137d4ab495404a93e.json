@@ -1,0 +1,57 @@
+{
+ "text": "Checking the results: the label photo is legible and reads model 64785, which is not on the recalled list (34692, 34785, 34790). Per policy, a legible label showing a non-recalled model means deny, regardless of the typed model. The typed model \"64785\" also mismatches (T2). Duplicates found none (T6), date code is in range (T3), purchase is in window at a listed retailer (T4), and no destruction photo is required (T5). The denial rests on the model mismatch.",
+ "usage": {
+  "input_tokens": 2862,
+  "output_tokens": 494,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeTecbwP8ixz82TPJ8G",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2724,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results: the label photo is legible and reads model 64785, which is not on the recalled list (34692, 34785, 34790). Per policy, a legible label showing a non-recalled model means deny, regardless of the typed model. The typed model \"64785\" also mismatches (T2). Duplicates found none (T6), date code is in range (T3), purchase is in window at a listed retailer (T4), and no destruction photo is required (T5). The denial rests on the model mismatch."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DT6ZWXcgbNF3eFmCR4vViN",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 64785, which is not a recalled model. A legible label showing a non-recalled model means the unit is not part of this recall.",
+      "cites": [
+       "R:policy",
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The typed model also does not match any recalled model, so the model check confirms the mismatch.",
+      "cites": [
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, and the date code (10/2021), purchase window, and retailer (Amazon.com) would otherwise be acceptable, but they do not change the model denial.",
+      "cites": [
+       "T3",
+       "T4",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

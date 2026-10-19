@@ -1,0 +1,85 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: label legible and shows DR2A, a recalled model (R:models, T1, T2). Confirmed.\n- Serial: J0D11922104 begins with J0D, in range (R:serials, T3).\n- Date code: 2017 falls in 2017-2024 (R:date_codes, T4).\n- Purchase: Yamaha dealers is a listed retailer, 2024-10-03 is inside the window, and no receipt is required (R:sold_at, R:sold_window, T5).\n- Destruction photo: not required for this remedy (T6).\n- Duplicates: none found (T7), so no flag.\n- Refund: none requested (repair or replacement), so the $100 review threshold does not apply.\n\nEvery rule passes and no flag trigger applies, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2887,
+  "output_tokens": 777,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAfQ7ytRJjKDV4pQkG7Q",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3577,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: label legible and shows DR2A, a recalled model (R:models, T1, T2). Confirmed.\n- Serial: J0D11922104 begins with J0D, in range (R:serials, T3).\n- Date code: 2017 falls in 2017-2024 (R:date_codes, T4).\n- Purchase: Yamaha dealers is a listed retailer, 2024-10-03 is inside the window, and no receipt is required (R:sold_at, R:sold_window, T5).\n- Destruction photo: not required for this remedy (T6).\n- Duplicates: none found (T7), so no flag.\n- Refund: none requested (repair or replacement), so the $100 review threshold does not apply.\n\nEvery rule passes and no flag trigger applies, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01118Svb6pKJV6tySqvmyupR",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model DR2A, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial number J0D11922104 begins with J0D, which is in the recalled serial range.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The date code 2017 falls within the recalled model years 2017-2024.",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     },
+     {
+      "text": "The unit was bought from a listed retailer (Yamaha dealers) on 2024-10-03, inside the sale window, and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T5",
+       "T8"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for the repair remedy.",
+      "cites": [
+       "T6",
+       "T8"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account, so no duplicate flag applies.",
+      "cites": [
+       "T7",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No refund is requested, so the $100 value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

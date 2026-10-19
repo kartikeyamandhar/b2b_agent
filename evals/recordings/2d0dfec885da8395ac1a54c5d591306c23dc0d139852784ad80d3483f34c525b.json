@@ -1,0 +1,83 @@
+{
+ "text": "All checks pass: label legible showing REV 20 Kids Bike (recalled), serial ET22 prefix in range, date code 2022 in range, REI.com listed, purchase 2022-04-11 inside window, no destruction photo required, no duplicates, repair remedy (no refund over threshold).",
+ "usage": {
+  "input_tokens": 3003,
+  "output_tokens": 620,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeNJm7ZmkLYpktyqcwB",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2743,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass: label legible showing REV 20 Kids Bike (recalled), serial ET22 prefix in range, date code 2022 in range, REI.com listed, purchase 2022-04-11 inside window, no destruction photo required, no duplicates, repair remedy (no refund over threshold)."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01CdWmNJSbHczHeMCJqAEKgp",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows REV 20 Kids Bike, a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial number ET2213319691 begins with ET22, which is in the recalled serial range.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "Date code 2022 falls within the recalled model years 2022-2024.",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     },
+     {
+      "text": "Purchased at REI.com, a listed retailer, on 2022-04-11, which is inside the sale window 2022-03-01 to 2024-05-31; no receipt required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T5"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T7",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The requested remedy is repair or replacement with no refund, so the value threshold does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

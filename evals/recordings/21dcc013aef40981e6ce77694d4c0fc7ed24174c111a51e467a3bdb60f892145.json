@@ -1,0 +1,68 @@
+{
+ "text": "The model is confirmed as recalled, and the purchase and duplicate checks are clean. The destruction photo does not show the required cut cord, so the claim needs more information.",
+ "usage": {
+  "input_tokens": 3495,
+  "output_tokens": 522,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB46JjULNJWan8wBPSub",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2520,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed as recalled, and the purchase and duplicate checks are clean. The destruction photo does not show the required cut cord, so the claim needs more information."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0118EyKkxqb5XTgstCfVvA4K",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model KY-318B, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase is from ALDI, a listed retailer, dated 2016-06-07, which is inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the cooker with its power cord intact and no visible cut. The recall requires the unplugged power cord to be cut, so the destruction requirement is not yet met.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "The serial check was skipped because the program has no serial rule, so it does not affect the outcome.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo showing the unplugged power cord of the cooker after it has been cut. The current photo shows the cord intact.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

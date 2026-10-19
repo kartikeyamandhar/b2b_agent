@@ -1,0 +1,67 @@
+{
+ "text": "The policy puts flag first: the label photo is shared with another claim (T3), so this claim must be flagged regardless of the other checks.",
+ "usage": {
+  "input_tokens": 3830,
+  "output_tokens": 519,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3r23yesRJ2fpGcu4vj",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2714,
+ "content": [
+  {
+   "type": "text",
+   "text": "The policy puts flag first: the label photo is shared with another claim (T3), so this claim must be flagged regardless of the other checks."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01TduA2ZSq8iVC3J3ZFmwdqq",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo is identical (same sha256) to a photo on another claim in the program, which is a duplicate-claim signal requiring review.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo reads model 'REV 12 Kids Bike', which is a recalled model, and the typed model 'REV 16 Kids Bike' is also recalled, so the model is confirmed either way.",
+      "cites": [
+       "T1",
+       "T6",
+       "T7",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The label's serial reads 'QQ52456269', which is not in the recalled ranges, while the typed serial 'ET2224893099' is in range; the mismatch needs review together with the duplicate.",
+      "cites": [
+       "T1",
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The date code 2022 is within the recalled years, and the REI purchase on 2024-04-04 is within the sale window and at a listed retailer; no receipt is required.",
+      "cites": [
+       "T2",
+       "T5",
+       "R:date_codes",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

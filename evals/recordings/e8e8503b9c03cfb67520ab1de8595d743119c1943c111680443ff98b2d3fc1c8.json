@@ -1,0 +1,69 @@
+{
+ "text": "The label is legible and shows MK04, which is a recalled model. The serial QQ38160549 does not start with \"BN\", so it is outside the recalled serial range. Under the policy, that makes the claim a deny. No duplicates were found, the purchase is valid, and the date code is in range, but the serial rule controls the outcome.",
+ "usage": {
+  "input_tokens": 3664,
+  "output_tokens": 556,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3XSvfxzidDgzwR9nvz",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2449,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows MK04, which is a recalled model. The serial QQ38160549 does not start with \"BN\", so it is outside the recalled serial range. Under the policy, that makes the claim a deny. No duplicates were found, the purchase is valid, and the date code is in range, but the serial rule controls the outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QAjf23DnyxVFsBQJxjNoda",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number QQ38160549 does not start with \"BN\", so it is outside the recalled serial ranges. Under the serial rule, this is a denial.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code June 2025 is manufactured prior to July 2025, so it is within the recalled range. This does not offset the serial result.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase at Amazon.com on 2025-05-14 is within the sale window and from a listed retailer, and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim, so no flag applies.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,60 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3716,
+  "output_tokens": 408,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3V1yRzLoSZfpwQiJYo",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2174,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01KKPw8kt98UsiXLS3uM8z79",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model DR2E, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial J0E3121591 falls in a recalled range and the 2017 date code is within the recalled model years, so both match the recall.",
+      "cites": [
+       "R:serials",
+       "R:date_codes",
+       "T4",
+       "T5"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2018-03-02 is before the sale window, which opens 2018-06-01. The purchase is therefore not eligible, even though the retailer (Yamaha dealers) is on the list.",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

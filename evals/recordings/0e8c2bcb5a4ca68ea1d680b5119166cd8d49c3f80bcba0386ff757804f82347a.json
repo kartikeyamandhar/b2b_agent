@@ -1,0 +1,66 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3558,
+  "output_tokens": 474,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4A5BWMXGTrDuKYmYmf",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2160,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01BLev2WQfGQVPP7UWrLYN6w",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program (c02b790b-365e-5529-aa5e-52f3a264772b) shares this claim's address, so the claim is flagged for review under the duplicate rule.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number BN2502A09917 starts with BN and is in the recalled range.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The date code 02/2025 is before July 2025, so it is within the recalled date codes.",
+      "cites": [
+       "T5",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase date of 2025-05-03 is inside the sale window, but the retailer eBay is not on the list of sellers covered by the program. Retailer eBay is not listed, so the purchase cannot be confirmed as an eligible sale.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

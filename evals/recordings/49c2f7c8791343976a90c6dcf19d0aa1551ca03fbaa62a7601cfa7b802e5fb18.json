@@ -1,0 +1,77 @@
+{
+ "text": "Checking the results against the policy:\n\n- Duplicates: T6 found no matches, so no flag.\n- Model: T1 reads the label as legible with model B0726Y, which is recalled (T2 match). Confirmed.\n- Date code: T3 shows 8/21 is in range.\n- Serial: the typed serial SN30299524 is present; the rules set no serial range, so it doesn't apply.\n- Purchase: Fred Meyer is listed (T4), the date 2022-05-15 is inside the window, and no receipt is required.\n- Destruction: required by R:destruction. T5 reports the destruction photo does not clearly show cut straps (confidence 0.6, complies false). Per FAQ faq#2 and the policy, a destruction photo that does not show the instructed destruction is asked for again, so this needs_info.\n\nThe outcome is needs_info: ask for a new destruction photo showing the helmet with its straps cut off.",
+ "usage": {
+  "input_tokens": 2931,
+  "output_tokens": 856,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB377JYYQjMGjxF54zvu",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3950,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Duplicates: T6 found no matches, so no flag.\n- Model: T1 reads the label as legible with model B0726Y, which is recalled (T2 match). Confirmed.\n- Date code: T3 shows 8/21 is in range.\n- Serial: the typed serial SN30299524 is present; the rules set no serial range, so it doesn't apply.\n- Purchase: Fred Meyer is listed (T4), the date 2022-05-15 is inside the window, and no receipt is required.\n- Destruction: required by R:destruction. T5 reports the destruction photo does not clearly show cut straps (confidence 0.6, complies false). Per FAQ faq#2 and the policy, a destruction photo that does not show the instructed destruction is asked for again, so this needs_info.\n\nThe outcome is needs_info: ask for a new destruction photo showing the helmet with its straps cut off."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01KorYy9unJYpmKJRzW5ct1v",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model B0726Y, a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The date code 8/21 is within the recalled range (August 2021 or earlier).",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Fred Meyer is a listed retailer and the purchase date 2022-05-15 is inside the sale window; no receipt is required.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the helmet with its straps cut off, which the remedy requires. Per the program FAQ, a destruction photo that does not show the instructed destruction is asked for again.",
+      "cites": [
+       "T5",
+       "R:destruction",
+       "T7"
+      ]
+     },
+     {
+      "text": "The refund ($49.04) is under the review threshold, so no person review is triggered.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo of the destroyed helmet clearly showing the helmet with its straps cut off. The photo should not be the same as your label photo.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

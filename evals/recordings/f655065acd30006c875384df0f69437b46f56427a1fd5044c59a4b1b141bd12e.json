@@ -1,0 +1,66 @@
+{
+ "text": "Policy order: flag takes precedence. check_duplicates (T5) found a shared payout destination with claim ee07490c..., so the outcome is flag.",
+ "usage": {
+  "input_tokens": 2889,
+  "output_tokens": 544,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeU7qxE6HKwBgDfmY2C",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2923,
+ "content": [
+  {
+   "type": "text",
+   "text": "Policy order: flag takes precedence. check_duplicates (T5) found a shared payout destination with claim ee07490c..., so the outcome is flag."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01XXA3orYCHMeW9rPCyJf7HX",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim (ee07490c-a1d5-5051-ae7e-dbf8697b03e6) that shares this claim's payout destination. Under the program's duplicate rule, claims sharing a payout account must go to a person for review.",
+      "cites": [
+       "T5",
+       "R:policy",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model 98527, which is on the recalled list, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number SN55682070 is provided and the program has no serial range rule that would deny it; the destruction photo shows the cut power cord as instructed.",
+      "cites": [
+       "T1",
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The purchase date of 2019-03-18 is inside the sale window. The retailer, Corner Hardware Co, is not on the ALDI list, but the FAQ allows owners from unlisted stores to proceed with proof of ownership, and no receipt is required here.",
+      "cites": [
+       "T3",
+       "R:sold_window",
+       "R:sold_at",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

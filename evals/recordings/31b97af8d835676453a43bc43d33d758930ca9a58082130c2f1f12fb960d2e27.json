@@ -1,0 +1,70 @@
+{
+ "text": "Under the policy, a store not on the list is not a denial. The claimant is asked for proof of ownership. The label confirms the recalled model and a recalled date code, there are no duplicates, and the purchase date is inside the window. The receipt was attached, but the check says receipts are not required for this claim. The outcome is needs_info, asking the claimant to confirm the retailer and provide proof of ownership.",
+ "usage": {
+  "input_tokens": 4362,
+  "output_tokens": 766,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3f3dvNzRH6j9HLw9S3",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3955,
+ "content": [
+  {
+   "type": "text",
+   "text": "Under the policy, a store not on the list is not a denial. The claimant is asked for proof of ownership. The label confirms the recalled model and a recalled date code, there are no duplicates, and the purchase date is inside the window. The receipt was attached, but the check says receipts are not required for this claim. The outcome is needs_info, asking the claimant to confirm the retailer and provide proof of ownership."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QeYogjYbr1FZTPxCNmmGBG",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model, so the model is confirmed even though the typed model matches.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The label's date code 07/22 NH matches one of the recalled date codes.",
+      "cites": [
+       "R:date_codes",
+       "T1"
+      ]
+     },
+     {
+      "text": "The purchase date 2023-05-20 is inside the sale window, but Boot Barn is not on the list of sellers. Under the claims FAQ, a buyer from a store not on the list is asked for proof of ownership rather than denied.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T6"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The refund is not requested (repair or replacement), so the value threshold does not apply. The remedy is replacement, and no destruction photo is required by the rules provided.",
+      "cites": [
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": "Thank you for your claim. The boot model and date code on your label match the recall, but Boot Barn is not one of the retailers named in this recall. Please send proof of ownership, such as a receipt or order record showing the boots were bought from an approved seller (Grainger, Safety Shoes Distributors, Saf-Gard Safety Shoe Company, grainger.com, or justinboots.com), or a note explaining how you came to own the boots (for example, bought secondhand or received as a gift).",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

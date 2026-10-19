@@ -1,0 +1,61 @@
+{
+ "text": "The label is legible and shows a recalled model, so the model is confirmed. The purchase date of 2006-06-16 is before the sale window that opens 2006-10-01, which makes the claim ineligible. I'm recording the denial now.",
+ "usage": {
+  "input_tokens": 3451,
+  "output_tokens": 445,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Hvkr2hAZiUyLiE9NB",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2306,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows a recalled model, so the model is confirmed. The purchase date of 2006-06-16 is before the sale window that opens 2006-10-01, which makes the claim ineligible. I'm recording the denial now."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_011vPm1tjJAtp7fC2ZRwcDMo",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model P1410-P, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2006-06-16 is before the program's sale window, which begins 2006-10-01. A purchase outside the window is ineligible.",
+      "cites": [
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The retailer (walmart.com) is on the sold-at list, but that does not cure the purchase date falling before the sale window.",
+      "cites": [
+       "R:sold_at",
+       "T2"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

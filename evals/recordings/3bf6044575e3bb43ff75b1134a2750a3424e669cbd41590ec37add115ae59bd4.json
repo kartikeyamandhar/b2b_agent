@@ -1,0 +1,60 @@
+{
+ "text": "Applying the policy in order: flag takes precedence. check_duplicates (T5) found a shared payout destination with another claim, so the outcome is flag. The label reading (T1) is legible and shows KY-311A, which is not on the recalled list (T2, R:models), so the unit is not part of the recall, which would otherwise be a deny. Flag comes first in the policy's precedence, so the claim goes to a person for review.",
+ "usage": {
+  "input_tokens": 2908,
+  "output_tokens": 547,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeULr3L9oLaHa8adR2h",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3418,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: flag takes precedence. check_duplicates (T5) found a shared payout destination with another claim, so the outcome is flag. The label reading (T1) is legible and shows KY-311A, which is not on the recalled list (T2, R:models), so the unit is not part of the recall, which would otherwise be a deny. Flag comes first in the policy's precedence, so the claim goes to a person for review."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01SLUbrV7CWqWGUmnwqBDfed",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The claim shares a payout destination with another claim (claim 9aee5de5-0260-5fa7-8d59-043085f8984c), so it must be sent to a person for duplicate review.",
+      "cites": [
+       "T5",
+       "R:policy",
+       "T6"
+      ]
+     },
+     {
+      "text": "The legible label photo reads model KY-311A, which is not on the recalled model list, so the unit does not appear to be part of this recall. This would be a denial on its own, and the reviewer should confirm it.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Other checks passed: the ALDI purchase date of 2016-07-21 is inside the sale window, no receipt is required, and the destruction photo shows a cut power cord.",
+      "cites": [
+       "T3",
+       "T4",
+       "R:sold_at",
+       "R:sold_window",
+       "R:destruction"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

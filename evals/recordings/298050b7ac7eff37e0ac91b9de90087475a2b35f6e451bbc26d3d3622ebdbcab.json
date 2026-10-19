@@ -1,0 +1,60 @@
+{
+ "text": "Both checks returned the same mismatch. Looking at the recall list directly, PLGFMZ99GC does not match any listed pattern. The closest entry is PLEFMZ99GC*, which differs in the second letter (L vs. L... specifically \"PLG\" vs. \"PLE\"). The label reads \"PLGFMZ99GC\", and the recalled model is \"PLEFMZ99GC*\", so the label model is not recalled.\n\nThe label is legible and shows a model that is not on the recalled list, so under the policy the claim is denied.",
+ "usage": {
+  "input_tokens": 3859,
+  "output_tokens": 545,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3pYegkNj6G7DQ8t9aq",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2719,
+ "content": [
+  {
+   "type": "text",
+   "text": "Both checks returned the same mismatch. Looking at the recall list directly, PLGFMZ99GC does not match any listed pattern. The closest entry is PLEFMZ99GC*, which differs in the second letter (L vs. L... specifically \"PLG\" vs. \"PLE\"). The label reads \"PLGFMZ99GC\", and the recalled model is \"PLEFMZ99GC*\", so the label model is not recalled.\n\nThe label is legible and shows a model that is not on the recalled list, so under the policy the claim is denied."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0197m63gWES9NcH3Dx4iYVeQ",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PLGFMZ99GC, which is not a recalled model. The recalled list includes PLEFMZ99GC* but not PLGFMZ99GC.",
+      "cites": [
+       "T1",
+       "T5",
+       "T6",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial VF12204449 is within the recalled range, and the purchase at Sears on 2003-07-26 falls inside the sale window with a receipt present. These checks pass, but they do not cure the model mismatch.",
+      "cites": [
+       "T2",
+       "T4",
+       "R:serials",
+       "R:sold_at",
+       "R:sold_window",
+       "R:receipt"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.8
+   }
+  }
+ ]
+}

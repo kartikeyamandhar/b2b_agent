@@ -1,0 +1,29 @@
+{
+ "text": "The duplicate check found another claim sharing the same label photo, which triggers a flag under the policy and takes precedence over the other outcomes. I'll also check the model against the recalled list to complete the record.",
+ "usage": {
+  "input_tokens": 3365,
+  "output_tokens": 115,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3YToXkpGAodeY1tNMi",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1037,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing the same label photo, which triggers a flag under the policy and takes precedence over the other outcomes. I'll also check the model against the recalled list to complete the record."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Dji4StThVagSJjFj4PgT41",
+   "name": "check_model",
+   "input": {
+    "model_text": "200LX"
+   }
+  }
+ ]
+}

@@ -1,0 +1,77 @@
+{
+ "text": "The call failed validation because I left out two required fields. Resubmitting with the question for the claimant and a confidence value.",
+ "usage": {
+  "input_tokens": 3878,
+  "output_tokens": 623,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3B5ci9xw3cXpMne5cB",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2651,
+ "content": [
+  {
+   "type": "text",
+   "text": "The call failed validation because I left out two required fields. Resubmitting with the question for the claimant and a confidence value."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_013XNfZp8mNN7q7dBYzvh5fY",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model MK04, a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial number BN2501B08803 starts with BN, which is in the recalled range.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The date code 01/2025 is prior to July 2025, so it is within the recalled date codes.",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase date of 2025-03-09 falls inside the sale window, but the retailer Walmart.com is not on the list of sales channels. Under policy, an unlisted retailer requires proof of ownership rather than a denial.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "R:policy",
+       "T5",
+       "T8"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account, so no flag applies.",
+      "cites": [
+       "T7"
+      ]
+     },
+     {
+      "text": "The remedy is replacement, so no destruction photo is required.",
+      "cites": [
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your air purifier's label matches the recalled model, but the product was bought from Walmart.com, which is not one of the approved sellers for this recall. Please provide proof of ownership, such as the order confirmation or receipt showing the product, the date, and your name, so we can continue your replacement claim.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

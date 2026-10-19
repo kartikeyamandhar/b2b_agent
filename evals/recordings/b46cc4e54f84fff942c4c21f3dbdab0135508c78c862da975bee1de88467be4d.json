@@ -1,0 +1,62 @@
+{
+ "text": "The model is confirmed as recalled, but the purchase was made before the sale window, which is grounds for denial. The serial check was skipped, so it doesn't change the outcome.",
+ "usage": {
+  "input_tokens": 3680,
+  "output_tokens": 429,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3MUvhBUgLqWmJB5Rny",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 6719,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed as recalled, but the purchase was made before the sale window, which is grounds for denial. The serial check was skipped, so it doesn't change the outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01JPdEoQxV2EB54kCrRZS4AH",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 9421, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2023-02-26 is before the program's sale window of 2023-10-01 to 2024-05-31. Purchases before the window are denied, even though the retailer (Amazon.com) is listed.",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "T2"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The serial check returned skipped, so it was not used in this decision.",
+      "cites": [
+       "T4",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

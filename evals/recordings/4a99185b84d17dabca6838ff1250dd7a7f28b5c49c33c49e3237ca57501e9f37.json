@@ -1,0 +1,53 @@
+{
+ "text": "I'll start by reading the label photo, checking the purchase, checking for duplicates, and checking the destruction photo, since the claim needs all of these. I'm also checking the typed date code against the recall list, since that field was provided.",
+ "usage": {
+  "input_tokens": 2633,
+  "output_tokens": 231,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB48soMn6QYjA4qRQhRv",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2575,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll start by reading the label photo, checking the purchase, checking for duplicates, and checking the destruction photo, since the claim needs all of these. I'm also checking the typed date code against the recall list, since that field was provided."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01TiSNVeaxjRnW4j8xmcngE3",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Ab76VaLi4fXfr64vE2b2UP",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_018dzvmyKMNrVu1vGi8F4s6A",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01JRVt8yeoBNeWYatsN1qCb3",
+   "name": "check_destruction_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01K7uytsJSc6iFM4izT6tvW4",
+   "name": "check_date_code",
+   "input": {
+    "date_code": "2016-09"
+   }
+  }
+ ]
+}

@@ -1,0 +1,77 @@
+{
+ "text": "The call failed validation because two required fields were missing. I'll resubmit with the question for the claimant and a confidence value.",
+ "usage": {
+  "input_tokens": 3846,
+  "output_tokens": 624,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeKPq8Hji7Tcz2XwqLZ",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2661,
+ "content": [
+  {
+   "type": "text",
+   "text": "The call failed validation because two required fields were missing. I'll resubmit with the question for the claimant and a confidence value."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01XbHtzLWmgYp5nz45cRKxf2",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PA-10, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 2126 falls within the recalled range of 2126 to 2319.",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "The purchase date of 2022-03-04 is inside the sale window of 2021-06-01 to 2023-11-30.",
+      "cites": [
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "The retailer 'Corner Hardware Co' is not on the list of authorized sellers. Under the policy, an unlisted retailer is not denied; the claimant is asked for proof of ownership.",
+      "cites": [
+       "R:sold_at",
+       "R:policy",
+       "T4",
+       "T7"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account, so no flag applies.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The remedy is repair or replacement, so no destruction photo is required.",
+      "cites": [
+       "T5",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your unit's label shows a recalled model, but the store where you bought it (Corner Hardware Co) is not on the list of authorized sellers. Please send proof of ownership, such as a receipt, invoice, order confirmation, or other document showing your purchase or how you came to own the unit.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

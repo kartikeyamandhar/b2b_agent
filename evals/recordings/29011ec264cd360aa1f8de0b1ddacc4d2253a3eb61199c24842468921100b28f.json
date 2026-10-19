@@ -1,0 +1,66 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: label photo is legible and shows FCRE3052BB, a recalled model. Confirmed (T1, T2, R:models).\n- Serial: QQ11506623 is outside all recalled serial ranges (T3, R:serials). Policy says serial outside the recalled ranges is deny.\n- Date code: October 2023 is in range (T4, R:date_codes).\n- Purchase: Lowe's, 2023-10-17, inside the window and a listed retailer (T5, R:sold_at, R:sold_window).\n- Destruction photo: not required (T6). Receipt: not required (T5).\n- Duplicates: none (T7), so no flag.\n\nThe flag, deny, needs_info, approve order means the serial failure is decisive: no flag applies, and the serial rule produces a deny.",
+ "usage": {
+  "input_tokens": 3213,
+  "output_tokens": 661,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeHLyfo6TBFf1Rqbwbf",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2976,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: label photo is legible and shows FCRE3052BB, a recalled model. Confirmed (T1, T2, R:models).\n- Serial: QQ11506623 is outside all recalled serial ranges (T3, R:serials). Policy says serial outside the recalled ranges is deny.\n- Date code: October 2023 is in range (T4, R:date_codes).\n- Purchase: Lowe's, 2023-10-17, inside the window and a listed retailer (T5, R:sold_at, R:sold_window).\n- Destruction photo: not required (T6). Receipt: not required (T5).\n- Duplicates: none (T7), so no flag.\n\nThe flag, deny, needs_info, approve order means the serial failure is decisive: no flag applies, and the serial rule produces a deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01VfXe6wCGfLmKAyYV2UpH5G",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model FCRE3052BB, a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial number QQ11506623 falls outside all recalled serial number ranges, so the unit is not part of this recall.",
+      "cites": [
+       "T3",
+       "R:serials",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The date code (October 2023), retailer (Lowe's), and purchase date (2023-10-17) all meet the recall criteria.",
+      "cites": [
+       "T4",
+       "T5",
+       "R:date_codes",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not flagged for review.",
+      "cites": [
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

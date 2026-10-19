@@ -1,0 +1,69 @@
+{
+ "text": "The label model 98527 is confirmed as recalled, the retailer and purchase date fall within the window, there are no duplicates, and the destruction photo shows the cord cut. The serial is not a program rule, so no serial check is needed.",
+ "usage": {
+  "input_tokens": 3627,
+  "output_tokens": 538,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3dfriArFi5eDC7iyE5",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2596,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label model 98527 is confirmed as recalled, the retailer and purchase date fall within the window, there are no duplicates, and the destruction photo shows the cord cut. The serial is not a program rule, so no serial check is needed."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_015gSSVKT5dmawia8xvrzanr",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model 98527, which is a recalled model. The typed model 98S27 is a typo and does not change the result.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "ALDI is a listed retailer, and the purchase date of 2019-12-30 falls inside the sale window ending 2019-12-31. No receipt is required for this claim.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the power cord cleanly severed, which meets the required destruction of the unplugged power cord cut.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The program has no serial or date code rule, so those checks do not affect the outcome. The $40.00 refund is below the $100.00 review threshold.",
+      "cites": [
+       "R:value_threshold",
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

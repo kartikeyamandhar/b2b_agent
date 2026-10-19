@@ -1,0 +1,71 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 2719,
+  "output_tokens": 471,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAePTRHb1goSNtTTMmX8",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 8842,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_017ba6HQGs7htcXnkDUYwjvV",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 9421, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase date of 2024-03-15 falls inside the sale window and the retailer, Keystone Automotive Operations Inc., is on the list of sellers; no receipt is required.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for the repair or replacement remedy.",
+      "cites": [
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial number is provided and no serial or date code range rule applies to this program, so it does not block approval.",
+      "cites": [
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The requested remedy is repair or replacement, not a refund, so the value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

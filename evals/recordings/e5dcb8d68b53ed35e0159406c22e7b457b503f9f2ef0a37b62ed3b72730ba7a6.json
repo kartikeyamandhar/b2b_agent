@@ -1,0 +1,69 @@
+{
+ "text": "The model is confirmed, but the purchase is outside the sale window.",
+ "usage": {
+  "input_tokens": 3695,
+  "output_tokens": 459,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3VeSfUmHRiNHEbX95M",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2426,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed, but the purchase is outside the sale window."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_018cwWXhB6CSZj6kcw1T7umQ",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model DR2E, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial J0E25826544 begins with J0E, which is within the recalled serial ranges.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code 2017 is within the recalled model year range 2017-2024.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2017-11-25 is before the sale window of 2018-06-01 to 2025-07-31. Purchases before the window are denied, even though the retailer (Yamaha dealers) is eligible.",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.92
+   }
+  }
+ ]
+}

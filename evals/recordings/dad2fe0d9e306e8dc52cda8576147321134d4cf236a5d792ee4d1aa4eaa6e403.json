@@ -1,0 +1,54 @@
+{
+ "text": "Applying the policy in order: flag comes first. T6 shows a same_payout match with another claim, so the claim must be flagged for review regardless of the other checks.",
+ "usage": {
+  "input_tokens": 2895,
+  "output_tokens": 408,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeKYrM17X6FAMVUjPug",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2413,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: flag comes first. T6 shows a same_payout match with another claim, so the claim must be flagged for review regardless of the other checks."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Wc4opaPKJwhYWqJm8yYq1N",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim (17782130-7f90-520f-abd4-395c0492f05f) that shares the same payout destination. Per policy, claims sharing a payout account are sent to a person for review together with the matched claim.",
+      "cites": [
+       "T6",
+       "R:policy",
+       "T7"
+      ]
+     },
+     {
+      "text": "The other eligibility checks passed: the legible label shows PA-10, a recalled model; the date code 2126 is in range; the purchase date is inside the sale window; and no destruction photo is required. These results do not override the duplicate flag.",
+      "cites": [
+       "T1",
+       "T2",
+       "T3",
+       "T4",
+       "T5",
+       "R:models",
+       "R:date_codes",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

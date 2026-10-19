@@ -1,0 +1,70 @@
+{
+ "text": "The model is confirmed. The purchase date is the deciding issue.",
+ "usage": {
+  "input_tokens": 3725,
+  "output_tokens": 466,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB41E7mDonjVthJg4NHM",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2158,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed. The purchase date is the deciding issue."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01XGUsJp6GaYpFRyEmpgXWDw",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The claimed purchase date, 2021-10-08, is before the program's sale window (2022-08-01 to 2024-07-31), so the unit was not sold within the recalled sale period.",
+      "cites": [
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows recalled model LXT-CL-1.0, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T7"
+      ]
+     },
+     {
+      "text": "The retailer, Salon Centric, is on the program's list, so the retailer is not the reason for denial.",
+      "cites": [
+       "R:sold_at",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 0722 is within the recalled range, and no duplicate claims were found.",
+      "cites": [
+       "R:date_codes",
+       "T6",
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the plug cut off as the recall requires, so destruction is not the reason for denial.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,73 @@
+{
+ "text": "I missed required fields. Resubmitting with reasons, the claimant question, and confidence.",
+ "usage": {
+  "input_tokens": 3551,
+  "output_tokens": 621,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3BQTYKFpLJ3dFEHavR",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3045,
+ "content": [
+  {
+   "type": "text",
+   "text": "I missed required fields. Resubmitting with reasons, the claimant question, and confidence."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01VgyL8CVj6PpWgasxBqhtRH",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "No duplicate claims share a photo, address, email, serial, or payout account.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows SE4570, a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The typed date code 07/22 NH matches the recalled date codes as read from the label, so it is not outside the recalled range.",
+      "cites": [
+       "T1",
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase date 2023-05-20 is inside the sale window, but the retailer Boot Barn is not on the list of stores where the product was sold. Per policy, an unlisted retailer requires proof of ownership rather than denial.",
+      "cites": [
+       "T4",
+       "T7",
+       "R:sold_at",
+       "R:sold_window",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy, and no refund is requested, so the value threshold does not apply.",
+      "cites": [
+       "T5",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your boot's model and date code match the recall, and your purchase date is within the sale period. However, the store you bought from, Boot Barn, is not on the list of stores that sold this product. Please provide proof of ownership, such as the receipt or order confirmation showing your purchase of this boot (or, if you received it secondhand or as a gift, a statement saying so).",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

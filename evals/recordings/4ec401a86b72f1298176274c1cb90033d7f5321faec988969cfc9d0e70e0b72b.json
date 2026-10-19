@@ -1,0 +1,61 @@
+{
+ "text": "The duplicate check found another claim sharing this serial number, which triggers a flag under the policy regardless of the other checks. I'm recording the decision now.",
+ "usage": {
+  "input_tokens": 3367,
+  "output_tokens": 403,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3G7BMwm8wFgv5244cQ",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2040,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing this serial number, which triggers a flag under the policy regardless of the other checks. I'm recording the decision now."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01CfBNvAExYisxFxHqsE9UDX",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program shares this serial number, so the claim is flagged for review under the duplicate rule.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model A17A1, which is a recalled model.",
+      "cites": [
+       "T1",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The retailer kickstarter.com is on the sold-at list and the purchase date of 2023-09-22 is inside the sale window; no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The serial check was skipped by the tool, so no serial verdict was recorded.",
+      "cites": [
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

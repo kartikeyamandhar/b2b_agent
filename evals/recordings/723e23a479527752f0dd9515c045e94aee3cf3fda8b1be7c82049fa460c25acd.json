@@ -1,0 +1,72 @@
+{
+ "text": "Working through the policy:\n\n- Flag: check_duplicates (T7) found no matching photo, address, email, serial, or payout account. Not triggered.\n- Model: The label photo is legible and reads SE4570, a recalled model (T1, T3). The typed \"SE457O\" is a typo, and the label confirms the model per the FAQ (T8). Model confirmed.\n- Serial: Program has no serial rule for this recall; not applicable.\n- Date code: The label reads 08/22 NH, which is within the recalled codes (T1). The typed value \"08/22 NH\" is the same. T4 returned \"unparsed\" from the tool, but the text matches a recalled code exactly, so this is satisfied.\n- Purchase: Retailer Saf-Gard Safety Shoe Company is on the list (T5). Date 2023-02-06 is inside the window 2022-09-01 to 2023-09-30 (T5). Receipt not required (T5).\n- Destruction: Not required for this remedy (T6).\n- Value: Repair or replacement, no refund requested, so the threshold does not apply.\n\nAll checks pass, so the claim is approved for replacement.",
+ "usage": {
+  "input_tokens": 2858,
+  "output_tokens": 861,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3B2Shn1j27vVLon2b4",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4028,
+ "content": [
+  {
+   "type": "text",
+   "text": "Working through the policy:\n\n- Flag: check_duplicates (T7) found no matching photo, address, email, serial, or payout account. Not triggered.\n- Model: The label photo is legible and reads SE4570, a recalled model (T1, T3). The typed \"SE457O\" is a typo, and the label confirms the model per the FAQ (T8). Model confirmed.\n- Serial: Program has no serial rule for this recall; not applicable.\n- Date code: The label reads 08/22 NH, which is within the recalled codes (T1). The typed value \"08/22 NH\" is the same. T4 returned \"unparsed\" from the tool, but the text matches a recalled code exactly, so this is satisfied.\n- Purchase: Retailer Saf-Gard Safety Shoe Company is on the list (T5). Date 2023-02-06 is inside the window 2022-09-01 to 2023-09-30 (T5). Receipt not required (T5).\n- Destruction: Not required for this remedy (T6).\n- Value: Repair or replacement, no refund requested, so the threshold does not apply.\n\nAll checks pass, so the claim is approved for replacement."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0128KAMiygYNyxaAj4SSoeno",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model. The typed model 'SE457O' is a typo, and the FAQ confirms the model from a clear label photo.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T3",
+       "T8",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label shows date code 08/22 NH, which is one of the recalled date codes.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T8"
+      ]
+     },
+     {
+      "text": "The retailer, Saf-Gard Safety Shoe Company, is on the sold-at list, and the purchase date of 2023-02-06 falls inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T5"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial, or payout account.",
+      "cites": [
+       "T7"
+      ]
+     },
+     {
+      "text": "Destruction photo is not required for this remedy, and the remedy is repair or replacement with no refund, so the value threshold does not apply.",
+      "cites": [
+       "T6",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

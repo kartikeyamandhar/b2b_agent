@@ -1,0 +1,71 @@
+{
+ "text": "The FAQ says a retailer not on the list makes the claim eligible but requires proof of ownership, and the receipt is not required for this claim. The claimant supplied a receipt photo, and the purchase is inside the window. Since the retailer is not on the list, the policy asks for proof of ownership, which is the receipt. I'll send this to needs_info so the claimant can confirm the purchase source.",
+ "usage": {
+  "input_tokens": 4612,
+  "output_tokens": 758,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4F4CrsrBjp43nHx87Z",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 4121,
+ "content": [
+  {
+   "type": "text",
+   "text": "The FAQ says a retailer not on the list makes the claim eligible but requires proof of ownership, and the receipt is not required for this claim. The claimant supplied a receipt photo, and the purchase is inside the window. Since the retailer is not on the list, the policy asks for proof of ownership, which is the receipt. I'll send this to needs_info so the claimant can confirm the purchase source."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01GUMRUPzkmGfC96BwTwDtED",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number BN87406677 starts with BN and the date code June 2025 is prior to July 2025, so both are within the recalled ranges.",
+      "cites": [
+       "R:serials",
+       "R:date_codes",
+       "T4",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase date of 2025-02-20 falls inside the sale window, but the retailer Corner Hardware Co is not on the list of sales channels (Amazon.com, Shopify.com, TEMU.com, TikTok.com).",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "T2"
+      ]
+     },
+     {
+      "text": "Per the claims FAQ, a purchase from a store not on the list is still eligible but the claimant must provide proof of ownership instead of being denied. The claim cannot be approved until that is provided.",
+      "cites": [
+       "R:policy",
+       "T7"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your unit's model, serial, and date code match the recall, and your purchase date is within the sale window. However, Corner Hardware Co is not one of the listed sellers (Amazon.com, Shopify.com, TEMU.com, or TikTok.com). Please provide proof of ownership, such as the receipt showing the seller name, date, and item, or another document showing where and when you bought the air purifier.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

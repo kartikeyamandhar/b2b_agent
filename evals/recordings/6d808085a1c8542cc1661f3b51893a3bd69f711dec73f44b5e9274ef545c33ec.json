@@ -1,0 +1,68 @@
+{
+ "text": "The model is confirmed as recalled. The purchase is valid, and there are no duplicates. The destruction photo does not show the required front and rear marking, so the claim needs more information before a refund.",
+ "usage": {
+  "input_tokens": 3617,
+  "output_tokens": 585,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3uSNoAYmdBMGVVSwn4",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2735,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed as recalled. The purchase is valid, and there are no duplicates. The destruction photo does not show the required front and rear marking, so the claim needs more information before a refund."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01XFHULad7HYgP8gavJ4iipE",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model AD10009BE, which is a recalled model, and the serial on the label matches the typed serial.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase is from Amazon.com, a listed retailer, dated 2023-11-29, which falls inside the sale window. No receipt is required for this retailer.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the product with RECALLED on its front, but the rule requires the word on both the front and rear of the seatback, and the rear is not visible. The destruction does not meet the instructed method yet.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "The refund of $125.63 is over the $100 threshold, so a person will review it after the destruction proof is resolved.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo of the recalled seat that clearly shows the word RECALLED written in large letters on both the front and the rear of the seatback, written with a marker.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

@@ -1,0 +1,57 @@
+{
+ "text": "The model matches, the date code and purchase are in order, but a same-photo duplicate was found, so the claim must be flagged.",
+ "usage": {
+  "input_tokens": 3481,
+  "output_tokens": 416,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3fQp9cuW6NJPpAvcFD",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2099,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model matches, the date code and purchase are in order, but a same-photo duplicate was found, so the claim must be flagged."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01VYRwaXKC95JkoqGoF1sq7j",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim (155ee9be-99a3-52b2-a86e-9134bb8cb819) that shares this claim's label photo. Under the policy, any shared photo requires a flag.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label is legible and shows model SE4570, which is a recalled model, and the typed date code 08/22 NH is also recalled.",
+      "cites": [
+       "T1",
+       "T4",
+       "R:models",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The retailer justinboots.com is on the sold-at list and the purchase date 2023-03-11 falls inside the sale window. No receipt is required for this claim.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

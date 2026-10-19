@@ -1,0 +1,70 @@
+{
+ "text": "The model is confirmed. The label date code 08/22 NH is in the recalled list, and the date code tool's \"unparsed\" verdict is a parsing issue, not a mismatch. The retailer is listed, the purchase falls inside the window, there are no duplicates, and no receipt is required. The remedy is repair or replacement, so no destruction photo is needed and there is no refund over the threshold.",
+ "usage": {
+  "input_tokens": 3585,
+  "output_tokens": 599,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3exKhVrxmPtcmi5aZN",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3523,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed. The label date code 08/22 NH is in the recalled list, and the date code tool's \"unparsed\" verdict is a parsing issue, not a mismatch. The retailer is listed, the purchase falls inside the window, there are no duplicates, and no receipt is required. The remedy is repair or replacement, so no destruction photo is needed and there is no refund over the threshold."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_011Lpskm1YqKx2JU2yQu3fAg",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The label date code reads 08/22 NH, which is one of the recalled date codes. The date code tool returned 'unparsed', but the label text matches the recalled value exactly.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T4"
+      ]
+     },
+     {
+      "text": "The retailer, Saf-Gard Safety Shoe Company, is on the sold-at list, and the purchase date of 2023-02-06 falls inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The remedy is repair or replacement, so no refund is requested and the value threshold does not apply. No serial check is required by the program rules.",
+      "cites": [
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

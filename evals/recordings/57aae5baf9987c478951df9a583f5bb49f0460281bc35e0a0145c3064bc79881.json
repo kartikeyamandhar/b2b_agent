@@ -1,0 +1,62 @@
+{
+ "text": "The model is confirmed as recalled. The remedy requires a destruction photo, and none was provided, so the claim needs more information.",
+ "usage": {
+  "input_tokens": 3569,
+  "output_tokens": 482,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3g51JXXXeAcp7Co8Tg",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3127,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed as recalled. The remedy requires a destruction photo, and none was provided, so the claim needs more information."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01RnDmekLsdK7jepQZz3MKqg",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model AD10014BE, which is on the recalled models list, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase at Amazon.com on 2024-04-09 falls inside the sale window and the retailer is listed; no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The remedy requires writing RECALLED in large letters on the front and rear of the seatback with a marker, and no destruction photo was provided. The destruction photo is missing.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a photo showing the seat with 'RECALLED' written in large letters with a marker on both the front and the rear of the seatback. The photo must not be the label photo.",
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,61 @@
+{
+ "text": "The label is legible and shows B0726Y, which is recalled. The date code 8/22 is outside the recalled range (August 2021 or earlier), and the serial check was skipped because the program has no serial rule. The destruction photo does not show the strap cutting the recall requires. Since the date code is out of range, the claim is denied on that basis regardless of the destruction result.",
+ "usage": {
+  "input_tokens": 3697,
+  "output_tokens": 520,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3FURGu54gcDygkomXx",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2516,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows B0726Y, which is recalled. The date code 8/22 is outside the recalled range (August 2021 or earlier), and the serial check was skipped because the program has no serial rule. The destruction photo does not show the strap cutting the recall requires. Since the date code is out of range, the claim is denied on that basis regardless of the destruction result."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0199m94PS9nZDHQ1DwXQWygc",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model B0726Y, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The date code on the label is 8/22, which is after the recalled range of August 2021 (8/21) or earlier, so the helmet is not within the recall.",
+      "cites": [
+       "R:date_codes",
+       "T6"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the required destruction (cutting off the straps); the product appears intact. This is an additional deficiency.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "Retailer (Fred Meyer) and purchase date (2023-10-31) are within the listed retailers and sale window, and there are no duplicate claims, so those checks do not change the outcome.",
+      "cites": [
+       "T2",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

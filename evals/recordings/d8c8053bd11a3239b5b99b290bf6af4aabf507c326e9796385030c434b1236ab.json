@@ -1,0 +1,72 @@
+{
+ "text": "All checks pass: the legible label shows a recalled model (GLEFM97GPW*), the serial is in range, the Sears purchase on 2007-10-21 falls within the sale window and a receipt is present, and no duplicate claims exist. Nothing triggers flag, deny, or needs_info, so I'm approving. The refund type is repair or replacement, so the value threshold does not apply.",
+ "usage": {
+  "input_tokens": 3872,
+  "output_tokens": 614,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3LEM5WyTrsvjkbCNi9",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3257,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass: the legible label shows a recalled model (GLEFM97GPW*), the serial is in range, the Sears purchase on 2007-10-21 falls within the sale window and a receipt is present, and no duplicate claims exist. Nothing triggers flag, deny, or needs_info, so I'm approving. The refund type is repair or replacement, so the value threshold does not apply."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01L4SFWYdgXcuwX9cRuS7Jvb",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model GLEFM97GPWA1, which matches the recalled model series GLEFM97GPW*.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number VF12265521 is within the recalled range VF122xxxxx - VF334xxxxx and matches the label reading.",
+      "cites": [
+       "T1",
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The purchase was from Sears, a listed retailer, on 2007-10-21, which is inside the sale window 2001-06-01 to 2009-08-31, and a receipt is present.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window",
+       "R:receipt"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The requested remedy is repair or replacement, not a refund, so the refund value threshold review does not apply, and no destruction photo is required.",
+      "cites": [
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

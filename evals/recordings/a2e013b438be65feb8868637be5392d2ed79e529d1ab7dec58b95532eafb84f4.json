@@ -1,0 +1,70 @@
+{
+ "text": "The call failed validation because I left out required fields. Resubmitting with reasons, the question for the claimant, and confidence.",
+ "usage": {
+  "input_tokens": 3621,
+  "output_tokens": 671,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeT6HfJv3jAErWecpoj",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 6766,
+ "content": [
+  {
+   "type": "text",
+   "text": "The call failed validation because I left out required fields. Resubmitting with reasons, the question for the claimant, and confidence."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01RvJmMDQaV5hAsFQgKSR4sv",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows BB4640BL, a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase date of 2024-04-01 is inside the sale window. The retailer, Corner Hardware Co, is not on the Amazon.com list, so proof of ownership is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3",
+       "T6"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the required destruction. The instruction calls for RECALLED written in large letters on the front and rear of the seatback with a marker. The rear is not visible, and the check confidence is only 0.45.",
+      "cites": [
+       "R:destruction",
+       "T4",
+       "T6"
+      ]
+     },
+     {
+      "text": "The refund of $167.60 is over the $100 threshold, so a person will review it after approval. This does not change the outcome.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Thank you for your claim. Before we can process it, please send us: (1) proof of ownership showing where you bought the unit, since Corner Hardware Co is not one of the stores that sold this product in the recall, and the receipt you attached may not show that; and (2) a new destruction photo showing \"RECALLED\" written in large letters with a marker on both the front and the rear of the seatback. The current photo shows the word on the face of the device, and the rear is not visible.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

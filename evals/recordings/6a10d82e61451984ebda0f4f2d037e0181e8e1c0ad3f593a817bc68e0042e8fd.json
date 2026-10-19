@@ -1,0 +1,56 @@
+{
+ "text": "Both the duplicate and the model result are settled. The duplicate rule ranks first in the policy, so this claim gets flagged.",
+ "usage": {
+  "input_tokens": 3539,
+  "output_tokens": 394,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3HadtP4ja9UxN8pspk",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1971,
+ "content": [
+  {
+   "type": "text",
+   "text": "Both the duplicate and the model result are settled. The duplicate rule ranks first in the policy, so this claim gets flagged."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_012UwcxXxsys4tr3wZ6q1gts",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program shares this claim's serial number, which triggers the duplicate flag.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The legible label reads model P4410-P, which is not a recalled model (recalled: P1410, P1410-P, P1411, P1411-P), so the model would otherwise lead to denial.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The retailer Corner Hardware Co is not on the sold-at list (Amazon, Walmart). The purchase date is inside the sale window, and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

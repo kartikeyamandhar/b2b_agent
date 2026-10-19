@@ -1,0 +1,70 @@
+{
+ "text": "The policy requires a receipt or other proof of purchase, and the claim has no receipt. The rules say a required receipt that is missing leads to needs_info, so I'll ask the claimant for proof of purchase.",
+ "usage": {
+  "input_tokens": 4607,
+  "output_tokens": 556,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4DwJLjLhHakcTg1WaJ",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2759,
+ "content": [
+  {
+   "type": "text",
+   "text": "The policy requires a receipt or other proof of purchase, and the claim has no receipt. The rules say a required receipt that is missing leads to needs_info, so I'll ask the claimant for proof of purchase."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01SuJHGSEVRmBZDkCMJS6AQn",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 790.990141A1, which matches the recalled 790.990141* model family.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The typed serial VF12298621 falls within the recalled range VF122xxxxx - VF334xxxxx.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The claimed purchase at Sears on 2008-08-19 is inside the sale window and from a listed retailer.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "A receipt is required, and none was provided. Without it, the claim cannot be approved.",
+      "cites": [
+       "T2",
+       "R:receipt",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your unit appears to be covered by the recall, but the claim is missing a required receipt. Please send a receipt or other proof of purchase from Sears dated on or around 2008-08-19 showing the range was bought there.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

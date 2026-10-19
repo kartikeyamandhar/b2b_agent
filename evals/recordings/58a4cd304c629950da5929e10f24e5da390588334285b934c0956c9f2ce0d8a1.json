@@ -1,0 +1,64 @@
+{
+ "text": "Key facts: the duplicate check (T5) found a shared payout account with another claim, which triggers a flag under the policy and takes precedence over the other outcomes. The label is legible and shows recalled model 9421, serial matches, purchase is inside the window at a listed retailer, and no destruction photo is required. The only triggering rule is the duplicate payout match, so the outcome is flag.",
+ "usage": {
+  "input_tokens": 2774,
+  "output_tokens": 562,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAePTSGmqvzZ8x5xwHNW",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 8842,
+ "content": [
+  {
+   "type": "text",
+   "text": "Key facts: the duplicate check (T5) found a shared payout account with another claim, which triggers a flag under the policy and takes precedence over the other outcomes. The label is legible and shows recalled model 9421, serial matches, purchase is inside the window at a listed retailer, and no destruction photo is required. The only triggering rule is the duplicate payout match, so the outcome is flag."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_011K5kMM8JGxZEek9VQm9ALj",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim (c16d467e-40ec-5177-8baf-04ec11c1738b) that shares the same payout account. Under the claim policy, any shared payout account sends the claim to a person for review together with the matched claim.",
+      "cites": [
+       "R:policy",
+       "T5",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows recalled model 9421, so the model is confirmed even though the typed model matches as well.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase date of 2024-04-29 is inside the sale window and the retailer is on the listed retailers, so the purchase checks pass without a receipt.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The serial number SN75424458 on the label matches the typed serial, and no destruction photo is required for this remedy.",
+      "cites": [
+       "T1",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

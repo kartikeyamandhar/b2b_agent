@@ -1,0 +1,76 @@
+{
+ "text": "Checking the policy in order:\n\n- Flag: check_duplicates (T7) found no matches. Not flagged.\n- Model: label legible (T1) and shows MK04, a recalled model (T2). Confirmed.\n- Serial: BN87406677 starts with \"BN\", in range (T3).\n- Date code: June 2025 is prior to July 2025, in range (T4).\n- Purchase: dated 2025-02-20, inside the sale window (T5). The retailer, Corner Hardware Co, is not on the list. Per policy, an unlisted retailer is needs_info: proof of ownership is requested. The receipt was attached, but the policy's proof of ownership request still applies to unlisted retailers. The receipt is attached, so the request is for a clearer statement or confirmation of ownership. Under the policy, an unlisted retailer means needs_info.\n- Destruction: not required (T6), since the remedy is replacement.\n\nThe outcome is needs_info, because the retailer is not on the list. The claimant should confirm how they obtained the unit, since the receipt does not establish purchase from a listed retailer.",
+ "usage": {
+  "input_tokens": 2908,
+  "output_tokens": 900,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "max_tokens",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB362yZd91oaNummpN6A",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4248,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy in order:\n\n- Flag: check_duplicates (T7) found no matches. Not flagged.\n- Model: label legible (T1) and shows MK04, a recalled model (T2). Confirmed.\n- Serial: BN87406677 starts with \"BN\", in range (T3).\n- Date code: June 2025 is prior to July 2025, in range (T4).\n- Purchase: dated 2025-02-20, inside the sale window (T5). The retailer, Corner Hardware Co, is not on the list. Per policy, an unlisted retailer is needs_info: proof of ownership is requested. The receipt was attached, but the policy's proof of ownership request still applies to unlisted retailers. The receipt is attached, so the request is for a clearer statement or confirmation of ownership. Under the policy, an unlisted retailer means needs_info.\n- Destruction: not required (T6), since the remedy is replacement.\n\nThe outcome is needs_info, because the retailer is not on the list. The claimant should confirm how they obtained the unit, since the receipt does not establish purchase from a listed retailer."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01PBMrQix7J6xZGquvzPZ5x5",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T7"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Serial number BN87406677 starts with BN and is inside the recalled range.",
+      "cites": [
+       "T3",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "Date code June 2025 is before July 2025 and is inside the recalled range.",
+      "cites": [
+       "T4",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase date of 2025-02-20 is inside the sale window, but the retailer Corner Hardware Co is not on the list of sales channels, so proof of ownership must be requested rather than denying the claim.",
+      "cites": [
+       "T5",
+       "T8",
+       "R:sold_at",
+       "R:sold_window",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No destruction photo is required because the remedy is replacement.",
+      "cites": [
+       "T6"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

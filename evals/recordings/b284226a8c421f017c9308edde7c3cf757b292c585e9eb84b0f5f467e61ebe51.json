@@ -1,0 +1,73 @@
+{
+ "text": "I left out two required fields. Resubmitting with the claimant question and a confidence value.",
+ "usage": {
+  "input_tokens": 4029,
+  "output_tokens": 594,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeNTCNJiBTQ29cBXPhd",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2635,
+ "content": [
+  {
+   "type": "text",
+   "text": "I left out two required fields. Resubmitting with the claimant question and a confidence value."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Cp8P6wJpM1AqKq3D4Jvnt8",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows REV 12 Kids Bike, a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial number begins with 07VX, which is within the recalled serial ranges.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The date code 2022 is within the recalled range of 2022-2024.",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase date of 2023-07-16 falls inside the sale window, but the retailer Corner Hardware Co is not on the list of REI or REI.com. Under policy, an unlisted retailer requires proof of ownership rather than denial.",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "R:policy",
+       "T5",
+       "T8"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not flagged. No destruction photo is required for this repair remedy, and no refund is requested, so the value threshold does not apply.",
+      "cites": [
+       "T7",
+       "T6",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your bike was bought from Corner Hardware Co, which is not an authorized seller for this recall. Please send proof of ownership, such as a receipt, order confirmation, or other document showing the purchase or that you own the bike.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

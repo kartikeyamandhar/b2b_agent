@@ -1,0 +1,65 @@
+{
+ "text": "The legible label reads 200LQ, and the recalled model is 200LX, so the model is not covered by the recall. Under the policy, a legible label showing a non-recalled model is a denial, regardless of the serial being in range.",
+ "usage": {
+  "input_tokens": 3302,
+  "output_tokens": 472,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB43Kn9YU2W2dqcUGDfy",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2967,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label reads 200LQ, and the recalled model is 200LX, so the model is not covered by the recall. Under the policy, a legible label showing a non-recalled model is a denial, regardless of the serial being in range."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01SDAGUQgiZehRizjqwntYv2",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 200LQ, which is not a recalled model. The only recalled model is 200LX.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The typed model (200LQ) also does not match the recalled model 200LX, so the typed value does not change the result.",
+      "cites": [
+       "R:models",
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial LX003221 is within the recalled range, but the model rule is not met, so the serial cannot make the unit eligible.",
+      "cites": [
+       "T4",
+       "R:serials",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase date of 2021-07-20 is inside the sale window and no duplicate claims were found, but these checks do not cure the model mismatch.",
+      "cites": [
+       "T2",
+       "R:sold_window",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,77 @@
+{
+ "text": "All checks pass: the model is recalled, the date code is in range, the Amazon purchase falls in the window, there are no duplicates, and the destruction photo shows the plug cut off.",
+ "usage": {
+  "input_tokens": 3842,
+  "output_tokens": 521,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Wbf1XvSbWxXqC9c8D",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3207,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass: the model is recalled, the date code is in range, the Amazon purchase falls in the window, there are no duplicates, and the destruction photo shows the plug cut off."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01VDxWWE7ZBSEm9Lt5noxxsD",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model LXT-CL-1.0, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T7"
+      ]
+     },
+     {
+      "text": "The label date code 0722 is within the recalled range of 0722 to 1223.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase was from Amazon, a listed retailer, on 2023-10-29, inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the power cord cut off the device, which is the destruction the recall requires.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The program has no serial number rule, so the serial was not used in the decision.",
+      "cites": [
+       "R:policy",
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

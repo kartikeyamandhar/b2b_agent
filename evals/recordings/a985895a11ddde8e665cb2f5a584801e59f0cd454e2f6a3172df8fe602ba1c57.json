@@ -1,0 +1,65 @@
+{
+ "text": "The model is confirmed as recalled. The serial is outside the recalled ranges, which is a deny condition. Flag does not apply because there are no duplicates, so the serial result decides the outcome.",
+ "usage": {
+  "input_tokens": 3780,
+  "output_tokens": 475,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Lr3Qnfqtx6etjrX2Y",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2251,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed as recalled. The serial is outside the recalled ranges, which is a deny condition. Flag does not apply because there are no duplicates, so the serial result decides the outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01FzwRzeA6KzEqgjkV5ncxSA",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows the REV 20 Kids Bike, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number QQ56876971 does not begin with ET22, ET23, 01VX or 07VX, so it is outside the recalled serial ranges.",
+      "cites": [
+       "T4",
+       "R:serials",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase is from REI.com, a listed retailer, on 2024-04-28, which is inside the sale window, and no receipt is required. The purchase check passes.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The date code 2022 is within the recalled range, and no duplicate claims were found.",
+      "cites": [
+       "T5",
+       "T3",
+       "R:date_codes"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

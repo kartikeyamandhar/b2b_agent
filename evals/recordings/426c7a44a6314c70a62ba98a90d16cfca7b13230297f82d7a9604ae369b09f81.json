@@ -1,0 +1,62 @@
+{
+ "text": "The model is confirmed. Since the label date code 2369 is out of the recalled range, the unit is not covered by the recall, so I'm denying the claim.",
+ "usage": {
+  "input_tokens": 3537,
+  "output_tokens": 427,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3myrfdXWSc8xKf4v67",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2072,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed. Since the label date code 2369 is out of the recalled range, the unit is not covered by the recall, so I'm denying the claim."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017J1SdyCBussV3PHLe5MZve",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PA-10, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The date code 2369 is outside the recalled date code range of 2126 to 2319, so this unit is not covered by the recall.",
+      "cites": [
+       "T5",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase at Amazon.com on 2022-12-18 is within the sale window and from a listed retailer, and no receipt is required. This does not change the outcome.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

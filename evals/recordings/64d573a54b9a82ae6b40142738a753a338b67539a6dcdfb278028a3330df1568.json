@@ -1,0 +1,75 @@
+{
+ "text": "The label model is confirmed as recalled. The purchase, duplicates, and date code all pass. The destruction photo does not show the instructed destruction, so the claim needs more information from the claimant.",
+ "usage": {
+  "input_tokens": 3734,
+  "output_tokens": 584,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB44VNt8Bf2zyWXb1A89",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2909,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label model is confirmed as recalled. The purchase, duplicates, and date code all pass. The destruction photo does not show the instructed destruction, so the claim needs more information from the claimant."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01HcyPNNgL3uSWDz4XTbfvnD",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model B0726Y, which is a recalled model. The typed model '80726Y' is a typo, and the label controls.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T7"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (www.Amazon.com) and the date 2017-10-16 is inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The label date code 8/21 is within the recalled range.",
+      "cites": [
+       "R:date_codes",
+       "T6"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show a helmet with cut straps. It shows an unrelated red and purple image, so it does not meet the destruction requirement.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "The program has no serial rule, so the serial number was not used in the decision.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo of the destroyed helmet showing that the straps have been cut off. The current destruction photo shows something other than the helmet.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

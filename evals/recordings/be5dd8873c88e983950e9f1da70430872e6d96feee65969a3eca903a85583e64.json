@@ -1,0 +1,75 @@
+{
+ "text": "Checking the results against the policy in order:\n\n- Duplicates (T6): no hits, so no flag.\n- Model: label photo is legible (T1) and shows FEFBZ90GCA1, which matches FEFBZ90GC* (T2). Confirmed.\n- Serial: VF12206270 is within VF122xxxxx - VF334xxxxx (T3). In range.\n- Date code: not required by this program's rules, so not checked.\n- Purchase: Sears is listed, and 2007-08-24 is inside the sale window (T4). But the receipt is missing, and R:receipt requires one. Per policy, a required receipt that is missing is needs_info.\n- Destruction: not required for this remedy (T5).\n\nOutcome: needs_info. The only open item is the missing receipt, so I'll ask the claimant for proof of purchase.",
+ "usage": {
+  "input_tokens": 3257,
+  "output_tokens": 836,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeMEiVtWmLktrMxRcVf",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3879,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy in order:\n\n- Duplicates (T6): no hits, so no flag.\n- Model: label photo is legible (T1) and shows FEFBZ90GCA1, which matches FEFBZ90GC* (T2). Confirmed.\n- Serial: VF12206270 is within VF122xxxxx - VF334xxxxx (T3). In range.\n- Date code: not required by this program's rules, so not checked.\n- Purchase: Sears is listed, and 2007-08-24 is inside the sale window (T4). But the receipt is missing, and R:receipt requires one. Per policy, a required receipt that is missing is needs_info.\n- Destruction: not required for this remedy (T5).\n\nOutcome: needs_info. The only open item is the missing receipt, so I'll ask the claimant for proof of purchase."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01VzNQHz2Ws3sErXoMUwLZek",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model FEFBZ90GCA1, which matches the recalled model pattern FEFBZ90GC*, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial number VF12206270 falls within the recalled range VF122xxxxx - VF334xxxxx.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The retailer Sears is on the list and the purchase date 2007-08-24 is inside the sale window, so the purchase itself is eligible.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "A receipt is required under the program rules, and none was provided, so the claim cannot be approved yet.",
+      "cites": [
+       "R:receipt",
+       "T4"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account with this claim.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "A destruction photo is not required for this remedy (repair or replacement).",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": "Thank you for your claim. To continue, please send a receipt or other proof of purchase for the unit (for example, a receipt, order confirmation, or credit card statement showing the Sears purchase on or around August 24, 2007).",
+    "confidence": 0.9
+   }
+  }
+ ]
+}

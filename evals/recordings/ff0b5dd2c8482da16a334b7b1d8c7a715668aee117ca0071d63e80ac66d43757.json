@@ -1,0 +1,73 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: T1 reads the label as TD3418B, legible, and T2 confirms it matches a recalled model (R:models). Confirmed.\n- Serial/date code: this program has no serial or date code rules in the policy, so these don't apply.\n- Purchase: T3 shows REI (listed retailer) and a purchase date of 2018-06-08, inside the 1998-2024 window. No receipt required. Eligible.\n- Destruction: T4 says not required (the remedy is repair, per T6). Not applicable.\n- Duplicates: T5 found no matches on photo, address, email, serial, or payout account. No flag.\n- Refund: none requested (repair or replacement), so the value threshold does not apply.\n\nEvery rule passes, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2693,
+  "output_tokens": 712,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeLojanuMEG69pg1UyR",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3270,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: T1 reads the label as TD3418B, legible, and T2 confirms it matches a recalled model (R:models). Confirmed.\n- Serial/date code: this program has no serial or date code rules in the policy, so these don't apply.\n- Purchase: T3 shows REI (listed retailer) and a purchase date of 2018-06-08, inside the 1998-2024 window. No receipt required. Eligible.\n- Destruction: T4 says not required (the remedy is repair, per T6). Not applicable.\n- Duplicates: T5 found no matches on photo, address, email, serial, or payout account. No flag.\n- Refund: none requested (repair or replacement), so the value threshold does not apply.\n\nEvery rule passes, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01RbXRUmTmhidA45c81H9yaK",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model TD3418B, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase was from REI, a listed retailer, on 2018-06-08, which is inside the 2024-01-31 sale window. No receipt is required.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found sharing a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Destruction photo is not required for this repair remedy, and no serial or date code rule applies to this program.",
+      "cites": [
+       "T4",
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No refund is requested (repair or replacement), so the $100 value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

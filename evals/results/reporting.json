@@ -1,0 +1,53 @@
+{
+ "scenario": {
+  "claims": 500,
+  "payouts": 261,
+  "delivered_events": 193
+ },
+ "months": [
+  {
+   "period": "2026-08",
+   "report": {
+    "corrections_this_period": 18,
+    "cumulative_corrections": 18,
+    "contacts_email": 148
+   },
+   "recount": {
+    "corrections_this_period": 18,
+    "cumulative_corrections": 18,
+    "contacts_email": 148
+   },
+   "diffs": []
+  },
+  {
+   "period": "2026-09",
+   "report": {
+    "corrections_this_period": 66,
+    "cumulative_corrections": 84,
+    "contacts_email": 168
+   },
+   "recount": {
+    "corrections_this_period": 66,
+    "cumulative_corrections": 84,
+    "contacts_email": 168
+   },
+   "diffs": []
+  },
+  {
+   "period": "2026-10",
+   "report": {
+    "corrections_this_period": 60,
+    "cumulative_corrections": 144,
+    "contacts_email": 143
+   },
+   "recount": {
+    "corrections_this_period": 60,
+    "cumulative_corrections": 144,
+    "contacts_email": 143
+   },
+   "diffs": []
+  }
+ ],
+ "passed": true,
+ "discrepancies": 0
+}

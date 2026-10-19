@@ -1,0 +1,69 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: label legible (T1) and shows KY-318A, a recalled model (R:models, T2 match). Confirmed.\n- Serial/date code: the program has no serial or date code rules in this recall, so nothing to check.\n- Purchase: ALDI is listed (R:sold_at, T3), and 2018-06-03 is inside the sale window (R:sold_window, T3). No receipt required (T3).\n- Destruction: R:destruction requires the unplugged power cord cut. The destruction photo (T4) shows an intact cord with no visible cut, so it does not comply. Per policy and FAQ#1 (T6), this needs a new photo.\n- Duplicates: none found (T5), so no flag.\n- Refund $40.00 is under the $100 threshold (R:value_threshold).\n\nFlag and deny don't apply. The claim is missing a compliant destruction photo, so the outcome is needs_info.",
+ "usage": {
+  "input_tokens": 2837,
+  "output_tokens": 818,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB38BhjXyUaHiV6P521X",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3720,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: label legible (T1) and shows KY-318A, a recalled model (R:models, T2 match). Confirmed.\n- Serial/date code: the program has no serial or date code rules in this recall, so nothing to check.\n- Purchase: ALDI is listed (R:sold_at, T3), and 2018-06-03 is inside the sale window (R:sold_window, T3). No receipt required (T3).\n- Destruction: R:destruction requires the unplugged power cord cut. The destruction photo (T4) shows an intact cord with no visible cut, so it does not comply. Per policy and FAQ#1 (T6), this needs a new photo.\n- Duplicates: none found (T5), so no flag.\n- Refund $40.00 is under the $100 threshold (R:value_threshold).\n\nFlag and deny don't apply. The claim is missing a compliant destruction photo, so the outcome is needs_info."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01RQU1e7JTLFVmQVvfpRX2V7",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model KY-318A, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase is at ALDI, a listed retailer, on 2018-06-03, which is inside the 2016-01-01 to 2019-12-31 sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account with this claim.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the required destruction. The cord appears intact with no visible cut, so a new destruction photo is needed.",
+      "cites": [
+       "R:destruction",
+       "T4",
+       "T6"
+      ]
+     },
+     {
+      "text": "The $40.00 refund is under the $100.00 review threshold.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo showing the unplugged power cord of your Ambiano cooker with the cord cut, as instructed. The photo you sent shows the cord intact. It should not be the same as your label photo.",
+    "confidence": 0.9
+   }
+  }
+ ]
+}

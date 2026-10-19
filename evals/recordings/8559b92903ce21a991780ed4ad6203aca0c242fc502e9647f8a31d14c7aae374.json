@@ -1,0 +1,69 @@
+{
+ "text": "Retrying with the citation corrected to the tool result that contains the FAQ text.",
+ "usage": {
+  "input_tokens": 3856,
+  "output_tokens": 557,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3BsrZAgwsqowxukA5Z",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3027,
+ "content": [
+  {
+   "type": "text",
+   "text": "Retrying with the citation corrected to the tool result that contains the FAQ text."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01GcL3s5nFer3kK5PdLwfUx7",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model BB4640CF, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase was at Amazon.com, which is the listed retailer, on 2024-08-31, which is inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, or payout account with this one.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the instructed destruction. It is a graphic on a blurred background, not a seatback, and there is no marker writing on the front and rear. A destruction photo that does not show the instructed destruction is asked for again.",
+      "cites": [
+       "R:destruction",
+       "T4",
+       "T6"
+      ]
+     },
+     {
+      "text": "The $159.99 refund is over the $100 threshold, so a person will review it after approval. This does not change the outcome.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo of the product showing \"RECALLED\" written in large letters on the front and rear of the seatback in marker. The photo should show the actual seatback, not an image or graphic.",
+    "confidence": 0.9
+   }
+  }
+ ]
+}

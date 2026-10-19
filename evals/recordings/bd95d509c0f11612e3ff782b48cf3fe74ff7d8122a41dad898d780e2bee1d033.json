@@ -1,0 +1,64 @@
+{
+ "text": "The model is confirmed, the date code and purchase are in range, but a shared payout account with another claim requires a flag, which takes precedence over approval.",
+ "usage": {
+  "input_tokens": 3724,
+  "output_tokens": 415,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Csj9eC2hMAaWTdm5b",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2632,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed, the date code and purchase are in range, but a shared payout account with another claim requires a flag, which takes precedence over approval."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01VfWorM7pGMMJGBjDRM3pf4",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim (ce9c2ada-16d3-5668-83ca-de4f83a3796d) shares this claim's payout destination, which the policy requires to be flagged for review.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The legible label photo shows model SE4570, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label date code 07/22 is in the recalled range.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase was from Grainger, a listed retailer, inside the sale window; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

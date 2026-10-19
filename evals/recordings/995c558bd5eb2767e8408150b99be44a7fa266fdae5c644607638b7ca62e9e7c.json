@@ -1,0 +1,37 @@
+{
+ "text": "The label is legible and shows model 790.990141A1, which matches the recalled 790.990141* family. The serial is in range, the purchase is at Sears inside the window, and there are no duplicates. The receipt is missing, which the rules require, so I'll check the model with the tool and then review the receipt policy.",
+ "usage": {
+  "input_tokens": 3605,
+  "output_tokens": 216,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3KtvXFXBPdxvciTSnM",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1381,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows model 790.990141A1, which matches the recalled 790.990141* family. The serial is in range, the purchase is at Sears inside the window, and there are no duplicates. The receipt is missing, which the rules require, so I'll check the model with the tool and then review the receipt policy."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QgonhqQyZVsQDik4Rn3LbN",
+   "name": "check_model",
+   "input": {
+    "model_text": "790.990141A1"
+   }
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_013HNV67FnHXn2MZARuQSoRZ",
+   "name": "retrieve_policy",
+   "input": {
+    "query": "receipt required proof of purchase missing receipt claim"
+   }
+  }
+ ]
+}

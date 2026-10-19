@@ -1,0 +1,68 @@
+{
+ "text": "The model is confirmed, and every check passes. The remedy is repair or replacement, so no destruction photo or refund review is needed.",
+ "usage": {
+  "input_tokens": 3289,
+  "output_tokens": 435,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB43CTcnTgmut4uSFh9j",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2073,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed, and every check passes. The remedy is repair or replacement, so no destruction photo or refund review is needed."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01BZPLKLVPhxezu4wzbS3EPN",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 200LX, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial LX009837 is inside the recalled range LX001698 - LX009896.",
+      "cites": [
+       "R:serials",
+       "T1",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase date of 2018-10-02 falls inside the sale window 2017-05-01 to 2026-02-28, and no receipt is required.",
+      "cites": [
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claimant requested repair or replacement, so no destruction proof or refund review applies.",
+      "cites": [
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

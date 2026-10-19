@@ -1,0 +1,62 @@
+{
+ "text": "The label is legible and shows a recalled model, and the serial is in range, but the purchase falls before the window. Flag doesn't apply (no duplicates), so the purchase rule controls and the claim is denied.",
+ "usage": {
+  "input_tokens": 3702,
+  "output_tokens": 464,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Neh734uH6bZc8tGW8",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2169,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows a recalled model, and the serial is in range, but the purchase falls before the window. Flag doesn't apply (no duplicates), so the purchase rule controls and the claim is denied."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_014oGMTAzsxT499dPg9yTEhF",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model CXC-02, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial number FC29D5788327 falls within the recalled serial prefixes.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2020-06-03 is before the program's sale window of 2021-01-01 to 2024-10-31. Although JHTNA is a listed retailer, a purchase before the window is not eligible.",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "T2"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found sharing a photo, address, email, serial, or payout account, so the flag rule does not apply.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

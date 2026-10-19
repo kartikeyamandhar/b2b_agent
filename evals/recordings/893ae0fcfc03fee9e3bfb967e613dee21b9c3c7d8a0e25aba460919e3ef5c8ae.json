@@ -1,0 +1,76 @@
+{
+ "text": "The decision was rejected because I cited a rule id that doesn't exist in the program rules. I'll resubmit with the valid citations only.",
+ "usage": {
+  "input_tokens": 4778,
+  "output_tokens": 668,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3RhHhhBGY1r7C7MDEV",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3136,
+ "content": [
+  {
+   "type": "text",
+   "text": "The decision was rejected because I cited a rule id that doesn't exist in the program rules. I'll resubmit with the valid citations only."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Eqv1JX9Q7hAbR1QzjYvz4d",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model BB4640BL, which is on the recalled models list, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase is from Amazon.com, a listed retailer, dated 2023-08-05, which is inside the sale window. No receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the required destruction. It appears to be a digital graphic, not marker writing of RECALLED on the front and rear of a seatback, so the remedy is not yet met.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The serial check was skipped both times, so the serial 13624504 could not be verified against the recalled ranges. It is not denied on that basis, but it remains unconfirmed.",
+      "cites": [
+       "T5",
+       "T7",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The refund of $79.78 is under the $100.00 threshold, so no person review is required on value grounds.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a clearer photo of the destruction. The word RECALLED should be written in large marker letters on both the front and the rear of the seatback, and the photo should show the actual seat, not a graphic. Please also confirm the serial number printed on the label, which should read 13624504.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

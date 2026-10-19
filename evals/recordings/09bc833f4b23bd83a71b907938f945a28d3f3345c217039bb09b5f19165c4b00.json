@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": false, \"complies\": false, \"observed\": \"The image is a graphic of a gray rectangle labeled RECALLED with a black connecting line on a purple blurred background, not a photo of a seatback with the word written on it in marker.\", \"confidence\": 0.9}",
+ "usage": {
+  "input_tokens": 1199,
+  "output_tokens": 90,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAe9AdrUoyf5YLYjaEdw",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 1551
+}

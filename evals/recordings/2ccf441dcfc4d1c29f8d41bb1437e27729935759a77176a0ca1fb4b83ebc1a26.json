@@ -1,0 +1,62 @@
+{
+ "text": "The legible label shows B0026Y, which is not a recalled model. The purchase date of 2015-12-27 is before the sale window, which also requires denial. Both independently support denial, so I'm recording the decision now.",
+ "usage": {
+  "input_tokens": 3854,
+  "output_tokens": 498,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3EXZkpji7du3uyAsNq",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2503,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows B0026Y, which is not a recalled model. The purchase date of 2015-12-27 is before the sale window, which also requires denial. Both independently support denial, so I'm recording the decision now."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01GfuiVLtXjvdJG6nXsoJE8N",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model B0026Y, which is not a recalled model (recalled model is B0726Y). The typed model matches the label, so the model is not covered by the recall.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T7"
+      ]
+     },
+     {
+      "text": "The purchase date of 2015-12-27 is before the program's sale window (2017-01-01 to 2024-01-31), so the purchase falls outside eligibility even though the retailer is listed.",
+      "cites": [
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo does not appear to show the helmet or the instructed strap cutting, so it would not satisfy the destruction requirement on its own.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, and the serial and date code checks were not the basis for this decision; the date code 8/21 is in range.",
+      "cites": [
+       "T3",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.92
+   }
+  }
+ ]
+}

@@ -1,0 +1,71 @@
+{
+ "text": "Applying the policy in order:\n\n- flag: T6 shows a same_photo match with another claim (155ee9be-...). Flag takes precedence over all other outcomes.\n\nOther checks for completeness: model confirmed by legible label (T1, T2); date code \"08/22 NH\" appears to be in the recalled set (T3 returned \"unparsed,\" but the typed and label reading both read 08/22 NH, which matches R:date_codes); retailer and window are fine (T4); no destruction photo needed (T5); receipt not required.\n\nThe outcome is flag because of the shared label photo.",
+ "usage": {
+  "input_tokens": 2845,
+  "output_tokens": 651,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3BMUStfLHkauJckcmL",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3088,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order:\n\n- flag: T6 shows a same_photo match with another claim (155ee9be-...). Flag takes precedence over all other outcomes.\n\nOther checks for completeness: model confirmed by legible label (T1, T2); date code \"08/22 NH\" appears to be in the recalled set (T3 returned \"unparsed,\" but the typed and label reading both read 08/22 NH, which matches R:date_codes); retailer and window are fine (T4); no destruction photo needed (T5); receipt not required.\n\nThe outcome is flag because of the shared label photo."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01FLtdrnMNvPmjQbWyK6qzoC",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo is identical (same sha256) to a photo on another claim, so this claim must be sent to a person for duplicate review together with the matching claim.",
+      "cites": [
+       "T6",
+       "R:policy",
+       "T7"
+      ]
+     },
+     {
+      "text": "The label is legible and shows model SE4570, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The date code 08/22 NH matches the recalled date code 08/22 NH on the label reading; the date-code checker returned 'unparsed', so a reviewer should confirm it.",
+      "cites": [
+       "T1",
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The retailer justinboots.com is on the sold-at list and the purchase date 2023-03-11 is inside the sale window; no receipt is required for this retailer.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

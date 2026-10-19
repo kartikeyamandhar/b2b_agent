@@ -1,0 +1,64 @@
+{
+ "text": "The legible label shows B0726Q, which is not a recalled model, so the model check fails on the label evidence. The destruction photo also does not show the required strap cutting.",
+ "usage": {
+  "input_tokens": 3822,
+  "output_tokens": 436,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB442tRJPD87gzH4irVW",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2332,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows B0726Q, which is not a recalled model, so the model check fails on the label evidence. The destruction photo also does not show the required strap cutting."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01JVvJW4ERV2Gbc7kEapTA4C",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model B0726Q, which is not a recalled model. The recalled model is B0726Y. The typed model B0726Y does not override a legible label that shows a different model.",
+      "cites": [
+       "R:models",
+       "R:policy",
+       "T1",
+       "T7",
+       "T8"
+      ]
+     },
+     {
+      "text": "The serial number and date code are within the recalled ranges, and the retailer and purchase date are valid, but these do not cure the model mismatch.",
+      "cites": [
+       "T2",
+       "T5",
+       "T6"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the helmet straps cut off as the recall requires, so the destruction requirement is not met.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

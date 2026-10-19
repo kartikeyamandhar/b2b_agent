@@ -1,0 +1,47 @@
+{
+ "text": "Per the claim policy, I need to verify the label photo, purchase details, duplicates, and serial. I'll run these checks in parallel first.",
+ "usage": {
+  "input_tokens": 2617,
+  "output_tokens": 176,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3kz81fFUHUuLpF616Z",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1537,
+ "content": [
+  {
+   "type": "text",
+   "text": "Per the claim policy, I need to verify the label photo, purchase details, duplicates, and serial. I'll run these checks in parallel first."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01RkzVmYjnpB65mH3S4Tkhq4",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Kgs5n6XNaFoN255aset5WZ",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01FhNfFrTvXjnirXDg2twPCy",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0181MUz2nNajsKaD56cMax74",
+   "name": "check_serial",
+   "input": {
+    "serial": "SN77562315"
+   }
+  }
+ ]
+}

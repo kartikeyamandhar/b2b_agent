@@ -1,0 +1,63 @@
+{
+ "text": "The model matches, but the date code is outside the recalled range, so the claim is denied.",
+ "usage": {
+  "input_tokens": 3692,
+  "output_tokens": 435,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAe2iaX76S9qexLMxB9c",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2372,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model matches, but the date code is outside the recalled range, so the claim is denied."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_015WuKV8rq7UPwWqfxNwwbSg",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label's date code is 08/23. The recalled date codes are only 07/22 and 08/22, so this date code is outside the recall and the claim fails.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The retailer (www.justinboots.com) is on the sale list and the purchase date of 2023-05-06 is inside the sale window, so the purchase is valid. This does not change the outcome because the date code is out of range.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

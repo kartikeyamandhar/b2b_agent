@@ -1,0 +1,72 @@
+{
+ "text": "The label is legible and shows model SE4570 (recalled). The label's date code reads \"07/22 NH,\" which matches the recalled date code exactly. The purchase is at a listed retailer, inside the sale window, and no receipt is required. No duplicates were found. The refund is repair or replacement, so no destruction photo or value threshold applies.",
+ "usage": {
+  "input_tokens": 4275,
+  "output_tokens": 549,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3esBdAdbvNisyB6xL6",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2435,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows model SE4570 (recalled). The label's date code reads \"07/22 NH,\" which matches the recalled date code exactly. The purchase is at a listed retailer, inside the sale window, and no receipt is required. No duplicates were found. The refund is repair or replacement, so no destruction photo or value threshold applies."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Hr4WC1AbgSSAT7dJbj7W7n",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model, so the model is confirmed even though the typed model matches.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label's date code is 07/22 NH, which is one of the recalled date codes.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "Grainger is a listed retailer and the purchase date of 2022-10-14 is inside the sale window; no receipt is required for this claim.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The remedy is replacement, so no destruction photo is required and no refund exceeds the value threshold.",
+      "cites": [
+       "R:policy",
+       "R:value_threshold",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

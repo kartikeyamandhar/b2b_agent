@@ -1,0 +1,70 @@
+{
+ "text": "I'll resubmit with the missing fields: the question for the claimant and a confidence value.",
+ "usage": {
+  "input_tokens": 3972,
+  "output_tokens": 584,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeRDs1nnypxRRNED3Kr",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 5445,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll resubmit with the missing fields: the question for the claimant and a confidence value."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01LsT7WC2rGZ9eGuEZycZjK4",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model CXM-03, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial number FC3341913908 has the recalled prefix FC33, so it is in the recalled range.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The purchase date of 2023-08-23 is inside the sale window, but the retailer 'Corner Hardware Co' is not on the JHTNA sales list. Unlisted retailers are asked for proof of ownership rather than denied.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4",
+       "T7"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so there is no flag.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this repair remedy, and no refund is requested, so the value threshold does not apply.",
+      "cites": [
+       "T5",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your product's label matches a recalled model and serial range, but the retailer you named (Corner Hardware Co) is not on the list of stores that sold this recalled product. Please send proof of ownership, such as a receipt, order record, or other document showing when and where you got the cycle. A clear photo of the product label is already on file.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

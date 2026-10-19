@@ -1,0 +1,65 @@
+{
+ "text": "The model is confirmed, but the purchase was before the sale window and the serial falls outside every recalled range. Either of these alone is enough to deny.",
+ "usage": {
+  "input_tokens": 3973,
+  "output_tokens": 478,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Dh9go2LbjR1qSMEZv",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2284,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed, but the purchase was before the sale window and the serial falls outside every recalled range. Either of these alone is enough to deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01PjAErzUAMqGrq8fAuw7cit",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The purchase date of 2023-06-08 is before the program's sale window of 2023-10-01 to 2023-12-31, so the unit was not sold within the recalled sale period.",
+      "cites": [
+       "R:sold_window",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label serial QQ66988261 is outside all recalled serial ranges, so the unit is not in the recalled serial population.",
+      "cites": [
+       "R:serials",
+       "T4",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The model FCRE3052BS on the label is a recalled model and the date code October 2023 is within the recalled production range, so those checks passed, but they do not overcome the failed purchase window and serial checks.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6",
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this claimant's photos, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

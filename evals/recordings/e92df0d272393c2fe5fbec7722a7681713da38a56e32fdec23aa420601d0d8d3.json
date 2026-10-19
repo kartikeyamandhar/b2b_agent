@@ -1,0 +1,62 @@
+{
+ "text": "The duplicate check found another claim sharing the same label photo, which triggers a flag under the policy regardless of the other checks. I'm recording the decision now.",
+ "usage": {
+  "input_tokens": 3207,
+  "output_tokens": 475,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3ovc14rifyoFUbffum",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2432,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing the same label photo, which triggers a flag under the policy regardless of the other checks. I'm recording the decision now."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01S1Evnf2oPjgxJRbqSdUEDt",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model TD3318B, which is a recalled model.",
+      "cites": [
+       "T1",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The retailer Designbydelta.com is on the sold-at list and the purchase date of 2004-05-22 falls inside the sale window; no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The duplicate check found another claim (d99b5c3c-6342-5210-8016-e531b84bb7e8) that shares the same label photo. Under the claim policy, any shared photo triggers a flag, which takes precedence over the approval path.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial check was skipped by the tool, so the serial was not verified against the recalled ranges; this does not change the flag outcome.",
+      "cites": [
+       "T4",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

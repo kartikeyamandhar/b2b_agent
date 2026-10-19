@@ -1,0 +1,62 @@
+{
+ "text": "The duplicate check found another claim sharing this claim's payout destination, which triggers a flag. The flag takes priority over the other outcomes, so I'll record it now.",
+ "usage": {
+  "input_tokens": 4056,
+  "output_tokens": 477,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3PxHYUJAttDvV9nUmQ",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2552,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing this claim's payout destination, which triggers a flag. The flag takes priority over the other outcomes, so I'll record it now."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Y4LQE4kPp3nfEJW51idh8J",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program (582664ad-f81d-5ab5-8f6e-9d25c22c58b4) shares this claim's payout destination, which requires a flag for review.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model LTE4815BD, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The retailer LG.com is not on the sold-at list, so the purchase rule cannot be confirmed from the list. The purchase date 2019-09-21 is inside the sale window and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The typed serial 409KM2538543 is outside the recalled serial ranges. This would be a deny on its own, but the flag takes priority.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

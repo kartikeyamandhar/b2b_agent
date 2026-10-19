@@ -1,0 +1,67 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3552,
+  "output_tokens": 486,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB42Kn7WPJPDhAYACwuc",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2206,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01Ag94RGbu9hvVLV5EkPEsGC",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number BN83694552 falls in the recalled serial range (starts with BN), and the date code June 2025 is prior to July 2025, so both are in range.",
+      "cites": [
+       "T4",
+       "T5",
+       "R:serials",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2024-06-18 is before the sale window (2024-09-01 to 2025-06-30), so the purchase cannot be covered by the program.",
+      "cites": [
+       "T2",
+       "R:sold_window",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The claimed retailer, Corner Hardware Co, is not on the list of sales channels (Amazon.com, Shopify.com, TEMU.com, TikTok.com).",
+      "cites": [
+       "T2",
+       "R:sold_at"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found sharing a photo, address, email, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

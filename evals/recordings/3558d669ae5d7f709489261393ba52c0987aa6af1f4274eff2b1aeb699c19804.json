@@ -1,0 +1,76 @@
+{
+ "text": "Checking each policy step against the results:\n\n- Duplicates (T6): no hits, so no flag.\n- Model: label is legible (T1) and shows PLEFMZ99GCA1, which matches recalled PLEFMZ99GC* (T2). Confirmed.\n- Serial: VF12294265 is within VF122xxxxx - VF334xxxxx (T3). In range.\n- Purchase: Sears is listed, date 2007-01-21 is inside the 2001-06-01 to 2009-08-31 window, and a receipt is present (T4). Eligible.\n- Destruction photo: not required for this remedy (T5).\n- Refund: none requested (repair or replacement), so the value threshold does not apply.\n\nEverything passes, so the claim is approved.",
+ "usage": {
+  "input_tokens": 3264,
+  "output_tokens": 727,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeMM6DwWoHySDtLkY19",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3254,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking each policy step against the results:\n\n- Duplicates (T6): no hits, so no flag.\n- Model: label is legible (T1) and shows PLEFMZ99GCA1, which matches recalled PLEFMZ99GC* (T2). Confirmed.\n- Serial: VF12294265 is within VF122xxxxx - VF334xxxxx (T3). In range.\n- Purchase: Sears is listed, date 2007-01-21 is inside the 2001-06-01 to 2009-08-31 window, and a receipt is present (T4). Eligible.\n- Destruction photo: not required for this remedy (T5).\n- Refund: none requested (repair or replacement), so the value threshold does not apply.\n\nEverything passes, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_012UsmMq9r5VEMmUCyehN86j",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model PLEFMZ99GCA1, which matches the recalled model PLEFMZ99GC*. The model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial number VF12294265 falls within the recalled range VF122xxxxx - VF334xxxxx.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The retailer Sears is on the list, the purchase date 2007-01-21 is inside the sale window, and a receipt is present.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "R:receipt",
+       "T4"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy (repair or replacement).",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "No refund is requested, so the refund value threshold does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

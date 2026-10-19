@@ -1,0 +1,70 @@
+{
+ "text": "The flag rule takes precedence over every other outcome, so I'm recording a flag.",
+ "usage": {
+  "input_tokens": 3728,
+  "output_tokens": 462,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3ensv7f7Xm4n6D7Cmk",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1935,
+ "content": [
+  {
+   "type": "text",
+   "text": "The flag rule takes precedence over every other outcome, so I'm recording a flag."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01ATPDdeYg8LhrXnM89Gf6B2",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program (66997b46-6fb9-50a9-92c1-636e69e52dc5) shares this claimant's address, so the claim is flagged for duplicate review.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The legible label shows model MK04, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial BN2411C16624 starts with BN and is in the recalled serial range.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "Date code 11/2024 is prior to July 2025, so it is in the recalled range.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "Retailer Amazon.com is listed and the purchase date 2024-12-20 is inside the sale window; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

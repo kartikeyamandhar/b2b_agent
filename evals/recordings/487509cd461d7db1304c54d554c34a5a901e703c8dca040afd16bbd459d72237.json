@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and shows model SE4570, the date code is 07/22 NH, and the purchase is from a listed retailer within the window. The date-code check returned \"unparsed,\" but the label's date code matches the recalled value exactly. I'll confirm the model against the program list.",
+ "usage": {
+  "input_tokens": 3244,
+  "output_tokens": 139,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB49uAztDky3HU4ut7C2",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1107,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows model SE4570, the date code is 07/22 NH, and the purchase is from a listed retailer within the window. The date-code check returned \"unparsed,\" but the label's date code matches the recalled value exactly. I'll confirm the model against the program list."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Q3ib4oc9XqySC5UEVsXcWH",
+   "name": "check_model",
+   "input": {
+    "model_text": "SE4570"
+   }
+  }
+ ]
+}

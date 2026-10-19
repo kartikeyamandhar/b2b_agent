@@ -1,0 +1,84 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 2842,
+  "output_tokens": 533,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeKL69XXLkSWDxkfrf3",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2739,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01Lf9AdQwe4oe9WRmiXB3dGw",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PA-10, a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 2126 on the label is within the recalled range 2126 to 2319.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T3"
+      ]
+     },
+     {
+      "text": "The serial number is not a separate rule for this program, so no serial check applies.",
+      "cites": [
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Amazon.com is a listed retailer and the purchase date 2022-08-25 falls inside the sale window; no receipt is required for this claim type.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy (replacement), so none is needed.",
+      "cites": [
+       "T5",
+       "T7"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "All eligibility checks pass and the remedy requested is repair or replacement with no refund, so the claim is approved.",
+      "cites": [
+       "R:policy",
+       "T1",
+       "T2",
+       "T3",
+       "T4",
+       "T5",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

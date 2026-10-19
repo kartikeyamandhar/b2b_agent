@@ -1,0 +1,67 @@
+{
+ "text": "The label confirms a recalled model, the retailer and purchase date are within the rules, there are no duplicates, and no serial or date-code rule applies. The refund of $83.05 is under the $100 threshold.",
+ "usage": {
+  "input_tokens": 3521,
+  "output_tokens": 477,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3JAem7232qGu2nZP2D",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2778,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label confirms a recalled model, the retailer and purchase date are within the rules, there are no duplicates, and no serial or date-code rule applies. The refund of $83.05 is under the $100 threshold."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01VdLeEKycftKfEFNnSkkwf1",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model P1411, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The retailer www.walmart.com is on the sold-at list and the purchase date 2009-04-27 falls inside the sale window; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The program has no serial or date-code rule for this claim, so those checks do not apply. No destruction requirement applies either.",
+      "cites": [
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The refund of $83.05 is below the $100.00 value threshold, so no person review is required.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

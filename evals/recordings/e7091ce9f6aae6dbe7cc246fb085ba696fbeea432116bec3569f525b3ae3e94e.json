@@ -1,0 +1,69 @@
+{
+ "text": "Every check passes: the label is legible and shows a recalled model, the retailer is listed, the purchase falls inside the window, the serial is in range, there are no duplicates, and no destruction photo is required because the claim asks for repair or replacement. The refund amount is not requested, so the value threshold does not apply.",
+ "usage": {
+  "input_tokens": 3695,
+  "output_tokens": 546,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3PRD1pUzf4DFC3sbJC",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2666,
+ "content": [
+  {
+   "type": "text",
+   "text": "Every check passes: the label is legible and shows a recalled model, the retailer is listed, the purchase falls inside the window, the serial is in range, there are no duplicates, and no destruction photo is required because the claim asks for repair or replacement. The refund amount is not requested, so the value threshold does not apply."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01XKpuqsMEsrxcHkD5rLTmmf",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model CXC-02, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial FC2746049693 falls within a recalled serial prefix range.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The claimed retailer JHTNA is on the sold-at list and the purchase date of 2024-09-01 is inside the 2021-01-01 to 2024-10-31 sale window. No receipt is required for this retailer.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claim seeks repair or replacement, so no destruction photo is required, and no refund amount is requested, so the value threshold does not apply.",
+      "cites": [
+       "R:policy",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

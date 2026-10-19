@@ -1,0 +1,29 @@
+{
+ "text": "The duplicate check found another claim sharing the same payout destination, which triggers a flag under the policy. I'll check the model against the recalled list, since the label reads SE4570.",
+ "usage": {
+  "input_tokens": 3570,
+  "output_tokens": 108,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3CoQhEtAUg7w7mzJmb",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 997,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing the same payout destination, which triggers a flag under the policy. I'll check the model against the recalled list, since the label reads SE4570."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Shns6avNynnpA3BHamAcFV",
+   "name": "check_model",
+   "input": {
+    "model_text": "SE4570"
+   }
+  }
+ ]
+}

@@ -1,0 +1,69 @@
+{
+ "text": "All checks pass: the label confirms a recalled model, the serial is in range, the purchase is at a listed retailer within the window, and there are no duplicates. No destruction or date code check applies. I'll approve, and note the refund is not requested (repair or replacement), so the value threshold does not apply.",
+ "usage": {
+  "input_tokens": 3699,
+  "output_tokens": 531,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3NXR3MaiAnFpfDGrsq",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2373,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass: the label confirms a recalled model, the serial is in range, the purchase is at a listed retailer within the window, and there are no duplicates. No destruction or date code check applies. I'll approve, and note the refund is not requested (repair or replacement), so the value threshold does not apply."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DkEpj7xN9xQoU2e6KLuURv",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model CXM-02, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial FC29D34442452 has a prefix (FC29D) within the recalled serial ranges.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase was at JHTNA, a listed retailer, on 2023-11-03, which is inside the sale window of 2021-01-01 to 2024-10-31. No receipt is required for this claim.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claimant requested repair or replacement, not a refund, so the refund value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

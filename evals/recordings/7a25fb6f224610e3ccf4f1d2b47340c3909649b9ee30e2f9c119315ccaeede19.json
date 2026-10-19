@@ -1,0 +1,72 @@
+{
+ "text": "The model matches, and the purchase, date code, and duplicate checks are clean. The serial is the only failing check, so I'm recording a denial.",
+ "usage": {
+  "input_tokens": 3968,
+  "output_tokens": 486,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3ESYdDyH8FDymEBxa8",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2704,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model matches, and the purchase, date code, and duplicate checks are clean. The serial is the only failing check, so I'm recording a denial."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_016nrQA6WamvoB26FVfgrTDX",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model FCRE3052BB, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number QQ11506623 is outside all recalled serial ranges, so the unit is not covered by the recall.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code October 2023 is within the recalled production range, and the Lowe's purchase on 2023-10-17 falls inside the sale window.",
+      "cites": [
+       "R:date_codes",
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T5"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "Under the claim policy, an out-of-range serial number results in denial, even though the model, date code, and purchase otherwise qualify.",
+      "cites": [
+       "R:policy",
+       "R:serials",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

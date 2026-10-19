@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and shows recalled model B0726Y, the purchase is at a listed retailer within the window, there are no duplicates, and the date code is in range. The destruction photo does not clearly show the straps cut off, so the claim needs a better destruction photo. I'll also confirm the model against the label reading.",
+ "usage": {
+  "input_tokens": 3683,
+  "output_tokens": 152,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Zb6r8PJbqfcfAjZZa",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1533,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows recalled model B0726Y, the purchase is at a listed retailer within the window, there are no duplicates, and the date code is in range. The destruction photo does not clearly show the straps cut off, so the claim needs a better destruction photo. I'll also confirm the model against the label reading."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01BJgYrk2hy6whEeKkt849sw",
+   "name": "check_model",
+   "input": {
+    "model_text": "B0726Y"
+   }
+  }
+ ]
+}

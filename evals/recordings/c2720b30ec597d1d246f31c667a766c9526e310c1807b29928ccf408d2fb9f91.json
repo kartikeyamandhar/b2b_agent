@@ -1,0 +1,59 @@
+{
+ "text": "The label reads CXP-33, which is not on the recalled list (CXP-03 is, but CXP-33 is a different model). The label is legible, so the model rule gives a deny.",
+ "usage": {
+  "input_tokens": 3628,
+  "output_tokens": 471,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3t6ThjxZokkEsqywdV",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3007,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label reads CXP-33, which is not on the recalled list (CXP-03 is, but CXP-33 is a different model). The label is legible, so the model rule gives a deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_011NncZ2pU9cXUz4YzRsHpFf",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model CXP-33, which is not a recalled model. The recalled list is CXP-03, CXC-02, CXM-03, CXV and CXM-02, so the product is outside the recall.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial ZFC32B26123106 is within the recalled serial prefixes, but the model rule controls because a legible label shows a non-recalled model, so the serial match does not cure the denial.",
+      "cites": [
+       "T4",
+       "R:serials",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase at JHTNA on 2022-05-21 is inside the sale window and the retailer is listed, and no duplicate claims were found. These checks do not change the outcome.",
+      "cites": [
+       "T2",
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

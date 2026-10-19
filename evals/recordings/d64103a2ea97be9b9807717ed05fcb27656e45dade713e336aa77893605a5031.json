@@ -1,0 +1,37 @@
+{
+ "text": "The duplicate check found another claim sharing this label photo, which triggers a flag. The label serial (QQ19420553) also differs from the typed serial (HA07762), so I'll check the label's serial and model against the recalled ranges as well.",
+ "usage": {
+  "input_tokens": 3361,
+  "output_tokens": 179,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3YYEgRvvGpWKV48CJg",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2207,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing this label photo, which triggers a flag. The label serial (QQ19420553) also differs from the typed serial (HA07762), so I'll check the label's serial and model against the recalled ranges as well."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_013cpqaaAboZ2MQJzfR55cXs",
+   "name": "check_model",
+   "input": {
+    "model_text": "200LX"
+   }
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01MWrex6yD3w4LNJV17fjA3X",
+   "name": "check_serial",
+   "input": {
+    "serial": "QQ19420553"
+   }
+  }
+ ]
+}

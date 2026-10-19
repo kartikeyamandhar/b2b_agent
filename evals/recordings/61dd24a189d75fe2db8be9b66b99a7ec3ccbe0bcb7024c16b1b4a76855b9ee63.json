@@ -1,0 +1,58 @@
+{
+ "text": "The legible label shows CQC-02, which is not on the recalled list (CXC-02 is, but CQC-02 is a different model). Under the policy, a legible label showing a non-recalled model is a deny.",
+ "usage": {
+  "input_tokens": 3537,
+  "output_tokens": 430,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3sdEMEFjQxEv4VixeW",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2318,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows CQC-02, which is not on the recalled list (CXC-02 is, but CQC-02 is a different model). Under the policy, a legible label showing a non-recalled model is a deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01ExkoNj3Q5qkv4EmLBdmY2G",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model CQC-02, which is not a recalled model. The typed model matches this reading, so the claimed model is not covered.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial FC3369329201 is in a recalled range, but the model is what disqualifies the claim, and the serial alone does not override a legible non-recalled label.",
+      "cites": [
+       "R:serials",
+       "T4",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The retailer JHTNA is listed and the purchase date 2023-08-06 falls inside the sale window, and no duplicate claims were found.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

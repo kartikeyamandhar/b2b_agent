@@ -1,0 +1,77 @@
+{
+ "text": "All checks pass: legible label showing PA-10 (T1, T2), date code 2126 in range (T3), Amazon.com listed and purchase 2021-08-27 inside the window (T4), no destruction photo required (T5), no duplicates (T6). Remedy is repair or replacement, no refund over threshold. Approve.",
+ "usage": {
+  "input_tokens": 2842,
+  "output_tokens": 592,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeKYm94f6K38AkB1XwW",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3901,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass: legible label showing PA-10 (T1, T2), date code 2126 in range (T3), Amazon.com listed and purchase 2021-08-27 inside the window (T4), no destruction photo required (T5), no duplicates (T6). Remedy is repair or replacement, no refund over threshold. Approve."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01LaX5KbTjFEEYiwfWUUiF7C",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model PA-10, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 2126 is within the recalled range of 2126 to 2319.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T3"
+      ]
+     },
+     {
+      "text": "The retailer Amazon.com is on the sold-at list and the purchase date 2021-08-27 falls inside the sale window; no receipt is required for this check.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy, so none is needed.",
+      "cites": [
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one, so it is not flagged as a duplicate.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The remedy requested is repair or replacement, not a refund, so the refund value threshold does not apply.",
+      "cites": [
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

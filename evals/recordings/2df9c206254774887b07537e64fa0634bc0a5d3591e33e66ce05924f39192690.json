@@ -1,0 +1,71 @@
+{
+ "text": "The model matches the recall list, so every check passes.",
+ "usage": {
+  "input_tokens": 3523,
+  "output_tokens": 478,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3hr1Gc3ZikckoiaxRP",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3954,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model matches the recall list, so every check passes."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_012fiLBgSw9auBfkggDeFNZa",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model SE4570, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label date code 07/22 falls within the recalled date codes (07/22 NH or 08/22 NH).",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "Purchased at Grainger on 2023-06-10, a listed retailer and inside the sale window of 2022-09-01 to 2023-09-30; no receipt required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The program has no serial rule, so the serial check does not affect the outcome. The remedy is repair or replacement, so no destruction photo is required, and no refund exceeds the value threshold.",
+      "cites": [
+       "R:policy",
+       "T4",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

@@ -1,0 +1,63 @@
+{
+ "text": "Checking the policy in order:\n\n- Flag: T7 found no duplicates. No flag.\n- Model: The label photo is legible (T1) and shows \"NK04\", which is not the recalled model MK04 (T2, R:models). A legible label showing a non-recalled model means deny.\n- Date code: T4 shows out of range (manufactured July 2026, after the July 2025 cutoff), which is also a deny basis.\n- Serial, purchase, and destruction checks pass, but they don't change the outcome.\n\nThe first triggered rule yields deny. Since the model and date code are both out of scope, the denial is firm.",
+ "usage": {
+  "input_tokens": 2908,
+  "output_tokens": 584,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB35pUjvK8WXWvQGQNSV",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2995,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy in order:\n\n- Flag: T7 found no duplicates. No flag.\n- Model: The label photo is legible (T1) and shows \"NK04\", which is not the recalled model MK04 (T2, R:models). A legible label showing a non-recalled model means deny.\n- Date code: T4 shows out of range (manufactured July 2026, after the July 2025 cutoff), which is also a deny basis.\n- Serial, purchase, and destruction checks pass, but they don't change the outcome.\n\nThe first triggered rule yields deny. Since the model and date code are both out of scope, the denial is firm."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_012k8DJGNWh5P7JWz75A3Wrt",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model NK04, which is not a recalled model. Only MK04 is recalled, so the unit is not part of this recall.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The date code July 2026 is outside the recalled range of units manufactured prior to July 2025, so the unit is not covered by the recall.",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so no review flag applies.",
+      "cites": [
+       "T7"
+      ]
+     },
+     {
+      "text": "The serial number is in range, the retailer is listed, the purchase date is inside the sale window, and no destruction photo is required. These do not offset the model and date code failures.",
+      "cites": [
+       "T3",
+       "T5",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.92
+   }
+  }
+ ]
+}

@@ -1,0 +1,70 @@
+{
+ "text": "All checks pass: the model matches, the serial is in range, the purchase is at Sears inside the window with a receipt, and there are no duplicates. The remedy is repair or replacement, so no destruction photo or refund review is needed.",
+ "usage": {
+  "input_tokens": 3623,
+  "output_tokens": 533,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3pxDWoh3HHLFqRcKgA",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2513,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass: the model matches, the serial is in range, the purchase is at Sears inside the window with a receipt, and there are no duplicates. The remedy is repair or replacement, so no destruction photo or refund review is needed."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Sx2BHJqS1xLsytzjWv8nBF",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model PLEFZ398GCA1, which matches the recalled model pattern PLEFZ398GC*.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number VF12245437 falls within the recalled range VF122xxxxx - VF334xxxxx.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The claimant bought the unit at Sears, a listed retailer, on 2009-02-12, which is inside the 2001-06-01 to 2009-08-31 sale window, and a receipt is present.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window",
+       "R:receipt"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The remedy is repair or replacement with no refund requested, so no destruction photo or value review applies.",
+      "cites": [
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

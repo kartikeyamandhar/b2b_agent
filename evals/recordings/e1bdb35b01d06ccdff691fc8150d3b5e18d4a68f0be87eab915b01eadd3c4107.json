@@ -1,0 +1,73 @@
+{
+ "text": "Applying the policy in order: flag takes precedence.\n\nT6 reports a same_serial duplicate with another claim (84c04209-...). Under the policy, any shared serial number triggers flag, which outranks deny and needs_info. The destruction photo (T5) also does not show the instructed destruction (complies false), which would otherwise be needs_info, and the other rules pass (model confirmed by label T1/T2, date code in range T3, retailer and window OK T4, no receipt required). Because flag applies, the outcome is flag.",
+ "usage": {
+  "input_tokens": 2974,
+  "output_tokens": 623,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeHtv3QUUxG48QZ71w9",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3089,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: flag takes precedence.\n\nT6 reports a same_serial duplicate with another claim (84c04209-...). Under the policy, any shared serial number triggers flag, which outranks deny and needs_info. The destruction photo (T5) also does not show the instructed destruction (complies false), which would otherwise be needs_info, and the other rules pass (model confirmed by label T1/T2, date code in range T3, retailer and window OK T4, no receipt required). Because flag applies, the outcome is flag."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_013eBauH6xLRH3Ha17hpDiuj",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The serial number matches another existing claim, so this claim must be sent to a person for review together with the matched claim.",
+      "cites": [
+       "T6",
+       "R:policy",
+       "T7"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows recalled model B0726Y, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The date code 8/21 is within the recalled range (August 2021 or earlier).",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Walmart is a listed retailer and the purchase date 2021-08-19 is inside the sale window; no receipt is required for this retailer.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the helmet with its straps cut off, so it would also need to be requested again if the claim were not flagged.",
+      "cites": [
+       "T5",
+       "R:destruction",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

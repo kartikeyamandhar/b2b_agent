@@ -1,0 +1,76 @@
+{
+ "text": "The decision was rejected because I cited \"faq#2\", which isn't a valid citation id. The correct id for the FAQ passage is T7. I'll resubmit with that fixed.",
+ "usage": {
+  "input_tokens": 3806,
+  "output_tokens": 500,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeRESFFw97hfekN5KAb",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4948,
+ "content": [
+  {
+   "type": "text",
+   "text": "The decision was rejected because I cited \"faq#2\", which isn't a valid citation id. The correct id for the FAQ passage is T7. I'll resubmit with that fixed."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_012yBFoeB2hzJyu38wNhhv2G",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model CXP-03, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial number ZFC32B59392644 has a recalled prefix (ZFC32B).",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The retailer JHTNA is on the list and the purchase date 2023-07-07 falls inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for a repair or replacement remedy.",
+      "cites": [
+       "T5",
+       "T7"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6",
+       "T7"
+      ]
+     },
+     {
+      "text": "No refund is requested, so the $100 value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

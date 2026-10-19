@@ -1,0 +1,70 @@
+{
+ "text": "Checking the policy in order: flag first. T6 shows no duplicate hits, so no flag. Deny: label legible and shows SE4570 (T1, T2), date code 07/22 in range (T3), serial not part of a rule here, purchase at www.grainger.com (listed) within window (T4), no destruction photo needed (T5). Value threshold: remedy is repair or replacement, no refund requested, so no person review needed. Everything passes, so approve.",
+ "usage": {
+  "input_tokens": 2782,
+  "output_tokens": 615,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB39gnVz3xfxEGM1MAvT",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3480,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy in order: flag first. T6 shows no duplicate hits, so no flag. Deny: label legible and shows SE4570 (T1, T2), date code 07/22 in range (T3), serial not part of a rule here, purchase at www.grainger.com (listed) within window (T4), no destruction photo needed (T5). Value threshold: remedy is repair or replacement, no refund requested, so no person review needed. Everything passes, so approve."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017252z8Dq43i2iNKeifBQ6Y",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "No duplicate claim matches a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model, so the model is confirmed even though the typed model was missing.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The date code 07/22 is in the recalled range of 07/22 NH or 08/22 NH.",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The retailer www.grainger.com is on the sold-at list and the purchase date 2022-10-10 falls inside the sale window of 2022-09-01 to 2023-09-30; no receipt is required.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The remedy is repair or replacement with no refund requested, and no destruction photo is required, so the claim meets every approval condition.",
+      "cites": [
+       "T5",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

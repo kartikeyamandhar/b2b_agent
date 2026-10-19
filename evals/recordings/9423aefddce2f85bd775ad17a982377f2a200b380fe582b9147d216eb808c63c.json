@@ -1,0 +1,37 @@
+{
+ "text": "The serial check was skipped, so I'll check the model against the recalled list and retry the serial check with the typed value.",
+ "usage": {
+  "input_tokens": 3328,
+  "output_tokens": 139,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Jm9gePXzSPxgvb452",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1275,
+ "content": [
+  {
+   "type": "text",
+   "text": "The serial check was skipped, so I'll check the model against the recalled list and retry the serial check with the typed value."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01STS1SeG3YhAjfzG9mompr5",
+   "name": "check_model",
+   "input": {
+    "model_text": "TD3418S"
+   }
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01XxGtEXLXXXCLWcWY2ki1gB",
+   "name": "check_serial",
+   "input": {
+    "serial": "SN92663271"
+   }
+  }
+ ]
+}

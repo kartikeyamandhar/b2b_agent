@@ -1,0 +1,68 @@
+{
+ "text": "I'll resubmit with the citation for the destruction point corrected to the retrieved policy result.",
+ "usage": {
+  "input_tokens": 3486,
+  "output_tokens": 452,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeJvFvzC3yKtH862rXb",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2136,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll resubmit with the citation for the destruction point corrected to the retrieved policy result."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QgkNJ5JnLfmSW92WzKoxuf",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model A17A2, which is on the recalled model list, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase is from TD Synnex, a listed retailer, dated 2023-08-11, which is inside the 2023-05-01 to 2023-09-30 sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "The duplicate check found no other claim sharing a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this replacement or repair remedy.",
+      "cites": [
+       "T4",
+       "T6"
+      ]
+     },
+     {
+      "text": "No refund is requested, so the $100.00 value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

@@ -1,0 +1,63 @@
+{
+ "text": "The label confirms a recalled model, the purchase is in the window at a listed retailer, and there are no duplicates. The destruction photo does not show the cord cut, which the policy says requires a new photo, so this is a needs_info outcome.",
+ "usage": {
+  "input_tokens": 4402,
+  "output_tokens": 547,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4D45MfJTQ1DDPrFh3d",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2936,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label confirms a recalled model, the purchase is in the window at a listed retailer, and there are no duplicates. The destruction photo does not show the cord cut, which the policy says requires a new photo, so this is a needs_info outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Q2wK4LhxZ2MZRKMwpjdaEi",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 96775 (KY-318A), which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase at ALDI on 2017-02-14 falls inside the sale window and at a listed retailer; no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo shows an intact power cord with no cut, so it does not show the instructed destruction (unplugged power cord cut). The policy asks for a new destruction photo in this case.",
+      "cites": [
+       "T4",
+       "R:destruction",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your destruction photo shows the cooker with its power cord intact. Please send a new photo of the unplugged pressure cooker with the power cord cut, showing the cut clearly. Please also keep the model number and date code visible if you can.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

@@ -1,0 +1,58 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3788,
+  "output_tokens": 393,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3PDbGcndDQiYubT7nX",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1817,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_015bsCaMQep6PpQfNvoiiPbz",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model CXV, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial number FC29D90257014 falls within the recalled serial prefix ranges.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2020-03-20 is before the sale window of 2021-01-01 to 2024-10-31, so the purchase does not qualify. The retailer 'Corner Hardware Co' is also not on the program's listed retailer.",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,65 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 2789,
+  "output_tokens": 447,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB34JmHnE2bhyy1t1e14",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2372,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01L47YH4tHwp9J3MXAWv5BFP",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2G520, which is a recalled model; the typed model matches.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "Retailer Esrtech.com is on the sold-at list and the purchase date 2022-10-07 falls inside the sale window; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the device with the word RECALLED written on it, as instructed, and is not a repeat of the label photo.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this claim.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "Serial number and date code rules do not apply to this program's checks as provided; the refund of $42.96 is under the $100 review threshold.",
+      "cites": [
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

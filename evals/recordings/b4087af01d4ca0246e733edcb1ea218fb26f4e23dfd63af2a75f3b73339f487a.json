@@ -1,0 +1,72 @@
+{
+ "text": "The legible label reads B0026Y, which does not match the recalled model B0726Y. Under the policy, a legible label showing a non-recalled model means deny. The destruction photo also does not show the instructed cut-off straps, but the model denial alone decides this claim.",
+ "usage": {
+  "input_tokens": 3706,
+  "output_tokens": 546,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB441W5F7RdiAndMQeQT",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 10756,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label reads B0026Y, which does not match the recalled model B0726Y. Under the policy, a legible label showing a non-recalled model means deny. The destruction photo also does not show the instructed cut-off straps, but the model denial alone decides this claim."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01NXSKbAaRC4nmKqYxzDjFeN",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model B0026Y, which is not a recalled model. The recalled model is B0726Y, so the product is not covered by the recall.",
+      "cites": [
+       "T1",
+       "T7",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The typed model B0726Y does not match the legible label reading. Under the policy, the legible label controls, so the typed value cannot confirm the model.",
+      "cites": [
+       "T1",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the required destruction (helmet with straps cut off), which would also block approval.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The purchase is at a listed retailer (Walmart) within the sale window, and the date code 8/21 is in range, but these do not cure the model mismatch.",
+      "cites": [
+       "T2",
+       "T6",
+       "R:sold_at",
+       "R:sold_window",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

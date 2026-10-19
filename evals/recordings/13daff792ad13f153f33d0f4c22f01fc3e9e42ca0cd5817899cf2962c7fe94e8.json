@@ -1,0 +1,71 @@
+{
+ "text": "Checking the results against policy:\n\n- Duplicates: T6 found no hits, so no flag.\n- Model: T1 read the label legibly as 34785, a recalled model; T2 confirms the match.\n- Date code: T3 shows 10/2021 is within the 10/2021-12/2022 range (R:date_codes).\n- Serial: the program's date-code rules apply here; no separate serial range is listed, and the serial is present.\n- Purchase: T4 shows Igloocoolers.com is a listed retailer and the 2023-06-04 date falls inside the sale window; no receipt required.\n- Destruction: T5 says not required (replacement remedy per T7).\n- Refund: none requested (repair or replacement), so the value threshold does not apply.\n\nEvery rule is satisfied, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2854,
+  "output_tokens": 702,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeTsj93PLJ81UwiTiEM",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3308,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against policy:\n\n- Duplicates: T6 found no hits, so no flag.\n- Model: T1 read the label legibly as 34785, a recalled model; T2 confirms the match.\n- Date code: T3 shows 10/2021 is within the 10/2021-12/2022 range (R:date_codes).\n- Serial: the program's date-code rules apply here; no separate serial range is listed, and the serial is present.\n- Purchase: T4 shows Igloocoolers.com is a listed retailer and the 2023-06-04 date falls inside the sale window; no receipt required.\n- Destruction: T5 says not required (replacement remedy per T7).\n- Refund: none requested (repair or replacement), so the value threshold does not apply.\n\nEvery rule is satisfied, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01FNHn3VZMert1yVqrAodjmQ",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "No duplicate claim matches the photo, address, email, serial, or payout account.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model 34785, which is a recalled model, so the model is confirmed despite the typed value matching.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The date code 10/2021 falls within the recalled range 10/2021-12/2022.",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Igloocoolers.com is a listed retailer and the purchase date 2023-06-04 is inside the sale window; no receipt is required.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy, and no refund is requested, so the value threshold does not apply.",
+      "cites": [
+       "T5",
+       "T7",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

@@ -1,0 +1,69 @@
+{
+ "text": "The model is confirmed. The destruction photo does not show the required marking, so the claim needs more information before any refund.",
+ "usage": {
+  "input_tokens": 3631,
+  "output_tokens": 566,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB44uhc5sV7ouEGMdbUW",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2677,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed. The destruction photo does not show the required marking, so the claim needs more information before any refund."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_019hDb1EgWrqB6otKsXhjmFd",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model BE10019US-PI, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase at Amazon.com on 2024-08-02 falls inside the sale window and the retailer is listed; no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the device but does not show 'RECALLED' written in large letters on the front and rear of the seatback, so the required destruction is not evidenced.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The claimant must provide a destruction photo showing the required 'RECALLED' marking on the seatback before the claim can be approved.",
+      "cites": [
+       "R:destruction",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your destruction photo shows the seat but does not show the word \"RECALLED\" written in large letters on the front and rear of the seatback with a marker. Please write \"RECALLED\" on the front and rear of the seatback, then send a new photo that clearly shows both sides.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": true, \"complies\": false, \"observed\": \"The photo shows a gray rectangular object with the word RECALLED in white letters against a green blurred background, appearing to be a sign or card rather than a seatback marked with a marker.\", \"confidence\": 0.6}",
+ "usage": {
+  "input_tokens": 1199,
+  "output_tokens": 89,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAe9EPKusgEXH7FNGcu7",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 1556
+}

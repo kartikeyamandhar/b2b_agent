@@ -1,0 +1,66 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3567,
+  "output_tokens": 408,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB49xLVCSa4yBU6x89N1",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3369,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01RVnpJrN3hM3FyDEfkq7SGQ",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program shares this claimant's address, so the claim is flagged for review before any payout.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The legible label shows model MK04, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial BN2411C16624 starts with BN and is in the recalled range.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "Date code 11/2024 is prior to July 2025, so it is in the recalled range.",
+      "cites": [
+       "T5",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Amazon.com is a listed retailer and the purchase date 2024-12-20 is inside the sale window. No receipt is required for this claim.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

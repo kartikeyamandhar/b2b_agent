@@ -1,0 +1,58 @@
+{
+ "text": "The legible label shows SE4500, which the program does not recall (the recalled model is SE4570), so the model is not covered.",
+ "usage": {
+  "input_tokens": 3652,
+  "output_tokens": 361,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3DNoNaVdzFbZmjXctu",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2703,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows SE4500, which the program does not recall (the recalled model is SE4570), so the model is not covered."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_015pz9TQkfJvN6MXKGiQaWhL",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4500, which is not a recalled model. The only recalled model is SE4570.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The claimant's typed model matches the label reading, so the claimed model is not in the recall.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer within the sale window and there are no duplicate claims, but these do not cure the model mismatch.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

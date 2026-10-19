@@ -1,0 +1,61 @@
+{
+ "text": "Per the claim policy, I'll run the independent checks in parallel: the label photo, purchase verification, duplicate search, destruction photo, serial check, and date code check.",
+ "usage": {
+  "input_tokens": 2659,
+  "output_tokens": 263,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB43p3zksHkvsS56LBT9",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1733,
+ "content": [
+  {
+   "type": "text",
+   "text": "Per the claim policy, I'll run the independent checks in parallel: the label photo, purchase verification, duplicate search, destruction photo, serial check, and date code check."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017ERY6S6CHoUX8ysMkLdq3Z",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Cte6xj96mtHBqYzV6RCvrh",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01RogL4CaQiyDEwA2sDu91Hg",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01AVaTsm6bKTWEjKPCnS132n",
+   "name": "check_destruction_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01AcfMgfU47W1aF1cKJpQqJa",
+   "name": "check_serial",
+   "input": {
+    "serial": "SN48049135"
+   }
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01SDkEnfEw1Y7z9frc4je3bh",
+   "name": "check_date_code",
+   "input": {
+    "date_code": "8/21"
+   }
+  }
+ ]
+}

@@ -1,0 +1,45 @@
+{
+ "text": "Per the workflow, I'll start with the independent checks in parallel: label reading, purchase check, duplicate check, and destruction photo.",
+ "usage": {
+  "input_tokens": 2895,
+  "output_tokens": 153,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3fmrBue4ZDquefNrc8",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1990,
+ "content": [
+  {
+   "type": "text",
+   "text": "Per the workflow, I'll start with the independent checks in parallel: label reading, purchase check, duplicate check, and destruction photo."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01VBCCg9SC6yeEfzLc6nv5RL",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01P1TtdHBfr6LGJ7DGKRzzHJ",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01H28m84GgxXSKHz2ifWM8c9",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0113GRN26cJy9duJ99xZdJFi",
+   "name": "check_destruction_photo",
+   "input": {}
+  }
+ ]
+}

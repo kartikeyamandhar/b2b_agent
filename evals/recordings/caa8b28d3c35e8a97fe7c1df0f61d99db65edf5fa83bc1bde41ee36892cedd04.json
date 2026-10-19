@@ -1,0 +1,64 @@
+{
+ "text": "Applying the policy in order: flag takes precedence. T6 reports the label photo is shared with another claim (17991bfa-...), so this must be flagged for a person to review, together with the matched claim, regardless of the other checks passing.",
+ "usage": {
+  "input_tokens": 2748,
+  "output_tokens": 463,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB36Tq3LUrzoBESKgQ8q",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2588,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: flag takes precedence. T6 reports the label photo is shared with another claim (17991bfa-...), so this must be flagged for a person to review, together with the matched claim, regardless of the other checks passing."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_016G97Cb2kWbhamWqqPD7bCa",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo is identical (same sha256) to a photo attached to another claim, so the claim must be sent to a person for duplicate review together with the matched claim.",
+      "cites": [
+       "T6",
+       "R:policy",
+       "T7"
+      ]
+     },
+     {
+      "text": "The label is legible and shows model 200LX, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "Serial HA07762 falls within the recalled range HA00001 - HA14873.",
+      "cites": [
+       "T3",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "Purchase date 2018-06-19 is inside the sale window; no receipt is required for this check and the destruction photo is not required for a repair remedy.",
+      "cites": [
+       "T4",
+       "T5",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

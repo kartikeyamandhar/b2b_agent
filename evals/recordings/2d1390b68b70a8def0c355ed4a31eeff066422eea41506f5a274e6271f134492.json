@@ -1,0 +1,70 @@
+{
+ "text": "Checking the results against the policy:\n\n- Duplicates: T6 found no matches, so no flag.\n- Model: T1 reads the label legibly as LXT-CL-1.0, a recalled model (T2 match).\n- Date code: T3 confirms 0722 is in range.\n- Serial: the program has no serial rule, so it is not applied.\n- Purchase: T4 shows Sephora is listed and the date is inside the window; no receipt is required.\n- Destruction: T5 shows the product, but the cord appears intact with no cut plug. The policy requires a photo showing the instructed destruction (cut off the plug), so this is a needs_info, asking for a new destruction photo.\n\nOutcome: needs_info.",
+ "usage": {
+  "input_tokens": 2911,
+  "output_tokens": 705,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB35g2FUfhmMkKni9DRF",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3443,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Duplicates: T6 found no matches, so no flag.\n- Model: T1 reads the label legibly as LXT-CL-1.0, a recalled model (T2 match).\n- Date code: T3 confirms 0722 is in range.\n- Serial: the program has no serial rule, so it is not applied.\n- Purchase: T4 shows Sephora is listed and the date is inside the window; no receipt is required.\n- Destruction: T5 shows the product, but the cord appears intact with no cut plug. The policy requires a photo showing the instructed destruction (cut off the plug), so this is a needs_info, asking for a new destruction photo.\n\nOutcome: needs_info."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_011LjuFw5PaGFvuE23Te1EYQ",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows the recalled model LXT-CL-1.0, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 0722 is within the recalled range.",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "Sephora is a listed retailer and the purchase date of 2024-03-10 falls inside the sale window; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the device with the cord intact and no cut plug, so it does not show the required destruction. The policy asks for a new destruction photo in this case.",
+      "cites": [
+       "R:destruction",
+       "T5",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo showing the curling iron with the plug cut off, as the recall instructions require. The current photo shows the cord still intact.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

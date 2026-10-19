@@ -1,0 +1,67 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 2791,
+  "output_tokens": 471,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB34YwaBAosM21PhohBa",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3084,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01MkFEoA7za2N74vmLB5ekD1",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "No duplicate claims found; no shared photo, address, email, serial, or payout account.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "Label photo is legible and shows recalled model 2G512B, which matches the typed model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Retailer Esrtech.com is on the sold-at list and the purchase date 2024-03-24 falls inside the sale window; no receipt is required.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "Destruction photo shows the product with the word 'Recalled' written on it, as the destruction rule instructs, and is distinct from the label photo.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "Serial number SN77964776 is present and no serial range restriction blocks it; the refund of $47.96 is under the $100 review threshold.",
+      "cites": [
+       "T1",
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

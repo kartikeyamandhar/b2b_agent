@@ -1,0 +1,63 @@
+{
+ "text": "The duplicate check found another claim sharing this serial number, which triggers a flag and takes precedence over the other outcomes. The label serial (SN18619232) also differs from the typed serial (SN57855707), so I'll note that in the decision. The label model TD3318S is recalled, and the purchase is at a listed retailer within the window.",
+ "usage": {
+  "input_tokens": 3356,
+  "output_tokens": 525,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Jh5N8dq3FngFAY6Dx",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3208,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing this serial number, which triggers a flag and takes precedence over the other outcomes. The label serial (SN18619232) also differs from the typed serial (SN57855707), so I'll note that in the decision. The label model TD3318S is recalled, and the purchase is at a listed retailer within the window."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01UtxPRT5aciTDtc5x2jogiU",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Duplicate check found another claim (fd99cda5-f6e6-5aed-abd9-d605df340bdc) sharing the same serial number, which requires flagging under the claim policy.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows recalled model TD3318S, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Purchase at REI, a listed retailer, dated 2004-10-28, is inside the sale window; no receipt requirement applies.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The serial read from the label (SN18619232) does not match the typed serial (SN57855707); this discrepancy should be reviewed along with the duplicate.",
+      "cites": [
+       "T1",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

@@ -1,0 +1,57 @@
+{
+ "text": "Label photo is legible and shows model 230LX, which is not on the recalled list (200LX). Per policy, a legible label showing a non-recalled model means deny. The typed model \"230LX\" matches the label, so no typo issue. Purchase date 2016-12-04 is before the sale window, also a denial ground. Duplicates: none. Serial is in range, but model mismatch controls.",
+ "usage": {
+  "input_tokens": 2687,
+  "output_tokens": 478,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB36Hct8bpsFD9kBofK7",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2987,
+ "content": [
+  {
+   "type": "text",
+   "text": "Label photo is legible and shows model 230LX, which is not on the recalled list (200LX). Per policy, a legible label showing a non-recalled model means deny. The typed model \"230LX\" matches the label, so no typo issue. Purchase date 2016-12-04 is before the sale window, also a denial ground. Duplicates: none. Serial is in range, but model mismatch controls."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_018Q9jrWjJs6mEwYLrC7vezP",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and reads model 230LX, which is not a recalled model. The recalled model is 200LX, so the unit is not part of this recall.",
+      "cites": [
+       "R:policy",
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2016-12-04 is before the program's sale window (2017-05-01 to 2026-02-28), so the purchase is not eligible.",
+      "cites": [
+       "R:sold_window",
+       "T4",
+       "T7"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, and the serial number is in range, but neither fact overrides the model mismatch and the pre-window purchase.",
+      "cites": [
+       "T3",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

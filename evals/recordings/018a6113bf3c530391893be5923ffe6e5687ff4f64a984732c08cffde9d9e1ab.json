@@ -1,0 +1,62 @@
+{
+ "text": "The policy confirms that a purchase from a store not on the list is still eligible but requires proof of ownership. The claimant's receipt was attached, but the retailer is not on the list, so I'll ask for proof of ownership.",
+ "usage": {
+  "input_tokens": 4382,
+  "output_tokens": 600,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3GJKq2FJb74mhe8s6g",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2777,
+ "content": [
+  {
+   "type": "text",
+   "text": "The policy confirms that a purchase from a store not on the list is still eligible but requires proof of ownership. The claimant's receipt was attached, but the retailer is not on the list, so I'll ask for proof of ownership."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01VZ2YuHyD4vTE6NNiSrLsJ2",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model A17A2, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase date of 2023-05-24 falls inside the sale window of 2023-05-01 to 2023-09-30.",
+      "cites": [
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The claimed retailer, Corner Hardware Co, is not on the list of sale locations. Under the program FAQ, owners who bought from a store not on the list are still eligible but must provide proof of ownership instead of being denied.",
+      "cites": [
+       "R:sold_at",
+       "T2",
+       "T6"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one, so there is no duplicate flag.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your product's label shows a recalled model, and your purchase date is within the sale window. However, Corner Hardware Co is not one of the authorized retailers (Best Buy, TD Synnex, or kickstarter.com). Please provide proof of ownership, such as a clearer copy of your receipt showing the retailer, date, and item, or another document that shows you bought or own this cooler.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

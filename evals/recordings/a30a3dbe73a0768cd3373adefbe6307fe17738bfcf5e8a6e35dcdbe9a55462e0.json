@@ -1,0 +1,66 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3698,
+  "output_tokens": 471,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3X3PpjNPBB5ukznHpe",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2101,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01QngPhFrtnikA9iV1mjaPSd",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model MK04, a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial BN31476875 starts with BN and is inside the recalled serial range.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code June 2025 is manufactured prior to July 2025, so it is within the recalled date codes.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "TikTok.com is a listed retailer and the purchase date of 2025-03-31 falls inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The duplicate check found another claim (b485a67d-9572-566b-b49e-e10d406bca3f) sharing the same address. Under the policy, any shared address requires a flag, so this claim goes to review despite otherwise meeting the criteria.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

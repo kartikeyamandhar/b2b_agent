@@ -1,0 +1,74 @@
+{
+ "text": "Applying the policy in order: flag takes precedence.\n\n- T7 finds a duplicate: same serial shared with claim ff83d9c6-e4c6-50ef-a685-a13c845161a6. Under the flag rule, this claim must go to a person for review regardless of the other checks.\n- The serial itself is out of range (T3), which would otherwise be a deny, and the label photo reads serial VF34414430, which is inside a recalled range. That conflicts with the typed serial, but the typed serial is what the serial rule uses, so it is noted for the reviewer.\n\nOutcome: flag.",
+ "usage": {
+  "input_tokens": 3267,
+  "output_tokens": 690,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeGgMTWijoV9r5WShgY",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 6677,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: flag takes precedence.\n\n- T7 finds a duplicate: same serial shared with claim ff83d9c6-e4c6-50ef-a685-a13c845161a6. Under the flag rule, this claim must go to a person for review regardless of the other checks.\n- The serial itself is out of range (T3), which would otherwise be a deny, and the label photo reads serial VF34414430, which is inside a recalled range. That conflicts with the typed serial, but the typed serial is what the serial rule uses, so it is noted for the reviewer.\n\nOutcome: flag."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DYQRLjSnwwFyU5icv9o7uB",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim sharing the same serial number, so the claim must go to a person for review together with the matched claim.",
+      "cites": [
+       "T7",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The typed serial QQ31048759 falls outside every recalled serial range, while the label photo reads VF34414430, which is inside a recalled range. The conflict between the typed and photographed serials should be reviewed.",
+      "cites": [
+       "T3",
+       "T1",
+       "R:serials",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows FCRG3052BW, a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The date code October 2023 is in the recalled range, and the Lowe's purchase on 2023-10-01 is inside the sale window, so these checks pass.",
+      "cites": [
+       "T4",
+       "T5",
+       "R:date_codes",
+       "R:sold_window",
+       "R:sold_at"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for a repair remedy, and no receipt is required for this retailer.",
+      "cites": [
+       "T5",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,76 @@
+{
+ "text": "Let me work through the policy against the check results.\n\n- Duplicates (T6): no hits, so no flag.\n- Model: the label photo is unreadable (T1: legible false, no model text). The typed model B0726Y matches a recalled model (T2), so the typed model decides: it is recalled, not denied.\n- Date code: \"8/21\" is in range (T3).\n- Serial number: the program has no serial rule, so nothing to check.\n- Purchase: Walmart is listed, date 2019-04-08 is inside the window (T4), and no receipt is required per T4.\n- Destruction: required. The destruction photo check (T5) says it does not clearly show the instructed destruction. The observed content describes a red object with straps and no visible cutting. Per policy, a destruction photo that does not show the instructed destruction is needs_info. The confidence is only 0.6, but the verdict is \"does not comply,\" so I'm asking for a new photo.\n- Refund $32.43 is under the $100 threshold.\n\nThe outcome is needs_info: the destruction photo must be resubmitted, and the label photo should be clearer because the current one could not be read.",
+ "usage": {
+  "input_tokens": 2917,
+  "output_tokens": 900,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "max_tokens",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB36qDv7Zt7cRt5DXxUh",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4134,
+ "content": [
+  {
+   "type": "text",
+   "text": "Let me work through the policy against the check results.\n\n- Duplicates (T6): no hits, so no flag.\n- Model: the label photo is unreadable (T1: legible false, no model text). The typed model B0726Y matches a recalled model (T2), so the typed model decides: it is recalled, not denied.\n- Date code: \"8/21\" is in range (T3).\n- Serial number: the program has no serial rule, so nothing to check.\n- Purchase: Walmart is listed, date 2019-04-08 is inside the window (T4), and no receipt is required per T4.\n- Destruction: required. The destruction photo check (T5) says it does not clearly show the instructed destruction. The observed content describes a red object with straps and no visible cutting. Per policy, a destruction photo that does not show the instructed destruction is needs_info. The confidence is only 0.6, but the verdict is \"does not comply,\" so I'm asking for a new photo.\n- Refund $32.43 is under the $100 threshold.\n\nThe outcome is needs_info: the destruction photo must be resubmitted, and the label photo should be clearer because the current one could not be read."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DBYGRXpDzqxEHb4KvqFes8",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo could not be read, so the typed model B0726Y decides; it matches a recalled model.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The typed date code 8/21 is within the recalled range.",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Walmart is a listed retailer and the purchase date is inside the sale window; no receipt is required.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The destruction photo does not appear to show the helmet with its straps cut off, which is the instructed destruction, so it must be asked for again.",
+      "cites": [
+       "T5",
+       "R:destruction",
+       "T7"
+      ]
+     },
+     {
+      "text": "The refund of $32.43 is under the $100 review threshold.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send two things: (1) a new photo of the helmet after you have cut off the straps, showing the cut straps clearly on the helmet; and (2) a clearer photo of the white inner label with the model number and date code, since the current label photo could not be read."
+   }
+  }
+ ]
+}

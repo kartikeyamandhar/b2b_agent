@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and shows a recalled model, the date code is in range, and the purchase is valid. The destruction photo does not clearly show the straps cut, so I'll check the model against the recalled list, then decide.",
+ "usage": {
+  "input_tokens": 3712,
+  "output_tokens": 120,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3EqFNdqvb3C4VcHmR6",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1227,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows a recalled model, the date code is in range, and the purchase is valid. The destruction photo does not clearly show the straps cut, so I'll check the model against the recalled list, then decide."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01PZhqadbuKMBz7nJjfUGyX3",
+   "name": "check_model",
+   "input": {
+    "model_text": "B0726Y"
+   }
+  }
+ ]
+}

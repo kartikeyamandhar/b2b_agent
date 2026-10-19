@@ -1,0 +1,84 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: label is legible and shows DR2E, a recalled model (T1, T2, R:models). Confirmed.\n- Serial: J2D25454795 begins with J2D, in range (T3, R:serials).\n- Date code: 2017, within 2017-2024 (T4, R:date_codes).\n- Purchase: Yamaha dealers is a listed retailer, 2019-03-19 is inside the window, no receipt required (T5, R:sold_at, R:sold_window).\n- Destruction photo: not required for this remedy (T6).\n- Duplicates: none found (T7), so no flag.\n- Refund: none requested; repair or replacement, so the value threshold does not apply.\n\nEvery rule is satisfied and no flag trigger applies, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2887,
+  "output_tokens": 810,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB34yWBSFopJGxeqHR86",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3933,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: label is legible and shows DR2E, a recalled model (T1, T2, R:models). Confirmed.\n- Serial: J2D25454795 begins with J2D, in range (T3, R:serials).\n- Date code: 2017, within 2017-2024 (T4, R:date_codes).\n- Purchase: Yamaha dealers is a listed retailer, 2019-03-19 is inside the window, no receipt required (T5, R:sold_at, R:sold_window).\n- Destruction photo: not required for this remedy (T6).\n- Duplicates: none found (T7), so no flag.\n- Refund: none requested; repair or replacement, so the value threshold does not apply.\n\nEvery rule is satisfied and no flag trigger applies, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017i4dAHAq5XpTVmrFCbvLw7",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model DR2E, which is a recalled model. The typed model matches.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial number J2D25454795 begins with J2D, which is within the recalled serial ranges.",
+      "cites": [
+       "T3",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "Date code 2017 falls within the recalled model years 2017-2024.",
+      "cites": [
+       "T4",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase was from Yamaha dealers, a listed retailer, on 2019-03-19, which is inside the 2018-06-01 to 2025-07-31 sale window. No receipt is required.",
+      "cites": [
+       "T5",
+       "R:sold_at",
+       "R:sold_window",
+       "T8"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for the repair or replacement remedy requested.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The duplicate check found no other claim sharing a photo, address, email, serial number, or payout account, so the claim is not flagged.",
+      "cites": [
+       "T7",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No refund is requested, so the $100 refund review threshold does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

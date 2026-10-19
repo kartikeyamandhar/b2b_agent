@@ -1,0 +1,47 @@
+{
+ "text": "Per the policy, I need the label reading, purchase check, duplicate check, and serial check first. I'm running these in parallel now.",
+ "usage": {
+  "input_tokens": 2616,
+  "output_tokens": 173,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB42bNUNK5w2qXVbHNxx",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2143,
+ "content": [
+  {
+   "type": "text",
+   "text": "Per the policy, I need the label reading, purchase check, duplicate check, and serial check first. I'm running these in parallel now."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01J3PAhu4F1cnBRUVZsvzBn1",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01NuyJEkQGbgGy8EnxrMMPzv",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01CPyLWRhZj8FhFFArEs1MHe",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01UFRf5iw7FNDNR3tn3CKdXK",
+   "name": "check_serial",
+   "input": {
+    "serial": "QQ58710406"
+   }
+  }
+ ]
+}

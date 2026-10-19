@@ -1,0 +1,75 @@
+{
+ "text": "The label photo is unreadable, so the typed model 93550 is the only basis, and it matches the recalled list. The serial check was skipped because the program has no serial rule, so the serial does not decide the outcome. The label is unreadable, which the policy says requires a clearer photo, so this claim needs more information rather than approval.",
+ "usage": {
+  "input_tokens": 4469,
+  "output_tokens": 629,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3az9UCiNq78nKhp6ZZ",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2835,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label photo is unreadable, so the typed model 93550 is the only basis, and it matches the recalled list. The serial check was skipped because the program has no serial rule, so the serial does not decide the outcome. The label is unreadable, which the policy says requires a clearer photo, so this claim needs more information rather than approval."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_015eRCdQJ7QLHcBsX4SPDBPZ",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo could not be read (no legible model, serial, or date code), so the model cannot be confirmed from the label.",
+      "cites": [
+       "T1",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The typed model 93550 matches the recalled model list, but without a legible label the typed model alone is not enough to confirm the unit; the policy asks for a clearer label photo.",
+      "cites": [
+       "T6",
+       "T7",
+       "R:models"
+      ]
+     },
+     {
+      "text": "Purchase at ALDI on 2016-06-28 is inside the sale window and the retailer is listed; no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the power cord cut, as the recall instructs.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The requested $40.00 refund is below the $100.00 person-review threshold.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a clearer photo of the product's permanent label on the bottom of the cooker, so the model number (and serial and date code if visible) can be read.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

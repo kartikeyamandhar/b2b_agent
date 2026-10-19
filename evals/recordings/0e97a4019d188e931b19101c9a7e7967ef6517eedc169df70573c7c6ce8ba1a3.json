@@ -1,0 +1,47 @@
+{
+ "text": "Per the policy, I need to check the label photo, purchase, duplicates, and serial in parallel first, since the claim relies on the label, receipt, and serial rules.",
+ "usage": {
+  "input_tokens": 3243,
+  "output_tokens": 185,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3tWdFkYFou18aP16Ve",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1407,
+ "content": [
+  {
+   "type": "text",
+   "text": "Per the policy, I need to check the label photo, purchase, duplicates, and serial in parallel first, since the claim relies on the label, receipt, and serial rules."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01CBzvCxXXCc3JRJG61v3nL5",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Qbsif31f9FtEEwx6GFK5Li",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01YL8C42Svu4biU2xu6tfNum",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_013mYYfDRZEhJbAVtYaqLoY8",
+   "name": "check_serial",
+   "input": {
+    "serial": "802KM9595131"
+   }
+  }
+ ]
+}

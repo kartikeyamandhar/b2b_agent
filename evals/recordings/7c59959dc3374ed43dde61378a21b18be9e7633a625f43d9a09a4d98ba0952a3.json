@@ -1,0 +1,69 @@
+{
+ "text": "The model is confirmed as recalled (T6). Since the duplicate check found a shared address with another claim (T3), the policy requires a flag, which takes precedence over the other outcomes.",
+ "usage": {
+  "input_tokens": 3681,
+  "output_tokens": 495,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3ut4NwtpL7raoK2UeG",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3312,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed as recalled (T6). Since the duplicate check found a shared address with another claim (T3), the policy requires a flag, which takes precedence over the other outcomes."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01UaVNexCPnE76GPwejs5br2",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program shares this claimant's address, so the claim is flagged for review under the duplicate rule.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label is legible and shows model AD10009BE, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "Purchase at Amazon.com on 2023-05-23 is within the sale window and from a listed retailer; no receipt required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show a seatback or the required RECALLED marker writing on the front and rear, so it does not meet the destruction requirement.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The refund of $156.19 is over the $100 threshold, so a person will review it in any case.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

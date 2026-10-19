@@ -1,0 +1,72 @@
+{
+ "text": "Checking the results: the label photo is legible and shows model 2G805, which is not on the recalled list (R:models). The policy says a legible label showing a non-recalled model means deny, even though the typed model 2G520 matches. Duplicates: none (T6). Serial is present and no serial rule applies beyond presence; no date code rule is required by the program here. Purchase is inside the window at a listed retailer (T4). Destruction photo complies (T5). The triggering rule is the model mismatch, so the outcome is deny.",
+ "usage": {
+  "input_tokens": 2872,
+  "output_tokens": 662,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB38cAtusB7BDkGVT39h",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3017,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results: the label photo is legible and shows model 2G805, which is not on the recalled list (R:models). The policy says a legible label showing a non-recalled model means deny, even though the typed model 2G520 matches. Duplicates: none (T6). Serial is present and no serial rule applies beyond presence; no date code rule is required by the program here. Purchase is inside the window at a listed retailer (T4). Destruction photo complies (T5). The triggering rule is the model mismatch, so the outcome is deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01F2K4emhRsgJtrD1sG5ipjg",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2G805, which is not a recalled model. Under the claim policy, a legible label showing a non-recalled model means the unit is not part of the recall, regardless of the typed model.",
+      "cites": [
+       "R:policy",
+       "R:models",
+       "T1",
+       "T3",
+       "T7"
+      ]
+     },
+     {
+      "text": "The typed model 2G520 matches the recall list, but the label photo takes precedence over the typed model when it is legible and shows a different model.",
+      "cites": [
+       "R:policy",
+       "T2",
+       "T1"
+      ]
+     },
+     {
+      "text": "Duplicate check found no other claims sharing a photo, address, email, serial number, or payout account, so no flag applies.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "Purchase is from a listed retailer (Esrtech.com) within the sale window, and no receipt is required, so purchase is not the reason for denial.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the device marked RECALLED, which satisfies the destruction requirement.",
+      "cites": [
+       "R:destruction",
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

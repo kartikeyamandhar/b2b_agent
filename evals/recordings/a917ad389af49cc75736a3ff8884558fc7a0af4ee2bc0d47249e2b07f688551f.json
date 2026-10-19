@@ -1,0 +1,64 @@
+{
+ "text": "The label model LTE4115BD is not on the recalled list (the nearest recalled model is LTE4815BD, which differs). That makes the model a mismatch, so the claim fails on model under the policy.",
+ "usage": {
+  "input_tokens": 4032,
+  "output_tokens": 436,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3trveR4fmD2CydDJh3",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2436,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label model LTE4115BD is not on the recalled list (the nearest recalled model is LTE4815BD, which differs). That makes the model a mismatch, so the claim fails on model under the policy."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01WPXoqyMREsZguZRusnnaD6",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model LTE4115BD, which is not one of the program's recalled models.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The typed model matches the label reading (LTE4115BD), so there is no legibility issue or typo that would change the model determination.",
+      "cites": [
+       "T1",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial 308KM0997401 falls within a recalled serial range, and the purchase is at a listed retailer within the sale window, but these do not cure a non-recalled model.",
+      "cites": [
+       "T4",
+       "T2",
+       "R:serials",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

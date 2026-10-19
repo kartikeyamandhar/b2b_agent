@@ -1,0 +1,59 @@
+{
+ "text": "The label is legible and shows AD10314SL, which is not a recalled model. The typed model BB4640CF is recalled, but policy says a legible label controls, so the claim is denied on the model.",
+ "usage": {
+  "input_tokens": 3804,
+  "output_tokens": 428,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB44thLS5She3GKVLyqT",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2792,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows AD10314SL, which is not a recalled model. The typed model BB4640CF is recalled, but policy says a legible label controls, so the claim is denied on the model."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DwsR4aD366rCewhZVCzEMG",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model AD10314SL, which is not one of the recalled models. The typed model BB4640CF does not override a legible label reading.",
+      "cites": [
+       "R:models",
+       "R:policy",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The typed model BB4640CF matches the recalled list, but the legible label takes precedence, so the model is not confirmed as recalled.",
+      "cites": [
+       "R:models",
+       "T7",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase is valid: Amazon.com is a listed retailer and the 2023-09-21 date is inside the sale window. No duplicate claims were found.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

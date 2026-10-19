@@ -1,0 +1,66 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 2757,
+  "output_tokens": 435,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeLokZxSvGb5BjDM8Cz",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2684,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_013EVVodPF7gCpFGFjA4q2TF",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim sharing this claim's serial number, so the claim must be sent to a person for review along with the matching claim.",
+      "cites": [
+       "T5",
+       "R:policy",
+       "faq#2"
+      ]
+     },
+     {
+      "text": "The legible label photo shows model TD3418B, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "Retailer Amazon.com is on the sold-at list and the purchase date 2015-10-07 is inside the sale window, so the purchase is eligible; no receipt was required.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this repair remedy.",
+      "cites": [
+       "T4"
+      ]
+     },
+     {
+      "text": "Flag takes precedence over the otherwise-approvable checks because of the duplicate serial match.",
+      "cites": [
+       "R:policy",
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

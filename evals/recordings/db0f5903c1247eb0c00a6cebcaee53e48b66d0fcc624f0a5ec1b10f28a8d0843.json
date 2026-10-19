@@ -1,0 +1,70 @@
+{
+ "text": "The typed model B0726Y is recalled, but the label photo is unreadable and the destruction photo does not show the instructed cut-off straps. Under the policy, a destruction photo that does not show the instructed destruction means needs_info.",
+ "usage": {
+  "input_tokens": 3677,
+  "output_tokens": 595,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB441yMF4ZPZQKWDrNou",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3036,
+ "content": [
+  {
+   "type": "text",
+   "text": "The typed model B0726Y is recalled, but the label photo is unreadable and the destruction photo does not show the instructed cut-off straps. Under the policy, a destruction photo that does not show the instructed destruction means needs_info."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_014fMuWCadDaMLUYsPtpzPS9",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo could not be read, so the model cannot be confirmed from the label. The typed model B0726Y matches the recalled model list.",
+      "cites": [
+       "T1",
+       "T7",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the required destruction (helmet with straps cut off). It does not clearly show a helmet or severed straps.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "Purchase is valid: retailer www.Amazon.com is on the sold-at list, the 2017-11-10 date is inside the sale window, and no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The typed date code 8/21 is within the recalled range.",
+      "cites": [
+       "T6",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a clearer photo of the white label inside the helmet, showing the model number, serial number, and date code. Also send a photo of the helmet with both straps cut off, so it is clear the helmet has been destroyed as the recall instructs.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

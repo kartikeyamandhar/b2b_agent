@@ -1,0 +1,68 @@
+{
+ "text": "The model is confirmed as recalled. The destruction photo does not comply, so I'm requesting a new one.",
+ "usage": {
+  "input_tokens": 3506,
+  "output_tokens": 545,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4AoDb5MFWpMA1W2hPP",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3264,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed as recalled. The destruction photo does not comply, so I'm requesting a new one."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01UYr4oTrAuD3eDCM9RKwHRR",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model BE10019US-PI, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The Amazon purchase date of 2023-04-03 falls inside the sale window and the retailer is listed, so no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the product with RECALLED printed on its front face, but it does not show the required marking on the front and rear of the seatback, so the destruction requirement is not yet met.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "The refund is $199.99, which is over the $100 threshold, so a person will review it after the destruction proof is received.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new destruction photo that shows \"RECALLED\" written in large letters with a marker on both the front and the rear of the seatback. The current photo shows only the front of the device, with no view of the rear or seatback.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

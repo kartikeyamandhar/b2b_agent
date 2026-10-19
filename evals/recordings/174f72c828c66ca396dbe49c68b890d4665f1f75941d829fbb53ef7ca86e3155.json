@@ -1,0 +1,75 @@
+{
+ "text": "All checks pass: label legible showing 200LX (recalled), serial HA09882 in range HA00001 - HA14873, purchase date 2023-08-12 inside window, no receipt required, no destruction photo required, no duplicate hits. Remedy is repair/replacement, no refund over threshold.",
+ "usage": {
+  "input_tokens": 2685,
+  "output_tokens": 564,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAg1nAGmTyt6vLdhC28b",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2864,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass: label legible showing 200LX (recalled), serial HA09882 in range HA00001 - HA14873, purchase date 2023-08-12 inside window, no receipt required, no destruction photo required, no duplicate hits. Remedy is repair/replacement, no refund over threshold."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01RNZSaX5nhyvwoHSrg7yjLY",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 200LX, which is a recalled model engraved on the regulator, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial number HA09882 falls within the recalled range HA00001 - HA14873.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The purchase date 2023-08-12 is inside the sale window 2017-05-01 to 2026-02-28, and no receipt is required for this claim.",
+      "cites": [
+       "R:sold_window",
+       "T4",
+       "T7"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy, so that check does not apply.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The claimant requests repair or replacement with no refund, so the value review threshold does not apply.",
+      "cites": [
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

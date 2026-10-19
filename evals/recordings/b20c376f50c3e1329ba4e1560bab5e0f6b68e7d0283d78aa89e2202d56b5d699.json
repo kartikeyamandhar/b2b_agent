@@ -1,0 +1,64 @@
+{
+ "text": "The model matches, the serial is in range, the purchase is at Sears inside the window, and there are no duplicates. The receipt is missing, and R:receipt requires one, so the claim needs more information.",
+ "usage": {
+  "input_tokens": 3767,
+  "output_tokens": 543,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3KbQ5GcqiVUNeQoJcY",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2725,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model matches, the serial is in range, the purchase is at Sears inside the window, and there are no duplicates. The receipt is missing, and R:receipt requires one, so the claim needs more information."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_019JAVnxpLacJjDhkkWDiuMc",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model FEFBZ90GCA1, which matches the recalled model FEFBZ90GC*.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The label serial VF12206270 falls inside the recalled range VF122xxxxx - VF334xxxxx.",
+      "cites": [
+       "T1",
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The claimed retailer Sears is listed and the purchase date 2007-08-24 is inside the sale window, but the program requires a receipt and none was provided.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window",
+       "R:receipt"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your model and serial match a recalled unit, and your Sears purchase date falls within the sale window. The program requires a receipt, and none was included with your claim. Please send a copy of your original proof of purchase from Sears (a receipt, or other documentation showing the purchase date and store).",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

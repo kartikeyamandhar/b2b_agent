@@ -1,0 +1,29 @@
+{
+ "text": "The serial is out of range, so I'll check the model against the label before deciding.",
+ "usage": {
+  "input_tokens": 3444,
+  "output_tokens": 83,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3qVB79g1jRzf3ry641",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 857,
+ "content": [
+  {
+   "type": "text",
+   "text": "The serial is out of range, so I'll check the model against the label before deciding."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_019yFXMywD4tnPS7Ci5zXcpK",
+   "name": "check_model",
+   "input": {
+    "model_text": "REV 20 Kids Bike"
+   }
+  }
+ ]
+}

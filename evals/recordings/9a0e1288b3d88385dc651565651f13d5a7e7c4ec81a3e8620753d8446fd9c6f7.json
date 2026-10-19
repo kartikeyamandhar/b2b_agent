@@ -1,0 +1,37 @@
+{
+ "text": "The label is legible and shows model 200LX, which is recalled. The label serial is HA06279, which differs from the typed serial. A duplicate hit shows another claim shares a serial number. The flag rule takes precedence, so I'll check the model and the label serial against the program before deciding.",
+ "usage": {
+  "input_tokens": 3361,
+  "output_tokens": 191,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Y69YABV8EbacauKj2",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1376,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows model 200LX, which is recalled. The label serial is HA06279, which differs from the typed serial. A duplicate hit shows another claim shares a serial number. The flag rule takes precedence, so I'll check the model and the label serial against the program before deciding."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QoHv4MXUugYgZZg4pK23gF",
+   "name": "check_model",
+   "input": {
+    "model_text": "200LX"
+   }
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DNHFTGnmaoft9JaNPvNncF",
+   "name": "check_serial",
+   "input": {
+    "serial": "HA06279"
+   }
+  }
+ ]
+}

@@ -1,0 +1,63 @@
+{
+ "text": "Checking the policy in order: flag (duplicates: T5 none), deny (model: T1 legible, 98527 recalled; serial/date code: no serial rule; purchase: T3 inside window, ALDI listed), needs_info (destruction photo: T4 complies false, observed gap but no clear cut through the cord, confidence 0.55). Destruction is required under R:destruction, and T4 says the photo does not clearly show the instructed cut, so the claim needs a clearer destruction photo.",
+ "usage": {
+  "input_tokens": 2829,
+  "output_tokens": 618,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB38Tt5RPkJ3RLCV5cQH",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4296,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy in order: flag (duplicates: T5 none), deny (model: T1 legible, 98527 recalled; serial/date code: no serial rule; purchase: T3 inside window, ALDI listed), needs_info (destruction photo: T4 complies false, observed gap but no clear cut through the cord, confidence 0.55). Destruction is required under R:destruction, and T4 says the photo does not clearly show the instructed cut, so the claim needs a clearer destruction photo."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_016Xiq9TLRSjiRMpeU1tsxwt",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 98527, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase at ALDI on 2018-02-06 is inside the sale window and the retailer is listed; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this claim.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the instructed destruction (the unplugged power cord cut). The check did not confirm compliance, so a new destruction photo is needed.",
+      "cites": [
+       "R:destruction",
+       "T4",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": "Thank you for your claim. Please send a new photo of the unplugged power cord that clearly shows it cut through, with the cooker otherwise visible. The photo should not be the same as your bottom-label photo.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

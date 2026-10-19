@@ -1,0 +1,76 @@
+{
+ "text": "Checking the results against the policy in order:\n\n- Duplicates (T6): no hits, so no flag.\n- Model (T1, T2): the label is legible and shows SE4570, a recalled model. Model confirmed.\n- Serial/date code: the program uses date codes. The typed date code \"07/22 NH\" matches a recalled code (T3 returned \"unparsed\" only because the tool couldn't parse the text, but the typed value is exactly the recalled code, and the label reading T1 also shows 07/22 NH). Date code is within the recalled range.\n- Purchase (T4): purchase date 2022-08-26 is before the sale window opening 2022-09-01. Per policy, a purchase before the window is a denial. Retailer is listed, and no receipt is required, so the retailer and receipt do not change this.\n- Destruction: not required (T5), since the remedy is repair or replacement.\n\nThe purchase-date rule is a hard denial, and no earlier rule (flag) applies, so the outcome is deny.",
+ "usage": {
+  "input_tokens": 2787,
+  "output_tokens": 778,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3BKLDYBrZBY3tQHVc1",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3632,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy in order:\n\n- Duplicates (T6): no hits, so no flag.\n- Model (T1, T2): the label is legible and shows SE4570, a recalled model. Model confirmed.\n- Serial/date code: the program uses date codes. The typed date code \"07/22 NH\" matches a recalled code (T3 returned \"unparsed\" only because the tool couldn't parse the text, but the typed value is exactly the recalled code, and the label reading T1 also shows 07/22 NH). Date code is within the recalled range.\n- Purchase (T4): purchase date 2022-08-26 is before the sale window opening 2022-09-01. Per policy, a purchase before the window is a denial. Retailer is listed, and no receipt is required, so the retailer and receipt do not change this.\n- Destruction: not required (T5), since the remedy is repair or replacement.\n\nThe purchase-date rule is a hard denial, and no earlier rule (flag) applies, so the outcome is deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01CfgrZRGHNw4Y3P1giq2vjj",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 07/22 NH is within the recalled date codes.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T3"
+      ]
+     },
+     {
+      "text": "The purchase date of 2022-08-26 is before the sale window opening on 2022-09-01. Purchases before the window are not eligible.",
+      "cites": [
+       "R:sold_window",
+       "T4",
+       "faq#1"
+      ]
+     },
+     {
+      "text": "The retailer (grainger.com) is on the list of sellers, so the denial rests on the purchase date alone.",
+      "cites": [
+       "R:sold_at",
+       "T4"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not flagged for review.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "No destruction photo is required because the remedy is repair or replacement.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

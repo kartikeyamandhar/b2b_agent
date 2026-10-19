@@ -1,0 +1,77 @@
+{
+ "text": "All checks pass: the model matches, the date code is in range, the retailer and purchase window are valid, there are no duplicates, and the destruction photo complies. The claim is approved.",
+ "usage": {
+  "input_tokens": 3905,
+  "output_tokens": 558,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3W34CaQc16ydtYeBvv",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2671,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass: the model matches, the date code is in range, the retailer and purchase window are valid, there are no duplicates, and the destruction photo complies. The claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01HkH1xz5qokt8SeQAonbJ4z",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows the recalled model LXT-CL-1.0, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T7"
+      ]
+     },
+     {
+      "text": "The label's date code 0722 falls within the recalled range 0722 to 1223.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The claimed retailer Amazon is on the sold-at list and the 2022-09-24 purchase date is inside the sale window. No receipt is required for this claim.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the cord cut with the plug removed, which complies with the cut-off-the-plug requirement.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The serial rule is not part of this program, so no serial check was needed. The refund requested is repair or replacement, so the value threshold does not apply.",
+      "cites": [
+       "R:policy",
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

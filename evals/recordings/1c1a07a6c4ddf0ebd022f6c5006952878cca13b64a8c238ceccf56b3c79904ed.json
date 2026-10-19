@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and shows DR2E, the serial and date code are in range, and there are no duplicates. The purchase date of 2018-03-02 is before the sale window opens on 2018-06-01, so the claim is denied. I'll confirm the model against the label reading before recording the decision.",
+ "usage": {
+  "input_tokens": 3357,
+  "output_tokens": 144,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3yQaGEeqEZeoKZ69t5",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1132,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows DR2E, the serial and date code are in range, and there are no duplicates. The purchase date of 2018-03-02 is before the sale window opens on 2018-06-01, so the claim is denied. I'll confirm the model against the label reading before recording the decision."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01PDTnred9WWqpCk1TG6j1Jz",
+   "name": "check_model",
+   "input": {
+    "model_text": "DR2E"
+   }
+  }
+ ]
+}

@@ -1,0 +1,68 @@
+{
+ "text": "The label clearly reads \"RGV 16,\" which is not a recalled model. The recalled model is \"REV 16.\" The typed model also says \"RGV 16,\" so this isn't a label-reading error. Per policy, a legible label showing a non-recalled model is a denial, and the serial and date code matching doesn't override the model rule.",
+ "usage": {
+  "input_tokens": 3636,
+  "output_tokens": 570,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3qxtyFKKBFEydm4W49",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2829,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label clearly reads \"RGV 16,\" which is not a recalled model. The recalled model is \"REV 16.\" The typed model also says \"RGV 16,\" so this isn't a label-reading error. Per policy, a legible label showing a non-recalled model is a denial, and the serial and date code matching doesn't override the model rule."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01GWBi3vtse4Ls8xHUKsseGs",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 'RGV 16 Kids Bike'. The program's recalled models are REV 12, REV 16, and REV 20 Kids Bike, so this model is not recalled.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The typed model matches the label ('RGV 16'), so this is not a transcription error that could be corrected to a recalled model.",
+      "cites": [
+       "T1",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial number (in range) and date code (2022, in range) match the recall, but the model rule is not met, so the claim cannot be approved.",
+      "cites": [
+       "T4",
+       "T5",
+       "R:serials",
+       "R:date_codes",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Purchase at REI.com on 2023-10-20 is inside the sale window and from a listed retailer, and no duplicate claims were found. These do not offset the model mismatch.",
+      "cites": [
+       "T2",
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

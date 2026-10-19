@@ -1,0 +1,62 @@
+{
+ "text": "The model is confirmed as recalled. The purchase is valid, there are no duplicates, and the destruction photo doesn't show the required cord cut. Under the policy, a missing or non-compliant destruction photo means needs_info, so I'll ask the claimant for a new photo.",
+ "usage": {
+  "input_tokens": 3497,
+  "output_tokens": 493,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3wh77qztnQZVZbhr5u",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2997,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed as recalled. The purchase is valid, there are no duplicates, and the destruction photo doesn't show the required cord cut. Under the policy, a missing or non-compliant destruction photo means needs_info, so I'll ask the claimant for a new photo."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01UQ6Weis8tGVqDNfuQ7KhKV",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 96775, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase is at ALDI, a listed retailer, and the date 2019-05-02 is inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the required destruction. It shows an intact power cord with no cut, so the remedy condition is not met.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo showing the unplugged power cord of the cooker with the cord cut through. The current photo shows the cord intact.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

@@ -1,0 +1,57 @@
+{
+ "text": "The label model SM4979 is not on the recalled list (SM1977 and SM1979 are, but SM4979 is not), and the label is legible, so the claim fails on model. The serial check is not usable, but the model result already settles the outcome.",
+ "usage": {
+  "input_tokens": 3457,
+  "output_tokens": 401,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3oaL7e4sTMRoLu4V2F",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2438,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label model SM4979 is not on the recalled list (SM1977 and SM1979 are, but SM4979 is not), and the label is legible, so the claim fails on model. The serial check is not usable, but the model result already settles the outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01AHGggZHTVAa5WTjTjbbABE",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SM4979, which is not one of the recalled models.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The typed model matches the label reading, so there is no conflicting model information that would change the result.",
+      "cites": [
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase itself is valid: the retailer is listed, the date is inside the sale window, and no receipt is required, and no duplicate claims were found. These do not cure the model mismatch.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

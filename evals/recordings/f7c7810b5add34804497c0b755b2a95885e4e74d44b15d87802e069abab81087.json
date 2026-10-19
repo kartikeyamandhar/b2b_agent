@@ -1,0 +1,69 @@
+{
+ "text": "Key points: label photo unreadable (T1 legible false), so the typed model decides: \"93550\" is recalled (T2 match), so model is confirmed by typed value. Serial/date code: no serial rule for this program (R:models only lists models; no serial/date code rule applies). Purchase: ALDI listed, inside window, no receipt required (T3). Destruction photo shows cut cord (T4, complies). No duplicates (T5). Approve, refund $40 under threshold.\n\nOne note: the label photo was unreadable, but policy says typed model decides when label is unreadable and the typed model is recalled, so approval stands.",
+ "usage": {
+  "input_tokens": 2821,
+  "output_tokens": 642,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB38Fuzcd1qRHRcUskHz",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3012,
+ "content": [
+  {
+   "type": "text",
+   "text": "Key points: label photo unreadable (T1 legible false), so the typed model decides: \"93550\" is recalled (T2 match), so model is confirmed by typed value. Serial/date code: no serial rule for this program (R:models only lists models; no serial/date code rule applies). Purchase: ALDI listed, inside window, no receipt required (T3). Destruction photo shows cut cord (T4, complies). No duplicates (T5). Approve, refund $40 under threshold.\n\nOne note: the label photo was unreadable, but policy says typed model decides when label is unreadable and the typed model is recalled, so approval stands."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QS7yK8EwAhmurnwG5B7dYu",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo could not be read, so the typed model decides; the typed model 93550 is on the recalled list.",
+      "cites": [
+       "R:models",
+       "R:policy",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase was at ALDI, a listed retailer, dated 2016-06-28, which is inside the 2016-01-01 to 2019-12-31 sale window; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the unplugged power cord cut, as the remedy requires, and is a distinct photo from the label.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this claim.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The $40.00 refund is under the $100.00 person-review threshold.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.8
+   }
+  }
+ ]
+}

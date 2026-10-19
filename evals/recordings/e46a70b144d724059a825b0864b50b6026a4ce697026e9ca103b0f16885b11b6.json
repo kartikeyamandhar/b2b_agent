@@ -1,0 +1,55 @@
+{
+ "text": "The duplicate check found another claim sharing the same payout destination, which triggers a flag regardless of the purchase timing. I'm recording the decision now.",
+ "usage": {
+  "input_tokens": 3282,
+  "output_tokens": 398,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3sH49oAUiUh8U5bL3k",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2160,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing the same payout destination, which triggers a flag regardless of the purchase timing. I'm recording the decision now."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01WGExYBxR6P2wrdWiRgPoVC",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim (346832ea-de2b-56c4-b9cd-069ba5d59963) shares this claim's payout destination, which the policy requires be flagged for review.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The legible label shows model 9421, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase date of 2023-04-25 is before the sale window (2023-10-01 to 2024-05-31), so the purchase falls outside the recalled sale period. This alone would be a denial.",
+      "cites": [
+       "T2",
+       "R:sold_window",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

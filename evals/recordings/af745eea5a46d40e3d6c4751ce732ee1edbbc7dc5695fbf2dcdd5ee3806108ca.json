@@ -1,0 +1,63 @@
+{
+ "text": "Key findings: label photo T1 is legible and shows MODEL 9421, a recalled model, so the model is confirmed despite T3's mismatch on the typed \"MODEL 9421\" string. Serial and date code aren't program rules here. Purchase date 2023-04-15 is before the sale window (2023-10-01 to 2024-05-31), per T4, which means deny. No duplicates (T6). No destruction photo needed (T5). Deny applies since no flag triggers.",
+ "usage": {
+  "input_tokens": 2778,
+  "output_tokens": 563,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeNqHtrmKhhTXyU1ihS",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2825,
+ "content": [
+  {
+   "type": "text",
+   "text": "Key findings: label photo T1 is legible and shows MODEL 9421, a recalled model, so the model is confirmed despite T3's mismatch on the typed \"MODEL 9421\" string. Serial and date code aren't program rules here. Purchase date 2023-04-15 is before the sale window (2023-10-01 to 2024-05-31), per T4, which means deny. No duplicates (T6). No destruction photo needed (T5). Deny applies since no flag triggers."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0166HmGYgS5Tiu9idoQiRvdT",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The purchase date of 2023-04-15 is before the product's sale window of 2023-10-01 to 2024-05-31, so the unit is not eligible for this recall.",
+      "cites": [
+       "T4",
+       "R:sold_window",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows MODEL 9421, a recalled model, so the model is confirmed. The typed 'MODEL 9421' mismatch in T3 is a formatting issue and does not change the outcome.",
+      "cites": [
+       "T1",
+       "T2",
+       "T3",
+       "R:models",
+       "T7"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account, so no review flag applies.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy, so that check does not apply.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,64 @@
+{
+ "text": "The policy says claims the checker could not finish are sent to a person for review. The serial check never produced a verdict, so this claim can't be finished automatically. I'm sending it to review rather than approving it.",
+ "usage": {
+  "input_tokens": 4492,
+  "output_tokens": 464,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4DpWpQq3AZutwE3ZT3",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3024,
+ "content": [
+  {
+   "type": "text",
+   "text": "The policy says claims the checker could not finish are sent to a person for review. The serial check never produced a verdict, so this claim can't be finished automatically. I'm sending it to review rather than approving it."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01CAUofvTYWz2f7SvjyFt3kV",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model TD3418B, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase is at REI, a listed retailer, dated 2018-06-08, inside the sale window; no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The duplicate check found no other claim sharing a photo, address, email, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The serial check (SN19351478) returned no verdict both times it ran, so the serial rule could not be completed automatically. The FAQ says claims the checker could not finish are reviewed by a person.",
+      "cites": [
+       "T4",
+       "T6",
+       "T7",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.6
+   }
+  }
+ ]
+}

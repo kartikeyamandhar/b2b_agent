@@ -1,0 +1,55 @@
+{
+ "text": "I'll start by reading the label photo, checking the purchase, checking for duplicates, and checking the typed serial and date code against the program's recalled ranges.",
+ "usage": {
+  "input_tokens": 2965,
+  "output_tokens": 231,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3iw788nm7WgVdJxFUL",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2111,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll start by reading the label photo, checking the purchase, checking for duplicates, and checking the typed serial and date code against the program's recalled ranges."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01FB2Z4B13qKaEfLciRNbMQ6",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Yc3bFjhHTt64Y99dyfK8uW",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_019qkkMwFwCBEYKuGKe5dLzn",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0186hV6Xd4y1o5AvmkEDMsB1",
+   "name": "check_serial",
+   "input": {
+    "serial": "VF34504834"
+   }
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01HU8hvHsq7vELbccvPmK1Jb",
+   "name": "check_date_code",
+   "input": {
+    "date_code": "October 2023"
+   }
+  }
+ ]
+}

@@ -1,0 +1,62 @@
+{
+ "text": "The duplicate check found another claim sharing the same label photo, which triggers a flag under the policy. The label also shows serial SN85636551, which differs from the typed serial. The flag decision takes precedence, so I'm recording it now.",
+ "usage": {
+  "input_tokens": 3246,
+  "output_tokens": 476,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3ou7xtmNs3c3nHAeyJ",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2379,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing the same label photo, which triggers a flag under the policy. The label also shows serial SN85636551, which differs from the typed serial. The flag decision takes precedence, so I'm recording it now."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_019c8QM8jeavhzJaSE1VPGyS",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The check found another claim (9a75ad4b-57ea-55eb-8295-8aa2025069b5) that shares this claim's label photo, which the policy requires be flagged for review.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model SM1979, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (REI) and falls inside the sale window, so the purchase itself is in order.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The label serial (SN85636551) does not match the typed serial (SN24836186), and the serial check was skipped, so the serial was not verified.",
+      "cites": [
+       "T1",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

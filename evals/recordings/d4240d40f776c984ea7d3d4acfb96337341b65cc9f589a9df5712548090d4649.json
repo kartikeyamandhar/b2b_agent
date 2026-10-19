@@ -1,0 +1,69 @@
+{
+ "text": "Checking the results against the policy:\n\n- Duplicates (T5): no hits, so no flag.\n- Model (T1, T2): label is legible and shows 6L-PC, a recalled model. Confirmed.\n- Serial/date code: the program has no serial or date code rules, so these don't apply.\n- Purchase (T3): ALDI is listed, the date 2016-03-27 is inside the window, and no receipt is required. Approved on purchase.\n- Destruction (T4): the photo shows the cord cut, it's a distinct photo from the label, and it complies.\n- Refund $40.00 is under the $100 threshold (R:value_threshold), so no person review is needed.\n\nEverything passes, so the outcome is approve.",
+ "usage": {
+  "input_tokens": 2837,
+  "output_tokens": 701,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB38T6TZFCZGc6xt11oX",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3030,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Duplicates (T5): no hits, so no flag.\n- Model (T1, T2): label is legible and shows 6L-PC, a recalled model. Confirmed.\n- Serial/date code: the program has no serial or date code rules, so these don't apply.\n- Purchase (T3): ALDI is listed, the date 2016-03-27 is inside the window, and no receipt is required. Approved on purchase.\n- Destruction (T4): the photo shows the cord cut, it's a distinct photo from the label, and it complies.\n- Refund $40.00 is under the $100 threshold (R:value_threshold), so no person review is needed.\n\nEverything passes, so the outcome is approve."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01PoEUgeUWU98e8AJHQaB3XP",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 6L-PC, which is a recalled model, so the unit is confirmed as recalled.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase was at ALDI, a listed retailer, on 2016-03-27, which is inside the 2016-01-01 to 2019-12-31 sale window. No receipt is required for this check.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3",
+       "faq#1"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the power cord cut, is distinct from the label photo, and complies with the required destruction.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this claim.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The $40.00 refund is under the $100.00 threshold, so it does not require person review. The program has no serial or date code rules that apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

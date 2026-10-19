@@ -1,0 +1,29 @@
+{
+ "text": "The duplicate check found another claim at the same address, which triggers a flag under the policy. The serial check was skipped, so I'm not relying on it. I'll check the model on the label as well, to confirm the recalled status, before recording the decision.",
+ "usage": {
+  "input_tokens": 3596,
+  "output_tokens": 130,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3ugFDeb5YippXjbbyQ",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1442,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim at the same address, which triggers a flag under the policy. The serial check was skipped, so I'm not relying on it. I'll check the model on the label as well, to confirm the recalled status, before recording the decision."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01YRCHn1RVtmxB7SWBPLJ2cv",
+   "name": "check_model",
+   "input": {
+    "model_text": "BB4640CF"
+   }
+  }
+ ]
+}

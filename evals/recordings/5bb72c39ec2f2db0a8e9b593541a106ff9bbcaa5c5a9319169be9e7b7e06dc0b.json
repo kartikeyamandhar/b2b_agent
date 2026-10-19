@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and shows PA-10, which is recalled. The purchase is at a listed retailer within the window, and there are no duplicates. The date code is in range. The serial check was skipped, so I'll confirm the model against the label and then decide.",
+ "usage": {
+  "input_tokens": 3388,
+  "output_tokens": 130,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3nPC6vBe455wvxc9kH",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1344,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows PA-10, which is recalled. The purchase is at a listed retailer within the window, and there are no duplicates. The date code is in range. The serial check was skipped, so I'll confirm the model against the label and then decide."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017HcTjKsugj1JPXqws3carp",
+   "name": "check_model",
+   "input": {
+    "model_text": "PA-10"
+   }
+  }
+ ]
+}

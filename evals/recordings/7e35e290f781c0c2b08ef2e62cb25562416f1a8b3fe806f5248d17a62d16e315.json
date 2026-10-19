@@ -1,0 +1,60 @@
+{
+ "text": "Checking the results:\n\n- Model: label photo is legible and shows SE4570, a recalled model (T1, T2). Model confirmed.\n- Date code: the label reads \"06/22 NH\". The recalled codes are 07/22 NH or 08/22 NH (R:date_codes). 06/22 is outside the recalled range, so the unit is not part of the recall (T3 returned \"unparsed,\" but the label text itself is clear, and T1 shows 06/22 NH). Per policy, a date code outside the recalled ranges is deny.\n- Purchase: 2022-11-03 is inside the window, retailer Grainger is listed (T4).\n- Duplicates: none (T6).\n- Destruction photo: not required (T5).\n\nThe date-code rule is the deciding factor. Outside-range date code is a deny under the serial/date code rule, and deny is the outcome that applies since no flag rule triggers.",
+ "usage": {
+  "input_tokens": 2787,
+  "output_tokens": 672,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3B7ESyxARG1X6yKBLX",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3275,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results:\n\n- Model: label photo is legible and shows SE4570, a recalled model (T1, T2). Model confirmed.\n- Date code: the label reads \"06/22 NH\". The recalled codes are 07/22 NH or 08/22 NH (R:date_codes). 06/22 is outside the recalled range, so the unit is not part of the recall (T3 returned \"unparsed,\" but the label text itself is clear, and T1 shows 06/22 NH). Per policy, a date code outside the recalled ranges is deny.\n- Purchase: 2022-11-03 is inside the window, retailer Grainger is listed (T4).\n- Duplicates: none (T6).\n- Destruction photo: not required (T5).\n\nThe date-code rule is the deciding factor. Outside-range date code is a deny under the serial/date code rule, and deny is the outcome that applies since no flag rule triggers."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01FaCZHYjwcVp8eCVp8uHpKs",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model, so the model itself is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The date code on the label is 06/22 NH. The recalled date codes are only 07/22 NH and 08/22 NH, so this unit falls outside the recalled date codes and is not part of the recall.",
+      "cites": [
+       "T1",
+       "T3",
+       "R:date_codes",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, and the purchase (Grainger, 2022-11-03) is inside the sale window, so these checks do not change the result.",
+      "cites": [
+       "T4",
+       "T6",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

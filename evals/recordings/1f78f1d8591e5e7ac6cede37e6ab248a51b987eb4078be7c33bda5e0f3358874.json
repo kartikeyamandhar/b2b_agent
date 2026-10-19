@@ -1,0 +1,68 @@
+{
+ "text": "The label is legible and shows CXP-03, which is a recalled model. The serial is in range and there are no duplicates. However, the purchase date of 2019-12-07 falls before the sale window (2021-01-01 to 2024-10-31), and the retailer is not on the list. A purchase before the window is a denial under the purchase rule, which takes precedence over the retailer question. I'll record the decision.",
+ "usage": {
+  "input_tokens": 3549,
+  "output_tokens": 567,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3NrYj1SJLAyNRH1KoV",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2594,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows CXP-03, which is a recalled model. The serial is in range and there are no duplicates. However, the purchase date of 2019-12-07 falls before the sale window (2021-01-01 to 2024-10-31), and the retailer is not on the list. A purchase before the window is a denial under the purchase rule, which takes precedence over the retailer question. I'll record the decision."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01GsmY3FPSxUxZHf9ajmYFYg",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model CXP-03, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number FC2739136621 falls within the recalled serial prefixes.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2019-12-07 is before the program's sale window of 2021-01-01 to 2024-10-31, so the purchase is ineligible.",
+      "cites": [
+       "T2",
+       "R:sold_window",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The retailer 'Corner Hardware Co' is not on the program's list of eligible sellers (JHTNA), which is an additional reason the purchase does not qualify.",
+      "cites": [
+       "T2",
+       "R:sold_at"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

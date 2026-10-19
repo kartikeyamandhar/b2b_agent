@@ -1,0 +1,77 @@
+{
+ "text": "Checking the policy in order: flag first. T7 shows no duplicate hits, so no flag. Model: T1 label is legible and shows REV 20 Kids Bike, a recalled model (R:models, T2). Serial: the typed serial QQ56876971 does not begin with ET22, ET23, 01VX or 07VX, so it is out of range per R:serials (T3). Under policy, a serial outside the recalled ranges is a deny. Date code 2022 is in range (T4). Purchase at REI.com on 2024-04-28 is inside the window and a listed retailer (T5). No destruction photo is required (T6). The serial mismatch is the deciding factor, so the outcome is deny.",
+ "usage": {
+  "input_tokens": 3005,
+  "output_tokens": 720,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeN8xkBBYQnT7jbUMYy",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3585,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy in order: flag first. T7 shows no duplicate hits, so no flag. Model: T1 label is legible and shows REV 20 Kids Bike, a recalled model (R:models, T2). Serial: the typed serial QQ56876971 does not begin with ET22, ET23, 01VX or 07VX, so it is out of range per R:serials (T3). Under policy, a serial outside the recalled ranges is a deny. Date code 2022 is in range (T4). Purchase at REI.com on 2024-04-28 is inside the window and a listed retailer (T5). No destruction photo is required (T6). The serial mismatch is the deciding factor, so the outcome is deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_014dqpjNZ56vEaZ94TSn5VUJ",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows REV 20 Kids Bike, a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial number QQ56876971 does not begin with ET22, ET23, 01VX or 07VX, so it falls outside the recalled serial ranges, which is a denial under the policy.",
+      "cites": [
+       "R:serials",
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The date code 2022 is within the recalled range of 2022-2024.",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase at REI.com on 2024-04-28 is inside the sale window and from a listed retailer; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T5"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number or payout account, so no duplicate flag applies.",
+      "cites": [
+       "T7"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy.",
+      "cites": [
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

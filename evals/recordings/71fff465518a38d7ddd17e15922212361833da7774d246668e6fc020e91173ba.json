@@ -1,0 +1,15 @@
+{
+ "text": "{\"legible\": true, \"model_text\": \"B0726Q\", \"serial_text\": \"SN48966187\", \"date_code_text\": \"8/21\", \"confidence\": 0.9}",
+ "usage": {
+  "input_tokens": 1372,
+  "output_tokens": 55,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeC2sMxGmFHMWhhqQzE",
+ "purpose": "read_label_photo",
+ "max_tokens": 400,
+ "latency_ms": 1831
+}

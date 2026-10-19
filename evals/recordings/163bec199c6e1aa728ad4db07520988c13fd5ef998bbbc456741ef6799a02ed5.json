@@ -1,0 +1,69 @@
+{
+ "text": "The typed model matches a recalled model, and the label is unreadable, so the typed model decides. The destruction photo does not show the required strap cutting, so this needs more information from the claimant.",
+ "usage": {
+  "input_tokens": 3830,
+  "output_tokens": 555,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3ZE8nqxs1LLqWDyYdw",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2748,
+ "content": [
+  {
+   "type": "text",
+   "text": "The typed model matches a recalled model, and the label is unreadable, so the typed model decides. The destruction photo does not show the required strap cutting, so this needs more information from the claimant."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01HJQvYDRfmoe7LWvJCWY7SU",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is unreadable, so the typed model is used. The typed model B0726Y is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T7"
+      ]
+     },
+     {
+      "text": "The typed date code 8/21 is within the recalled range (August 2021 or earlier).",
+      "cites": [
+       "R:date_codes",
+       "T6"
+      ]
+     },
+     {
+      "text": "The retailer Walmart is on the sold-at list and the purchase date 2019-04-08 is inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the required destruction (cutting off the straps). It shows the product with an intact strap, so the destruction requirement is not met.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a clearer photo of the helmet's inner helmet sticker (label) so the model number can be read. Also send a new photo showing the helmet with its straps cut off, as the recall instructs.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

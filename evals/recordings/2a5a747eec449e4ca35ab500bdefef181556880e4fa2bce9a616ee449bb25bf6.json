@@ -1,0 +1,62 @@
+{
+ "text": "The label is legible and shows PA-10, which is recalled. The purchase date of 2020-09-05 is before the sale window (2021-06-01 to 2023-11-30), so it's a deny under the purchase rule. The serial check was skipped because the program's serial rules don't apply here, and there are no duplicates. I'll record the denial.",
+ "usage": {
+  "input_tokens": 3521,
+  "output_tokens": 516,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Gj5bmFtA63T4Dfi7V",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2321,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows PA-10, which is recalled. The purchase date of 2020-09-05 is before the sale window (2021-06-01 to 2023-11-30), so it's a deny under the purchase rule. The serial check was skipped because the program's serial rules don't apply here, and there are no duplicates. I'll record the denial."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01AW9eebNqdS4QvVwxPPK1Nx",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PA-10, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2020-09-05 falls before the program's sale window (2021-06-01 to 2023-11-30), so the unit was not sold within the recalled sale period and the claim is denied.",
+      "cites": [
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The retailer Sam Ash is on the list of sellers, and the date code 2126 is within the recalled range, but neither fixes the purchase date outside the sale window.",
+      "cites": [
+       "R:sold_at",
+       "R:date_codes",
+       "T2",
+       "T5"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

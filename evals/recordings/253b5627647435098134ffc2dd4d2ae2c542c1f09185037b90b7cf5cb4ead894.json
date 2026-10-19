@@ -1,0 +1,57 @@
+{
+ "text": "The legible label shows PC-10, which is not a recalled model (the recalled model is PA-10), so the claim fails on model regardless of the other checks.",
+ "usage": {
+  "input_tokens": 3529,
+  "output_tokens": 385,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3n6gSCnQCDBJ9A9tCn",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2743,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows PC-10, which is not a recalled model (the recalled model is PA-10), so the claim fails on model regardless of the other checks."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01JkWZVSAXoJZ7FNCgJUUk82",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PC-10. The only recalled model is PA-10, so the product is not a recalled model.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The claimant's typed model also reads PC-10, which is not on the recalled list, so the model does not qualify.",
+      "cites": [
+       "T5",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, and the purchase retailer, sale window, and date code (2126, in range) would otherwise be acceptable. These do not cure the model mismatch.",
+      "cites": [
+       "T2",
+       "T3",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.92
+   }
+  }
+ ]
+}

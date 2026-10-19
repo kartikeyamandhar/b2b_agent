@@ -1,0 +1,53 @@
+{
+ "text": "Policy order: flag first. T6 reports a same_photo duplicate with another claim, so the flag rule triggers and overrides the other outcomes.",
+ "usage": {
+  "input_tokens": 2813,
+  "output_tokens": 350,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeLw2soXt2kqBXPuWJB",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2306,
+ "content": [
+  {
+   "type": "text",
+   "text": "Policy order: flag first. T6 reports a same_photo duplicate with another claim, so the flag rule triggers and overrides the other outcomes."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_016sYmyVZiLwK5hJio5M943j",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo is shared with another existing claim, so this claim must go to a person for duplicate review together with the matching claim.",
+      "cites": [
+       "R:policy",
+       "T6",
+       "T7"
+      ]
+     },
+     {
+      "text": "Other checks pass (legible label showing recalled model SM1979, purchase at listed retailer REI inside the sale window, no destruction photo required), but the duplicate flag takes precedence.",
+      "cites": [
+       "T1",
+       "T3",
+       "T4",
+       "T5",
+       "R:models",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

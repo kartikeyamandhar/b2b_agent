@@ -1,0 +1,63 @@
+{
+ "text": "The model is confirmed. The purchase predates the sale window, which is a deny condition under the purchase rule.",
+ "usage": {
+  "input_tokens": 4026,
+  "output_tokens": 417,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3tXBVPskBd8VrGVS4T",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1927,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed. The purchase predates the sale window, which is a deny condition under the purchase rule."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Np3Q6fkcURxntEveJMqVS3",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model LTE4815BM, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number 604KM3049884 falls within a recalled serial range.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2014-06-02 is before the program's sale window (2015-01-01 to 2025-01-31), so the purchase does not qualify. Retailer Lowe's is listed, but the date is outside the window.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

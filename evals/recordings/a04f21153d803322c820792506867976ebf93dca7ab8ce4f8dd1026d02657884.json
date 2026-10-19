@@ -1,0 +1,66 @@
+{
+ "text": "Retrying with the citation corrected to the valid retrieval result id.",
+ "usage": {
+  "input_tokens": 3462,
+  "output_tokens": 524,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeLVBcSyXtoutzFbQkC",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2622,
+ "content": [
+  {
+   "type": "text",
+   "text": "Retrying with the citation corrected to the valid retrieval result id."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01RCsEzkQ3FNqnhDW8ciYDtk",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim (08f1dbd6-dd98-5df3-bbbf-18468e91a10a) sharing the same payout destination, so this claim must go to a person for review together with the matching claim.",
+      "cites": [
+       "T5",
+       "R:policy",
+       "T6"
+      ]
+     },
+     {
+      "text": "The legible label photo shows model P1413-P, which is not on the recalled list (P1410, P1410-P, P1411, P1411-P), so the unit does not appear to be part of this recall. This would be a denial on its own, but the duplicate flag takes precedence.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Purchase facts are otherwise acceptable: retailer www.amazon.com is listed and the purchase date 2006-01-05 is before the sale window, which would be a denial on its own.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy, and the refund of $44.08 is under the $100 review threshold.",
+      "cites": [
+       "T4",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

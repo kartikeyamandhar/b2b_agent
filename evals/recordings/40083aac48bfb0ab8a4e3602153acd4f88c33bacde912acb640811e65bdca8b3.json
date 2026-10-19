@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": true, \"complies\": true, \"observed\": \"The photo shows a gray device with a cord on a blue background, with the word RECALLED written prominently on its face, matching the instructed destruction.\", \"confidence\": 0.8}",
+ "usage": {
+  "input_tokens": 1190,
+  "output_tokens": 77,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeDQcq7wfsDpUQYWdZ3",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 1624
+}

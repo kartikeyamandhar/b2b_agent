@@ -1,0 +1,15 @@
+{
+ "text": "{\"legible\": true, \"model_text\": \"LTG4815BM\", \"serial_text\": \"308KM5452036\", \"date_code_text\": null, \"confidence\": 0.95}",
+ "usage": {
+  "input_tokens": 1372,
+  "output_tokens": 55,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAe8uajVf4KHQPkkDkQe",
+ "purpose": "read_label_photo",
+ "max_tokens": 400,
+ "latency_ms": 1066
+}

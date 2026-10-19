@@ -1,0 +1,75 @@
+{
+ "text": "Checking the policy against the results:\n\n- Flag: T5 shows no duplicates, so no flag.\n- Model: T1 is legible and reads 93550, a recalled model (R:models), and T2 confirms a match. No deny.\n- Serial/date code: the program has no serial or date code rule in the policy, so this does not apply.\n- Purchase: T3 shows ALDI (listed, R:sold_at) and 2017-11-24 inside the window (R:sold_window). No receipt required per T3. Eligible.\n- Destruction: R:destruction requires the cord cut. T4 shows a cut cord with a visible gap, complies true, and the photo shows the product, so it is not a repeat of the label photo. Complies.\n- Value: $40.00 is under the $100 threshold (R:value_threshold).\n\nEverything passes, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2821,
+  "output_tokens": 758,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3A1rxmmcgqt5ykrCdE",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3754,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy against the results:\n\n- Flag: T5 shows no duplicates, so no flag.\n- Model: T1 is legible and reads 93550, a recalled model (R:models), and T2 confirms a match. No deny.\n- Serial/date code: the program has no serial or date code rule in the policy, so this does not apply.\n- Purchase: T3 shows ALDI (listed, R:sold_at) and 2017-11-24 inside the window (R:sold_window). No receipt required per T3. Eligible.\n- Destruction: R:destruction requires the cord cut. T4 shows a cut cord with a visible gap, complies true, and the photo shows the product, so it is not a repeat of the label photo. Complies.\n- Value: $40.00 is under the $100 threshold (R:value_threshold).\n\nEverything passes, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01N91MEMRunYWp8ijLJVmHq8",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 93550, which is a recalled model, and the typed model matches.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase was at ALDI, a listed retailer, on 2017-11-24, which is inside the 2016-01-01 to 2019-12-31 sale window. No receipt is required for this check.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the unplugged power cord cut, as instructed, and is a distinct photo from the label.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this claim.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The $40.00 refund is under the $100.00 person-review threshold.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     },
+     {
+      "text": "The program policy requires approval when no other rule triggers, and every check passed.",
+      "cites": [
+       "R:policy",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

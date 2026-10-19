@@ -1,0 +1,75 @@
+{
+ "text": "All checks pass: the model is recalled, the serial and date code are in range, the purchase is from a listed retailer within the window, no duplicates were found, and no refund is requested, so no destruction photo is needed.",
+ "usage": {
+  "input_tokens": 3479,
+  "output_tokens": 531,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3yrT14rcLEtw4NTsHv",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2541,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass: the model is recalled, the serial and date code are in range, the purchase is from a listed retailer within the window, no duplicates were found, and no refund is requested, so no destruction photo is needed."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01No5iSTYYBXcrWdww2RuU8W",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model DR2E, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number J2D25454795 begins with J2D, which falls within the recalled serial ranges.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code 2017 falls within the recalled model year range of 2017-2024.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase was from Yamaha dealers, a listed retailer, on 2019-03-19, which is inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claimant requests repair or replacement, not a refund, so the destruction requirement and the refund review threshold do not apply.",
+      "cites": [
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

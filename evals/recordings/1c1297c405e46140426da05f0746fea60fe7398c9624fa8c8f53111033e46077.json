@@ -1,0 +1,68 @@
+{
+ "text": "I cited a rule id that isn't in the program rules. I'll resend the decision with only valid citations.",
+ "usage": {
+  "input_tokens": 4058,
+  "output_tokens": 477,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3hcWATYJYfZ5ufhVC4",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2083,
+ "content": [
+  {
+   "type": "text",
+   "text": "I cited a rule id that isn't in the program rules. I'll resend the decision with only valid citations."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QPe6hmy6d59QG6s5LpNP59",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Duplicate check found another claim (1abb80d3-d118-5c60-aaa1-6324977c1a81) sharing the same payout destination, which requires review under the flag rule.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label is legible and shows recalled model SE4570, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The label date code 08/23 is not one of the recalled date codes (07/22 NH or 08/22 NH), which would support a denial on its own.",
+      "cites": [
+       "T5",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Retailer Grainger is on the sold-at list and the purchase date 2023-07-30 is inside the sale window; no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The serial check was skipped, so no serial verdict was made.",
+      "cites": [
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

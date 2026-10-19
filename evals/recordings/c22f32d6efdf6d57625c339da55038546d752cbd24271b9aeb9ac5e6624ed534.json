@@ -1,0 +1,47 @@
+{
+ "text": "I'll start by reading the label photo, checking the purchase, checking for duplicates, and checking the serial, since the program has serial rules and the claim gives a typed serial. Destruction isn't a listed rule, so I won't check that.",
+ "usage": {
+  "input_tokens": 2607,
+  "output_tokens": 205,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3nTN8p2yobNqTTWJ2r",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1895,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll start by reading the label photo, checking the purchase, checking for duplicates, and checking the serial, since the program has serial rules and the claim gives a typed serial. Destruction isn't a listed rule, so I won't check that."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01P4EyRwcd9UkmCQ3EyZZqcr",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01KYdbU8cTobqoSoXdehtv58",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_014bwL2mHQ6QknhjNgazsuq9",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01SbVjedbLxbVtoZLXafAuLP",
+   "name": "check_serial",
+   "input": {
+    "serial": "SN14753743"
+   }
+  }
+ ]
+}

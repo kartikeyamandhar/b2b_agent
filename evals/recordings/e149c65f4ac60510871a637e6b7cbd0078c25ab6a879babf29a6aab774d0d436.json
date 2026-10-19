@@ -1,0 +1,62 @@
+{
+ "text": "The model is confirmed. The only open issue is the missing destruction photo, which triggers needs_info.",
+ "usage": {
+  "input_tokens": 3735,
+  "output_tokens": 496,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3RL8j36a6Xmu3uB2Pv",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2372,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed. The only open issue is the missing destruction photo, which triggers needs_info."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_014cSFPEyVHTyoAqbFLbgzLD",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model AD10009BE, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase was from Amazon.com, a listed retailer, on a date within the sale window (2023-04-01 to 2024-08-31). No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The remedy requires destruction: writing 'RECALLED' in large letters on the front and rear of the seatback with a marker. No destruction photo was submitted, so the destruction requirement is not met.",
+      "cites": [
+       "R:destruction",
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a photo showing the seat with 'RECALLED' written in large letters with a marker on both the front and rear of the seatback. The photo should be different from the label photo you already submitted.",
+    "confidence": 0.9
+   }
+  }
+ ]
+}

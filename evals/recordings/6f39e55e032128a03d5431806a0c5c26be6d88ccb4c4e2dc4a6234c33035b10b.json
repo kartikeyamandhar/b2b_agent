@@ -1,0 +1,85 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: label legible, shows MK04 (T1, T2). Recalled.\n- Serial: starts with BN, in range (T3).\n- Date code: June 2025, prior to July 2025, in range (T4).\n- Purchase: Shopify.com is listed; 2024-12-21 is inside the sale window; no receipt required (T5).\n- Destruction photo: not required (T6), since the remedy is replacement.\n- Duplicates: none (T7).\n\nNo flag, deny, or needs_info trigger applies, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2899,
+  "output_tokens": 722,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAfr7FxHTvVwugyVAtMC",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3518,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: label legible, shows MK04 (T1, T2). Recalled.\n- Serial: starts with BN, in range (T3).\n- Date code: June 2025, prior to July 2025, in range (T4).\n- Purchase: Shopify.com is listed; 2024-12-21 is inside the sale window; no receipt required (T5).\n- Destruction photo: not required (T6), since the remedy is replacement.\n- Duplicates: none (T7).\n\nNo flag, deny, or needs_info trigger applies, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01LgEqRpFeXevsuFV5XhUdny",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial number BN23139927 starts with BN and is within the recalled range.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The date code June 2025 is prior to July 2025, so it is within the recalled date codes.",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     },
+     {
+      "text": "Shopify.com is a listed retailer, and the purchase date 2024-12-21 falls inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T5",
+       "T8"
+      ]
+     },
+     {
+      "text": "The remedy is replacement, so no destruction photo is required.",
+      "cites": [
+       "T6",
+       "T8"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T7",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No flag, deny, or needs_info rule applies, so the claim is approved. The refund is not requested and no amount exceeds the value threshold.",
+      "cites": [
+       "R:policy",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

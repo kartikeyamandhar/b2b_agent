@@ -1,0 +1,66 @@
+{
+ "text": "The claim shares a serial number with another claim on file, which triggers the flag rule, so it goes to a person for review.",
+ "usage": {
+  "input_tokens": 4419,
+  "output_tokens": 472,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3XGDyyk49qpUvkuEKi",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2264,
+ "content": [
+  {
+   "type": "text",
+   "text": "The claim shares a serial number with another claim on file, which triggers the flag rule, so it goes to a person for review."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QRVKitFGbHRdKZjqSERz1k",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim (ffb1b591-c5b6-5c82-b243-f6cb990781d7) sharing the same serial number, so this claim must be sent to a person for review together with the matching claim.",
+      "cites": [
+       "T3",
+       "T7",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number is in the recalled BN range and the date code (June 2025) is prior to July 2025, both within the recall.",
+      "cites": [
+       "T4",
+       "T5",
+       "R:serials",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The retailer TikTok.com is on the sold-at list and the purchase date 2024-10-07 is inside the sale window; no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,68 @@
+{
+ "text": "Every check passes, so I'm recording an approval.",
+ "usage": {
+  "input_tokens": 4160,
+  "output_tokens": 418,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3QMGuWw7nQveqepGnq",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2035,
+ "content": [
+  {
+   "type": "text",
+   "text": "Every check passes, so I'm recording an approval."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_018eaZvQTM7qbmoaAPqiXT4m",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model LSEL6331F, which is on the recalled model list.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial 606KM1749168 falls within a recalled serial range.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The purchase at LG.com on 2022-03-22 is inside the sale window and LG.com is a listed retailer; no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claimant requested repair or replacement, not a refund, so the value threshold does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

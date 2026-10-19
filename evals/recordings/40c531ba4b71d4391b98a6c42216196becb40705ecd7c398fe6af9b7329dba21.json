@@ -1,0 +1,64 @@
+{
+ "text": "The model is confirmed as recalled, but the date code is out of range, so the claim fails on that rule.",
+ "usage": {
+  "input_tokens": 3722,
+  "output_tokens": 438,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3GqwMRBiFr16APtQb5",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2137,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed as recalled, but the date code is out of range, so the claim fails on that rule."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01A4Ud1dbsnFworQhJ3gqMjm",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PA-10, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The date code 2369 (confirmed on the label and typed by the claimant) is outside the recalled date code range of 2126 to 2319, so the unit is not covered by the recall.",
+      "cites": [
+       "T5",
+       "T1",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The retailer (Amazon.com) and purchase date (2022-12-18) are valid and no duplicate claims were found, but these do not offset the out-of-range date code.",
+      "cites": [
+       "T2",
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No serial rule applies to this program, so the serial check was not used in the decision.",
+      "cites": [
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.92
+   }
+  }
+ ]
+}

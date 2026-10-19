@@ -1,0 +1,53 @@
+{
+ "text": "Policy order: flag first. T5 shows a same_photo duplicate with another claim, so the outcome is flag.",
+ "usage": {
+  "input_tokens": 2779,
+  "output_tokens": 361,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAePTGrb3QrgAbJRgnUV",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 9707,
+ "content": [
+  {
+   "type": "text",
+   "text": "Policy order: flag first. T5 shows a same_photo duplicate with another claim, so the outcome is flag."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01RuTigt7YJonqP59EgXp6mB",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo is shared with another claim (fcf3a7de-fdab-529b-b2da-772ca9ced8f3), so this claim must go to a person for review together with the matched claim.",
+      "cites": [
+       "T5",
+       "R:policy",
+       "T6"
+      ]
+     },
+     {
+      "text": "Otherwise the claim would pass: the label is legible and shows recalled model 9421, the purchase is at a listed retailer inside the sale window, and no destruction photo or refund is required.",
+      "cites": [
+       "T1",
+       "T2",
+       "T3",
+       "T4",
+       "R:models",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

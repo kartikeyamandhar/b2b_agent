@@ -1,0 +1,29 @@
+{
+ "text": "The serial is out of range, and the policy says an out-of-range serial is a denial. I'll confirm the model against the label as well, then record the decision.",
+ "usage": {
+  "input_tokens": 3815,
+  "output_tokens": 103,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3EMVmjKHHA5u7v81wB",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1077,
+ "content": [
+  {
+   "type": "text",
+   "text": "The serial is out of range, and the policy says an out-of-range serial is a denial. I'll confirm the model against the label as well, then record the decision."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_015kh9A4KTuojJH3JCr4Tehz",
+   "name": "check_model",
+   "input": {
+    "model_text": "FCRE3052BB"
+   }
+  }
+ ]
+}

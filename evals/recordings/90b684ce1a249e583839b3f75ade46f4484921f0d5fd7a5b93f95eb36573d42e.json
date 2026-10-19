@@ -1,0 +1,62 @@
+{
+ "text": "The FAQ confirms the recall covers only the October\u2013November 2023 date codes. The label shows November 2024, which is outside the recalled production window, so the unit is not part of the recall. That is a denial.",
+ "usage": {
+  "input_tokens": 4702,
+  "output_tokens": 474,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3DrT2t8uN6ad3Ly67h",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2083,
+ "content": [
+  {
+   "type": "text",
+   "text": "The FAQ confirms the recall covers only the October\u2013November 2023 date codes. The label shows November 2024, which is outside the recalled production window, so the unit is not part of the recall. That is a denial."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QfCLyznn36qaPJ1YTMPzij",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model FCRE3052BW, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The label date code is November 2024, but the recall covers only units produced from October 2023 through November 2023. The date code is outside the recalled range, so this unit is not part of the recall.",
+      "cites": [
+       "R:date_codes",
+       "T5",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number VF34508573 is inside a recalled range, but the date code rule is an independent requirement. The program's FAQ states that a date code outside the recalled set is not part of the recall, so the serial match does not save the claim.",
+      "cites": [
+       "T4",
+       "T6"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the duplicate rule does not apply.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

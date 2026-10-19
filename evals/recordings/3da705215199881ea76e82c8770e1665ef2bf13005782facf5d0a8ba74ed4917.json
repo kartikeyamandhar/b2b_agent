@@ -1,0 +1,69 @@
+{
+ "text": "The legible label shows AD10009GR, which is not on the recalled list (the list includes AD10009BE but not AD10009GR). Under the model rule, a legible label showing a non-recalled model means deny, regardless of the typed model.",
+ "usage": {
+  "input_tokens": 3683,
+  "output_tokens": 563,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3ftLc76LgLWfE94kaw",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3116,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows AD10009GR, which is not on the recalled list (the list includes AD10009BE but not AD10009GR). Under the model rule, a legible label showing a non-recalled model means deny, regardless of the typed model."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01RCvyd2Tv8AazRA6v9GhSLe",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model AD10009GR. That model is not on the recalled list (the list includes AD10009BE, not AD10009GR), so the product is not covered by the recall.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The typed model AD10007GR does not control here. The legible label is the evidence, and it shows a non-recalled model.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The purchase is valid: Amazon.com is a listed retailer, the purchase date of 2023-09-21 is inside the sale window, and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the required destruction. It shows a graphic with the word RECALLED, not marker writing on the front and rear of a seatback. This would also require needs_info if the model were covered.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

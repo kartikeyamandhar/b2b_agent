@@ -1,0 +1,81 @@
+{
+ "text": "Checking each rule against the results:\n\n- Model: T1 label is legible and shows SE4570, a recalled model (T2 match). Confirmed.\n- Serial/date code: Date code 07/22 is in range (T3). Serial number has no recalled range rule in this program, so nothing to check against it.\n- Purchase: Retailer www.justinboots.com is on the list, purchase date 2023-02-23 is inside the 2022-09-01 to 2023-09-30 window (T4). No receipt required per T4, though one was attached.\n- Destruction photo: not required, the remedy is replacement (T5, T7).\n- Duplicates: none found (T6), so no flag.\n- Refund: none requested, so the value threshold does not apply.\n\nNo rule triggers a flag, deny, or needs_info, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2788,
+  "output_tokens": 773,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeG8qeWfAua4deg8eds",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4071,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking each rule against the results:\n\n- Model: T1 label is legible and shows SE4570, a recalled model (T2 match). Confirmed.\n- Serial/date code: Date code 07/22 is in range (T3). Serial number has no recalled range rule in this program, so nothing to check against it.\n- Purchase: Retailer www.justinboots.com is on the list, purchase date 2023-02-23 is inside the 2022-09-01 to 2023-09-30 window (T4). No receipt required per T4, though one was attached.\n- Destruction photo: not required, the remedy is replacement (T5, T7).\n- Duplicates: none found (T6), so no flag.\n- Refund: none requested, so the value threshold does not apply.\n\nNo rule triggers a flag, deny, or needs_info, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01MH9944dpKWDVaTfYS7gEbT",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 07/22 falls within the recalled date codes.",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "The retailer www.justinboots.com is on the sold-at list and the purchase date of 2023-02-23 is inside the sale window.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No destruction photo is required because the remedy is replacement, so that check does not apply.",
+      "cites": [
+       "T5",
+       "T7"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The claimant requested repair or replacement, not a refund, so the refund value threshold does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     },
+     {
+      "text": "No flag, deny, or needs-info trigger applies, so the claim is approved under the claim policy.",
+      "cites": [
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

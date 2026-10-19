@@ -1,0 +1,70 @@
+{
+ "text": "The purchase date of 2023-01-04 is before the sale window (2023-10-01 to 2023-12-31), so the claim is denied on purchase grounds. The model, serial, and date code all match, and there are no duplicates.",
+ "usage": {
+  "input_tokens": 3775,
+  "output_tokens": 505,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3j6r253KLhyH4Ncccg",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2594,
+ "content": [
+  {
+   "type": "text",
+   "text": "The purchase date of 2023-01-04 is before the sale window (2023-10-01 to 2023-12-31), so the claim is denied on purchase grounds. The model, serial, and date code all match, and there are no duplicates."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01TBN9WV4zwzRX1pPE5L3tQN",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The purchase date of 2023-01-04 is before the program's sale window of 2023-10-01 to 2023-12-31, so the unit was not sold within the covered period.",
+      "cites": [
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The retailer, Lowe's, is on the approved list, so the retailer itself is not the problem.",
+      "cites": [
+       "R:sold_at",
+       "T2"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model FCRE306CAS, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial VF34410338 is within the recalled range, and the date code October 2023 is within the recalled production dates.",
+      "cites": [
+       "R:serials",
+       "T4",
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

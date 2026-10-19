@@ -1,0 +1,76 @@
+{
+ "text": "All checks pass: legible label showing PA-10, date code 2126 in range, serial present, Amazon.com listed, purchase 2022-02-20 inside window, no receipt required, no destruction photo required (repair/replacement), no duplicates found.",
+ "usage": {
+  "input_tokens": 2842,
+  "output_tokens": 543,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeK5qPtrwcYnV99saKX",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2643,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass: legible label showing PA-10, date code 2126 in range, serial present, Amazon.com listed, purchase 2022-02-20 inside window, no receipt required, no destruction photo required (repair/replacement), no duplicates found."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01UguX4AaNGzQR7QP7dGvV4h",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PA-10, a recalled model; the typed model matches.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 2126 is within the recalled range 2126 to 2319.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T3"
+      ]
+     },
+     {
+      "text": "Purchase from Amazon.com, a listed retailer, on 2022-02-20, which is inside the sale window 2021-06-01 to 2023-11-30. No receipt is required for this claim.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No destruction photo is required because the remedy is repair or replacement.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No refund is requested, so the value threshold does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

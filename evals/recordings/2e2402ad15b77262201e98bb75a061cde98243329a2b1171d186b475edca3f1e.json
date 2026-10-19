@@ -1,0 +1,53 @@
+{
+ "text": "I'll start by running the independent checks in parallel: the label photo, purchase, duplicates, destruction photo, and the serial check.",
+ "usage": {
+  "input_tokens": 2898,
+  "output_tokens": 201,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3aGp3Jk1KDn56YuiFa",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1221,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll start by running the independent checks in parallel: the label photo, purchase, duplicates, destruction photo, and the serial check."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QpxfUo61HrWneyZ6eKS9L8",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_011zwzqisahNzgk2RjVnAfQ7",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Le3z91ieAMYd6JQmCVDQEV",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01LfRqo6SceRhofdxVFFkAGQ",
+   "name": "check_destruction_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01FMCqzT5qSJLoh2EPeZs9mA",
+   "name": "check_serial",
+   "input": {
+    "serial": "SN57021945"
+   }
+  }
+ ]
+}

@@ -1,0 +1,57 @@
+{
+ "text": "The model is confirmed, but the date code is out of range, so the claim fails on that rule.",
+ "usage": {
+  "input_tokens": 3694,
+  "output_tokens": 376,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAe1cuRs7cs2E2eU59Vs",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2054,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed, but the date code is out of range, so the claim fails on that rule."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01GXpfB5o7L9GFphbqFQNwWP",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The date code 08/23 is outside the recalled date codes (07/22 NH or 08/22 NH), so the unit is not covered by the recall.",
+      "cites": [
+       "T5",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (www.grainger.com) within the sale window, and no duplicate claims were found. These do not offset the failed date-code rule.",
+      "cites": [
+       "T2",
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

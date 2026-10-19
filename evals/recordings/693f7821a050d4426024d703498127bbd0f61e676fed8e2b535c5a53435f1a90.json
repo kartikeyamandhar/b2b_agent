@@ -1,0 +1,70 @@
+{
+ "text": "The model is confirmed. The purchase timing is the deciding factor, so I'll record the denial.",
+ "usage": {
+  "input_tokens": 3723,
+  "output_tokens": 525,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3XcPSAmmXDFjY6oEcE",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2529,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed. The purchase timing is the deciding factor, so I'll record the denial."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QMSSVndzi7FU43aZEeyyHn",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number BN83694552 is in the recalled 'BN' range and the date code June 2025 is prior to July 2025, so both are in range.",
+      "cites": [
+       "R:serials",
+       "R:date_codes",
+       "T4",
+       "T5"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2024-06-18 is before the program's sale window of 2024-09-01 to 2025-06-30, so the purchase is outside the eligible window.",
+      "cites": [
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The claimed retailer, Corner Hardware Co, is not on the list of eligible sellers (Amazon.com, Shopify.com, TEMU.com, TikTok.com). This is a second reason the purchase does not qualify.",
+      "cites": [
+       "R:sold_at",
+       "T2"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found sharing a photo, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

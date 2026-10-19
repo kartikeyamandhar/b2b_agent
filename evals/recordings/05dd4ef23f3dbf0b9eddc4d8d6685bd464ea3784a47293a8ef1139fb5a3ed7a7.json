@@ -1,0 +1,72 @@
+{
+ "text": "Flag takes precedence: check_duplicates (T5) found a shared payout destination with another claim, so the claim must be flagged for person review regardless of the other checks passing.",
+ "usage": {
+  "input_tokens": 2803,
+  "output_tokens": 572,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeJEvpLSpnE6AC78sqh",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3444,
+ "content": [
+  {
+   "type": "text",
+   "text": "Flag takes precedence: check_duplicates (T5) found a shared payout destination with another claim, so the claim must be flagged for person review regardless of the other checks passing."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Wb283pWrJ1SjK72PwX84LH",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim (6ad450ec-9ce8-580f-86ba-5c3e50afb551) that shares the same payout destination. Under the policy, claims sharing a payout account are sent to a person for review, together with the matched claim.",
+      "cites": [
+       "T5",
+       "R:policy",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model A17A2, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number SN38305011 is present on the label. The program has no serial or date code range rule for this recall, so no serial-based denial applies.",
+      "cites": [
+       "T1",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase date of 2023-06-01 falls inside the sale window, though the retailer Corner Hardware Co is not on the list. The policy asks for proof of ownership in that case, and no receipt is required here, so this does not trigger a denial.",
+      "cites": [
+       "T3",
+       "R:sold_window",
+       "R:sold_at",
+       "T6"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for the replacement remedy.",
+      "cites": [
+       "T4",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

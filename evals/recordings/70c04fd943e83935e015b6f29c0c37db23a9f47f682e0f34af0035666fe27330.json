@@ -1,0 +1,60 @@
+{
+ "text": "The legible label shows a model that is not recalled, so the claim is denied under the model rule, even though the serial and date code fall within the recalled ranges.",
+ "usage": {
+  "input_tokens": 3805,
+  "output_tokens": 448,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3M4AAzARLdV922oScS",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2167,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows a model that is not recalled, so the claim is denied under the model rule, even though the serial and date code fall within the recalled ranges."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01JXvRhriMcpmPgS8q3oLXSr",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 'RGV 16 Kids Bike'. That is not a recalled model; the recalled models are REV 12, REV 16 and REV 20 Kids Bike. The label reading controls over the typed model.",
+      "cites": [
+       "R:models",
+       "R:policy",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The typed serial 07VX50697893 falls in a recalled range and the date code 2022 is in range, but these do not cure a non-recalled model.",
+      "cites": [
+       "R:serials",
+       "R:date_codes",
+       "T4",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (REI.com) within the sale window, and no duplicate claims were found, so these checks do not change the denial.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

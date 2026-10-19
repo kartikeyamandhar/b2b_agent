@@ -1,0 +1,72 @@
+{
+ "text": "Checking the policy against the results:\n\n- Flag: T7 found no duplicates. No flag.\n- Model: T1 read the label as legible with model B0726Y, which is recalled. The model is confirmed despite the typed \"80726Y\" typo (T2 ambiguous, T3 match on the label reading). Pass.\n- Serial/date code: The recall rule (R:date_codes) uses date code only. T1 and T4 show \"8/21\", which is in range. Pass.\n- Purchase: T5 shows Amazon is listed and the date 2017-06-24 is inside the window; no receipt required. Pass.\n- Destruction: R:destruction requires cutting off the straps. T6 says the destruction photo does not clearly show the instructed destruction (confidence 0.6, complies false). Per policy, a destruction photo that does not show the instructed destruction is needs_info.\n\nThe destruction photo is the only blocking issue, so the outcome is needs_info, asking for a clearer photo of the helmet with the straps cut off.",
+ "usage": {
+  "input_tokens": 3012,
+  "output_tokens": 822,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB36qWnFEhteCKoexoKE",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3836,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy against the results:\n\n- Flag: T7 found no duplicates. No flag.\n- Model: T1 read the label as legible with model B0726Y, which is recalled. The model is confirmed despite the typed \"80726Y\" typo (T2 ambiguous, T3 match on the label reading). Pass.\n- Serial/date code: The recall rule (R:date_codes) uses date code only. T1 and T4 show \"8/21\", which is in range. Pass.\n- Purchase: T5 shows Amazon is listed and the date 2017-06-24 is inside the window; no receipt required. Pass.\n- Destruction: R:destruction requires cutting off the straps. T6 says the destruction photo does not clearly show the instructed destruction (confidence 0.6, complies false). Per policy, a destruction photo that does not show the instructed destruction is needs_info.\n\nThe destruction photo is the only blocking issue, so the outcome is needs_info, asking for a clearer photo of the helmet with the straps cut off."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01NQe4gFeVUWYTpDJMqUdxMP",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model B0726Y, a recalled model, so the model is confirmed even though the typed model 80726Y has a typo.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The date code 8/21 is within the recalled range.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T4"
+      ]
+     },
+     {
+      "text": "Amazon is a listed retailer and the purchase date 2017-06-24 falls inside the sale window; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T5"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T7"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the helmet with its straps cut off, which is the required destruction, so it cannot be accepted yet.",
+      "cites": [
+       "R:destruction",
+       "T6",
+       "T8"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a clearer photo of the destroyed helmet showing that the straps have been cut off. The photo should show the helmet itself, not the label.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

@@ -1,0 +1,69 @@
+{
+ "text": "Model is confirmed as recalled. The purchase is inside the window, but the retailer is not a listed Yamaha dealer. Per the policy, a retailer not on the list is needs_info, asking for proof of ownership. I'll record that.",
+ "usage": {
+  "input_tokens": 3694,
+  "output_tokens": 612,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3V8GCVsKxXeauRBAhN",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3256,
+ "content": [
+  {
+   "type": "text",
+   "text": "Model is confirmed as recalled. The purchase is inside the window, but the retailer is not a listed Yamaha dealer. Per the policy, a retailer not on the list is needs_info, asking for proof of ownership. I'll record that."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01FdjKe1zEUo1eeZjN9DQvCu",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model DR2A, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number J0D63321830 (read from the label as J0D6332 1830) falls within a recalled serial prefix (J0D).",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code 2017 is within the recalled model year range 2017-2024.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase date 2020-06-13 is inside the sale window, but the claimed retailer, Corner Hardware Co, is not a listed Yamaha dealer. A retailer not on the list requires proof of ownership before approval.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found sharing a photo, address, email, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": "Our records do not list Corner Hardware Co as an authorized Yamaha dealer. Please provide proof of ownership for the unit, such as a receipt, invoice, or other document showing where and when you bought it, and confirm the seller's name and location.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

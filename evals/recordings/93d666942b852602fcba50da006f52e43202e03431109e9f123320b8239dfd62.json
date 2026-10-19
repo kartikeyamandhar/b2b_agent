@@ -1,0 +1,77 @@
+{
+ "text": "Checking the results against the policy:\n\n- Duplicates: T6 found no matching photo, address, email, serial, or payout account, so no flag.\n- Model: T1 reads the label as legible, showing LXT-CL-1.0, a recalled model (T2 match).\n- Date code: T1 and T3 show 0722, within the recalled range.\n- Serial: the program lists no serial rule, so none applies.\n- Purchase: T4 shows Nordstrom is a listed retailer and the 2022-11-04 date is inside the sale window. No receipt is required for this retailer, though one was attached anyway.\n- Destruction: T5 confirms the photo shows the cord cut through, as instructed, and it is not a repeat of the label photo.\n- Refund: the remedy is repair or replacement, not a refund, so the $100 threshold does not apply.\n\nNo rule triggers a flag, deny, or needs_info, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2913,
+  "output_tokens": 805,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB35YPrkheATRf9hHmke",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3554,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Duplicates: T6 found no matching photo, address, email, serial, or payout account, so no flag.\n- Model: T1 reads the label as legible, showing LXT-CL-1.0, a recalled model (T2 match).\n- Date code: T1 and T3 show 0722, within the recalled range.\n- Serial: the program lists no serial rule, so none applies.\n- Purchase: T4 shows Nordstrom is a listed retailer and the 2022-11-04 date is inside the sale window. No receipt is required for this retailer, though one was attached anyway.\n- Destruction: T5 confirms the photo shows the cord cut through, as instructed, and it is not a repeat of the label photo.\n- Refund: the remedy is repair or replacement, not a refund, so the $100 threshold does not apply.\n\nNo rule triggers a flag, deny, or needs_info, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01X8nYAhvfoaRfL77bCeBkJ7",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model LXT-CL-1.0, which is a recalled model, so the unit is confirmed as recalled.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 0722 is inside the recalled range of 0722 to 1223.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T3"
+      ]
+     },
+     {
+      "text": "Nordstrom is a listed retailer and the purchase date of 2022-11-04 falls inside the sale window, so the purchase is eligible without a receipt.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the cord cut through as instructed and is not a repeat of the label photo.",
+      "cites": [
+       "R:destruction",
+       "T5"
+      ]
+     },
+     {
+      "text": "No duplicate claim shares a photo, address, email, serial number, or payout account with this claim.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The requested remedy is repair or replacement, not a refund, so the value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

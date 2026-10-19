@@ -1,0 +1,62 @@
+{
+ "text": "The duplicate check found another claim sharing a payout destination, which triggers a flag regardless of the other results. The purchase date is before the sale window, which would also be a denial, but flag takes precedence under the policy order. I'll record the decision now.",
+ "usage": {
+  "input_tokens": 3192,
+  "output_tokens": 488,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3ndjxdvJ5HPLDZSwtF",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2463,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing a payout destination, which triggers a flag regardless of the other results. The purchase date is before the sale window, which would also be a denial, but flag takes precedence under the policy order. I'll record the decision now."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_014ArgBZiBTUd89Qmr2fPKnH",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program (ab27d02a-fdcb-56c6-8fc5-c14379c31e0f) shares this claim's payout destination, so the claim must be flagged for review.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model P1411, which is a recalled model.",
+      "cites": [
+       "T1",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2006-03-22 is before the sale window (2006-10-01 to 2021-12-31), so the purchase would fall outside the program's sale rules. This would be a denial on its own but is secondary to the flag.",
+      "cites": [
+       "T2",
+       "R:sold_window",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The retailer www.amazon.com is on the sold-at list.",
+      "cites": [
+       "T2",
+       "R:sold_at"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

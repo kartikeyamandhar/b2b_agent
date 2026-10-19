@@ -1,0 +1,75 @@
+{
+ "text": "Every check passes: the label is legible and shows a recalled model, the serial and date code are in range, the Lowe's purchase falls inside the sale window, and there are no duplicate claims. The remedy is repair or replacement, so no destruction photo is needed and the refund threshold does not apply.",
+ "usage": {
+  "input_tokens": 3784,
+  "output_tokens": 568,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3iM9iLdWRqqTcUSwgV",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2585,
+ "content": [
+  {
+   "type": "text",
+   "text": "Every check passes: the label is legible and shows a recalled model, the serial and date code are in range, the Lowe's purchase falls inside the sale window, and there are no duplicate claims. The remedy is repair or replacement, so no destruction photo is needed and the refund threshold does not apply."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_011DNmtYmrZxkcptKMBuJ5Kk",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model FCRG3051BB, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial VF34508527 falls within the recalled range VF34508449 through VF34508592.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code October 2023 is within the recalled production period of October through November 2023.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase was at Lowe's, a listed retailer, on 2023-11-29, inside the 2023-10-01 to 2023-12-31 sale window; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claim seeks repair or replacement, so no destruction photo is required and the refund value threshold does not apply.",
+      "cites": [
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

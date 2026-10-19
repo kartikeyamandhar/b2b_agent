@@ -1,0 +1,64 @@
+{
+ "text": "Per the policy, the first triggered rule determines the outcome. check_duplicates (T5) found a same_payout hit with another claim, so the claim must be flagged for person review, regardless of the otherwise clean checks.",
+ "usage": {
+  "input_tokens": 2880,
+  "output_tokens": 515,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeUFSM5HSCP7HvQ53u6",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2826,
+ "content": [
+  {
+   "type": "text",
+   "text": "Per the policy, the first triggered rule determines the outcome. check_duplicates (T5) found a same_payout hit with another claim, so the claim must be flagged for person review, regardless of the otherwise clean checks."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0191rkyaitiPSpaEf6k2AGAN",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim (92cd95e1-1b01-50bf-b217-0794b5294bb9) that shares a payout destination with this claim. Claims sharing a payout account must be sent to a person for review.",
+      "cites": [
+       "T5",
+       "R:policy",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model 98527, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number SN67985618 is present; no serial range rule applies to this program. The purchase date 2016-05-20 is inside the sale window at a listed retailer (ALDI), and no receipt is required.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the unplugged power cord cut, as instructed, and is not a repeat of the label photo.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

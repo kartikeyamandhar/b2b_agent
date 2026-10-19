@@ -1,0 +1,64 @@
+{
+ "text": "The model is confirmed. The date code is outside the recalled range, which is a denial ground under the policy, and that outcome takes precedence over the retailer question.",
+ "usage": {
+  "input_tokens": 3720,
+  "output_tokens": 429,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3HCkjzAsHWscW3GUwb",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2367,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed. The date code is outside the recalled range, which is a denial ground under the policy, and that outcome takes precedence over the retailer question."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_014iwvpo1SGvvykDT8Fd8ezH",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PA-10, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The date code on the label, 2369, is outside the recalled date code range of 2126 to 2319, so the unit is not covered by the recall.",
+      "cites": [
+       "T5",
+       "R:date_codes",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The retailer, Corner Hardware Co, is not on the list of approved sellers, though this is secondary to the date code result.",
+      "cites": [
+       "T2",
+       "R:sold_at"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, and the purchase date falls within the sale window.",
+      "cites": [
+       "T3",
+       "T2",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

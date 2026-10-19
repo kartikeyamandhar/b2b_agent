@@ -1,0 +1,71 @@
+{
+ "text": "Checking the policy against the results:\n\n- Duplicates (T5): no hits, so no flag.\n- Model (T1, T2): label is legible and shows P1410-P, which is recalled. Model confirmed.\n- Serial/date code: the program's rules here don't include serial or date code ranges, so these don't apply.\n- Purchase (T3): retailer www.walmart.com is listed, date 2010-09-26 is inside the 2006-10-01 to 2021-12-31 window, and no receipt is required by the check. Approve on purchase grounds.\n- Destruction (T4): not required for this remedy.\n- Refund $87.39 is under the $100.00 threshold, so no person review is required.\n\nAll rules pass, so the outcome is approve.",
+ "usage": {
+  "input_tokens": 2733,
+  "output_tokens": 696,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeLHQhVKzxZa1EpfGZa",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3967,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy against the results:\n\n- Duplicates (T5): no hits, so no flag.\n- Model (T1, T2): label is legible and shows P1410-P, which is recalled. Model confirmed.\n- Serial/date code: the program's rules here don't include serial or date code ranges, so these don't apply.\n- Purchase (T3): retailer www.walmart.com is listed, date 2010-09-26 is inside the 2006-10-01 to 2021-12-31 window, and no receipt is required by the check. Approve on purchase grounds.\n- Destruction (T4): not required for this remedy.\n- Refund $87.39 is under the $100.00 threshold, so no person review is required.\n\nAll rules pass, so the outcome is approve."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01NB33bJPAbTSDAF3aXaFsPo",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model P1410-P, which is on the recalled list, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The retailer www.walmart.com is on the sold-at list and the purchase date 2010-09-26 falls inside the sale window, so the purchase qualifies. No receipt is required for this check.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3",
+       "T6"
+      ]
+     },
+     {
+      "text": "The duplicate check found no other claim sharing a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy, and the program has no serial or date code range rules that apply.",
+      "cites": [
+       "T4",
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The refund of $87.39 is under the $100.00 review threshold, so no person review is needed.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

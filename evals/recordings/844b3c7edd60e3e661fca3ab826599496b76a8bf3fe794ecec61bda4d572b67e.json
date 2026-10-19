@@ -1,0 +1,66 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3559,
+  "output_tokens": 442,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3wKT8do6UrF48GRjcL",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2105,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01HtajEuZDpTJvwPJqLGJ7Lv",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The payout destination matches another claim in the program (ee6c9d50-8fbb-5519-bcb0-04927d9a38e2), which requires flagging for review regardless of the other checks.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The legible label shows model 34692, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label's date code 'December 2023' is within the recalled range (manufactured prior to January 2024).",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "Dick's is a listed retailer and the purchase date 2020-02-06 is inside the sale window; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial check was skipped because the serial rule does not apply to this program, so it did not affect the outcome.",
+      "cites": [
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.8
+   }
+  }
+ ]
+}

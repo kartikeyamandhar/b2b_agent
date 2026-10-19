@@ -1,0 +1,64 @@
+{
+ "text": "The label is legible and shows 203LX, which is not a recalled model (only 200LX is recalled). Under the policy, a legible label showing a non-recalled model is a denial, regardless of the serial being in range.",
+ "usage": {
+  "input_tokens": 3310,
+  "output_tokens": 450,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB436iKyQBiiBmgWUG2H",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2321,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows 203LX, which is not a recalled model (only 200LX is recalled). Under the policy, a legible label showing a non-recalled model is a denial, regardless of the serial being in range."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01CNEaMxF7tnXWKv5WLCbL3q",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 203LX, which is not a recalled model. The program's recalled model is 200LX.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The typed model matches the label reading (203LX), so there is no typo to correct that would make it a recalled model.",
+      "cites": [
+       "T1",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial S73202 is within a recalled range, but the model is not recalled, so the claim cannot be approved on the serial alone.",
+      "cites": [
+       "T4",
+       "R:serials",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, and the purchase date falls inside the sale window. These do not change the outcome.",
+      "cites": [
+       "T2",
+       "T3",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

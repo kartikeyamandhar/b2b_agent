@@ -1,0 +1,77 @@
+{
+ "text": "Retrying with the citation corrected to the valid tool result id (T7 contains the FAQ passage).",
+ "usage": {
+  "input_tokens": 4384,
+  "output_tokens": 499,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeSG8DeuUXckWEeKjNV",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2059,
+ "content": [
+  {
+   "type": "text",
+   "text": "Retrying with the citation corrected to the valid tool result id (T7 contains the FAQ passage)."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01U5RhPbPi9uAL7ELb7Zc7H7",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model LDE4413BD, which is on the recalled list, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial number 704KM5319755 falls within the recalled serial ranges.",
+      "cites": [
+       "T3",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "Costco is an approved retailer, and the purchase date of 2016-09-08 falls inside the sale window. No receipt is required for this remedy.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No destruction photo is required because the remedy is repair or replacement.",
+      "cites": [
+       "T5",
+       "T7"
+      ]
+     },
+     {
+      "text": "The duplicate check found no other claim sharing a photo, address, email, serial, or payout account.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No refund amount is requested, so the value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

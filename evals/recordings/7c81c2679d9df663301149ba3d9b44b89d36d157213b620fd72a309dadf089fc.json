@@ -1,0 +1,63 @@
+{
+ "text": "Label photo T1 is legible and shows model 2K512B, which is not on the recalled list (R:models; T2 mismatch). Per policy, a legible label showing a non-recalled model means deny, regardless of the typed model matching a recalled-looking string. Other checks (purchase window, retailer, destruction photo, duplicates) pass, but the model rule controls, and flag/deny takes precedence over needs_info/approve. No duplicates were found, so flag doesn't apply.",
+ "usage": {
+  "input_tokens": 2807,
+  "output_tokens": 602,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB34kKBsixC348GuSBHG",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2982,
+ "content": [
+  {
+   "type": "text",
+   "text": "Label photo T1 is legible and shows model 2K512B, which is not on the recalled list (R:models; T2 mismatch). Per policy, a legible label showing a non-recalled model means deny, regardless of the typed model matching a recalled-looking string. Other checks (purchase window, retailer, destruction photo, duplicates) pass, but the model rule controls, and flag/deny takes precedence over needs_info/approve. No duplicates were found, so flag doesn't apply."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QKW4WtnwHcyHz1e2a8ELFc",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2K512B, which is not a recalled model. Recalled models are 2G505, 2G520, 2G505B and 2G512B, so the unit is not part of this recall.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The typed model 2K512B is not on the recalled list either; the model check returned a mismatch, so the typed value does not rescue the claim.",
+      "cites": [
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "Purchase details pass: retailer Esrtech.com is listed, the date 2022-09-05 is inside the sale window, and no receipt is required. This does not change the outcome because the model is not recalled.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one, so no duplicate flag applies.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,55 @@
+{
+ "text": "The duplicate check found another claim sharing the same payout destination, which triggers a flag under the policy. The label is legible and shows a recalled model, and the purchase is valid, but the flag takes precedence. I'll record the decision.",
+ "usage": {
+  "input_tokens": 3377,
+  "output_tokens": 429,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Fqm9yZdRiybFudabD",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1983,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing the same payout destination, which triggers a flag under the policy. The label is legible and shows a recalled model, and the purchase is valid, but the flag takes precedence. I'll record the decision."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_016wKMACGpk8Pm4KXSyjA2rA",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Duplicate check found another claim (ed2ea2ef-2c4e-5e40-ba2f-3d8db7cd5a06) that shares the same payout destination with this claim. The policy requires a flag for any shared payout account.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model A17A2, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "R:models"
+      ]
+     },
+     {
+      "text": "Retailer TD Synnex is on the sold-at list, and the purchase date 2023-07-28 falls inside the sale window.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

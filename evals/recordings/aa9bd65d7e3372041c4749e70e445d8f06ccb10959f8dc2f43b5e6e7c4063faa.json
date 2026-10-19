@@ -1,0 +1,60 @@
+{
+ "text": "Model, serial, and date code all match the recall. The only open issue is the retailer, which is not on the approved list. Under the policy, an unlisted retailer means I need to ask the claimant for proof of purchase.",
+ "usage": {
+  "input_tokens": 3556,
+  "output_tokens": 557,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB41qwo3RiBiGQvaMVup",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2660,
+ "content": [
+  {
+   "type": "text",
+   "text": "Model, serial, and date code all match the recall. The only open issue is the retailer, which is not on the approved list. Under the policy, an unlisted retailer means I need to ask the claimant for proof of purchase."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0185pTUae4ujrxQ6HrbJ52NL",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model MK04, a recalled model, with serial BN60782175 and date code June 2025, both within the recalled ranges.",
+      "cites": [
+       "R:models",
+       "R:serials",
+       "R:date_codes",
+       "T1",
+       "T4",
+       "T5",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase date of 2025-04-22 falls inside the sale window, but the retailer 'Corner Hardware Co' is not on the list of sales channels (Amazon.com, Shopify.com, TEMU.com, TikTok.com), so the purchase cannot be verified from the record.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "R:policy",
+       "T2"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your claim lists the retailer as Corner Hardware Co, which is not one of the sales channels covered by this program. Please provide proof of purchase (such as a receipt, order confirmation, or bank/card statement) showing where and when you bought the air purifier, so we can verify the sale.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

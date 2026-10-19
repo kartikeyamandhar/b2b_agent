@@ -1,0 +1,77 @@
+{
+ "text": "Checking the results against policy:\n\n- Duplicates: T6 found no matches, so no flag.\n- Model: T1 is legible and shows B0726Y, a recalled model (T2 match). Confirmed.\n- Date code: 8/21 is in range (T3).\n- Purchase: Fred Meyer is listed, the date 2017-09-26 is inside the window, and no receipt is required (T4).\n- Destruction: R:destruction requires cutting off the straps. T5 reports the photo does not clearly show a helmet with straps cut off (confidence 0.3, complies false). Per policy, a destruction photo that does not show the instructed destruction is needs_info.\n- Refund $47.19 is under the $100 threshold, so no person review is needed for value.\n\nOutcome: needs_info, asking for a clearer destruction photo.",
+ "usage": {
+  "input_tokens": 2926,
+  "output_tokens": 807,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeHn4HxVs8tRNmEoSUA",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3657,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against policy:\n\n- Duplicates: T6 found no matches, so no flag.\n- Model: T1 is legible and shows B0726Y, a recalled model (T2 match). Confirmed.\n- Date code: 8/21 is in range (T3).\n- Purchase: Fred Meyer is listed, the date 2017-09-26 is inside the window, and no receipt is required (T4).\n- Destruction: R:destruction requires cutting off the straps. T5 reports the photo does not clearly show a helmet with straps cut off (confidence 0.3, complies false). Per policy, a destruction photo that does not show the instructed destruction is needs_info.\n- Refund $47.19 is under the $100 threshold, so no person review is needed for value.\n\nOutcome: needs_info, asking for a clearer destruction photo."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01D3TCVRBqZSLFkZvjk56TZN",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model B0726Y, a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The date code 8/21 is within the recalled range.",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Fred Meyer is a listed retailer and the purchase date falls inside the sale window; no receipt is required.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the helmet with its straps cut off as instructed, so it must be requested again.",
+      "cites": [
+       "T5",
+       "R:destruction",
+       "T7"
+      ]
+     },
+     {
+      "text": "The refund of $47.19 is under the $100 review threshold.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Thank you for your claim. Your label photo checks out, but the destruction photo does not clearly show the helmet with its straps cut off. Please send a new photo that clearly shows the helmet with the straps cut off. It should be a different photo from the label photo.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

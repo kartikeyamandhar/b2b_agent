@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": true, \"complies\": false, \"observed\": \"The photo shows a gray rectangular device with a black cord on an orange bokeh background, with the word RECALLED printed on its front face, but it is not clearly a seatback and no marker writing on the front and rear is evident.\", \"confidence\": 0.55}",
+ "usage": {
+  "input_tokens": 1199,
+  "output_tokens": 102,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeCenbqSExDUyceZd8t",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 1378
+}

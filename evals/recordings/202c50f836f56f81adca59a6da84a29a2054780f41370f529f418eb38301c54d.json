@@ -1,0 +1,70 @@
+{
+ "text": "The label confirms a recalled model, the serial is in range, the purchase is at Sears inside the window with a receipt, and there are no duplicates. The refund is not requested, so the value threshold does not apply. This is an approval.",
+ "usage": {
+  "input_tokens": 3630,
+  "output_tokens": 525,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3pKwhhikmMKvLdmT6E",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2930,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label confirms a recalled model, the serial is in range, the purchase is at Sears inside the window with a receipt, and there are no duplicates. The refund is not requested, so the value threshold does not apply. This is an approval."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01LyWDNnNWk1ReQt19gUF8fm",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model GLEF396ASA1, which matches the recalled model pattern GLEF396AS*.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial VF12222806 is inside the recalled range VF122xxxxx - VF334xxxxx.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The purchase was at Sears on 2001-09-24, inside the sale window 2001-06-01 to 2009-08-31, and a receipt is present.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window",
+       "R:receipt"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The remedy is repair or replacement with no refund requested, so the value threshold review does not apply and no destruction photo is required.",
+      "cites": [
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

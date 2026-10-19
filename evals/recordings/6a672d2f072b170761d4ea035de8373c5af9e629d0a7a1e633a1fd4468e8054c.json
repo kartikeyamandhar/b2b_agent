@@ -1,0 +1,68 @@
+{
+ "text": "Checking the results against the policy:\n\n- Duplicates (T5): no hits, so no flag.\n- Model (T1, T2): label is legible and reads A17A2, a recalled model. Confirmed.\n- Serial/date code: the program's rules for this recall do not include serial or date code ranges, so these do not apply.\n- Purchase (T3): retailer TD Synnex is listed, date 2023-08-11 is inside the window, and no receipt is required.\n- Destruction (T4): not required for this remedy.\n- Refund: none requested (repair or replacement), so the value threshold does not apply.\n\nNo rule triggers a flag, deny, or needs_info, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2741,
+  "output_tokens": 646,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeJZCuuSJbK1V88jwSb",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4930,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Duplicates (T5): no hits, so no flag.\n- Model (T1, T2): label is legible and reads A17A2, a recalled model. Confirmed.\n- Serial/date code: the program's rules for this recall do not include serial or date code ranges, so these do not apply.\n- Purchase (T3): retailer TD Synnex is listed, date 2023-08-11 is inside the window, and no receipt is required.\n- Destruction (T4): not required for this remedy.\n- Refund: none requested (repair or replacement), so the value threshold does not apply.\n\nNo rule triggers a flag, deny, or needs_info, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01MgT1haRR5NfiDJSALAFMBX",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model A17A2, which is on the recalled model list, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase is from TD Synnex, a listed retailer, dated 2023-08-11, which is inside the 2023-05-01 to 2023-09-30 sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "The duplicate check found no other claim sharing a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this replacement or repair remedy.",
+      "cites": [
+       "T4",
+       "faq#1"
+      ]
+     },
+     {
+      "text": "No refund is requested, so the $100.00 value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

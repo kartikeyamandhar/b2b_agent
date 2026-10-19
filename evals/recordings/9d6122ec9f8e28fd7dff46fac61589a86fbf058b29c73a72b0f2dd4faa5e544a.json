@@ -1,0 +1,68 @@
+{
+ "text": "The label is legible and shows recalled model B0726Y, the purchase is in the window at a listed retailer, and there are no duplicates. The destruction photo does not clearly show the straps cut off, so it needs more information. The serial check was skipped because the program has no serial rule.",
+ "usage": {
+  "input_tokens": 3528,
+  "output_tokens": 549,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB44McJgKmpdFF682ULD",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2775,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows recalled model B0726Y, the purchase is in the window at a listed retailer, and there are no duplicates. The destruction photo does not clearly show the straps cut off, so it needs more information. The serial check was skipped because the program has no serial rule."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01TSKBmgFSc3xS63tGVeJRxE",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows recalled model B0726Y, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The date code 8/21 is within the recalled range (August 2021 or earlier).",
+      "cites": [
+       "T6",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase at Fred Meyer on 2022-05-15 is inside the sale window and at a listed retailer; no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the helmet with its straps cut off, so the required destruction is not verified.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo of the destroyed helmet showing that the straps have been cut off. The current photo shows a red helmet with a cord and no visible cut straps.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

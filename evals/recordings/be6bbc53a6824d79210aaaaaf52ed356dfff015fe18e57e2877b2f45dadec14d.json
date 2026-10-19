@@ -1,0 +1,15 @@
+{
+ "text": "{\"legible\": true, \"model_text\": \"REV 20 Kids Bike\", \"serial_text\": \"01VX52145133\", \"date_code_text\": \"2022\", \"confidence\": 0.9}",
+ "usage": {
+  "input_tokens": 1372,
+  "output_tokens": 61,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAe83SUKYbWw8skUCibN",
+ "purpose": "read_label_photo",
+ "max_tokens": 400,
+ "latency_ms": 1076
+}

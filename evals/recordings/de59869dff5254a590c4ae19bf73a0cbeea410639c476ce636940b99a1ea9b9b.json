@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": true, \"complies\": true, \"observed\": \"A gray device body has a black power cord that appears cut, with a visible gap in the cord near the lower right of the image.\", \"confidence\": 0.8}",
+ "usage": {
+  "input_tokens": 1182,
+  "output_tokens": 68,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeEXNfkZrynRvYsQLBe",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 1746
+}

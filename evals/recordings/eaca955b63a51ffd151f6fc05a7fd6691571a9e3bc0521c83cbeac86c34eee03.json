@@ -1,0 +1,59 @@
+{
+ "text": "Checking the policy against the results:\n\n- Duplicates: T7 has no hits, so no flag.\n- Model: T1 label is legible and reads DR2E, a recalled model (T2, R:models). Confirmed.\n- Serial: T3 shows J0E prefix, in range (R:serials).\n- Date code: T4 shows 2017, within 2017-2024 (R:date_codes).\n- Purchase: T5 says retailer is listed (Yamaha dealers), but the purchase date 2018-03-02 is before the sale window opening 2018-06-01 (R:sold_window). Per policy, a purchase before the sale window is deny.\n- Destruction photo: not required (T6), since the remedy is repair.\n\nThe purchase-date rule triggers a denial, and no earlier rule (flag) applies.",
+ "usage": {
+  "input_tokens": 2890,
+  "output_tokens": 632,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAfFT66NkNxnsMrgmgdF",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3420,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy against the results:\n\n- Duplicates: T7 has no hits, so no flag.\n- Model: T1 label is legible and reads DR2E, a recalled model (T2, R:models). Confirmed.\n- Serial: T3 shows J0E prefix, in range (R:serials).\n- Date code: T4 shows 2017, within 2017-2024 (R:date_codes).\n- Purchase: T5 says retailer is listed (Yamaha dealers), but the purchase date 2018-03-02 is before the sale window opening 2018-06-01 (R:sold_window). Per policy, a purchase before the sale window is deny.\n- Destruction photo: not required (T6), since the remedy is repair.\n\nThe purchase-date rule triggers a denial, and no earlier rule (flag) applies."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_013mQo8fvzTgBk7zH2Qj8YZR",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The purchase date of 2018-03-02 is before the program's sale window, which opens 2018-06-01. Purchases before the window are not eligible.",
+      "cites": [
+       "R:sold_window",
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model DR2E, a recalled model, and the serial (J0E prefix) and date code (2017) are within the recalled ranges. These checks pass, but the purchase timing still makes the claim ineligible.",
+      "cites": [
+       "T1",
+       "T2",
+       "T3",
+       "T4",
+       "R:models",
+       "R:serials",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not flagged for review.",
+      "cites": [
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

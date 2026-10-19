@@ -1,0 +1,70 @@
+{
+ "text": "Applying the policy in order: flag takes precedence.\n\n- check_duplicates (T5) found a same_address match with another claim, so the flag rule triggers. Per the policy, flag comes first, so the outcome is flag regardless of the other checks.\n\nOther checks for the record: the label is legible and shows AD10025GR, a recalled model (T1, T2, R:models). The serial and date code are not rules for this program. Purchase is at Amazon.com inside the window with no receipt required (T3, R:sold_at, R:sold_window). The destruction photo does not clearly show the instructed destruction (T4, R:destruction), which would otherwise need more info. The refund of $168.44 is over the $100 threshold (R:value_threshold), so a person reviews it anyway.",
+ "usage": {
+  "input_tokens": 2945,
+  "output_tokens": 693,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeT4y2vyAVEeRDDT8hb",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 5200,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: flag takes precedence.\n\n- check_duplicates (T5) found a same_address match with another claim, so the flag rule triggers. Per the policy, flag comes first, so the outcome is flag regardless of the other checks.\n\nOther checks for the record: the label is legible and shows AD10025GR, a recalled model (T1, T2, R:models). The serial and date code are not rules for this program. Purchase is at Amazon.com inside the window with no receipt required (T3, R:sold_at, R:sold_window). The destruction photo does not clearly show the instructed destruction (T4, R:destruction), which would otherwise need more info. The refund of $168.44 is over the $100 threshold (R:value_threshold), so a person reviews it anyway."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_014TQGeKHxqnYuoMrJ55RuUs",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim sharing the same address, which requires review by a person together with the matched claim.",
+      "cites": [
+       "R:policy",
+       "T5",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows recalled model AD10025GR, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase is at Amazon.com, a listed retailer, dated inside the sale window, and no receipt is required.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the instructed marker writing on the front and rear of the seatback, so it would need to be requested again if the claim proceeds.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The refund of $168.44 is over the $100.00 threshold, so a person reviews it regardless.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

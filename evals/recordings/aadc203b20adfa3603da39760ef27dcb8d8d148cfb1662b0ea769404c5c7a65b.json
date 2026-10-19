@@ -1,0 +1,70 @@
+{
+ "text": "The label is legible and shows a recalled model, and the serial, date code, and purchase all pass. However, another claim in the program shares this same serial number (T3), so the claim must be flagged for review under the flag rule.",
+ "usage": {
+  "input_tokens": 3714,
+  "output_tokens": 474,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3UjTWp26oz6cewLj18",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2226,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows a recalled model, and the serial, date code, and purchase all pass. However, another claim in the program shares this same serial number (T3), so the claim must be flagged for review under the flag rule."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_016yw2a9cdTFif96WYyQepod",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program shares this serial number, which triggers the flag rule for duplicate serials.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model DR2A, a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "Serial J0E5490210 is within the recalled J0E range.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "Date code 2017 is within the recalled model years 2017-2024.",
+      "cites": [
+       "T5",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Purchase at a listed Yamaha dealer on 2019-02-01 falls inside the sale window, and no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

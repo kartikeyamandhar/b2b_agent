@@ -1,0 +1,70 @@
+{
+ "text": "Checking the policy in order: flag first. T5 found no duplicates, so no flag. Model: T1 label is legible and shows KY-318A, a recalled model (R:models), confirmed. Serial/date code: the program has no serial or date code rules listed in R:models/R:policy, so not applicable. Purchase: T3 shows ALDI listed and the date 2018-09-06 is inside the window, receipt not required. Destruction: R:destruction requires the unplugged power cord cut. T4 says the cord appears intact with no visible cut, and does not comply. Per policy, a destruction photo that does not show the instructed destruction is needs_info, asking for a new photo.\n\nRefund is $40, under the $100 threshold, so no person review is needed for value.",
+ "usage": {
+  "input_tokens": 2849,
+  "output_tokens": 745,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeUc55s6tsmC3w5EDCF",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3699,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy in order: flag first. T5 found no duplicates, so no flag. Model: T1 label is legible and shows KY-318A, a recalled model (R:models), confirmed. Serial/date code: the program has no serial or date code rules listed in R:models/R:policy, so not applicable. Purchase: T3 shows ALDI listed and the date 2018-09-06 is inside the window, receipt not required. Destruction: R:destruction requires the unplugged power cord cut. T4 says the cord appears intact with no visible cut, and does not comply. Per policy, a destruction photo that does not show the instructed destruction is needs_info, asking for a new photo.\n\nRefund is $40, under the $100 threshold, so no person review is needed for value."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01BjDsRjBrQ8muo2EGxGuoAz",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model KY-318A, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase is at ALDI, a listed retailer, and the date 2018-09-06 is inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial number, or payout account.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the instructed destruction. The power cord appears intact with no cut, so it does not meet the requirement to cut the unplugged power cord.",
+      "cites": [
+       "R:destruction",
+       "T4",
+       "R:policy",
+       "faq#1"
+      ]
+     },
+     {
+      "text": "The refund of $40.00 is under the $100 review threshold, so no person review is needed for value.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo showing the unplugged power cord of your cooker cut, as the recall instructs. The current destruction photo shows the cord intact.",
+    "confidence": 0.9
+   }
+  }
+ ]
+}

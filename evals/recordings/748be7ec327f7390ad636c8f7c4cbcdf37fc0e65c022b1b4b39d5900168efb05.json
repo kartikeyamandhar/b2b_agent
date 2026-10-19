@@ -1,0 +1,69 @@
+{
+ "text": "Let me work through the policy.\n\n- Flag: check_duplicates (T5) found no hits. No flag.\n- Model: label photo unreadable (T1 legible false, no model text). Typed model AD10007GR matches recalled list (T2, R:models). Without a usable label reading, the typed model decides: recalled, so model is confirmed by typed model.\n- Serial/date code: program has no serial or date code rules listed in R:models/R:sold_at/R:sold_window, so not applied.\n- Purchase: Amazon.com is listed, date 2024-06-16 is inside the window (T3). Receipt not required, but one was attached anyway.\n- Destruction: required. The destruction photo (T4) shows the product with \"RECALLED\" on the front only; the instruction requires front and rear. The check reports it does not comply (complies false, confidence 0.6). Per policy, a destruction photo that does not show the instructed destruction is needs_info.\n- Refund $168.62 exceeds $100 threshold, but that does not change the outcome; it's reviewed afterward.\n\nOutcome: needs_info. Two items are needed: a clearer label photo (since the label is unreadable) and a destruction photo showing \"RECALLED\" on both the front and rear of the seatback.",
+ "usage": {
+  "input_tokens": 2866,
+  "output_tokens": 900,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "max_tokens",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB37QaMpVYXWEK5RA3XQ",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4589,
+ "content": [
+  {
+   "type": "text",
+   "text": "Let me work through the policy.\n\n- Flag: check_duplicates (T5) found no hits. No flag.\n- Model: label photo unreadable (T1 legible false, no model text). Typed model AD10007GR matches recalled list (T2, R:models). Without a usable label reading, the typed model decides: recalled, so model is confirmed by typed model.\n- Serial/date code: program has no serial or date code rules listed in R:models/R:sold_at/R:sold_window, so not applied.\n- Purchase: Amazon.com is listed, date 2024-06-16 is inside the window (T3). Receipt not required, but one was attached anyway.\n- Destruction: required. The destruction photo (T4) shows the product with \"RECALLED\" on the front only; the instruction requires front and rear. The check reports it does not comply (complies false, confidence 0.6). Per policy, a destruction photo that does not show the instructed destruction is needs_info.\n- Refund $168.62 exceeds $100 threshold, but that does not change the outcome; it's reviewed afterward.\n\nOutcome: needs_info. Two items are needed: a clearer label photo (since the label is unreadable) and a destruction photo showing \"RECALLED\" on both the front and rear of the seatback."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_016p4nBpRsH9DbjXeR9xTKh6",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo could not be read, so the typed model AD10007GR decides; it is on the recalled list.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The retailer Amazon.com is listed and the purchase date 2024-06-16 is inside the sale window, so purchase is acceptable.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo shows \"RECALLED\" only on the front of the seatback; the instruction requires it on both the front and rear, so the destruction photo does not show the instructed destruction.",
+      "cites": [
+       "T4",
+       "R:destruction",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The refund of $168.62 is over the $100 threshold, so a person will review it after approval; this does not change the outcome.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

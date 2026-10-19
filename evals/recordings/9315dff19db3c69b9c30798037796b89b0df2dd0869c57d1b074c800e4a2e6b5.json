@@ -1,0 +1,29 @@
+{
+ "text": "The label reads a recalled model, the purchase is valid, and there are no duplicates. The destruction photo does not show the required marking on both the front and rear of the seatback, so it needs more information. The serial check was skipped because the program has no serial rule in this claim's rules, so I'll rely on the label and typed model.\n\nLet me confirm the model check on the label reading.",
+ "usage": {
+  "input_tokens": 3612,
+  "output_tokens": 172,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3a1Yn1PDxPfTc8VKC7",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1919,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label reads a recalled model, the purchase is valid, and there are no duplicates. The destruction photo does not show the required marking on both the front and rear of the seatback, so it needs more information. The serial check was skipped because the program has no serial rule in this claim's rules, so I'll rely on the label and typed model.\n\nLet me confirm the model check on the label reading."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01UUNriyhf9nzteg447dTLuB",
+   "name": "check_model",
+   "input": {
+    "model_text": "BE10019US-GR"
+   }
+  }
+ ]
+}

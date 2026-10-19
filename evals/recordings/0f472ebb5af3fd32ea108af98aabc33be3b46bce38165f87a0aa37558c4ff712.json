@@ -1,0 +1,69 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: label legible and shows PA-10, a recalled model (T1, T2, R:models).\n- Date code 2126 is within the recalled range (T3, R:date_codes).\n- Serial number: no serial rule in the program, so not applicable.\n- Purchase: 2020-09-05 is before the sale window (2021-06-01 to 2023-11-30), so it is a deny (T4, R:sold_window). The retailer is listed, but the date rule controls.\n- Duplicates: none found (T6), so flag does not apply.\n- Destruction photo: not required (T5).\n\nThe first matching rule in the policy order that applies is deny, since the purchase predates the sale window. Flag does not trigger, so deny is the outcome.",
+ "usage": {
+  "input_tokens": 2841,
+  "output_tokens": 696,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeKHKTTAXeS48UnqhHi",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3424,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: label legible and shows PA-10, a recalled model (T1, T2, R:models).\n- Date code 2126 is within the recalled range (T3, R:date_codes).\n- Serial number: no serial rule in the program, so not applicable.\n- Purchase: 2020-09-05 is before the sale window (2021-06-01 to 2023-11-30), so it is a deny (T4, R:sold_window). The retailer is listed, but the date rule controls.\n- Duplicates: none found (T6), so flag does not apply.\n- Destruction photo: not required (T5).\n\nThe first matching rule in the policy order that applies is deny, since the purchase predates the sale window. Flag does not trigger, so deny is the outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01PpP1KFV41tCChoLffrWDa8",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PA-10, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The date code 2126 falls within the recalled range of 2126 to 2319.",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase date of 2020-09-05 is before the sale window of 2021-06-01 to 2023-11-30. Purchases before the window are not eligible, so the claim is denied even though the retailer (Sam Ash) is on the list.",
+      "cites": [
+       "T4",
+       "R:sold_window",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found sharing a photo, address, email, serial number, or payout account, so no flag applies.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy, so no destruction-related request applies.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

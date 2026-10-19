@@ -1,0 +1,77 @@
+{
+ "text": "I'll resubmit with the FAQ cited under its tool result ID, T7.",
+ "usage": {
+  "input_tokens": 3891,
+  "output_tokens": 508,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB367Tgz1C7eARoCGpDr",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2861,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll resubmit with the FAQ cited under its tool result ID, T7."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01P61WfBFAWycFS1tDGq9bPg",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows LXT-CL-1.0, a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 0722 is inside the recalled range 0722 to 1223.",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "Ulta is on the sold-at list and the purchase date 2023-10-25 falls inside the sale window.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "The destruction photo is a different image from the label photo and shows the device with a gap in the cord consistent with the plug being cut off, as instructed.",
+      "cites": [
+       "R:destruction",
+       "T5",
+       "T7"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The remedy is replacement with no refund requested, so the refund value threshold does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}
