@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": true, \"complies\": false, \"observed\": \"The photo shows a grey HOMEAL bed rail with its cloth covering still attached to the white metal frame, appearing fully intact with no visible cutting or removal of the cloth.\", \"confidence\": 0.95}",
+ "usage": {
+  "input_tokens": 745,
+  "output_tokens": 91,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgCFzVNQzdYr9jLe2uVre",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 1458
+}

@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": true, \"complies\": false, \"observed\": \"The photo shows an intact navy baby swing with a star-and-moon canopy cover, with no visible cut in the cover and no visible 'Recalled' marking on the base.\", \"confidence\": 0.9}",
+ "usage": {
+  "input_tokens": 686,
+  "output_tokens": 87,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgCFzbS3SsAquxzhMoo22",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 1301
+}

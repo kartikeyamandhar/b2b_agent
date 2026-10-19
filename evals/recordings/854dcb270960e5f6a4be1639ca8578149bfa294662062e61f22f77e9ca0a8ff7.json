@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": true, \"complies\": false, \"observed\": \"The photo shows a green blender blade assembly with a clear rubber seal ring still intact on the base, with a knife blade partially touching the seal but no visible cuts or pieces.\", \"confidence\": 0.85}",
+ "usage": {
+  "input_tokens": 1792,
+  "output_tokens": 89,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgCG2TqCknr1tmkLD1gex",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 1525
+}

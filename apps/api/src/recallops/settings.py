@@ -130,7 +130,11 @@ class Settings(BaseSettings):
     neo4j_uri: str = Field("bolt://localhost:57687", description="Bolt URI; empty disables the fraud graph.")
     neo4j_user: str = Field("neo4j")
     neo4j_password: SecretStr = Field(SecretStr(EXAMPLE_NEO4J_PASSWORD), description="Real password only in .env.")
-    neo4j_database: str = Field("neo4j", description="Community and AuraDB Free have one user database.")
+    neo4j_database: str = Field(
+        "neo4j",
+        description="Community's database is neo4j; an AuraDB instance names its own (the instance id, in the "
+        "credentials file as NEO4J_DATABASE).",
+    )
     neo4j_namespace: str = Field("dev", pattern=r"^[a-z][a-z0-9_]{0,31}$", description="Separates dev from test.")
     neo4j_timeout_s: float = Field(3.0, description="Connection and per-transaction timeout.")
     graph_key_secret: SecretStr = Field(

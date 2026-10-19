@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": true, \"complies\": false, \"observed\": \"The photo shows an intact black satin short-sleeve button-up top and matching shorts laid flat on a wooden floor, with no visible cutting or destruction.\", \"confidence\": 0.97}",
+ "usage": {
+  "input_tokens": 958,
+  "output_tokens": 83,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgCFzQ9t8afTSfzUSqN6h",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 1109
+}

@@ -1,0 +1,15 @@
+{
+ "text": "{\"legible\": true, \"model_text\": \"NZ-9160.4 5000 Y\", \"serial_text\": null, \"date_code_text\": \"15th,Jul,2021\", \"confidence\": 0.85}",
+ "usage": {
+  "input_tokens": 1036,
+  "output_tokens": 65,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgCFwMFRbsYzv8MGSzxPo",
+ "purpose": "read_label_photo",
+ "max_tokens": 400,
+ "latency_ms": 1690
+}

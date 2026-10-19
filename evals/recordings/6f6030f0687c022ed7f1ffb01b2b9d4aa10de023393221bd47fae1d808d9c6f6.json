@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": true, \"complies\": false, \"observed\": \"The photo shows a blue hooded plush robe with its belt tied, intact and uncut, with no sign of it being cut in half.\", \"confidence\": 0.97}",
+ "usage": {
+  "input_tokens": 1120,
+  "output_tokens": 73,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgCG1cNdK1qFJUN3Zk6hk",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 1418
+}

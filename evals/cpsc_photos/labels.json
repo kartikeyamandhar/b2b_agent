@@ -1,0 +1,549 @@
+{
+ "status": "assistant-labeled: two blind labelers (64 of 64 agreed before adjudication), adjudicated by the main session; owner audit pending",
+ "protocol": "evals/cpsc_photos/PREREG.md; raw labels in labels_a.json and labels_b.json",
+ "adjudication": [
+  {
+   "id": "L09",
+   "change": "legible true with 177296 -> legible false; 177296 kept as a printed code",
+   "why": "the only marker is the CPSC callout 'Style/VPN', not a model marker; both labelers flagged it as doubtful, and L05's SKU, the same kind of identifier, is excluded under the same rule"
+  },
+  {
+   "id": "printed_codes",
+   "change": "added for the label pool from both labelers' notes, before any model call",
+   "why": "diagnostic only: splits a wrong model text into a real printed code in the wrong field versus text printed nowhere; E2 and E3 are unchanged"
+  }
+ ],
+ "items": {
+  "D01": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": true
+  },
+  "D02": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": true
+  },
+  "D03": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false
+  },
+  "D04": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": true
+  },
+  "L01": {
+   "legible": true,
+   "model_texts": [
+    "LD-0030"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": [
+    "ZE 082124"
+   ]
+  },
+  "L02": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": [
+    "12-15-2023"
+   ]
+  },
+  "L03": {
+   "legible": true,
+   "model_texts": [
+    "XR-8801"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": []
+  },
+  "L04": {
+   "legible": true,
+   "model_texts": [
+    "SH20.006D"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": [
+    "2024127763",
+    "202412/T763"
+   ]
+  },
+  "L05": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": [
+    "FTBFSD-0162"
+   ]
+  },
+  "L06": {
+   "legible": true,
+   "model_texts": [
+    "V-1906-S"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": [
+    "06/2021",
+    "CPSC 1203",
+    "EN 1078"
+   ]
+  },
+  "L07": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": []
+  },
+  "L08": {
+   "legible": true,
+   "model_texts": [
+    "XR-8801"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": []
+  },
+  "L09": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": [
+    "177296",
+    "07/2025"
+   ]
+  },
+  "L10": {
+   "legible": true,
+   "model_texts": [
+    "KY-055"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": [
+    "202503"
+   ]
+  },
+  "L11": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": []
+  },
+  "L12": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": []
+  },
+  "L13": {
+   "legible": true,
+   "model_texts": [
+    "ZY2025"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": [
+    "June 2025"
+   ]
+  },
+  "L14": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": [
+    "255641",
+    "S34154",
+    "S94154",
+    "1128"
+   ]
+  },
+  "L15": {
+   "legible": true,
+   "model_texts": [
+    "ZR0097U2",
+    "RH99"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": [
+    "23 W34D2",
+    "SS-2230003384",
+    "ZD048M390100US",
+    "SS-2230002949"
+   ]
+  },
+  "L16": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": []
+  },
+  "L17": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": [
+    "921065",
+    "921069",
+    "001472"
+   ]
+  },
+  "L18": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": []
+  },
+  "L19": {
+   "legible": true,
+   "model_texts": [
+    "NZ-9160.4 5000 Y"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": [
+    "15th,Jul,2021"
+   ]
+  },
+  "L20": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": [
+    "RN#86790"
+   ]
+  },
+  "L21": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": []
+  },
+  "L22": {
+   "legible": true,
+   "model_texts": [
+    "KCBAGORANGE"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": [
+    "20-01"
+   ]
+  },
+  "L23": {
+   "legible": true,
+   "model_texts": [
+    "BGRT003"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": [
+    "202411001"
+   ]
+  },
+  "L24": {
+   "legible": true,
+   "model_texts": [
+    "X-203"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": [
+    "X-203N-TH",
+    "65901322"
+   ]
+  },
+  "L25": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": []
+  },
+  "L26": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": [
+    "6Y"
+   ]
+  },
+  "L27": {
+   "legible": true,
+   "model_texts": [
+    "K1000BK"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": [
+    "07/2022"
+   ]
+  },
+  "L28": {
+   "legible": true,
+   "model_texts": [
+    "NQ69811"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": [
+    "NQ69",
+    "UT 6710",
+    "2000001"
+   ]
+  },
+  "L29": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": [
+    "370331735",
+    "61970"
+   ]
+  },
+  "L30": {
+   "legible": true,
+   "model_texts": [
+    "LT-BG01-3"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": [
+    "249EXY"
+   ]
+  },
+  "L31": {
+   "legible": true,
+   "model_texts": [
+    "SG021"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": [
+    "2024-07"
+   ]
+  },
+  "L32": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": []
+  },
+  "L33": {
+   "legible": true,
+   "model_texts": [
+    "PA5083U-1ACA",
+    "G71C000F7110"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": [
+    "PA-1121-81",
+    "T13040047553A01"
+   ]
+  },
+  "L34": {
+   "legible": true,
+   "model_texts": [
+    "LU-PH3-B"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": []
+  },
+  "L35": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": []
+  },
+  "L36": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": []
+  },
+  "L37": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": []
+  },
+  "L38": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": []
+  },
+  "L39": {
+   "legible": true,
+   "model_texts": [
+    "PUA-US"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": [
+    "PU-US"
+   ]
+  },
+  "L40": {
+   "legible": true,
+   "model_texts": [
+    "FR730V"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "printed_codes": []
+  },
+  "P01": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false
+  },
+  "P02": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false
+  },
+  "P03": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false
+  },
+  "P04": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false
+  },
+  "P05": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false
+  },
+  "P06": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false
+  },
+  "P07": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false
+  },
+  "P08": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false
+  },
+  "P09": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false
+  },
+  "P10": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false
+  },
+  "P11": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false
+  },
+  "P12": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false
+  },
+  "P13": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false
+  },
+  "P14": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false
+  },
+  "P15": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false
+  },
+  "P16": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false
+  },
+  "P17": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false
+  },
+  "P18": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false
+  },
+  "P19": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false
+  },
+  "P20": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false
+  }
+ }
+}

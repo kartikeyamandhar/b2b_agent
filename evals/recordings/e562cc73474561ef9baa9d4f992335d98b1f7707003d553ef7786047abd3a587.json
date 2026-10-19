@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": true, \"complies\": false, \"observed\": \"The photo is a promotional image showing four intact green-and-black pressure washers (4800PSI, 5100PSI, 5000PSI, 4000PSI) with their power cords and accessories, with no sign of any cord being cut.\", \"confidence\": 0.97}",
+ "usage": {
+  "input_tokens": 844,
+  "output_tokens": 106,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgCG1uBuqDhhwBXsWW7bi",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 1630
+}

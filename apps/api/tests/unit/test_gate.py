@@ -68,3 +68,35 @@ def test_self_consistency_ignores_wall_clock_seconds_only() -> None:
     moved = {"blocks": {"g": {"row": {"macro_f1": 0.9, "p50_seconds": 1.2, "per_class": {"flag": {"f1": 0.99}}}}}}
     assert _differences(base, same) == []
     assert _differences(base, moved) == [".blocks.g.row.per_class.flag.f1"]
+
+
+def test_cpsc_photos_regressions_fail_and_improvements_pass() -> None:
+    from recallops.evals.gate import check_cpsc_photos
+
+    base = {
+        "metrics": {
+            "missing": 0,
+            "label_read_rate": 0.9,
+            "label_misread_rate": 0.05,
+            "label_hallucination_rate": 0.1,
+            "product_rejected": 19,
+            "destruction_accepted": 3,
+            "destruction_not_shown_rejected": 1,
+        }
+    }
+    assert check_cpsc_photos(base, base) == []
+    better = {"metrics": {**base["metrics"], "label_read_rate": 0.95, "label_misread_rate": 0.0}}
+    assert check_cpsc_photos(base, better) == []
+    worse = {
+        "metrics": {
+            **base["metrics"],
+            "missing": 2,
+            "label_read_rate": 0.85,
+            "label_hallucination_rate": 0.2,
+            "product_rejected": 18,
+        }
+    }
+    found = " ".join(check_cpsc_photos(base, worse))
+    for key in ("2 photos", "label_read_rate", "label_hallucination_rate", "product_rejected"):
+        assert key in found
+    assert check_cpsc_photos({}, {"metrics": {"label_read_rate": None, "missing": 0}}) == []
