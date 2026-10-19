@@ -17,6 +17,11 @@ spent. A firm that is over its plan's limit is skipped for one polling interval,
 (03-payments.md section 8: work resumes within one interval after an upgrade). On start and on idle ticks the worker
 recovers adjudication runs left running by a crash after the claim was decided or held: the claim's status says
 whether the run reached its interrupt (waiting_human, capped) or finished (done).
+
+After a claim's decision has committed, the worker projects it into the fraud graph (recallops.fraud.sync), which
+rewrites fraud_clusters; idle ticks re-project claims whose facts changed. The graph never decides anything: a sync
+failure is logged and the claim stays dirty for a later tick, and a graph outage only delays clusters (money safety
+is in the decision's own transaction, claims/effects.py).
 """
 
 from __future__ import annotations
@@ -51,7 +56,10 @@ from recallops.claims.context import LoadedClaim, load_claim, photo_reader, prog
 from recallops.claims.effects import DbEffects
 from recallops.claims.graph import VARIANTS, AgentConfig, build_graph, run_budget, summarize
 from recallops.claims.rules_only import adjudicate as rules_only_adjudicate
-from recallops.db.engine import internal_engine
+from recallops.db.engine import app_engine, internal_engine
+from recallops.fraud.graph import GraphError, GraphStore, GraphUnavailable, build_graph_store
+from recallops.fraud.graph_admin import ensure_schema
+from recallops.fraud.sync import check_epoch, resync_dirty, sync_claim
 from recallops.llm.client import LlmClient, build_client
 from recallops.llm.meter import BudgetExhausted
 from recallops.logs import configure, get_logger, log_event
@@ -109,6 +117,7 @@ class Worker:
         billing: BillingGate | None = None,
         ledger: PayoutLedger | None = None,
         worker_id: str | None = None,
+        graph: GraphStore | bool | None = True,
     ) -> None:
         self.settings = settings or get_settings()
         self.engine = engine or internal_engine()
@@ -120,6 +129,53 @@ class Worker:
         self.embedder = build_embedder(self.settings.embedding_model_id, self.settings.embedding_dim)
         self.stopped = False
         self.blocked_firms: dict[UUID, float] = {}  # firm -> monotonic expiry (not entitled to adjudicate)
+        # graph=True builds the store from settings (None when NEO4J_URI is empty); False or None disables it.
+        self.graph: GraphStore | None = (
+            build_graph_store(self.settings) if graph is True else (graph if graph is not False else None)
+        )
+        self.app_engine = app_engine()
+
+    # fraud graph projection (never decides anything)
+
+    def graph_start(self) -> None:
+        if self.graph is None:
+            return
+        try:
+            ensure_schema(self.graph)
+            check_epoch(self.graph, self.engine, self.settings)
+        except GraphError as exc:
+            log_event(log, "graph_start_failed", level=30, error=str(exc)[:300])
+
+    def graph_sync(self, claim_id: UUID) -> None:
+        """After the claim's decision committed. Any failure leaves the claim dirty for resync_dirty."""
+        if self.graph is None:
+            return
+        with self.engine.connect() as conn:
+            row = conn.execute(text("SELECT firm_id, program_id FROM claims WHERE id = :c"), {"c": claim_id}).first()
+        if row is None:
+            return
+        try:
+            sync_claim(self.graph, self.engine, self.app_engine, self.settings, row.firm_id, row.program_id, claim_id)
+        except Exception as exc:  # noqa: BLE001 - the projection must never fail a decided claim
+            log_event(
+                log, "graph_sync_failed", level=30, claim_id=str(claim_id), error=f"{type(exc).__name__}: {exc}"[:300]
+            )
+
+    def graph_resync(self) -> int:
+        if self.graph is None:
+            return 0
+        try:
+            return resync_dirty(
+                self.graph,
+                self.engine,
+                self.app_engine,
+                self.settings,
+                self.settings.graph_resync_batch,
+                heartbeat=lambda: self.heartbeat({"adjudicator": self.settings.adjudicator, "resync": True}),
+            )
+        except GraphUnavailable as exc:
+            log_event(log, "graph_unavailable", level=30, error=str(exc)[:300])
+            return 0
 
     @property
     def llm(self) -> LlmClient:
@@ -416,6 +472,7 @@ class Worker:
         resume = self.lease_resume()
         if resume is not None:
             self.resume(*resume)
+            self.graph_sync(resume[1])
             return True
         leased = self.lease_claim()
         if leased is None:
@@ -452,6 +509,7 @@ class Worker:
             outcome=outcome,
             duration_ms=round((time.monotonic() - t0) * 1000),
         )
+        self.graph_sync(leased.claim_id)
         return True
 
     @contextmanager
@@ -479,6 +537,7 @@ class Worker:
                 llm_mode=self.settings.llm_mode,
             )
             self.recover_orphans()
+            self.graph_start()
             while not self.stopped:
                 self.heartbeat({"adjudicator": self.settings.adjudicator, "variant": self.config.variant})
                 try:
@@ -487,7 +546,7 @@ class Worker:
                     log_event(log, "worker_budget_exhausted", level=40, error=str(exc))
                     return 3
                 idle = 0 if did else idle + 1
-                if not did and self.recover_orphans():
+                if not did and (self.recover_orphans() or self.graph_resync()):
                     idle = 0
                 if max_idle_ticks is not None and idle >= max_idle_ticks:
                     return 0

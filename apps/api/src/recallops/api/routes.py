@@ -26,6 +26,7 @@ from recallops.claims.review import ReviewConflict, submit_action
 from recallops.db.engine import app_engine
 from recallops.db.repos import ClaimsRepo, ProgramsRepo, RunsRepo, UsageRepo
 from recallops.db.session import tenant_session
+from recallops.fraud.view import FraudGraphView
 from recallops.logs import get_logger, log_event
 from recallops.models import Claim, Recall, RecallProgram, WorkerHeartbeat
 from recallops.payouts.db_ledger import DbPayoutLedger
@@ -430,6 +431,36 @@ def mpr_pdf(program_id: UUID, report_id: UUID, ctx: FirmDep, db: TenantDb) -> Re
     return Response(body, media_type="application/pdf")
 
 
+# Fraud graph (M5; Neo4j projection, decisions log 2026-10-18)
+
+GRAPH_DOWN = "fraud graph unavailable"
+
+
+@firm.get(
+    "/programs/{program_id}/fraud-graph",
+    response_model=FraudGraphView,
+    responses={**NOT_FOUND, 503: {"model": s.Problem, "description": "the graph is disabled or unreachable"}},
+    summary="Fraud rings across every duplicate kind: claims, links, rings (statuses from Postgres)",
+)
+def fraud_graph_view(
+    program_id: UUID, ctx: FirmDep, db: TenantDb, limit: int = Query(500, ge=1, le=2000)
+) -> FraudGraphView:
+    """Program first (404 for another firm's program), then a read-only graph query whose every claim id is checked
+    against this firm's claims under RLS. A graph error answers a fixed 503 detail (never the driver's message)."""
+    from recallops.fraud.graph import GraphError
+    from recallops.fraud.view import fraud_graph
+
+    _open_program(db, ctx, program_id)
+    store = graph_store()
+    if store is None:
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, GRAPH_DOWN)
+    try:
+        return fraud_graph(db, store, ctx, program_id, node_cap=limit)
+    except GraphError as exc:
+        log_event(log, "fraud_graph_unavailable", level=30, firm_id=str(ctx.firm_id), error=type(exc).__name__)
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, GRAPH_DOWN) from exc
+
+
 # Notification campaigns (M5): registrations, matching, drafts, simulated send
 
 
@@ -788,4 +819,22 @@ def readyz() -> s.Health:
             status.HTTP_503_SERVICE_UNAVAILABLE,
             "no worker heartbeat" if age_s is None else f"worker heartbeat is {age_s} s old",
         )
-    return s.Health(status="ok", database=True, worker_heartbeat_age_s=age_s)
+    return s.Health(status="ok", database=True, worker_heartbeat_age_s=age_s, graph=_graph_status())
+
+
+_GRAPH: dict[str, Any] = {}
+
+
+def graph_store() -> Any:
+    """One store per process (the driver pools connections); None when NEO4J_URI is empty."""
+    from recallops.fraud.graph import build_graph_store
+
+    if "store" not in _GRAPH:
+        _GRAPH["store"] = build_graph_store(get_settings())
+    return _GRAPH["store"]
+
+
+def _graph_status() -> Any:
+    from recallops.fraud.graph import graph_status
+
+    return graph_status(graph_store())

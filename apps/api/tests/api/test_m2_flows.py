@@ -207,6 +207,18 @@ def test_flagged_claim_waits_and_the_review_resumes_the_same_run(env: dict[str, 
     again = client.get(f"/v1/claims/{earlier['id']}", headers=REVIEWER).json()
     assert again["status"] == "flagged" and again["run"]["status"] == "waiting_human"
     assert w2.tick() is False
+    # 01-backend.md section 12: both flagged and they share a cluster id (Neo4j projection, synced after each
+    # decision committed).
+    mine = {c["kind"]: c["id"] for c in client.get(f"/v1/claims/{claim_id}", headers=REVIEWER).json()["clusters"]}
+    theirs = {c["kind"]: c["id"] for c in again["clusters"]}
+    assert mine.get("same_photo") and mine["same_photo"] == theirs.get("same_photo")
+    graph = client.get(f"/v1/programs/{program_id}/fraud-graph", headers=REVIEWER)
+    assert graph.status_code == 200, graph.text
+    ring = next(r for r in graph.json()["rings"] if claim_id in r)
+    assert earlier["id"] in ring
+    statuses = {n["claim_id"]: n["status"] for n in graph.json()["nodes"]}
+    assert statuses[claim_id] == "denied" and statuses[earlier["id"]] == "flagged"  # statuses come from Postgres
+    assert client.get(f"/v1/programs/{program_id}/fraud-graph", headers=OTHER).status_code == 404
 
 
 def test_direct_review_of_a_rules_only_claim_and_guards(env: dict[str, Any]) -> None:
@@ -391,3 +403,18 @@ def test_mpr_manual_boxes_period_validation_and_a_delivered_repair(env: dict[str
         f"/v1/programs/{program_id}/mpr/generate?period={period}", headers=ADMIN, json={"total_units_affected": 1}
     )
     assert bad.status_code == 422  # computed boxes cannot be typed in
+
+
+def test_the_graph_is_reported_and_its_absence_is_a_fixed_503(env: dict[str, Any], monkeypatch: Any) -> None:
+    from recallops.api import routes
+
+    client = env["client"]
+    with env["engine"].begin() as conn:  # a fresh heartbeat so readyz answers 200
+        conn.execute(text("INSERT INTO worker_heartbeats (worker_id) VALUES ('graph-test') ON CONFLICT DO NOTHING"))
+        conn.execute(text("UPDATE worker_heartbeats SET seen_at = now() WHERE worker_id = 'graph-test'"))
+    assert client.get("/readyz").json()["graph"] == "ok"
+    monkeypatch.setitem(routes._GRAPH, "store", None)
+    assert client.get("/readyz").json()["graph"] == "disabled"
+    pid = env["seeded"]["demo"]["program_id"]
+    down = client.get(f"/v1/programs/{pid}/fraud-graph", headers=REVIEWER)
+    assert down.status_code == 503 and down.json()["detail"] == "fraud graph unavailable"

@@ -245,7 +245,7 @@ class RunSummary(Schema):
 
 class Cluster(Schema):
     id: UUID
-    kind: Literal["same_photo", "same_address", "same_payout", "same_serial"]
+    kind: Literal["same_photo", "same_address", "same_payout", "same_serial", "same_mailing"]
     member_claim_ids: list[UUID]
     score: float
 
@@ -540,6 +540,9 @@ class Health(Schema):
     status: Literal["ok", "degraded"]
     database: bool
     worker_heartbeat_age_s: float | None = Field(None, description="seconds since the worker's last heartbeat")
+    graph: Literal["ok", "disabled", "unavailable"] = Field(
+        "disabled", description="the Neo4j fraud graph; a projection, so it never makes the service unready"
+    )
 
 
 class ExportBatchSummary(Schema):

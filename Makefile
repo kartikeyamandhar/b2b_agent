@@ -19,7 +19,7 @@ PY := $(RUN) python
 PSQL := docker compose exec -T db psql -U postgres -v ON_ERROR_STOP=1 -q
 DATABASES := recallops recallops_test
 
-.PHONY: help setup db-up db-bootstrap migrate downgrade api dev worker export-payouts seed test lint format typecheck check eval ingest label profile openapi
+.PHONY: help setup db-up db-bootstrap migrate downgrade api dev worker export-payouts graph-sync seed test lint format typecheck check eval ingest label profile openapi
 
 help: ## List targets
 	@grep -hE '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-14s %s\n", $$1, $$2}'
@@ -58,6 +58,9 @@ worker: ## Run the adjudication worker (ADJUDICATOR=agent needs LLM_MODE=live; r
 
 export-payouts: ## Write the check/ACH export file for payouts in pending_export and mark them exported
 	$(PY) -m recallops.payouts.export $(ARGS)
+
+graph-sync: ## Rebuild the Neo4j fraud graph and fraud_clusters from Postgres (every program; ARGS="--program <id>")
+	$(PY) -m recallops.fraud sync $(if $(ARGS),$(ARGS),--all)
 
 seed: ## Load one real recall, open a program, generate and adjudicate 500 synthetic claims
 	$(PY) -m recallops.seed

@@ -33,7 +33,6 @@ from recallops.models import (
     ClaimPhoto,
     Firm,
     FirmMember,
-    FraudCluster,
     Recall,
     RecallProgram,
     UsageMeter,
@@ -241,7 +240,6 @@ def seed_program(engine: Engine, firm_id: uuid.UUID, recall_source_id: str, n: i
     facts_all = [_facts(c) for c in claims]
     approved: list[tuple[uuid.UUID, int]] = []
     outcomes: Counter[str] = Counter()
-    clusters: dict[tuple[str, tuple[str, ...]], None] = {}
     t0 = time.monotonic()
     for c, facts in zip(claims, facts_all, strict=True):
         trace = DbTrace(engine, "rules_only", firm_id=firm_id, claim_id=c.claim_id, program_id=program_id)
@@ -275,8 +273,6 @@ def seed_program(engine: Engine, firm_id: uuid.UUID, recall_source_id: str, n: i
                     after={"status": status, "outcome": result.outcome},
                 )
             )
-        for kind, other in zip(result.duplicate_kinds, result.duplicate_with, strict=False):
-            clusters[(kind, tuple(sorted({str(c.claim_id), other})))] = None
         if result.outcome == "approve" and c.refund_cents and not result.routed_to_human:
             approved.append((c.claim_id, c.refund_cents))
     elapsed = time.monotonic() - t0
@@ -284,12 +280,6 @@ def seed_program(engine: Engine, firm_id: uuid.UUID, recall_source_id: str, n: i
         plan = str(session.get(Firm, firm_id).plan)  # type: ignore[union-attr]
     payouts = seed_payouts(engine, ctx, approved, plan)
     with Session(engine) as session, session.begin():
-        for kind, members in clusters:
-            session.add(
-                FraudCluster(
-                    firm_id=firm_id, program_id=program_id, kind=kind, member_claim_ids=[uuid.UUID(m) for m in members]
-                )
-            )
         session.add(
             UsageMeter(firm_id=firm_id, period_start=date.today().replace(day=1), claims_adjudicated=len(claims))
         )
@@ -299,7 +289,6 @@ def seed_program(engine: Engine, firm_id: uuid.UUID, recall_source_id: str, n: i
         "recall": recall_source_id,
         "claims": len(claims),
         "statuses": dict(outcomes),
-        "clusters": len(clusters),
         **payouts,
         "adjudication_seconds": round(elapsed, 2),
         "first_claim_id": str(claims[0].claim_id),
@@ -330,7 +319,38 @@ def run(engine: Engine | None = None, n: int = 500, seed: int = 42) -> dict[str,
         )
     demo = seed_program(engine, DEMO_FIRM_ID, DEMO_RECALL, n, seed)
     other = seed_program(engine, OTHER_FIRM_ID, OTHER_RECALL, 5, seed)
-    return {"demo": demo, "other": other, "seconds": round(time.monotonic() - t0, 2)}
+    graph = seed_graph(
+        engine, [(DEMO_FIRM_ID, uuid.UUID(demo["program_id"])), (OTHER_FIRM_ID, uuid.UUID(other["program_id"]))]
+    )
+    return {"demo": demo, "other": other, "graph": graph, "seconds": round(time.monotonic() - t0, 2)}
+
+
+def seed_graph(engine: Engine, programs: list[tuple[uuid.UUID, uuid.UUID]]) -> dict[str, Any]:
+    """Fraud clusters come from the Neo4j projection (decisions log 2026-10-18): the seed firms' old graph nodes are
+    purged and each program is rebuilt from Postgres. Without a reachable graph the claims stay dirty and
+    `make graph-sync` (or the worker's idle ticks) builds the clusters later."""
+    from recallops.db.engine import app_engine
+    from recallops.fraud.graph import GraphError, build_graph_store
+    from recallops.fraud.graph_admin import ensure_schema, purge_firm
+    from recallops.fraud.sync import sync_program
+
+    settings = get_settings()
+    store = build_graph_store(settings)
+    if store is None:
+        return {"status": "disabled"}
+    try:
+        ensure_schema(store)
+        for firm_id, _ in programs:
+            purge_firm(store, settings.neo4j_namespace, firm_id)
+        clusters: dict[str, Any] = {}
+        for firm_id, program_id in programs:
+            clusters[str(program_id)] = sync_program(store, engine, app_engine(), settings, firm_id, program_id)
+        return {"status": "ok", "programs": clusters}
+    except GraphError as exc:
+        log_event(log, "seed_graph_skipped", level=30, error=str(exc)[:300])
+        return {"status": "unavailable", "hint": "run make graph-sync once Neo4j is up"}
+    finally:
+        store.close()
 
 
 def main() -> int:

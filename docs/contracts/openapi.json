@@ -801,7 +801,8 @@
               "same_photo",
               "same_address",
               "same_payout",
-              "same_serial"
+              "same_serial",
+              "same_mailing"
             ],
             "title": "Kind",
             "type": "string"
@@ -992,6 +993,122 @@
         "title": "ExportBatchSummary",
         "type": "object"
       },
+      "FraudGraphEdge": {
+        "additionalProperties": false,
+        "properties": {
+          "a": {
+            "format": "uuid",
+            "title": "A",
+            "type": "string"
+          },
+          "b": {
+            "format": "uuid",
+            "title": "B",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "same_photo",
+              "same_address",
+              "same_serial",
+              "same_payout",
+              "same_mailing"
+            ],
+            "title": "Kind",
+            "type": "string"
+          }
+        },
+        "required": [
+          "a",
+          "b",
+          "kind"
+        ],
+        "title": "FraudGraphEdge",
+        "type": "object"
+      },
+      "FraudGraphNode": {
+        "additionalProperties": false,
+        "properties": {
+          "claim_id": {
+            "format": "uuid",
+            "title": "Claim Id",
+            "type": "string"
+          },
+          "cluster_kinds": {
+            "items": {
+              "enum": [
+                "same_photo",
+                "same_address",
+                "same_serial",
+                "same_payout",
+                "same_mailing"
+              ],
+              "type": "string"
+            },
+            "title": "Cluster Kinds",
+            "type": "array"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "claim_id",
+          "status",
+          "cluster_kinds"
+        ],
+        "title": "FraudGraphNode",
+        "type": "object"
+      },
+      "FraudGraphView": {
+        "additionalProperties": false,
+        "properties": {
+          "edges": {
+            "items": {
+              "$ref": "#/components/schemas/FraudGraphEdge"
+            },
+            "title": "Edges",
+            "type": "array"
+          },
+          "nodes": {
+            "items": {
+              "$ref": "#/components/schemas/FraudGraphNode"
+            },
+            "title": "Nodes",
+            "type": "array"
+          },
+          "program_id": {
+            "format": "uuid",
+            "title": "Program Id",
+            "type": "string"
+          },
+          "rings": {
+            "items": {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "title": "Rings",
+            "type": "array"
+          },
+          "truncated": {
+            "title": "Truncated",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "program_id",
+          "nodes",
+          "edges",
+          "rings",
+          "truncated"
+        ],
+        "title": "FraudGraphView",
+        "type": "object"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -1011,6 +1128,17 @@
           "database": {
             "title": "Database",
             "type": "boolean"
+          },
+          "graph": {
+            "default": "disabled",
+            "description": "the Neo4j fraud graph; a projection, so it never makes the service unready",
+            "enum": [
+              "ok",
+              "disabled",
+              "unavailable"
+            ],
+            "title": "Graph",
+            "type": "string"
           },
           "status": {
             "enum": [
@@ -5021,6 +5149,102 @@
           }
         },
         "summary": "Issue n single-claim portal links for distribution",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/programs/{program_id}/fraud-graph": {
+      "get": {
+        "description": "Program first (404 for another firm's program), then a read-only graph query whose every claim id is checked\nagainst this firm's claims under RLS. A graph error answers a fixed 503 detail (never the driver's message).",
+        "operationId": "fraud_graph_view_v1_programs__program_id__fraud_graph_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "program_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Program Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 500,
+              "maximum": 2000,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FraudGraphView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "the graph is disabled or unreachable"
+          }
+        },
+        "summary": "Fraud rings across every duplicate kind: claims, links, rings (statuses from Postgres)",
         "tags": [
           "firm"
         ]
