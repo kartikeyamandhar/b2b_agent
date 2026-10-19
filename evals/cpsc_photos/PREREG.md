@@ -54,6 +54,22 @@ Misses are reported as misses, and neither the prompts nor the selection change 
 - Labels: the two blind labelers agreed on all 64 photos. The main session viewed every photo whose caption names a model number the labels do not, and every photo a labeler marked as doubtful, and changed one label: L09's only marker is the CPSC callout "Style/VPN", not a model marker, so it joins L05 (a SKU) as a photo with no readable model number. Final counts: 20 readable labels, 20 with no readable model number, 20 intact products, 3 destruction photos that show the instruction carried out, and 1 (D03, the seal being pried out, not yet cut) that does not. E5 therefore needs all 3.
 - Scoring, diagnostic only: labels.json now records the other codes printed in each label photo (serials, SKUs, batch numbers), and each wrong model text is reported as either one of those codes in the wrong field or text printed nowhere in the photo. E2 and E3 keep their pre-registered definitions: a SKU returned as the model still counts against E3.
 
-## Outcome
+## Outcome (2026-10-19)
 
-(Filled in after the run.)
+One live run: 64 calls (L08 replayed L03's recording, so 63 were recorded), 0.009425 USD charged and 0.009542 nominal, through the metered client and traced in agent_steps; the ledger went from 1.620841 to 1.630266 USD. Replay with every image file removed reproduces all 64 readings, so CI needs no image.
+
+| expectation | result | |
+|---|---|---|
+| E1: read rate on readable labels at least 0.80 | 0.900 (18 of 20) | met |
+| E2: misread rate on readable labels at most 0.10 | 0.050 (1 of 20) | met |
+| E3: hallucination rate on photos with no readable model at most 0.20 | 0.100 (2 of 20) | met |
+| E4: complies false on at least 18 intact product photos | 20 of 20 | met |
+| E5: complies true on at least 3 of the 3 destruction photos showing it | 1 of 3 | missed |
+
+What the photos show:
+
+- **Labels.** The one misread (L39) is the right model copied with the angle brackets the label prints, "<PUA-US>". `norm_code` strips spaces, hyphens, and dots only, so in production `check_model` would call it a mismatch and deny a covered claim. The two model texts returned where no model number is readable are codes printed in the photo: the style number 177296 (L09) and "ITEM 61970" (L29). No answer was text printed nowhere in the photo. L40 abstained on a small FR730V badge.
+- **Destruction.** The check rejected all 20 intact product photos and D03 (the seal pried out, not cut), but accepted only D02 of CPSC's three published examples of compliant destruction. It called D01's cut cord "intact", and said D04's straps were "still attached and intact" with "no trash can visible" while the helmet sits in a lined trash can with its cut straps inside. Three photos are weak evidence, but they agree with probe60: the check errs strict on real photos too, not only on the renders. Strict means needs_info, a request for another photo, never a payment.
+- **A diagnostic change after the run, disclosed.** The split of wrong model texts first matched whole codes only and classed "ITEM 61970" as printed nowhere. It now also recognizes a printed code inside the answer, and the right model with extra characters. E1 to E5 are unaffected.
+
+Next: a revised destruction prompt (VISION_VERSION 1.1.0), measured on this block and on probe60 before it is adopted; and `norm_code` stripping bracket and quote delimiters, which changes the frozen `check_model` and needs its own revision of the ablation freeze.

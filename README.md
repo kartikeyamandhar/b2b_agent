@@ -19,7 +19,7 @@ When a company recalls a consumer product in the United States, the press releas
 **RecallOps does that work.** It reads the recall from the public CPSC feed and turns the free-text notice into rules a machine can check. Claims come in through a link-only portal, and a tool-using agent decides each one after reading the claimant's photos. Fraud rings are found across claims. Refunds go out through a ledger that cannot pay twice, and the monthly report is written from the data and reconciled to the unit.
 
 <p align="center">
-  <img src="docs/assets/results-at-a-glance.svg" alt="Results at a glance: fraud recall 1.000 on the synthetic claims for rules and agent both, 0.750 on the 40 agent-written claims; agent versus rules on those 40 claims 0.774 versus 0.583 macro F1; 0 discrepancies in the monthly report; 36 of 36 duplicate groups reproduced by the Neo4j graph; 1.62 USD of model spend for the whole project." width="100%">
+  <img src="docs/assets/results-at-a-glance.svg" alt="Results at a glance: fraud recall 1.000 on the synthetic claims for rules and agent both, 0.750 on the 40 agent-written claims; agent versus rules on those 40 claims 0.774 versus 0.583 macro F1; 0 discrepancies in the monthly report; 36 of 36 duplicate groups reproduced by the Neo4j graph; 1.63 USD of model spend for the whole project." width="100%">
 </p>
 
 <details>
@@ -178,9 +178,20 @@ Six ways of deciding the same claims under the same outcome policy, on three blo
 <table>
 <tr>
 <td width="40%"><img src="docs/assets/img/rejected-destruction.jpg" alt="Synthetic photo of a gray device on a dark green background; its black cord has a small cut gap near the end that is hard to see against the background"></td>
-<td valign="middle"><i>"The photo shows a gray rectangular device with a black cord trailing off its right edge, and the cord appears intact with no visible cut."</i><br><br><sub>The vision check, about a synthetic photo in which the cord is cut. The renders are too schematic for the model to accept as evidence (<a href="evals/adjudication/PREREG.md">PREREG.md</a>). The fix is a block of real photos, not a tuned threshold.</sub></td>
+<td valign="middle"><i>"The photo shows a gray rectangular device with a black cord trailing off its right edge, and the cord appears intact with no visible cut."</i><br><br><sub>The vision check, about a synthetic photo in which the cord is cut. The renders are too schematic for the model to accept as evidence (<a href="evals/adjudication/PREREG.md">PREREG.md</a>), but real photos show the check is strict too: see below.</sub></td>
 </tr>
 </table>
+
+- **On real photos.** To separate the vision tools from our drawings, 64 photos that CPSC published with its recall notices were drawn by a seeded rule, labeled by two blind labelers who agreed on all 64, and run through both tools once (0.0094 USD; the gate replays it without the image files). Pre-registration and results: [evals/cpsc_photos/PREREG.md](evals/cpsc_photos/PREREG.md).
+
+| what the tool should do | real CPSC photos | result |
+|---|---|---|
+| Read the model number | 20 readable labels | 18 read, 1 misread, 1 abstained |
+| Never make one up | 20 with no readable model number | none made up; 2 returned another printed code (a style and an item number) |
+| Reject an intact product | 20 product photos | 20 rejected |
+| Accept CPSC's own examples of correct destruction | 3 | **1 accepted** |
+
+The label reader holds up on real labels; its one misread is the right model with the angle brackets the label prints, which the model-number matching does not strip yet. The destruction check is strict on real photos as well: it called a cut cord "intact" in CPSC's own example, so that claimant would be asked for another photo rather than paid. A revised destruction prompt, measured on this block before it ships, is the next change.
 
 - **Rule extraction.** On the 60 notices labeled blind, the regex baseline beats the model-based extractor on field accuracy, 91.8 against 87.9 ([evals/results/extraction.md](evals/results/extraction.md)). The model extractor therefore runs only as a fallback, as the kill criterion written before the run requires: if the regex baseline came within 5 points of the model, the model would be demoted.
 
@@ -189,8 +200,8 @@ Six ways of deciding the same claims under the same outcome policy, on three blo
 | | |
 |---|---|
 | **Tenant isolation** | Row-level security is forced on every tenant table. The API connects as a role that bypasses nothing and owns nothing. Tests prove that one firm cannot read, change, or delete another firm's rows, and that the graph never joins two firms. |
-| **A budget the code enforces** | Every model call goes through one wrapper whose meter checks the projected cost before the call, against per-run caps and a global stop. The whole project has spent 1.62 USD on model calls. |
-| **Replayable evaluations** | 3,430 recorded model responses (3,330 for adjudication, 100 for rule extraction) let every evaluation rerun offline, at no cost, with identical results. A freeze manifest pins the decision logic the recordings were made against. |
+| **A budget the code enforces** | Every model call goes through one wrapper whose meter checks the projected cost before the call, against per-run caps and a global stop. The whole project has spent 1.63 USD on model calls. |
+| **Replayable evaluations** | 3,493 recorded model responses (3,330 for adjudication, 100 for rule extraction, 63 for real recall photos) let every evaluation rerun offline, at no cost, with identical results. A freeze manifest pins the decision logic the recordings were made against. |
 | **A gate that checks itself** | The deploy gate fails a change if any headline metric regresses past its tolerance, or if the committed results tables differ from what replay produces. |
 | **Pre-registration** | Expectations and kill criteria are written down before each run. Misses are reported, not tuned away. |
 | **Observed traces** | Every user-facing flow has a timeline recorded from a real run, not a description of what should happen. See [docs/traces](docs/traces). |
@@ -351,6 +362,7 @@ Each component's design is in [docs/components](docs/components), and each owner
 |---|---|
 | [Backend design](docs/components/01-backend.md) | Schema, tenancy, the agent, tools, retrieval, the ledger, the report, the graph, and the gate tolerances |
 | [Evaluation pre-registration](evals/adjudication/PREREG.md) | Every expectation, written before the run, and how each one came out |
-| [Results tables](evals/results) | Extraction, adjudication, the ablation, and the report reconciliation, regenerated by `make eval` |
+| [Real-photo pre-registration](evals/cpsc_photos/PREREG.md) | The vision tools on 64 photos from CPSC's recall notices: selection, blind labels, and results |
+| [Results tables](evals/results) | Extraction, adjudication, the ablation, the report reconciliation, and the vision tools on real CPSC photos, regenerated by `make eval` |
 | [Runtime traces](docs/traces) | Real runs: claims through every adjudication path, payouts, the report, the fraud graph, a clean-clone setup |
 | [Contract changes](docs/contracts/CHANGES.md) | What changed in the API contract, grouped by the teammate it affects |

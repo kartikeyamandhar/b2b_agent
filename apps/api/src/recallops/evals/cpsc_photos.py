@@ -36,7 +36,15 @@ from recallops.claims.vision import (
     prepare_image,
     read_label_photo,
 )
-from recallops.llm.client import Completion, ImageInput, LlmClient, ModelCallFailed, ReplayMiss, build_client
+from recallops.llm.client import (
+    Completion,
+    ImageInput,
+    LiveCallsDisabled,
+    LlmClient,
+    ModelCallFailed,
+    ReplayMiss,
+    build_client,
+)
 from recallops.llm.meter import RunBudget
 from recallops.logs import configure, get_logger, log_event
 from recallops.settings import REPO_ROOT, Settings, get_settings
@@ -310,10 +318,16 @@ def score_item(item: dict[str, Any], truth: dict[str, Any], reading: dict[str, A
     if item["task"] == "label":
         texts = [t for t in truth.get("model_texts") or [] if t]
         read = reading.get("model_text") if reading.get("legible") else None
-        # Diagnostic only (labels.json, adjudication): a wrong model text that is another code printed in the photo
-        # (a serial, SKU, or batch number) versus text printed nowhere in it.
+        # Diagnostic only (labels.json, adjudication; PREREG.md Outcome): a wrong model text that holds the right model
+        # plus extra characters, holds another code printed in the photo (a serial, SKU, or batch number, possibly
+        # with its field word, as in "ITEM 61970"), or is printed nowhere in it.
         printed = {norm_code(c) for c in truth.get("printed_codes") or [] if c}
-        kind = "other_code" if read and norm_code(read) in printed else "unprinted"
+        got = norm_code(read)
+        kind = "unprinted"
+        if any(norm_code(t) and norm_code(t) in got for t in texts):
+            kind = "formatting"
+        elif got in printed or any(len(c) >= 4 and c in got for c in printed):
+            kind = "other_code"
         if truth.get("legible") and texts:
             if not read:
                 return {"verdict": "abstained", "group": "readable"}
@@ -324,8 +338,8 @@ def score_item(item: dict[str, Any], truth: dict[str, Any], reading: dict[str, A
             return {"verdict": "hallucinated", "group": "no_model", "kind": kind}
         return {"verdict": "abstained_ok", "group": "no_model"}
     expected = bool(truth.get("destruction_shown"))
-    got = bool(reading.get("complies"))
-    return {"verdict": "correct" if got == expected else "wrong", "group": "shown" if expected else "not_shown"}
+    complies = bool(reading.get("complies"))
+    return {"verdict": "correct" if complies == expected else "wrong", "group": "shown" if expected else "not_shown"}
 
 
 def summarize(items: list[dict[str, Any]], verdicts: dict[str, dict[str, Any]], costs: list[Decimal]) -> dict[str, Any]:
@@ -353,6 +367,7 @@ def summarize(items: list[dict[str, Any]], verdicts: dict[str, dict[str, Any]], 
         "label_abstained": count("label", "readable", "abstained"),
         "label_no_model": no_model,
         "label_hallucinated": count("label", "no_model", "hallucinated"),
+        "label_wrong_formatting": sum(1 for v in verdicts.values() if v.get("kind") == "formatting"),
         "label_wrong_other_code": sum(1 for v in verdicts.values() if v.get("kind") == "other_code"),
         "label_wrong_unprinted": sum(1 for v in verdicts.values() if v.get("kind") == "unprinted"),
         "label_read_rate": rate(count("label", "readable", "read"), readable),
@@ -419,7 +434,11 @@ def run(settings: Settings, results_dir: Path = RESULTS_DIR, llm: LlmClient | No
     if unlabeled:
         raise SystemExit(f"labels.json has no label for {', '.join(unlabeled[:5])}")
     live = settings.llm_mode == "live"
-    llm = llm or build_client(settings)
+    if llm is None:
+        try:
+            llm = build_client(settings)
+        except LiveCallsDisabled:  # LLM_MODE=fake (the test suite): report the block as not run, never guess
+            llm = None
     if live:
         ensure_eval_firm(EVAL_FIRM)
     readings: dict[str, dict[str, Any] | None] = {}
@@ -427,6 +446,10 @@ def run(settings: Settings, results_dir: Path = RESULTS_DIR, llm: LlmClient | No
     costs: list[Decimal] = []
     for item in items:
         reading: dict[str, Any] | None = None
+        if llm is None:
+            readings[item["id"]] = None
+            verdicts[item["id"]] = score_item(item, truth[item["id"]], None)
+            continue
         try:
             reading, done = call_item(llm, item, live, settings)
             costs.append(done.nominal_cost_usd)
@@ -462,6 +485,7 @@ def run(settings: Settings, results_dir: Path = RESULTS_DIR, llm: LlmClient | No
     payload = {
         "block": "cpsc_photos",
         "vision_version": VISION_VERSION,
+        "status": "run" if llm is not None else f"not run (LLM_MODE={settings.llm_mode})",
         "label_status": labels.get("status"),
         "metrics": metrics,
         "expectations": expectations(metrics),
@@ -513,7 +537,7 @@ def render(payload: dict[str, Any], manifest: dict[str, Any]) -> str:
         f"sha256), drawn by a seeded rule from pools of {manifest['pool_sizes']['label']} label, "
         f"{manifest['pool_sizes']['product']} product, and {manifest['pool_sizes']['destruction']} destruction "
         f"photos. Vision tools {payload['vision_version']} (unchanged, frozen with the ablation). Labels: "
-        f"{payload['label_status']}.",
+        f"{payload['label_status']}. Status: {payload['status']}.",
         "",
         "| task | photos | result |",
         "|---|---|---|",
@@ -529,9 +553,10 @@ def render(payload: dict[str, Any], manifest: dict[str, Any]) -> str:
         f"| destruction-captioned photos not showing it done | {m['destruction_not_shown']} | correctly rejected "
         f"{m['destruction_not_shown_rejected']} |",
         "",
-        f"Every wrong model text, misread or returned where none is readable: {m['label_wrong_other_code']} were "
-        f"another code printed in the photo (a serial, SKU, or batch number), {m['label_wrong_unprinted']} were "
-        "printed nowhere in it.",
+        f"Every wrong model text, misread or returned where none is readable: {m['label_wrong_formatting']} held the "
+        f"right model with extra characters the label prints, {m['label_wrong_other_code']} were another code printed "
+        f"in the photo (a serial, SKU, item, or style number), and {m['label_wrong_unprinted']} were printed "
+        "nowhere in it.",
         "",
         f"Model calls: {m['model_calls']}, nominal cost {m['nominal_cost_usd']} USD. Missing recordings: "
         f"{m['missing']}.",

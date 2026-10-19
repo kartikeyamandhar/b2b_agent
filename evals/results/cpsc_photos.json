@@ -1,0 +1,879 @@
+{
+ "block": "cpsc_photos",
+ "vision_version": "1.0.0",
+ "status": "run",
+ "label_status": "assistant-labeled: two blind labelers (64 of 64 agreed before adjudication), adjudicated by the main session; owner audit pending",
+ "metrics": {
+  "label_n": 40,
+  "label_readable": 20,
+  "label_read": 18,
+  "label_read_exact": 18,
+  "label_misread": 1,
+  "label_abstained": 1,
+  "label_no_model": 20,
+  "label_hallucinated": 2,
+  "label_wrong_formatting": 1,
+  "label_wrong_other_code": 2,
+  "label_wrong_unprinted": 0,
+  "label_read_rate": 0.9,
+  "label_exact_rate": 0.9,
+  "label_misread_rate": 0.05,
+  "label_hallucination_rate": 0.1,
+  "product_n": 20,
+  "product_not_shown": 20,
+  "product_rejected": 20,
+  "product_shown": 0,
+  "product_shown_accepted": 0,
+  "destruction_n": 4,
+  "destruction_shown": 3,
+  "destruction_accepted": 1,
+  "destruction_not_shown": 1,
+  "destruction_not_shown_rejected": 1,
+  "missing": 0,
+  "model_calls": 64,
+  "nominal_cost_usd": "0.0095407"
+ },
+ "expectations": [
+  {
+   "expectation": "E1 read rate on readable labels >= 0.80",
+   "value": 0.9,
+   "met": true
+  },
+  {
+   "expectation": "E2 misread rate on readable labels <= 0.10",
+   "value": 0.05,
+   "met": true
+  },
+  {
+   "expectation": "E3 hallucination rate on labels with no readable model <= 0.20",
+   "value": 0.1,
+   "met": true
+  },
+  {
+   "expectation": "E4 complies false on >= 18 of the intact product photos",
+   "value": 20,
+   "met": true
+  },
+  {
+   "expectation": "E5 complies true on >= 3 of the destruction photos showing it",
+   "value": 1,
+   "met": false
+  }
+ ],
+ "labeler_agreement": {
+  "available": true,
+  "items": 64,
+  "agreed": 64,
+  "rate": 1.0
+ },
+ "items": [
+  {
+   "id": "L01",
+   "task": "label",
+   "recall_number": "25204",
+   "verdict": "read",
+   "reading": {
+    "legible": true,
+    "model_text": "LD-0030",
+    "serial_text": null,
+    "date_code_text": "ZE 082124",
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "L02",
+   "task": "label",
+   "recall_number": "24266",
+   "verdict": "abstained_ok",
+   "reading": {
+    "legible": true,
+    "model_text": null,
+    "serial_text": null,
+    "date_code_text": "Batch:12-15-2023",
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "L03",
+   "task": "label",
+   "recall_number": "26754",
+   "verdict": "read",
+   "reading": {
+    "legible": true,
+    "model_text": "XR-8801",
+    "serial_text": null,
+    "date_code_text": null,
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "L04",
+   "task": "label",
+   "recall_number": "25385",
+   "verdict": "read",
+   "reading": {
+    "legible": true,
+    "model_text": "SH20.006D",
+    "serial_text": null,
+    "date_code_text": "2024.12",
+    "confidence": 0.6
+   }
+  },
+  {
+   "id": "L05",
+   "task": "label",
+   "recall_number": "26251",
+   "verdict": "abstained_ok",
+   "reading": {
+    "legible": true,
+    "model_text": null,
+    "serial_text": null,
+    "date_code_text": null,
+    "confidence": 0.2
+   }
+  },
+  {
+   "id": "L06",
+   "task": "label",
+   "recall_number": "23747",
+   "verdict": "read",
+   "reading": {
+    "legible": true,
+    "model_text": "V-1906-S",
+    "serial_text": null,
+    "date_code_text": "MFG DATE:06/2021",
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "L07",
+   "task": "label",
+   "recall_number": "23759",
+   "verdict": "abstained_ok",
+   "reading": {
+    "legible": false,
+    "model_text": null,
+    "serial_text": null,
+    "date_code_text": null,
+    "confidence": 0.0
+   }
+  },
+  {
+   "id": "L08",
+   "task": "label",
+   "recall_number": "26750",
+   "verdict": "read",
+   "reading": {
+    "legible": true,
+    "model_text": "XR-8801",
+    "serial_text": null,
+    "date_code_text": null,
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "L09",
+   "task": "label",
+   "recall_number": "26202",
+   "verdict": "hallucinated",
+   "reading": {
+    "legible": true,
+    "model_text": "177296",
+    "serial_text": null,
+    "date_code_text": "07/2025",
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "L10",
+   "task": "label",
+   "recall_number": "26528",
+   "verdict": "read",
+   "reading": {
+    "legible": true,
+    "model_text": "KY-055",
+    "serial_text": null,
+    "date_code_text": "March 2025",
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "L11",
+   "task": "label",
+   "recall_number": "24340",
+   "verdict": "abstained_ok",
+   "reading": {
+    "legible": true,
+    "model_text": null,
+    "serial_text": null,
+    "date_code_text": null,
+    "confidence": 0.3
+   }
+  },
+  {
+   "id": "L12",
+   "task": "label",
+   "recall_number": "26032",
+   "verdict": "abstained_ok",
+   "reading": {
+    "legible": true,
+    "model_text": null,
+    "serial_text": null,
+    "date_code_text": null,
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "L13",
+   "task": "label",
+   "recall_number": "26171",
+   "verdict": "read",
+   "reading": {
+    "legible": true,
+    "model_text": "ZY2025",
+    "serial_text": null,
+    "date_code_text": "June 2025",
+    "confidence": 0.95
+   }
+  },
+  {
+   "id": "L14",
+   "task": "label",
+   "recall_number": "23298",
+   "verdict": "abstained_ok",
+   "reading": {
+    "legible": false,
+    "model_text": null,
+    "serial_text": null,
+    "date_code_text": null,
+    "confidence": 0.3
+   }
+  },
+  {
+   "id": "L15",
+   "task": "label",
+   "recall_number": "26595",
+   "verdict": "read",
+   "reading": {
+    "legible": true,
+    "model_text": "ZR0097U2",
+    "serial_text": "SS-2230003384",
+    "date_code_text": "23 W34D2",
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "L16",
+   "task": "label",
+   "recall_number": "26493",
+   "verdict": "abstained_ok",
+   "reading": {
+    "legible": true,
+    "model_text": null,
+    "serial_text": null,
+    "date_code_text": null,
+    "confidence": 0.0
+   }
+  },
+  {
+   "id": "L17",
+   "task": "label",
+   "recall_number": "25124",
+   "verdict": "abstained_ok",
+   "reading": {
+    "legible": false,
+    "model_text": null,
+    "serial_text": null,
+    "date_code_text": null,
+    "confidence": 0.2
+   }
+  },
+  {
+   "id": "L18",
+   "task": "label",
+   "recall_number": "23149",
+   "verdict": "abstained_ok",
+   "reading": {
+    "legible": false,
+    "model_text": null,
+    "serial_text": null,
+    "date_code_text": null,
+    "confidence": 0.1
+   }
+  },
+  {
+   "id": "L19",
+   "task": "label",
+   "recall_number": "25058",
+   "verdict": "read",
+   "reading": {
+    "legible": true,
+    "model_text": "NZ-9160.4 5000 Y",
+    "serial_text": null,
+    "date_code_text": "15th,Jul,2021",
+    "confidence": 0.85
+   }
+  },
+  {
+   "id": "L20",
+   "task": "label",
+   "recall_number": "23754",
+   "verdict": "abstained_ok",
+   "reading": {
+    "legible": true,
+    "model_text": null,
+    "serial_text": null,
+    "date_code_text": null,
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "L21",
+   "task": "label",
+   "recall_number": "26341",
+   "verdict": "abstained_ok",
+   "reading": {
+    "legible": false,
+    "model_text": null,
+    "serial_text": null,
+    "date_code_text": null,
+    "confidence": 0.0
+   }
+  },
+  {
+   "id": "L22",
+   "task": "label",
+   "recall_number": "23184",
+   "verdict": "read",
+   "reading": {
+    "legible": true,
+    "model_text": "KCBAGORANGE",
+    "serial_text": null,
+    "date_code_text": "20-01",
+    "confidence": 0.8
+   }
+  },
+  {
+   "id": "L23",
+   "task": "label",
+   "recall_number": "26081",
+   "verdict": "read",
+   "reading": {
+    "legible": true,
+    "model_text": "BGRT003",
+    "serial_text": null,
+    "date_code_text": "2024/11/15",
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "L24",
+   "task": "label",
+   "recall_number": "24161",
+   "verdict": "read",
+   "reading": {
+    "legible": true,
+    "model_text": "X-203",
+    "serial_text": "65901322",
+    "date_code_text": "04/2023",
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "L25",
+   "task": "label",
+   "recall_number": "25077",
+   "verdict": "abstained_ok",
+   "reading": {
+    "legible": false,
+    "model_text": null,
+    "serial_text": null,
+    "date_code_text": null,
+    "confidence": 0.1
+   }
+  },
+  {
+   "id": "L26",
+   "task": "label",
+   "recall_number": "26003",
+   "verdict": "abstained_ok",
+   "reading": {
+    "legible": true,
+    "model_text": null,
+    "serial_text": null,
+    "date_code_text": null,
+    "confidence": 0.0
+   }
+  },
+  {
+   "id": "L27",
+   "task": "label",
+   "recall_number": "23206",
+   "verdict": "read",
+   "reading": {
+    "legible": true,
+    "model_text": "K1000BK",
+    "serial_text": null,
+    "date_code_text": "07/2022",
+    "confidence": 0.93
+   }
+  },
+  {
+   "id": "L28",
+   "task": "label",
+   "recall_number": "24263",
+   "verdict": "read",
+   "reading": {
+    "legible": true,
+    "model_text": "NQ69811",
+    "serial_text": "2000001",
+    "date_code_text": "12/28/2022",
+    "confidence": 0.85
+   }
+  },
+  {
+   "id": "L29",
+   "task": "label",
+   "recall_number": "23729",
+   "verdict": "hallucinated",
+   "reading": {
+    "legible": true,
+    "model_text": "ITEM 61970",
+    "serial_text": "370331735",
+    "date_code_text": null,
+    "confidence": 0.85
+   }
+  },
+  {
+   "id": "L30",
+   "task": "label",
+   "recall_number": "25401",
+   "verdict": "read",
+   "reading": {
+    "legible": true,
+    "model_text": "LT-BG01-3",
+    "serial_text": null,
+    "date_code_text": "Sep 2024/",
+    "confidence": 0.85
+   }
+  },
+  {
+   "id": "L31",
+   "task": "label",
+   "recall_number": "25178",
+   "verdict": "read",
+   "reading": {
+    "legible": true,
+    "model_text": "SG021",
+    "serial_text": null,
+    "date_code_text": "2024-07",
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "L32",
+   "task": "label",
+   "recall_number": "24371",
+   "verdict": "abstained_ok",
+   "reading": {
+    "legible": false,
+    "model_text": null,
+    "serial_text": null,
+    "date_code_text": null,
+    "confidence": 0.1
+   }
+  },
+  {
+   "id": "L33",
+   "task": "label",
+   "recall_number": "24122",
+   "verdict": "read",
+   "reading": {
+    "legible": true,
+    "model_text": "PA5083U-1ACA",
+    "serial_text": "T13040047553A01",
+    "date_code_text": null,
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "L34",
+   "task": "label",
+   "recall_number": "25317",
+   "verdict": "read",
+   "reading": {
+    "legible": true,
+    "model_text": "LU-PH3-B",
+    "serial_text": null,
+    "date_code_text": null,
+    "confidence": 0.95
+   }
+  },
+  {
+   "id": "L35",
+   "task": "label",
+   "recall_number": "24261",
+   "verdict": "abstained_ok",
+   "reading": {
+    "legible": false,
+    "model_text": null,
+    "serial_text": null,
+    "date_code_text": null,
+    "confidence": 0.0
+   }
+  },
+  {
+   "id": "L36",
+   "task": "label",
+   "recall_number": "23215",
+   "verdict": "abstained_ok",
+   "reading": {
+    "legible": false,
+    "model_text": null,
+    "serial_text": null,
+    "date_code_text": null,
+    "confidence": 0.0
+   }
+  },
+  {
+   "id": "L37",
+   "task": "label",
+   "recall_number": "24219",
+   "verdict": "abstained_ok",
+   "reading": {
+    "legible": false,
+    "model_text": null,
+    "serial_text": null,
+    "date_code_text": null,
+    "confidence": 0.0
+   }
+  },
+  {
+   "id": "L38",
+   "task": "label",
+   "recall_number": "23726",
+   "verdict": "abstained_ok",
+   "reading": {
+    "legible": false,
+    "model_text": null,
+    "serial_text": null,
+    "date_code_text": null,
+    "confidence": 0.0
+   }
+  },
+  {
+   "id": "L39",
+   "task": "label",
+   "recall_number": "26788",
+   "verdict": "misread",
+   "reading": {
+    "legible": true,
+    "model_text": "<PUA-US>",
+    "serial_text": null,
+    "date_code_text": null,
+    "confidence": 0.7
+   }
+  },
+  {
+   "id": "L40",
+   "task": "label",
+   "recall_number": "24705",
+   "verdict": "abstained",
+   "reading": {
+    "legible": false,
+    "model_text": null,
+    "serial_text": null,
+    "date_code_text": null,
+    "confidence": 0.0
+   }
+  },
+  {
+   "id": "P01",
+   "task": "product",
+   "recall_number": "26790",
+   "verdict": "correct",
+   "reading": {
+    "shows_product": true,
+    "complies": false,
+    "observed": "The photo shows an intact one-quart methanol bottle with its original white label and cap, with no 'RECALLED' writing or any other visible destruction.",
+    "confidence": 0.95
+   }
+  },
+  {
+   "id": "P02",
+   "task": "product",
+   "recall_number": "24291",
+   "verdict": "correct",
+   "reading": {
+    "shows_product": true,
+    "complies": false,
+    "observed": "The photo shows a white power adapter with its cord intact and coiled, with no visible cut in the cord, so the instructed destruction is not shown.",
+    "confidence": 0.95
+   }
+  },
+  {
+   "id": "P03",
+   "task": "product",
+   "recall_number": "26635",
+   "verdict": "correct",
+   "reading": {
+    "shows_product": true,
+    "complies": false,
+    "observed": "The photo shows an intact pink silicone octopus-style teether toy with its dangling strings still attached and no visible 'RECALLED' marking on the body.",
+    "confidence": 0.93
+   }
+  },
+  {
+   "id": "P04",
+   "task": "product",
+   "recall_number": "23121",
+   "verdict": "correct",
+   "reading": {
+    "shows_product": true,
+    "complies": false,
+    "observed": "The photo shows an intact Christmas-print long-sleeved nightgown laid flat on a dark surface, with no cuts or destruction visible.",
+    "confidence": 0.97
+   }
+  },
+  {
+   "id": "P05",
+   "task": "product",
+   "recall_number": "26752",
+   "verdict": "correct",
+   "reading": {
+    "shows_product": true,
+    "complies": false,
+    "observed": "The photo shows an intact black satin short-sleeve button-up top and matching shorts laid flat on a wooden floor, with no visible cutting or destruction.",
+    "confidence": 0.97
+   }
+  },
+  {
+   "id": "P06",
+   "task": "product",
+   "recall_number": "26060",
+   "verdict": "correct",
+   "reading": {
+    "shows_product": true,
+    "complies": false,
+    "observed": "The photo shows a grey HOMEAL bed rail with its cloth covering still attached to the white metal frame, appearing fully intact with no visible cutting or removal of the cloth.",
+    "confidence": 0.95
+   }
+  },
+  {
+   "id": "P07",
+   "task": "product",
+   "recall_number": "25228",
+   "verdict": "correct",
+   "reading": {
+    "shows_product": true,
+    "complies": false,
+    "observed": "The photo shows an intact navy baby swing with a star-and-moon canopy cover, with no visible cut in the cover and no visible 'Recalled' marking on the base.",
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "P08",
+   "task": "product",
+   "recall_number": "25103",
+   "verdict": "correct",
+   "reading": {
+    "shows_product": true,
+    "complies": false,
+    "observed": "The photo is a product image showing a blue helmet with intact straps alongside four other helmet color variants on a white background, with no sign of any cut straps or destruction.",
+    "confidence": 0.97
+   }
+  },
+  {
+   "id": "P09",
+   "task": "product",
+   "recall_number": "27006",
+   "verdict": "correct",
+   "reading": {
+    "shows_product": true,
+    "complies": false,
+    "observed": "The photo shows four intact yellow Moominvalley-style Squishy Bun capsule packages on a cardboard tray, with no visible 'RECALLED' writing on the products or containers and no evidence of disposal.",
+    "confidence": 0.95
+   }
+  },
+  {
+   "id": "P10",
+   "task": "product",
+   "recall_number": "25278",
+   "verdict": "correct",
+   "reading": {
+    "shows_product": true,
+    "complies": false,
+    "observed": "The photo shows a gray high chair in multiple configurations (full upright, reclined, and folded views), all appearing fully assembled and intact with no sign of disassembly.",
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "P11",
+   "task": "product",
+   "recall_number": "26498",
+   "verdict": "correct",
+   "reading": {
+    "shows_product": true,
+    "complies": false,
+    "observed": "The photo shows an intact purple and gray resistance band pair with black handles and metal D-rings laid in a loop on a wooden surface, with no visible cuts.",
+    "confidence": 0.95
+   }
+  },
+  {
+   "id": "P12",
+   "task": "product",
+   "recall_number": "25118",
+   "verdict": "correct",
+   "reading": {
+    "shows_product": true,
+    "complies": false,
+    "observed": "The photo shows two intact women's pullover sweatshirts (one blue, one pink) being modeled on people, with no cutting or destruction visible.",
+    "confidence": 0.97
+   }
+  },
+  {
+   "id": "P13",
+   "task": "product",
+   "recall_number": "26725",
+   "verdict": "correct",
+   "reading": {
+    "shows_product": true,
+    "complies": false,
+    "observed": "The photo is a product image of an intact green and black pressure washer with its power cord still coiled and uncut, alongside accessories and nozzles, showing no destruction.",
+    "confidence": 0.97
+   }
+  },
+  {
+   "id": "P14",
+   "task": "product",
+   "recall_number": "26113",
+   "verdict": "correct",
+   "reading": {
+    "shows_product": true,
+    "complies": false,
+    "observed": "The photo shows a intact blue and white sheep-patterned baby lounger with its cover fully assembled, with no foam or pads removed and no cutting visible.",
+    "confidence": 0.95
+   }
+  },
+  {
+   "id": "P15",
+   "task": "product",
+   "recall_number": "26781",
+   "verdict": "correct",
+   "reading": {
+    "shows_product": true,
+    "complies": false,
+    "observed": "The photo shows an intact purple and white mattress styled on a bed with pillows, with no visible destruction or the word 'Recalled' written on it.",
+    "confidence": 0.97
+   }
+  },
+  {
+   "id": "P16",
+   "task": "product",
+   "recall_number": "23113",
+   "verdict": "correct",
+   "reading": {
+    "shows_product": true,
+    "complies": false,
+    "observed": "The photo shows a blue hooded plush robe with its belt tied, intact and uncut, with no sign of it being cut in half.",
+    "confidence": 0.97
+   }
+  },
+  {
+   "id": "P17",
+   "task": "product",
+   "recall_number": "27027",
+   "verdict": "correct",
+   "reading": {
+    "shows_product": true,
+    "complies": false,
+    "observed": "The photo shows an intact grey Papablic bedside sleeper bassinet with its fabric bassinet, mesh panels, and frame all assembled and undamaged, with no visible cutting or disassembly.",
+    "confidence": 0.97
+   }
+  },
+  {
+   "id": "P18",
+   "task": "product",
+   "recall_number": "25427",
+   "verdict": "correct",
+   "reading": {
+    "shows_product": true,
+    "complies": false,
+    "observed": "The photo shows an intact navy pajama set with white piping laid flat on a white background, with no cutting or destruction visible.",
+    "confidence": 0.97
+   }
+  },
+  {
+   "id": "P19",
+   "task": "product",
+   "recall_number": "26420",
+   "verdict": "correct",
+   "reading": {
+    "shows_product": true,
+    "complies": false,
+    "observed": "The photo is a promotional image showing four intact green-and-black pressure washers (4800PSI, 5100PSI, 5000PSI, 4000PSI) with their power cords and accessories, with no sign of any cord being cut.",
+    "confidence": 0.97
+   }
+  },
+  {
+   "id": "P20",
+   "task": "product",
+   "recall_number": "25304",
+   "verdict": "correct",
+   "reading": {
+    "shows_product": true,
+    "complies": false,
+    "observed": "The photo shows an intact white iWALK power bank with its logo and a round button, with no visible 'Recalled' writing or model/serial number displayed.",
+    "confidence": 0.95
+   }
+  },
+  {
+   "id": "D01",
+   "task": "destruction",
+   "recall_number": "26125",
+   "verdict": "wrong",
+   "reading": {
+    "shows_product": true,
+    "complies": false,
+    "observed": "The photo shows a white and black hair styling brush labeled MY ONLY STYLER with its black power cord lying intact on a wooden surface, and the cord does not appear cut in half.",
+    "confidence": 0.9
+   }
+  },
+  {
+   "id": "D02",
+   "task": "destruction",
+   "recall_number": "25007",
+   "verdict": "correct",
+   "reading": {
+    "shows_product": true,
+    "complies": true,
+    "observed": "The photo shows a black helmet, upside down, with both chin straps lying separately on the surface beside it, their ends cut or detached from the helmet, though no trash can is visible.",
+    "confidence": 0.7
+   }
+  },
+  {
+   "id": "D03",
+   "task": "destruction",
+   "recall_number": "24069",
+   "verdict": "correct",
+   "reading": {
+    "shows_product": true,
+    "complies": false,
+    "observed": "The photo shows a green blender blade assembly with a clear rubber seal ring still intact on the base, with a knife blade partially touching the seal but no visible cuts or pieces.",
+    "confidence": 0.85
+   }
+  },
+  {
+   "id": "D04",
+   "task": "destruction",
+   "recall_number": "25007",
+   "verdict": "wrong",
+   "reading": {
+    "shows_product": true,
+    "complies": false,
+    "observed": "The photo shows a black helmet with its interior visible, sitting inside a white plastic bag, with its chin straps still attached and intact, and no cut straps or trash can visible.",
+    "confidence": 0.9
+   }
+  }
+ ]
+}

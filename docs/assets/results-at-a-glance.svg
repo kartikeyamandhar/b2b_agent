@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1200" height="224" viewBox="0 0 1200 224" role="img" aria-labelledby="title desc">
 <title id="title">RecallOps results at a glance</title>
-<desc id="desc">Five headline numbers. Fraud recall on the 300 synthetic golden claims: 1.000 for the rules-only adjudicator and the agent, 0.750 on the 40 agent-written claims (written blind to the generator). Macro F1 on those 40 claims: agent loop 0.774, rules only 0.583, rules plus vision 0.668. Monthly progress report discrepancies: 0. Duplicate groups the Neo4j graph reproduces from check_duplicates: 36 of 36. Model spend for the whole project: 1.62 USD.</desc>
+<desc id="desc">Five headline numbers. Fraud recall on the 300 synthetic golden claims: 1.000 for the rules-only adjudicator and the agent, 0.750 on the 40 agent-written claims (written blind to the generator). Macro F1 on those 40 claims: agent loop 0.774, rules only 0.583, rules plus vision 0.668. Monthly progress report discrepancies: 0. Duplicate groups the Neo4j graph reproduces from check_duplicates: 36 of 36. Model spend for the whole project: 1.63 USD.</desc>
 <style>
   text { font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
   .card { fill:#fcfcfb;stroke:#0b0b0b;stroke-opacity:0.10 }
@@ -51,6 +51,6 @@
 <line class="grid" x1="950.4" y1="30" x2="950.4" y2="194" stroke-width="1"/>
 <rect class="accent" x="970.4" y="30" width="24" height="3" rx="1.5"/>
 <text x="970.4" y="60" class="ink2" font-size="14" font-weight="500">Model spend, whole project</text>
-<text x="970.4" y="142" font-weight="600"><tspan class="ink" font-size="35">1.62</tspan><tspan class="ink2" font-size="17.5" font-weight="500" dx="7">USD</tspan></text>
+<text x="970.4" y="142" font-weight="600"><tspan class="ink" font-size="35">1.63</tspan><tspan class="ink2" font-size="17.5" font-weight="500" dx="7">USD</tspan></text>
 <text x="970.4" y="172" class="ink2" font-size="13">every eval replays offline</text>
 </svg>

@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": true, \"complies\": false, \"observed\": \"The photo is a product image showing a blue helmet with intact straps alongside four other helmet color variants on a white background, with no sign of any cut straps or destruction.\", \"confidence\": 0.97}",
+ "usage": {
+  "input_tokens": 1171,
+  "output_tokens": 83,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgCFzh9M2Q1s8MkMXwh5M",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 1562
+}

@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": true, \"complies\": false, \"observed\": \"The photo shows a black helmet with its interior visible, sitting inside a white plastic bag, with its chin straps still attached and intact, and no cut straps or trash can visible.\", \"confidence\": 0.9}",
+ "usage": {
+  "input_tokens": 3193,
+  "output_tokens": 88,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgCG2aUZ4L8UMWrPRaK1t",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 1733
+}

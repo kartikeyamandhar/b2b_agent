@@ -149,6 +149,14 @@ def test_wrong_model_texts_are_split_into_printed_codes_and_unprinted_text() -> 
     none = {"legible": False, "model_texts": [], "printed_codes": ["FTBFSD-0162"]}
     sku = cp.score_item({"task": "label"}, none, {"legible": True, "model_text": "FTBFSD 0162"})
     assert (sku["verdict"], sku["kind"]) == ("hallucinated", "other_code")  # E3 still counts it, as pre-registered
+    item = cp.score_item(
+        {"task": "label"}, {**none, "printed_codes": ["61970"]}, {"legible": True, "model_text": "ITEM 61970"}
+    )
+    assert item["kind"] == "other_code"
+    brackets = cp.score_item(
+        {"task": "label"}, {"legible": True, "model_texts": ["PUA-US"]}, {"legible": True, "model_text": "<PUA-US>"}
+    )
+    assert (brackets["verdict"], brackets["kind"]) == ("misread", "formatting")
 
 
 def test_destruction_scoring_and_missing() -> None:
@@ -198,6 +206,20 @@ def test_run_scores_replayed_readings_and_writes_tables(tmp_path: Path, monkeypa
     table = (tmp_path / "results" / "cpsc_photos.md").read_text()
     assert "| L02 | label | 1 | hallucinated | ZZ9 |" in table
     assert json.loads((tmp_path / "results" / "cpsc_photos.json").read_text())["metrics"] == m
+
+
+def test_fake_mode_reports_the_block_as_not_run(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    item = _item("L01", "label", png())
+    (tmp_path / "manifest.json").write_text(
+        json.dumps({"items": [item], "skipped": [], "pool_sizes": {"label": 1, "product": 0, "destruction": 0}})
+    )
+    (tmp_path / "labels.json").write_text(json.dumps({"items": {"L01": {"legible": False, "model_texts": []}}}))
+    monkeypatch.setattr(cp, "DIR", tmp_path)
+    monkeypatch.setattr(cp, "MANIFEST", tmp_path / "manifest.json")
+    monkeypatch.setattr(cp, "LABELS", tmp_path / "labels.json")
+    out = cp.run(Settings(llm_mode="fake"), tmp_path / "results")
+    assert out["status"] == "not run (LLM_MODE=fake)"
+    assert out["metrics"]["missing"] == 1 and out["metrics"]["model_calls"] == 0
 
 
 def test_run_refuses_unlabeled_items(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
