@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
+<title id="title">Fraud clusters found in 500 synthetic claims</title>
+<desc id="desc">58 fraud clusters from the seeded demo program, drawn as small stars grouped by kind: same photo 14, same address 13, same serial 17, same payout 14. Each star has a center marker for the shared photo, address, serial, or payout destination and one dot per member claim. 117 memberships across 117 distinct claims.</desc>
+<style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+  .card { fill:#fcfcfb;stroke:#0b0b0b;stroke-opacity:0.10 }
+  .ink { fill:#0b0b0b }
+  .ink2 { fill:#52514e }
+  .muted { fill:#898781 }
+  .grid { stroke:#e1e0d9 }
+  .axis { stroke:#c3c2b7 }
+  .k-same_photo { fill:#2a78d6;stroke:#fcfcfb }
+  .k-same_address { fill:#eb6834;stroke:#fcfcfb }
+  .k-same_serial { fill:#1baf7a;stroke:#fcfcfb }
+  .k-same_payout { fill:#6250d6;stroke:#fcfcfb }
+  .spoke { stroke:#b5b3ab }
+  .member { fill:#898781;stroke:#fcfcfb }
+  @media (prefers-color-scheme: dark) {
+    .card { fill:#1a1a19;stroke:#ffffff;stroke-opacity:0.10 }
+    .ink { fill:#f0efec }
+    .ink2 { fill:#c3c2b7 }
+    .muted { fill:#898781 }
+    .grid { stroke:#2c2c2a }
+    .axis { stroke:#383835 }
+    .k-same_photo { fill:#3987e5;stroke:#1a1a19 }
+    .k-same_address { fill:#d95926;stroke:#1a1a19 }
+    .k-same_serial { fill:#199e70;stroke:#1a1a19 }
+    .k-same_payout { fill:#9085e9;stroke:#1a1a19 }
+    .spoke { stroke:#5a5955 }
+    .member { fill:#898781;stroke:#1a1a19 }
+  }
+</style>
+<rect class="card" x="0.5" y="0.5" width="1199" height="519" rx="16" stroke-width="1"/>
+<text x="32" y="56" class="ink" font-size="26" font-weight="600">Fraud clusters found in 500 synthetic claims</text>
+<text x="32" y="86" class="ink2" font-size="15">Connected components in the Neo4j projection; members are claims, centers are the shared photo, address, serial, or payout destination</text>
+<line class="spoke" x1="37" y1="120" x2="59" y2="120" stroke-width="1"/>
+<circle class="member" cx="37" cy="120" r="4.5" stroke-width="2"/>
+<rect class="k-same_photo" x="54.5" y="114.5" width="11" height="11" rx="1.5" stroke-width="2"/>
+<text x="76" y="124.5" class="ink2" font-size="13">claim joined to the value it shares; the marker's shape and color name the kind</text>
+<line class="grid" x1="32" y1="150" x2="1168" y2="150" stroke-width="1"/>
+<rect class="k-same_photo" x="34.5" y="178.5" width="11" height="11" rx="1.5" stroke-width="2"/>
+<text x="56" y="189" class="ink" font-size="15" font-weight="600">Same photo, 14</text>
+<text x="56" y="208" class="ink2" font-size="13">identical or similar image</text>
+<line class="spoke" x1="294.47" y1="189" x2="294.47" y2="172" stroke-width="1"/>
+<line class="spoke" x1="294.47" y1="189" x2="309.19" y2="197.5" stroke-width="1"/>
+<line class="spoke" x1="294.47" y1="189" x2="279.75" y2="197.5" stroke-width="1"/>
+<circle class="member" cx="294.47" cy="172" r="4.5" stroke-width="2"/>
+<circle class="member" cx="309.19" cy="197.5" r="4.5" stroke-width="2"/>
+<circle class="member" cx="279.75" cy="197.5" r="4.5" stroke-width="2"/>
+<rect class="k-same_photo" x="288.97" y="183.5" width="11" height="11" rx="1.5" stroke-width="2"/>
+<line class="spoke" x1="347.41" y1="189" x2="347.41" y2="172" stroke-width="1"/>
+<line class="spoke" x1="347.41" y1="189" x2="347.41" y2="206" stroke-width="1"/>
+<circle class="member" cx="347.41" cy="172" r="4.5" stroke-width="2"/>
+<circle class="member" cx="347.41" cy="206" r="4.5" stroke-width="2"/>
+<rect class="k-same_photo" x="341.91" y="183.5" width="11" height="11" rx="1.5" stroke-width="2"/>
+<line class="spoke" x1="400.35" y1="189" x2="400.35" y2="172" stroke-width="1"/>
+<line class="spoke" x1="400.35" y1="189" x2="400.35" y2="206" stroke-width="1"/>
+<circle class="member" cx="400.35" cy="172" r="4.5" stroke-width="2"/>
+<circle class="member" cx="400.35" cy="206" r="4.5" stroke-width="2"/>
+<rect class="k-same_photo" x="394.85" y="183.5" width="11" height="11" rx="1.5" stroke-width="2"/>
+<line class="spoke" x1="453.29" y1="189" x2="453.29" y2="172" stroke-width="1"/>
+<line class="spoke" x1="453.29" y1="189" x2="453.29" y2="206" stroke-width="1"/>
+<circle class="member" cx="453.29" cy="172" r="4.5" stroke-width="2"/>
+<circle class="member" cx="453.29" cy="206" r="4.5" stroke-width="2"/>
+<rect class="k-same_photo" x="447.79" y="183.5" width="11" height="11" rx="1.5" stroke-width="2"/>
+<line class="spoke" x1="506.24" y1="189" x2="506.24" y2="172" stroke-width="1"/>
+<line class="spoke" x1="506.24" y1="189" x2="506.24" y2="206" stroke-width="1"/>
+<circle class="member" cx="506.24" cy="172" r="4.5" stroke-width="2"/>
+<circle class="member" cx="506.24" cy="206" r="4.5" stroke-width="2"/>
+<rect class="k-same_photo" x="500.74" y="183.5" width="11" height="11" rx="1.5" stroke-width="2"/>
+<line class="spoke" x1="559.18" y1="189" x2="559.18" y2="172" stroke-width="1"/>
+<line class="spoke" x1="559.18" y1="189" x2="559.18" y2="206" stroke-width="1"/>
+<circle class="member" cx="559.18" cy="172" r="4.5" stroke-width="2"/>
+<circle class="member" cx="559.18" cy="206" r="4.5" stroke-width="2"/>
+<rect class="k-same_photo" x="553.68" y="183.5" width="11" height="11" rx="1.5" stroke-width="2"/>
+<line class="spoke" x1="612.12" y1="189" x2="612.12" y2="172" stroke-width="1"/>
+<line class="spoke" x1="612.12" y1="189" x2="612.12" y2="206" stroke-width="1"/>
+<circle class="member" cx="612.12" cy="172" r="4.5" stroke-width="2"/>
+<circle class="member" cx="612.12" cy="206" r="4.5" stroke-width="2"/>
+<rect class="k-same_photo" x="606.62" y="183.5" width="11" height="11" rx="1.5" stroke-width="2"/>
+<line class="spoke" x1="665.06" y1="189" x2="665.06" y2="172" stroke-width="1"/>
+<line class="spoke" x1="665.06" y1="189" x2="665.06" y2="206" stroke-width="1"/>
+<circle class="member" cx="665.06" cy="172" r="4.5" stroke-width="2"/>
+<circle class="member" cx="665.06" cy="206" r="4.5" stroke-width="2"/>
+<rect class="k-same_photo" x="659.56" y="183.5" width="11" height="11" rx="1.5" stroke-width="2"/>
+<line class="spoke" x1="718" y1="189" x2="718" y2="172" stroke-width="1"/>
+<line class="spoke" x1="718" y1="189" x2="718" y2="206" stroke-width="1"/>
+<circle class="member" cx="718" cy="172" r="4.5" stroke-width="2"/>
+<circle class="member" cx="718" cy="206" r="4.5" stroke-width="2"/>
+<rect class="k-same_photo" x="712.5" y="183.5" width="11" height="11" rx="1.5" stroke-width="2"/>
+<line class="spoke" x1="770.94" y1="189" x2="770.94" y2="172" stroke-width="1"/>
+<line class="spoke" x1="770.94" y1="189" x2="770.94" y2="206" stroke-width="1"/>
+<circle class="member" cx="770.94" cy="172" r="4.5" stroke-width="2"/>
+<circle class="member" cx="770.94" cy="206" r="4.5" stroke-width="2"/>
+<rect class="k-same_photo" x="765.44" y="183.5" width="11" height="11" rx="1.5" stroke-width="2"/>
+<line class="spoke" x1="823.88" y1="189" x2="823.88" y2="172" stroke-width="1"/>
+<line class="spoke" x1="823.88" y1="189" x2="823.88" y2="206" stroke-width="1"/>
+<circle class="member" cx="823.88" cy="172" r="4.5" stroke-width="2"/>
+<circle class="member" cx="823.88" cy="206" r="4.5" stroke-width="2"/>
+<rect class="k-same_photo" x="818.38" y="183.5" width="11" height="11" rx="1.5" stroke-width="2"/>
+<line class="spoke" x1="876.82" y1="189" x2="876.82" y2="172" stroke-width="1"/>
+<line class="spoke" x1="876.82" y1="189" x2="876.82" y2="206" stroke-width="1"/>
+<circle class="member" cx="876.82" cy="172" r="4.5" stroke-width="2"/>
+<circle class="member" cx="876.82" cy="206" r="4.5" stroke-width="2"/>
+<rect class="k-same_photo" x="871.32" y="183.5" width="11" height="11" rx="1.5" stroke-width="2"/>
+<line class="spoke" x1="929.76" y1="189" x2="929.76" y2="172" stroke-width="1"/>
+<line class="spoke" x1="929.76" y1="189" x2="929.76" y2="206" stroke-width="1"/>
+<circle class="member" cx="929.76" cy="172" r="4.5" stroke-width="2"/>
+<circle class="member" cx="929.76" cy="206" r="4.5" stroke-width="2"/>
+<rect class="k-same_photo" x="924.26" y="183.5" width="11" height="11" rx="1.5" stroke-width="2"/>
+<line class="spoke" x1="982.71" y1="189" x2="982.71" y2="172" stroke-width="1"/>
+<line class="spoke" x1="982.71" y1="189" x2="982.71" y2="206" stroke-width="1"/>
+<circle class="member" cx="982.71" cy="172" r="4.5" stroke-width="2"/>
+<circle class="member" cx="982.71" cy="206" r="4.5" stroke-width="2"/>
+<rect class="k-same_photo" x="977.21" y="183.5" width="11" height="11" rx="1.5" stroke-width="2"/>
+<line class="grid" x1="32" y1="228" x2="1168" y2="228" stroke-width="1"/>
+<polygon class="k-same_address" points="40,254.2 47.8,262 40,269.8 32.2,262" stroke-linejoin="round" stroke-width="2"/>
+<text x="56" y="267" class="ink" font-size="15" font-weight="600">Same address, 13</text>
+<text x="56" y="286" class="ink2" font-size="13">street address or email</text>
+<line class="spoke" x1="294.47" y1="267" x2="294.47" y2="250" stroke-width="1"/>
+<line class="spoke" x1="294.47" y1="267" x2="294.47" y2="284" stroke-width="1"/>
+<circle class="member" cx="294.47" cy="250" r="4.5" stroke-width="2"/>
+<circle class="member" cx="294.47" cy="284" r="4.5" stroke-width="2"/>
+<polygon class="k-same_address" points="294.47,259.2 302.27,267 294.47,274.8 286.67,267" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="347.41" y1="267" x2="347.41" y2="250" stroke-width="1"/>
+<line class="spoke" x1="347.41" y1="267" x2="347.41" y2="284" stroke-width="1"/>
+<circle class="member" cx="347.41" cy="250" r="4.5" stroke-width="2"/>
+<circle class="member" cx="347.41" cy="284" r="4.5" stroke-width="2"/>
+<polygon class="k-same_address" points="347.41,259.2 355.21,267 347.41,274.8 339.61,267" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="400.35" y1="267" x2="400.35" y2="250" stroke-width="1"/>
+<line class="spoke" x1="400.35" y1="267" x2="400.35" y2="284" stroke-width="1"/>
+<circle class="member" cx="400.35" cy="250" r="4.5" stroke-width="2"/>
+<circle class="member" cx="400.35" cy="284" r="4.5" stroke-width="2"/>
+<polygon class="k-same_address" points="400.35,259.2 408.15,267 400.35,274.8 392.55,267" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="453.29" y1="267" x2="453.29" y2="250" stroke-width="1"/>
+<line class="spoke" x1="453.29" y1="267" x2="453.29" y2="284" stroke-width="1"/>
+<circle class="member" cx="453.29" cy="250" r="4.5" stroke-width="2"/>
+<circle class="member" cx="453.29" cy="284" r="4.5" stroke-width="2"/>
+<polygon class="k-same_address" points="453.29,259.2 461.09,267 453.29,274.8 445.49,267" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="506.24" y1="267" x2="506.24" y2="250" stroke-width="1"/>
+<line class="spoke" x1="506.24" y1="267" x2="506.24" y2="284" stroke-width="1"/>
+<circle class="member" cx="506.24" cy="250" r="4.5" stroke-width="2"/>
+<circle class="member" cx="506.24" cy="284" r="4.5" stroke-width="2"/>
+<polygon class="k-same_address" points="506.24,259.2 514.04,267 506.24,274.8 498.44,267" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="559.18" y1="267" x2="559.18" y2="250" stroke-width="1"/>
+<line class="spoke" x1="559.18" y1="267" x2="559.18" y2="284" stroke-width="1"/>
+<circle class="member" cx="559.18" cy="250" r="4.5" stroke-width="2"/>
+<circle class="member" cx="559.18" cy="284" r="4.5" stroke-width="2"/>
+<polygon class="k-same_address" points="559.18,259.2 566.98,267 559.18,274.8 551.38,267" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="612.12" y1="267" x2="612.12" y2="250" stroke-width="1"/>
+<line class="spoke" x1="612.12" y1="267" x2="612.12" y2="284" stroke-width="1"/>
+<circle class="member" cx="612.12" cy="250" r="4.5" stroke-width="2"/>
+<circle class="member" cx="612.12" cy="284" r="4.5" stroke-width="2"/>
+<polygon class="k-same_address" points="612.12,259.2 619.92,267 612.12,274.8 604.32,267" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="665.06" y1="267" x2="665.06" y2="250" stroke-width="1"/>
+<line class="spoke" x1="665.06" y1="267" x2="665.06" y2="284" stroke-width="1"/>
+<circle class="member" cx="665.06" cy="250" r="4.5" stroke-width="2"/>
+<circle class="member" cx="665.06" cy="284" r="4.5" stroke-width="2"/>
+<polygon class="k-same_address" points="665.06,259.2 672.86,267 665.06,274.8 657.26,267" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="718" y1="267" x2="718" y2="250" stroke-width="1"/>
+<line class="spoke" x1="718" y1="267" x2="718" y2="284" stroke-width="1"/>
+<circle class="member" cx="718" cy="250" r="4.5" stroke-width="2"/>
+<circle class="member" cx="718" cy="284" r="4.5" stroke-width="2"/>
+<polygon class="k-same_address" points="718,259.2 725.8,267 718,274.8 710.2,267" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="770.94" y1="267" x2="770.94" y2="250" stroke-width="1"/>
+<line class="spoke" x1="770.94" y1="267" x2="770.94" y2="284" stroke-width="1"/>
+<circle class="member" cx="770.94" cy="250" r="4.5" stroke-width="2"/>
+<circle class="member" cx="770.94" cy="284" r="4.5" stroke-width="2"/>
+<polygon class="k-same_address" points="770.94,259.2 778.74,267 770.94,274.8 763.14,267" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="823.88" y1="267" x2="823.88" y2="250" stroke-width="1"/>
+<line class="spoke" x1="823.88" y1="267" x2="823.88" y2="284" stroke-width="1"/>
+<circle class="member" cx="823.88" cy="250" r="4.5" stroke-width="2"/>
+<circle class="member" cx="823.88" cy="284" r="4.5" stroke-width="2"/>
+<polygon class="k-same_address" points="823.88,259.2 831.68,267 823.88,274.8 816.08,267" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="876.82" y1="267" x2="876.82" y2="250" stroke-width="1"/>
+<line class="spoke" x1="876.82" y1="267" x2="876.82" y2="284" stroke-width="1"/>
+<circle class="member" cx="876.82" cy="250" r="4.5" stroke-width="2"/>
+<circle class="member" cx="876.82" cy="284" r="4.5" stroke-width="2"/>
+<polygon class="k-same_address" points="876.82,259.2 884.62,267 876.82,274.8 869.02,267" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="929.76" y1="267" x2="929.76" y2="250" stroke-width="1"/>
+<line class="spoke" x1="929.76" y1="267" x2="929.76" y2="284" stroke-width="1"/>
+<circle class="member" cx="929.76" cy="250" r="4.5" stroke-width="2"/>
+<circle class="member" cx="929.76" cy="284" r="4.5" stroke-width="2"/>
+<polygon class="k-same_address" points="929.76,259.2 937.56,267 929.76,274.8 921.96,267" stroke-linejoin="round" stroke-width="2"/>
+<line class="grid" x1="32" y1="306" x2="1168" y2="306" stroke-width="1"/>
+<polygon class="k-same_serial" points="40,331.8 47.79,345.08 32.21,345.08" stroke-linejoin="round" stroke-width="2"/>
+<text x="56" y="345" class="ink" font-size="15" font-weight="600">Same serial, 17</text>
+<text x="56" y="364" class="ink2" font-size="13">claimed serial number</text>
+<line class="spoke" x1="294.47" y1="345" x2="294.47" y2="328" stroke-width="1"/>
+<line class="spoke" x1="294.47" y1="345" x2="294.47" y2="362" stroke-width="1"/>
+<circle class="member" cx="294.47" cy="328" r="4.5" stroke-width="2"/>
+<circle class="member" cx="294.47" cy="362" r="4.5" stroke-width="2"/>
+<polygon class="k-same_serial" points="294.47,336.8 302.26,350.08 286.68,350.08" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="347.41" y1="345" x2="347.41" y2="328" stroke-width="1"/>
+<line class="spoke" x1="347.41" y1="345" x2="347.41" y2="362" stroke-width="1"/>
+<circle class="member" cx="347.41" cy="328" r="4.5" stroke-width="2"/>
+<circle class="member" cx="347.41" cy="362" r="4.5" stroke-width="2"/>
+<polygon class="k-same_serial" points="347.41,336.8 355.2,350.08 339.62,350.08" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="400.35" y1="345" x2="400.35" y2="328" stroke-width="1"/>
+<line class="spoke" x1="400.35" y1="345" x2="400.35" y2="362" stroke-width="1"/>
+<circle class="member" cx="400.35" cy="328" r="4.5" stroke-width="2"/>
+<circle class="member" cx="400.35" cy="362" r="4.5" stroke-width="2"/>
+<polygon class="k-same_serial" points="400.35,336.8 408.14,350.08 392.56,350.08" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="453.29" y1="345" x2="453.29" y2="328" stroke-width="1"/>
+<line class="spoke" x1="453.29" y1="345" x2="453.29" y2="362" stroke-width="1"/>
+<circle class="member" cx="453.29" cy="328" r="4.5" stroke-width="2"/>
+<circle class="member" cx="453.29" cy="362" r="4.5" stroke-width="2"/>
+<polygon class="k-same_serial" points="453.29,336.8 461.08,350.08 445.5,350.08" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="506.24" y1="345" x2="506.24" y2="328" stroke-width="1"/>
+<line class="spoke" x1="506.24" y1="345" x2="506.24" y2="362" stroke-width="1"/>
+<circle class="member" cx="506.24" cy="328" r="4.5" stroke-width="2"/>
+<circle class="member" cx="506.24" cy="362" r="4.5" stroke-width="2"/>
+<polygon class="k-same_serial" points="506.24,336.8 514.03,350.08 498.45,350.08" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="559.18" y1="345" x2="559.18" y2="328" stroke-width="1"/>
+<line class="spoke" x1="559.18" y1="345" x2="559.18" y2="362" stroke-width="1"/>
+<circle class="member" cx="559.18" cy="328" r="4.5" stroke-width="2"/>
+<circle class="member" cx="559.18" cy="362" r="4.5" stroke-width="2"/>
+<polygon class="k-same_serial" points="559.18,336.8 566.97,350.08 551.39,350.08" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="612.12" y1="345" x2="612.12" y2="328" stroke-width="1"/>
+<line class="spoke" x1="612.12" y1="345" x2="612.12" y2="362" stroke-width="1"/>
+<circle class="member" cx="612.12" cy="328" r="4.5" stroke-width="2"/>
+<circle class="member" cx="612.12" cy="362" r="4.5" stroke-width="2"/>
+<polygon class="k-same_serial" points="612.12,336.8 619.91,350.08 604.33,350.08" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="665.06" y1="345" x2="665.06" y2="328" stroke-width="1"/>
+<line class="spoke" x1="665.06" y1="345" x2="665.06" y2="362" stroke-width="1"/>
+<circle class="member" cx="665.06" cy="328" r="4.5" stroke-width="2"/>
+<circle class="member" cx="665.06" cy="362" r="4.5" stroke-width="2"/>
+<polygon class="k-same_serial" points="665.06,336.8 672.85,350.08 657.27,350.08" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="718" y1="345" x2="718" y2="328" stroke-width="1"/>
+<line class="spoke" x1="718" y1="345" x2="718" y2="362" stroke-width="1"/>
+<circle class="member" cx="718" cy="328" r="4.5" stroke-width="2"/>
+<circle class="member" cx="718" cy="362" r="4.5" stroke-width="2"/>
+<polygon class="k-same_serial" points="718,336.8 725.79,350.08 710.21,350.08" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="770.94" y1="345" x2="770.94" y2="328" stroke-width="1"/>
+<line class="spoke" x1="770.94" y1="345" x2="770.94" y2="362" stroke-width="1"/>
+<circle class="member" cx="770.94" cy="328" r="4.5" stroke-width="2"/>
+<circle class="member" cx="770.94" cy="362" r="4.5" stroke-width="2"/>
+<polygon class="k-same_serial" points="770.94,336.8 778.73,350.08 763.15,350.08" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="823.88" y1="345" x2="823.88" y2="328" stroke-width="1"/>
+<line class="spoke" x1="823.88" y1="345" x2="823.88" y2="362" stroke-width="1"/>
+<circle class="member" cx="823.88" cy="328" r="4.5" stroke-width="2"/>
+<circle class="member" cx="823.88" cy="362" r="4.5" stroke-width="2"/>
+<polygon class="k-same_serial" points="823.88,336.8 831.67,350.08 816.09,350.08" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="876.82" y1="345" x2="876.82" y2="328" stroke-width="1"/>
+<line class="spoke" x1="876.82" y1="345" x2="876.82" y2="362" stroke-width="1"/>
+<circle class="member" cx="876.82" cy="328" r="4.5" stroke-width="2"/>
+<circle class="member" cx="876.82" cy="362" r="4.5" stroke-width="2"/>
+<polygon class="k-same_serial" points="876.82,336.8 884.61,350.08 869.03,350.08" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="929.76" y1="345" x2="929.76" y2="328" stroke-width="1"/>
+<line class="spoke" x1="929.76" y1="345" x2="929.76" y2="362" stroke-width="1"/>
+<circle class="member" cx="929.76" cy="328" r="4.5" stroke-width="2"/>
+<circle class="member" cx="929.76" cy="362" r="4.5" stroke-width="2"/>
+<polygon class="k-same_serial" points="929.76,336.8 937.55,350.08 921.97,350.08" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="982.71" y1="345" x2="982.71" y2="328" stroke-width="1"/>
+<line class="spoke" x1="982.71" y1="345" x2="982.71" y2="362" stroke-width="1"/>
+<circle class="member" cx="982.71" cy="328" r="4.5" stroke-width="2"/>
+<circle class="member" cx="982.71" cy="362" r="4.5" stroke-width="2"/>
+<polygon class="k-same_serial" points="982.71,336.8 990.5,350.08 974.92,350.08" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="1035.65" y1="345" x2="1035.65" y2="328" stroke-width="1"/>
+<line class="spoke" x1="1035.65" y1="345" x2="1035.65" y2="362" stroke-width="1"/>
+<circle class="member" cx="1035.65" cy="328" r="4.5" stroke-width="2"/>
+<circle class="member" cx="1035.65" cy="362" r="4.5" stroke-width="2"/>
+<polygon class="k-same_serial" points="1035.65,336.8 1043.44,350.08 1027.86,350.08" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="1088.59" y1="345" x2="1088.59" y2="328" stroke-width="1"/>
+<line class="spoke" x1="1088.59" y1="345" x2="1088.59" y2="362" stroke-width="1"/>
+<circle class="member" cx="1088.59" cy="328" r="4.5" stroke-width="2"/>
+<circle class="member" cx="1088.59" cy="362" r="4.5" stroke-width="2"/>
+<polygon class="k-same_serial" points="1088.59,336.8 1096.38,350.08 1080.8,350.08" stroke-linejoin="round" stroke-width="2"/>
+<line class="spoke" x1="1141.53" y1="345" x2="1141.53" y2="328" stroke-width="1"/>
+<line class="spoke" x1="1141.53" y1="345" x2="1141.53" y2="362" stroke-width="1"/>
+<circle class="member" cx="1141.53" cy="328" r="4.5" stroke-width="2"/>
+<circle class="member" cx="1141.53" cy="362" r="4.5" stroke-width="2"/>
+<polygon class="k-same_serial" points="1141.53,336.8 1149.32,350.08 1133.74,350.08" stroke-linejoin="round" stroke-width="2"/>
+<line class="grid" x1="32" y1="384" x2="1168" y2="384" stroke-width="1"/>
+<circle class="k-same_payout" cx="40" cy="418" r="6.5" stroke-width="2"/>
+<text x="56" y="423" class="ink" font-size="15" font-weight="600">Same payout, 14</text>
+<text x="56" y="442" class="ink2" font-size="13">payout destination</text>
+<line class="spoke" x1="294.47" y1="423" x2="294.47" y2="406" stroke-width="1"/>
+<line class="spoke" x1="294.47" y1="423" x2="294.47" y2="440" stroke-width="1"/>
+<circle class="member" cx="294.47" cy="406" r="4.5" stroke-width="2"/>
+<circle class="member" cx="294.47" cy="440" r="4.5" stroke-width="2"/>
+<circle class="k-same_payout" cx="294.47" cy="423" r="6.5" stroke-width="2"/>
+<line class="spoke" x1="347.41" y1="423" x2="347.41" y2="406" stroke-width="1"/>
+<line class="spoke" x1="347.41" y1="423" x2="347.41" y2="440" stroke-width="1"/>
+<circle class="member" cx="347.41" cy="406" r="4.5" stroke-width="2"/>
+<circle class="member" cx="347.41" cy="440" r="4.5" stroke-width="2"/>
+<circle class="k-same_payout" cx="347.41" cy="423" r="6.5" stroke-width="2"/>
+<line class="spoke" x1="400.35" y1="423" x2="400.35" y2="406" stroke-width="1"/>
+<line class="spoke" x1="400.35" y1="423" x2="400.35" y2="440" stroke-width="1"/>
+<circle class="member" cx="400.35" cy="406" r="4.5" stroke-width="2"/>
+<circle class="member" cx="400.35" cy="440" r="4.5" stroke-width="2"/>
+<circle class="k-same_payout" cx="400.35" cy="423" r="6.5" stroke-width="2"/>
+<line class="spoke" x1="453.29" y1="423" x2="453.29" y2="406" stroke-width="1"/>
+<line class="spoke" x1="453.29" y1="423" x2="453.29" y2="440" stroke-width="1"/>
+<circle class="member" cx="453.29" cy="406" r="4.5" stroke-width="2"/>
+<circle class="member" cx="453.29" cy="440" r="4.5" stroke-width="2"/>
+<circle class="k-same_payout" cx="453.29" cy="423" r="6.5" stroke-width="2"/>
+<line class="spoke" x1="506.24" y1="423" x2="506.24" y2="406" stroke-width="1"/>
+<line class="spoke" x1="506.24" y1="423" x2="506.24" y2="440" stroke-width="1"/>
+<circle class="member" cx="506.24" cy="406" r="4.5" stroke-width="2"/>
+<circle class="member" cx="506.24" cy="440" r="4.5" stroke-width="2"/>
+<circle class="k-same_payout" cx="506.24" cy="423" r="6.5" stroke-width="2"/>
+<line class="spoke" x1="559.18" y1="423" x2="559.18" y2="406" stroke-width="1"/>
+<line class="spoke" x1="559.18" y1="423" x2="559.18" y2="440" stroke-width="1"/>
+<circle class="member" cx="559.18" cy="406" r="4.5" stroke-width="2"/>
+<circle class="member" cx="559.18" cy="440" r="4.5" stroke-width="2"/>
+<circle class="k-same_payout" cx="559.18" cy="423" r="6.5" stroke-width="2"/>
+<line class="spoke" x1="612.12" y1="423" x2="612.12" y2="406" stroke-width="1"/>
+<line class="spoke" x1="612.12" y1="423" x2="612.12" y2="440" stroke-width="1"/>
+<circle class="member" cx="612.12" cy="406" r="4.5" stroke-width="2"/>
+<circle class="member" cx="612.12" cy="440" r="4.5" stroke-width="2"/>
+<circle class="k-same_payout" cx="612.12" cy="423" r="6.5" stroke-width="2"/>
+<line class="spoke" x1="665.06" y1="423" x2="665.06" y2="406" stroke-width="1"/>
+<line class="spoke" x1="665.06" y1="423" x2="665.06" y2="440" stroke-width="1"/>
+<circle class="member" cx="665.06" cy="406" r="4.5" stroke-width="2"/>
+<circle class="member" cx="665.06" cy="440" r="4.5" stroke-width="2"/>
+<circle class="k-same_payout" cx="665.06" cy="423" r="6.5" stroke-width="2"/>
+<line class="spoke" x1="718" y1="423" x2="718" y2="406" stroke-width="1"/>
+<line class="spoke" x1="718" y1="423" x2="718" y2="440" stroke-width="1"/>
+<circle class="member" cx="718" cy="406" r="4.5" stroke-width="2"/>
+<circle class="member" cx="718" cy="440" r="4.5" stroke-width="2"/>
+<circle class="k-same_payout" cx="718" cy="423" r="6.5" stroke-width="2"/>
+<line class="spoke" x1="770.94" y1="423" x2="770.94" y2="406" stroke-width="1"/>
+<line class="spoke" x1="770.94" y1="423" x2="770.94" y2="440" stroke-width="1"/>
+<circle class="member" cx="770.94" cy="406" r="4.5" stroke-width="2"/>
+<circle class="member" cx="770.94" cy="440" r="4.5" stroke-width="2"/>
+<circle class="k-same_payout" cx="770.94" cy="423" r="6.5" stroke-width="2"/>
+<line class="spoke" x1="823.88" y1="423" x2="823.88" y2="406" stroke-width="1"/>
+<line class="spoke" x1="823.88" y1="423" x2="823.88" y2="440" stroke-width="1"/>
+<circle class="member" cx="823.88" cy="406" r="4.5" stroke-width="2"/>
+<circle class="member" cx="823.88" cy="440" r="4.5" stroke-width="2"/>
+<circle class="k-same_payout" cx="823.88" cy="423" r="6.5" stroke-width="2"/>
+<line class="spoke" x1="876.82" y1="423" x2="876.82" y2="406" stroke-width="1"/>
+<line class="spoke" x1="876.82" y1="423" x2="876.82" y2="440" stroke-width="1"/>
+<circle class="member" cx="876.82" cy="406" r="4.5" stroke-width="2"/>
+<circle class="member" cx="876.82" cy="440" r="4.5" stroke-width="2"/>
+<circle class="k-same_payout" cx="876.82" cy="423" r="6.5" stroke-width="2"/>
+<line class="spoke" x1="929.76" y1="423" x2="929.76" y2="406" stroke-width="1"/>
+<line class="spoke" x1="929.76" y1="423" x2="929.76" y2="440" stroke-width="1"/>
+<circle class="member" cx="929.76" cy="406" r="4.5" stroke-width="2"/>
+<circle class="member" cx="929.76" cy="440" r="4.5" stroke-width="2"/>
+<circle class="k-same_payout" cx="929.76" cy="423" r="6.5" stroke-width="2"/>
+<line class="spoke" x1="982.71" y1="423" x2="982.71" y2="406" stroke-width="1"/>
+<line class="spoke" x1="982.71" y1="423" x2="982.71" y2="440" stroke-width="1"/>
+<circle class="member" cx="982.71" cy="406" r="4.5" stroke-width="2"/>
+<circle class="member" cx="982.71" cy="440" r="4.5" stroke-width="2"/>
+<circle class="k-same_payout" cx="982.71" cy="423" r="6.5" stroke-width="2"/>
+<line class="grid" x1="32" y1="462" x2="1168" y2="462" stroke-width="1"/>
+<text x="32" y="496" class="ink2" font-size="13">58 clusters covering 117 of the 500 claims. Source: fraud_clusters for the seeded demo program (make seed)</text>
+</svg>

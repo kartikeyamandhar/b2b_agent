@@ -1,0 +1,193 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-labelledby="title desc">
+  <title id="title">The claims agent loop</title>
+  <desc id="desc">The claims agent as built in LangGraph. load_context feeds the agent node, a model turn that calls tools. The tools node runs typed tools: read_label_photo and check_destruction_photo are vision calls; check_model, check_serial, check_date_code, check_purchase, and check_duplicates are pure code; retrieve_policy is keyword plus vector retrieval. Results come back as T1, T2, and so on. The agent ends with a decide call whose every reason must cite a rule id such as R:models or a result id such as T3; an uncited reason is rejected and retried once. route then applies approve (the payout row is created in the same transaction), deny, or needs_info (the question is shown in the portal), or holds the claim for a person: flagged, an approval over the value threshold, a capped or failed run, or a model more lenient than the rules table. human_review is a LangGraph interrupt, and a reviewer's action resumes the same checkpointed run. Run caps: 8 steps, 0.02 USD, 60 seconds; the meter refuses a call before it would cross one. A duplicate found after an approval, before its money moves, reopens the earlier claim and holds its payout in the decision's own transaction.</desc>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="9" orient="auto">
+      <path class="ahead" d="M1,1.5 L9,5 L1,8.5 Z"/>
+    </marker>
+    <marker id="ahb" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="9" orient="auto">
+      <path class="aheadb" d="M1,1.5 L9,5 L1,8.5 Z"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+    .card { fill: #fcfcfb; stroke: rgba(11,11,11,0.10); stroke-width: 1; }
+    .ink { fill: #0b0b0b; }
+    .ink2 { fill: #52514e; }
+    .mut { fill: #898781; }
+    .node { fill: #f9f9f7; stroke: #c3c2b7; stroke-width: 1.5; }
+    .core { fill: #2a78d6; fill-opacity: 0.08; stroke: #2a78d6; stroke-width: 1.5; }
+    .chip { fill: #fcfcfb; stroke: #c3c2b7; stroke-width: 1; }
+    .panel { fill: #f9f9f7; stroke: #e1e0d9; stroke-width: 1; }
+    .flow { stroke: #898781; stroke-width: 2; fill: none; stroke-linejoin: round; }
+    .flowb { stroke: #2a78d6; stroke-width: 2; fill: none; stroke-linejoin: round; }
+    .dash { stroke: #898781; stroke-width: 2; fill: none; stroke-dasharray: 5 4; }
+    .ahead { fill: #898781; }
+    .aheadb { fill: #2a78d6; }
+    .h-vis { fill: #e87ba4; }
+    .h-code { fill: #1baf7a; }
+    .h-ret { fill: #eda100; }
+    .good { fill: #0ca30c; }
+    .warn { fill: #fab219; }
+    .crit { fill: #d03b3b; }
+    .serious { fill: #ec835a; }
+    @media (prefers-color-scheme: dark) {
+      .card { fill: #1a1a19; stroke: rgba(255,255,255,0.10); }
+      .ink { fill: #f0efec; }
+      .ink2 { fill: #c3c2b7; }
+      .mut { fill: #898781; }
+      .node { fill: #0d0d0d; stroke: #383835; }
+      .core { fill: #3987e5; fill-opacity: 0.14; stroke: #3987e5; }
+      .chip { fill: #1a1a19; stroke: #383835; }
+      .panel { fill: #0d0d0d; stroke: #2c2c2a; }
+      .flow { stroke: #898781; }
+      .flowb { stroke: #3987e5; }
+      .dash { stroke: #898781; }
+      .ahead { fill: #898781; }
+      .aheadb { fill: #3987e5; }
+      .h-vis { fill: #d55181; }
+      .h-code { fill: #199e70; }
+      .h-ret { fill: #c98500; }
+    }
+  </style>
+
+  <rect class="card" x="0.5" y="0.5" width="1199" height="639" rx="16"/>
+
+  <text class="ink" x="40" y="50" font-size="26" font-weight="600">The claims agent</text>
+  <text class="ink2" x="40" y="77" font-size="15">A LangGraph loop over typed tools. Every step writes one agent_steps row, and the trace route serves exactly those rows.</text>
+
+  <!-- load_context -->
+  <rect class="node" x="40" y="124" width="210" height="88" rx="10"/>
+  <text class="ink code" x="56" y="151" font-size="15" font-weight="600">load_context</text>
+  <text class="ink2" x="56" y="173" font-size="13">Program rules, claim fields,</text>
+  <text class="ink2" x="56" y="190" font-size="13">photo kinds; no model call</text>
+
+  <!-- agent -->
+  <rect class="core" x="300" y="124" width="220" height="88" rx="10"/>
+  <text class="ink code" x="316" y="151" font-size="15" font-weight="600">agent</text>
+  <text class="mut" x="368" y="151" font-size="12">model turn</text>
+  <text class="ink2" x="316" y="173" font-size="13">One sentence on why, then</text>
+  <text class="ink2" x="316" y="190" font-size="13">the checks it still needs</text>
+
+  <path class="flow" d="M250 168 H298" marker-end="url(#ah)"/>
+
+  <!-- agent <-> tools -->
+  <path class="flowb" d="M390 212 V254" marker-end="url(#ahb)"/>
+  <path class="flowb" d="M430 256 V214" marker-end="url(#ahb)"/>
+  <text class="ink2" x="380" y="239" font-size="13" text-anchor="end">tool calls</text>
+  <text class="ink2" x="440" y="239" font-size="13">results T1, T2, ...</text>
+
+  <!-- tools -->
+  <rect class="core" x="40" y="256" width="600" height="300" rx="12"/>
+  <text class="ink code" x="60" y="285" font-size="15" font-weight="600">tools</text>
+  <text class="ink2" x="60" y="307" font-size="13">Typed arguments and results. Invalid arguments are rejected before the tool runs.</text>
+
+  <circle class="h-vis" cx="66" cy="340" r="5"/>
+  <text class="ink" x="78" y="345" font-size="13" font-weight="600">Vision</text>
+  <text class="mut" x="60" y="364" font-size="12">one model call each</text>
+  <rect class="chip" x="60" y="378" width="212" height="26" rx="6"/>
+  <text class="ink code" x="72" y="396" font-size="13">read_label_photo</text>
+  <rect class="chip" x="60" y="411" width="212" height="26" rx="6"/>
+  <text class="ink code" x="72" y="429" font-size="13">check_destruction_photo</text>
+
+  <circle class="h-code" cx="300" cy="340" r="5"/>
+  <text class="ink" x="312" y="345" font-size="13" font-weight="600">Pure code</text>
+  <text class="mut" x="294" y="364" font-size="12">no model call, not counted</text>
+  <rect class="chip" x="294" y="378" width="156" height="26" rx="6"/>
+  <text class="ink code" x="306" y="396" font-size="13">check_model</text>
+  <rect class="chip" x="294" y="411" width="156" height="26" rx="6"/>
+  <text class="ink code" x="306" y="429" font-size="13">check_serial</text>
+  <rect class="chip" x="294" y="444" width="156" height="26" rx="6"/>
+  <text class="ink code" x="306" y="462" font-size="13">check_date_code</text>
+  <rect class="chip" x="294" y="477" width="156" height="26" rx="6"/>
+  <text class="ink code" x="306" y="495" font-size="13">check_purchase</text>
+  <rect class="chip" x="294" y="510" width="156" height="26" rx="6"/>
+  <text class="ink code" x="306" y="528" font-size="13">check_duplicates</text>
+
+  <circle class="h-ret" cx="480" cy="340" r="5"/>
+  <text class="ink" x="492" y="345" font-size="13" font-weight="600">Retrieval</text>
+  <text class="mut" x="474" y="364" font-size="12">keyword + vector</text>
+  <rect class="chip" x="474" y="378" width="146" height="26" rx="6"/>
+  <text class="ink code" x="486" y="396" font-size="13">retrieve_policy</text>
+  <text class="ink2" x="474" y="426" font-size="13">Only when the rules</text>
+  <text class="ink2" x="474" y="443" font-size="13">and policy do not</text>
+  <text class="ink2" x="474" y="460" font-size="13">settle a question</text>
+  <text class="mut" x="626" y="494" font-size="12" text-anchor="end">ends early on a cap or failure</text>
+
+  <text class="ink2" x="60" y="476" font-size="13">Counted toward the 8 steps:</text>
+  <text class="ink2" x="60" y="493" font-size="13">each model turn, each vision</text>
+  <text class="ink2" x="60" y="510" font-size="13">call, and each rejected call</text>
+
+  <!-- decide -->
+  <rect class="node" x="680" y="248" width="220" height="96" rx="10"/>
+  <text class="ink code" x="696" y="275" font-size="15" font-weight="600">decide</text>
+  <text class="ink2" x="696" y="297" font-size="13">The agent's last tool call.</text>
+  <text class="ink2" x="696" y="314" font-size="13">Each reason must cite a rule</text>
+  <text class="ink2" x="696" y="331" font-size="13">(R:models) or a result (T3).</text>
+  <path class="flow" d="M640 296 H678" marker-end="url(#ah)"/>
+
+  <!-- reject and retry -->
+  <path class="flow" d="M790 248 V168 H522" marker-end="url(#ah)"/>
+  <text class="ink2" x="540" y="158" font-size="13">A reason with no citation is rejected; one retry</text>
+
+  <!-- route -->
+  <rect class="node" x="680" y="376" width="220" height="128" rx="10"/>
+  <text class="ink code" x="696" y="403" font-size="15" font-weight="600">route</text>
+  <text class="ink2" x="696" y="425" font-size="13">Applies the outcome, or holds</text>
+  <text class="ink2" x="696" y="442" font-size="13">it for a person: flagged, an</text>
+  <text class="ink2" x="696" y="459" font-size="13">approval over the threshold,</text>
+  <text class="ink2" x="696" y="476" font-size="13">capped or failed, or a model</text>
+  <text class="ink2" x="696" y="493" font-size="13">more lenient than the rules</text>
+  <path class="flow" d="M790 344 V374" marker-end="url(#ah)"/>
+  <text class="mut" x="800" y="364" font-size="12">accepted</text>
+  <path class="dash" d="M640 490 H678" marker-end="url(#ah)"/>
+
+  <!-- human_review -->
+  <rect class="node" x="680" y="536" width="220" height="80" rx="10"/>
+  <text class="ink code" x="696" y="563" font-size="15" font-weight="600">human_review</text>
+  <text class="ink2" x="696" y="585" font-size="13">A LangGraph interrupt. The</text>
+  <text class="ink2" x="696" y="602" font-size="13">reviewer resumes the <tspan font-weight="700">same</tspan> run</text>
+  <path class="flow" d="M790 504 V534" marker-end="url(#ah)"/>
+  <circle class="serious" cx="661" cy="519.5" r="4.5"/>
+  <text class="ink2" x="780" y="524" font-size="13" text-anchor="end">waits for a person</text>
+
+  <!-- outcomes trunk -->
+  <path class="flow" d="M900 440 H915 M900 576 H915 M915 576 V288"/>
+  <path class="flow" d="M915 288 H938" marker-end="url(#ah)"/>
+  <path class="flow" d="M915 372 H938" marker-end="url(#ah)"/>
+  <path class="flow" d="M915 456 H938" marker-end="url(#ah)"/>
+
+  <rect class="node" x="940" y="248" width="220" height="80" rx="10"/>
+  <circle class="good" cx="960" cy="270" r="5"/>
+  <text class="ink code" x="972" y="275" font-size="15" font-weight="600">approve</text>
+  <text class="ink2" x="956" y="297" font-size="13">Payout row created in the</text>
+  <text class="ink2" x="956" y="314" font-size="13">same transaction</text>
+
+  <rect class="node" x="940" y="340" width="220" height="64" rx="10"/>
+  <circle class="crit" cx="960" cy="362" r="5"/>
+  <text class="ink code" x="972" y="367" font-size="15" font-weight="600">deny</text>
+  <text class="ink2" x="956" y="389" font-size="13">Reasons kept with citations</text>
+
+  <rect class="node" x="940" y="416" width="220" height="80" rx="10"/>
+  <circle class="warn" cx="960" cy="438" r="5"/>
+  <text class="ink code" x="972" y="443" font-size="15" font-weight="600">needs_info</text>
+  <text class="ink2" x="956" y="465" font-size="13">The question is shown</text>
+  <text class="ink2" x="956" y="482" font-size="13">in the claim portal</text>
+
+  <!-- caps badge -->
+  <rect class="panel" x="940" y="108" width="220" height="116" rx="10"/>
+  <text class="mut" x="956" y="132" font-size="12" font-weight="600" letter-spacing="1">RUN CAPS</text>
+  <text class="ink" x="956" y="157" font-size="16" font-weight="600">8 steps · 0.02 USD · 60 s</text>
+  <text class="ink2" x="956" y="180" font-size="13">The meter refuses a call before</text>
+  <text class="ink2" x="956" y="197" font-size="13">it would cross a cap; the run</text>
+  <text class="ink2" x="956" y="214" font-size="13">then goes to a person.</text>
+
+  <!-- late duplicate note -->
+  <rect class="panel" x="940" y="516" width="220" height="100" rx="10"/>
+  <text class="ink" x="956" y="539" font-size="13" font-weight="600">A late duplicate</text>
+  <text class="ink2" x="956" y="559" font-size="13">found after an approval, before</text>
+  <text class="ink2" x="956" y="576" font-size="13">its money moves, reopens the</text>
+  <text class="ink2" x="956" y="593" font-size="13">earlier claim and holds its</text>
+  <text class="ink2" x="956" y="610" font-size="13">payout in the same transaction.</text>
+</svg>

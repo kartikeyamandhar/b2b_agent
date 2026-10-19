@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-labelledby="title desc">
+  <title id="title">RecallOps</title>
+  <desc id="desc">RecallOps, the operations console for consumer product recalls. Five steps from left to right: load the recall from the CPSC feed, verify claims with an agent, catch fraud with a graph, pay refunds through a ledger, and file the monthly progress report.</desc>
+  <style>
+    text { font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .card { fill: #fcfcfb; stroke: rgba(11,11,11,0.10); stroke-width: 1; }
+    .tile { fill: #f9f9f7; stroke: rgba(11,11,11,0.10); stroke-width: 1; }
+    .ink { fill: #0b0b0b; }
+    .ink2 { fill: #52514e; }
+    .mut { fill: #898781; }
+    .rule { stroke: #e1e0d9; stroke-width: 1; fill: none; }
+    .icon { stroke: #52514e; stroke-width: 1.75; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .iconfill { fill: #f9f9f7; }
+    .link { stroke: #c3c2b7; stroke-width: 1; fill: none; }
+    .chev { stroke: #c3c2b7; stroke-width: 1.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .mark { fill: #2a78d6; fill-opacity: 0.10; stroke: #2a78d6; stroke-width: 1.5; }
+    .markicon { stroke: #2a78d6; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .net { stroke: #e1e0d9; stroke-width: 1; fill: none; }
+    .node { fill: #fcfcfb; stroke: #c3c2b7; stroke-width: 1; }
+    .ring { stroke: #2a78d6; stroke-width: 1.5; fill: none; stroke-opacity: 0.55; }
+    .ringnode { fill: #2a78d6; }
+    @media (prefers-color-scheme: dark) {
+      .card { fill: #1a1a19; stroke: rgba(255,255,255,0.10); }
+      .tile { fill: #0d0d0d; stroke: rgba(255,255,255,0.10); }
+      .ink { fill: #f0efec; }
+      .ink2 { fill: #c3c2b7; }
+      .mut { fill: #898781; }
+      .rule { stroke: #2c2c2a; }
+      .icon { stroke: #c3c2b7; }
+      .iconfill { fill: #0d0d0d; }
+      .link { stroke: #383835; }
+      .chev { stroke: #383835; }
+      .mark { fill: #3987e5; fill-opacity: 0.16; stroke: #3987e5; }
+      .markicon { stroke: #3987e5; }
+      .net { stroke: #2c2c2a; }
+      .node { fill: #1a1a19; stroke: #383835; }
+      .ring { stroke: #3987e5; }
+      .ringnode { fill: #3987e5; }
+    }
+  </style>
+
+  <rect class="card" x="0.5" y="0.5" width="1199" height="299" rx="16"/>
+
+  <!-- quiet claim network, one linked ring in the accent -->
+  <g aria-hidden="true">
+    <path class="net" d="M784 74 L846 50 M846 50 L912 88 M784 74 L866 136 M866 136 L912 88 M912 88 L946 146 M946 146 L1026 152 M1026 152 L1060 96 M1060 96 L1116 140 M1026 152 L1116 140 M912 88 L984 58 M1116 140 L1128 70"/>
+    <path class="ring" d="M984 58 L1060 96 M1060 96 L1128 70 M984 58 L1128 70"/>
+    <circle class="node" cx="784" cy="74" r="4.5"/>
+    <circle class="node" cx="846" cy="50" r="4.5"/>
+    <circle class="node" cx="912" cy="88" r="4.5"/>
+    <circle class="node" cx="866" cy="136" r="4.5"/>
+    <circle class="node" cx="946" cy="146" r="4.5"/>
+    <circle class="node" cx="1026" cy="152" r="4.5"/>
+    <circle class="node" cx="1116" cy="140" r="4.5"/>
+    <circle class="ringnode" cx="984" cy="58" r="5"/>
+    <circle class="ringnode" cx="1060" cy="96" r="5"/>
+    <circle class="ringnode" cx="1128" cy="70" r="5"/>
+  </g>
+
+  <!-- wordmark -->
+  <rect class="mark" x="64" y="56" width="56" height="56" rx="14"/>
+  <path class="markicon" d="M92 69 L105 74 V85 C105 94.5 99.5 100 92 103 C84.5 100 79 94.5 79 85 V74 Z"/>
+  <path class="markicon" d="M86 86 L90.5 90.5 L98.5 81.5"/>
+  <text class="ink" x="140" y="100" font-size="46" font-weight="600" letter-spacing="-0.5">RecallOps</text>
+  <text class="ink2" x="64" y="152" font-size="20">The operations console for consumer product recalls</text>
+
+  <line class="rule" x1="64" y1="188" x2="1136" y2="188"/>
+
+  <!-- step 1: load the recall -->
+  <g transform="translate(64 212)">
+    <rect class="tile" x="0" y="0" width="44" height="44" rx="10"/>
+    <path class="icon" d="M15 11 H25 L30 16 V33 H15 Z"/>
+    <path class="icon" d="M25 11 V16 H30"/>
+    <path class="icon" d="M19 22 H26 M19 26.5 H26"/>
+    <text class="ink" x="58" y="19" font-size="15" font-weight="600">Load the recall</text>
+    <text class="mut" x="58" y="38" font-size="13">CPSC feed</text>
+  </g>
+  <line class="link" x1="257" y1="234" x2="277" y2="234"/>
+  <path class="chev" d="M273.5 230 L277.5 234 L273.5 238"/>
+
+  <!-- step 2: verify claims -->
+  <g transform="translate(308 212)">
+    <rect class="tile" x="0" y="0" width="44" height="44" rx="10"/>
+    <circle class="icon" cx="20" cy="20" r="8.5"/>
+    <path class="icon" d="M26.2 26.2 L32 32"/>
+    <path class="icon" d="M16.2 20.2 L19 23 L24 17.5"/>
+    <text class="ink" x="58" y="19" font-size="15" font-weight="600">Verify claims</text>
+    <text class="mut" x="58" y="38" font-size="13">agent</text>
+  </g>
+  <line class="link" x1="489" y1="234" x2="509" y2="234"/>
+  <path class="chev" d="M505.5 230 L509.5 234 L505.5 238"/>
+
+  <!-- step 3: catch fraud -->
+  <g transform="translate(540 212)">
+    <rect class="tile" x="0" y="0" width="44" height="44" rx="10"/>
+    <path class="icon" d="M14.5 15 L29 13.5 M14.5 15 L21 30 M29 13.5 L21 30"/>
+    <circle class="iconfill" cx="14.5" cy="15" r="3.4"/>
+    <circle class="icon" cx="14.5" cy="15" r="3.4"/>
+    <circle class="iconfill" cx="29" cy="13.5" r="3.4"/>
+    <circle class="icon" cx="29" cy="13.5" r="3.4"/>
+    <circle class="iconfill" cx="21" cy="30" r="3.4"/>
+    <circle class="icon" cx="21" cy="30" r="3.4"/>
+    <text class="ink" x="58" y="19" font-size="15" font-weight="600">Catch fraud</text>
+    <text class="mut" x="58" y="38" font-size="13">graph</text>
+  </g>
+  <line class="link" x1="713" y1="234" x2="733" y2="234"/>
+  <path class="chev" d="M729.5 230 L733.5 234 L729.5 238"/>
+
+  <!-- step 4: pay refunds -->
+  <g transform="translate(764 212)">
+    <rect class="tile" x="0" y="0" width="44" height="44" rx="10"/>
+    <rect class="icon" x="10" y="14" width="24" height="16" rx="2.5"/>
+    <circle class="icon" cx="22" cy="22" r="3.6"/>
+    <path class="icon" d="M14.5 18.5 V18.51 M29.5 25.5 V25.51"/>
+    <text class="ink" x="58" y="19" font-size="15" font-weight="600">Pay refunds</text>
+    <text class="mut" x="58" y="38" font-size="13">ledger</text>
+  </g>
+  <line class="link" x1="937" y1="234" x2="957" y2="234"/>
+  <path class="chev" d="M953.5 230 L957.5 234 L953.5 238"/>
+
+  <!-- step 5: file the MPR -->
+  <g transform="translate(988 212)">
+    <rect class="tile" x="0" y="0" width="44" height="44" rx="10"/>
+    <path class="icon" d="M14 11 H30 V33 H14 Z"/>
+    <path class="icon" d="M18.5 28.5 V24 M22 28.5 V19 M25.5 28.5 V22"/>
+    <text class="ink" x="58" y="19" font-size="15" font-weight="600">File the MPR</text>
+    <text class="mut" x="58" y="38" font-size="13">report</text>
+  </g>
+</svg>

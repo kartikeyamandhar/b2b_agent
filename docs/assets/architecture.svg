@@ -1,0 +1,216 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="724" viewBox="0 0 1200 724" role="img" aria-labelledby="title desc">
+  <title id="title">RecallOps architecture</title>
+  <desc id="desc">Inputs on the left: the CPSC recall API feed, product-owner registrations uploaded as CSV, and the consumer claim portal with single-claim links and photo uploads. In the middle, the backend (FastAPI and a polling worker): rule extraction with a regex baseline and a LangGraph extractor as fallback, a cost meter in front of every model call, campaigns, the MPR generator, the claims agent with caps and human review by interrupt, and the payouts ledger. Below them the stores: private photo storage, Postgres 16 with pgvector as the system of record with row-level security, and a Neo4j fraud graph projected from Postgres that never decides. On the right, through the HTTP API: Clerk sign-in, the firm console, and Stripe test mode, all to be built by teammates against the API contract, and the monthly progress report PDF for CPSC.</desc>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="9" orient="auto">
+      <path class="ahead" d="M1,1.5 L9,5 L1,8.5 Z"/>
+    </marker>
+    <marker id="at" viewBox="0 0 10 10" refX="1" refY="5" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="9" orient="auto">
+      <path class="ahead" d="M9,1.5 L1,5 L9,8.5 Z"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .card { fill: #fcfcfb; stroke: rgba(11,11,11,0.10); stroke-width: 1; }
+    .ink { fill: #0b0b0b; }
+    .ink2 { fill: #52514e; }
+    .mut { fill: #898781; }
+    .rule { stroke: #e1e0d9; stroke-width: 1; fill: none; }
+    .hair { stroke: #c3c2b7; stroke-width: 1; fill: none; }
+    .flow { stroke: #898781; stroke-width: 2; fill: none; stroke-linejoin: round; }
+    .ahead { fill: #898781; }
+    .bus { fill: #f9f9f7; stroke: #c3c2b7; stroke-width: 1; }
+    .t-in { fill: #eb6834; fill-opacity: 0.07; stroke: #eb6834; stroke-width: 1.5; }
+    .t-be { fill: #2a78d6; fill-opacity: 0.08; stroke: #2a78d6; stroke-width: 1.5; }
+    .t-st { fill: #1baf7a; fill-opacity: 0.09; stroke: #1baf7a; stroke-width: 1.5; }
+    .t-tm { fill: #6250d6; fill-opacity: 0.08; stroke: #6250d6; stroke-width: 1.5; }
+    .grp { fill: none; stroke: #6250d6; stroke-width: 1; stroke-dasharray: 5 4; }
+    .s-in { fill: #eb6834; }
+    .s-be { fill: #2a78d6; }
+    .s-st { fill: #1baf7a; }
+    .s-tm { fill: #6250d6; }
+    @media (prefers-color-scheme: dark) {
+      .card { fill: #1a1a19; stroke: rgba(255,255,255,0.10); }
+      .ink { fill: #f0efec; }
+      .ink2 { fill: #c3c2b7; }
+      .mut { fill: #898781; }
+      .rule { stroke: #2c2c2a; }
+      .hair { stroke: #383835; }
+      .flow { stroke: #898781; }
+      .ahead { fill: #898781; }
+      .bus { fill: #0d0d0d; stroke: #383835; }
+      .t-in { fill: #d95926; fill-opacity: 0.14; stroke: #d95926; }
+      .t-be { fill: #3987e5; fill-opacity: 0.13; stroke: #3987e5; }
+      .t-st { fill: #199e70; fill-opacity: 0.14; stroke: #199e70; }
+      .t-tm { fill: #9085e9; fill-opacity: 0.13; stroke: #9085e9; }
+      .grp { stroke: #9085e9; }
+      .s-in { fill: #d95926; }
+      .s-be { fill: #3987e5; }
+      .s-st { fill: #199e70; }
+      .s-tm { fill: #9085e9; }
+    }
+  </style>
+
+  <rect class="card" x="0.5" y="0.5" width="1199" height="723" rx="16"/>
+
+  <text class="ink" x="40" y="50" font-size="26" font-weight="600">Architecture</text>
+  <text class="ink2" x="40" y="77" font-size="15">One FastAPI service and a polling worker over Postgres. The console, payments, and sign-in plug in through the API contract.</text>
+
+  <!-- column headers -->
+  <text class="mut" x="40" y="116" font-size="12" font-weight="600" letter-spacing="1">INPUTS</text>
+  <line class="rule" x1="40" y1="126" x2="250" y2="126"/>
+  <text class="mut" x="284" y="116" font-size="12" font-weight="600" letter-spacing="1">BACKEND</text>
+  <text class="mut" x="356" y="116" font-size="12">apps/api, FastAPI and a polling worker</text>
+  <line class="rule" x1="284" y1="126" x2="848" y2="126"/>
+  <text class="mut" x="936" y="116" font-size="12" font-weight="600" letter-spacing="1">COMPONENTS AND OUTPUTS</text>
+  <line class="rule" x1="936" y1="126" x2="1160" y2="126"/>
+
+  <!-- inputs -->
+  <rect class="t-in" x="40" y="140" width="210" height="114" rx="10"/>
+  <text class="ink" x="56" y="165" font-size="15" font-weight="600">CPSC recall API</text>
+  <text class="ink2" x="56" y="186" font-size="13">Public saferproducts.gov</text>
+  <text class="ink2" x="56" y="203" font-size="13">feed, no key needed</text>
+  <text class="ink2" x="56" y="220" font-size="13">Pulled by the API in</text>
+  <text class="ink2" x="56" y="237" font-size="13">30-day windows</text>
+
+  <rect class="t-in" x="40" y="272" width="210" height="114" rx="10"/>
+  <text class="ink" x="56" y="297" font-size="15" font-weight="600">Owner registrations</text>
+  <text class="ink2" x="56" y="318" font-size="13">CSV a firm uploads of the</text>
+  <text class="ink2" x="56" y="335" font-size="13">owners it already knows</text>
+  <text class="ink2" x="56" y="352" font-size="13">Synthetic rows only</text>
+
+  <rect class="t-in" x="40" y="404" width="210" height="114" rx="10"/>
+  <text class="ink" x="56" y="429" font-size="15" font-weight="600">Claim portal</text>
+  <text class="ink2" x="56" y="450" font-size="13">Consumers, no accounts</text>
+  <text class="ink2" x="56" y="467" font-size="13">Single-claim links</text>
+  <text class="ink2" x="56" y="484" font-size="13">Label, destruction, and</text>
+  <text class="ink2" x="56" y="501" font-size="13">receipt photo uploads</text>
+
+  <!-- backend modules: column A -->
+  <rect class="t-be" x="284" y="140" width="266" height="114" rx="10"/>
+  <text class="ink" x="300" y="165" font-size="15" font-weight="600">Rule extraction</text>
+  <text class="ink2" x="300" y="186" font-size="13">Notice text to checkable rules</text>
+  <text class="ink2" x="300" y="203" font-size="13">Regex baseline first; LangGraph</text>
+  <text class="ink2" x="300" y="220" font-size="13">extractor only as a fallback</text>
+  <text class="ink2" x="300" y="237" font-size="13">Values taken from the notice text</text>
+
+  <rect class="t-be" x="284" y="272" width="266" height="114" rx="10"/>
+  <text class="ink" x="300" y="297" font-size="15" font-weight="600">Campaigns</text>
+  <text class="ink2" x="300" y="318" font-size="13">Match known owners to the rules</text>
+  <text class="ink2" x="300" y="335" font-size="13">Outreach drafts quote the notice</text>
+  <text class="ink2" x="300" y="352" font-size="13">Sending is simulated</text>
+
+  <rect class="t-be" x="284" y="404" width="266" height="114" rx="10"/>
+  <text class="ink" x="300" y="429" font-size="15" font-weight="600">Claims agent</text>
+  <text class="ink2" x="300" y="450" font-size="13">LangGraph loop over typed tools</text>
+  <text class="ink2" x="300" y="467" font-size="13">Caps: 8 steps, 0.02 USD, 60 s</text>
+  <text class="ink2" x="300" y="484" font-size="13">Human review by interrupt</text>
+  <text class="ink2" x="300" y="501" font-size="13">Postgres checkpointer</text>
+
+  <!-- backend modules: column B -->
+  <rect class="t-be" x="582" y="140" width="266" height="114" rx="10"/>
+  <text class="ink" x="598" y="165" font-size="15" font-weight="600">Cost meter</text>
+  <text class="ink2" x="598" y="186" font-size="13">In front of every model call</text>
+  <text class="ink2" x="598" y="203" font-size="13">Model: claude-haiku-5-5</text>
+  <text class="ink2" x="598" y="220" font-size="13">Refuses a call before it would</text>
+  <text class="ink2" x="598" y="237" font-size="13">cross a run cap or the budget</text>
+
+  <rect class="t-be" x="582" y="272" width="266" height="114" rx="10"/>
+  <text class="ink" x="598" y="297" font-size="15" font-weight="600">MPR generator</text>
+  <text class="ink2" x="598" y="318" font-size="13">SQL over claims and payouts</text>
+  <text class="ink2" x="598" y="335" font-size="13">Independent Polars recount</text>
+  <text class="ink2" x="598" y="352" font-size="13">Reconciled to zero discrepancy</text>
+
+  <rect class="t-be" x="582" y="404" width="266" height="114" rx="10"/>
+  <text class="ink" x="598" y="429" font-size="15" font-weight="600">Payouts ledger</text>
+  <text class="ink2" x="598" y="450" font-size="13">A payout row before any Stripe call</text>
+  <text class="ink2" x="598" y="467" font-size="13">held, transferring, export batches</text>
+  <text class="ink2" x="598" y="484" font-size="13">Payout id is the idempotency key</text>
+
+  <!-- stores -->
+  <text class="mut" x="40" y="560" font-size="12" font-weight="600" letter-spacing="1">STORES</text>
+
+  <rect class="t-st" x="40" y="572" width="210" height="90" rx="10"/>
+  <text class="ink" x="56" y="597" font-size="15" font-weight="600">Photo storage</text>
+  <text class="ink2" x="56" y="618" font-size="13">Private Supabase bucket</text>
+  <text class="ink2" x="56" y="635" font-size="13">Bytes proxied after the</text>
+  <text class="ink2" x="56" y="652" font-size="13">firm check</text>
+
+  <rect class="t-st" x="284" y="572" width="266" height="90" rx="10"/>
+  <text class="ink" x="300" y="597" font-size="15" font-weight="600">Postgres 16 + pgvector</text>
+  <text class="ink2" x="300" y="618" font-size="13">System of record</text>
+  <text class="ink2" x="300" y="635" font-size="13">Row-level security forced on</text>
+  <text class="ink2" x="300" y="652" font-size="13">every tenant table</text>
+
+  <rect class="t-st" x="582" y="572" width="266" height="90" rx="10"/>
+  <text class="ink" x="598" y="597" font-size="15" font-weight="600">Neo4j fraud graph</text>
+  <text class="ink2" x="598" y="618" font-size="13">Projected from Postgres after</text>
+  <text class="ink2" x="598" y="635" font-size="13">each decision: clusters, rings</text>
+  <text class="ink2" x="598" y="652" font-size="13">Never decides anything</text>
+
+  <!-- API bus -->
+  <rect class="bus" x="880" y="140" width="24" height="522" rx="12"/>
+  <text class="ink2" font-size="13" font-weight="600" letter-spacing="0.5" text-anchor="middle" transform="translate(896.5 401) rotate(-90)">HTTP API  ·  OpenAPI contract</text>
+  <line class="hair" x1="848" y1="197" x2="880" y2="197"/>
+  <line class="hair" x1="848" y1="329" x2="880" y2="329"/>
+  <line class="hair" x1="848" y1="461" x2="880" y2="461"/>
+
+  <!-- team components -->
+  <rect class="grp" x="936" y="140" width="224" height="378" rx="12"/>
+  <text class="ink2" x="952" y="164" font-size="13" font-weight="600">To be built by teammates</text>
+  <text class="ink2" x="952" y="181" font-size="13">against the API contract</text>
+
+  <rect class="t-tm" x="948" y="194" width="200" height="94" rx="10"/>
+  <text class="ink" x="962" y="218" font-size="15" font-weight="600">Clerk</text>
+  <text class="mut" x="962" y="236" font-size="12">sign-in component</text>
+  <text class="ink2" x="962" y="256" font-size="13">Sign-in and organizations</text>
+  <text class="ink2" x="962" y="273" font-size="13">The token sets the firm</text>
+
+  <rect class="t-tm" x="948" y="302" width="200" height="94" rx="10"/>
+  <text class="ink" x="962" y="326" font-size="15" font-weight="600">Firm console</text>
+  <text class="mut" x="962" y="344" font-size="12">console component, Next.js</text>
+  <text class="ink2" x="962" y="364" font-size="13">Claims queue, trace viewer,</text>
+  <text class="ink2" x="962" y="381" font-size="13">reviewer actions</text>
+
+  <rect class="t-tm" x="948" y="410" width="200" height="94" rx="10"/>
+  <text class="ink" x="962" y="434" font-size="15" font-weight="600">Stripe, test mode</text>
+  <text class="mut" x="962" y="452" font-size="12">payments component</text>
+  <text class="ink2" x="962" y="472" font-size="13">Billing for firms</text>
+  <text class="ink2" x="962" y="489" font-size="13">Connect payouts to claimants</text>
+
+  <rect class="t-in" x="936" y="572" width="224" height="90" rx="10"/>
+  <text class="ink" x="952" y="597" font-size="15" font-weight="600">Monthly progress report</text>
+  <text class="ink2" x="952" y="618" font-size="13">PDF the firm files with CPSC,</text>
+  <text class="ink2" x="952" y="635" font-size="13">from the MPR generator</text>
+
+  <!-- flows -->
+  <path class="flow" d="M250 197 H282" marker-end="url(#ah)"/>
+  <path class="flow" d="M250 329 H282" marker-end="url(#ah)"/>
+  <path class="flow" d="M250 461 H282" marker-end="url(#ah)"/>
+  <path class="flow" d="M145 518 V570" marker-end="url(#ah)"/>
+  <text class="mut" x="155" y="550" font-size="12">photo uploads</text>
+
+  <path class="flow" d="M550 197 H580" marker-end="url(#ah)"/>
+  <path class="flow" d="M550 430 H566 V236 H580" marker-end="url(#ah)"/>
+  <path class="flow" d="M550 478 H580" marker-end="url(#ah)"/>
+  <path class="flow" d="M417 520 V570" marker-start="url(#at)" marker-end="url(#ah)"/>
+  <text class="mut" x="427" y="550" font-size="12">reads and writes</text>
+  <path class="flow" d="M550 617 H580" marker-end="url(#ah)"/>
+
+  <path class="flow" d="M946 241 H906" marker-end="url(#ah)"/>
+  <path class="flow" d="M906 349 H946" marker-start="url(#at)" marker-end="url(#ah)"/>
+  <path class="flow" d="M906 457 H946" marker-start="url(#at)" marker-end="url(#ah)"/>
+  <path class="flow" d="M906 617 H934" marker-end="url(#ah)"/>
+
+  <!-- legend -->
+  <g font-size="13">
+    <rect class="s-in" x="40" y="688" width="12" height="12" rx="3"/>
+    <text class="ink2" x="60" y="699">Inputs and the CPSC filing</text>
+    <rect class="s-be" x="262" y="688" width="12" height="12" rx="3"/>
+    <text class="ink2" x="282" y="699">Backend modules</text>
+    <rect class="s-st" x="420" y="688" width="12" height="12" rx="3"/>
+    <text class="ink2" x="440" y="699">Stores</text>
+    <rect class="s-tm" x="512" y="688" width="12" height="12" rx="3"/>
+    <text class="ink2" x="532" y="699">Team components</text>
+  </g>
+</svg>

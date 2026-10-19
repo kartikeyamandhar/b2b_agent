@@ -23,7 +23,7 @@ PY := $(RUN) python
 PSQL := docker compose exec -T db psql -U postgres -v ON_ERROR_STOP=1 -q
 DATABASES := recallops recallops_test
 
-.PHONY: help setup db-up db-bootstrap migrate downgrade api dev worker export-payouts graph-sync seed test lint format typecheck check eval ingest label profile openapi
+.PHONY: help setup db-up db-bootstrap migrate downgrade api dev worker export-payouts graph-sync seed test lint format typecheck check eval ingest label profile openapi readme-assets
 
 help: ## List targets
 	@grep -hE '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-14s %s\n", $$1, $$2}'
@@ -76,7 +76,7 @@ test: ## Run pytest with coverage (needs make setup)
 	cd $(API) && $(ENV) uv run --frozen pytest --cov --cov-report=term
 
 lint: ## Ruff lint and format check
-	cd $(API) && uv run --frozen ruff check src tests && uv run --frozen ruff format --check src tests
+	cd $(API) && uv run --frozen ruff check src tests ../../docs/assets/src && uv run --frozen ruff format --check src tests ../../docs/assets/src
 
 format: ## Apply ruff formatting
 	cd $(API) && uv run --frozen ruff format src tests && uv run --frozen ruff check --fix src tests
@@ -94,6 +94,9 @@ label: ## Owner audit or blind labeling of golden notices: make label ARGS="--au
 
 profile: ## Recompute the data profile numbers into evals/results/data_profile.json (needs data/raw)
 	$(PY) -m recallops.data_profile
+
+readme-assets: ## Rebuild the README charts in docs/assets from evals/results and the seeded database (needs make seed)
+	$(PY) docs/assets/src/build_assets.py $(ARGS)
 
 openapi: ## Regenerate docs/contracts/openapi.json from the app
 	$(PY) -m recallops.api.export_openapi docs/contracts/openapi.json
