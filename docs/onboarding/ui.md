@@ -26,7 +26,7 @@ You build the firm console and the claim portal in apps/web (02-ui.md). The back
 - **Stable ids across reseeds.** Demo program `0874f66f-bfb5-552b-bd93-6266f49c1d5a`; first claim `66dcc492-086f-5b59-b441-cbe001eb2e0b`.
 - **Portal tokens in development** are `dev.<claim id>`, for example `/portal/dev.66dcc492-086f-5b59-b441-cbe001eb2e0b`. The login owner replaces them with signed tokens.
 - **Errors** are RFC 7807 problem details (`application/problem+json`) with `detail` and `correlation_id`; show both (02-ui.md section 6). Another firm's claim is a 404, never a 403.
-- **Photos.** `photos[].url` is an API path in development (send the same auth headers). In production it becomes a short-lived signed storage URL; treat it as opaque.
+- **Photos.** `photos[].url` is an API path in every environment (send the same auth headers). The API reads the bytes from storage after checking the firm (local disk in development, a private Supabase bucket in production), so no storage URL ever reaches the browser; treat the path as opaque.
 - **Money** is integer cents (`refund_cents`, `amount_cents`); costs are decimal strings in USD.
 
 ## Run the backend locally

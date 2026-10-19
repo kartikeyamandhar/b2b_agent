@@ -51,6 +51,8 @@ services:
         sync: false
       - key: STRIPE_WEBHOOK_SECRET
         sync: false
+      - key: STORAGE_BACKEND
+        value: supabase
       - key: SUPABASE_URL
         sync: false
       - key: SUPABASE_SERVICE_KEY
@@ -86,4 +88,10 @@ services:
       - key: NEO4J_NAMESPACE
         value: prod
       - key: GRAPH_KEY_SECRET
+        sync: false
+      - key: STORAGE_BACKEND
+        value: supabase
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
         sync: false
