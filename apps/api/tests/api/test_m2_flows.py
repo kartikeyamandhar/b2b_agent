@@ -418,3 +418,96 @@ def test_the_graph_is_reported_and_its_absence_is_a_fixed_503(env: dict[str, Any
     pid = env["seeded"]["demo"]["program_id"]
     down = client.get(f"/v1/programs/{pid}/fraud-graph", headers=REVIEWER)
     assert down.status_code == 503 and down.json()["detail"] == "fraud graph unavailable"
+
+
+class RecordingStorage:
+    """The real local backend, recording calls; fail_on names the operations that raise StorageError instead."""
+
+    def __init__(self, inner: Any, fail_on: tuple[str, ...] = ()) -> None:
+        self.inner = inner
+        self.fail_on = fail_on
+        self.calls: list[tuple[str, str]] = []
+
+    def _check(self, op: str, relative: str) -> None:
+        self.calls.append((op, relative))
+        if op in self.fail_on:
+            from recallops.storage import StorageError
+
+            raise StorageError(f"{op} {relative} failed: HTTP 503")
+
+    def put(self, relative: str, data: bytes, content_type: str) -> None:
+        self._check("put", relative)
+        self.inner.put(relative, data, content_type)
+
+    def get(self, relative: str) -> bytes | None:
+        self._check("get", relative)
+        result: bytes | None = self.inner.get(relative)
+        return result
+
+    def delete(self, relative: str) -> None:
+        self._check("delete", relative)
+        self.inner.delete(relative)
+
+
+def test_a_replaced_portal_photo_is_deleted_from_storage_after_the_commit(
+    env: dict[str, Any], monkeypatch: Any
+) -> None:
+    from recallops.api import routes
+
+    client, engine = env["client"], env["engine"]
+    storage = RecordingStorage(routes.photo_storage())
+    monkeypatch.setitem(routes._STORAGE, "storage", storage)
+    program = open_program(client, engine)
+    link = client.post(f"/v1/programs/{program['id']}/claims/issue", headers=ADMIN, json={"n": 1}).json()["links"][0]
+    token, claim_id = link["url"].rsplit("/", 1)[1], link["claim_id"]
+
+    def upload(seed_value: int) -> Any:
+        return client.post(
+            f"/portal/{token}/photos",
+            data={"kind": "label"},
+            files={"file": ("label.jpg", io.BytesIO(jpeg("label", seed_value)), "image/jpeg")},
+        )
+
+    assert upload(31).status_code == 200
+    [(op, first)] = storage.calls
+    assert op == "put" and first.startswith(f"{seed.DEMO_FIRM_ID}/{claim_id}/label-") and first.endswith(".jpg")
+    storage.fail_on = ("delete",)  # a failed cleanup after the commit never fails the upload
+    assert upload(32).status_code == 200
+    assert [op for op, _ in storage.calls] == ["put", "put", "delete"] and storage.calls[2][1] == first
+    second = storage.calls[1][1]
+    storage.fail_on = ()
+    assert upload(33).status_code == 200
+    third = storage.calls[3][1]
+    assert storage.calls[3:] == [("put", third), ("delete", second)]
+    assert storage.inner.get(second) is None and storage.inner.get(third) is not None
+    detail = client.get(f"/v1/claims/{claim_id}", headers=REVIEWER).json()
+    [photo] = detail["photos"]
+    served = client.get(photo["url"], headers=REVIEWER)
+    assert served.status_code == 200 and served.headers["content-type"] == "image/jpeg"
+    assert served.headers["x-content-type-options"] == "nosniff"
+    assert served.content == storage.inner.get(third)
+
+
+def test_a_storage_outage_is_a_fixed_503_and_stores_no_row(env: dict[str, Any], monkeypatch: Any) -> None:
+    from recallops.api import routes
+
+    client, engine = env["client"], env["engine"]
+    storage = RecordingStorage(routes.photo_storage(), fail_on=("put", "get", "delete"))
+    monkeypatch.setitem(routes._STORAGE, "storage", storage)
+    program = open_program(client, engine)
+    link = client.post(f"/v1/programs/{program['id']}/claims/issue", headers=ADMIN, json={"n": 1}).json()["links"][0]
+    token = link["url"].rsplit("/", 1)[1]
+    up = client.post(
+        f"/portal/{token}/photos",
+        data={"kind": "receipt"},
+        files={"file": ("r.jpg", io.BytesIO(jpeg("receipt", 41)), "image/jpeg")},
+    )
+    assert up.status_code == 503 and up.json()["detail"] == "photo storage unavailable"
+    assert "HTTP 503" not in up.text  # the storage error's text stays in the logs
+    assert client.get(f"/portal/{token}").json()["photos_uploaded"] == []  # the row rolled back with the put
+    claim_id = env["seeded"]["demo"]["first_claim_id"]
+    url = client.get(f"/v1/claims/{claim_id}", headers=REVIEWER).json()["photos"][0]["url"]
+    down = client.get(url, headers=REVIEWER)
+    assert down.status_code == 503 and down.json()["detail"] == "photo storage unavailable"
+    storage.fail_on = ()
+    assert client.get(url, headers=REVIEWER).status_code == 200

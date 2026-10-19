@@ -1,5 +1,5 @@
 """The claim-photo storage seam: the Supabase adapter against httpx.MockTransport (no network), the local backend's
-traversal guard, and the production settings guard for the Supabase backend."""
+traversal guard, the worker's photo reader, and the production settings guard for the Supabase backend."""
 
 from __future__ import annotations
 
@@ -12,6 +12,7 @@ import httpx
 import pytest
 from pydantic import ValidationError
 
+from recallops.claims.context import photo_reader
 from recallops.settings import EXAMPLE_SUPABASE_SERVICE_KEY, EXAMPLE_SUPABASE_URL, Settings
 from recallops.storage import (
     InvalidKey,
@@ -277,6 +278,37 @@ def test_local_storage_wraps_os_errors(tmp_path: Path) -> None:
         finally:
             (root / "locked.jpg").chmod(0o600)
     assert repr(store) == f"LocalStorage({str(root)!r})"
+
+
+# The worker's photo reader
+
+
+class Exploding:
+    def put(self, relative: str, data: bytes, content_type: str) -> None:
+        raise StorageError(f"put {relative} failed: HTTP 503")
+
+    def get(self, relative: str) -> bytes | None:
+        raise StorageError(f"get {relative} failed: HTTP 503")
+
+    def delete(self, relative: str) -> None:
+        raise StorageError(f"delete {relative} failed: HTTP 503")
+
+
+def test_photo_reader_reads_through_storage(tmp_path: Path) -> None:
+    store = LocalStorage(tmp_path)
+    store.put("f/c/label.jpg", b"label", "image/jpeg")
+    read = photo_reader(store, {"label": "f/c/label.jpg", "receipt": "f/c/gone.jpg", "other": "../escape.jpg"})
+    assert read("label") == b"label"
+    assert read("receipt") is None  # absent object
+    assert read("destruction") is None  # no photo of that kind
+    assert read("other") is None  # an unsafe stored key is refused, never read
+
+
+def test_photo_reader_lets_a_storage_outage_fail_the_attempt() -> None:
+    read = photo_reader(Exploding(), {"label": "f/c/label.jpg"})
+    assert read("destruction") is None
+    with pytest.raises(StorageError):
+        read("label")
 
 
 # Settings

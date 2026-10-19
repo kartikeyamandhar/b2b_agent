@@ -42,6 +42,7 @@ from recallops.payouts.export import export_firm
 from recallops.photos import store
 from recallops.rules import baseline
 from recallops.settings import REPO_ROOT, get_settings
+from recallops.storage import Storage, build_storage
 from recallops.synth.generate import SynthClaim, generate_program, load_yaml
 from recallops.tenancy import FirmContext
 from recallops.tracing.writer import DbTrace
@@ -109,9 +110,17 @@ def _question(reasons: list[str]) -> str:
     return "To finish your claim, please provide: " + "; ".join(reasons) + "."
 
 
-def insert_claims(engine: Engine, firm_id: uuid.UUID, program_id: uuid.UUID, claims: list[SynthClaim]) -> None:
-    """Submitted claims with their rendered photos stored like portal uploads (dev tokens dev.<firm>.<claim>)."""
-    settings = get_settings()
+def insert_claims(
+    engine: Engine,
+    firm_id: uuid.UUID,
+    program_id: uuid.UUID,
+    claims: list[SynthClaim],
+    storage: Storage | None = None,
+) -> None:
+    """Submitted claims with their rendered photos stored like portal uploads (dev tokens dev.<firm>.<claim>). Seed
+    keys are deterministic, so each object is deleted before its put: a reseed works on a bucket that refuses
+    overwrites (Supabase, x-upsert: false) exactly as on local disk."""
+    storage = storage or build_storage(get_settings())
     now = datetime.now(UTC)
     with Session(engine) as session, session.begin():
         for c in claims:
@@ -139,7 +148,8 @@ def insert_claims(engine: Engine, firm_id: uuid.UUID, program_id: uuid.UUID, cla
         for c in claims:
             for p in c.photos:
                 relative = f"{firm_id}/{c.claim_id}/{p.kind}.jpg"
-                stored = store(settings.storage_dir, relative, p.data)
+                storage.delete(relative)
+                stored = store(storage, relative, p.data, "image/jpeg")
                 session.add(
                     ClaimPhoto(
                         firm_id=firm_id,

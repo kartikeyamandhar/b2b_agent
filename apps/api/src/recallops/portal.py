@@ -12,7 +12,6 @@ import json
 import re
 from dataclasses import dataclass
 from datetime import UTC, datetime
-from pathlib import Path
 from typing import Any
 from uuid import UUID, uuid4
 
@@ -25,11 +24,13 @@ from recallops.logs import get_logger, log_event
 from recallops.models import AuditLog, Claim, ClaimPhoto, Recall, RecallProgram
 from recallops.photos import InvalidPhoto, inspect
 from recallops.rules.schemas import IdentificationRules, RemedyRules
+from recallops.storage import Storage
 
 log = get_logger("portal")
 
 PHOTO_KINDS = ("label", "destruction", "receipt", "other")
 CONTENT_TYPES = {"image/jpeg": "jpg", "image/png": "png"}
+MEDIA_TYPES = {ext: media for media, ext in CONTENT_TYPES.items()}
 EDITABLE = ("draft", "needs_info")
 
 
@@ -205,14 +206,15 @@ def submit(session: Session, pc: PortalClaim, fields: dict[str, Any]) -> bool:
 def add_photo(
     session: Session,
     pc: PortalClaim,
-    storage_dir: Path,
+    storage: Storage,
     kind: str,
     content_type: str | None,
     data: bytes,
     max_bytes: int,
     max_pixels: int,
-) -> tuple[ClaimPhoto, list[Path]]:
-    """Returns the new photo and the files it replaced; the caller deletes those only after the commit."""
+) -> tuple[ClaimPhoto, list[str]]:
+    """Returns the new photo and the storage keys it replaced; the caller deletes those only after the commit. The
+    bytes are stored before the row is written, so a failed put (StorageError) leaves no row behind."""
     claim = pc.claim
     if claim.status not in EDITABLE:
         raise NotEditable(f"photos can be added while the claim is {' or '.join(EDITABLE)}")
@@ -230,9 +232,7 @@ def add_photo(
     if facts.exif.get("format") not in ("JPEG", "PNG"):
         raise PhotoRejected("photo must be JPEG or PNG")
     relative = f"{claim.firm_id}/{claim.id}/{kind}-{uuid4().hex}.{ext}"
-    target = storage_dir / relative
-    target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_bytes(data)
+    storage.put(relative, data, MEDIA_TYPES[ext])
     old = list(
         session.scalars(
             select(ClaimPhoto).where(
@@ -255,7 +255,7 @@ def add_photo(
     log_event(
         log, "portal_photo_stored", firm_id=str(claim.firm_id), claim_id=str(claim.id), kind=kind, bytes=len(data)
     )
-    return photo, [storage_dir / p.storage_path for p in old]
+    return photo, [p.storage_path for p in old]
 
 
 def answer(session: Session, pc: PortalClaim, message: str) -> None:
