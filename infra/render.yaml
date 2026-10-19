@@ -37,6 +37,8 @@ services:
         sync: false
       - key: NEO4J_PASSWORD
         sync: false
+      - key: NEO4J_DATABASE
+        sync: false
       - key: NEO4J_NAMESPACE
         value: prod
       - key: GRAPH_KEY_SECRET
@@ -86,6 +88,8 @@ services:
       - key: NEO4J_USER
         sync: false
       - key: NEO4J_PASSWORD
+        sync: false
+      - key: NEO4J_DATABASE
         sync: false
       - key: NEO4J_NAMESPACE
         value: prod
