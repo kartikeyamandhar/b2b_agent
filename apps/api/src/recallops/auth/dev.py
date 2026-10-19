@@ -87,6 +87,5 @@ class DevClaimTokenVerifier:
     def token_hash(self, token: str) -> str:
         return hashlib.sha256(token.encode()).hexdigest()
 
-    @staticmethod
-    def issue(claim_id: UUID) -> str:
+    def issue(self, claim_id: UUID) -> str:
         return f"dev.{claim_id}"

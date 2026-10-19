@@ -103,6 +103,19 @@ class Settings(BaseSettings):
     phash_duplicate_bits: int = Field(6)
     default_value_threshold_cents: int = Field(10_000)
 
+    # Worker (claims/worker.py). ADJUDICATOR=agent needs LLM_MODE=live (or recordings for every request);
+    # rules_only runs offline at no cost.
+    adjudicator: Literal["agent", "rules_only"] = Field("agent", description="What the worker runs on a claim.")
+    agent_variant: str = Field("loop_full", description="claims.graph.VARIANTS key used by the worker.")
+    worker_poll_s: float = Field(1.0, description="Seconds between polls when there is no work.")
+    worker_lease_s: int = Field(90, description="A claim or resume lease; expiry lets another worker retry.")
+    worker_max_attempts: int = Field(3, description="Failed attempts before a claim is held for a person.")
+    worker_heartbeat_max_age_s: float = Field(300.0, description="/readyz reports degraded past this age.")
+
+    # Portal (component 4 owns the token format; the backend owns the routes).
+    portal_base_url: str = Field("http://localhost:3000/claim", description="Base of issued claim links.")
+    max_photo_bytes: int = Field(8_000_000, description="Largest accepted upload.")
+
     @field_validator("storage_dir", "replay_dir", "llm_record_dir")
     @classmethod
     def _repo_relative(cls, value: Path) -> Path:

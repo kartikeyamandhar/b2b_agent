@@ -2,7 +2,15 @@
 
 You build the firm console and the claim portal in apps/web (02-ui.md). The backend owner keeps a local API with realistic data and a fixed contract, so you can build every screen before the M2 write routes exist.
 
-## What exists today (end of M1)
+## What changed on 2026-10-18 (M2 backend; additive, no field removed)
+
+- Write routes now work: `POST /v1/programs` (draft program with extracted rules), `PATCH /v1/programs/{id}` (edit rules, threshold, status), `POST /v1/programs/{id}/claims/issue`, `POST /v1/claims/{id}/actions`, `POST /portal/{token}/submit`, `/photos`, `/answer`, and `POST /internal/feeds/pull`. Still 501: the portal payout step (M4), MPR (M4), billing and the Stripe webhook (payments owner).
+- A claim filed through the portal is adjudicated by the worker (`make worker`) within a second or two of submit. Its trace grows row by row; poll `GET /v1/claims/{id}/trace` every 1 to 2 s while `run.status` is `running` (docs/contracts/trace.md). The header bar should show `used.steps` of `caps.max_steps`, not `run.steps`.
+- `PortalView` gains `photos_uploaded` and `messages` (needs_info questions and the claimant's replies). Upload photos before `submit`; a second `submit` changes nothing.
+- A flagged claim's run waits for a reviewer: `POST /v1/claims/{id}/actions` returns the claim unchanged (the review is queued), and the worker resumes the run; poll until the status changes. A second action while one is pending is a 409.
+- `/readyz` is 503 until a worker heartbeat exists.
+
+## What existed at the end of M1
 
 - A FastAPI backend in apps/api with every route from 01-backend.md section 9, plus billing stubs and a photo route, in **docs/contracts/openapi.json**. Generate your zod types and client from that file (02-ui.md section 3: `npm run gen:api`). The API also serves it live at http://127.0.0.1:8000/openapi.json, with interactive docs at http://127.0.0.1:8000/docs.
 - Implemented now (return real data): `GET /v1/recalls`, `GET /v1/programs`, `GET /v1/programs/{id}`, `GET /v1/programs/{id}/claims` (status filter, keyset cursor), `GET /v1/claims/{id}`, `GET /v1/claims/{id}/photos/{photo_id}`, `GET /v1/claims/{id}/trace`, `GET /v1/usage`, `GET /portal/{token}`, `/healthz`, `/readyz`.

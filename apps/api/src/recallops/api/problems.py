@@ -24,6 +24,14 @@ class NotYetImplemented(Exception):
         self.detail = f"{route} arrives in {milestone} ({owner}); the contract in docs/contracts/openapi.json is final."
 
 
+class PaymentRequired(Exception):
+    """The billing gate refused an action (03-payments.md section 2): the UI turns this into an upgrade prompt."""
+
+    def __init__(self, action: str, reason: str | None) -> None:
+        super().__init__(action)
+        self.detail = f"{action} is not included in the current plan: {reason or 'upgrade to continue'}."
+
+
 def problem(status: int, title: str, detail: str | None, request: Request) -> JSONResponse:
     body = {
         "type": "about:blank",
@@ -78,3 +86,7 @@ def install(app: FastAPI) -> None:
     @app.exception_handler(NotYetImplemented)
     async def not_yet(request: Request, exc: NotYetImplemented) -> JSONResponse:
         return problem(501, TITLES[501], exc.detail, request)
+
+    @app.exception_handler(PaymentRequired)
+    async def payment_required(request: Request, exc: PaymentRequired) -> JSONResponse:
+        return problem(402, TITLES[402], exc.detail, request)

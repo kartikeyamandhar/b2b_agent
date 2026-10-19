@@ -21,3 +21,14 @@ violations:
 
 # Not an outcome: claims whose refund exceeds the program's value threshold are routed to a human
 # regardless of outcome (reported as "share routed to human").
+
+# Revision 2 (2026-10-18, before any row that reads photos is run): rules for what the label and destruction
+# photos show. Every row that reads photos applies them through the same channel: the rules_plus_vision decision
+# table implements them in code, and the agent rows get the same rules in their instructions (never only through
+# retrieved documents). Rows that do not read photos (rules_only) cannot apply them.
+photo_rules:
+  label_shows_other_model: deny            # a legible label shows a model that is not recalled, whatever was typed
+  label_unreadable: needs_info             # the label photo cannot be read: ask for a clearer photo
+  label_confirms_typed_typo: approve       # typed model is a confusable typo, the legible label shows a recalled model
+  label_confirms_missing_typed_model: approve  # no typed model, the legible label shows a recalled model
+  destruction_photo_intact: needs_info     # the destruction photo does not show the instructed destruction

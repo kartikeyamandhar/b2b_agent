@@ -1,4 +1,4 @@
-"""FakeLedger: allows every transition, keeps state in memory, and logs each call. M1 and M2 only."""
+"""FakeLedger: allows every transition, keeps state in memory, and logs each call (unit tests and the seed)."""
 
 from __future__ import annotations
 
@@ -31,8 +31,14 @@ class FakeLedger:
         )
         return ref
 
-    def create_pending(self, ctx: FirmContext, claim_id: UUID, amount_cents: int) -> PayoutRef:
-        ref = PayoutRef(payout_id=uuid.uuid4(), claim_id=claim_id, amount_cents=amount_cents, status="pending")
+    def create_pending(
+        self, ctx: FirmContext, claim_id: UUID, amount_cents: int, method: str = "stripe_connect"
+    ) -> PayoutRef:
+        existing = next((r for r in self.rows.values() if r.claim_id == claim_id), None)
+        if existing is not None:
+            return existing  # idempotent per claim, like the database ledger
+        status: PayoutStatus = "pending_export" if method in ("check_export", "ach_export") else "pending"
+        ref = PayoutRef(payout_id=uuid.uuid4(), claim_id=claim_id, amount_cents=amount_cents, status=status)
         self.rows[ref.payout_id] = ref
         log_event(
             log,

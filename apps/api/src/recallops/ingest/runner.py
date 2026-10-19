@@ -187,6 +187,23 @@ def api_batches(since: date, until: date) -> Iterator[tuple[str, list[dict[str, 
             yield f"{start}_{end}", client.fetch_window(start, end)
 
 
+def pull_since_last(engine: Engine, settings: Any, today: date | None = None) -> dict[str, Any]:
+    """The nightly job behind POST /internal/feeds/pull: from two days before the last finished run (overlap
+    absorbs late publications; upserts are idempotent), or 30 days back when there is none."""
+    from datetime import timedelta
+
+    from sqlalchemy import text as sql
+
+    today = today or date.today()
+    with engine.connect() as conn:
+        last = conn.execute(
+            sql("SELECT max(started_at)::date FROM feed_runs WHERE source = 'cpsc' AND status IN ('done', 'partial')")
+        ).scalar_one_or_none()
+    since = (last - timedelta(days=2)) if last else today - timedelta(days=settings.cpsc_window_days)
+    run_id, counts = run(api_batches(since, today), engine, "cpsc")
+    return {"run_id": str(run_id), "since": since.isoformat(), **asdict(counts), "balanced": counts.balanced()}
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source", default="cpsc", choices=["cpsc"])

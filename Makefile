@@ -19,10 +19,10 @@ PY := $(RUN) python
 PSQL := docker compose exec -T db psql -U postgres -v ON_ERROR_STOP=1 -q
 DATABASES := recallops recallops_test
 
-.PHONY: help setup db-up db-bootstrap migrate downgrade api dev seed test lint format typecheck check eval ingest label profile openapi
+.PHONY: help setup db-up db-bootstrap migrate downgrade api dev worker seed test lint format typecheck check eval ingest label profile openapi
 
 help: ## List targets
-	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-14s %s\n", $$1, $$2}'
+	@grep -hE '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-14s %s\n", $$1, $$2}'
 
 setup: ## Install pinned deps, start Postgres, create roles and databases, run migrations
 	uv sync --project $(API) --frozen
@@ -52,6 +52,9 @@ api: ## Run the API on http://127.0.0.1:8000
 
 dev: ## Run the API with auto-reload
 	$(RUN) uvicorn recallops.api.app:app --host 127.0.0.1 --port 8000 --reload --reload-dir $(API)/src
+
+worker: ## Run the adjudication worker (ADJUDICATOR=agent needs LLM_MODE=live; rules_only runs offline)
+	$(PY) -m recallops.claims.worker $(ARGS)
 
 seed: ## Load one real recall, open a program, generate and adjudicate 500 synthetic claims
 	$(PY) -m recallops.seed

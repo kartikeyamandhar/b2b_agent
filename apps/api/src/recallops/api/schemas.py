@@ -231,7 +231,7 @@ class Photo(Schema):
 
 class RunSummary(Schema):
     run_id: UUID
-    graph: Literal["extract_rules", "adjudicate", "rules_only"]
+    graph: Literal["extract_rules", "adjudicate", "rules_only", "rules_plus_vision"]
     status: RunStatus
     steps: int
     cost_usd: str = Field(description="decimal string, USD")
@@ -309,6 +309,16 @@ class TraceStep(Schema):
     tokens_out: int
     cost_usd: str
     created_at: datetime
+    counted: bool = Field(False, description="counts toward caps.max_steps (a model call or a rejected tool call)")
+    nominal_cost_usd: str = Field("0.000000", description="cost from reported usage; cost_usd is 0 when replayed")
+
+
+class Used(Schema):
+    """What the run has used, to show against caps in the trace viewer header (counted steps, nominal cost)."""
+
+    steps: int
+    cost_usd: str
+    seconds: float
 
 
 class Caps(Schema):
@@ -320,6 +330,7 @@ class Caps(Schema):
 class Trace(Schema):
     run: RunSummary
     caps: Caps
+    used: Used | None = None
     steps: list[TraceStep]
 
     model_config = ConfigDict(
@@ -359,7 +370,7 @@ class Trace(Schema):
 
 class ClaimAction(Schema):
     action: Literal["resume_override", "request_info", "mark_fraud"]
-    outcome: Outcome | None = Field(None, description="required for resume_override")
+    outcome: Literal["approve", "deny", "needs_info"] | None = Field(None, description="required for resume_override")
     message: str | None = Field(None, description="question for the claimant (request_info) or note")
 
     model_config = ConfigDict(
@@ -408,12 +419,20 @@ class PortalProgram(Schema):
     required_photos: list[Literal["label", "destruction", "receipt"]]
 
 
+class PortalMessage(Schema):
+    sender: Literal["firm", "claimant"]
+    text: str
+    at: datetime
+
+
 class PortalView(Schema):
     claim_id: UUID
     status: ClaimStatus
     program: PortalProgram
     pending_question: str | None
     decision_reasons: list[str] = Field(description="plain-language reasons once decided")
+    photos_uploaded: list[Literal["label", "destruction", "receipt", "other"]] = Field(default_factory=list)
+    messages: list[PortalMessage] = Field(default_factory=list, description="needs_info questions and replies")
 
 
 class PortalSubmit(Schema):
@@ -448,4 +467,4 @@ class CheckoutSession(Schema):
 class Health(Schema):
     status: Literal["ok", "degraded"]
     database: bool
-    worker_heartbeat_age_s: float | None = Field(None, description="null until the M2 worker exists")
+    worker_heartbeat_age_s: float | None = Field(None, description="seconds since the worker's last heartbeat")

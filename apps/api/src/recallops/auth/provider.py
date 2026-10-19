@@ -43,8 +43,11 @@ class ClaimTokenContext:
 
 
 class ClaimTokenVerifier(Protocol):
-    """Portal tokens (invariant 10). The login owner replaces the dev verifier with HMAC tokens."""
+    """Portal tokens (invariant 10). The login owner replaces the dev verifier with HMAC tokens (auth/hmac_tokens.py
+    is the starter code). The backend stores token_hash(token) on the claim; the raw token appears only in the link."""
 
     def verify(self, token: str) -> ClaimTokenContext: ...
 
     def token_hash(self, token: str) -> str: ...
+
+    def issue(self, claim_id: UUID) -> str: ...

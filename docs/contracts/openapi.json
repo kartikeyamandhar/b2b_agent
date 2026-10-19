@@ -146,8 +146,7 @@
                 "enum": [
                   "approve",
                   "deny",
-                  "needs_info",
-                  "flag"
+                  "needs_info"
                 ],
                 "type": "string"
               },
@@ -836,7 +835,7 @@
                 "type": "null"
               }
             ],
-            "description": "null until the M2 worker exists",
+            "description": "seconds since the worker's last heartbeat",
             "title": "Worker Heartbeat Age S"
           }
         },
@@ -1224,6 +1223,35 @@
         "title": "PortalAnswer",
         "type": "object"
       },
+      "PortalMessage": {
+        "additionalProperties": false,
+        "properties": {
+          "at": {
+            "format": "date-time",
+            "title": "At",
+            "type": "string"
+          },
+          "sender": {
+            "enum": [
+              "firm",
+              "claimant"
+            ],
+            "title": "Sender",
+            "type": "string"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "sender",
+          "text",
+          "at"
+        ],
+        "title": "PortalMessage",
+        "type": "object"
+      },
       "PortalPayout": {
         "additionalProperties": false,
         "properties": {
@@ -1446,6 +1474,14 @@
             "title": "Decision Reasons",
             "type": "array"
           },
+          "messages": {
+            "description": "needs_info questions and replies",
+            "items": {
+              "$ref": "#/components/schemas/PortalMessage"
+            },
+            "title": "Messages",
+            "type": "array"
+          },
           "pending_question": {
             "anyOf": [
               {
@@ -1456,6 +1492,19 @@
               }
             ],
             "title": "Pending Question"
+          },
+          "photos_uploaded": {
+            "items": {
+              "enum": [
+                "label",
+                "destruction",
+                "receipt",
+                "other"
+              ],
+              "type": "string"
+            },
+            "title": "Photos Uploaded",
+            "type": "array"
           },
           "program": {
             "$ref": "#/components/schemas/PortalProgram"
@@ -2104,7 +2153,8 @@
             "enum": [
               "extract_rules",
               "adjudicate",
-              "rules_only"
+              "rules_only",
+              "rules_plus_vision"
             ],
             "title": "Graph",
             "type": "string"
@@ -2277,6 +2327,16 @@
             },
             "title": "Steps",
             "type": "array"
+          },
+          "used": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Used"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -2306,6 +2366,12 @@
             "title": "Cost Usd",
             "type": "string"
           },
+          "counted": {
+            "default": false,
+            "description": "counts toward caps.max_steps (a model call or a rejected tool call)",
+            "title": "Counted",
+            "type": "boolean"
+          },
           "created_at": {
             "format": "date-time",
             "title": "Created At",
@@ -2321,6 +2387,12 @@
           },
           "node": {
             "title": "Node",
+            "type": "string"
+          },
+          "nominal_cost_usd": {
+            "default": "0.000000",
+            "description": "cost from reported usage; cost_usd is 0 when replayed",
+            "title": "Nominal Cost Usd",
             "type": "string"
           },
           "result": {
@@ -2412,6 +2484,31 @@
         "title": "Usage",
         "type": "object"
       },
+      "Used": {
+        "additionalProperties": false,
+        "description": "What the run has used, to show against caps in the trace viewer header (counted steps, nominal cost).",
+        "properties": {
+          "cost_usd": {
+            "title": "Cost Usd",
+            "type": "string"
+          },
+          "seconds": {
+            "title": "Seconds",
+            "type": "number"
+          },
+          "steps": {
+            "title": "Steps",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "steps",
+          "cost_usd",
+          "seconds"
+        ],
+        "title": "Used",
+        "type": "object"
+      },
       "ValidationError": {
         "properties": {
           "ctx": {
@@ -2485,14 +2582,30 @@
     "/internal/feeds/pull": {
       "post": {
         "operationId": "feeds_pull_internal_feeds_pull_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-internal-secret",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Internal-Secret"
+            }
+          }
+        ],
         "responses": {
           "202": {
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": {
-                    "type": "string"
-                  },
+                  "additionalProperties": true,
                   "title": "Response Feeds Pull Internal Feeds Pull Post",
                   "type": "object"
                 }
@@ -2500,7 +2613,7 @@
             },
             "description": "Successful Response"
           },
-          "501": {
+          "401": {
             "content": {
               "application/json": {
                 "schema": {
@@ -2508,10 +2621,20 @@
                 }
               }
             },
-            "description": "contract final, implementation in a later milestone"
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Nightly feed pull (shared secret header)",
+        "summary": "Nightly feed pull (X-Internal-Secret header); pulls the CPSC windows since the last run",
         "tags": [
           "internal"
         ]
@@ -2649,6 +2772,16 @@
             },
             "description": "not found, or belongs to another firm"
           },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
           "422": {
             "content": {
               "application/json": {
@@ -2658,19 +2791,9 @@
               }
             },
             "description": "Validation Error"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "contract final, implementation in a later milestone"
           }
         },
-        "summary": "Reply to needs_info",
+        "summary": "Reply to needs_info; the claim is adjudicated again",
         "tags": [
           "portal"
         ]
@@ -2793,17 +2916,7 @@
             },
             "description": "not found, or belongs to another firm"
           },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            },
-            "description": "Validation Error"
-          },
-          "501": {
+          "409": {
             "content": {
               "application/json": {
                 "schema": {
@@ -2811,10 +2924,20 @@
                 }
               }
             },
-            "description": "contract final, implementation in a later milestone"
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
           }
         },
-        "summary": "Upload a photo (multipart); sha256 and pHash computed server-side",
+        "summary": "Upload a photo (multipart, JPEG or PNG); sha256 and pHash computed server-side",
         "tags": [
           "portal"
         ]
@@ -2865,6 +2988,16 @@
             },
             "description": "not found, or belongs to another firm"
           },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
           "422": {
             "content": {
               "application/json": {
@@ -2874,19 +3007,9 @@
               }
             },
             "description": "Validation Error"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "contract final, implementation in a later milestone"
           }
         },
-        "summary": "Submit claim fields",
+        "summary": "Submit claim fields (idempotent: a second submission changes nothing)",
         "tags": [
           "portal"
         ]
@@ -2894,6 +3017,7 @@
     },
     "/readyz": {
       "get": {
+        "description": "Database reachable and a worker heartbeat younger than WORKER_HEARTBEAT_MAX_AGE_S (01-backend.md section 9).",
         "operationId": "readyz_readyz_get",
         "responses": {
           "200": {
@@ -2910,7 +3034,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Health"
+                  "$ref": "#/components/schemas/Problem"
                 }
               }
             },

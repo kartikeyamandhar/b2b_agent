@@ -113,18 +113,17 @@ def test_auth_failures_and_roles(client: TestClient) -> None:
     assert client.post("/v1/programs", headers=REVIEWER, json={}).status_code == 403
 
 
-def test_stubs_return_problem_details(client: TestClient, seeded: dict[str, Any]) -> None:
-    response = client.post(
-        "/v1/programs",
-        headers=DEMO,
-        json={"recall_id": None},
-    )
+def test_errors_are_problem_details_and_payments_stubs_stay_501(client: TestClient, seeded: dict[str, Any]) -> None:
+    response = client.post("/v1/programs", headers=DEMO, json={"recall_id": None})
     body = response.json()
-    assert response.status_code == 501
-    assert body["title"] == "Not Implemented" and "M2" in body["detail"] and body["correlation_id"]
+    assert response.status_code == 422
+    assert body["title"] == "Unprocessable Entity" and "recall_id" in body["detail"] and body["correlation_id"]
     assert response.headers["x-request-id"] == body["correlation_id"]
-    assert client.post("/internal/stripe/webhook").status_code == 501
+    stub = client.post("/internal/stripe/webhook")
+    assert stub.status_code == 501 and "payments owner" in stub.json()["detail"]
     assert client.post("/v1/billing/checkout", headers=DEMO).status_code == 501
+    assert client.post("/internal/feeds/pull").status_code == 401
+    assert client.post("/internal/feeds/pull", headers={"X-Internal-Secret": "wrong"}).status_code == 401
 
 
 def test_recall_search_usage_portal_and_health(client: TestClient, seeded: dict[str, Any]) -> None:
@@ -137,7 +136,7 @@ def test_recall_search_usage_portal_and_health(client: TestClient, seeded: dict[
     assert client.get(f"/portal/dev.{uuid4()}").status_code == 404
     assert client.get("/portal/not-a-token").status_code == 404
     assert client.get("/healthz").json()["status"] == "ok"
-    assert client.get("/readyz").status_code == 200
+    assert client.get("/readyz").status_code in (200, 503)  # 503 until a worker heartbeat exists
 
 
 def test_committed_openapi_matches_the_app() -> None:
