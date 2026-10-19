@@ -71,7 +71,7 @@ Owner: backend. Consumer: the UI trace viewer (`/app/claims/[id]/trace`, 02-ui.m
 | failed | the run ended without an outcome (for example a model error or a missing replay recording) | error badge with the last step's `result.error` |
 | waiting_human | a LangGraph interrupt is waiting for a reviewer (flagged, or an approval over the value threshold) | action prompt; POST /v1/claims/{id}/actions queues the review and the worker resumes the same run (same run_id, a `human_review` row is appended) |
 
-capped and failed runs of graph `adjudicate` also wait for a reviewer the same way (the claim status is `capped`). After a review, the run's status becomes `done`.
+capped and failed runs of graph `adjudicate` also wait for a reviewer the same way (the claim status is `capped`). After a review, the run's status becomes `done`. Two exceptions (2026-10-18): a run the worker closed after repeated crashes is `failed` with `outcome.exhausted: true` and cannot be resumed (a reviewer action applies to the claim directly); a run the worker recovered after a crash carries `outcome.recovered: true`. A claim reopened because a duplicate arrived after its decision gets a new run, so the trace shows the latest run; earlier runs stay in agent_runs.
 
 ## Node names by graph
 
@@ -83,6 +83,8 @@ capped and failed runs of graph `adjudicate` also wait for a reviewer the same w
 
 ## Claim status vocabulary (for the queue)
 
-`draft`, `submitted`, `needs_info`, `under_review` (approved but routed to a human, for example over the value threshold), `approved`, `denied`, `flagged`, `capped` (the checker stopped on a cap or a failure; a person decides), `paid`, `closed`.
+`draft`, `submitted` (also: reopened because a duplicate arrived after its decision; `decision.reopened_from` says from what), `needs_info`, `under_review` (approved but routed to a person: over the value threshold, `decision.hold_reason` `payout_held_needs_review` after an automated re-approval of a held payout, or `shared_mailing_address` from the portal payout step; the run may be `done`, so key the reviewer actions on the claim status), `approved`, `denied`, `flagged`, `capped` (the checker stopped on a cap or a failure; a person decides), `paid` (the refund reached transferred or exported), `closed` (a repair or replacement a reviewer marked delivered).
 
 Changes on 2026-10-18 (additive, decisions log): `used`, `steps[].counted`, `steps[].nominal_cost_usd`, the `rules_plus_vision` graph value, the adjudicate node names, and the 1 to 2 s polling guidance while a run is running. The adjudication outcome in `decision.outcome` is one of `approve`, `deny`, `needs_info`, `flag`.
+
+Changes on 2026-10-18 and 2026-10-19 (decisions log; the full team notice is docs/contracts/CHANGES.md): claim statuses `paid` and `closed` are now set, reopened claims return to `submitted`, `under_review` has two new hold reasons, and runs can carry `outcome.exhausted` or `outcome.recovered`.
