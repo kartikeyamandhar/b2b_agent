@@ -2,9 +2,10 @@
 
 Loads the committed CPSC fixture (data/samples/cpsc_sample.json), opens a program for the Scotch thermal laminator
 recall (27024) with baseline-extracted rules, generates 500 synthetic claims with planted violations and rendered
-photos, adjudicates them with the rules-only adjudicator (traces in agent_runs and agent_steps), and adds a second
-firm so cross-tenant behavior can be tried from the UI. Ids are deterministic, so README curl examples stay valid
-across reseeds. Idempotent: rows of the two seed firms are deleted and rebuilt.
+photos, adjudicates them with the rules-only adjudicator (traces in agent_runs and agent_steps), moves the approved
+refunds' payouts through the real ledger (transferred, failed, onboarding, pending, and one export batch), and adds a
+second firm so cross-tenant behavior can be tried from the UI. Ids are deterministic, so README curl examples stay
+valid across reseeds. Idempotent: rows of the two seed firms are deleted and rebuilt.
 """
 
 from __future__ import annotations
@@ -23,6 +24,7 @@ from sqlalchemy.orm import Session
 from recallops.claims.rules_only import adjudicate
 from recallops.claims.tools import ClaimFacts, PhotoRef
 from recallops.db.engine import internal_engine
+from recallops.db.session import internal_session
 from recallops.ingest.runner import run as ingest_run
 from recallops.logs import configure, get_logger, log_event
 from recallops.models import (
@@ -36,7 +38,8 @@ from recallops.models import (
     RecallProgram,
     UsageMeter,
 )
-from recallops.payouts.fake import FakeLedger
+from recallops.payouts.db_ledger import DbPayoutLedger
+from recallops.payouts.export import export_firm
 from recallops.photos import store
 from recallops.rules import baseline
 from recallops.settings import REPO_ROOT, get_settings
@@ -58,6 +61,7 @@ TENANT_DELETE_ORDER = (
     "agent_steps",
     "agent_runs",
     "payouts",
+    "export_batches",
     "claim_photos",
     "fraud_clusters",
     "mpr_reports",
@@ -104,40 +108,9 @@ def _question(reasons: list[str]) -> str:
     return "To finish your claim, please provide: " + "; ".join(reasons) + "."
 
 
-def seed_program(engine: Engine, firm_id: uuid.UUID, recall_source_id: str, n: int, seed: int) -> dict[str, Any]:
+def insert_claims(engine: Engine, firm_id: uuid.UUID, program_id: uuid.UUID, claims: list[SynthClaim]) -> None:
+    """Submitted claims with their rendered photos stored like portal uploads (dev tokens dev.<firm>.<claim>)."""
     settings = get_settings()
-    planted = load_yaml(REPO_ROOT / "evals" / "adjudication" / "planted.yaml")
-    policy = load_yaml(REPO_ROOT / "evals" / "adjudication" / "outcome_policy.yaml")
-    ctx = FirmContext(firm_id=firm_id, user_id="seed", role="admin")
-    with Session(engine) as session, session.begin():
-        recall = session.query(Recall).filter(Recall.source == "cpsc", Recall.source_id == recall_source_id).one()
-        rules = baseline.extract(recall.source_text)
-        rules_json = json.loads(rules.model_dump_json())
-        session.execute(
-            update(Recall)
-            .where(Recall.id == recall.id)
-            .values(
-                extracted_rules=rules_json,
-                extracted_at=datetime.now(UTC),
-                extractor=baseline.EXTRACTOR,
-                extractor_version=baseline.EXTRACTOR_VERSION,
-            )
-        )
-        program_id = program_id_for(firm_id, recall_source_id)
-        session.add(
-            RecallProgram(
-                id=program_id,
-                firm_id=firm_id,
-                recall_id=recall.id,
-                status="open",
-                identification_rules=rules_json["identification"],
-                remedy_rules=rules_json["remedy"],
-                value_threshold_cents=settings.default_value_threshold_cents,
-                opened_at=datetime.now(UTC),
-            )
-        )
-        recall_date = recall.recall_date
-    claims = generate_program(rules, str(program_id), n, seed, planted, policy, recall_date)
     now = datetime.now(UTC)
     with Session(engine) as session, session.begin():
         for c in claims:
@@ -177,8 +150,94 @@ def seed_program(engine: Engine, firm_id: uuid.UUID, recall_source_id: str, n: i
                         exif=stored.exif,
                     )
                 )
+
+
+# Deterministic payout states for the demo, by position among approved refunds (index mod 10).
+PAYOUT_PLAN = (
+    "export",
+    "export",
+    "export",
+    "transfer",
+    "transfer",
+    "transfer",
+    "pending",
+    "pending",
+    "onboard",
+    "fail",
+)
+
+
+def seed_payouts(engine: Engine, ctx: FirmContext, approved: list[tuple[uuid.UUID, int]], plan: str) -> dict[str, Any]:
+    """Approved refunds through the real ledger, so the demo has every payout state, an export batch, and MPR
+    corrections. A free-plan firm has no Connect payouts: its rows wait for the export batch (03-payments.md)."""
+    ledger = DbPayoutLedger(engine, session_for=lambda c, e: internal_session(e))
+    method = "stripe_connect" if plan != "free" else "check_export"
+    for i, (claim_id, cents) in enumerate(sorted(approved)):
+        ref = ledger.create_pending(ctx, claim_id, cents, method)
+        if method != "stripe_connect":
+            continue
+        step = PAYOUT_PLAN[i % len(PAYOUT_PLAN)]
+        if step == "export":
+            ledger.to_export(ctx, ref.payout_id)
+        elif step == "transfer":
+            ledger.claim_for_transfer(ctx, ref.payout_id)
+            ledger.mark_transferred(ctx, ref.payout_id, f"tr_seed_{claim_id.hex[:12]}")
+        elif step == "onboard":
+            ledger.mark_onboarding(ctx, ref.payout_id, f"acct_seed_{claim_id.hex[:12]}")
+        elif step == "fail":
+            ledger.claim_for_transfer(ctx, ref.payout_id)
+            ledger.mark_failed(ctx, ref.payout_id, "seeded transfer failure (test mode)")
+    batch = export_firm(engine, ctx.firm_id, actor="seed") if method == "stripe_connect" else None
+    with engine.connect() as conn:
+        statuses: dict[str, int] = dict(
+            conn.execute(
+                text("SELECT status, count(*) FROM payouts WHERE firm_id = :f GROUP BY status ORDER BY status"),
+                {"f": ctx.firm_id},
+            ).all()
+        )
+    return {
+        "payouts": {str(k): int(v) for k, v in statuses.items()},
+        "export_batch_rows": batch["rows"] if batch else 0,
+    }
+
+
+def seed_program(engine: Engine, firm_id: uuid.UUID, recall_source_id: str, n: int, seed: int) -> dict[str, Any]:
+    settings = get_settings()
+    planted = load_yaml(REPO_ROOT / "evals" / "adjudication" / "planted.yaml")
+    policy = load_yaml(REPO_ROOT / "evals" / "adjudication" / "outcome_policy.yaml")
+    ctx = FirmContext(firm_id=firm_id, user_id="seed", role="admin")
+    with Session(engine) as session, session.begin():
+        recall = session.query(Recall).filter(Recall.source == "cpsc", Recall.source_id == recall_source_id).one()
+        rules = baseline.extract(recall.source_text)
+        rules_json = json.loads(rules.model_dump_json())
+        session.execute(
+            update(Recall)
+            .where(Recall.id == recall.id)
+            .values(
+                extracted_rules=rules_json,
+                extracted_at=datetime.now(UTC),
+                extractor=baseline.EXTRACTOR,
+                extractor_version=baseline.EXTRACTOR_VERSION,
+            )
+        )
+        program_id = program_id_for(firm_id, recall_source_id)
+        session.add(
+            RecallProgram(
+                id=program_id,
+                firm_id=firm_id,
+                recall_id=recall.id,
+                status="open",
+                identification_rules=rules_json["identification"],
+                remedy_rules=rules_json["remedy"],
+                value_threshold_cents=settings.default_value_threshold_cents,
+                opened_at=datetime.now(UTC),
+            )
+        )
+        recall_date = recall.recall_date
+    claims = generate_program(rules, str(program_id), n, seed, planted, policy, recall_date)
+    insert_claims(engine, firm_id, program_id, claims)
     facts_all = [_facts(c) for c in claims]
-    ledger = FakeLedger()
+    approved: list[tuple[uuid.UUID, int]] = []
     outcomes: Counter[str] = Counter()
     clusters: dict[tuple[str, tuple[str, ...]], None] = {}
     t0 = time.monotonic()
@@ -217,8 +276,11 @@ def seed_program(engine: Engine, firm_id: uuid.UUID, recall_source_id: str, n: i
         for kind, other in zip(result.duplicate_kinds, result.duplicate_with, strict=False):
             clusters[(kind, tuple(sorted({str(c.claim_id), other})))] = None
         if result.outcome == "approve" and c.refund_cents and not result.routed_to_human:
-            ledger.create_pending(ctx, c.claim_id, c.refund_cents)
+            approved.append((c.claim_id, c.refund_cents))
     elapsed = time.monotonic() - t0
+    with Session(engine) as session:
+        plan = str(session.get(Firm, firm_id).plan)  # type: ignore[union-attr]
+    payouts = seed_payouts(engine, ctx, approved, plan)
     with Session(engine) as session, session.begin():
         for kind, members in clusters:
             session.add(
@@ -236,7 +298,7 @@ def seed_program(engine: Engine, firm_id: uuid.UUID, recall_source_id: str, n: i
         "claims": len(claims),
         "statuses": dict(outcomes),
         "clusters": len(clusters),
-        "fake_ledger_pending": len(ledger.rows),
+        **payouts,
         "adjudication_seconds": round(elapsed, 2),
         "first_claim_id": str(claims[0].claim_id),
     }
