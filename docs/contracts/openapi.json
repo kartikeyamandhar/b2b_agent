@@ -2884,6 +2884,16 @@
             },
             "description": "not found, or belongs to another firm"
           },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "the resource is not in a state that allows this"
+          },
           "422": {
             "content": {
               "application/json": {
@@ -3328,6 +3338,16 @@
             },
             "description": "not found, or belongs to another firm"
           },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "the resource is not in a state that allows this"
+          },
           "422": {
             "content": {
               "application/json": {
@@ -3337,16 +3357,6 @@
               }
             },
             "description": "Validation Error"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "contract final, implementation in a later milestone"
           }
         },
         "summary": "Reviewer action: resume_override, request_info, mark_fraud (writes audit_log)",
@@ -3581,6 +3591,16 @@
             },
             "description": "Unauthorized"
           },
+          "402": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "over the plan's limit (component 3 entitlement)"
+          },
           "403": {
             "content": {
               "application/json": {
@@ -3591,6 +3611,16 @@
             },
             "description": "Forbidden"
           },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
           "422": {
             "content": {
               "application/json": {
@@ -3600,16 +3630,6 @@
               }
             },
             "description": "Validation Error"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "contract final, implementation in a later milestone"
           }
         },
         "summary": "Open a program from a recall; runs rule extraction and returns rules for review",
@@ -3735,6 +3755,16 @@
             },
             "description": "Unauthorized"
           },
+          "402": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "over the plan's limit (component 3 entitlement)"
+          },
           "403": {
             "content": {
               "application/json": {
@@ -3755,6 +3785,16 @@
             },
             "description": "not found, or belongs to another firm"
           },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "the resource is not in a state that allows this"
+          },
           "422": {
             "content": {
               "application/json": {
@@ -3764,16 +3804,6 @@
               }
             },
             "description": "Validation Error"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "contract final, implementation in a later milestone"
           }
         },
         "summary": "Edit rules, threshold, or status",
@@ -3977,6 +4007,16 @@
             },
             "description": "not found, or belongs to another firm"
           },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "the resource is not in a state that allows this"
+          },
           "422": {
             "content": {
               "application/json": {
@@ -3986,16 +4026,6 @@
               }
             },
             "description": "Validation Error"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "contract final, implementation in a later milestone"
           }
         },
         "summary": "Issue n single-claim portal links for distribution",

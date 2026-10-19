@@ -6,7 +6,11 @@ replay mode, compare the fresh numbers with a committed baseline and fail on any
   and a row complete in the baseline must still be complete (a lost recording is a failure);
 - reporting: MPR reconciliation must pass with zero discrepancies.
 
-python -m recallops.evals.gate --baseline-ref origin/main     (CI: the base branch; default HEAD)
+A missing baseline is reported as a line, never silently skipped: a ref that does not resolve fails the gate, and
+when the ref has no ablation.json the adjudication check falls back to adjudication.json (the rules_only row).
+
+python -m recallops.evals.gate --baseline-ref origin/main     (pull request: the base branch)
+python -m recallops.evals.gate --baseline-ref <github.event.before>   (push: the previous tip, never the commit itself)
 """
 
 from __future__ import annotations
@@ -25,7 +29,25 @@ EXTRACTION_POINTS = 2.0
 ADJUDICATION_DELTA = 0.02
 
 
+class BaselineRefMissing(RuntimeError):
+    pass
+
+
+def verify_ref(ref: str) -> None:
+    try:
+        subprocess.run(
+            ["git", "rev-parse", "--verify", "--quiet", f"{ref}^{{commit}}"],
+            cwd=REPO_ROOT,
+            capture_output=True,
+            check=True,
+            timeout=30,
+        )
+    except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
+        raise BaselineRefMissing(f"baseline ref {ref!r} does not resolve to a commit") from exc
+
+
 def committed(ref: str, name: str) -> dict[str, Any] | None:
+    """The results file at ref, or None when the file does not exist there (the ref itself is verified first)."""
     try:
         raw = subprocess.run(
             ["git", "show", f"{ref}:evals/results/{name}"], cwd=REPO_ROOT, capture_output=True, check=True, timeout=30
@@ -64,10 +86,11 @@ def check_extraction(base: dict[str, Any], now: dict[str, Any]) -> list[str]:
                     f"{b[extractor]['headline']:.1f} -> {n[extractor]['headline']:.1f}"
                 )
             for field, score in b[extractor]["per_field"].items():
-                if score - n[extractor]["per_field"].get(field, 0.0) > EXTRACTION_POINTS:
-                    problems.append(
-                        f"extraction {block} {extractor} {field} {score:.1f} -> {n[extractor]['per_field'][field]:.1f}"
-                    )
+                now_score = n[extractor]["per_field"].get(field)
+                if now_score is None:
+                    problems.append(f"extraction {block} {extractor} {field}: field no longer scored")
+                elif score - now_score > EXTRACTION_POINTS:
+                    problems.append(f"extraction {block} {extractor} {field} {score:.1f} -> {now_score:.1f}")
     return problems
 
 
@@ -90,6 +113,29 @@ def check_ablation(base: dict[str, Any], now: dict[str, Any]) -> list[str]:
     return problems
 
 
+def ablation_from_adjudication(adjudication: dict[str, Any]) -> dict[str, Any]:
+    """The pre-ablation results file (rules_only on the 300 golden claims) in the ablation payload's shape."""
+    row = adjudication.get("rules_only")
+    if not row or "outcome_accuracy" not in row:
+        return {"blocks": {}}
+    flag = row.get("per_class", {}).get("flag", {})
+    f1 = flag.get("f1")
+    if f1 is None:
+        p, r = row.get("fraud_precision") or 0.0, row.get("fraud_recall") or 0.0
+        f1 = round(2 * p * r / (p + r), 4) if p + r else 0.0
+    return {
+        "blocks": {
+            "golden300": {
+                "rules_only": {
+                    "macro_f1": row["macro_f1"],
+                    "outcome_accuracy": row["outcome_accuracy"],
+                    "per_class": {"flag": {"f1": f1}},
+                }
+            }
+        }
+    }
+
+
 def check_reporting(now: dict[str, Any]) -> list[str]:
     return (
         []
@@ -98,22 +144,41 @@ def check_reporting(now: dict[str, Any]) -> list[str]:
     )
 
 
-def run(ref: str, results: Path = RESULTS) -> list[str]:
+def run(ref: str, results: Path = RESULTS) -> tuple[list[str], list[str]]:
+    """(problems, notes). Notes name every check that had no baseline, so a skip is visible in the CI log."""
+    verify_ref(ref)
     problems: list[str] = []
-    for name, check in (("extraction.json", check_extraction), ("ablation.json", check_ablation)):
-        base = committed(ref, name)
-        if base is None:
-            continue  # no baseline at that ref yet: nothing to regress from
-        problems += check(base, fresh(name, results))
+    notes: list[str] = []
+    base = committed(ref, "extraction.json")
+    if base is None:
+        notes.append(f"no extraction baseline at {ref}")
+    else:
+        problems += check_extraction(base, fresh("extraction.json", results))
+    base = committed(ref, "ablation.json")
+    if base is None:
+        legacy = committed(ref, "adjudication.json")
+        if legacy is None:
+            notes.append(f"no adjudication baseline at {ref}")
+        else:
+            notes.append(f"no ablation.json at {ref}: comparing rules_only on golden300 from adjudication.json")
+            base = ablation_from_adjudication(legacy)
+    if base is not None:
+        problems += check_ablation(base, fresh("ablation.json", results))
     problems += check_reporting(fresh("reporting.json", results))
-    return problems
+    return problems, notes
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--baseline-ref", default="HEAD")
     args = parser.parse_args(argv)
-    problems = run(args.baseline_ref)
+    try:
+        problems, notes = run(args.baseline_ref)
+    except BaselineRefMissing as exc:
+        print(f"gate: FAIL ({exc})")
+        return 1
+    for note in notes:
+        print(f"NOTE: {note}")
     for p in problems:
         print(f"REGRESSION: {p}")
     print("gate: " + ("FAIL" if problems else "PASS") + f" against {args.baseline_ref}")

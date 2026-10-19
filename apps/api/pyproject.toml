@@ -20,7 +20,6 @@ dependencies = [
     "pydantic-settings==2.16.0",
     "httpx==0.28.1",
     "pyjwt==2.15.1",
-    "networkx==3.7",
     "python-multipart==0.0.32",
     "stripe==16.0.0",
     "anthropic==1.15.0",
@@ -28,6 +27,7 @@ dependencies = [
     "pillow==12.3.0",
     "numpy==2.5.4",
     "pyyaml==6.0.3",
+    "neo4j==6.3.1",
 ]
 
 [dependency-groups]
@@ -71,7 +71,7 @@ plugins = ["pydantic.mypy"]
 files = ["src", "tests"]
 
 [[tool.mypy.overrides]]
-module = ["yaml", "yaml.*", "networkx", "networkx.*", "fastexcel", "pgvector.*"]
+module = ["yaml", "yaml.*", "fastexcel", "pgvector.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
@@ -81,6 +81,7 @@ addopts = "-ra --strict-markers"
 markers = [
     "db: needs the docker compose Postgres (make db-up && make migrate)",
     "contract: API-shape probes for the pinned libraries",
+    "graph: needs the docker compose Neo4j (make db-up)",
 ]
 
 [tool.coverage.run]

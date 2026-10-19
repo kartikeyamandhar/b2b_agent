@@ -507,6 +507,8 @@ def main(argv: list[str] | None = None, results_dir: Path = RESULTS) -> dict[str
     parser.add_argument("--no-write", action="store_true", help="record only; do not rewrite the results table")
     parser.add_argument("--limit", type=int, default=None, help="first N claims of each block (smoke runs only)")
     args = parser.parse_args(argv or [])
+    if args.limit:
+        args.no_write = True  # a smoke run never becomes the committed table (or the deploy gate's baseline)
     settings = get_settings()
     live = settings.llm_mode == "live"
     engine = internal_engine()

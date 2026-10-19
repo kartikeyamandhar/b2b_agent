@@ -21,7 +21,7 @@ os.environ.setdefault("APP_ENV", "test")
 from recallops.db.engine import build_engine
 from recallops.settings import Settings, get_settings
 
-TEST_DB = "recallops_test"
+TEST_DB = os.environ.get("RECALLOPS_TEST_DB", "recallops_test")  # a second checkout can use its own database
 
 
 def _point_settings_at_test_db() -> None:
@@ -42,6 +42,7 @@ CLEAN_ORDER = (
     "agent_steps",
     "agent_runs",
     "payouts",
+    "export_batches",
     "claim_photos",
     "fraud_clusters",
     "mpr_reports",

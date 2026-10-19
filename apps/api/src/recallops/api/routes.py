@@ -1,5 +1,5 @@
-"""Every route in 01-backend.md section 9. Read routes are implemented over the database in M1 so the UI owner
-can build against `make seed`; write routes keep their final contract and return 501 until their milestone."""
+"""Every route in 01-backend.md section 9, implemented over the database. The only 501 answers left are the payments
+owner's (component 3): billing checkout and portal, the Stripe webhook, and Connect onboarding from the portal."""
 
 from __future__ import annotations
 
@@ -36,6 +36,8 @@ Responses = dict[int | str, dict[str, Any]]
 NOT_FOUND: Responses = {404: {"model": s.Problem, "description": "not found, or belongs to another firm"}}
 AUTH: Responses = {401: {"model": s.Problem}, 403: {"model": s.Problem}}
 LATER: Responses = {501: {"model": s.Problem, "description": "contract final, implementation in a later milestone"}}
+CONFLICT: Responses = {409: {"model": s.Problem, "description": "the resource is not in a state that allows this"}}
+PAYMENT: Responses = {402: {"model": s.Problem, "description": "over the plan's limit (component 3 entitlement)"}}
 IMAGE: Responses = {200: {"content": {"image/jpeg": {}, "image/png": {}}}}
 PDF: Responses = {200: {"content": {"application/pdf": {}}}}
 
@@ -101,7 +103,7 @@ def get_program(program_id: UUID, ctx: FirmDep, db: TenantDb) -> s.Program:
     "/programs",
     response_model=s.Program,
     status_code=201,
-    responses=LATER,
+    responses={**NOT_FOUND, **PAYMENT},
     summary="Open a program from a recall; runs rule extraction and returns rules for review",
 )
 def create_program(body: s.ProgramCreate, ctx: AdminDep, db: TenantDb) -> s.Program:
@@ -127,7 +129,7 @@ def create_program(body: s.ProgramCreate, ctx: AdminDep, db: TenantDb) -> s.Prog
 @firm.patch(
     "/programs/{program_id}",
     response_model=s.Program,
-    responses={**NOT_FOUND, **LATER},
+    responses={**NOT_FOUND, **PAYMENT, **CONFLICT},
     summary="Edit rules, threshold, or status",
 )
 def patch_program(program_id: UUID, body: s.ProgramPatch, ctx: AdminDep, db: TenantDb) -> s.Program:
@@ -184,7 +186,7 @@ def list_claims(
 @firm.post(
     "/programs/{program_id}/claims/issue",
     response_model=s.IssueResponse,
-    responses={**NOT_FOUND, **LATER},
+    responses={**NOT_FOUND, **CONFLICT},
     summary="Issue n single-claim portal links for distribution",
 )
 def issue_links(program_id: UUID, body: s.IssueRequest, ctx: AdminDep, db: TenantDb) -> s.IssueResponse:
@@ -283,7 +285,7 @@ def get_trace(claim_id: UUID, ctx: FirmDep, db: TenantDb) -> s.Trace:
 @firm.post(
     "/claims/{claim_id}/actions",
     response_model=s.ClaimDetail,
-    responses={**NOT_FOUND, **LATER},
+    responses={**NOT_FOUND, **CONFLICT},
     summary="Reviewer action: resume_override, request_info, mark_fraud (writes audit_log)",
 )
 def claim_action(claim_id: UUID, body: s.ClaimAction, ctx: FirmDep, db: TenantDb) -> s.ClaimDetail:
@@ -545,7 +547,7 @@ def portal_answer(token: str, body: s.PortalAnswer, token_ctx: ClaimTokenDep) ->
 @portal.post(
     "/{token}/payout",
     response_model=s.PortalView,
-    responses={**NOT_FOUND, **LATER},
+    responses={**NOT_FOUND, **LATER, **CONFLICT},
     summary="Payout destination (Connect onboarding handoff is component 3)",
 )
 def portal_payout(token: str, body: s.PortalPayout, token_ctx: ClaimTokenDep) -> s.PortalView:

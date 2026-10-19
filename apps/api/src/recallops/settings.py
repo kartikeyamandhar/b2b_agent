@@ -102,6 +102,22 @@ class Settings(BaseSettings):
     supabase_service_key: str = Field("fake-service-key")
     supabase_bucket: str = Field("claim-photos")
 
+    # Fraud graph (Neo4j, a projection of Postgres; decisions log 2026-10-18). An empty NEO4J_URI disables the graph.
+    # AuraDB uses neo4j+s://<instance>.databases.neo4j.io. One Community database serves dev and test, so every node
+    # carries a namespace; tests run in their own.
+    neo4j_uri: str = Field("bolt://localhost:57687", description="Bolt URI; empty disables the fraud graph.")
+    neo4j_user: str = Field("neo4j")
+    neo4j_password: str = Field("graph-dev-only", description="Real password only in .env.")
+    neo4j_database: str = Field("neo4j", description="Community and AuraDB Free have one user database.")
+    neo4j_namespace: str = Field("dev", pattern=r"^[a-z][a-z0-9_]{0,31}$", description="Separates dev from test.")
+    neo4j_timeout_s: float = Field(10.0, description="Connection and per-transaction timeout.")
+    graph_key_secret: str = Field(
+        "ZmFrZS1ncmFwaC1rZXktc2VjcmV0LTMyLWJ5dGVz",
+        description="HMAC key for identity keys in the graph (addresses, emails, payout destinations are never stored "
+        "raw). Rotating it requires make graph-sync.",
+    )
+    graph_resync_batch: int = Field(25, description="Decided claims the worker re-projects per idle tick.")
+
     # Adjudication defaults.
     phash_duplicate_bits: int = Field(6)
     default_value_threshold_cents: int = Field(10_000)

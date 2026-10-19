@@ -55,8 +55,16 @@ jobs:
       - name: make eval (replay)
         run: PYTHONPATH=apps/api/src uv run --project apps/api --frozen python -m recallops.evals.run_all
       - name: Gate against the base
+        # Pull request: the base branch. Push: the previous tip (github.event.before), never the pushed commit, whose
+        # own regenerated tables would make the comparison vacuous. A new branch's all-zero before falls back to HEAD~1.
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          BEFORE: ${{ github.event.before }}
         run: |
-          REF=${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || 'HEAD' }}
+          if [ "$EVENT" = "pull_request" ]; then REF="origin/$BASE_REF";
+          elif [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then REF="$BEFORE";
+          else REF="HEAD~1"; fi
           PYTHONPATH=apps/api/src uv run --project apps/api --frozen python -m recallops.evals.gate --baseline-ref "$REF"
 
   deploy:
