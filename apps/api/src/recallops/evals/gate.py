@@ -4,7 +4,9 @@ replay mode, compare the fresh numbers with a committed baseline and fail on any
 - extraction: every per-field score and the headline of both extractors, on every block, may drop at most 2 points;
 - adjudication: outcome accuracy and fraud F1 of every complete ablation row on every block may drop at most 0.02,
   and a row complete in the baseline must still be complete (a lost recording is a failure);
-- reporting: MPR reconciliation must pass with zero discrepancies.
+- reporting: MPR reconciliation must pass with zero discrepancies;
+- vision on CPSC photos: no recording may go missing, the label read rate may drop and the misread and
+  hallucination rates may rise by at most 0.02, and no correctly judged destruction photo may be lost.
 
 A missing baseline is reported as a line, never silently skipped: a ref that does not resolve fails the gate, and
 when the ref has no ablation.json the adjudication check falls back to adjudication.json (the rules_only row).
@@ -146,7 +148,23 @@ def check_reporting(now: dict[str, Any]) -> list[str]:
     return problems
 
 
-SELF_CHECKED = ("extraction.json", "adjudication.json", "ablation.json", "reporting.json")
+def check_cpsc_photos(base: dict[str, Any], now: dict[str, Any]) -> list[str]:
+    b, n = base.get("metrics", {}), now.get("metrics", {})
+    problems = []
+    if n.get("missing"):
+        problems.append(f"cpsc_photos: {n['missing']} photos have no recording or failed")
+    for key, worse in (("label_read_rate", -1), ("label_misread_rate", 1), ("label_hallucination_rate", 1)):
+        if b.get(key) is None or n.get(key) is None:
+            continue
+        if (n[key] - b[key]) * worse > ADJUDICATION_DELTA:
+            problems.append(f"cpsc_photos {key}: {b[key]} -> {n[key]}")
+    for key in ("product_rejected", "destruction_accepted", "destruction_not_shown_rejected"):
+        if b.get(key) is not None and n.get(key) is not None and n[key] < b[key]:
+            problems.append(f"cpsc_photos {key}: {b[key]} -> {n[key]}")
+    return problems
+
+
+SELF_CHECKED = ("extraction.json", "adjudication.json", "ablation.json", "reporting.json", "cpsc_photos.json")
 VOLATILE = re.compile(r"seconds|generated|duration")
 
 
@@ -200,6 +218,11 @@ def run(ref: str, results: Path = RESULTS) -> tuple[list[str], list[str]]:
     if base is not None:
         problems += check_ablation(base, fresh("ablation.json", results))
     problems += check_reporting(fresh("reporting.json", results))
+    base = committed(ref, "cpsc_photos.json")
+    if base is None:
+        notes.append(f"no cpsc_photos baseline at {ref}")
+    else:
+        problems += check_cpsc_photos(base, fresh("cpsc_photos.json", results))
     return problems, notes
 
 

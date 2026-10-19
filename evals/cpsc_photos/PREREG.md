@@ -48,6 +48,12 @@ Codes are compared after `norm_code` (claims/tools/checks.py), the normalization
 
 Misses are reported as misses, and neither the prompts nor the selection change after the run. A change to the vision tools would be a new VISION_VERSION with its own revision here.
 
+## Revision 1 (2026-10-19, after labeling, before any model call)
+
+- Selection: 64 photos, none skipped, from pools of 557 label, 466 product, and 4 destruction candidates. L03 and L08 are the same image (one product, two recall notices); the rule takes one photo per recall, not one per image, so both stay.
+- Labels: the two blind labelers agreed on all 64 photos. The main session viewed every photo whose caption names a model number the labels do not, and every photo a labeler marked as doubtful, and changed one label: L09's only marker is the CPSC callout "Style/VPN", not a model marker, so it joins L05 (a SKU) as a photo with no readable model number. Final counts: 20 readable labels, 20 with no readable model number, 20 intact products, 3 destruction photos that show the instruction carried out, and 1 (D03, the seal being pried out, not yet cut) that does not. E5 therefore needs all 3.
+- Scoring, diagnostic only: labels.json now records the other codes printed in each label photo (serials, SKUs, batch numbers), and each wrong model text is reported as either one of those codes in the wrong field or text printed nowhere in the photo. E2 and E3 keep their pre-registered definitions: a SKU returned as the model still counts against E3.
+
 ## Outcome
 
 (Filled in after the run.)

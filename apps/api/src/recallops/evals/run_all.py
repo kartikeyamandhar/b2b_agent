@@ -1,5 +1,6 @@
 """make eval: every eval in the configured LLM_MODE (replay by default; no live model calls) and the results tables
-in evals/results/: extraction, adjudication (rules_only), the ablation table, and MPR reconciliation."""
+in evals/results/: extraction, adjudication (rules_only), the ablation table, MPR reconciliation, and the vision
+tools on CPSC's own recall photos."""
 
 from __future__ import annotations
 
@@ -7,7 +8,7 @@ import json
 import sys
 from pathlib import Path
 
-from recallops.evals import ablation, adjudication, extraction, reporting
+from recallops.evals import ablation, adjudication, cpsc_photos, extraction, reporting
 from recallops.logs import configure
 from recallops.settings import get_settings
 
@@ -18,6 +19,7 @@ def main(results_dir: Path = extraction.RESULTS_DIR) -> int:
     adj = adjudication.main(results_dir)
     abl = ablation.main([], results_dir)
     rep = reporting.main(results_dir)
+    pho = cpsc_photos.main([], results_dir)
     summary = {
         "extraction": {
             "label_status": ext["label_status"],
@@ -33,6 +35,16 @@ def main(results_dir: Path = extraction.RESULTS_DIR) -> int:
             "passed": rep["passed"],
             "discrepancies": rep["discrepancies"],
             "composition_ok": rep["composition_ok"],
+        },
+        "cpsc_photos": {
+            k: pho["metrics"][k]
+            for k in (
+                "label_read_rate",
+                "label_misread_rate",
+                "label_hallucination_rate",
+                "product_rejected",
+                "missing",
+            )
         },
         "results": sorted(str(p.relative_to(results_dir.parent.parent)) for p in results_dir.glob("*")),
     }

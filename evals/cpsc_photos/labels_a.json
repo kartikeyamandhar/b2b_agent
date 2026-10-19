@@ -1,0 +1,498 @@
+{
+ "labeler": "a",
+ "protocol": "evals/cpsc_photos/PREREG.md (blind: images as sent, no captions)",
+ "items": {
+  "L01": {
+   "legible": true,
+   "model_texts": [
+    "LD-0030"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Round label on bear light: 'Model: LD-0030'. Batch No. ZE 082124 excluded."
+  },
+  "L02": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Bike frame label: 'Retrospec / Made in Tianjin, China / Batch:12-15-2023'. Only a batch date, no model number."
+  },
+  "L03": {
+   "legible": true,
+   "model_texts": [
+    "XR-8801"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Box top: 'XRUI / XR-8801 / ONE-STEP HAIR DRYER AND STYLER'. No MODEL marker; XR-8801 is unmistakably the model designation under the brand."
+  },
+  "L04": {
+   "legible": true,
+   "model_texts": [
+    "SH20.006D"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Small printed tag: 'Model Name: SH20.006D' (Retractable Safety Gate). Small text but every character readable. Batch No. 2024127763 excluded."
+  },
+  "L05": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Shipping carton: 'SKU:FTBFSD-0162' and large 'FTBFSD 0162'. Only marked as SKU, not as model, so excluded per rules. Doubt: the SKU may be what the notice calls the model."
+  },
+  "L06": {
+   "legible": true,
+   "model_texts": [
+    "V-1906-S"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Helmet label: 'V-1906-S', (48-55)cm, ca.360g, MFG DATE:06/2021, CE EN 1078, CPSC 1203. V-1906-S has no MODEL marker but is the only product designation on the label (included as unmarked model; some doubt whether -S is a size suffix)."
+  },
+  "L07": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Product photo of a white/silver bike helmet with 'VENTURA' brand on the shell and visor. No model number visible."
+  },
+  "L08": {
+   "legible": true,
+   "model_texts": [
+    "XR-8801"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Same image as L03: 'XRUI / XR-8801 / ONE-STEP HAIR DRYER AND STYLER'. Unmarked but unmistakably the model designation."
+  },
+  "L09": {
+   "legible": true,
+   "model_texts": [
+    "177296"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Academy, LTD garment label with CPSC callout boxes: '177296' labeled 'Style/VPN' by the annotation, '07/2025' labeled 'Production Date Code'. Doubt: style/VPN is not literally 'model'; included as the product's style designation marked by the CPSC overlay. Size list below excluded."
+  },
+  "L10": {
+   "legible": true,
+   "model_texts": [
+    "KY-055"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Helmet label box: 'Size M / Model KY-055'. Batch No:202503 excluded."
+  },
+  "L11": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Woven brand tag 'Mamibaby' only. No model number."
+  },
+  "L12": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Care/content label 'BABY NEST' with fabric content, made in China, washing instructions. 'BABY NEST' is a product name, not a model number."
+  },
+  "L13": {
+   "legible": true,
+   "model_texts": [
+    "ZY2025"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Bath seat label: 'Product name: Bath seat / Model No.: ZY2025'. Importer fields blurred out."
+  },
+  "L14": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Dot-matrix print: '255641 S34154 1128 / GTM MAX MIR 0.85' (second code uncertain, could be S94154). No model marker; these look like lot/date codes."
+  },
+  "L15": {
+   "legible": true,
+   "model_texts": [
+    "ZR0097U2",
+    "RH99"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Li-ion battery pack label. CPSC red callout 'Model number' boxes ZR0097U2. Label also says 'For use only with Model RH99' (the host vacuum's model, explicitly marked Model; included per the every-marked-model rule, but it is not the battery's own model). Date code 23 W34D2, SS-2230003384, charger ZD048M390100US, part no. SS-2230002949 excluded."
+  },
+  "L16": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Product photo of a wooden learning tower/step stool; a small label at the top rail is unreadable at this resolution."
+  },
+  "L17": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Ariens snow-blower label on orange housing. Numbers '921065' and '001472' are faintly readable but the field labels above them are not, so cannot tell which (if any) is the model; small print unreadable."
+  },
+  "L18": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Very small, low-resolution photo of a dark hoodie neck label; text unreadable."
+  },
+  "L19": {
+   "legible": true,
+   "model_texts": [
+    "NZ-9160.4 5000 Y"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "netZero usa LED fixture label table: 'Model | NZ-9160.4 5000 Y'. Date 15th,Jul,2021."
+  },
+  "L20": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Towel care label: 100% Cotton, washing instructions, 'RN#86790'. RN number is not a model number; faint top line unreadable."
+  },
+  "L21": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Product photo of a bed assist rail on a bed. No label or model number visible."
+  },
+  "L22": {
+   "legible": true,
+   "model_texts": [
+    "KCBAGORANGE"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Printed on orange rod: 'Kid Casters KCBAGORANGE Made In China 20-01'. No MODEL marker; KCBAGORANGE is the product code after the brand, included as the likely model designation (doubt: could be an item/SKU code). 20-01 looks like a date code."
+  },
+  "L23": {
+   "legible": true,
+   "model_texts": [
+    "BGRT003"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Sewn label: 'Product Name: bed rail for toddlers / Brand:WYBITNY / Model Number: BGRT003'. Batch 202411001 excluded."
+  },
+  "L24": {
+   "legible": true,
+   "model_texts": [
+    "X-203"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Boiler rating plate: 'MODEL NO: X-203', 'PART NO: X-203N-TH', 'SERIAL NO: 65901322' (yellow arrow on serial). Part and serial excluded."
+  },
+  "L25": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "PIEPS device with battery door open; red arrow points to a red box on a label inside the door, but the text is far too small to read."
+  },
+  "L26": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Garment neck tag 'blossom ORGANIC CLOTHING COMPANY 6Y'. Size only, no model number."
+  },
+  "L27": {
+   "legible": true,
+   "model_texts": [
+    "K1000BK"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Mini fridge label: '10L MINI FRIDGE with LED LIGHTS / Model: K1000BK', 07/2022."
+  },
+  "L28": {
+   "legible": true,
+   "model_texts": [
+    "NQ69811"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Mattress law tag: 'Model: NQ69811', 'Prototype ID: NQ69'. NQ69811 also appears on barcode labels. Prototype ID, REG. NO, and 2000001 excluded."
+  },
+  "L29": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Miter saw warning label with yellow circles on 'Serial: 370331735' and 'ITEM 61970'. Item number and serial are not model numbers; no model marked."
+  },
+  "L30": {
+   "legible": true,
+   "model_texts": [
+    "LT-BG01-3"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Paper tag on retractable gate: 'RETRACTABLE SAFETY GATE / Model: LT-BG01-3'. Small text but readable. Batch No 249EXY excluded."
+  },
+  "L31": {
+   "legible": true,
+   "model_texts": [
+    "SG021"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Gate label: 'Model name: Retractable Safety Gate' (a name, not a number, excluded) and 'Model number: SG021'. MFD 2024-07."
+  },
+  "L32": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Small product photo of a black wall-mounted unit with fan grille and cord; labels on top are unreadable at this resolution."
+  },
+  "L33": {
+   "legible": true,
+   "model_texts": [
+    "PA5083U-1ACA",
+    "G71C000F7110"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Toshiba AC adapter: printed 'MODEL /MODELO/MODELE: PA5083U-1ACA'. CPSC callout 'Model Name/Number' points to barcode text 'G71C000F7110' (included as annotated). Part No. PA-1121-81 and serial T13040047553A01 excluded."
+  },
+  "L34": {
+   "legible": true,
+   "model_texts": [
+    "LU-PH3-B"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Lutron label: 'Power Interface / LU-PH3-B'. No MODEL marker; LU-PH3-B is unmistakably the product's model designation under the product name."
+  },
+  "L35": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Product photo of a green crampon/binding with straps and a black plate. No label or model number visible."
+  },
+  "L36": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Product photo of a white power reclining loveseat. No model number visible."
+  },
+  "L37": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Product photo of a two-door glass commercial refrigerator; the small badge at top is unreadable."
+  },
+  "L38": {
+   "legible": false,
+   "model_texts": [],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Line diagram 'Serial Number Location on Steering Column'. Shows only where the serial is, no number."
+  },
+  "L39": {
+   "legible": true,
+   "model_texts": [
+    "PUA-US"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Mattress tag: 'Model:< PUA-US>' (printed inside angle brackets, brackets dropped), 'Prototype ID :<PU-US>' excluded."
+  },
+  "L40": {
+   "legible": true,
+   "model_texts": [
+    "FR730V"
+   ],
+   "shows_product": null,
+   "destruction_shown": null,
+   "notes": "Kawasaki engine photo; shroud reads 'FR730V' (no marker, but matches the 'Model Number' callout pattern FR###V shown in the CPSC annotation). The callout itself shows masked placeholders FR###V, FR###VX######, XX## (not real numbers, excluded). FR730V is small but readable; slight doubt."
+  },
+  "P01": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false,
+   "notes": "Intact 1 US Quart Hyperfuels methanol bottle with ruler; no 'RECALLED' written on it."
+  },
+  "P02": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false,
+   "notes": "White power adapter with intact coiled cord and barrel plug; cord not cut."
+  },
+  "P03": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false,
+   "notes": "Pink silicone pull-string toy, strings intact, no 'RECALLED' marking (stock-style photo)."
+  },
+  "P04": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false,
+   "notes": "Intact Christmas-print nightgown laid flat; not cut."
+  },
+  "P05": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false,
+   "notes": "Black satin pajama shirt and shorts, intact; not cut in half."
+  },
+  "P06": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false,
+   "notes": "HOMEAL bed rail with gray cloth cover intact on frame; cloth not removed or cut."
+  },
+  "P07": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false,
+   "notes": "Screenshot of an online listing showing an intact blue baby swing with remote; cover not cut, no 'Recalled' on base."
+  },
+  "P08": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false,
+   "notes": "Stock image of NQDTPBOR helmets in five colors with straps intact."
+  },
+  "P09": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false,
+   "notes": "Four Mochi Malrang squishy bun toys sealed in yellow containers with retail sleeves; no 'RECALLED' writing, not in trash. Product visible only in packaging."
+  },
+  "P10": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false,
+   "notes": "Stock images of an assembled gray/white baby high chair in several configurations; not disassembled."
+  },
+  "P11": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false,
+   "notes": "Purple and gray resistance bands coiled, intact; not cut."
+  },
+  "P12": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false,
+   "notes": "Two quarter-zip pullovers worn by models (product in use); not cut."
+  },
+  "P13": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false,
+   "notes": "Stock image of a YERYORK electric pressure washer with accessories, intact; cord not cut."
+  },
+  "P14": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false,
+   "notes": "Intact blue sheep-print baby lounger; cover, foam and pad not removed or cut."
+  },
+  "P15": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false,
+   "notes": "Stock image of a purple/white mattress on a bed in a bedroom; no 'Recalled' writing, not destroyed."
+  },
+  "P16": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false,
+   "notes": "Intact blue hooded child's robe; not cut."
+  },
+  "P17": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false,
+   "notes": "Stock image of an assembled Papablic bedside bassinet; not disassembled or cut."
+  },
+  "P18": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false,
+   "notes": "Intact navy children's pajama set; not cut."
+  },
+  "P19": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false,
+   "notes": "Listing strip of four green pressure washers (4800/5100/5000/4000 PSI) with accessories, intact; cords not cut. Images are small."
+  },
+  "P20": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false,
+   "notes": "Front of a white iWALK power bank; no 'Recalled' written on it, model/serial not shown."
+  },
+  "D01": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": true,
+   "notes": "MY ONLY STYLER hair dryer brush with its black cord; the cord is cut through, with two free cut ends visible near the center of the frame (plug end at top). Cut location not literally at the midpoint, but the cord is clearly severed."
+  },
+  "D02": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": true,
+   "notes": "Helmet shown upside down with both chin straps (with buckles) cut off and lying separately above it; frayed cut ends visible. Matches the first required photo."
+  },
+  "D03": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": false,
+   "notes": "Blender base with blade; a knife is prying the clear rubber seal, which is still whole and in place. Seal not cut into three or more pieces and no serial number shown: partial action only."
+  },
+  "D04": {
+   "legible": null,
+   "model_texts": [],
+   "shows_product": true,
+   "destruction_shown": true,
+   "notes": "Helmet sitting in a lined trash can with its detached straps and buckles piled inside the shell; matches the second required photo (helmet and cut straps in a trash can). Slight doubt: the cut ends are less obvious here than in D02."
+  }
+ }
+}

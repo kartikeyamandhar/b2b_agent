@@ -310,16 +310,19 @@ def score_item(item: dict[str, Any], truth: dict[str, Any], reading: dict[str, A
     if item["task"] == "label":
         texts = [t for t in truth.get("model_texts") or [] if t]
         read = reading.get("model_text") if reading.get("legible") else None
+        # Diagnostic only (labels.json, adjudication): a wrong model text that is another code printed in the photo
+        # (a serial, SKU, or batch number) versus text printed nowhere in it.
+        printed = {norm_code(c) for c in truth.get("printed_codes") or [] if c}
+        kind = "other_code" if read and norm_code(read) in printed else "unprinted"
         if truth.get("legible") and texts:
             if not read:
                 return {"verdict": "abstained", "group": "readable"}
-            norm_ok = norm_code(read) in {norm_code(t) for t in texts}
-            return {
-                "verdict": "read" if norm_ok else "misread",
-                "group": "readable",
-                "exact": read in texts,
-            }
-        return {"verdict": "hallucinated" if read else "abstained_ok", "group": "no_model"}
+            if norm_code(read) in {norm_code(t) for t in texts}:
+                return {"verdict": "read", "group": "readable", "exact": read in texts}
+            return {"verdict": "misread", "group": "readable", "exact": False, "kind": kind}
+        if read:
+            return {"verdict": "hallucinated", "group": "no_model", "kind": kind}
+        return {"verdict": "abstained_ok", "group": "no_model"}
     expected = bool(truth.get("destruction_shown"))
     got = bool(reading.get("complies"))
     return {"verdict": "correct" if got == expected else "wrong", "group": "shown" if expected else "not_shown"}
@@ -350,6 +353,8 @@ def summarize(items: list[dict[str, Any]], verdicts: dict[str, dict[str, Any]], 
         "label_abstained": count("label", "readable", "abstained"),
         "label_no_model": no_model,
         "label_hallucinated": count("label", "no_model", "hallucinated"),
+        "label_wrong_other_code": sum(1 for v in verdicts.values() if v.get("kind") == "other_code"),
+        "label_wrong_unprinted": sum(1 for v in verdicts.values() if v.get("kind") == "unprinted"),
         "label_read_rate": rate(count("label", "readable", "read"), readable),
         "label_exact_rate": rate(exact, readable),
         "label_misread_rate": rate(count("label", "readable", "misread"), readable),
@@ -401,7 +406,7 @@ def agreement(items: list[dict[str, Any]]) -> dict[str, Any]:
     return {"available": True, "items": total, "agreed": same, "rate": round(same / total, 4) if total else None}
 
 
-def run(settings: Settings, results_dir: Path = RESULTS_DIR) -> dict[str, Any]:
+def run(settings: Settings, results_dir: Path = RESULTS_DIR, llm: LlmClient | None = None) -> dict[str, Any]:
     from recallops.db.engine import internal_engine
     from recallops.evals.ablation import EVAL_FIRM
     from recallops.tracing.writer import DbTrace
@@ -414,7 +419,7 @@ def run(settings: Settings, results_dir: Path = RESULTS_DIR) -> dict[str, Any]:
     if unlabeled:
         raise SystemExit(f"labels.json has no label for {', '.join(unlabeled[:5])}")
     live = settings.llm_mode == "live"
-    llm = build_client(settings)
+    llm = llm or build_client(settings)
     if live:
         ensure_eval_firm(EVAL_FIRM)
     readings: dict[str, dict[str, Any] | None] = {}
@@ -515,7 +520,7 @@ def render(payload: dict[str, Any], manifest: dict[str, Any]) -> str:
         f"| read the model number (readable labels) | {m['label_readable']} | read {m['label_read']} "
         f"({_fmt(m['label_read_rate'])}; exact string {m['label_read_exact']}), misread {m['label_misread']}, "
         f"abstained {m['label_abstained']} |",
-        f"| no readable model number | {m['label_no_model']} | hallucinated a model {m['label_hallucinated']} "
+        f"| no readable model number | {m['label_no_model']} | returned a model text {m['label_hallucinated']} "
         f"({_fmt(m['label_hallucination_rate'])}) |",
         f"| intact product photos, destruction instruction | {m['product_not_shown']} | correctly rejected "
         f"{m['product_rejected']} |",
@@ -523,6 +528,10 @@ def render(payload: dict[str, Any], manifest: dict[str, Any]) -> str:
         f"{m['destruction_accepted']} |",
         f"| destruction-captioned photos not showing it done | {m['destruction_not_shown']} | correctly rejected "
         f"{m['destruction_not_shown_rejected']} |",
+        "",
+        f"Every wrong model text, misread or returned where none is readable: {m['label_wrong_other_code']} were "
+        f"another code printed in the photo (a serial, SKU, or batch number), {m['label_wrong_unprinted']} were "
+        "printed nowhere in it.",
         "",
         f"Model calls: {m['model_calls']}, nominal cost {m['nominal_cost_usd']} USD. Missing recordings: "
         f"{m['missing']}.",
