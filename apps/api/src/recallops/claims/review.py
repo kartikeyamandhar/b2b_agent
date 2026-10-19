@@ -42,6 +42,8 @@ def submit_action(
     phash_bits: int = 6,
 ) -> str:
     """Returns "queued" (the worker resumes the run) or "applied" (decided directly)."""
+    if action == "mark_delivered":
+        return _mark_delivered(session, ctx, claim, message)
     if action == "resume_override" and outcome is None:
         raise ValueError("resume_override needs an outcome")
     if action == "request_info" and not (message or "").strip():
@@ -83,6 +85,31 @@ def submit_action(
         engine, ctx, claim.id, claim.refund_cents, ledger, billing, lease_owner=None, phash_bits=phash_bits
     )
     effects.apply_from(final, DIRECT_REVIEWABLE)
+    return "applied"
+
+
+def _mark_delivered(session: Session, ctx: FirmContext, claim: Claim, message: str | None) -> str:
+    """An approved repair or replacement reached the consumer: an MPR correction (01-backend.md section 8). Refunds
+    are delivered by the payouts ledger instead, so they cannot be marked here."""
+    if claim.remedy not in ("repair", "replacement"):
+        raise ReviewConflict("only a repair or replacement is marked delivered; refunds are delivered by the ledger")
+    done = session.execute(
+        text("UPDATE claims SET status = 'closed' WHERE id = :c AND firm_id = :f AND status = 'approved' RETURNING id"),
+        {"c": claim.id, "f": ctx.firm_id},
+    ).first()
+    if done is None:
+        raise ReviewConflict(f"a claim in status {claim.status} cannot be marked delivered")
+    session.add(
+        AuditLog(
+            firm_id=ctx.firm_id,
+            actor=ctx.user_id,
+            action="remedy_delivered",
+            target_type="claim",
+            target_id=str(claim.id),
+            before={"status": "approved"},
+            after={"status": "closed", "remedy": claim.remedy, "note": (message or "")[:300]},
+        )
+    )
     return "applied"
 
 

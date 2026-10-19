@@ -373,7 +373,10 @@ class Trace(Schema):
 
 
 class ClaimAction(Schema):
-    action: Literal["resume_override", "request_info", "mark_fraud"]
+    action: Literal["resume_override", "request_info", "mark_fraud", "mark_delivered"] = Field(
+        description="mark_delivered records that an approved repair or replacement reached the consumer (an MPR "
+        "correction); the claim closes"
+    )
     outcome: Literal["approve", "deny", "needs_info"] | None = Field(None, description="required for resume_override")
     message: str | None = Field(None, description="question for the claimant (request_info) or note")
 
@@ -395,6 +398,33 @@ class IssuedLink(Schema):
 
 class IssueResponse(Schema):
     links: list[IssuedLink]
+
+
+class MprManual(Schema):
+    """Boxes the system cannot know (01-backend.md section 8). Omitted boxes keep their documented defaults;
+    contacts_email overrides the computed count and the report notes it."""
+
+    units_with_manufacturer: int | None = Field(None, ge=0)
+    units_with_distributor: int | None = Field(None, ge=0)
+    units_with_retailers: int | None = Field(None, ge=0)
+    incidents_before: int | None = Field(None, ge=0)
+    incidents_after: int | None = Field(None, ge=0)
+    injuries_before: int | None = Field(None, ge=0)
+    injuries_after: int | None = Field(None, ge=0)
+    deaths_before: int | None = Field(None, ge=0)
+    deaths_after: int | None = Field(None, ge=0)
+    notified_phone_text: int | None = Field(None, ge=0)
+    notified_email: int | None = Field(None, ge=0)
+    notified_mail: int | None = Field(None, ge=0)
+    contacts_phone: int | None = Field(None, ge=0)
+    contacts_email: int | None = Field(None, ge=0)
+    contacts_mail: int | None = Field(None, ge=0)
+    contacts_registration_card: int | None = Field(None, ge=0)
+    homepage_posting: bool | None = None
+    homepage_posting_explanation: str | None = Field(None, max_length=500)
+    website_hits: int | None = Field(None, ge=0)
+    social_posts: dict[str, Any] | None = None
+    marketplace_monitoring: dict[str, Any] | None = None
 
 
 class MprReport(Schema):

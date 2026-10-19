@@ -8,7 +8,7 @@ from datetime import date, datetime
 from typing import Annotated, Any
 from uuid import UUID
 
-from fastapi import APIRouter, File, Form, Header, HTTPException, Query, UploadFile, status
+from fastapi import APIRouter, Body, File, Form, Header, HTTPException, Query, UploadFile, status
 from fastapi.responses import FileResponse, Response
 from sqlalchemy import func, select, text
 from sqlalchemy.orm import Session
@@ -26,10 +26,13 @@ from recallops.claims.review import ReviewConflict, submit_action
 from recallops.db.engine import app_engine
 from recallops.db.repos import ClaimsRepo, ProgramsRepo, RunsRepo, UsageRepo
 from recallops.db.session import tenant_session
+from recallops.logs import get_logger, log_event
 from recallops.models import Claim, Recall, RecallProgram, WorkerHeartbeat
 from recallops.payouts.db_ledger import DbPayoutLedger
 from recallops.settings import get_settings
 from recallops.tenancy import FirmContext
+
+log = get_logger("api.routes")
 
 Responses = dict[int | str, dict[str, Any]]
 NOT_FOUND: Responses = {404: {"model": s.Problem, "description": "not found, or belongs to another firm"}}
@@ -39,6 +42,7 @@ CONFLICT: Responses = {409: {"model": s.Problem, "description": "the resource is
 PAYMENT: Responses = {402: {"model": s.Problem, "description": "over the plan's limit (component 3 entitlement)"}}
 IMAGE: Responses = {200: {"content": {"image/jpeg": {}, "image/png": {}}}}
 PDF: Responses = {200: {"content": {"application/pdf": {}}}}
+MPR_PERIOD = r"^\d{4}-(0[1-9]|1[0-2])$"
 
 firm = APIRouter(prefix="/v1", tags=["firm"], responses=AUTH)
 billing = APIRouter(prefix="/v1/billing", tags=["billing (component 3)"], responses={**AUTH, **LATER})
@@ -334,7 +338,7 @@ def _mpr_view(r: Any) -> s.MprReport:
     responses=NOT_FOUND,
     summary="Latest MPR generated for a period (YYYY-MM)",
 )
-def get_mpr(program_id: UUID, ctx: FirmDep, db: TenantDb, period: str = Query(pattern=r"^\d{4}-\d{2}$")) -> s.MprReport:
+def get_mpr(program_id: UUID, ctx: FirmDep, db: TenantDb, period: str = Query(pattern=MPR_PERIOD)) -> s.MprReport:
     from recallops.models import MprReport
     from recallops.mpr.generate import Period
 
@@ -357,42 +361,53 @@ def get_mpr(program_id: UUID, ctx: FirmDep, db: TenantDb, period: str = Query(pa
     summary="Generate the MPR for a period; reconciled is true when the independent recount agrees",
 )
 def generate_mpr(
-    program_id: UUID, ctx: AdminDep, db: TenantDb, period: str = Query(pattern=r"^\d{4}-\d{2}$")
+    program_id: UUID,
+    ctx: AdminDep,
+    period: str = Query(pattern=MPR_PERIOD),
+    manual: Annotated[
+        s.MprManual | None, Body(description="boxes the system cannot know; omitted boxes use their defaults")
+    ] = None,
 ) -> s.MprReport:
+    """One REPEATABLE READ snapshot: the SQL report and the recount's row exports see the same data, so a payout
+    delivered while the report is generated cannot produce a false discrepancy."""
     from recallops.models import AuditLog, MprReport
     from recallops.mpr.generate import Period, build_payload
     from recallops.mpr.recount import export, reconcile, recount
 
-    if ProgramsRepo(db, ctx).get(program_id) is None:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, "program not found")
-    p = Period.parse(period)
-    payload = build_payload(db, ctx.firm_id, program_id, p)
-    diffs = reconcile(payload["boxes"], recount(export(db, ctx.firm_id, program_id), p))
-    payload["reconciliation"] = {"discrepancies": diffs}
-    row = MprReport(
-        firm_id=ctx.firm_id,
-        program_id=program_id,
-        period_start=p.start,
-        period_end=p.end,
-        payload=payload,
-        reconciled=not diffs,
-        generated_by=ctx.user_id,
-    )
-    db.add(row)
-    db.flush()
-    db.add(
-        AuditLog(
+    entered = manual.model_dump(exclude_none=True) if manual else {}
+    with tenant_session(ctx, isolation="REPEATABLE READ") as db:
+        if ProgramsRepo(db, ctx).get(program_id) is None:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "program not found")
+        p = Period.parse(period)
+        payload = build_payload(db, ctx.firm_id, program_id, p, entered)
+        diffs = reconcile(payload["computed"], recount(export(db, ctx.firm_id, program_id), p.label, entered))
+        payload["reconciliation"] = {"discrepancies": diffs}
+        row = MprReport(
             firm_id=ctx.firm_id,
-            actor=ctx.user_id,
-            action="mpr_generated",
-            target_type="program",
-            target_id=str(program_id),
-            before=None,
-            after={"period": period, "reconciled": not diffs},
+            program_id=program_id,
+            period_start=p.start,
+            period_end=p.end,
+            payload=payload,
+            reconciled=not diffs,
+            generated_by=ctx.user_id,
         )
-    )
-    db.refresh(row)
-    return _mpr_view(row)
+        db.add(row)
+        db.flush()
+        db.add(
+            AuditLog(
+                firm_id=ctx.firm_id,
+                actor=ctx.user_id,
+                action="mpr_generated",
+                target_type="program",
+                target_id=str(program_id),
+                before=None,
+                after={"period": period, "reconciled": not diffs, "manual_boxes": sorted(entered)},
+            )
+        )
+        db.refresh(row)
+        if diffs:
+            log_event(log, "mpr_unreconciled", level=40, firm_id=str(ctx.firm_id), program_id=str(program_id))
+        return _mpr_view(row)
 
 
 @firm.get("/programs/{program_id}/mpr/{report_id}.pdf", responses={**NOT_FOUND, **PDF}, summary="MPR as PDF")

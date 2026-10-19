@@ -120,10 +120,12 @@
         ],
         "properties": {
           "action": {
+            "description": "mark_delivered records that an approved repair or replacement reached the consumer (an MPR correction); the claim closes",
             "enum": [
               "resume_override",
               "request_info",
-              "mark_fraud"
+              "mark_fraud",
+              "mark_delivered"
             ],
             "title": "Action",
             "type": "string"
@@ -1085,6 +1087,265 @@
           "description"
         ],
         "title": "ManualRecall",
+        "type": "object"
+      },
+      "MprManual": {
+        "additionalProperties": false,
+        "description": "Boxes the system cannot know (01-backend.md section 8). Omitted boxes keep their documented defaults;\ncontacts_email overrides the computed count and the report notes it.",
+        "properties": {
+          "contacts_email": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contacts Email"
+          },
+          "contacts_mail": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contacts Mail"
+          },
+          "contacts_phone": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contacts Phone"
+          },
+          "contacts_registration_card": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contacts Registration Card"
+          },
+          "deaths_after": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deaths After"
+          },
+          "deaths_before": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deaths Before"
+          },
+          "homepage_posting": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Homepage Posting"
+          },
+          "homepage_posting_explanation": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Homepage Posting Explanation"
+          },
+          "incidents_after": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Incidents After"
+          },
+          "incidents_before": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Incidents Before"
+          },
+          "injuries_after": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Injuries After"
+          },
+          "injuries_before": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Injuries Before"
+          },
+          "marketplace_monitoring": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Marketplace Monitoring"
+          },
+          "notified_email": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notified Email"
+          },
+          "notified_mail": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notified Mail"
+          },
+          "notified_phone_text": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notified Phone Text"
+          },
+          "social_posts": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Social Posts"
+          },
+          "units_with_distributor": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Units With Distributor"
+          },
+          "units_with_manufacturer": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Units With Manufacturer"
+          },
+          "units_with_retailers": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Units With Retailers"
+          },
+          "website_hits": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Website Hits"
+          }
+        },
+        "title": "MprManual",
         "type": "object"
       },
       "MprReport": {
@@ -4300,7 +4561,7 @@
             "name": "period",
             "required": true,
             "schema": {
-              "pattern": "^\\d{4}-\\d{2}$",
+              "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
               "title": "Period",
               "type": "string"
             }
@@ -4366,6 +4627,7 @@
     },
     "/v1/programs/{program_id}/mpr/generate": {
       "post": {
+        "description": "One REPEATABLE READ snapshot: the SQL report and the recount's row exports see the same data, so a payout\ndelivered while the report is generated cannot produce a false discrepancy.",
         "operationId": "generate_mpr_v1_programs__program_id__mpr_generate_post",
         "parameters": [
           {
@@ -4383,12 +4645,30 @@
             "name": "period",
             "required": true,
             "schema": {
-              "pattern": "^\\d{4}-\\d{2}$",
+              "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
               "title": "Period",
               "type": "string"
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/MprManual"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "boxes the system cannot know; omitted boxes use their defaults",
+                "title": "Manual"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "content": {

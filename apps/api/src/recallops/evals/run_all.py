@@ -29,11 +29,15 @@ def main(results_dir: Path = extraction.RESULTS_DIR) -> int:
         },
         "adjudication": {k: adj[k] for k in ("n", "outcome_accuracy", "macro_f1", "fraud_precision", "fraud_recall")},
         "ablation": ablation._summary(abl),
-        "reporting": {"passed": rep["passed"], "discrepancies": rep["discrepancies"]},
+        "reporting": {
+            "passed": rep["passed"],
+            "discrepancies": rep["discrepancies"],
+            "composition_ok": rep["composition_ok"],
+        },
         "results": sorted(str(p.relative_to(results_dir.parent.parent)) for p in results_dir.glob("*")),
     }
     print(json.dumps(summary, indent=1))
-    return 0 if rep["passed"] else 1
+    return 0 if rep["passed"] and rep["composition_ok"] else 1
 
 
 if __name__ == "__main__":

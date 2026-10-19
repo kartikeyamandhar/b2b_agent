@@ -350,3 +350,44 @@ def test_a_mailing_address_shared_with_another_claim_holds_the_payout(env: dict[
             {"c": link["claim_id"]},
         ).scalar_one()
     assert set(audit) == {"mailing_fp"} and "Main" not in str(audit)  # a fingerprint, never the address
+
+
+def test_mpr_manual_boxes_period_validation_and_a_delivered_repair(env: dict[str, Any]) -> None:
+    from datetime import UTC, datetime
+
+    client, engine = env["client"], env["engine"]
+    program_id = env["seeded"]["demo"]["program_id"]
+    assert client.post(f"/v1/programs/{program_id}/mpr/generate?period=2026-13", headers=ADMIN).status_code == 422
+    assert client.get(f"/v1/programs/{program_id}/mpr?period=2026-00", headers=ADMIN).status_code == 422
+    with engine.begin() as conn:  # an approved repair claim in the demo program
+        claim_id = conn.execute(
+            text(
+                "UPDATE claims SET remedy = 'repair', refund_cents = NULL, status = 'approved' WHERE id = ("
+                "SELECT id FROM claims WHERE program_id = :p AND status = 'denied' ORDER BY id LIMIT 1) RETURNING id"
+            ),
+            {"p": program_id},
+        ).scalar_one()
+    done = client.post(f"/v1/claims/{claim_id}/actions", headers=REVIEWER, json={"action": "mark_delivered"})
+    assert done.status_code == 200 and done.json()["status"] == "closed"
+    assert (
+        client.post(f"/v1/claims/{claim_id}/actions", headers=REVIEWER, json={"action": "mark_delivered"}).status_code
+        == 409
+    )
+    period = datetime.now(UTC).strftime("%Y-%m")
+    report = client.post(
+        f"/v1/programs/{program_id}/mpr/generate?period={period}",
+        headers=ADMIN,
+        json={"incidents_after": 3, "units_with_retailers": 100, "contacts_email": 7},
+    )
+    assert report.status_code == 200, report.text
+    body = report.json()
+    assert body["reconciled"] is True  # the contacts override is noted, never a discrepancy
+    boxes, computed = body["payload"]["boxes"], body["payload"]["computed"]
+    assert boxes["incidents_after"] == 3 and boxes["contacts_email"] == 7 and computed["contacts_email"] >= 1
+    assert computed["corrections_this_period"] >= 1  # the delivered repair
+    assert boxes["units_with_consumers"] == computed["total_units_affected"] - 100 - computed["cumulative_corrections"]
+    assert any("entered by hand" in n for n in body["payload"]["notes"])
+    bad = client.post(
+        f"/v1/programs/{program_id}/mpr/generate?period={period}", headers=ADMIN, json={"total_units_affected": 1}
+    )
+    assert bad.status_code == 422  # computed boxes cannot be typed in

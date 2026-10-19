@@ -137,11 +137,12 @@ def ablation_from_adjudication(adjudication: dict[str, Any]) -> dict[str, Any]:
 
 
 def check_reporting(now: dict[str, Any]) -> list[str]:
-    return (
-        []
-        if now.get("passed") and now.get("discrepancies") == 0
-        else [f"reporting: {now.get('discrepancies')} discrepancies"]
-    )
+    problems = []
+    if not (now.get("passed") and now.get("discrepancies") == 0):
+        problems.append(f"reporting: {now.get('discrepancies')} discrepancies")
+    if now.get("composition_ok") is False:
+        problems.append("reporting: the scenario no longer has its pre-registered composition")
+    return problems
 
 
 def run(ref: str, results: Path = RESULTS) -> tuple[list[str], list[str]]:

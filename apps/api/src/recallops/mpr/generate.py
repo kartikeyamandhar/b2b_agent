@@ -1,18 +1,24 @@
-"""Monthly progress report (01-backend.md section 8): SQL aggregation over claims and payouts for one program and
-one calendar month, into exactly the CPSC form's boxes.
+"""Monthly progress report (01-backend.md section 8): SQL aggregation over claims, payouts, and the audit log for one
+program and one calendar month (UTC), into exactly the CPSC form's boxes.
 
-Definitions (also used by the independent recount in evals/reporting, which must agree to the unit):
-- A correction is a remedy delivered: a refund payout that reached transferred or exported, counted in the month of
-  that transition (its audit_log row). Repairs and replacements have no delivery marker yet, so they count only
-  when a firm user records one (none do in this project); the report says so in its notes.
-- contacts_email: claims submitted through the portal in the month (portal submissions count as email contacts).
-- Boxes the system cannot know (units with distributors, incidents, notifications by channel, web hits) are manual
-  inputs with documented defaults; units_with_consumers = total units minus the other holders.
+Definitions (the independent recount in mpr/recount.py restates them in its own words and must agree to the unit):
+- A correction is a remedy delivered, counted once, in the month of its first delivery event: a refund payout that
+  reached transferred or exported (its audit row), or a repair or replacement claim a reviewer marked delivered (the
+  remedy_delivered audit row on the claim).
+- contacts_email: claims whose first submission (claims.first_submitted_at, set once by a trigger) falls in the month;
+  portal submissions count as email contacts, and a needs_info answer is not a new contact.
+- total_units_affected comes from the program's rules first (a firm can correct it), then the recall record.
+- units_with_consumers = total units minus units held by the manufacturer, distributors, and retailers, minus
+  cumulative corrections.
+- Boxes the system cannot know (incidents, notifications sent outside it, web hits) are manual inputs with documented
+  defaults. The payload keeps computed and manual values apart; reconciliation checks the computed ones only, and a
+  manual override of a contacts box is listed in the notes.
 """
 
 from __future__ import annotations
 
 import calendar
+import re
 from dataclasses import dataclass
 from datetime import UTC, date, datetime, time
 from typing import Any
@@ -21,7 +27,9 @@ from uuid import UUID
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
-DELIVERED = ("payout_transferred", "payout_exported")
+PERIOD_PATTERN = r"^\d{4}-(0[1-9]|1[0-2])$"
+REFUND_DELIVERED = ("payout_transferred", "payout_exported")
+REMEDY_DELIVERED = "remedy_delivered"
 MANUAL_DEFAULTS: dict[str, Any] = {
     "units_with_manufacturer": 0,
     "units_with_distributor": 0,
@@ -44,6 +52,14 @@ MANUAL_DEFAULTS: dict[str, Any] = {
     "social_posts": {},
     "marketplace_monitoring": {},
 }
+OVERRIDABLE_COMPUTED = ("contacts_email",)
+COMPUTED = (
+    "total_units_affected",
+    "corrections_this_period",
+    "cumulative_corrections",
+    "units_with_consumers",
+    "contacts_email",
+)
 BOX_ORDER = (
     "total_units_affected",
     "corrections_this_period",
@@ -73,6 +89,10 @@ BOX_ORDER = (
 )
 
 
+class BadPeriod(ValueError):
+    pass
+
+
 @dataclass(frozen=True)
 class Period:
     start: date
@@ -80,8 +100,14 @@ class Period:
 
     @classmethod
     def parse(cls, period: str) -> Period:
+        if not re.match(PERIOD_PATTERN, period or ""):
+            raise BadPeriod(f"period must be YYYY-MM with a month from 01 to 12, got {period!r}")
         year, month = (int(x) for x in period.split("-"))
         return cls(date(year, month, 1), date(year, month, calendar.monthrange(year, month)[1]))
+
+    @property
+    def label(self) -> str:
+        return self.start.strftime("%Y-%m")
 
     @property
     def start_ts(self) -> datetime:
@@ -93,21 +119,38 @@ class Period:
 
 
 def counts(session: Session, firm_id: UUID, program_id: UUID, period: Period) -> dict[str, int]:
-    """The computed boxes, in SQL (aggregation belongs in the database: invariant 11)."""
-    params = {"f": firm_id, "p": program_id, "s": period.start_ts, "e": period.end_ts}
+    """The computed boxes, in SQL (aggregation belongs in the database: invariant 11). Each delivered refund or remedy
+    counts once, at its first delivery event, however many audit rows a replay might have written."""
+    params = {
+        "f": firm_id,
+        "p": program_id,
+        "s": period.start_ts,
+        "e": period.end_ts,
+        "refund": list(REFUND_DELIVERED),
+        "remedy": REMEDY_DELIVERED,
+    }
     delivered = session.execute(
         text(
-            "SELECT count(*) FILTER (WHERE a.at BETWEEN :s AND :e) AS this_period, "
-            "count(*) FILTER (WHERE a.at <= :e) AS cumulative "
-            "FROM audit_log a JOIN payouts pay ON pay.id::text = a.target_id AND pay.firm_id = a.firm_id "
-            "JOIN claims c ON c.id = pay.claim_id AND c.firm_id = pay.firm_id "
-            "WHERE a.firm_id = :f AND c.program_id = :p AND a.target_type = 'payout' "
-            "AND a.action IN ('payout_transferred', 'payout_exported')"
+            "WITH events AS ("
+            " SELECT 'payout:' || pay.id::text AS item, a.at FROM audit_log a"
+            " JOIN payouts pay ON pay.id::text = a.target_id AND pay.firm_id = a.firm_id"
+            " JOIN claims c ON c.id = pay.claim_id AND c.firm_id = pay.firm_id"
+            " WHERE a.firm_id = :f AND c.program_id = :p AND a.target_type = 'payout' AND a.action = ANY(:refund)"
+            " UNION ALL"
+            " SELECT 'claim:' || c.id::text AS item, a.at FROM audit_log a"
+            " JOIN claims c ON c.id::text = a.target_id AND c.firm_id = a.firm_id"
+            " WHERE a.firm_id = :f AND c.program_id = :p AND a.target_type = 'claim' AND a.action = :remedy"
+            "), first AS (SELECT item, min(at) AS at FROM events GROUP BY item)"
+            " SELECT count(*) FILTER (WHERE at BETWEEN :s AND :e) AS this_period,"
+            " count(*) FILTER (WHERE at <= :e) AS cumulative FROM first"
         ),
         params,
     ).one()
     contacts = session.execute(
-        text("SELECT count(*) FROM claims WHERE firm_id = :f AND program_id = :p AND submitted_at BETWEEN :s AND :e"),
+        text(
+            "SELECT count(*) FROM claims WHERE firm_id = :f AND program_id = :p AND status <> 'draft' "
+            "AND first_submitted_at BETWEEN :s AND :e"
+        ),
         params,
     ).scalar_one()
     return {
@@ -125,25 +168,38 @@ def total_units(session: Session, firm_id: UUID, program_id: UUID) -> int:
         ),
         {"p": program_id, "f": firm_id},
     ).one()
-    return int(row.units_affected or row.rules_units or 0)
+    if row.rules_units not in (None, ""):
+        return int(row.rules_units)
+    return int(row.units_affected or 0)
 
 
 def build_payload(
     session: Session, firm_id: UUID, program_id: UUID, period: Period, manual: dict[str, Any] | None = None
 ) -> dict[str, Any]:
-    boxes: dict[str, Any] = {**MANUAL_DEFAULTS, **(manual or {})}
-    boxes["total_units_affected"] = total_units(session, firm_id, program_id)
-    boxes.update(counts(session, firm_id, program_id, period))
+    entered = {k: v for k, v in (manual or {}).items() if k in MANUAL_DEFAULTS or k in OVERRIDABLE_COMPUTED}
+    computed: dict[str, Any] = {"total_units_affected": total_units(session, firm_id, program_id)}
+    computed.update(counts(session, firm_id, program_id, period))
+    boxes: dict[str, Any] = {**MANUAL_DEFAULTS, **{k: v for k, v in entered.items() if k in MANUAL_DEFAULTS}}
     held = boxes["units_with_manufacturer"] + boxes["units_with_distributor"] + boxes["units_with_retailers"]
-    boxes["units_with_consumers"] = max(0, boxes["total_units_affected"] - held - boxes["cumulative_corrections"])
+    computed["units_with_consumers"] = max(
+        0, computed["total_units_affected"] - held - computed["cumulative_corrections"]
+    )
+    boxes.update(computed)
+    overridden = [k for k in OVERRIDABLE_COMPUTED if k in entered]
+    boxes.update({k: entered[k] for k in overridden})
+    notes = [
+        "Corrections count each refund payout that reached transferred or exported, and each repair or replacement "
+        "marked delivered, once, in the month of its first delivery.",
+        "Portal submissions count as email contacts in the month of first submission.",
+        "Manual boxes use their documented defaults unless entered.",
+        "units_with_consumers = total units minus units held by manufacturer, distributor, and retailers, minus "
+        "cumulative corrections.",
+    ]
+    notes += [f"{k} was entered by hand ({entered[k]}); the computed value is {computed[k]}." for k in overridden]
     return {
-        "period": period.start.strftime("%Y-%m"),
+        "period": period.label,
         "boxes": {k: boxes[k] for k in BOX_ORDER},
-        "notes": [
-            "Corrections count refund payouts that reached transferred or exported in the month of that transition.",
-            "Repairs and replacements count only when a delivery is recorded; none are recorded in this project.",
-            "Portal submissions count as email contacts. Manual boxes use their documented defaults unless set.",
-            "units_with_consumers = total units minus units held by manufacturer, distributor, and retailers, "
-            "minus cumulative corrections.",
-        ],
+        "computed": {k: computed[k] for k in COMPUTED},
+        "manual": entered,
+        "notes": notes,
     }

@@ -1,49 +1,178 @@
 {
  "scenario": {
-  "claims": 500,
-  "payouts": 261,
-  "delivered_events": 193
+  "refund_claims": 500,
+  "payouts": 256,
+  "delivered_events": 202,
+  "replayed_events": 1,
+  "answered_next_month": 30,
+  "boundary_events": 2,
+  "remedy_claims": 40,
+  "remedies_delivered": 25,
+  "other_program_deliveries": 5
  },
+ "composition_ok": true,
  "months": [
   {
    "period": "2026-08",
    "report": {
-    "corrections_this_period": 18,
-    "cumulative_corrections": 18,
-    "contacts_email": 148
+    "total_units_affected": 53634,
+    "corrections_this_period": 19,
+    "cumulative_corrections": 19,
+    "units_with_consumers": 53615,
+    "contacts_email": 161
    },
    "recount": {
-    "corrections_this_period": 18,
-    "cumulative_corrections": 18,
-    "contacts_email": 148
+    "total_units_affected": 53634,
+    "corrections_this_period": 19,
+    "cumulative_corrections": 19,
+    "units_with_consumers": 53615,
+    "contacts_email": 161
    },
+   "truth": {
+    "total_units_affected": 53634,
+    "corrections_this_period": 19,
+    "cumulative_corrections": 19,
+    "units_with_consumers": 53615,
+    "contacts_email": 161
+   },
+   "boxes": {
+    "total_units_affected": 53634,
+    "corrections_this_period": 19,
+    "cumulative_corrections": 19,
+    "units_with_manufacturer": 0,
+    "units_with_distributor": 0,
+    "units_with_retailers": 0,
+    "units_with_consumers": 53615,
+    "incidents_before": 0,
+    "incidents_after": 0,
+    "injuries_before": 0,
+    "injuries_after": 0,
+    "deaths_before": 0,
+    "deaths_after": 0,
+    "notified_phone_text": 0,
+    "notified_email": 0,
+    "notified_mail": 0,
+    "contacts_phone": 0,
+    "contacts_email": 161,
+    "contacts_mail": 0,
+    "contacts_registration_card": 0,
+    "homepage_posting": true,
+    "homepage_posting_explanation": null,
+    "website_hits": 0,
+    "social_posts": {},
+    "marketplace_monitoring": {}
+   },
+   "manual": {},
    "diffs": []
   },
   {
    "period": "2026-09",
    "report": {
-    "corrections_this_period": 66,
-    "cumulative_corrections": 84,
-    "contacts_email": 168
+    "total_units_affected": 53634,
+    "corrections_this_period": 87,
+    "cumulative_corrections": 106,
+    "units_with_consumers": 52528,
+    "contacts_email": 188
    },
    "recount": {
-    "corrections_this_period": 66,
-    "cumulative_corrections": 84,
-    "contacts_email": 168
+    "total_units_affected": 53634,
+    "corrections_this_period": 87,
+    "cumulative_corrections": 106,
+    "units_with_consumers": 52528,
+    "contacts_email": 188
+   },
+   "truth": {
+    "total_units_affected": 53634,
+    "corrections_this_period": 87,
+    "cumulative_corrections": 106,
+    "units_with_consumers": 52528,
+    "contacts_email": 188
+   },
+   "boxes": {
+    "total_units_affected": 53634,
+    "corrections_this_period": 87,
+    "cumulative_corrections": 106,
+    "units_with_manufacturer": 0,
+    "units_with_distributor": 0,
+    "units_with_retailers": 1000,
+    "units_with_consumers": 52528,
+    "incidents_before": 0,
+    "incidents_after": 2,
+    "injuries_before": 0,
+    "injuries_after": 0,
+    "deaths_before": 0,
+    "deaths_after": 0,
+    "notified_phone_text": 0,
+    "notified_email": 0,
+    "notified_mail": 0,
+    "contacts_phone": 0,
+    "contacts_email": 188,
+    "contacts_mail": 0,
+    "contacts_registration_card": 0,
+    "homepage_posting": true,
+    "homepage_posting_explanation": null,
+    "website_hits": 0,
+    "social_posts": {},
+    "marketplace_monitoring": {}
+   },
+   "manual": {
+    "units_with_retailers": 1000,
+    "incidents_after": 2
    },
    "diffs": []
   },
   {
    "period": "2026-10",
    "report": {
-    "corrections_this_period": 60,
-    "cumulative_corrections": 144,
-    "contacts_email": 143
+    "total_units_affected": 53634,
+    "corrections_this_period": 68,
+    "cumulative_corrections": 174,
+    "units_with_consumers": 53460,
+    "contacts_email": 153
    },
    "recount": {
-    "corrections_this_period": 60,
-    "cumulative_corrections": 144,
-    "contacts_email": 143
+    "total_units_affected": 53634,
+    "corrections_this_period": 68,
+    "cumulative_corrections": 174,
+    "units_with_consumers": 53460,
+    "contacts_email": 153
+   },
+   "truth": {
+    "total_units_affected": 53634,
+    "corrections_this_period": 68,
+    "cumulative_corrections": 174,
+    "units_with_consumers": 53460,
+    "contacts_email": 153
+   },
+   "boxes": {
+    "total_units_affected": 53634,
+    "corrections_this_period": 68,
+    "cumulative_corrections": 174,
+    "units_with_manufacturer": 0,
+    "units_with_distributor": 0,
+    "units_with_retailers": 0,
+    "units_with_consumers": 53460,
+    "incidents_before": 0,
+    "incidents_after": 0,
+    "injuries_before": 0,
+    "injuries_after": 0,
+    "deaths_before": 0,
+    "deaths_after": 0,
+    "notified_phone_text": 0,
+    "notified_email": 0,
+    "notified_mail": 0,
+    "contacts_phone": 0,
+    "contacts_email": 999,
+    "contacts_mail": 0,
+    "contacts_registration_card": 0,
+    "homepage_posting": true,
+    "homepage_posting_explanation": null,
+    "website_hits": 0,
+    "social_posts": {},
+    "marketplace_monitoring": {}
+   },
+   "manual": {
+    "contacts_email": 999
    },
    "diffs": []
   }

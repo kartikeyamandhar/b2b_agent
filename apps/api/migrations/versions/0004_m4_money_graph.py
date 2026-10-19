@@ -58,7 +58,17 @@ ALTER TABLE payouts ADD CONSTRAINT payouts_export_batch_fk
     FOREIGN KEY (export_batch, firm_id) REFERENCES export_batches (id, firm_id);
 
 ALTER TABLE claims ADD COLUMN first_submitted_at timestamptz;
-UPDATE claims SET first_submitted_at = submitted_at WHERE submitted_at IS NOT NULL;
+-- A needs_info answer used to move submitted_at, so the earliest claim_submitted audit row is the better first date.
+-- FORCE ROW LEVEL SECURITY binds the owner too, so a data statement here would see no rows: lift it for the
+-- backfill, inside this migration's transaction, and restore it (the meta-test checks every tenant table).
+ALTER TABLE claims NO FORCE ROW LEVEL SECURITY;
+ALTER TABLE audit_log NO FORCE ROW LEVEL SECURITY;
+UPDATE claims c SET first_submitted_at = least(c.submitted_at, (
+    SELECT min(a.at) FROM audit_log a
+    WHERE a.firm_id = c.firm_id AND a.target_type = 'claim' AND a.target_id = c.id::text AND a.action = 'claim_submitted'
+)) WHERE c.submitted_at IS NOT NULL;
+ALTER TABLE audit_log FORCE ROW LEVEL SECURITY;
+ALTER TABLE claims FORCE ROW LEVEL SECURITY;
 ALTER TABLE claims ADD COLUMN graph_version integer NOT NULL DEFAULT 0;
 ALTER TABLE claims ADD COLUMN graph_synced_version integer;
 CREATE INDEX claims_graph_dirty_idx ON claims (program_id)
@@ -124,6 +134,8 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON graph_state TO recallops_internal;
 """
 
 DOWN = r"""
+ALTER TABLE fraud_clusters NO FORCE ROW LEVEL SECURITY;
+ALTER TABLE payouts NO FORCE ROW LEVEL SECURITY;
 DROP TABLE IF EXISTS graph_state;
 DROP TRIGGER IF EXISTS fraud_clusters_members_in_program ON fraud_clusters;
 DROP FUNCTION IF EXISTS fraud_clusters_members_in_program();
@@ -149,6 +161,8 @@ UPDATE payouts SET status = 'pending' WHERE status IN ('held', 'transferring');
 ALTER TABLE payouts DROP CONSTRAINT payouts_status_check;
 ALTER TABLE payouts ADD CONSTRAINT payouts_status_check CHECK (status IN (
     'pending', 'pending_export', 'onboarding', 'transferred', 'failed', 'exported'));
+ALTER TABLE payouts FORCE ROW LEVEL SECURITY;
+ALTER TABLE fraud_clusters FORCE ROW LEVEL SECURITY;
 """
 
 
