@@ -17,6 +17,9 @@ REPO_ROOT = Path(__file__).resolve().parents[4]
 EXAMPLE_NEO4J_PASSWORD = "graph-dev-only"
 EXAMPLE_GRAPH_KEY_SECRET = "ZmFrZS1ncmFwaC1rZXktc2VjcmV0LTMyLWJ5dGVz"
 GRAPH_KEY_MIN_BYTES = 32
+# Photo storage values that must never reach production (the committed defaults and .env.example values).
+EXAMPLE_SUPABASE_URL = "https://example.supabase.co"
+EXAMPLE_SUPABASE_SERVICE_KEY = "fake-service-key"
 LOCAL_HOSTS = frozenset({"localhost", "127.0.0.1", "::1"})
 
 
@@ -25,8 +28,9 @@ def is_local_uri(uri: str) -> bool:
 
 
 class Settings(BaseSettings):
+    # hide_input_in_errors: a validation error never echoes the inputs, which include keys and passwords.
     model_config = SettingsConfigDict(
-        env_file=REPO_ROOT / ".env", env_file_encoding="utf-8", extra="ignore", frozen=True
+        env_file=REPO_ROOT / ".env", env_file_encoding="utf-8", extra="ignore", frozen=True, hide_input_in_errors=True
     )
 
     app_env: Literal["dev", "test", "prod"] = Field("dev", description="Deployment environment.")
@@ -107,11 +111,18 @@ class Settings(BaseSettings):
     embedding_model_id: str = Field("hash-ngram-v1")
     embedding_dim: int = Field(1024, description="Must match migration 0002 (vector(1024)).")
 
-    # Storage for claim photos. Local directory in dev; Supabase private bucket in prod.
+    # Storage for claim photos (recallops.storage). Local directory in dev and tests; Supabase private bucket in prod.
+    # Browsers never get a storage URL: the API's photo route proxies the bytes after an RLS lookup.
+    storage_backend: Literal["local", "supabase"] = Field(
+        "local", description="local writes under STORAGE_DIR; supabase uses the private bucket (Storage REST API)."
+    )
+    storage_timeout_s: float = Field(10.0, gt=0, description="Connect, read, write, and pool timeout per request.")
     storage_dir: Path = Field(REPO_ROOT / "data" / "generated" / "storage")
-    supabase_url: str = Field("https://example.supabase.co")
-    supabase_service_key: str = Field("fake-service-key")
-    supabase_bucket: str = Field("claim-photos")
+    supabase_url: str = Field(EXAMPLE_SUPABASE_URL, description="Project URL; https in prod.")
+    supabase_service_key: SecretStr = Field(
+        SecretStr(EXAMPLE_SUPABASE_SERVICE_KEY), description="Service role key, server only; real key only in .env."
+    )
+    supabase_bucket: str = Field("claim-photos", pattern=r"^[A-Za-z0-9][A-Za-z0-9._-]{0,62}$")
 
     # Fraud graph (Neo4j, a projection of Postgres; decisions log 2026-10-18). An empty NEO4J_URI disables the graph.
     # AuraDB uses neo4j+s://<instance>.databases.neo4j.io. One Community database serves dev and test, so every node
@@ -181,6 +192,26 @@ class Settings(BaseSettings):
             problems.append("a remote NEO4J_URI must use TLS (neo4j+s:// or bolt+s://)")
         if problems:
             raise ValueError("unsafe fraud graph settings for APP_ENV=prod: " + "; ".join(problems))
+        return self
+
+    @model_validator(mode="after")
+    def _storage_guards(self) -> Settings:
+        """A production process on the Supabase backend must hold a real project URL over TLS and a real key."""
+        if self.app_env != "prod" or self.storage_backend != "supabase":
+            return self
+        problems = []
+        parts = urlsplit(self.supabase_url)
+        if self.supabase_url.rstrip("/") == EXAMPLE_SUPABASE_URL:
+            problems.append("SUPABASE_URL is the example value")
+        if parts.scheme != "https" or not parts.hostname:
+            problems.append("SUPABASE_URL must be an https URL with a host")
+        key = self.supabase_service_key.get_secret_value()
+        if key == EXAMPLE_SUPABASE_SERVICE_KEY:
+            problems.append("SUPABASE_SERVICE_KEY is the example value")
+        elif not key:
+            problems.append("SUPABASE_SERVICE_KEY is empty")
+        if problems:
+            raise ValueError("unsafe photo storage settings for APP_ENV=prod: " + "; ".join(problems))
         return self
 
     @field_validator("storage_dir", "replay_dir", "llm_record_dir")
