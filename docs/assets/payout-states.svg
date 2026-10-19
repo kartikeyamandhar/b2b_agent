@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="584" viewBox="0 0 1200 584" role="img" aria-labelledby="title desc">
+  <title id="title">Payout ledger states</title>
+  <desc id="desc">The payout ledger state machine from LEGAL in payouts/db_ledger.py. An approval creates the row in pending. pending, onboarding, and failed are payable with money not yet moved: pending can go to onboarding, onboarding can fail, and failed can re-onboard. Any of the three can be claimed for a transfer (claim_for_transfer, which the payments component will call before each Stripe transfer), moved to pending_export when a check is chosen or the third transfer fails, or held when the claim leaves approved. transferring ends in transferred (terminal; the claim moves to paid) or failed. pending_export ends in exported (terminal; the claim moves to paid) or is held. A held row is released only by a person's re-approval; a late Stripe result for a held row is recorded with an alert, never refused.</desc>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="9" orient="auto">
+      <path class="ahead" d="M1,1.5 L9,5 L1,8.5 Z"/>
+    </marker>
+    <marker id="ahb" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="9" orient="auto">
+      <path class="aheadb" d="M1,1.5 L9,5 L1,8.5 Z"/>
+    </marker>
+  </defs>
+  <style>
+    text { font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+    .card { fill: #fcfcfb; stroke: rgba(11,11,11,0.10); stroke-width: 1; }
+    .ink { fill: #0b0b0b; }
+    .ink2 { fill: #52514e; }
+    .mut { fill: #898781; }
+    .panel { fill: #f9f9f7; stroke: #e1e0d9; stroke-width: 1; }
+    .rule { stroke: #e1e0d9; stroke-width: 1; fill: none; }
+    .node { fill: #fcfcfb; stroke: #c3c2b7; stroke-width: 1.5; }
+    .term { fill: #0ca30c; fill-opacity: 0.08; stroke: #0ca30c; stroke-width: 1.5; }
+    .check { stroke: #0ca30c; stroke-width: 2.25; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .goodfill { fill: #0ca30c; fill-opacity: 0.16; }
+    .flow { stroke: #898781; stroke-width: 2; fill: none; stroke-linejoin: round; }
+    .flowb { stroke: #2a78d6; stroke-width: 2; fill: none; }
+    .dash { stroke: #898781; stroke-width: 2; fill: none; stroke-dasharray: 5 4; stroke-linejoin: round; }
+    .ahead { fill: #898781; }
+    .aheadb { fill: #2a78d6; }
+    .dot { fill: #52514e; }
+    .accent { fill: #2a78d6; }
+    .warn { fill: #fab219; }
+    .crit { fill: #d03b3b; }
+    @media (prefers-color-scheme: dark) {
+      .card { fill: #1a1a19; stroke: rgba(255,255,255,0.10); }
+      .ink { fill: #f0efec; }
+      .ink2 { fill: #c3c2b7; }
+      .mut { fill: #898781; }
+      .panel { fill: #0d0d0d; stroke: #2c2c2a; }
+      .rule { stroke: #2c2c2a; }
+      .node { fill: #1a1a19; stroke: #383835; }
+      .term { fill: #0ca30c; fill-opacity: 0.14; }
+      .goodfill { fill-opacity: 0.24; }
+      .flow { stroke: #898781; }
+      .flowb { stroke: #3987e5; }
+      .dash { stroke: #898781; }
+      .ahead { fill: #898781; }
+      .aheadb { fill: #3987e5; }
+      .dot { fill: #c3c2b7; }
+      .accent { fill: #3987e5; }
+    }
+  </style>
+
+  <rect class="card" x="0.5" y="0.5" width="1199" height="583" rx="16"/>
+
+  <text class="ink" x="40" y="50" font-size="26" font-weight="600">Payout ledger</text>
+  <text class="ink2" x="40" y="77" font-size="15">A payouts row exists before any Stripe call. Every move is checked against LEGAL in db_ledger.py and written to audit_log.</text>
+
+  <!-- payable group -->
+  <rect class="panel" x="40" y="112" width="380" height="300" rx="12"/>
+  <text class="ink2" x="60" y="138" font-size="13" font-weight="600">Payable, money not moved yet</text>
+
+  <circle class="dot" cx="80" cy="172" r="6"/>
+  <text class="mut" x="94" y="176" font-size="12">on approval</text>
+  <path class="flow" d="M80 178 V212" marker-end="url(#ah)"/>
+
+  <rect class="node" x="56" y="214" width="150" height="48" rx="10"/>
+  <text class="ink code" x="131" y="243" font-size="15" font-weight="600" text-anchor="middle">pending</text>
+
+  <rect class="node" x="254" y="168" width="146" height="48" rx="10"/>
+  <text class="ink code" x="327" y="197" font-size="15" font-weight="600" text-anchor="middle">onboarding</text>
+
+  <rect class="node" x="254" y="292" width="146" height="48" rx="10"/>
+  <circle class="crit" cx="292" cy="316" r="4.5"/>
+  <text class="ink code" x="334" y="321" font-size="15" font-weight="600" text-anchor="middle">failed</text>
+
+  <path class="flow" d="M206 230 C232 230 228 192 252 192" marker-end="url(#ah)"/>
+  <path class="flow" d="M312 216 V290" marker-end="url(#ah)"/>
+  <path class="flow" d="M342 292 V218" marker-end="url(#ah)"/>
+  <text class="mut" x="304" y="258" font-size="12" text-anchor="end">fails</text>
+  <text class="mut" x="350" y="258" font-size="12">re-onboard</text>
+
+  <text class="ink2" x="60" y="374" font-size="13">Any of the three can be claimed for a</text>
+  <text class="ink2" x="60" y="392" font-size="13">transfer, sent to export, or held.</text>
+
+  <!-- transferring -->
+  <rect class="node" x="560" y="168" width="180" height="48" rx="10"/>
+  <text class="ink code" x="650" y="197" font-size="15" font-weight="600" text-anchor="middle">transferring</text>
+
+  <path class="flowb" d="M420 192 H558" marker-end="url(#ahb)"/>
+  <circle class="accent" cx="437" cy="129" r="4"/>
+  <text class="ink code" x="448" y="134" font-size="13" font-weight="600">claim_for_transfer</text>
+  <text class="ink2" x="432" y="153" font-size="12">the payments component will call it before each transfer</text>
+
+  <!-- transferred (terminal) -->
+  <rect class="term" x="924" y="160" width="236" height="64" rx="10"/>
+  <circle class="goodfill" cx="950" cy="182" r="10"/>
+  <path class="check" d="M945 182.5 L948.8 186.3 L955.5 178.5"/>
+  <text class="ink code" x="968" y="187" font-size="15" font-weight="600">transferred</text>
+  <text class="ink2" x="940" y="211" font-size="12">Terminal. The claim is now paid.</text>
+
+  <path class="flow" d="M740 192 H922" marker-end="url(#ah)"/>
+  <text class="ink2" x="831" y="182" font-size="13" text-anchor="middle">Stripe transfer succeeds</text>
+
+  <!-- transferring -> failed -->
+  <path class="flow" d="M600 216 V316 H402" marker-end="url(#ah)"/>
+  <text class="ink2" x="612" y="262" font-size="13">transfer fails,</text>
+  <text class="ink2" x="612" y="279" font-size="13">attempts + 1</text>
+
+  <!-- held -->
+  <rect class="node" x="560" y="344" width="180" height="56" rx="10"/>
+  <circle class="warn" cx="624" cy="372" r="4.5"/>
+  <text class="ink code" x="660" y="377" font-size="15" font-weight="600" text-anchor="middle">held</text>
+
+  <path class="flow" d="M420 360 H558" marker-end="url(#ah)"/>
+  <text class="ink2" x="430" y="351" font-size="12">claim left approved</text>
+  <path class="dash" d="M560 386 H422" marker-end="url(#ah)"/>
+  <text class="ink2" x="430" y="404" font-size="12">a person re-approves</text>
+
+  <!-- late result for a held row -->
+  <path class="dash" d="M740 372 H1000 Q1040 372 1040 332 V226" marker-end="url(#ah)"/>
+  <text class="ink2" x="760" y="392" font-size="12">a late Stripe result for a held row is</text>
+  <text class="ink2" x="760" y="408" font-size="12">recorded with an alert, never refused</text>
+
+  <!-- pending_export -->
+  <rect class="node" x="560" y="452" width="180" height="48" rx="10"/>
+  <text class="ink code" x="650" y="481" font-size="15" font-weight="600" text-anchor="middle">pending_export</text>
+
+  <path class="flow" d="M300 412 V476 H558" marker-end="url(#ah)"/>
+  <text class="ink2" x="312" y="496" font-size="12">a check is chosen, or</text>
+  <text class="ink2" x="312" y="512" font-size="12">after the third failure</text>
+
+  <path class="flow" d="M650 452 V402" marker-end="url(#ah)"/>
+  <text class="ink2" x="660" y="432" font-size="12">claim left approved</text>
+
+  <!-- exported (terminal) -->
+  <rect class="term" x="924" y="444" width="236" height="64" rx="10"/>
+  <circle class="goodfill" cx="950" cy="466" r="10"/>
+  <path class="check" d="M945 466.5 L948.8 470.3 L955.5 462.5"/>
+  <text class="ink code" x="968" y="471" font-size="15" font-weight="600">exported</text>
+  <text class="ink2" x="940" y="495" font-size="12">Terminal. The claim is now paid.</text>
+
+  <path class="flow" d="M740 476 H922" marker-end="url(#ah)"/>
+  <text class="ink2" x="831" y="466" font-size="13" text-anchor="middle">CSV export batch written</text>
+
+  <!-- footnotes -->
+  <line class="rule" x1="40" y1="530" x2="1160" y2="530"/>
+  <text class="mut" x="40" y="552" font-size="13">Dashed lines are exception paths; only a person's re-approval releases a hold. A hold asked for during a transfer is applied if that transfer fails.</text>
+  <text class="mut" x="40" y="570" font-size="13">Re-approval sends a held check back to pending_export. An approval starts there when billing allows no Connect payout. The payout id is the idempotency key.</text>
+</svg>

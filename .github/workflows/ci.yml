@@ -59,7 +59,7 @@ jobs:
           done
       - name: Lint
         working-directory: apps/api
-        run: uv run --frozen ruff check src tests migrations && uv run --frozen ruff format --check src tests migrations
+        run: uv run --frozen ruff check src tests migrations ../../docs/assets/src && uv run --frozen ruff format --check src tests migrations ../../docs/assets/src
       - name: Types
         working-directory: apps/api
         run: uv run --frozen mypy

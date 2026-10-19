@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1200" height="224" viewBox="0 0 1200 224" role="img" aria-labelledby="title desc">
+<title id="title">RecallOps results at a glance</title>
+<desc id="desc">Five headline numbers. Fraud recall on the 300 synthetic golden claims: 1.000 for the rules-only adjudicator and the agent, 0.750 on the 40 agent-written claims (written blind to the generator). Macro F1 on those 40 claims: agent loop 0.774, rules only 0.583, rules plus vision 0.668. Monthly progress report discrepancies: 0. Duplicate groups the Neo4j graph reproduces from check_duplicates: 36 of 36. Model spend for the whole project: 1.62 USD.</desc>
+<style>
+  text { font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+  .card { fill:#fcfcfb;stroke:#0b0b0b;stroke-opacity:0.10 }
+  .ink { fill:#0b0b0b }
+  .ink2 { fill:#52514e }
+  .muted { fill:#898781 }
+  .grid { stroke:#e1e0d9 }
+  .axis { stroke:#c3c2b7 }
+  .accent { fill:#2a78d6 }
+  @media (prefers-color-scheme: dark) {
+    .card { fill:#1a1a19;stroke:#ffffff;stroke-opacity:0.10 }
+    .ink { fill:#f0efec }
+    .ink2 { fill:#c3c2b7 }
+    .muted { fill:#898781 }
+    .grid { stroke:#2c2c2a }
+    .axis { stroke:#383835 }
+    .accent { fill:#3987e5 }
+  }
+</style>
+<rect class="card" x="0.5" y="0.5" width="1199" height="223" rx="16" stroke-width="1"/>
+<rect class="accent" x="36" y="30" width="24" height="3" rx="1.5"/>
+<text x="36" y="60" class="ink2" font-size="14" font-weight="500">Fraud recall on the</text>
+<text x="36" y="79" class="ink2" font-size="14" font-weight="500">synthetic claims</text>
+<text x="36" y="142" font-weight="600"><tspan class="ink" font-size="35">1.000</tspan></text>
+<text x="36" y="172" class="ink2" font-size="13">rules and agent both; 0.750</text>
+<text x="36" y="190" class="ink2" font-size="13">on the 40 agent-written</text>
+<line class="grid" x1="249.6" y1="30" x2="249.6" y2="194" stroke-width="1"/>
+<rect class="accent" x="269.6" y="30" width="24" height="3" rx="1.5"/>
+<text x="269.6" y="60" class="ink2" font-size="14" font-weight="500">Agent vs rules on 40</text>
+<text x="269.6" y="79" class="ink2" font-size="14" font-weight="500">agent-written claims</text>
+<text x="269.6" y="142" font-weight="600"><tspan class="ink" font-size="35">0.774</tspan><tspan class="ink" font-size="17.5" font-weight="500" dx="7">vs 0.583</tspan></text>
+<text x="269.6" y="172" class="ink2" font-size="13">macro F1; written</text>
+<text x="269.6" y="190" class="ink2" font-size="13">blind to the generator</text>
+<line class="grid" x1="483.2" y1="30" x2="483.2" y2="194" stroke-width="1"/>
+<rect class="accent" x="503.2" y="30" width="24" height="3" rx="1.5"/>
+<text x="503.2" y="60" class="ink2" font-size="14" font-weight="500">MPR discrepancies</text>
+<text x="503.2" y="142" font-weight="600"><tspan class="ink" font-size="35">0</tspan></text>
+<text x="503.2" y="172" class="ink2" font-size="13">SQL report = Polars</text>
+<text x="503.2" y="190" class="ink2" font-size="13">recount = scenario truth</text>
+<line class="grid" x1="716.8" y1="30" x2="716.8" y2="194" stroke-width="1"/>
+<rect class="accent" x="736.8" y="30" width="24" height="3" rx="1.5"/>
+<text x="736.8" y="60" class="ink2" font-size="14" font-weight="500">Duplicate groups</text>
+<text x="736.8" y="79" class="ink2" font-size="14" font-weight="500">reproduced by the graph</text>
+<text x="736.8" y="142" font-weight="600"><tspan class="ink" font-size="35">36 / 36</tspan></text>
+<text x="736.8" y="172" class="ink2" font-size="13">Neo4j vs check_duplicates,</text>
+<text x="736.8" y="190" class="ink2" font-size="13">asserted by a CI test</text>
+<line class="grid" x1="950.4" y1="30" x2="950.4" y2="194" stroke-width="1"/>
+<rect class="accent" x="970.4" y="30" width="24" height="3" rx="1.5"/>
+<text x="970.4" y="60" class="ink2" font-size="14" font-weight="500">Model spend, whole project</text>
+<text x="970.4" y="142" font-weight="600"><tspan class="ink" font-size="35">1.62</tspan><tspan class="ink2" font-size="17.5" font-weight="500" dx="7">USD</tspan></text>
+<text x="970.4" y="172" class="ink2" font-size="13">every eval replays offline</text>
+</svg>
