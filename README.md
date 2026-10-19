@@ -187,11 +187,11 @@ Six ways of deciding the same claims under the same outcome policy, on three blo
 | what the tool should do | real CPSC photos | result |
 |---|---|---|
 | Read the model number | 20 readable labels | 18 read, 1 misread, 1 abstained |
-| Never make one up | 20 with no readable model number | none made up; 2 returned another printed code (a style and an item number) |
+| Never make one up | 20 with no readable model number | none invented; 2 returned another printed code (a style number, and "ITEM 61970") |
 | Reject an intact product | 20 product photos | 20 rejected |
 | Accept CPSC's own examples of correct destruction | 3 | **1 accepted** |
 
-The label reader holds up on real labels; its one misread is the right model with the angle brackets the label prints, which the model-number matching does not strip yet. The destruction check is strict on real photos as well: it called a cut cord "intact" in CPSC's own example, so that claimant would be asked for another photo rather than paid. A revised destruction prompt, measured on this block before it ships, is the next change.
+The label reader holds up on real labels. The weak link is one step later, matching what it read against the model list the regex extractor stored for the notice: 3 photos would deny a covered claim. One label prints "NZ-9160.4 5000 Y" where the notice lists "9160.4", the extractor kept only 2 of the 7 models in one notice's table, and "ITEM 61970" keeps its field word against the notice's item 61970. The destruction check is strict on real photos as well: it called a cut cord "intact" in CPSC's own example, so that claimant would be asked for another photo rather than paid. Sending a label-shows-another-model result to a person, reading whole model tables, and a revised destruction prompt are the next changes, each measured on this block before it ships.
 
 - **Rule extraction.** On the 60 notices labeled blind, the regex baseline beats the model-based extractor on field accuracy, 91.8 against 87.9 ([evals/results/extraction.md](evals/results/extraction.md)). The model extractor therefore runs only as a fallback, as the kill criterion written before the run requires: if the regex baseline came within 5 points of the model, the model would be demoted.
 

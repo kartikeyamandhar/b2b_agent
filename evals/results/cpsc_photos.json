@@ -2,6 +2,7 @@
  "block": "cpsc_photos",
  "vision_version": "1.0.0",
  "status": "run",
+ "mode": "replay",
  "label_status": "assistant-labeled: two blind labelers (64 of 64 agreed before adjudication), adjudicated by the main session; owner audit pending",
  "metrics": {
   "label_n": 40,

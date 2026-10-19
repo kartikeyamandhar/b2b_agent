@@ -103,5 +103,5 @@ Provenance for every downloaded file. data/raw/ is gitignored except this file; 
 - Source: the `Images` URLs of the cached CPSC records in section 2 (www.cpsc.gov), chosen by the seeded rule in evals/cpsc_photos/PREREG.md (`python -m recallops.evals.cpsc_photos select`)
 - Saved as: data/raw/cpsc_images/<sha256>.<ext> (gitignored); evals/cpsc_photos/manifest.json commits every URL, caption, sha256, byte size, and the size the model receives
 - Downloaded: 2026-10-19T20:45:14+00:00, HTTP 200 for all 64 photos, one request at a time with the project User-Agent; 0 skipped
-- Size: 16,271,458 bytes in total (42 PNG, 19 JPEG, 3 GIF)
+- Size: 16,271,458 bytes in total across the 64 downloads (42 PNG, 19 JPEG, 3 GIF); 63 files, 16,213,748 bytes on disk, because L03 and L08 are one image
 - Use: images CPSC publishes with its recall notices; the files are not redistributed by this repository
