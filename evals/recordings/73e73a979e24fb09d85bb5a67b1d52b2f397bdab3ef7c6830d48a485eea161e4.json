@@ -1,0 +1,65 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3734,
+  "output_tokens": 484,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB443XsR6ttGjuvm4CpL",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2502,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01QYFrfuzonAFvoWckmJ9h6q",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model B0726Y, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T7"
+      ]
+     },
+     {
+      "text": "The date code 8/21 on the label is within the recalled range (August 2021 or earlier).",
+      "cites": [
+       "R:date_codes",
+       "T6"
+      ]
+     },
+     {
+      "text": "The retailer (www.Amazon.com) is on the sold-at list and the purchase date of 2017-01-08 is inside the sale window, with no receipt required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the helmet with its straps cut off. It shows a red object with a black strap against a green background, so it does not confirm the required destruction.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo showing the recalled helmet with both straps cut off, so we can confirm it has been destroyed as the recall instructs.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

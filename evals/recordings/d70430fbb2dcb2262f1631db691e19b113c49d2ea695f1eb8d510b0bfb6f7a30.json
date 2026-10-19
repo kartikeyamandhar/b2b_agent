@@ -1,0 +1,76 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: label photo is legible and shows 34785, a recalled model (T1, T2). Confirmed.\n- Date code: 10/2021 is within 10/2021-12/2022 (T3). Serial is present; the program's serial rule is not listed among the active rules, so no serial check applies.\n- Purchase: Igloocoolers.com is on the sold-at list, and 2024-06-26 is inside the sale window (T4).\n- Destruction photo: not required for this remedy (T5).\n- Duplicates: none found (T6).\n- No flag, deny, or needs_info triggers apply, so the claim is approved for replacement (no refund requested, so no value threshold review).",
+ "usage": {
+  "input_tokens": 2850,
+  "output_tokens": 712,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeTecbZzxMbE9kw2prm",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3406,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: label photo is legible and shows 34785, a recalled model (T1, T2). Confirmed.\n- Date code: 10/2021 is within 10/2021-12/2022 (T3). Serial is present; the program's serial rule is not listed among the active rules, so no serial check applies.\n- Purchase: Igloocoolers.com is on the sold-at list, and 2024-06-26 is inside the sale window (T4).\n- Destruction photo: not required for this remedy (T5).\n- Duplicates: none found (T6).\n- No flag, deny, or needs_info triggers apply, so the claim is approved for replacement (no refund requested, so no value threshold review)."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01TxSZzfcU91XXLPzMFch6zy",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 34785, which is on the recalled model list, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 10/2021 falls within the recalled range 10/2021-12/2022.",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "Igloocoolers.com is an approved retailer and the purchase date 2024-06-26 is inside the sale window, so purchase requirements are met and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this replacement remedy.",
+      "cites": [
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this claim.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "No flag, deny, or needs_info condition is triggered, and no refund is requested, so the replacement is approved under the claim policy.",
+      "cites": [
+       "R:policy",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

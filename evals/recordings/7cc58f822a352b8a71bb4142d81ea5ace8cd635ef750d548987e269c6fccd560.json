@@ -1,0 +1,59 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3439,
+  "output_tokens": 377,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3rhJPWyj25RzoNxFMK",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1841,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_014BPAc1R9FyGnC4sk9J8WWD",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo is the same image (identical sha256) as a photo on another claim in the program, which the policy requires to be flagged for review.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label is legible and shows model 9421, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (Graybar Electric Co.) inside the sale window, and no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The serial check was skipped, so the serial number SN72780317 has not been verified against the recalled ranges.",
+      "cites": [
+       "T4",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

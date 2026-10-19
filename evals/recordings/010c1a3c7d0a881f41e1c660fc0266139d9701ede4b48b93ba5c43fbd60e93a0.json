@@ -1,0 +1,64 @@
+{
+ "text": "Checking the results against the policy:\n\n- Duplicates: T6 shows no hits, so no flag.\n- Model: T1 reads the label as legible showing 34790, which is a recalled model (T2 match). Confirmed.\n- Date code: T3 says 09/2025 is out of range. The recalled ranges are 07/2020-09/2021, 10/2021-12/2022, 10/2021-02/2023, and manufactured prior to January 2024. A 09/2025 date code is outside all of them, so the unit is not part of the recall. Deny.\n- Serial: the program's serial rule is not listed in R:date_codes or R:models, so it does not apply here.\n- Purchase: Target is listed, and 2023-07-22 is inside the sale window (T4). Receipt not required.\n- Destruction: not required (T5), since the remedy is repair or replacement.\n\nOrder of rules: flag does not apply, so deny is the first triggered outcome. The date-code rule is the deciding one; the model being recalled does not override it.",
+ "usage": {
+  "input_tokens": 2845,
+  "output_tokens": 754,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeTTR9LxTRxwJ1AVnAM",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3711,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Duplicates: T6 shows no hits, so no flag.\n- Model: T1 reads the label as legible showing 34790, which is a recalled model (T2 match). Confirmed.\n- Date code: T3 says 09/2025 is out of range. The recalled ranges are 07/2020-09/2021, 10/2021-12/2022, 10/2021-02/2023, and manufactured prior to January 2024. A 09/2025 date code is outside all of them, so the unit is not part of the recall. Deny.\n- Serial: the program's serial rule is not listed in R:date_codes or R:models, so it does not apply here.\n- Purchase: Target is listed, and 2023-07-22 is inside the sale window (T4). Receipt not required.\n- Destruction: not required (T5), since the remedy is repair or replacement.\n\nOrder of rules: flag does not apply, so deny is the first triggered outcome. The date-code rule is the deciding one; the model being recalled does not override it."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01HtmuzA3LcQFqGvBVccL6Lr",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 34790, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code on the label is 09/2025, which falls outside every recalled date code range (07/2020-09/2021, 10/2021-12/2022, 10/2021-02/2023, and manufactured before January 2024). The unit is not part of the recall.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T3",
+       "T7"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase at Target on 2023-07-22 is inside the sale window and at a listed retailer, so purchase eligibility is not the issue.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

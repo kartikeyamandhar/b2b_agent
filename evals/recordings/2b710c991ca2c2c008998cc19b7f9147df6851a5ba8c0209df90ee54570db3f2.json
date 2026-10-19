@@ -1,0 +1,58 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3991,
+  "output_tokens": 401,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3tN35U9VaTGr2HqgwA",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1968,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01D7KMkvkzjrhG9wy9cYNgiU",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model LSE4613BD, which is on the recalled models list, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number 309KM7640401 falls within a recalled serial range.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2014-04-05 is before the program's sale window (2015-01-01 to 2025-01-31), so the purchase does not qualify. The retailer, LG.com, is not on the list of approved sellers, so the purchase cannot be accepted.",
+      "cites": [
+       "T2",
+       "R:sold_window",
+       "R:sold_at"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,70 @@
+{
+ "text": "Model, serial, date code, purchase, and the duplicate check are all in hand. The flag rule takes precedence over the otherwise-approvable result.",
+ "usage": {
+  "input_tokens": 3715,
+  "output_tokens": 495,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3XeSTpUWrJiUrqobvx",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 4104,
+ "content": [
+  {
+   "type": "text",
+   "text": "Model, serial, date code, purchase, and the duplicate check are all in hand. The flag rule takes precedence over the otherwise-approvable result."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01GgTyBLS2JAjhbVyqLnsb31",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program (9a853e1f-6423-5b58-a6c8-c031fd1a6963) shares this claim's address, so the claim must be flagged for review under the duplicate rule.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number BN29705481 falls in the recalled 'BN' range.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code June 2025 is prior to July 2025, so it is within the recalled date codes.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "Amazon.com is a listed retailer and the purchase date 2025-06-18 is inside the sale window; no receipt is required for this retailer.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,63 @@
+{
+ "text": "Checking the results against the policy:\n\n- Flag: check_duplicates (T5) found no matches. No flag.\n- Model: label photo is legible and shows AD10004BE, a recalled model (R:models, T1, T2). Confirmed.\n- Serial/date code: program has serial rules only as stated in the policy; the claim has a serial (SN29785122), and the policy's serial/date-code rule applies only when the program has those rules. The recall list gives no serial range, so this does not trigger a deny or needs_info.\n- Purchase: Amazon.com is listed, date 2023-11-04 is inside the window, receipt not required (T3, R:sold_window, R:sold_at).\n- Destruction: required. The destruction photo check (T4) returned complies: false. The observed photo shows a gray card/sign with \"RECALLED\" on a green background, not a seatback marked with a marker. Per policy, a destruction photo that does not show the instructed destruction is asked for again (needs_info, R:destruction, T4, faq#3).\n- Refund $194.71 exceeds $100 threshold, but the review flag applies only after approval; it does not override the needs_info outcome.\n\nOutcome: needs_info, asking for a new destruction photo.",
+ "usage": {
+  "input_tokens": 2875,
+  "output_tokens": 900,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "max_tokens",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeSduPyZw261JH1Y55D",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4639,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Flag: check_duplicates (T5) found no matches. No flag.\n- Model: label photo is legible and shows AD10004BE, a recalled model (R:models, T1, T2). Confirmed.\n- Serial/date code: program has serial rules only as stated in the policy; the claim has a serial (SN29785122), and the policy's serial/date-code rule applies only when the program has those rules. The recall list gives no serial range, so this does not trigger a deny or needs_info.\n- Purchase: Amazon.com is listed, date 2023-11-04 is inside the window, receipt not required (T3, R:sold_window, R:sold_at).\n- Destruction: required. The destruction photo check (T4) returned complies: false. The observed photo shows a gray card/sign with \"RECALLED\" on a green background, not a seatback marked with a marker. Per policy, a destruction photo that does not show the instructed destruction is asked for again (needs_info, R:destruction, T4, faq#3).\n- Refund $194.71 exceeds $100 threshold, but the review flag applies only after approval; it does not override the needs_info outcome.\n\nOutcome: needs_info, asking for a new destruction photo."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0171Zzq8UywTTjqqp14mJedN",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model AD10004BE, which is on the recalled list, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase is from Amazon.com, which is the listed retailer, and the date 2023-11-04 falls inside the sale window. No receipt is required for this retailer.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the instructed destruction. It shows a gray card or sign with RECALLED on a green background, not a seatback marked in marker on the front and rear. A destruction photo that does not show the instructed destruction must be asked for again.",
+      "cites": [
+       "R:destruction",
+       "T4",
+       "faq#3"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new destruction photo showing the seatback itself with \"RECALLED\" written in large letters in marker on both the front and the rear of the seatback. The current photo shows a card or sign instead of the seat."
+   }
+  }
+ ]
+}

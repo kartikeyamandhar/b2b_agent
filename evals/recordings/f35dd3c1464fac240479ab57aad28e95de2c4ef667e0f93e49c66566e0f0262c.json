@@ -1,0 +1,77 @@
+{
+ "text": "All checks pass: label legible showing CXM-02 (recalled), serial prefix FC29D in range, retailer JHTNA listed, purchase 2023-11-03 inside window, no destruction photo required, no duplicates, remedy is repair (no refund over threshold).",
+ "usage": {
+  "input_tokens": 3010,
+  "output_tokens": 587,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeQ7ai6racxM9U7zfpo",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 16024,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass: label legible showing CXM-02 (recalled), serial prefix FC29D in range, retailer JHTNA listed, purchase 2023-11-03 inside window, no destruction photo required, no duplicates, remedy is repair (no refund over threshold)."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01M6bEB4hj8WxEPF6KKmrvjk",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model CXM-02, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "T7"
+      ]
+     },
+     {
+      "text": "The serial number FC29D34442452 has a prefix within the recalled serial ranges.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The unit was sold at JHTNA, a listed retailer, on 2023-11-03, which is inside the 2021-01-01 to 2024-10-31 sale window; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy (repair), so that check does not apply.",
+      "cites": [
+       "T5",
+       "T7"
+      ]
+     },
+     {
+      "text": "The duplicate check found no other claim sharing a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The remedy requested is repair or replacement with no refund amount, so the $100 value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

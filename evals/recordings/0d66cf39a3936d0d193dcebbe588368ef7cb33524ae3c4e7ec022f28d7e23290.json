@@ -1,0 +1,64 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: T1 label is legible and reads CXC-02, a recalled model (R:models, T2 match). Confirmed.\n- Serial: FC29D5788327 has prefix FC29D, which is on the recalled list (R:serials, T3 in_range).\n- Purchase: JHTNA is a listed retailer (R:sold_at, T4), and the purchase date 2020-06-03 is before the sale window of 2021-01-01 to 2024-10-31 (R:sold_window, T4 \"before\"). Policy says a purchase before the window is denied.\n- Duplicates: none found (T6), so no flag applies.\n- Destruction photo: not required for this remedy (T5).\n\nDeny takes precedence over the approve path, and no flag or needs_info condition overrides it. The purchase date is clearly before the window, not unknown, so this is a denial rather than a request for more information.",
+ "usage": {
+  "input_tokens": 3009,
+  "output_tokens": 688,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeQAzLgrgQokz6paZtV",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 12184,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: T1 label is legible and reads CXC-02, a recalled model (R:models, T2 match). Confirmed.\n- Serial: FC29D5788327 has prefix FC29D, which is on the recalled list (R:serials, T3 in_range).\n- Purchase: JHTNA is a listed retailer (R:sold_at, T4), and the purchase date 2020-06-03 is before the sale window of 2021-01-01 to 2024-10-31 (R:sold_window, T4 \"before\"). Policy says a purchase before the window is denied.\n- Duplicates: none found (T6), so no flag applies.\n- Destruction photo: not required for this remedy (T5).\n\nDeny takes precedence over the approve path, and no flag or needs_info condition overrides it. The purchase date is clearly before the window, not unknown, so this is a denial rather than a request for more information."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01MzYjxvUNj3RZjrhFUWj3Uh",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows CXC-02, a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial number prefix FC29D is on the recalled list.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The retailer JHTNA is on the approved list, but the stated purchase date of 2020-06-03 is before the sale window of 2021-01-01 to 2024-10-31. Purchases before the window are not eligible.",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "T4",
+       "faq#2"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, and no destruction photo is required for this repair or replacement remedy.",
+      "cites": [
+       "T5",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

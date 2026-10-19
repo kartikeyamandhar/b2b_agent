@@ -1,0 +1,70 @@
+{
+ "text": "Let me work through the policy against the results.\n\n- Duplicates (T6): no hits, so no flag.\n- Model: the label photo (T1) is legible and shows AD10014SL, a recalled model. The typed value has a typo (T2 ambiguous), but the label confirms the model. Pass.\n- Serial/date code: the program has no serial or date code rules for this recall (R:models lists none), so these don't apply.\n- Purchase: Amazon.com is listed, and 2024-01-05 falls inside the window (T4). Receipt not required (T4), though one was attached anyway. Pass.\n- Destruction: the policy requires \"RECALLED\" written in large letters on the front and rear of the seatback. T5 shows the word on a device's front face, but the checker reports it does not clearly show the instructed seatback marking, with confidence 0.5 and complies false. Under the policy, a destruction photo that does not show the instructed destruction is needs_info.\n- Refund $89.99 is under the $100 threshold, so no person review is needed for value.\n\nOutcome: needs_info, asking for a clearer destruction photo.",
+ "usage": {
+  "input_tokens": 2958,
+  "output_tokens": 900,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "max_tokens",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Bd9n4AiewccFwbh6C",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4231,
+ "content": [
+  {
+   "type": "text",
+   "text": "Let me work through the policy against the results.\n\n- Duplicates (T6): no hits, so no flag.\n- Model: the label photo (T1) is legible and shows AD10014SL, a recalled model. The typed value has a typo (T2 ambiguous), but the label confirms the model. Pass.\n- Serial/date code: the program has no serial or date code rules for this recall (R:models lists none), so these don't apply.\n- Purchase: Amazon.com is listed, and 2024-01-05 falls inside the window (T4). Receipt not required (T4), though one was attached anyway. Pass.\n- Destruction: the policy requires \"RECALLED\" written in large letters on the front and rear of the seatback. T5 shows the word on a device's front face, but the checker reports it does not clearly show the instructed seatback marking, with confidence 0.5 and complies false. Under the policy, a destruction photo that does not show the instructed destruction is needs_info.\n- Refund $89.99 is under the $100 threshold, so no person review is needed for value.\n\nOutcome: needs_info, asking for a clearer destruction photo."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01SvX4tc57AnFXa7gVSBcm2H",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model AD10014SL, which is a recalled model. The typed model has a typo, but the label confirms the model.",
+      "cites": [
+       "R:models",
+       "R:policy",
+       "T1",
+       "T2",
+       "T3"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "Purchase at Amazon.com on 2024-01-05 is inside the sale window and the retailer is listed. No receipt is required, though one was attached.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the instructed destruction (\"RECALLED\" in large letters on the front and rear of the seatback). The checker reports it does not comply, with low confidence, so a clearer photo is needed.",
+      "cites": [
+       "R:destruction",
+       "T5",
+       "T7"
+      ]
+     },
+     {
+      "text": "The refund of $89.99 is under the $100 threshold, so no person review is required for value.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a clearer photo of the destroyed unit showing \"RECALLED\" written in large letters on both the front and the rear of the seatback, in marker. The photo should show the seatback clearly."
+   }
+  }
+ ]
+}

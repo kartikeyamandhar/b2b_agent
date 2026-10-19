@@ -1,0 +1,77 @@
+{
+ "text": "Checking the policy in order: flag first. T6 found no duplicates, so no flag. Deny: label legible and shows LXT-CL-1.0 (T1, T2), date code 0722 in range (T3), serial present, purchase at Amazon within window with no receipt required (T4), destruction photo shows cut plug (T5). No deny or needs_info triggers. Remedy is replacement, no refund requested, so no value threshold review applies.",
+ "usage": {
+  "input_tokens": 2911,
+  "output_tokens": 636,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB35d3uSVpPJ8QnDzoi4",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2842,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy in order: flag first. T6 found no duplicates, so no flag. Deny: label legible and shows LXT-CL-1.0 (T1, T2), date code 0722 in range (T3), serial present, purchase at Amazon within window with no receipt required (T4), destruction photo shows cut plug (T5). No deny or needs_info triggers. Remedy is replacement, no refund requested, so no value threshold review applies."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01VYqwJQWPJz71ZWSoy3tVAx",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows the recalled model LXT-CL-1.0, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 0722 falls within the recalled range of 0722 to 1223.",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "The purchase was at Amazon, a listed retailer, on 2023-10-29, inside the sale window, and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the device with the plug cut off, as the remedy requires, and it is not a repeat of the label photo.",
+      "cites": [
+       "R:destruction",
+       "T5"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this claim.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The claim meets every eligibility rule; the remedy is replacement with no refund requested, so no value review applies.",
+      "cites": [
+       "R:policy",
+       "R:value_threshold",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.92
+   }
+  }
+ ]
+}

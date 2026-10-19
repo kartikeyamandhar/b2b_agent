@@ -1,0 +1,10 @@
+{
+ "claim_id": "335dd887-af7c-5de0-8337-1123236f8a0f",
+ "program": "26007",
+ "category": "clean",
+ "expected_outcome": "approve",
+ "violations": [],
+ "label_model_printed": "96775",
+ "label_unreadable": false,
+ "subtypes": {}
+}

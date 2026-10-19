@@ -1,0 +1,70 @@
+{
+ "text": "The call failed validation because I left out two required fields. Retrying with the question for the claimant and a confidence value added.",
+ "usage": {
+  "input_tokens": 3915,
+  "output_tokens": 581,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB38BaJKpkbk79uRhMsW",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2377,
+ "content": [
+  {
+   "type": "text",
+   "text": "The call failed validation because I left out two required fields. Retrying with the question for the claimant and a confidence value added."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01V65KhW2grtQ5KSaQf3Frcx",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows AD10014SL, a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase at Amazon.com on 2024-01-07 is inside the sale window and the retailer is listed; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the instructed destruction. It shows 'RECALLED' on the front only, and the check was low confidence (0.6). The instruction requires the word on both the front and rear of the seatback, so the photo is asked for again.",
+      "cites": [
+       "R:destruction",
+       "T4",
+       "T6"
+      ]
+     },
+     {
+      "text": "The $216.04 refund exceeds the $100 threshold, but that only means a person reviews it afterward; it does not change the outcome.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo of the destroyed product showing \"RECALLED\" written in large letters on both the front and the rear of the seatback, written with a marker. The current photo appears to show only the front.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

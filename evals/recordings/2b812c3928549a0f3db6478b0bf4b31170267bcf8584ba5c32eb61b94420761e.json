@@ -1,0 +1,66 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3656,
+  "output_tokens": 593,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB45FLJJVtwmtHybHmEt",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3216,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_016jtw11KpwXGwqtreGpM7YH",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model BB4640PU, which is a recalled model, so the model is confirmed even though the typed model was 8B4640PU.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase is from Amazon.com, a listed retailer, within the sale window 2023-04-01 to 2024-08-31 (purchase date 2024-06-18), and no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the instructed destruction. It does not clearly show a seatback, and there is no visible RECALLED marker writing on the front and rear. The remedy requires this, so the claim cannot be approved yet.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The serial check was skipped because the program has no serial rule, so the serial does not affect the outcome. The refund of $79.22 is under the $100 review threshold.",
+      "cites": [
+       "T5",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new destruction photo that clearly shows the seatback, with \"RECALLED\" written in large marker letters on both the front and the rear of the seatback. Please also make sure the photo is of the recalled seat itself.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

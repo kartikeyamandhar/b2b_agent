@@ -1,0 +1,10 @@
+{
+ "claim_id": "51277e43-ee89-5ac6-ab9e-18cd67e105a1",
+ "spec_id": "S38",
+ "program": "25206",
+ "category": "expect_needs_info",
+ "expected_outcome": "needs_info",
+ "rationale": "No destruction photo was uploaded, and notice 25206 requires a photo of the seatback marked RECALLED to obtain the refund, so destruction_not_shown gives needs_info.",
+ "violations": [],
+ "subtypes": {}
+}

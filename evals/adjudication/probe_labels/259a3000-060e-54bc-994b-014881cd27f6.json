@@ -1,0 +1,12 @@
+{
+ "claim_id": "259a3000-060e-54bc-994b-014881cd27f6",
+ "program": "26046",
+ "category": "label_shows_other_model",
+ "expected_outcome": "deny",
+ "violations": [
+  "label_shows_other_model"
+ ],
+ "label_model_printed": "LXT-DL-1.0",
+ "label_unreadable": false,
+ "subtypes": {}
+}

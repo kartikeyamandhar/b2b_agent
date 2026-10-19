@@ -1,0 +1,71 @@
+{
+ "text": "Flag takes precedence: T7 shows a same_serial match with another claim (a4a47ccc...), so this must go to a person regardless of the other checks.",
+ "usage": {
+  "input_tokens": 2961,
+  "output_tokens": 550,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB35rQaXagrin5uFf6BT",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2664,
+ "content": [
+  {
+   "type": "text",
+   "text": "Flag takes precedence: T7 shows a same_serial match with another claim (a4a47ccc...), so this must go to a person regardless of the other checks."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01NKCsZwd65M16wuG6JzBu5V",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim (a4a47ccc-ed8b-5bdd-adda-3ea23de865c1) sharing the same serial number, so the claim must be sent to a person for review together with the matching claim.",
+      "cites": [
+       "T7",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model MK04, a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number BN55928938 starts with BN and the date code June 2025 is prior to July 2025, both within the recall ranges.",
+      "cites": [
+       "T3",
+       "T4",
+       "R:serials",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase date 2024-12-23 is inside the sale window. The retailer Corner Hardware Co is not on the listed sellers, but the policy treats this as proof-of-ownership territory and no receipt is required, so it does not block the claim.",
+      "cites": [
+       "T5",
+       "R:sold_window",
+       "R:sold_at"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy.",
+      "cites": [
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

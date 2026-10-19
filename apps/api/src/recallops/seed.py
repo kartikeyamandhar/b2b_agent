@@ -2,9 +2,10 @@
 
 Loads the committed CPSC fixture (data/samples/cpsc_sample.json), opens a program for the Scotch thermal laminator
 recall (27024) with baseline-extracted rules, generates 500 synthetic claims with planted violations and rendered
-photos, adjudicates them with the rules-only adjudicator (traces in agent_runs and agent_steps), and adds a second
-firm so cross-tenant behavior can be tried from the UI. Ids are deterministic, so README curl examples stay valid
-across reseeds. Idempotent: rows of the two seed firms are deleted and rebuilt.
+photos, adjudicates them with the rules-only adjudicator (traces in agent_runs and agent_steps), moves the approved
+refunds' payouts through the real ledger (transferred, failed, onboarding, pending, and one export batch), and adds a
+second firm so cross-tenant behavior can be tried from the UI. Ids are deterministic, so README curl examples stay
+valid across reseeds. Idempotent: rows of the two seed firms are deleted and rebuilt.
 """
 
 from __future__ import annotations
@@ -23,6 +24,7 @@ from sqlalchemy.orm import Session
 from recallops.claims.rules_only import adjudicate
 from recallops.claims.tools import ClaimFacts, PhotoRef
 from recallops.db.engine import internal_engine
+from recallops.db.session import internal_session
 from recallops.ingest.runner import run as ingest_run
 from recallops.logs import configure, get_logger, log_event
 from recallops.models import (
@@ -31,15 +33,16 @@ from recallops.models import (
     ClaimPhoto,
     Firm,
     FirmMember,
-    FraudCluster,
     Recall,
     RecallProgram,
     UsageMeter,
 )
-from recallops.payouts.fake import FakeLedger
+from recallops.payouts.db_ledger import DbPayoutLedger
+from recallops.payouts.export import export_firm
 from recallops.photos import store
 from recallops.rules import baseline
 from recallops.settings import REPO_ROOT, get_settings
+from recallops.storage import Storage, build_storage
 from recallops.synth.generate import SynthClaim, generate_program, load_yaml
 from recallops.tenancy import FirmContext
 from recallops.tracing.writer import DbTrace
@@ -54,9 +57,13 @@ OTHER_RECALL = "27025"
 FIXTURE = REPO_ROOT / "data" / "samples" / "cpsc_sample.json"
 STATUS = {"approve": "approved", "deny": "denied", "needs_info": "needs_info", "flag": "flagged"}
 TENANT_DELETE_ORDER = (
+    "document_chunks",
     "agent_steps",
     "agent_runs",
+    "notifications",
+    "registrations",
     "payouts",
+    "export_batches",
     "claim_photos",
     "fraud_clusters",
     "mpr_reports",
@@ -74,6 +81,8 @@ def program_id_for(firm_id: uuid.UUID, recall: str) -> uuid.UUID:
 
 
 def _wipe(session: Session, firm_ids: list[uuid.UUID]) -> None:
+    """Reset tooling only: audit_log is append-only (migration 0003) unless app.audit_purge is on."""
+    session.execute(text("SELECT set_config('app.audit_purge', 'on', true)"))
     for table in TENANT_DELETE_ORDER:
         session.execute(text(f"DELETE FROM {table} WHERE firm_id = ANY(:ids)"), {"ids": firm_ids})
     session.execute(text("DELETE FROM firms WHERE id = ANY(:ids)"), {"ids": firm_ids})
@@ -99,6 +108,108 @@ def _facts(c: SynthClaim) -> ClaimFacts:
 
 def _question(reasons: list[str]) -> str:
     return "To finish your claim, please provide: " + "; ".join(reasons) + "."
+
+
+def insert_claims(
+    engine: Engine,
+    firm_id: uuid.UUID,
+    program_id: uuid.UUID,
+    claims: list[SynthClaim],
+    storage: Storage | None = None,
+) -> None:
+    """Submitted claims with their rendered photos stored like portal uploads (dev tokens dev.<firm>.<claim>). Seed
+    keys are deterministic, so each object is deleted before its put: a reseed works on a bucket that refuses
+    overwrites (Supabase, x-upsert: false) exactly as on local disk."""
+    storage = storage or build_storage(get_settings())
+    now = datetime.now(UTC)
+    with Session(engine) as session, session.begin():
+        for c in claims:
+            token = f"dev.{firm_id}.{c.claim_id}"
+            session.add(
+                Claim(
+                    id=c.claim_id,
+                    firm_id=firm_id,
+                    program_id=program_id,
+                    token_hash=hashlib.sha256(token.encode()).hexdigest(),
+                    status="submitted",
+                    claimant=c.claimant,
+                    model_claimed=c.model_claimed,
+                    serial_claimed=c.serial_claimed,
+                    date_code_claimed=c.date_code_claimed,
+                    retailer_claimed=c.retailer_claimed,
+                    purchase_date=c.purchase_date,
+                    quantity=1,
+                    remedy=c.remedy,
+                    refund_cents=c.refund_cents,
+                    submitted_at=now,
+                )
+            )
+        session.flush()
+        for c in claims:
+            for p in c.photos:
+                relative = f"{firm_id}/{c.claim_id}/{p.kind}.jpg"
+                storage.delete(relative)
+                stored = store(storage, relative, p.data, "image/jpeg")
+                session.add(
+                    ClaimPhoto(
+                        firm_id=firm_id,
+                        claim_id=c.claim_id,
+                        kind=p.kind,
+                        storage_path=relative,
+                        sha256=stored.sha256,
+                        phash=stored.phash,
+                        exif=stored.exif,
+                    )
+                )
+
+
+# Deterministic payout states for the demo, by position among approved refunds (index mod 10).
+PAYOUT_PLAN = (
+    "export",
+    "export",
+    "export",
+    "transfer",
+    "transfer",
+    "transfer",
+    "pending",
+    "pending",
+    "onboard",
+    "fail",
+)
+
+
+def seed_payouts(engine: Engine, ctx: FirmContext, approved: list[tuple[uuid.UUID, int]], plan: str) -> dict[str, Any]:
+    """Approved refunds through the real ledger, so the demo has every payout state, an export batch, and MPR
+    corrections. A free-plan firm has no Connect payouts: its rows wait for the export batch (03-payments.md)."""
+    ledger = DbPayoutLedger(engine, session_for=lambda c, e: internal_session(e))
+    method = "stripe_connect" if plan != "free" else "check_export"
+    for i, (claim_id, cents) in enumerate(sorted(approved)):
+        ref = ledger.create_pending(ctx, claim_id, cents, method)
+        if method != "stripe_connect":
+            continue
+        step = PAYOUT_PLAN[i % len(PAYOUT_PLAN)]
+        if step == "export":
+            ledger.to_export(ctx, ref.payout_id)
+        elif step == "transfer":
+            ledger.claim_for_transfer(ctx, ref.payout_id)
+            ledger.mark_transferred(ctx, ref.payout_id, f"tr_seed_{claim_id.hex[:12]}")
+        elif step == "onboard":
+            ledger.mark_onboarding(ctx, ref.payout_id, f"acct_seed_{claim_id.hex[:12]}")
+        elif step == "fail":
+            ledger.claim_for_transfer(ctx, ref.payout_id)
+            ledger.mark_failed(ctx, ref.payout_id, "seeded transfer failure (test mode)")
+    batch = export_firm(engine, ctx.firm_id, actor="seed") if method == "stripe_connect" else None
+    with engine.connect() as conn:
+        statuses: dict[str, int] = dict(
+            conn.execute(
+                text("SELECT status, count(*) FROM payouts WHERE firm_id = :f GROUP BY status ORDER BY status"),
+                {"f": ctx.firm_id},
+            ).all()
+        )
+    return {
+        "payouts": {str(k): int(v) for k, v in statuses.items()},
+        "export_batch_rows": batch["rows"] if batch else 0,
+    }
 
 
 def seed_program(engine: Engine, firm_id: uuid.UUID, recall_source_id: str, n: int, seed: int) -> dict[str, Any]:
@@ -135,49 +246,10 @@ def seed_program(engine: Engine, firm_id: uuid.UUID, recall_source_id: str, n: i
         )
         recall_date = recall.recall_date
     claims = generate_program(rules, str(program_id), n, seed, planted, policy, recall_date)
-    now = datetime.now(UTC)
-    with Session(engine) as session, session.begin():
-        for c in claims:
-            token = f"dev.{c.claim_id}"
-            session.add(
-                Claim(
-                    id=c.claim_id,
-                    firm_id=firm_id,
-                    program_id=program_id,
-                    token_hash=hashlib.sha256(token.encode()).hexdigest(),
-                    status="submitted",
-                    claimant=c.claimant,
-                    model_claimed=c.model_claimed,
-                    serial_claimed=c.serial_claimed,
-                    date_code_claimed=c.date_code_claimed,
-                    retailer_claimed=c.retailer_claimed,
-                    purchase_date=c.purchase_date,
-                    quantity=1,
-                    remedy=c.remedy,
-                    refund_cents=c.refund_cents,
-                    submitted_at=now,
-                )
-            )
-        session.flush()
-        for c in claims:
-            for p in c.photos:
-                relative = f"{firm_id}/{c.claim_id}/{p.kind}.jpg"
-                stored = store(settings.storage_dir, relative, p.data)
-                session.add(
-                    ClaimPhoto(
-                        firm_id=firm_id,
-                        claim_id=c.claim_id,
-                        kind=p.kind,
-                        storage_path=relative,
-                        sha256=stored.sha256,
-                        phash=stored.phash,
-                        exif=stored.exif,
-                    )
-                )
+    insert_claims(engine, firm_id, program_id, claims)
     facts_all = [_facts(c) for c in claims]
-    ledger = FakeLedger()
+    approved: list[tuple[uuid.UUID, int]] = []
     outcomes: Counter[str] = Counter()
-    clusters: dict[tuple[str, tuple[str, ...]], None] = {}
     t0 = time.monotonic()
     for c, facts in zip(claims, facts_all, strict=True):
         trace = DbTrace(engine, "rules_only", firm_id=firm_id, claim_id=c.claim_id, program_id=program_id)
@@ -211,18 +283,13 @@ def seed_program(engine: Engine, firm_id: uuid.UUID, recall_source_id: str, n: i
                     after={"status": status, "outcome": result.outcome},
                 )
             )
-        for kind, other in zip(result.duplicate_kinds, result.duplicate_with, strict=False):
-            clusters[(kind, tuple(sorted({str(c.claim_id), other})))] = None
         if result.outcome == "approve" and c.refund_cents and not result.routed_to_human:
-            ledger.create_pending(ctx, c.claim_id, c.refund_cents)
+            approved.append((c.claim_id, c.refund_cents))
     elapsed = time.monotonic() - t0
+    with Session(engine) as session:
+        plan = str(session.get(Firm, firm_id).plan)  # type: ignore[union-attr]
+    payouts = seed_payouts(engine, ctx, approved, plan)
     with Session(engine) as session, session.begin():
-        for kind, members in clusters:
-            session.add(
-                FraudCluster(
-                    firm_id=firm_id, program_id=program_id, kind=kind, member_claim_ids=[uuid.UUID(m) for m in members]
-                )
-            )
         session.add(
             UsageMeter(firm_id=firm_id, period_start=date.today().replace(day=1), claims_adjudicated=len(claims))
         )
@@ -232,8 +299,7 @@ def seed_program(engine: Engine, firm_id: uuid.UUID, recall_source_id: str, n: i
         "recall": recall_source_id,
         "claims": len(claims),
         "statuses": dict(outcomes),
-        "clusters": len(clusters),
-        "fake_ledger_pending": len(ledger.rows),
+        **payouts,
         "adjudication_seconds": round(elapsed, 2),
         "first_claim_id": str(claims[0].claim_id),
     }
@@ -263,7 +329,38 @@ def run(engine: Engine | None = None, n: int = 500, seed: int = 42) -> dict[str,
         )
     demo = seed_program(engine, DEMO_FIRM_ID, DEMO_RECALL, n, seed)
     other = seed_program(engine, OTHER_FIRM_ID, OTHER_RECALL, 5, seed)
-    return {"demo": demo, "other": other, "seconds": round(time.monotonic() - t0, 2)}
+    graph = seed_graph(
+        engine, [(DEMO_FIRM_ID, uuid.UUID(demo["program_id"])), (OTHER_FIRM_ID, uuid.UUID(other["program_id"]))]
+    )
+    return {"demo": demo, "other": other, "graph": graph, "seconds": round(time.monotonic() - t0, 2)}
+
+
+def seed_graph(engine: Engine, programs: list[tuple[uuid.UUID, uuid.UUID]]) -> dict[str, Any]:
+    """Fraud clusters come from the Neo4j projection (decisions log 2026-10-18): the seed firms' old graph nodes are
+    purged and each program is rebuilt from Postgres. Without a reachable graph the claims stay dirty and
+    `make graph-sync` (or the worker's idle ticks) builds the clusters later."""
+    from recallops.db.engine import app_engine
+    from recallops.fraud.graph import GraphError, build_graph_store
+    from recallops.fraud.graph_admin import ensure_schema, purge_firm
+    from recallops.fraud.sync import sync_program
+
+    settings = get_settings()
+    store = build_graph_store(settings)
+    if store is None:
+        return {"status": "disabled"}
+    try:
+        ensure_schema(store)
+        for firm_id, _ in programs:
+            purge_firm(store, settings.neo4j_namespace, firm_id)
+        clusters: dict[str, Any] = {}
+        for firm_id, program_id in programs:
+            clusters[str(program_id)] = sync_program(store, engine, app_engine(), settings, firm_id, program_id)
+        return {"status": "ok", "programs": clusters}
+    except GraphError as exc:
+        log_event(log, "seed_graph_skipped", level=30, error=str(exc)[:300])
+        return {"status": "unavailable", "hint": "run make graph-sync once Neo4j is up"}
+    finally:
+        store.close()
 
 
 def main() -> int:

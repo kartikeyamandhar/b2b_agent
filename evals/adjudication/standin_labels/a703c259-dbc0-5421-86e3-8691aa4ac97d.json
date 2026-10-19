@@ -1,0 +1,10 @@
+{
+ "claim_id": "a703c259-dbc0-5421-86e3-8691aa4ac97d",
+ "spec_id": "S21",
+ "program": "24082",
+ "category": "expect_approve",
+ "expected_outcome": "approve",
+ "rationale": "Notice 24082 recalls model SE4570 with date code 07/22 NH or 08/22 NH, sold at Grainger from September 2022 through September 2023; this claim matches on every point and the replacement remedy asks for no destruction photo, so approve.",
+ "violations": [],
+ "subtypes": {}
+}

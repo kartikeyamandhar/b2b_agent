@@ -1,0 +1,68 @@
+{
+ "text": "The duplicate check found another claim sharing a payout destination, and the flag rule takes precedence over all other outcomes. I'll record the decision now.",
+ "usage": {
+  "input_tokens": 3561,
+  "output_tokens": 490,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3SQmYn5FdRdYsjTcZt",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2245,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing a payout destination, and the flag rule takes precedence over all other outcomes. I'll record the decision now."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01E98G3s76RpRCc6Rr9Jy9j2",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim (ee6c9d50-8fbb-5519-bcb0-04927d9a38e2) shares the same payout destination as this claim, which triggers the duplicate-payout flag rule.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model 34692, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The purchase was at Dick's, a listed retailer, within the sale window (2020-02-06), and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The label date code December 2023 is manufactured prior to January 2024, so it is in the recalled range.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial check was skipped by the tool, so no serial finding is relied on here.",
+      "cites": [
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,69 @@
+{
+ "text": "Checking the results against the policy:\n\n- Duplicates (T5): no hits, so no flag.\n- Model (T1, T2): label is legible and shows BE10019US-PI, a recalled model. Model confirmed.\n- Serial/date code: no serial rule listed for this program; typed serial is present, date code not required by the rules given. Not a trigger.\n- Purchase (T3): Amazon.com is listed, date 2024-04-26 is inside the window, receipt not required. Eligible.\n- Destruction (T4): the destruction photo is missing or repeats the label photo. Per R:destruction and faq#3, this requires a new destruction photo, so needs_info.\n- Refund $210.09 exceeds the $100 threshold (R:value_threshold), but policy says it is still approved and reviewed afterward, so it does not change the outcome.\n\nThe outcome is needs_info, asking for a proper destruction photo.",
+ "usage": {
+  "input_tokens": 2815,
+  "output_tokens": 823,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeSvDBEKAD5eT6TsCfh",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3895,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Duplicates (T5): no hits, so no flag.\n- Model (T1, T2): label is legible and shows BE10019US-PI, a recalled model. Model confirmed.\n- Serial/date code: no serial rule listed for this program; typed serial is present, date code not required by the rules given. Not a trigger.\n- Purchase (T3): Amazon.com is listed, date 2024-04-26 is inside the window, receipt not required. Eligible.\n- Destruction (T4): the destruction photo is missing or repeats the label photo. Per R:destruction and faq#3, this requires a new destruction photo, so needs_info.\n- Refund $210.09 exceeds the $100 threshold (R:value_threshold), but policy says it is still approved and reviewed afterward, so it does not change the outcome.\n\nThe outcome is needs_info, asking for a proper destruction photo."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0146vsKtGGZGM7yKkPDKWDAq",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows BE10019US-PI, a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase is from Amazon.com, a listed retailer, dated 2024-04-26, inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo is missing or repeats the label photo, so it does not show the required destruction. Per policy, the claimant must submit a new destruction photo.",
+      "cites": [
+       "R:destruction",
+       "T4",
+       "T6"
+      ]
+     },
+     {
+      "text": "The refund of $210.09 is over the $100 threshold, so a person reviews it after approval. This does not change the outcome.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new destruction photo showing the product with \\\"RECALLED\\\" written in large letters on the front and rear of the seatback using a marker. The photo you sent earlier either was missing or matched your label photo, so it could not be accepted.",
+    "confidence": 0.9
+   }
+  }
+ ]
+}

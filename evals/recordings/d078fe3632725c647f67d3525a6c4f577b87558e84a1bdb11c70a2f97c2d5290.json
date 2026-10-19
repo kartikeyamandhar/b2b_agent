@@ -1,0 +1,54 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 2695,
+  "output_tokens": 391,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB36Jxkd55v9pt8f2vXj",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2399,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01J3kg7S5uFWAjrv6CSFtMdj",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 200LQ, which is not on the recalled model list (200LX). Under the claim policy, a legible label showing a non-recalled model means the unit is not part of this recall, so the claim is denied. The typed model 200LQ matches the label reading and is likewise not recalled.",
+      "cites": [
+       "R:policy",
+       "R:models",
+       "T1",
+       "T2",
+       "T7"
+      ]
+     },
+     {
+      "text": "The serial number HA01694 is within the recalled range, but the serial check does not override the model finding; the unit is not a recalled model.",
+      "cites": [
+       "T3",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, and the purchase date falls inside the sale window, so these checks do not change the outcome.",
+      "cites": [
+       "T6",
+       "T4",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,75 @@
+{
+ "text": "All checks pass: label legible showing CXC-02 (recalled), serial in range, retailer JHTNA listed, purchase 2024-09-01 inside window, no destruction required, no duplicates, repair remedy (no refund over threshold).",
+ "usage": {
+  "input_tokens": 3007,
+  "output_tokens": 558,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeRf5poFjdDAAfv2WZY",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3082,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass: label legible showing CXC-02 (recalled), serial in range, retailer JHTNA listed, purchase 2024-09-01 inside window, no destruction required, no duplicates, repair remedy (no refund over threshold)."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_011MjP5bGDrqQZkigLSUTdCW",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model CXC-02, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial number FC2746049693 has a recalled prefix (FC27), so it is within the recalled serial ranges.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The unit was bought from JHTNA, a listed retailer, on 2024-09-01, which is inside the 2021-01-01 to 2024-10-31 sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The requested remedy is repair or replacement with no refund, so the refund value threshold does not apply.",
+      "cites": [
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

@@ -1,0 +1,61 @@
+{
+ "text": "Every check passes, so I'll record an approval.",
+ "usage": {
+  "input_tokens": 3322,
+  "output_tokens": 392,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3kYthkV1WoztK8RinT",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2819,
+ "content": [
+  {
+   "type": "text",
+   "text": "Every check passes, so I'll record an approval."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01BnDjmGYDbNkEjsvgmiUUnX",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model A17B0, which is on the recalled models list.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The retailer TD Synnex is on the sold-at list, and the purchase date 2023-09-13 falls inside the 2023-05-01 to 2023-09-30 sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The remedy is repair or replacement, so no destruction photo is required, and the program has no serial or date code rule to apply.",
+      "cites": [
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

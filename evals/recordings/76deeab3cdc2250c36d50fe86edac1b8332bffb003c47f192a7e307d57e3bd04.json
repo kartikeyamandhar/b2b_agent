@@ -1,0 +1,64 @@
+{
+ "text": "Applying the policy in order: the duplicate check (T5) finds another claim sharing the same serial number, which triggers flag, the first outcome in precedence. The other checks would otherwise pass: the label is legible and shows SM1977 (T1, T2), the retailer is listed and the purchase date is inside the window (T3), and no destruction photo is required (T4). The purchase date of 2002-09-24 falls within 1998-01-01 to 2024-01-31, so it is not a pre-window denial. The flag takes precedence, so the claim goes to a person.",
+ "usage": {
+  "input_tokens": 2740,
+  "output_tokens": 584,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeLzo6abEPKhZQcyoFE",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3092,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: the duplicate check (T5) finds another claim sharing the same serial number, which triggers flag, the first outcome in precedence. The other checks would otherwise pass: the label is legible and shows SM1977 (T1, T2), the retailer is listed and the purchase date is inside the window (T3), and no destruction photo is required (T4). The purchase date of 2002-09-24 falls within 1998-01-01 to 2024-01-31, so it is not a pre-window denial. The flag takes precedence, so the claim goes to a person."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01KQ3eZ85QXJqdvqzJezKrhD",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim (b6668553-19ab-5378-aa06-e0e18858c091) sharing the same serial number, so this claim must go to a person for review together with the matched claim.",
+      "cites": [
+       "T5",
+       "R:policy",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows SM1977, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "REI is a listed retailer and the purchase date of 2002-09-24 is inside the sale window, so the purchase check passes with no receipt required.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for the repair remedy, so that check does not apply.",
+      "cites": [
+       "T4",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

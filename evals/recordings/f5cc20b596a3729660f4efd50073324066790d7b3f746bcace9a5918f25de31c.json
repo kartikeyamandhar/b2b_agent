@@ -1,0 +1,77 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: label photo legible and shows PA-10 (T1), which matches the recall list (T2, R:models). Confirmed.\n- Date code: 2126 is within the recalled range 2126\u20132319 (T3, R:date_codes). Passes.\n- Serial: no serial rule in this program, so not applicable.\n- Purchase: B & H Foto & Electronics is on the retailer list (T4, R:sold_at). Date 2023-11-28 is inside the window 2021-06-01 to 2023-11-30 (T4, R:sold_window). Receipt not required (T4).\n- Destruction photo: not required, since the remedy is replacement (T5, T7).\n- Duplicates: no matches (T6), so no flag.\n- Refund: none requested; replacement only, so the value threshold does not apply.\n\nEvery rule passes and no flag trigger applies, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2843,
+  "output_tokens": 793,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeK6FTG7ubhWPPfKjJS",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3581,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: label photo legible and shows PA-10 (T1), which matches the recall list (T2, R:models). Confirmed.\n- Date code: 2126 is within the recalled range 2126\u20132319 (T3, R:date_codes). Passes.\n- Serial: no serial rule in this program, so not applicable.\n- Purchase: B & H Foto & Electronics is on the retailer list (T4, R:sold_at). Date 2023-11-28 is inside the window 2021-06-01 to 2023-11-30 (T4, R:sold_window). Receipt not required (T4).\n- Destruction photo: not required, since the remedy is replacement (T5, T7).\n- Duplicates: no matches (T6), so no flag.\n- Refund: none requested; replacement only, so the value threshold does not apply.\n\nEvery rule passes and no flag trigger applies, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01GvKoaY5tjUPf7F3T46dE94",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model PA-10, which is a recalled model, so the model is confirmed even though the typed model matches as well.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Date code 2126 falls within the recalled range of 2126 to 2319.",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "The retailer B & H Foto & Electronics is on the sold-at list, and the purchase date 2023-11-28 is inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No destruction photo is required because the remedy is replacement, not refund.",
+      "cites": [
+       "T5",
+       "T7"
+      ]
+     },
+     {
+      "text": "The duplicate check found no other claim sharing a photo, address, email, serial number, or payout account, so no flag applies.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No refund is requested (replacement only), so the refund value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

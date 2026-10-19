@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and matches the typed values. Now I'll confirm the model against the recalled list.",
+ "usage": {
+  "input_tokens": 3513,
+  "output_tokens": 83,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3VZSHjtY2YnVpwqNwN",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1040,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and matches the typed values. Now I'll confirm the model against the recalled list."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0124kek4KFfadqBF9xgXZbJM",
+   "name": "check_model",
+   "input": {
+    "model_text": "DR2E"
+   }
+  }
+ ]
+}

@@ -1,0 +1,70 @@
+{
+ "text": "Checking the results against policy:\n\n- Duplicates: T6 found no matches, so no flag.\n- Model: T1 is legible and shows LXT-CL-1.0, which is recalled (T2 match).\n- Date code: 0722 is in range (T3).\n- Serial: the policy lists serial numbers only as a check when the program has serial rules; the program rules here have none, so no serial check applies.\n- Purchase: Sephora is on the list, the date 2022-08-28 is inside the window, and no receipt is required (T4).\n- Destruction: the policy requires the plug to be cut off. T5 says the photo shows an intact power cord with no visible cut, so it does not show the instructed destruction. Per the FAQ, that means the destruction photo is asked for again, which is needs_info.\n\nNothing triggers flag or deny, so the outcome is needs_info, asking for a new destruction photo.",
+ "usage": {
+  "input_tokens": 2896,
+  "output_tokens": 813,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAfiP3kX3fZansDsUG8w",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3698,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against policy:\n\n- Duplicates: T6 found no matches, so no flag.\n- Model: T1 is legible and shows LXT-CL-1.0, which is recalled (T2 match).\n- Date code: 0722 is in range (T3).\n- Serial: the policy lists serial numbers only as a check when the program has serial rules; the program rules here have none, so no serial check applies.\n- Purchase: Sephora is on the list, the date 2022-08-28 is inside the window, and no receipt is required (T4).\n- Destruction: the policy requires the plug to be cut off. T5 says the photo shows an intact power cord with no visible cut, so it does not show the instructed destruction. Per the FAQ, that means the destruction photo is asked for again, which is needs_info.\n\nNothing triggers flag or deny, so the outcome is needs_info, asking for a new destruction photo."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_016EZVASLLYFkLz2QWvwijmC",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model LXT-CL-1.0, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "Date code 0722 falls within the recalled range.",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Sephora is a listed retailer, the purchase date of 2022-08-28 is inside the sale window, and no receipt is required.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the required destruction. The product shows an intact power cord with no visible cut of the plug, and the policy requires the plug to be cut off. A destruction photo that does not show the instructed destruction is asked for again.",
+      "cites": [
+       "T5",
+       "R:destruction",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": "Thank you for your claim. The destruction photo you sent does not show the curling iron with its plug cut off, which is the required step. Please send a new photo showing the power plug cut off from the cord of the device.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

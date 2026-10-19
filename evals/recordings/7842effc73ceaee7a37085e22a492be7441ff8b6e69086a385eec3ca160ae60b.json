@@ -1,0 +1,62 @@
+{
+ "text": "The policy confirms that a retailer not on the list means the claimant is asked for proof of ownership (needs_info), and the destruction photo does not show the instructed destruction, which also requires asking again. Serial rules are not in the program rules, so they don't apply. Neither the duplicate check nor the model check blocks the claim. Per the policy order, needs_info applies here.",
+ "usage": {
+  "input_tokens": 4452,
+  "output_tokens": 665,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4EC4MZpD3NiL5hpvw5",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3868,
+ "content": [
+  {
+   "type": "text",
+   "text": "The policy confirms that a retailer not on the list means the claimant is asked for proof of ownership (needs_info), and the destruction photo does not show the instructed destruction, which also requires asking again. Serial rules are not in the program rules, so they don't apply. Neither the duplicate check nor the model check blocks the claim. Per the policy order, needs_info applies here."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01KMiytAyBcz9NcCurBBLLcA",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model BB4640BL, which is on the recalled list, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase date of 2024-04-01 is inside the sale window, but the retailer Corner Hardware Co is not Amazon.com, the only listed seller. Proof of ownership is required for a store not on the list.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the instructed destruction: the rear of the seatback is not visible and the marker writing on the front and rear is not confirmed. It must be submitted again.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send (1) proof of ownership, such as a receipt or order record showing you bought the unit, since Corner Hardware Co is not an eligible seller for this recall (if you bought it secondhand or received it as a gift, tell us that), and (2) a new photo of the seat with \"RECALLED\" written in large letters with a marker on both the front and the rear of the seatback, with the rear clearly visible.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

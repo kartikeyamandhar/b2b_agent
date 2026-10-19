@@ -1,0 +1,70 @@
+{
+ "text": "Reviewing the checks: label is legible and shows BB4640CF (recalled), model matches. Serial present; no date code rule applies to this program (only serial/model listed in R:models; no date code rule). Purchase at Amazon.com, 2023-10-30, inside window; receipt not required. No duplicates. Refund $94.02, under the $100 threshold.\n\nThe destruction photo check (T4) is the open issue: the observed photo shows the word RECALLED on the front face, but the rear is not visible, so the instruction is not fully shown. Per policy, a destruction photo that does not show the instructed destruction is needs_info. The check's verdict is \"complies: false\" with confidence 0.6, so the destruction requirement is not satisfied as shown. That triggers needs_info, asking for a photo showing RECALLED on both the front and rear of the seatback.",
+ "usage": {
+  "input_tokens": 2897,
+  "output_tokens": 789,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB37zDBbFfMnuLScneeW",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3958,
+ "content": [
+  {
+   "type": "text",
+   "text": "Reviewing the checks: label is legible and shows BB4640CF (recalled), model matches. Serial present; no date code rule applies to this program (only serial/model listed in R:models; no date code rule). Purchase at Amazon.com, 2023-10-30, inside window; receipt not required. No duplicates. Refund $94.02, under the $100 threshold.\n\nThe destruction photo check (T4) is the open issue: the observed photo shows the word RECALLED on the front face, but the rear is not visible, so the instruction is not fully shown. Per policy, a destruction photo that does not show the instructed destruction is needs_info. The check's verdict is \"complies: false\" with confidence 0.6, so the destruction requirement is not satisfied as shown. That triggers needs_info, asking for a photo showing RECALLED on both the front and rear of the seatback."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01T3baqJAYLCZ2CZ4DgYHJzN",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model BB4640CF, which is on the recalled list, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase was made at Amazon.com on 2023-10-30, which is a listed retailer and inside the sale window; no receipt is required for this program.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the word RECALLED on the front face only. The instruction requires it on both the front and rear of the seatback, and the rear is not shown, so the destruction is not shown as instructed.",
+      "cites": [
+       "R:destruction",
+       "T4",
+       "faq#3"
+      ]
+     },
+     {
+      "text": "The refund of $94.02 is under the $100.00 review threshold.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a clearer destruction photo showing \"RECALLED\" written in large letters on both the front and the rear of the seatback, written with a marker on the product.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

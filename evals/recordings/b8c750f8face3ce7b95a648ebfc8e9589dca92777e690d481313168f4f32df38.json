@@ -1,0 +1,54 @@
+{
+ "text": "Retrying with the correct citation id for the FAQ passage (T6).",
+ "usage": {
+  "input_tokens": 3410,
+  "output_tokens": 390,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3AUqBf9rkF3obAotyn",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2201,
+ "content": [
+  {
+   "type": "text",
+   "text": "Retrying with the correct citation id for the FAQ passage (T6)."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01579f5bjbqYqPGUeyy4HoZB",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo's SHA-256 hash matches the label photo in another claim (d7c5dc8d-bb03-5f6f-8fbf-195b17b6a5e2), so this claim must be sent to a person for duplicate review along with the matched claim.",
+      "cites": [
+       "T5",
+       "R:policy",
+       "T6"
+      ]
+     },
+     {
+      "text": "On the other checks the claim would otherwise be eligible: the legible label shows recalled model 98527, the purchase at ALDI on 2017-07-04 is inside the sale window, and the destruction photo shows the cut power cord.",
+      "cites": [
+       "T1",
+       "T2",
+       "T3",
+       "T4",
+       "R:models",
+       "R:sold_at",
+       "R:sold_window",
+       "R:destruction"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

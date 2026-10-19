@@ -1,0 +1,70 @@
+{
+ "text": "Checking the policy in order: flag (duplicates) \u2014 T6 has no hits, so no flag. Deny \u2014 label legible showing CXM-03, a recalled model (T1, T2, R:models); serial FC32... in range (T3, R:serials); purchase at JHTNA within window 2024-01-06 (T4, R:sold_at, R:sold_window); destruction not required (T5); remedy is repair, no refund over threshold. No deny trigger, no needs_info trigger. Approve.",
+ "usage": {
+  "input_tokens": 3007,
+  "output_tokens": 633,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeRf2bNvfFbd6rSfDs9",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4931,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy in order: flag (duplicates) \u2014 T6 has no hits, so no flag. Deny \u2014 label legible showing CXM-03, a recalled model (T1, T2, R:models); serial FC32... in range (T3, R:serials); purchase at JHTNA within window 2024-01-06 (T4, R:sold_at, R:sold_window); destruction not required (T5); remedy is repair, no refund over threshold. No deny trigger, no needs_info trigger. Approve."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01RGQfXs8VNFuFCvPmviNkKY",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model CXM-03, which is a recalled model, so the model is confirmed even though it matches the typed value.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial number FC3229427044 has a recalled prefix (FC32), so it is within the recalled serial ranges.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The purchase was from JHTNA, a listed retailer, on 2024-01-06, which falls inside the sale window of 2021-01-01 to 2024-10-31. No receipt is required for this retailer.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this claim.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The remedy is repair or replacement, not a refund, and the destruction photo requirement does not apply, so no further documentation is needed.",
+      "cites": [
+       "T5",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

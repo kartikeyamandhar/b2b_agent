@@ -1,0 +1,13 @@
+{
+ "note": "sha256 of the decision logic and eval-program documents the ablation recordings were made against (PREREG Revision 2). Regenerate only with a logged revision: python -m tests.unit.test_freeze",
+ "sha256": {
+  "claims/tools/checks.py": "2f5a26af13d23836c561633673e871b431d6474ed85f520726b8fe36953c27e4",
+  "claims/policy.py": "6d8f69112c1e411950ec1bafed1a1ba3ed6e0ebb92ffed9221b703d41512bef1",
+  "claims/agent_tools.py": "aacdcdb82b13920a4ab6b8cbbd1f5ac7082999ec8e665976a94c4a563d84de8b",
+  "claims/graph.py": "421f56ac4ee7070f4bcc6f548ae95c709d595e040471d90e4a90d141645d5b6c",
+  "claims/rules_only.py": "b64bf263faf0157c430ea4d3aacc8da04f95d0d15f3fac8dcb7ee23c3ed10a97",
+  "claims/rules_plus_vision.py": "c919d403e4957e68903f8a7b3d070d39a5e16e1c16abc9228041fac2a87f66d8",
+  "claims/vision.py": "179b42155943a63781af353c177857bac089831efdcb576b856d520d4671d3ba",
+  "eval program documents": "c7b6a0fb7c59f4a70c5e70c7412556cdbafca828c31d7990c350f76f43c32cbc"
+ }
+}

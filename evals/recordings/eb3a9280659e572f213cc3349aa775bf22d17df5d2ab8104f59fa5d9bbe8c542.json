@@ -1,0 +1,29 @@
+{
+ "text": "The label is unreadable, so the typed model decides. The destruction photo does not show a cut cord. I'll check the typed model against the recalled list.",
+ "usage": {
+  "input_tokens": 3471,
+  "output_tokens": 97,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3b3inGs1jydTk1RyjB",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1128,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is unreadable, so the typed model decides. The destruction photo does not show a cut cord. I'll check the typed model against the recalled list."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01TeVeeduugpvfW6knAUwoju",
+   "name": "check_model",
+   "input": {
+    "model_text": "96775"
+   }
+  }
+ ]
+}

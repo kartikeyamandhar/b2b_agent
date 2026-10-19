@@ -1,0 +1,63 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 2840,
+  "output_tokens": 432,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeKHMSRPws3FKLgNCCx",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2147,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01Lo67EACYqfmRE8no6M83Tg",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PA-10, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The date code read from the label is 2369, which is outside the recalled range of 2126 to 2319, so the unit is not part of this recall.",
+      "cites": [
+       "T1",
+       "T3",
+       "R:date_codes",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Because the date code is out of range, the claim is denied under the program policy regardless of the other checks passing.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "Other checks passed: retailer Amazon.com is listed, purchase date 2022-12-18 is inside the sale window, no duplicate claims were found, and no destruction photo is required for a repair/replacement remedy.",
+      "cites": [
+       "T4",
+       "T5",
+       "T6",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,64 @@
+{
+ "text": "The label reads DT2E, which is not a recalled model (recalled models are DR2A and DR2E). The typed model also says DT2E. The label is legible, so the model is not recalled and the claim is denied, even though the serial, date code, purchase, and duplicate checks all pass.",
+ "usage": {
+  "input_tokens": 3646,
+  "output_tokens": 549,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3VBqGegnX92JLAb1ad",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2685,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label reads DT2E, which is not a recalled model (recalled models are DR2A and DR2E). The typed model also says DT2E. The label is legible, so the model is not recalled and the claim is denied, even though the serial, date code, purchase, and duplicate checks all pass."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0172n11vc4BeU7aPidWZQZZj",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model DT2E. That model is not on the recalled list, which covers DR2A and DR2E only. The claimant's typed model is also DT2E, so the model does not qualify.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number J0D72580518 is in a recalled range, and the date code 2017 is in the recalled model years. These do not overcome the model mismatch, because the recall requires a recalled model.",
+      "cites": [
+       "R:serials",
+       "T4",
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase at a listed Yamaha dealer on 2023-09-08 falls inside the sale window, and no receipt is required. The purchase is valid, but it does not establish eligibility.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim, so no flag applies.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

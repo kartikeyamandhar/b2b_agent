@@ -1,0 +1,47 @@
+{
+ "text": "I'll start by reading the label photo, checking the purchase, and checking for duplicates, since these don't depend on each other. The date code rule applies, so I'll also check the typed date code.",
+ "usage": {
+  "input_tokens": 2817,
+  "output_tokens": 192,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3emmSVXbRBFCfgHMMp",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1273,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll start by reading the label photo, checking the purchase, and checking for duplicates, since these don't depend on each other. The date code rule applies, so I'll also check the typed date code."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01FQ7Xu21HgCfUxjdYneb1ys",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01VNUtsaha7Sup63zwZ81vPP",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_018wcT8PvguzsXde5scxbmF4",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01ViihiJK2744jDXQ4ihnBNB",
+   "name": "check_date_code",
+   "input": {
+    "date_code": "08/22 NH"
+   }
+  }
+ ]
+}

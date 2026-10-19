@@ -1,0 +1,73 @@
+{
+ "text": "Checking the policy against the results:\n\n- Duplicates: T7 finds no matches, so no flag.\n- Model: T1 reads the label as legible with model B0726Y, which is recalled (T3 match). The typo \"80726Y\" is overridden by the label photo per R:policy and T8.\n- Date code: T1 and T4 show 8/21, in range.\n- Serial: the program has no serial rule, so it is not checked.\n- Purchase: T5 shows Amazon is listed, the date 2017-10-16 is inside the window, and no receipt is required.\n- Destruction: R:destruction requires cutting off the straps. T6 says the destruction photo does not show a helmet or cut straps, and it does not show the instructed destruction. Per the policy and T8 faq#2, this needs a new destruction photo.\n\nOutcome: needs_info, asking for a destruction photo that shows the helmet with the straps cut off.",
+ "usage": {
+  "input_tokens": 2992,
+  "output_tokens": 777,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB36qYFxZ1UC5dT3veZU",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3471,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy against the results:\n\n- Duplicates: T7 finds no matches, so no flag.\n- Model: T1 reads the label as legible with model B0726Y, which is recalled (T3 match). The typo \"80726Y\" is overridden by the label photo per R:policy and T8.\n- Date code: T1 and T4 show 8/21, in range.\n- Serial: the program has no serial rule, so it is not checked.\n- Purchase: T5 shows Amazon is listed, the date 2017-10-16 is inside the window, and no receipt is required.\n- Destruction: R:destruction requires cutting off the straps. T6 says the destruction photo does not show a helmet or cut straps, and it does not show the instructed destruction. Per the policy and T8 faq#2, this needs a new destruction photo.\n\nOutcome: needs_info, asking for a destruction photo that shows the helmet with the straps cut off."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01D2guwFw8Yjma35sdrEGvj6",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model B0726Y, a recalled model, so the typed typo '80726Y' does not block the claim.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T3",
+       "T8"
+      ]
+     },
+     {
+      "text": "The date code 8/21 is within the recalled range.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T4"
+      ]
+     },
+     {
+      "text": "Amazon is a listed retailer, the purchase date falls inside the sale window, and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T5"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found.",
+      "cites": [
+       "T7"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show a helmet with cut straps, so it does not show the instructed destruction. Under the policy a new destruction photo is required.",
+      "cites": [
+       "R:destruction",
+       "T6",
+       "T8",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo of the destroyed helmet showing that the straps have been cut off. The photo you sent earlier shows a red shape on a purple background, not the helmet.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

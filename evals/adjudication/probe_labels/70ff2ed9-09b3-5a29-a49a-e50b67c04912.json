@@ -1,0 +1,12 @@
+{
+ "claim_id": "70ff2ed9-09b3-5a29-a49a-e50b67c04912",
+ "program": "26046",
+ "category": "destruction_photo_intact",
+ "expected_outcome": "needs_info",
+ "violations": [
+  "destruction_photo_intact"
+ ],
+ "label_model_printed": "LXT-CL-1.0",
+ "label_unreadable": false,
+ "subtypes": {}
+}

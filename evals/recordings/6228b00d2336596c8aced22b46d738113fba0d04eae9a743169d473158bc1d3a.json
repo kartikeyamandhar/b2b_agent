@@ -1,0 +1,70 @@
+{
+ "text": "Checking the policy in order: flag first. T5 found no duplicates, so no flag. Model: T1 legible label shows AD10009BE, which is recalled (T2 match), so the model is confirmed. Serial/date code: this program uses the serial number rule only as listed in R:models? The policy text for serial/date code applies only when the program has those rules; the program rules listed here do not include a serial or date code range, so no serial check applies. Purchase: Amazon.com is listed (T3), date 2023-11-29 is inside the window (T3). Receipt not required per T3, though the claimant provided one anyway. Destruction: R:destruction requires \"RECALLED\" written on both front and rear of the seatback. T4 shows the word on the front only and the rear is not visible, so it does not show the instructed destruction completely. Per policy, that is needs_info, asking for a destruction photo showing both front and rear. Refund of $125.63 is over $100, but that only affects review after approval and does not change the outcome here.",
+ "usage": {
+  "input_tokens": 2880,
+  "output_tokens": 884,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeSZYTvAtqxnb4Yewcb",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4543,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy in order: flag first. T5 found no duplicates, so no flag. Model: T1 legible label shows AD10009BE, which is recalled (T2 match), so the model is confirmed. Serial/date code: this program uses the serial number rule only as listed in R:models? The policy text for serial/date code applies only when the program has those rules; the program rules listed here do not include a serial or date code range, so no serial check applies. Purchase: Amazon.com is listed (T3), date 2023-11-29 is inside the window (T3). Receipt not required per T3, though the claimant provided one anyway. Destruction: R:destruction requires \"RECALLED\" written on both front and rear of the seatback. T4 shows the word on the front only and the rear is not visible, so it does not show the instructed destruction completely. Per policy, that is needs_info, asking for a destruction photo showing both front and rear. Refund of $125.63 is over $100, but that only affects review after approval and does not change the outcome here."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017UVnDAuUNywMcBmXAWqLzB",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "No duplicate claim matches this one (no shared photo, address, email, serial number, or payout account), so no flag applies.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows AD10009BE, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Amazon.com is a listed retailer and the purchase date of 2023-11-29 falls inside the sale window, so the purchase is eligible; no receipt is required by the program.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction rule requires RECALLED to be written on both the front and rear of the seatback. The destruction photo shows the word on the front only, and the rear is not visible, so it does not show the instructed destruction.",
+      "cites": [
+       "T4",
+       "R:destruction",
+       "T6"
+      ]
+     },
+     {
+      "text": "The refund amount of $125.63 exceeds $100, so a person will review it after approval; this does not change the outcome.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a photo of the destruction showing \"RECALLED\" written in large letters on both the front and the rear of the seatback, using a marker. The current photo only shows the front, so the rear view is needed.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

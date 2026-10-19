@@ -1,0 +1,10 @@
+{
+ "claim_id": "c7692196-6282-5bea-8dcd-7de75f8fccdb",
+ "spec_id": "S11",
+ "program": "26244",
+ "category": "expect_approve",
+ "expected_outcome": "approve",
+ "rationale": "Notice 26244 recalls model MK04 with serials starting BN made before July 2025, sold on Amazon.com from September 2024 through June 2025; serial, date code, and purchase all match, and the replacement remedy asks for no destruction photo, so the claim is clean: approve.",
+ "violations": [],
+ "subtypes": {}
+}

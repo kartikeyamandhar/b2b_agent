@@ -1,0 +1,68 @@
+{
+ "text": "The model is confirmed, the purchase is in window at a listed retailer, and there are no duplicates. The destruction photo does not show the required cord cut, so the claim needs more information.",
+ "usage": {
+  "input_tokens": 3483,
+  "output_tokens": 523,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3x6mfZWiVemj8rznwW",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2497,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed, the purchase is in window at a listed retailer, and there are no duplicates. The destruction photo does not show the required cord cut, so the claim needs more information."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017pRvPDuDA7VkC9djUzuJbw",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows recalled model 6L-PC, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase is at ALDI, a listed retailer, dated 2018-07-08, which is inside the sale window. No receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the product but does not show the required unplugged power cord cut. It shows an intact black cord, so the destruction requirement is not yet met.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The serial check was skipped because the program has no serial rule, so it does not affect the outcome.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new destruction photo that clearly shows the unplugged power cord cut through, with the cut end visible on the cooker.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

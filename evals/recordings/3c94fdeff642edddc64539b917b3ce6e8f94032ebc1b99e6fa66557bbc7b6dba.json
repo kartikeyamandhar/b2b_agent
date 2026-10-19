@@ -1,0 +1,71 @@
+{
+ "text": "All checks pass: the label confirms a recalled model, the serial is in range, the Sears purchase falls inside the sale window with a receipt, and there are no duplicate claims. The remedy is repair or replacement, so no destruction photo is needed and the refund threshold doesn't apply.",
+ "usage": {
+  "input_tokens": 3653,
+  "output_tokens": 550,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3pkfVdgrSyxMEQM6yH",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2582,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass: the label confirms a recalled model, the serial is in range, the Sears purchase falls inside the sale window with a receipt, and there are no duplicate claims. The remedy is repair or replacement, so no destruction photo is needed and the refund threshold doesn't apply."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01ME3ExZZvShsFTw3WJP4ccg",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PLEFMZ99GCA1, which matches the recalled model series PLEFMZ99GC*.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial number VF12294265 falls within the recalled range VF122xxxxx - VF334xxxxx.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase was from Sears, a listed retailer, on a date inside the 2001-06-01 to 2009-08-31 sale window, and the receipt is present.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "R:receipt",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The requested remedy is repair or replacement, so no destruction photo or refund-value review is required.",
+      "cites": [
+       "R:policy",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

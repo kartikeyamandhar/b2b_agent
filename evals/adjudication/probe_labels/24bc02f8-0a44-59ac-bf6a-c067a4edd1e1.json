@@ -1,0 +1,12 @@
+{
+ "claim_id": "24bc02f8-0a44-59ac-bf6a-c067a4edd1e1",
+ "program": "24082",
+ "category": "label_confirms_missing_typed_model",
+ "expected_outcome": "approve",
+ "violations": [
+  "label_confirms_missing_typed_model"
+ ],
+ "label_model_printed": "SE4570",
+ "label_unreadable": false,
+ "subtypes": {}
+}

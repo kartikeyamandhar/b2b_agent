@@ -1,0 +1,64 @@
+{
+ "text": "The legible label shows 200LQ, and the model check confirms it does not match the recalled 200LX. Under the policy, a legible label showing a non-recalled model is a denial, regardless of the serial being in range.",
+ "usage": {
+  "input_tokens": 3291,
+  "output_tokens": 456,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB43EfKgisBeVf1SWtBT",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2256,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows 200LQ, and the model check confirms it does not match the recalled 200LX. Under the policy, a legible label showing a non-recalled model is a denial, regardless of the serial being in range."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Cwir39cp8E2i26HEni5d78",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 200LQ, which is not a recalled model. The only recalled model is 200LX.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The typed model 200LQ also does not match the recalled model, so the claim cannot be confirmed under the recall.",
+      "cites": [
+       "R:models",
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial HA01694 is within a recalled range, but the model rule takes precedence, and a legible non-recalled model means the claim is denied.",
+      "cites": [
+       "R:serials",
+       "T4",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, and the purchase date falls inside the sale window, so neither changes the outcome.",
+      "cites": [
+       "T3",
+       "T2",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

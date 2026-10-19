@@ -1,0 +1,64 @@
+{
+ "text": "The legible label shows model 2G515B, which is not a recalled model. Under the policy, a legible label showing a non-recalled model is a denial, regardless of the typed model 2G520 matching the list. That makes deny the first applicable outcome, since no flag condition applies (T3 found no duplicates).",
+ "usage": {
+  "input_tokens": 3693,
+  "output_tokens": 547,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB46iVxgQAqHPckJuitK",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2912,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows model 2G515B, which is not a recalled model. Under the policy, a legible label showing a non-recalled model is a denial, regardless of the typed model 2G520 matching the list. That makes deny the first applicable outcome, since no flag condition applies (T3 found no duplicates)."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Sws8N8y7T2KS2SHjUWpids",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model 2G515B, which is not one of the recalled models. The typed model 2G520 is recalled, but the policy says a legible label showing a non-recalled model is denied, so the typed value cannot override it.",
+      "cites": [
+       "R:policy",
+       "R:models",
+       "T1",
+       "T6",
+       "T7"
+      ]
+     },
+     {
+      "text": "The purchase is valid: Homedepot.com is a listed retailer and the 2023-09-16 date falls inside the sale window, with no receipt required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the required permanent-marker 'Recalled' writing on the product; it appears to be a printed or digital label. This would also need review if the claim were otherwise eligible.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

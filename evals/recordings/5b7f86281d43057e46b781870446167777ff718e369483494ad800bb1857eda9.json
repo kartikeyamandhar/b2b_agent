@@ -1,0 +1,68 @@
+{
+ "text": "Checking the results against the policy:\n\n- Duplicates (T5): no hits, so no flag.\n- Model (T1, T2): label is legible and shows AD10009BE, which is recalled (R:models). Model confirmed.\n- Serial/date code: no serial rule is listed in the program rules for this recall, and no date code rule applies, so nothing to check there.\n- Purchase (T3): Amazon.com is listed, purchase date 2024-05-07 is inside the window 2023-04-01 to 2024-08-31, and no receipt is required. Eligible.\n- Destruction (T4): R:destruction requires a destruction photo, and none was submitted. Per policy, a missing destruction photo means needs_info.\n- Refund $185.12 is over the $100 threshold (R:value_threshold), but that only means a person reviews it afterward; it does not change the outcome.\n\nThe outcome is needs_info, asking for a destruction photo.",
+ "usage": {
+  "input_tokens": 2792,
+  "output_tokens": 810,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeT87oCaanvhuJBbhTh",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4718,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Duplicates (T5): no hits, so no flag.\n- Model (T1, T2): label is legible and shows AD10009BE, which is recalled (R:models). Model confirmed.\n- Serial/date code: no serial rule is listed in the program rules for this recall, and no date code rule applies, so nothing to check there.\n- Purchase (T3): Amazon.com is listed, purchase date 2024-05-07 is inside the window 2023-04-01 to 2024-08-31, and no receipt is required. Eligible.\n- Destruction (T4): R:destruction requires a destruction photo, and none was submitted. Per policy, a missing destruction photo means needs_info.\n- Refund $185.12 is over the $100 threshold (R:value_threshold), but that only means a person reviews it afterward; it does not change the outcome.\n\nThe outcome is needs_info, asking for a destruction photo."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01HiG1zaMWhagJYRCpMH4W6m",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model AD10009BE, which is on the recall list, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase was made at Amazon.com on 2024-05-07, which is a listed retailer and inside the sale window; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The remedy requires a destruction photo showing 'RECALLED' written on the front and rear of the seatback, and no destruction photo was submitted.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "The refund of $185.12 exceeds the $100 threshold, so a person will review it after approval, but this does not change the outcome.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a photo of the product showing 'RECALLED' written in large letters with a marker on both the front and the rear of the seatback. The photo must show the destruction itself, not the product label.",
+    "confidence": 0.9
+   }
+  }
+ ]
+}

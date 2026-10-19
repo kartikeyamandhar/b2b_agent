@@ -1,0 +1,71 @@
+{
+ "text": "The citation \"R:serials\" isn't a valid rule id, so I'll resubmit with only the valid ids.",
+ "usage": {
+  "input_tokens": 5415,
+  "output_tokens": 479,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3TTRaKznZrpF5ryXai",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2102,
+ "content": [
+  {
+   "type": "text",
+   "text": "The citation \"R:serials\" isn't a valid rule id, so I'll resubmit with only the valid ids."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_018Y3Ds2WnYKkMqra1mdY44b",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model 98527, which is on the recall list, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase at ALDI on 2018-10-11 falls inside the 2016-2019 sale window and the retailer is listed; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the cooker with its power cord cut, which matches the required destruction.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "The duplicate check found no other claim sharing a photo, address, email, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The serial check could not be completed (verdict 'skipped' on both attempts), and the program sends claims the checker could not finish to a person for review.",
+      "cites": [
+       "R:policy",
+       "T5",
+       "T7",
+       "T8"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.6
+   }
+  }
+ ]
+}

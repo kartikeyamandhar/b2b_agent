@@ -1,0 +1,10 @@
+{
+ "claim_id": "4a1a1e18-ad30-5a5f-ac2b-1295847092d9",
+ "spec_id": "S03",
+ "program": "26007",
+ "category": "expect_approve",
+ "expected_outcome": "approve",
+ "rationale": "Typed '98S27' is a confusable S-for-5 typo and the legible label shows recalled model 98527 (6L-PC), which photo_rules.label_confirms_typed_typo approves, and the December 30, 2019 purchase is inside the window that runs through December 2019.",
+ "violations": [],
+ "subtypes": {}
+}

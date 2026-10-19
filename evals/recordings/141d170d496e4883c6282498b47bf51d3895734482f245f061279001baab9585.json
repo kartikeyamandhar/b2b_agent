@@ -1,0 +1,60 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3497,
+  "output_tokens": 455,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB38y41bGzBS2xnt8DHE",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 1921,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01Pvwxwbsh7RY5CetNupSqaX",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2G520, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase date of 2025-03-06 is inside the sale window at a listed retailer (Esrtech.com), and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The destruction photo shows a device but does not show the word 'Recalled' written in permanent marker, so it does not show the instructed destruction. Under the policy this is asked for again.",
+      "cites": [
+       "R:destruction",
+       "R:policy",
+       "T4",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new destruction photo showing the power bank with the word \"Recalled\" written on it in permanent marker. The photo should be of the product itself, not a copy of the label photo.",
+    "confidence": 0.9
+   }
+  }
+ ]
+}

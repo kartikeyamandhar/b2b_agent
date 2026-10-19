@@ -1,0 +1,73 @@
+{
+ "text": "Checking the results against policy:\n\n- Model: T1 reads the label as legible with model P1411, which is recalled (R:models). T2 confirms a match.\n- Serial/date code: the program has no serial or date code rules in this recall, so none apply.\n- Purchase: T3 shows walmart.com is listed and the purchase date 2020-02-23 is inside the sale window (R:sold_window). No receipt is required.\n- Destruction: T4 says no destruction photo is required.\n- Duplicates: T5 found no matches.\n- Refund: $85.71 is under the $100.00 threshold (R:value_threshold), so no person review is needed for value.\n\nEverything passes, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2721,
+  "output_tokens": 664,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeKc2rLRdAdMFchspf8",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3156,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against policy:\n\n- Model: T1 reads the label as legible with model P1411, which is recalled (R:models). T2 confirms a match.\n- Serial/date code: the program has no serial or date code rules in this recall, so none apply.\n- Purchase: T3 shows walmart.com is listed and the purchase date 2020-02-23 is inside the sale window (R:sold_window). No receipt is required.\n- Destruction: T4 says no destruction photo is required.\n- Duplicates: T5 found no matches.\n- Refund: $85.71 is under the $100.00 threshold (R:value_threshold), so no person review is needed for value.\n\nEverything passes, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01ME6ZNbN5P97hSAzWiXLudm",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model P1411, which is a recalled model; the typed model matches.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase was from walmart.com, a listed retailer, on 2020-02-23, which is inside the sale window, and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy.",
+      "cites": [
+       "T4"
+      ]
+     },
+     {
+      "text": "The duplicate check found no other claim sharing a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The refund of $85.71 is under the $100.00 review threshold, so it does not need person review.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     },
+     {
+      "text": "No serial or date code rule applies to this recall, so none is needed for approval.",
+      "cites": [
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

@@ -1,0 +1,70 @@
+{
+ "text": "Checking each rule against the results:\n\n- Model: label photo legible and shows PA-10 (T1), matches recall list (T2, R:models). Confirmed.\n- Date code: 2126 in range 2126\u20132319 (T3, R:date_codes). Confirmed.\n- Serial: no serial rule in the program, so not applicable.\n- Purchase: Musicians Friend is on the retailer list (T4, R:sold_at); 2023-03-28 falls inside the sale window (T4, R:sold_window). Receipt not required for this check but was attached anyway.\n- Destruction: not required, remedy is repair/replacement (T5).\n- Duplicates: none found (T6), so no flag.\n- Refund: none requested, so the value threshold does not apply.\n\nNo rule triggers a flag, deny, or needs_info, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2843,
+  "output_tokens": 713,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeJjntd5bei2wYtcBkK",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4601,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking each rule against the results:\n\n- Model: label photo legible and shows PA-10 (T1), matches recall list (T2, R:models). Confirmed.\n- Date code: 2126 in range 2126\u20132319 (T3, R:date_codes). Confirmed.\n- Serial: no serial rule in the program, so not applicable.\n- Purchase: Musicians Friend is on the retailer list (T4, R:sold_at); 2023-03-28 falls inside the sale window (T4, R:sold_window). Receipt not required for this check but was attached anyway.\n- Destruction: not required, remedy is repair/replacement (T5).\n- Duplicates: none found (T6), so no flag.\n- Refund: none requested, so the value threshold does not apply.\n\nNo rule triggers a flag, deny, or needs_info, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01NEcZQakVLP8dERhk4E63BL",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PA-10, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The date code 2126 falls within the recalled range of 2126 to 2319.",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "Musicians Friend is an authorized retailer and the purchase date 2023-03-28 is inside the sale window of 2021-06-01 to 2023-11-30.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account with this claim.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy, and no refund is requested, so the value threshold does not apply.",
+      "cites": [
+       "T5",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

@@ -1,0 +1,69 @@
+{
+ "text": "Applying the policy in order: flag takes precedence. T5 finds another claim sharing the same serial number (fd99cda5...), so the claim must be flagged for review regardless of the other checks passing.\n\nNote the typed serial \"SN57855707\" differs from the label reading \"SN18619232\", but the duplicate match is on serial, which triggers the flag rule.",
+ "usage": {
+  "input_tokens": 2752,
+  "output_tokens": 585,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeLiS65i5c9DfxNc5mQ",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2867,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: flag takes precedence. T5 finds another claim sharing the same serial number (fd99cda5...), so the claim must be flagged for review regardless of the other checks passing.\n\nNote the typed serial \"SN57855707\" differs from the label reading \"SN18619232\", but the duplicate match is on serial, which triggers the flag rule."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01V5RkT6aN2uzGC6w8Qg88oP",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim (fd99cda5-f6e6-5aed-abd9-d605df340bdc) sharing the same serial number, so the claim must go to a person for review under the duplicate rule.",
+      "cites": [
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model TD3318S, which is on the recalled list, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The REI purchase is on the listed retailers and dated 2004-10-28, which is inside the sale window, so the purchase itself is eligible.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for the repair remedy, so that check does not block the claim.",
+      "cites": [
+       "T4"
+      ]
+     },
+     {
+      "text": "The typed serial (SN57855707) does not match the serial read from the label (SN18619232); a reviewer should confirm which is correct.",
+      "cites": [
+       "T1",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,70 @@
+{
+ "text": "Applying the policy in order: flag takes precedence.\n\n- check_duplicates (T5) finds another claim sharing the same address, so the flag rule triggers. Per policy, flag overrides all other outcomes.\n\nThe other checks (model match T1/T2, purchase window and retailer T3, destruction photo T4 not complying) would otherwise point toward needs_info for the destruction photo, but the duplicate flag is decisive under the precedence order.",
+ "usage": {
+  "input_tokens": 2959,
+  "output_tokens": 650,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeSpAnpyXinCneb2i5v",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3367,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: flag takes precedence.\n\n- check_duplicates (T5) finds another claim sharing the same address, so the flag rule triggers. Per policy, flag overrides all other outcomes.\n\nThe other checks (model match T1/T2, purchase window and retailer T3, destruction photo T4 not complying) would otherwise point toward needs_info for the destruction photo, but the duplicate flag is decisive under the precedence order."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01MFQzDuFhv6evZNnp2xDSpL",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Duplicate check found another claim (3ee95632-b7ec-5a30-92ba-ad1744c0fb3b) sharing the same address, so this claim must be sent to a person for review together with the matching claim.",
+      "cites": [
+       "T5",
+       "R:policy",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model BB4640CF, which is on the recalled list, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "Amazon.com is a listed retailer and the purchase date 2024-05-16 is inside the sale window, with no receipt required.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the instructed marker writing on the front and rear of a seatback and appears to be a graphic, which would normally require a new photo; this is noted for the reviewer.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The refund requested is $187.35, which is over the $100.00 threshold, so a person reviews it regardless.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

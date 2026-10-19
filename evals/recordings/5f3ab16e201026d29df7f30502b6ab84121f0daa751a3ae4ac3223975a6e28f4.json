@@ -1,0 +1,68 @@
+{
+ "text": "The serial check was skipped again. The serial rule (R:serials) is not among the program rules listed for this claim, so it does not apply, and the model match is confirmed. All other rules are satisfied, so I'll approve.",
+ "usage": {
+  "input_tokens": 3797,
+  "output_tokens": 476,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3UMRwseGSFuuHLUnqr",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2355,
+ "content": [
+  {
+   "type": "text",
+   "text": "The serial check was skipped again. The serial rule (R:serials) is not among the program rules listed for this claim, so it does not apply, and the model match is confirmed. All other rules are satisfied, so I'll approve."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01FwbSRAfYpas2aNBxhN49nw",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2G512B, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T7"
+      ]
+     },
+     {
+      "text": "The retailer Esrtech.com is on the sold-at list and the purchase date 2024-03-24 falls inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the product with RECALLED written on it, as the recall instructs.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The refund of $47.96 is under the $100.00 threshold, so no person review is required.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

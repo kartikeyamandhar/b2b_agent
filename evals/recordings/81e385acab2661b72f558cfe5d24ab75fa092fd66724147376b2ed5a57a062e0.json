@@ -1,0 +1,71 @@
+{
+ "text": "The claim is flagged, because the duplicate check (T3) found another claim sharing this unit's serial number, and the policy requires a person to review any claim that shares a serial with another claim. The model (DR2E, T1 and T6), purchase (T2), and date code (T5) all check out, and the serial is in range (T4).",
+ "usage": {
+  "input_tokens": 4451,
+  "output_tokens": 550,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3VESnMFJUSnznGHUMH",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2754,
+ "content": [
+  {
+   "type": "text",
+   "text": "The claim is flagged, because the duplicate check (T3) found another claim sharing this unit's serial number, and the policy requires a person to review any claim that shares a serial with another claim. The model (DR2E, T1 and T6), purchase (T2), and date code (T5) all check out, and the serial is in range (T4)."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01VP8XHemg6dxLxSZTjxu8oM",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program shares this unit's serial number, so the claim must go to a person for review together with the matching claim.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model DR2E, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase at a listed Yamaha dealer on 2022-12-15 is inside the sale window, and no receipt is required for this claim.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The date code 2017 is within the recalled model year range.",
+      "cites": [
+       "T5",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The typed serial J2D45572794 is in a recalled range. The label reads J0D14638083, which is also in range, so the mismatch does not change the outcome but should be noted for the reviewer.",
+      "cites": [
+       "T4",
+       "T1",
+       "R:serials"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.8
+   }
+  }
+ ]
+}

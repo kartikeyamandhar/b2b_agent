@@ -1,0 +1,76 @@
+{
+ "text": "All checks pass, so I'm recording an approval.",
+ "usage": {
+  "input_tokens": 3898,
+  "output_tokens": 526,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3VwxNWWWNRGazMsifQ",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2333,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass, so I'm recording an approval."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_016XG9SJUjrcDjw3Ahiv8Uge",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model LXT-CL-1.0, which matches the recalled model list.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T7"
+      ]
+     },
+     {
+      "text": "The date code 0722 is inside the recalled range 0722 to 1223.",
+      "cites": [
+       "R:date_codes",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase was made at Amazon, a listed retailer, on 2022-09-16, inside the 2022-08-01 to 2024-07-31 sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the curling iron with the cord cut off, which meets the instructed destruction of cutting off the plug.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The program has no serial rule, so the serial was not checked. The claim asks for repair or replacement, not a refund, so the value threshold does not apply.",
+      "cites": [
+       "T5",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

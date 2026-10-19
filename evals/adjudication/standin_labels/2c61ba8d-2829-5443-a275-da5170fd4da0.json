@@ -1,0 +1,10 @@
+{
+ "claim_id": "2c61ba8d-2829-5443-a275-da5170fd4da0",
+ "spec_id": "S05",
+ "program": "26007",
+ "category": "expect_deny",
+ "expected_outcome": "deny",
+ "rationale": "The December 19, 2015 purchase precedes the January 2016 start of the ALDI sale window (purchase_before_window: deny), and under the policy precedence deny outranks the needs_info from the intact-cord photo (destruction_photo_intact).",
+ "violations": [],
+ "subtypes": {}
+}

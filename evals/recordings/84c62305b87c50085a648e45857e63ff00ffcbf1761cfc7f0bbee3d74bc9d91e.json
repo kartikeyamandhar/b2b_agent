@@ -1,0 +1,70 @@
+{
+ "text": "Applying the policy in order:\n\n- Flag: T6 shows a same_serial match with another claim (e5e044bc...). Flag takes precedence over all other outcomes.\n- Model: T1 legibly reads 200LX, a recalled model (T2 match), so the model is confirmed.\n- Serial: the label photo reads HA06279, which is within HA00001 - HA14873. The typed serial QQ41130245 is out of range (T3), but the label reading is the evidence for the unit, and the typed value is the claimant's entry. Either way, the duplicate hit is the controlling issue.\n- Purchase: 2023-04-11 is inside the sale window; no receipt required (T4).\n- Destruction: not required for this remedy (T5).\n\nThe flag rule applies, so the claim goes to a person for review together with the matched claim.",
+ "usage": {
+  "input_tokens": 2743,
+  "output_tokens": 717,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAfztZy2x84H4STTHCp2",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3650,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order:\n\n- Flag: T6 shows a same_serial match with another claim (e5e044bc...). Flag takes precedence over all other outcomes.\n- Model: T1 legibly reads 200LX, a recalled model (T2 match), so the model is confirmed.\n- Serial: the label photo reads HA06279, which is within HA00001 - HA14873. The typed serial QQ41130245 is out of range (T3), but the label reading is the evidence for the unit, and the typed value is the claimant's entry. Either way, the duplicate hit is the controlling issue.\n- Purchase: 2023-04-11 is inside the sale window; no receipt required (T4).\n- Destruction: not required for this remedy (T5).\n\nThe flag rule applies, so the claim goes to a person for review together with the matched claim."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Qkjk87QFJLEp93Uk8RgWZh",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim sharing the same serial number, so the claim must be sent to a person for review together with the matched claim.",
+      "cites": [
+       "R:policy",
+       "T6",
+       "faq#2"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows the recalled model 200LX, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The label photo reads serial HA06279, which falls within the recalled range HA00001 - HA14873. The typed serial QQ41130245 is outside the recalled ranges, which conflicts with the label and is part of why a person should review.",
+      "cites": [
+       "T1",
+       "T3",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The purchase date of 2023-04-11 is inside the sale window, and no receipt is required.",
+      "cites": [
+       "T4",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for a repair or replacement remedy.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

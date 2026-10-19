@@ -1,0 +1,29 @@
+{
+ "text": "The label photo is unreadable (T1), so the typed model decides. The date code check returned \"unparsed,\" so I'll check the typed model directly.",
+ "usage": {
+  "input_tokens": 3278,
+  "output_tokens": 98,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4APV5XLjW19TbWW7XR",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 975,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label photo is unreadable (T1), so the typed model decides. The date code check returned \"unparsed,\" so I'll check the typed model directly."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01AeGgeBhwowWWPETiVCtFu4",
+   "name": "check_model",
+   "input": {
+    "model_text": "SE4570"
+   }
+  }
+ ]
+}

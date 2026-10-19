@@ -1,0 +1,55 @@
+{
+ "text": "The legible label shows model 2K512B, which is not a recalled model, and the claimant typed the same model. Under the policy, a legible label showing a non-recalled model is a denial.",
+ "usage": {
+  "input_tokens": 3681,
+  "output_tokens": 430,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3UihMyVNyW7ANs5Pv6",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2198,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows model 2K512B, which is not a recalled model, and the claimant typed the same model. Under the policy, a legible label showing a non-recalled model is a denial."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01BMk1YsdGzaiwNYoBvr3Uqz",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2K512B. The typed model matches it. This model is not one of the recalled models (2G505, 2G520, 2G505B, 2G512B), so the claim fails the model rule.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "Purchase facts are otherwise fine: the retailer Esrtech.com is listed, the purchase date 2022-09-05 is inside the sale window, and no receipt is required. These do not cure the model mismatch.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, serial, or payout account with this claim, so no flag applies.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

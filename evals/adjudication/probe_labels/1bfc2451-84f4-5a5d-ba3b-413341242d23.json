@@ -1,0 +1,12 @@
+{
+ "claim_id": "1bfc2451-84f4-5a5d-ba3b-413341242d23",
+ "program": "26046",
+ "category": "label_unreadable",
+ "expected_outcome": "needs_info",
+ "violations": [
+  "label_unreadable"
+ ],
+ "label_model_printed": "LXT-CL-1.0",
+ "label_unreadable": true,
+ "subtypes": {}
+}

@@ -1,0 +1,70 @@
+{
+ "text": "The model is confirmed, the purchase is valid, and there are no duplicates. The destruction photo does not clearly show the cord cut, and the policy says a photo that does not show the instructed destruction must be asked for again, so this needs more information. The serial check was skipped, so I can't confirm it against the recalled ranges. Because the destruction photo is the only blocker, I'll ask the claimant for a clearer one.",
+ "usage": {
+  "input_tokens": 4539,
+  "output_tokens": 693,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4CXVbFUwc3u8yJkfDW",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3212,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed, the purchase is valid, and there are no duplicates. The destruction photo does not clearly show the cord cut, and the policy says a photo that does not show the instructed destruction must be asked for again, so this needs more information. The serial check was skipped, so I can't confirm it against the recalled ranges. Because the destruction photo is the only blocker, I'll ask the claimant for a clearer one."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01NCGUYqPfLqaaWdgSLWMrh3",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 98527, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase at ALDI on 2018-02-06 falls inside the sale window and at a listed retailer; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the unplugged power cord cut. The checker reported a gap in the cord but no clear cut, with low confidence. The policy asks for a new photo when the destruction shown is not the instructed one.",
+      "cites": [
+       "R:destruction",
+       "T4",
+       "T7"
+      ]
+     },
+     {
+      "text": "The serial check was skipped, so the typed serial SN93387657 has not been confirmed against the recalled serial ranges. This must be resolved before approval.",
+      "cites": [
+       "T5",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a clearer photo showing the unplugged power cord of your pressure cooker actually cut through, with the cooker otherwise intact. Please also confirm the serial number printed on the bottom label of the cooker, since we could not verify the serial you typed.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

@@ -1,0 +1,68 @@
+{
+ "text": "The typed model matches a recalled model. The label is unreadable, so the typed model decides, and it is a match. The date code is in range, the purchase is at a listed retailer within the window, and there are no duplicates. Because the label is illegible, the model confirmation rests only on the typed value, so I'll ask for a clearer label photo.\n\nUnder the policy, an unreadable label means needs_info. I'll ask the claimant for a clearer label photo.",
+ "usage": {
+  "input_tokens": 3641,
+  "output_tokens": 579,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3d2MjVRZeq5TzA3Thj",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2968,
+ "content": [
+  {
+   "type": "text",
+   "text": "The typed model matches a recalled model. The label is unreadable, so the typed model decides, and it is a match. The date code is in range, the purchase is at a listed retailer within the window, and there are no duplicates. Because the label is illegible, the model confirmation rests only on the typed value, so I'll ask for a clearer label photo.\n\nUnder the policy, an unreadable label means needs_info. I'll ask the claimant for a clearer label photo."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01USEMoah4yxojACUR73hN2d",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo could not be read (no legible model, serial, or date code), so the model cannot be confirmed from the label.",
+      "cites": [
+       "T1"
+      ]
+     },
+     {
+      "text": "The typed model SE4570 matches a recalled model, but without a usable label reading the program requires a clearer label photo before approval.",
+      "cites": [
+       "R:models",
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The typed date code 07/22 is in the recalled range.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "Purchase at Grainger on 2023-05-10 is inside the sale window and at a listed retailer; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please upload a clearer, well-lit photo of the product's label showing the model number, serial number, and date code so we can confirm the model.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

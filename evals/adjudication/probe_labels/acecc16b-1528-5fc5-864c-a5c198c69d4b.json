@@ -1,0 +1,12 @@
+{
+ "claim_id": "acecc16b-1528-5fc5-864c-a5c198c69d4b",
+ "program": "25206",
+ "category": "label_confirms_missing_typed_model",
+ "expected_outcome": "approve",
+ "violations": [
+  "label_confirms_missing_typed_model"
+ ],
+ "label_model_printed": "AD10025PI",
+ "label_unreadable": false,
+ "subtypes": {}
+}

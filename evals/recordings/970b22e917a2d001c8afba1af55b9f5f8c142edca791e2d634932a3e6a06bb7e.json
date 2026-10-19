@@ -1,0 +1,70 @@
+{
+ "text": "The policy says claims the checker could not finish go to a person for review. The serial check was skipped twice, so I can't confirm the serial is in range, and the outcome should be a flag. The duplicate check was clean and the purchase and model checks passed.",
+ "usage": {
+  "input_tokens": 4422,
+  "output_tokens": 541,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3KCWAbFu7o36t98QQj",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3320,
+ "content": [
+  {
+   "type": "text",
+   "text": "The policy says claims the checker could not finish go to a person for review. The serial check was skipped twice, so I can't confirm the serial is in range, and the outcome should be a flag. The duplicate check was clean and the purchase and model checks passed."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017F4jF7TDXdUz8hLEqrtR6P",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model TD3418B, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase is from REI, a listed retailer, dated 2018-06-08, which is inside the 1998-2024 sale window. No receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The duplicate check found no other claim sharing a photo, address, email, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The serial number check could not be completed (skipped on both attempts), so the serial SN19351478 could not be verified against the recalled ranges. The program sends claims the checker could not finish to a person for review.",
+      "cites": [
+       "T4",
+       "T6",
+       "T7",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The refund is not requested (repair or replacement), so the $100 value threshold does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.6
+   }
+  }
+ ]
+}

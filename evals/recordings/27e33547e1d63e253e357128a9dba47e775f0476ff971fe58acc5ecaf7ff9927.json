@@ -1,0 +1,83 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: label photo legible, shows MK04 (T1), a recalled model. Confirmed.\n- Serial: \"BN2412D19950\" starts with BN, in range (T3).\n- Date code: 12/2024, prior to July 2025, in range (T4).\n- Purchase: 2025-02-14 is inside the window, retailer Shopify.com is listed, receipt not required (T5).\n- Destruction photo: not required (T6), remedy is replacement.\n- Duplicates: none (T7).\n\nNo flag, deny, or needs_info trigger applies. Approve, with no refund requested, so the value threshold does not apply.",
+ "usage": {
+  "input_tokens": 2905,
+  "output_tokens": 744,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3AbYzddnCVJLRG1Ppo",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3270,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: label photo legible, shows MK04 (T1), a recalled model. Confirmed.\n- Serial: \"BN2412D19950\" starts with BN, in range (T3).\n- Date code: 12/2024, prior to July 2025, in range (T4).\n- Purchase: 2025-02-14 is inside the window, retailer Shopify.com is listed, receipt not required (T5).\n- Destruction photo: not required (T6), remedy is replacement.\n- Duplicates: none (T7).\n\nNo flag, deny, or needs_info trigger applies. Approve, with no refund requested, so the value threshold does not apply."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Tcf7Cvs6H619ACyjaBfwEv",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model, so the model is confirmed even though the typed model was missing.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial number BN2412D19950 starts with BN, which is within the recalled serial range.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The date code 12/2024 is manufactured prior to July 2025, so it is within the recalled date codes.",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase date of 2025-02-14 falls inside the sale window, and Shopify.com is a listed retailer. No receipt is required.",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "T5"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy (replacement), so that check does not apply.",
+      "cites": [
+       "T6",
+       "faq#2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this claim.",
+      "cites": [
+       "T7"
+      ]
+     },
+     {
+      "text": "No refund is requested, so the value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

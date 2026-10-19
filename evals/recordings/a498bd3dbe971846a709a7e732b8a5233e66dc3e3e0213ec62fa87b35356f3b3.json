@@ -1,0 +1,70 @@
+{
+ "text": "Flag takes precedence: check_duplicates (T6) found a same_serial match with another claim, so the claim must be flagged for person review regardless of the other checks passing.",
+ "usage": {
+  "input_tokens": 2844,
+  "output_tokens": 491,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeFXcLDX4FbAerACaB5",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 8371,
+ "content": [
+  {
+   "type": "text",
+   "text": "Flag takes precedence: check_duplicates (T6) found a same_serial match with another claim, so the claim must be flagged for person review regardless of the other checks passing."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01SBhkt5VXXFoYNQaTzZpPgU",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim sharing the same serial number, so this claim must be sent to a person for review together with the matching claim.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The date code 07/22 is within the recalled date codes.",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase date of 2022-09-16 is inside the sale window. The retailer Corner Hardware Co is not on the list, so proof of ownership is requested, but this does not by itself cause a denial.",
+      "cites": [
+       "T4",
+       "R:sold_window",
+       "R:sold_at"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy (repair or replacement).",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

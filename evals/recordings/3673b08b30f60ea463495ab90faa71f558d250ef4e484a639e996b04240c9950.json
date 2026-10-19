@@ -1,0 +1,76 @@
+{
+ "text": "Flag takes precedence: the duplicate check found another claim sharing the same address, so this claim must be flagged for review regardless of the other results.",
+ "usage": {
+  "input_tokens": 3861,
+  "output_tokens": 549,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3QvtEjJ5m2rKDJ74mJ",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2584,
+ "content": [
+  {
+   "type": "text",
+   "text": "Flag takes precedence: the duplicate check found another claim sharing the same address, so this claim must be flagged for review regardless of the other results."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01LYyUZKHmw1RFYqE3C6sY65",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Duplicate check found another claim (798a66d4-6d64-5362-aeda-adc363841a12) sharing the same address, which triggers a flag.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The legible label photo shows model AD10009BE, which is on the recalled models list.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "Purchase at Amazon.com on 2023-05-23 falls inside the sale window and the retailer is listed; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show a seatback and no marker writing on the front and rear is visible, so it does not comply with the required destruction.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "The serial check was skipped, so the serial has not been verified against the recalled ranges.",
+      "cites": [
+       "R:policy",
+       "T5"
+      ]
+     },
+     {
+      "text": "The refund of $156.19 exceeds the $100.00 threshold, so a person must review it.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

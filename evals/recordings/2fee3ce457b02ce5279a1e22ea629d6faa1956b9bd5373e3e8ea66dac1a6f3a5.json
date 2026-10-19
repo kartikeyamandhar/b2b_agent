@@ -1,0 +1,56 @@
+{
+ "text": "The model is confirmed, the purchase is in the window at a listed retailer, but the payout account is shared with another claim (T3). Under the policy, a shared payout account requires a flag, which takes precedence over approval.",
+ "usage": {
+  "input_tokens": 3600,
+  "output_tokens": 419,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3NFsA2FruLvQXtKg5t",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2097,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed, the purchase is in the window at a listed retailer, but the payout account is shared with another claim (T3). Under the policy, a shared payout account requires a flag, which takes precedence over approval."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_019m9MwaPCHT4cZnZqThN3Xa",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The check found another claim (c16d467e-40ec-5177-8baf-04ec11c1738b) that shares this claim's payout account, which the policy requires to be flagged for review.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The label is legible and shows model 9421, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase date of 2024-04-29 falls inside the sale window at a listed retailer (Hamilton Manufacturing Corp.), and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

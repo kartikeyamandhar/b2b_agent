@@ -1,0 +1,70 @@
+{
+ "text": "Applying the policy in order: flag takes precedence.\n\n- check_duplicates (T6) found a payout destination shared with another claim, so the claim must be flagged before any deny or approve.\n- The serial 409KM2538543 is out of the recalled range (T3), which would be a deny on its own, but flag comes first in the precedence.\n- Model is confirmed from the legible label (T1, T2), purchase is inside the window at a listed retailer (T4), and no destruction photo is required (T5).\n\nOutcome: flag, for a person to review alongside the matching claim.",
+ "usage": {
+  "input_tokens": 3624,
+  "output_tokens": 626,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeSADGYQnxQhd1LeXQZ",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3500,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: flag takes precedence.\n\n- check_duplicates (T6) found a payout destination shared with another claim, so the claim must be flagged before any deny or approve.\n- The serial 409KM2538543 is out of the recalled range (T3), which would be a deny on its own, but flag comes first in the precedence.\n- Model is confirmed from the legible label (T1, T2), purchase is inside the window at a listed retailer (T4), and no destruction photo is required (T5).\n\nOutcome: flag, for a person to review alongside the matching claim."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_015ygkmrzfHe2mCiLrd6C3Yp",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim sharing the same payout destination, so the claim must go to a person for review.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model LTE4815BD, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number 409KM2538543 falls outside the recalled serial ranges. This would be a denial on its own, but the flag rule takes precedence and the reviewer should consider it.",
+      "cites": [
+       "T3",
+       "R:serials",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase date of 2019-09-21 is inside the sale window at LG.com, which is a listed retailer, and no receipt is required.",
+      "cites": [
+       "T4",
+       "R:sold_window",
+       "R:sold_at"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for a repair remedy.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

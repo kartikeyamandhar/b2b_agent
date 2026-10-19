@@ -1,0 +1,57 @@
+{
+ "text": "The legible label shows B0026Y, which is not a recalled model (T7 confirms the only recalled model is B0726Y). Under the model rule, a legible label showing a non-recalled model means denial, and that takes precedence over the other checks.",
+ "usage": {
+  "input_tokens": 3859,
+  "output_tokens": 443,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB31mCBEj7PG3bmTDLcY",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2395,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows B0026Y, which is not a recalled model (T7 confirms the only recalled model is B0726Y). Under the model rule, a legible label showing a non-recalled model means denial, and that takes precedence over the other checks."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01EywAgM4Q8Fgna8tUmmV6zU",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model B0026Y, which is not a recalled model. The only recalled model is B0726Y. The typed model B0726Y does not override the legible label.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T7"
+      ]
+     },
+     {
+      "text": "The serial number and date code are not the deciding issue, but the date code 8/21 is in range (T6). The claim fails on model alone.",
+      "cites": [
+       "R:date_codes",
+       "T6"
+      ]
+     },
+     {
+      "text": "The retailer (Walmart) and purchase date (2017-04-01) are within the program's sale rules, and no duplicate claims were found. These do not change the denial.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

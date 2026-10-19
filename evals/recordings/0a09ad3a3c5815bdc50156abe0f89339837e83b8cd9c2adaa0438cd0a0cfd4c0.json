@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and shows DR2E, so I'll confirm the model against the recalled list.",
+ "usage": {
+  "input_tokens": 3350,
+  "output_tokens": 82,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3z9xhtmyQA1w6zQsjE",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 941,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows DR2E, so I'll confirm the model against the recalled list."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017zzJVKs91mf5qcp3V8Votc",
+   "name": "check_model",
+   "input": {
+    "model_text": "DR2E"
+   }
+  }
+ ]
+}

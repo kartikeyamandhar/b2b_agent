@@ -117,6 +117,8 @@ def trace_step(t: AgentStep) -> s.TraceStep:
         tokens_out=t.tokens_out,
         cost_usd=f"{t.cost_usd:.6f}",
         created_at=t.created_at,
+        counted=bool(t.counted),
+        nominal_cost_usd=f"{t.nominal_cost_usd:.6f}",
     )
 
 

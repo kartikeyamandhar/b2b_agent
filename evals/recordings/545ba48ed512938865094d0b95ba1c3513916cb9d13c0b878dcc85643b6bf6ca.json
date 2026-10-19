@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": true, \"complies\": false, \"observed\": \"The photo shows a gray rectangular device with a black cord and the word RECALLED printed in white capital letters on its face, which appears to be a printed label or display rather than marker writing on the product.\", \"confidence\": 0.6}",
+ "usage": {
+  "input_tokens": 1190,
+  "output_tokens": 92,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeASYbRxqS1utZfy618",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 1401
+}

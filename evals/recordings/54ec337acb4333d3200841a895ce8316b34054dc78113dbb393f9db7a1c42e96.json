@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and shows AD10014BE, the purchase is inside the window at a listed retailer, there are no duplicates, and the destruction photo is missing. I'll confirm the model against the recall list.",
+ "usage": {
+  "input_tokens": 3401,
+  "output_tokens": 120,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3fviVEgJ4DfJwt5YHK",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1950,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows AD10014BE, the purchase is inside the window at a listed retailer, there are no duplicates, and the destruction photo is missing. I'll confirm the model against the recall list."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01NFBQ2RrWu5ne2u1t2UQwBe",
+   "name": "check_model",
+   "input": {
+    "model_text": "AD10014BE"
+   }
+  }
+ ]
+}

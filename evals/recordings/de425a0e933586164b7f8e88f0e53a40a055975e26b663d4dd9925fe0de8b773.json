@@ -1,0 +1,47 @@
+{
+ "text": "I'll start by reading the label photo, checking the purchase, and checking for duplicates, since the claim has a label and receipt and the rules don't require serial or destruction checks.",
+ "usage": {
+  "input_tokens": 2650,
+  "output_tokens": 189,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4AFqCwtG4jDrmDRNJX",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1386,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll start by reading the label photo, checking the purchase, and checking for duplicates, since the claim has a label and receipt and the rules don't require serial or destruction checks."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01NMFMDCbpDfQ7odrkQK942t",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01JDDULBNdwAVwAMLcMLh1U3",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_014zrcCKYZ77mCbGh4unUDYi",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01BYqaKSRkMv1Kxh38nSHHhc",
+   "name": "check_date_code",
+   "input": {
+    "date_code": "08/22 NH"
+   }
+  }
+ ]
+}

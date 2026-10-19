@@ -1,0 +1,75 @@
+{
+ "text": "The label photo is unreadable (T1), so the typed model decides. The typed model MK04 matches the recalled model (T6). Serial and date code are in range (T4, T5), the purchase is at a listed retailer within the window (T2), and there are no duplicates (T3). The remedy is repair or replacement, so no destruction photo is required and no value threshold applies.\n\nBecause the label is illegible, the model rule says: without a usable label reading, the typed model decides, and the typed model is a match. So the model is confirmed by the typed value. All other checks pass, so the claim is approved.",
+ "usage": {
+  "input_tokens": 3622,
+  "output_tokens": 655,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3eTQPiSnkT69XgEjgX",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3765,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label photo is unreadable (T1), so the typed model decides. The typed model MK04 matches the recalled model (T6). Serial and date code are in range (T4, T5), the purchase is at a listed retailer within the window (T2), and there are no duplicates (T3). The remedy is repair or replacement, so no destruction photo is required and no value threshold applies.\n\nBecause the label is illegible, the model rule says: without a usable label reading, the typed model decides, and the typed model is a match. So the model is confirmed by the typed value. All other checks pass, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Nh2QPLBFQgH2oYJ3FhrSFG",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo could not be read, so the typed model decides. Typed model MK04 is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "Typed serial BN2503C14476 starts with BN, which is in the recalled serial range.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "Typed date code 03/2025 is manufactured before July 2025, which is in the recalled range.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "Purchase at Amazon.com on 2025-04-22 is a listed retailer and falls inside the sale window. No receipt was required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claimant requested repair or replacement, so no destruction photo is required and no value threshold review applies.",
+      "cites": [
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.8
+   }
+  }
+ ]
+}

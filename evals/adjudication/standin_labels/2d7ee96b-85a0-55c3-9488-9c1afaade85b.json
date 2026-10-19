@@ -1,0 +1,10 @@
+{
+ "claim_id": "2d7ee96b-85a0-55c3-9488-9c1afaade85b",
+ "spec_id": "S32",
+ "program": "25206",
+ "category": "expect_approve",
+ "expected_outcome": "approve",
+ "rationale": "BB4640CF is a listed model, the August 31, 2024 Amazon.com purchase is the last day of a window that runs through August 2024, the seatback is marked RECALLED, and notice 25206 requires no receipt, so approve.",
+ "violations": [],
+ "subtypes": {}
+}

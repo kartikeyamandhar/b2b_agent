@@ -1,0 +1,69 @@
+{
+ "text": "The label confirms a recalled model. The purchase is at a listed retailer within the window, and the date code is in range. However, another claim shares this payout account, so the policy requires a flag regardless of the other checks.",
+ "usage": {
+  "input_tokens": 3559,
+  "output_tokens": 492,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3huMRomLDqt6LVLFjk",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2947,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label confirms a recalled model. The purchase is at a listed retailer within the window, and the date code is in range. However, another claim shares this payout account, so the policy requires a flag regardless of the other checks."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_012xkwtCapSiZq8HWKTTT33M",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program (ce9c2ada-16d3-5668-83ca-de4f83a3796d) shares this claim's payout destination, which the policy requires to be flagged for review.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The legible label shows model SE4570, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase was from Grainger, a listed retailer, on 2023-04-26, inside the sale window. No receipt is required for this retailer.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The label date code 07/22 is in the recalled range.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial check was skipped because the program has no serial rule, so it did not affect the outcome.",
+      "cites": [
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

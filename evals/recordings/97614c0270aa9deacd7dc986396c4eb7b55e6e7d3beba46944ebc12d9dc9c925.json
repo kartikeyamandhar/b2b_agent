@@ -1,0 +1,71 @@
+{
+ "text": "Every check passes: the label model matches a recalled model, the serial is in range, the purchase is at Sears inside the window with a receipt, and there are no duplicates. The refund isn't requested (repair or replacement), so the value threshold doesn't apply.",
+ "usage": {
+  "input_tokens": 3601,
+  "output_tokens": 569,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3qAt1yFwdrEzHT6dJV",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2844,
+ "content": [
+  {
+   "type": "text",
+   "text": "Every check passes: the label model matches a recalled model, the serial is in range, the purchase is at Sears inside the window with a receipt, and there are no duplicates. The refund isn't requested (repair or replacement), so the value threshold doesn't apply."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_014KRhSpLJMePFW6Q1bsqEjy",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model GLEFM97GPWA1, which matches the recalled model pattern GLEFM97GPW*. The typed model is a variant of the same model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The label serial VF12265521 falls within the recalled serial range VF122xxxxx - VF334xxxxx.",
+      "cites": [
+       "R:serials",
+       "T1",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase was from Sears, a listed retailer, on 2007-10-21, which is inside the sale window 2001-06-01 to 2009-08-31. The receipt is present.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "R:receipt",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The claimant requests repair or replacement, not a refund, so the $100 value threshold does not require person review.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": true, \"complies\": false, \"observed\": \"The photo shows a red rectangular object with a tan strip and a black line on a blurred background, with no visible helmet straps being cut off, so the instructed destruction is not clearly visible.\", \"confidence\": 0.6}",
+ "usage": {
+  "input_tokens": 1187,
+  "output_tokens": 91,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAe6Q97zMLfTkSNqby32",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 1372
+}

@@ -1,0 +1,57 @@
+{
+ "text": "The legible label shows KY-348A, which is not a recalled model, so the label controls and the model is not confirmed. The destruction photo also does not show the cut power cord required by R:destruction. The label-based model denial is the first triggering rule in the policy order, and no flag applies (T3 is empty).",
+ "usage": {
+  "input_tokens": 3804,
+  "output_tokens": 485,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3acrZNKm3gGNqTWxD6",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3091,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows KY-348A, which is not a recalled model, so the label controls and the model is not confirmed. The destruction photo also does not show the cut power cord required by R:destruction. The label-based model denial is the first triggering rule in the policy order, and no flag applies (T3 is empty)."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01L2Hz5Czphm1XcU2CSsY7zW",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model KY-348A, which is not one of the recalled models (93550, KY-318B, 96775, KY-318A, 98527, 6L-PC). The typed model 93550 does not override a legible label showing a non-recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the required destruction: the power cord appears intact with no cut, so the R:destruction requirement is not met.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase is at a listed retailer (ALDI) within the sale window, and no duplicate claims were found, but these do not cure the model mismatch on the label.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

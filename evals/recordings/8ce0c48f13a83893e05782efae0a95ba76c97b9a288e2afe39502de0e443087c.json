@@ -1,0 +1,70 @@
+{
+ "text": "Checking the policy order: flag takes precedence. check_duplicates (T6) found a same_payout hit with claim ce9c2ada-..., so the outcome is flag regardless of the otherwise-clean model, date code, serial, and purchase checks.",
+ "usage": {
+  "input_tokens": 2841,
+  "output_tokens": 522,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeG8rdRznMeieVYhBpV",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4081,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy order: flag takes precedence. check_duplicates (T6) found a same_payout hit with claim ce9c2ada-..., so the outcome is flag regardless of the otherwise-clean model, date code, serial, and purchase checks."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01PgSYTg16K3oCkgUnWYQSzE",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "This claim shares a payout account with another claim (ce9c2ada-16d3-5668-83ca-de4f83a3796d), so it must be sent to a person for duplicate review together with the matching claim.",
+      "cites": [
+       "T6",
+       "R:policy",
+       "T7"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The date code 07/22 is within the recalled date codes.",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Grainger is a listed retailer and the purchase date of 2023-04-26 falls inside the sale window; no receipt was required for this check.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No destruction photo is required because the remedy is repair or replacement.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

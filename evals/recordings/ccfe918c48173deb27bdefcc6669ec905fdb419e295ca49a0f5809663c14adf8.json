@@ -1,0 +1,77 @@
+{
+ "text": "Checking the policy in order: flag first. T6 shows no duplicates, so no flag. Deny: label legible and shows LXT-CL-1.0 (T1, T2), so model is not a denial. Date code 0722 is in range (T3). Serial is present and no serial range rule applies beyond date code. Purchase 2022-09-24 is inside the window and Amazon is listed (T4). Destruction photo shows the device with the cord cut (T5, complies true, though confidence 0.6 is moderate); it is a distinct photo from the label. No needs_info triggers apply. Remedy is replacement, no refund requested, so no value threshold review.",
+ "usage": {
+  "input_tokens": 2913,
+  "output_tokens": 691,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB35MLqquVDWHecy4xdA",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3361,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy in order: flag first. T6 shows no duplicates, so no flag. Deny: label legible and shows LXT-CL-1.0 (T1, T2), so model is not a denial. Date code 0722 is in range (T3). Serial is present and no serial range rule applies beyond date code. Purchase 2022-09-24 is inside the window and Amazon is listed (T4). Destruction photo shows the device with the cord cut (T5, complies true, though confidence 0.6 is moderate); it is a distinct photo from the label. No needs_info triggers apply. Remedy is replacement, no refund requested, so no value threshold review."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01B195PeLJvjhG2JUxGJB6in",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows the recalled model LXT-CL-1.0, which confirms the model and matches the typed model.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "Date code 0722 falls within the recalled range 0722 to 1223.",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Purchase on 2022-09-24 is inside the sale window and the retailer Amazon is on the list.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the device with the cord cut, as the remedy requires, and it is distinct from the label photo.",
+      "cites": [
+       "T5",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The remedy is replacement with no refund requested, so the refund value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

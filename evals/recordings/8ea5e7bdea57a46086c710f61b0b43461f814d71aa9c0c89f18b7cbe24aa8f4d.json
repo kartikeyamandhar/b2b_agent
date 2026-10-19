@@ -1,0 +1,56 @@
+{
+ "text": "The model is confirmed as recalled (T5), and the label date code 07/22 NH matches the recalled code (T1). The purchase is before the sale window (T2), which is a deny.",
+ "usage": {
+  "input_tokens": 3575,
+  "output_tokens": 400,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3fEZFmvhmwpxfapJt9",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1882,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed as recalled (T5), and the label date code 07/22 NH matches the recalled code (T1). The purchase is before the sale window (T2), which is a deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Cyen47c6u6dQ9tvQjUL5cV",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model, so the product itself is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase date of 2022-08-26 is before the sale window, which starts 2022-09-01. Purchases before the window are denied, even though the retailer (grainger.com) is on the list.",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim, so no duplicate flag applies.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

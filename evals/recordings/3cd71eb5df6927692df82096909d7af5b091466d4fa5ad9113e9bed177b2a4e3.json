@@ -1,0 +1,62 @@
+{
+ "text": "The legible label shows CQM-03, and the model check reports a mismatch against the recalled models (CXP-03, CXC-02, CXM-03, CXV, CXM-02). The typed model \"CQM-03\" is the same non-recalled model. Under the policy, a legible label showing a non-recalled model is a denial, even though the serial and purchase checks pass.",
+ "usage": {
+  "input_tokens": 3739,
+  "output_tokens": 503,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3P7mmy4DzJ1cK5swiP",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2720,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows CQM-03, and the model check reports a mismatch against the recalled models (CXP-03, CXC-02, CXM-03, CXV, CXM-02). The typed model \"CQM-03\" is the same non-recalled model. Under the policy, a legible label showing a non-recalled model is a denial, even though the serial and purchase checks pass."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0133ZwTvRFsxXLqAw5qebLrV",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model CQM-03, which is not one of the program's recalled models, so the model requirement is not met.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial number FC3389948182 falls within a recalled serial range, but the serial rule cannot cure a non-recalled model.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The retailer JHTNA is on the list and the purchase date of 2022-08-21 is inside the sale window, so the purchase checks pass; this does not change the model result.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,51 @@
+{
+ "text": "Policy order: flag takes precedence. T6 shows a same_photo hit with another claim, so flag applies.",
+ "usage": {
+  "input_tokens": 2844,
+  "output_tokens": 361,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3BXNG14Dsj7tcw1u3M",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2361,
+ "content": [
+  {
+   "type": "text",
+   "text": "Policy order: flag takes precedence. T6 shows a same_photo hit with another claim, so flag applies."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DLgYz9uzg7smEW4BJYwQ12",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo is shared with another claim (ed2908e7-84b2-5fa5-91a8-919a2cf990ad), so the claim must go to a person for duplicate review.",
+      "cites": [
+       "T6",
+       "R:policy",
+       "T7"
+      ]
+     },
+     {
+      "text": "Other checks would otherwise pass: the label is legible and shows recalled model SE4570, the date code 08/22 NH is in the recalled set per the label reading, the Grainger retailer is listed, and the receipt is not required for this case.",
+      "cites": [
+       "T1",
+       "T2",
+       "T4",
+       "R:models",
+       "R:sold_at"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

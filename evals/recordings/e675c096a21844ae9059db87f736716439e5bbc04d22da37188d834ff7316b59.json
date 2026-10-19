@@ -1,0 +1,77 @@
+{
+ "text": "Checking the policy in order: flag (duplicates) \u2014 T7 has no hits, so no flag. Deny: label legible showing DR2E (recalled, T1/T2), serial J0E in range (T3), date code 2017 in range (T4), purchase 2020-09-22 inside window at a listed retailer (T5), no destruction photo required (T6). Refund not requested, so no value review. All checks pass, so approve.",
+ "usage": {
+  "input_tokens": 2887,
+  "output_tokens": 648,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB355X5pCB7kjm9i7vFw",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3037,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy in order: flag (duplicates) \u2014 T7 has no hits, so no flag. Deny: label legible showing DR2E (recalled, T1/T2), serial J0E in range (T3), date code 2017 in range (T4), purchase 2020-09-22 inside window at a listed retailer (T5), no destruction photo required (T6). Refund not requested, so no value review. All checks pass, so approve."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QZifPjMbRa2A8sxdN4117o",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model DR2E, which is on the recalled model list, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial number J0E35430791 begins with J0E, which falls within the recalled serial ranges.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "Date code 2017 is within the recalled model year range of 2017-2024.",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     },
+     {
+      "text": "Purchase on 2020-09-22 is inside the sale window (2018-06-01 to 2025-07-31) and was from a listed retailer (Yamaha dealers); no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T5"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy (repair), and no other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6",
+       "T7",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No refund was requested (repair or replacement), so the refund value threshold does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.92
+   }
+  }
+ ]
+}

@@ -21,6 +21,7 @@ def build_engine(libpq_url: str) -> Engine:
     return create_engine(
         sqlalchemy_url(libpq_url),
         pool_pre_ping=True,
+        hide_parameters=True,  # a database error never logs row values (claimant names, addresses)
         connect_args={"connect_timeout": CONNECT_TIMEOUT_S, "application_name": "recallops"},
     )
 

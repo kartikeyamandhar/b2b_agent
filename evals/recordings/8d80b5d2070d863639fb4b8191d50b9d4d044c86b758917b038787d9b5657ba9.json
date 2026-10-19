@@ -1,0 +1,62 @@
+{
+ "text": "The model is confirmed as recalled, the purchase is in-window at a listed retailer, but another claim shares the payout account. Under the policy, a shared payout account requires a flag, which takes precedence over approval.",
+ "usage": {
+  "input_tokens": 3359,
+  "output_tokens": 451,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3o2RiYExAJHjymScwD",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2268,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed as recalled, the purchase is in-window at a listed retailer, but another claim shares the payout account. Under the policy, a shared payout account requires a flag, which takes precedence over approval."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_015Gsa3FAS6pa7D8bGVw1sfL",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Duplicate check found another claim (a8975c59-c3ef-564c-a5d4-9ba2778a739d) sharing this claim's payout destination.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model P1410, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The retailer www.amazon.com is on the sold-at list and the purchase date 2019-09-28 falls inside the sale window; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial check was skipped, so no serial verdict was recorded; the flag decision does not depend on it.",
+      "cites": [
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

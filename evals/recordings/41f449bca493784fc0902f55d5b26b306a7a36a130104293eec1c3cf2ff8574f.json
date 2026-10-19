@@ -1,0 +1,63 @@
+{
+ "text": "Checking the policy against the results:\n\n- Duplicates: T7 shows no hits, so no flag.\n- Model: The label photo (T1) is legible and reads DT2E. That is not a recalled model (R:models lists DR2A and DR2E). The typed model matches the label reading (T2 mismatch). Per policy, a legible label showing a non-recalled model means deny. The typed model isn't a typo of a recalled model here; DT2E is a different model string from DR2E, and the label itself is the evidence.\n- Serial, date code, purchase, and destruction checks all pass (T3, T4, T5, T6), but the model failure controls.\n\nOutcome: deny.",
+ "usage": {
+  "input_tokens": 2895,
+  "output_tokens": 604,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB34qUjUQWyCUdK6WjTt",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3159,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy against the results:\n\n- Duplicates: T7 shows no hits, so no flag.\n- Model: The label photo (T1) is legible and reads DT2E. That is not a recalled model (R:models lists DR2A and DR2E). The typed model matches the label reading (T2 mismatch). Per policy, a legible label showing a non-recalled model means deny. The typed model isn't a typo of a recalled model here; DT2E is a different model string from DR2E, and the label itself is the evidence.\n- Serial, date code, purchase, and destruction checks all pass (T3, T4, T5, T6), but the model failure controls.\n\nOutcome: deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_018B8EJRfBSmKxc6Zb6zX42W",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model DT2E, which is not on the recalled model list (DR2A, DR2E). Under the claim policy, a legible label showing a non-recalled model means the unit is not part of this recall.",
+      "cites": [
+       "R:policy",
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The typed model DT2E also does not match any recalled model, so the model check fails on both the label and the typed value.",
+      "cites": [
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the denial does not rest on a duplicate flag.",
+      "cites": [
+       "T7"
+      ]
+     },
+     {
+      "text": "Serial number, date code, retailer, and purchase window all pass, but these do not override the model failure.",
+      "cites": [
+       "T3",
+       "T4",
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

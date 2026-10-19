@@ -1,0 +1,70 @@
+{
+ "text": "Retrying with the FAQ cited under its tool result ID.",
+ "usage": {
+  "input_tokens": 3916,
+  "output_tokens": 547,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB37PVsqqQmibHBByvMs",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2159,
+ "content": [
+  {
+   "type": "text",
+   "text": "Retrying with the FAQ cited under its tool result ID."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01JU1rjmTvSff6w5QpvTQp9E",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model B0726Y, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 8/21 is within the recalled range.",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "Fred Meyer is a listed retailer, the purchase date of 2023-09-03 is inside the sale window, and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the instructed destruction (cutting off the straps). It shows a red rectangular object with a green stripe and a cord, with nothing clearly resembling a helmet. A destruction photo that does not show the instructed destruction is asked for again.",
+      "cites": [
+       "R:destruction",
+       "T5",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your label and purchase details check out, but the destruction photo does not show the helmet with its straps cut off. Please send a new photo that clearly shows your helmet with the straps cut off as instructed.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

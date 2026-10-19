@@ -1,0 +1,71 @@
+{
+ "text": "The model is confirmed, the purchase and date code are in range, but the duplicate check (T3) found another claim sharing a serial number. Under the policy, any shared serial triggers a flag, and that overrides the other outcomes.",
+ "usage": {
+  "input_tokens": 3752,
+  "output_tokens": 528,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3CsfvE7nY2uBuADNg4",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2529,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed, the purchase and date code are in range, but the duplicate check (T3) found another claim sharing a serial number. Under the policy, any shared serial triggers a flag, and that overrides the other outcomes."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01MA5SUXCQkHY4n8JUCDCoBP",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program shares a serial number with this claim, which the duplicate check found. Under the flag rule, a shared serial requires review before any payout.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows recalled model SE4570, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label photo's date code 07/22 is in the recalled range.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The retailer www.justinboots.com is on the sold-at list, and the purchase date 2023-07-31 falls within the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The typed serial SN48572698 does not match the label serial SN81283641. The serial check was skipped, so the serial discrepancy is also unresolved.",
+      "cites": [
+       "T1",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

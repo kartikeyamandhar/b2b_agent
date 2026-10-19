@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": true, \"complies\": false, \"observed\": \"The photo shows a gray device with a black cord and the word RECALLED written in white, but the instruction calls for marker writing on the front and rear of a seatback, and this appears to be a digital graphic rather than a physical product with marker writing on both sides.\", \"confidence\": 0.7}",
+ "usage": {
+  "input_tokens": 1199,
+  "output_tokens": 111,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeEzXntbtt23iLyPxiF",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 1276
+}

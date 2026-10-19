@@ -1,0 +1,63 @@
+{
+ "text": "The model is confirmed, but the required receipt is missing, so this claim cannot be approved yet. I'll ask the claimant for proof of purchase.",
+ "usage": {
+  "input_tokens": 3685,
+  "output_tokens": 510,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3pxBnPsM74BScbx2Yd",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2683,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed, but the required receipt is missing, so this claim cannot be approved yet. I'll ask the claimant for proof of purchase."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_013GEegLkz2cZyEr2U7VSXch",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 790.990141A1, which matches the recalled 790.990141* family.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number VF12298621 falls within the recalled range VF122xxxxx - VF334xxxxx.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The retailer Sears is on the list and the purchase date 2008-08-19 falls inside the sale window, but the purchase receipt is missing, and a receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window",
+       "R:receipt"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your unit's model and serial are covered by the recall, and the Sears purchase date falls within the eligible window. To continue, please upload a copy of your purchase receipt from Sears (or another proof of purchase showing the Sears purchase date).",
+    "confidence": 0.9
+   }
+  }
+ ]
+}

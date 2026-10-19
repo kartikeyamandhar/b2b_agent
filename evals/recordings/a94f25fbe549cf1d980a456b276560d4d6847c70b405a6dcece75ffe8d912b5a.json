@@ -1,0 +1,69 @@
+{
+ "text": "The model is confirmed, and the date code is in range. The retailer is not on the approved list, which under the purchase rule calls for a needs_info outcome asking for proof of purchase.",
+ "usage": {
+  "input_tokens": 3699,
+  "output_tokens": 560,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3DGf2mpX4b5HhYwX9F",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2777,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed, and the date code is in range. The retailer is not on the approved list, which under the purchase rule calls for a needs_info outcome asking for proof of purchase."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01XqQC7joQ5ioWxqcQq4idvj",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows recalled model SE4570 with date code 07/22, which is in the recalled range.",
+      "cites": [
+       "T1",
+       "T6",
+       "T5",
+       "R:models",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The claimed retailer, Corner Hardware Co, is not on the program's list of sales points, so the retailer cannot be verified from the list alone.",
+      "cites": [
+       "T2",
+       "R:sold_at"
+      ]
+     },
+     {
+      "text": "The purchase date of 2022-10-12 is inside the sale window, so the date itself is not a problem.",
+      "cites": [
+       "T2",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The program has no serial number rule, so the typed serial was not used to decide this claim.",
+      "cites": [
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your retailer, Corner Hardware Co, is not one of the authorized sellers for this recall. Please send proof of purchase (such as a receipt, order confirmation, or bank/card statement) showing where and when you bought the boots, so we can verify the sale.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

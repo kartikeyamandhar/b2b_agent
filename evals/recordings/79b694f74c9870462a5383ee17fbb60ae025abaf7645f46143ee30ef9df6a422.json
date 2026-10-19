@@ -1,0 +1,77 @@
+{
+ "text": "Checking each rule against the results:\n\n- Duplicates: T6 found no matching claims, so no flag.\n- Model: T1 reads the label as legible with LXT-CL-1.0, a recalled model (T2 match). Confirmed.\n- Date code: T3 shows 0722 in range; serial SN31079309 matches the label reading (T1). No serial rule is listed in R:models or R:date_codes, so none applies.\n- Purchase: T4 shows Ulta is listed and the date 2023-10-25 is inside the window. Receipt not required per T4, though one was attached.\n- Destruction: T5 shows the device with a gap in the cord consistent with the plug being cut off. The photo is distinct from the label photo, and the check complies, though the confidence is 0.7 and the cut itself is not directly visible. Per R:destruction and the FAQ, the photo must show the instructed destruction. T5 judges it does, and the visible gap supports that, so I'll treat it as satisfied.\n- Remedy: replacement, no refund requested, so the value threshold doesn't apply.\n\nAll checks pass, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2916,
+  "output_tokens": 854,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB35nGXsoonizj5RP4AP",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4392,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking each rule against the results:\n\n- Duplicates: T6 found no matching claims, so no flag.\n- Model: T1 reads the label as legible with LXT-CL-1.0, a recalled model (T2 match). Confirmed.\n- Date code: T3 shows 0722 in range; serial SN31079309 matches the label reading (T1). No serial rule is listed in R:models or R:date_codes, so none applies.\n- Purchase: T4 shows Ulta is listed and the date 2023-10-25 is inside the window. Receipt not required per T4, though one was attached.\n- Destruction: T5 shows the device with a gap in the cord consistent with the plug being cut off. The photo is distinct from the label photo, and the check complies, though the confidence is 0.7 and the cut itself is not directly visible. Per R:destruction and the FAQ, the photo must show the instructed destruction. T5 judges it does, and the visible gap supports that, so I'll treat it as satisfied.\n- Remedy: replacement, no refund requested, so the value threshold doesn't apply.\n\nAll checks pass, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_015eX84CyqUDpwPoocwEP1S2",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows LXT-CL-1.0, a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 0722 is inside the recalled range 0722 to 1223.",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "Ulta is on the sold-at list and the purchase date 2023-10-25 falls inside the sale window.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "The destruction photo is a different image from the label photo and shows the device with a gap in the cord consistent with the plug being cut off, as instructed.",
+      "cites": [
+       "R:destruction",
+       "T5",
+       "faq#2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The remedy is replacement with no refund requested, so the refund value threshold does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

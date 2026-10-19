@@ -1,0 +1,57 @@
+{
+ "text": "The label's model AD10314SL is not a recalled model, and the claimant's typed model does not match the label. Under the policy, a legible label showing a non-recalled model is a denial. I'll record that.",
+ "usage": {
+  "input_tokens": 3816,
+  "output_tokens": 438,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3ZhQ8DkVAXxvh97RW8",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2492,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label's model AD10314SL is not a recalled model, and the claimant's typed model does not match the label. Under the policy, a legible label showing a non-recalled model is a denial. I'll record that."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01KBWUXLnHjzuFULkkjC8vrE",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model AD10314SL, which is not one of the recalled models. The typed model BB4640CF does not match the label, and the label is the controlling evidence.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase is at Amazon.com within the sale window, and there are no duplicate claims, but these checks do not cure the model mismatch.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the required destruction. The RECALLED marking is on a device front, and the rear of the seatback is not visible, so it does not meet the instructed marking.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

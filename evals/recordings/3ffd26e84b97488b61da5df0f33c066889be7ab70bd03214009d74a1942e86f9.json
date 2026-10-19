@@ -1,0 +1,15 @@
+{
+ "text": "{\"legible\": true, \"model_text\": \"P4410-P\", \"serial_text\": \"SN14753743\", \"date_code_text\": null, \"confidence\": 0.95}",
+ "usage": {
+  "input_tokens": 1372,
+  "output_tokens": 52,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAe7GGNuYXyiG2SN1Ab9",
+ "purpose": "read_label_photo",
+ "max_tokens": 400,
+ "latency_ms": 966
+}

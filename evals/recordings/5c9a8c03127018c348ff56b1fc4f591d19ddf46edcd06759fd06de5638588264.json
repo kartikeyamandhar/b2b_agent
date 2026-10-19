@@ -1,0 +1,29 @@
+{
+ "text": "The label reads model 93550, which is recalled. The destruction photo does not show the cord cut. Next I'll confirm the model against the program list.",
+ "usage": {
+  "input_tokens": 3314,
+  "output_tokens": 96,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB48epWhEnCeKcsfe7g7",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1118,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label reads model 93550, which is recalled. The destruction photo does not show the cord cut. Next I'll confirm the model against the program list."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01EAaAsNzXZN49tz7YQSpyFL",
+   "name": "check_model",
+   "input": {
+    "model_text": "93550"
+   }
+  }
+ ]
+}

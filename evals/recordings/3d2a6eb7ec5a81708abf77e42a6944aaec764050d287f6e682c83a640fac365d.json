@@ -1,0 +1,83 @@
+{
+ "text": "Checking each rule against the results:\n\n- Model: T1 legible, label shows MK04, a recalled model. T2 match. Confirmed.\n- Serial: T3 in range (starts with BN). Pass.\n- Date code: T4 10/2024, prior to July 2025. Pass.\n- Purchase: T5 retailer Amazon.com is listed, date 2024-11-29 is inside the window, receipt not required. Pass.\n- Destruction photo: T6 not required (remedy is replacement). Pass.\n- Duplicates: T7 no hits. Not flagged.\n- No refund requested, so the value threshold does not apply.\n\nAll checks pass, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2909,
+  "output_tokens": 760,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3AKgWqW9A6JDT4QMWE",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3779,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking each rule against the results:\n\n- Model: T1 legible, label shows MK04, a recalled model. T2 match. Confirmed.\n- Serial: T3 in range (starts with BN). Pass.\n- Date code: T4 10/2024, prior to July 2025. Pass.\n- Purchase: T5 retailer Amazon.com is listed, date 2024-11-29 is inside the window, receipt not required. Pass.\n- Destruction photo: T6 not required (remedy is replacement). Pass.\n- Duplicates: T7 no hits. Not flagged.\n- No refund requested, so the value threshold does not apply.\n\nAll checks pass, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01EBSNzvibMkoTpgQsMHs8ra",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model, so the model is confirmed even though the typed model matches.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial number BN2410A07731 starts with BN, which is within the recalled serial range.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The date code 10/2024 is prior to July 2025, so it is within the recalled date codes.",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     },
+     {
+      "text": "Retailer Amazon.com is on the sold-at list, and the purchase date 2024-11-29 falls inside the sale window. No receipt is required for this retailer.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T5"
+      ]
+     },
+     {
+      "text": "The remedy is replacement, so no destruction photo is required.",
+      "cites": [
+       "T6",
+       "T8"
+      ]
+     },
+     {
+      "text": "The duplicate check found no other claim sharing a photo, address, email, serial number, or payout account, so the claim is not flagged.",
+      "cites": [
+       "T7"
+      ]
+     },
+     {
+      "text": "No refund is requested, so the value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

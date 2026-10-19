@@ -1,0 +1,67 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3689,
+  "output_tokens": 450,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeTj5EdNXfRd6rZt49i",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 1907,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01QvNKZPfGxGMMM1EWxKwqB6",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 34790, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The date code December 2023 is manufactured prior to January 2024, so it is within the recalled range.",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2017-12-20 is before the sale window of 2019-01-01 to 2025-01-31. Purchases before the window are not eligible, even though the retailer (Igloocoolers.com) is on the list.",
+      "cites": [
+       "T4",
+       "T7",
+       "R:sold_window",
+       "R:sold_at"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so no review flag applies.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy, and no refund over the threshold is requested.",
+      "cites": [
+       "T5",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

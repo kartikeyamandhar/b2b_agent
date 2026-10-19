@@ -1,0 +1,62 @@
+{
+ "text": "Model is confirmed by the legible label and the recall list. Purchase is at a listed retailer within the window, no receipt needed, and there are no duplicates. The claim is for repair or replacement, so no value threshold applies and no destruction photo is required.",
+ "usage": {
+  "input_tokens": 3471,
+  "output_tokens": 469,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3FwM1NkHJmtW2VvCjp",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2447,
+ "content": [
+  {
+   "type": "text",
+   "text": "Model is confirmed by the legible label and the recall list. Purchase is at a listed retailer within the window, no receipt needed, and there are no duplicates. The claim is for repair or replacement, so no value threshold applies and no destruction photo is required."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01ESngipwY7o5rtF2xDrmz8u",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model A17A0, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "Purchased at Best Buy on 2023-07-24, a listed retailer, inside the sale window 2023-05-01 to 2023-09-30; no receipt required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The serial check was skipped and no serial rule is in the program rules, so it does not affect the outcome. The remedy is repair or replacement, so no destruction photo or value review is required.",
+      "cites": [
+       "T4",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

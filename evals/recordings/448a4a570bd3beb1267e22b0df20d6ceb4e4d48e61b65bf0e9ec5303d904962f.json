@@ -1,0 +1,75 @@
+{
+ "text": "Checking each rule against the results:\n\n- Duplicates: T6 found no hits, so no flag.\n- Model: T1 reads the label legibly as GLEF396ASA1, and T2 matches it to GLEF396AS*, a recalled model.\n- Serial: T3 shows VF12222806 is within VF122xxxxx - VF334xxxxx.\n- Purchase: T4 shows Sears (listed), purchase date 2001-09-24 falls inside the 2001-06-01 to 2009-08-31 window, and a receipt is present.\n- Destruction: T5 says no destruction photo is required for this remedy.\n- Refund: none requested (repair or replacement), so the value threshold does not apply.\n\nEverything passes, so the claim is approved.",
+ "usage": {
+  "input_tokens": 3252,
+  "output_tokens": 700,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeM7PTmjfb8RSqFhDaw",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3125,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking each rule against the results:\n\n- Duplicates: T6 found no hits, so no flag.\n- Model: T1 reads the label legibly as GLEF396ASA1, and T2 matches it to GLEF396AS*, a recalled model.\n- Serial: T3 shows VF12222806 is within VF122xxxxx - VF334xxxxx.\n- Purchase: T4 shows Sears (listed), purchase date 2001-09-24 falls inside the 2001-06-01 to 2009-08-31 window, and a receipt is present.\n- Destruction: T5 says no destruction photo is required for this remedy.\n- Refund: none requested (repair or replacement), so the value threshold does not apply.\n\nEverything passes, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01JD43zMciPkSfSh33FJdHmh",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "No duplicate claims share a photo, address, email, serial, or payout account.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The legible label photo shows model GLEF396ASA1, which matches the recalled model GLEF396AS*.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "Serial number VF12222806 falls within the recalled range VF122xxxxx - VF334xxxxx.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "Purchased at Sears (a listed retailer) on 2001-09-24, inside the sale window, and a receipt is attached.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "R:receipt",
+       "T4"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for the repair or replacement remedy.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "No refund is requested, so the value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

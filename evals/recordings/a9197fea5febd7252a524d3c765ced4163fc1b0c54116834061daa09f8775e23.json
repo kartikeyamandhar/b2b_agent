@@ -1,0 +1,70 @@
+{
+ "text": "The label shows a recalled model, the purchase is valid, and the destruction photo complies. But the label photo is shared with another claim (T3), and the policy says any shared photo is a flag, which takes precedence over approval.",
+ "usage": {
+  "input_tokens": 3686,
+  "output_tokens": 523,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3eAJEg99djZ29vfXr6",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3279,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label shows a recalled model, the purchase is valid, and the destruction photo complies. But the label photo is shared with another claim (T3), and the policy says any shared photo is a flag, which takes precedence over approval."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01LSNgCDev5Jbyc7EQYu7hyb",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo is identical (same SHA-256 hash) to a photo on another claim in the program, so this claim is flagged for duplicate review.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label is legible and shows model 98527, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase at ALDI on 2017-07-04 is inside the 2016-01-01 to 2019-12-31 sale window at a listed retailer, and no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo shows a gray device with a cut power cord, which matches the required destruction.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The label date code 2017-03 matches the typed value; the date code check was skipped because the program has no date code rule.",
+      "cites": [
+       "T1",
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

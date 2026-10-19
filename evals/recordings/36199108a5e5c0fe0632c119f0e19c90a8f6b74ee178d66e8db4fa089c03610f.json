@@ -1,0 +1,57 @@
+{
+ "text": "Checking the policy against the results:\n\n- Duplicates: T6 shows no hits, so no flag.\n- Model: T1 is legible and reads CXM-06, which is not on the recalled list (R:models). The label photo is the evidence, and a legible label showing a non-recalled model means deny. The typed model CXM-06 matches the label, and T2 confirms mismatch.\n- Serial, purchase, and destruction checks would pass (T3, T4, T5), but the model denial takes precedence in the policy order (deny comes before needs_info or approve).\n\nOutcome: deny.",
+ "usage": {
+  "input_tokens": 3028,
+  "output_tokens": 539,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeQwLLo4NvuMc3PWBQk",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3845,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy against the results:\n\n- Duplicates: T6 shows no hits, so no flag.\n- Model: T1 is legible and reads CXM-06, which is not on the recalled list (R:models). The label photo is the evidence, and a legible label showing a non-recalled model means deny. The typed model CXM-06 matches the label, and T2 confirms mismatch.\n- Serial, purchase, and destruction checks would pass (T3, T4, T5), but the model denial takes precedence in the policy order (deny comes before needs_info or approve).\n\nOutcome: deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_015GcKC6eaU6impmu4PuaEBV",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model CXM-06, which is not one of the recalled models (CXP-03, CXC-02, CXM-03, CXV, CXM-02). A legible label showing a non-recalled model means the unit is not part of this recall.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy",
+       "R:models"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so no review flag applies.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number (in range), purchase at a listed retailer within the sale window, and absence of a destruction requirement do not override the model mismatch.",
+      "cites": [
+       "T3",
+       "T4",
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

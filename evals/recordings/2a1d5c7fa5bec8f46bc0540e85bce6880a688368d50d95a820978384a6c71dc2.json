@@ -1,0 +1,47 @@
+{
+ "text": "I'll read the label photo, check the purchase, check for duplicates, and check the typed date code, since the rules include R:date_codes and the claim relies on the label and receipt. The serial rule is not in the program rules and the remedy is repair or replacement, so no destruction check is needed.",
+ "usage": {
+  "input_tokens": 2816,
+  "output_tokens": 224,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3f3aCkJLvTZHgdBF8C",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1329,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll read the label photo, check the purchase, check for duplicates, and check the typed date code, since the rules include R:date_codes and the claim relies on the label and receipt. The serial rule is not in the program rules and the remedy is repair or replacement, so no destruction check is needed."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Jyn6WE98qZnT2XBUodkSCq",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_012oc9KouRTm54cn7uoRw5z2",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01MSNWVpnNy5xtD21QPuXHWM",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_012pngNZXAoT7jSJAiRTh6BL",
+   "name": "check_date_code",
+   "input": {
+    "date_code": "08/22 NH"
+   }
+  }
+ ]
+}

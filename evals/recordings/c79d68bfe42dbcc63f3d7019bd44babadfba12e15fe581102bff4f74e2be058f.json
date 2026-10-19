@@ -1,0 +1,63 @@
+{
+ "text": "Checking the policy against the results:\n\n- Label photo (T1) is legible and shows model LTE4115BD. The recalled list (R:models) does not include LTE4115BD; the nearby recalled models are LTE4815BD and LTE4815BM. T2 confirms mismatch. Under the policy, a legible label showing a non-recalled model means deny.\n- Duplicates (T6): no hits, so no flag.\n- Serial (T3) is in range, but the model rule already decides the outcome.\n- Purchase (T4): Best Buy is listed, date 2023-11-23 is inside the window, no receipt required.\n- Destruction: not required (T5).\n\nFlag does not apply (T6 empty). Deny applies because the legible label shows a model not on the recall list.",
+ "usage": {
+  "input_tokens": 3600,
+  "output_tokens": 635,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeSADWgwWDYoZh156CM",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3180,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy against the results:\n\n- Label photo (T1) is legible and shows model LTE4115BD. The recalled list (R:models) does not include LTE4115BD; the nearby recalled models are LTE4815BD and LTE4815BM. T2 confirms mismatch. Under the policy, a legible label showing a non-recalled model means deny.\n- Duplicates (T6): no hits, so no flag.\n- Serial (T3) is in range, but the model rule already decides the outcome.\n- Purchase (T4): Best Buy is listed, date 2023-11-23 is inside the window, no receipt required.\n- Destruction: not required (T5).\n\nFlag does not apply (T6 empty). Deny applies because the legible label shows a model not on the recall list."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01EQqxP9fjzQJfbg177rMZMa",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model LTE4115BD, which is not on the recalled model list. A legible label showing a non-recalled model means the unit is not part of this recall.",
+      "cites": [
+       "R:models",
+       "R:policy",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The typed model matches the label reading, and the typed serial is in a recalled range, but the model check decides the outcome.",
+      "cites": [
+       "T2",
+       "T3"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not flagged.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "Purchase at Best Buy on 2023-11-23 is inside the sale window and no receipt is required; this does not change the denial.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,59 @@
+{
+ "text": "The legible label shows LXT-DL-1.0, which is not a recalled model (only LXT-CL-1.0 is). Under the model policy, a legible label showing a non-recalled model means deny, even though the typed model matches the recall.",
+ "usage": {
+  "input_tokens": 3695,
+  "output_tokens": 485,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB47WCKxmid7aaPh1qqA",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2316,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows LXT-DL-1.0, which is not a recalled model (only LXT-CL-1.0 is). Under the model policy, a legible label showing a non-recalled model means deny, even though the typed model matches the recall."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01SZjVwewRhUG18VZvEwYqz8",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model LXT-DL-1.0, which is not a recalled model. The only recalled model is LXT-CL-1.0, so the product is not covered by the recall.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T7",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The typed model LXT-CL-1.0 does not match the label reading. The label is the controlling evidence, so the typed model cannot confirm eligibility.",
+      "cites": [
+       "R:models",
+       "T1",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The other checks passed: the Amazon purchase is inside the sale window and needs no receipt, the date code 0722 is in range, the destruction photo shows a cut-off plug, and no duplicate claims were found. None of these overcome the model mismatch.",
+      "cites": [
+       "T2",
+       "T6",
+       "T4",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

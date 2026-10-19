@@ -1,0 +1,65 @@
+{
+ "text": "Checking the results: the label is legible and shows SE4570 (recalled model, T1, T2). Date code 08/23 is outside the recalled range 07/22 or 08/22 NH (T3), and serial/date code rules apply, so the unit is outside the recall: deny. Flag takes precedence only if duplicates found; none found (T6). Purchase at a listed retailer within the window (T4), so no issue there, but the date code failure is decisive.",
+ "usage": {
+  "input_tokens": 2790,
+  "output_tokens": 578,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeG8puQ8dCdsnNBazdE",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4070,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results: the label is legible and shows SE4570 (recalled model, T1, T2). Date code 08/23 is outside the recalled range 07/22 or 08/22 NH (T3), and serial/date code rules apply, so the unit is outside the recall: deny. Flag takes precedence only if duplicates found; none found (T6). Purchase at a listed retailer within the window (T4), so no issue there, but the date code failure is decisive."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01VcxRtpH6wtvp1ooURAV4R9",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model, so the model itself is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code on the label is 08/23, which is outside the recalled date codes of 07/22 NH or 08/22 NH, so this unit is not part of the recall.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T3",
+       "T7"
+      ]
+     },
+     {
+      "text": "The duplicate check found no other claims sharing a photo, address, email, serial number, or payout account, so no review flag applies.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The retailer (www.justinboots.com) is on the list and the purchase date of 2022-11-24 is within the sale window, so those checks do not block the claim, but the out-of-range date code does.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

@@ -1,0 +1,68 @@
+{
+ "text": "The duplicate check found another claim sharing an address, which takes priority under the policy. I'll record a flag.",
+ "usage": {
+  "input_tokens": 3685,
+  "output_tokens": 497,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3QnTE1pRKgJbcJ54QW",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3875,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing an address, which takes priority under the policy. I'll record a flag."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01N5Tqzz5xRWGA4G8oJhyFaQ",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program shares this claimant's address, so the claim is flagged for review under the duplicate rule.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model BB4640CF, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The Amazon.com purchase on 2024-05-16 falls inside the sale window and the retailer is listed; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the instructed RECALLED marking on the front and rear of the seatback; it appears to be a stylized graphic rather than a real product photo. This would need a corrected photo if the claim proceeds.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "The refund of $187.35 is over the $100.00 threshold, so a person must review it in any case.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

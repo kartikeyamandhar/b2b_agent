@@ -1,0 +1,70 @@
+{
+ "text": "Applying the policy in order: flag takes precedence.\n\n- check_duplicates (T5) found a same_address match with another claim, so the outcome is flag.\n\nOther checks for the record: the label is legible and shows AD10025GR, a recalled model (T1, T2, R:models). The serial is present and no serial range rule applies. Purchase at Amazon.com within the window, no receipt required (T3, R:sold_at, R:sold_window). The destruction photo shows only the front, while the instruction requires front and rear (T4, R:destruction), which would otherwise be needs_info. The refund of $121.41 exceeds $100 and goes to a person (R:value_threshold). Flag overrides these.",
+ "usage": {
+  "input_tokens": 2931,
+  "output_tokens": 707,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeSWJ1aR8JBY9YmwxmK",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4062,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: flag takes precedence.\n\n- check_duplicates (T5) found a same_address match with another claim, so the outcome is flag.\n\nOther checks for the record: the label is legible and shows AD10025GR, a recalled model (T1, T2, R:models). The serial is present and no serial range rule applies. Purchase at Amazon.com within the window, no receipt required (T3, R:sold_at, R:sold_window). The destruction photo shows only the front, while the instruction requires front and rear (T4, R:destruction), which would otherwise be needs_info. The refund of $121.41 exceeds $100 and goes to a person (R:value_threshold). Flag overrides these."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01A4bXH2YNMnhbf83zxbquKk",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim (6ad55d28-b755-565d-97dd-d7a19206abad) sharing the same address, so this claim must go to a person for review together with the matching claim.",
+      "cites": [
+       "T5",
+       "R:policy",
+       "R:models"
+      ]
+     },
+     {
+      "text": "Model is confirmed: the legible label photo shows AD10025GR, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "Purchase at Amazon.com on 2023-07-11 is inside the sale window and no receipt is required.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo shows only the front of the device with RECALLED; the instruction requires the front and rear, so the photo does not fully meet the requirement. A reviewer should also check this.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The refund of $121.41 is over the $100.00 threshold, so a person reviews it regardless.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

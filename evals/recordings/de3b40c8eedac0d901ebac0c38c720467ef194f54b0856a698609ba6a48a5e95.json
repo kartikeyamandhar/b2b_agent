@@ -1,0 +1,77 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: label photo legible, shows PA-10 (T1, T2), a recalled model. Confirmed.\n- Date code: 2126 is in range 2126\u20132319 (T3).\n- Purchase: 2021-08-06 is inside the sale window (T4). The retailer \"Corner Hardware Co\" is not on the list, so per policy this is needs_info (proof of ownership), not a denial. Receipt is \"not_required\" per T4, but the retailer rule still asks for proof of ownership.\n- Destruction photo: not required, since the remedy is repair or replacement (T5, T7).\n- Duplicates: none (T6), so flag does not apply.\n\nTriggered rule: retailer not on the list leads to needs_info. No flag, deny, or other needs_info trigger applies. The serial number is outside the program's stated rule set (only model and date code are checked), so it is not a basis for action.",
+ "usage": {
+  "input_tokens": 2843,
+  "output_tokens": 857,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeKX2DKrpSkztM2f85k",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 6033,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: label photo legible, shows PA-10 (T1, T2), a recalled model. Confirmed.\n- Date code: 2126 is in range 2126\u20132319 (T3).\n- Purchase: 2021-08-06 is inside the sale window (T4). The retailer \"Corner Hardware Co\" is not on the list, so per policy this is needs_info (proof of ownership), not a denial. Receipt is \"not_required\" per T4, but the retailer rule still asks for proof of ownership.\n- Destruction photo: not required, since the remedy is repair or replacement (T5, T7).\n- Duplicates: none (T6), so flag does not apply.\n\nTriggered rule: retailer not on the list leads to needs_info. No flag, deny, or other needs_info trigger applies. The serial number is outside the program's stated rule set (only model and date code are checked), so it is not a basis for action."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01NZ7vXLk9cteNMczNfBJSd7",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PA-10, a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 2126 falls within the recalled range of 2126 to 2319.",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "The purchase date of 2021-08-06 is inside the sale window, so the purchase is not denied on timing.",
+      "cites": [
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "The retailer 'Corner Hardware Co' is not on the list of authorized retailers. Under the policy, owners who bought from an unlisted store are asked for proof of ownership rather than denied.",
+      "cites": [
+       "R:sold_at",
+       "R:policy",
+       "T4",
+       "T7"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account, so the claim is not flagged.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The remedy is repair or replacement, so no destruction photo is required.",
+      "cites": [
+       "T5",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": "We could not match the retailer you bought from to our list of approved sellers. Please send proof of ownership, such as a receipt, order confirmation, or other document showing the product was yours and when you acquired it.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

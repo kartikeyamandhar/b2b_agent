@@ -1,0 +1,78 @@
+{
+ "text": "Key issue: the label photo is unreadable (T1 legible false, no model text). Per policy, without a usable label reading, the typed model decides. Typed model SE4570 matches (T2), so the model is confirmed by the typed value. Date code 07/22 in range (T3). Serial number: the program has no serial rule in the listed rules, so it is not decisive. Purchase: Grainger listed, inside window, receipt not required (T4). No destruction photo required (T5). No duplicates (T6). Remedy is replacement, no refund over threshold.\n\nThe policy says the label photo is the evidence, and an unreadable label means the typed model decides. The typed model is a clean match, so all checks pass and the claim should be approved.",
+ "usage": {
+  "input_tokens": 2768,
+  "output_tokens": 691,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB39fEUrSw21wrSgc4bE",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3403,
+ "content": [
+  {
+   "type": "text",
+   "text": "Key issue: the label photo is unreadable (T1 legible false, no model text). Per policy, without a usable label reading, the typed model decides. Typed model SE4570 matches (T2), so the model is confirmed by the typed value. Date code 07/22 in range (T3). Serial number: the program has no serial rule in the listed rules, so it is not decisive. Purchase: Grainger listed, inside window, receipt not required (T4). No destruction photo required (T5). No duplicates (T6). Remedy is replacement, no refund over threshold.\n\nThe policy says the label photo is the evidence, and an unreadable label means the typed model decides. The typed model is a clean match, so all checks pass and the claim should be approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Jz7ghu15LMHkammo59FYkG",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is unreadable, so the typed model decides; the typed model SE4570 is a recalled model.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The typed date code 07/22 is within the recalled date codes.",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Grainger is a listed retailer and the purchase date 2023-05-10 falls inside the sale window; no receipt is required.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy.",
+      "cites": [
+       "T5",
+       "T7"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The remedy is repair or replacement with no refund requested, so the refund value threshold does not apply.",
+      "cites": [
+       "R:value_threshold",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.8
+   }
+  }
+ ]
+}

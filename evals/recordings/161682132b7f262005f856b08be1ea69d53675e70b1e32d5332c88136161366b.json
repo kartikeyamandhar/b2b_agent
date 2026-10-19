@@ -1,0 +1,72 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3678,
+  "output_tokens": 448,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3BavaHAVRQyuqLGt93",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2054,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_013kJRD3QhUSpooeYZGjmQPP",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 07/22 NH is within the recalled date codes.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T3"
+      ]
+     },
+     {
+      "text": "The purchase date of 2022-08-26 is before the sale window opening on 2022-09-01. Purchases before the window are not eligible.",
+      "cites": [
+       "R:sold_window",
+       "T4",
+       "T7"
+      ]
+     },
+     {
+      "text": "The retailer (grainger.com) is on the list of sellers, so the denial rests on the purchase date alone.",
+      "cites": [
+       "R:sold_at",
+       "T4"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not flagged for review.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "No destruction photo is required because the remedy is repair or replacement.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

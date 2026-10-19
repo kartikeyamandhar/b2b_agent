@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": true, \"complies\": false, \"observed\": \"The photo shows a dark gray rectangular object with the word RECALLED in white letters and a black cord, but it is not clearly a seatback with marker writing on both the front and rear, and only one side is visible.\", \"confidence\": 0.55}",
+ "usage": {
+  "input_tokens": 1199,
+  "output_tokens": 97,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeCV4CmE1aUvR1mjx5i",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 1164
+}

@@ -1,0 +1,70 @@
+{
+ "text": "Checking the results: T6 finds a same_serial duplicate with another claim, which triggers flag under the policy, taking precedence over the other outcomes.\n\nNote also that the label photo reads serial SN81283641, while the typed serial is SN48572698. The serial rule is not part of this program's rules, so that mismatch doesn't drive the outcome, but the duplicate hit is a flag trigger regardless.",
+ "usage": {
+  "input_tokens": 2840,
+  "output_tokens": 579,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeFYRSVLWFogr21AB5r",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 8372,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results: T6 finds a same_serial duplicate with another claim, which triggers flag under the policy, taking precedence over the other outcomes.\n\nNote also that the label photo reads serial SN81283641, while the typed serial is SN48572698. The serial rule is not part of this program's rules, so that mismatch doesn't drive the outcome, but the duplicate hit is a flag trigger regardless."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Fyos5XFgthF4qAn2hXvF1U",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim (4bf57cc8-359e-5d2b-a6ee-cc0a37042216) sharing the same serial number, so the claim must go to a person for review with the matched claim.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model, and the typed model matches.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "Date code 07/22 is within the recalled date codes.",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The retailer www.justinboots.com is on the list, and the purchase date 2023-07-31 is inside the sale window; no receipt is required.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy (replacement), so that check does not apply.",
+      "cites": [
+       "T5",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

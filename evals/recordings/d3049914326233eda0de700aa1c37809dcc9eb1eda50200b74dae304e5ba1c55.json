@@ -1,0 +1,64 @@
+{
+ "text": "The legible label shows KY-348A, which is not a recalled model, and the typed model 93550 is recalled but does not match the label. The label is the evidence under the policy, so the model is not confirmed. The destruction photo also does not show the cord cut, so that alone would require more information. Because the legible label shows a non-recalled model, the claim is denied.",
+ "usage": {
+  "input_tokens": 3633,
+  "output_tokens": 520,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB45kJaNDvfz5E35GgFU",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2465,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows KY-348A, which is not a recalled model, and the typed model 93550 is recalled but does not match the label. The label is the evidence under the policy, so the model is not confirmed. The destruction photo also does not show the cord cut, so that alone would require more information. Because the legible label shows a non-recalled model, the claim is denied."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01TrfZrU8KGksHqtEtquijVK",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model KY-348A, which is not one of the recalled models. The typed model 93550 does not match the label, and under the claim policy the label photo is the controlling evidence.",
+      "cites": [
+       "R:models",
+       "R:policy",
+       "T1",
+       "T6",
+       "T7"
+      ]
+     },
+     {
+      "text": "The purchase is valid: ALDI is a listed retailer, the date 2018-06-20 is inside the sale window, and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the required unplugged power cord cut; the cord appears intact. This is an additional deficiency.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

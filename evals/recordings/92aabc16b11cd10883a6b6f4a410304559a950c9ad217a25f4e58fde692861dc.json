@@ -1,0 +1,71 @@
+{
+ "text": "Checking the results against the policy:\n\n- Duplicates: T6 found no matches, so no flag.\n- Model: T1 reads the label as legible and showing B0726Y, which is recalled (T2 match). Confirmed.\n- Date code: 8/21 is in range (T3).\n- Serial: the program has no serial rule, so it is not applied.\n- Purchase: Walmart is listed and 2017-05-06 is inside the window (T4). No receipt required per T4, though a receipt was attached anyway.\n- Destruction: the policy requires a photo showing the helmet with straps cut off. T5 reports the destruction photo does not show a helmet or cut straps, so it does not show the instructed destruction. Per the policy, this is needs_info: ask the claimant for a new destruction photo.\n\nNo flag or deny rule applies, so the outcome is needs_info.",
+ "usage": {
+  "input_tokens": 2945,
+  "output_tokens": 754,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB377iM2xDEpb1WFhqYn",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3563,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Duplicates: T6 found no matches, so no flag.\n- Model: T1 reads the label as legible and showing B0726Y, which is recalled (T2 match). Confirmed.\n- Date code: 8/21 is in range (T3).\n- Serial: the program has no serial rule, so it is not applied.\n- Purchase: Walmart is listed and 2017-05-06 is inside the window (T4). No receipt required per T4, though a receipt was attached anyway.\n- Destruction: the policy requires a photo showing the helmet with straps cut off. T5 reports the destruction photo does not show a helmet or cut straps, so it does not show the instructed destruction. Per the policy, this is needs_info: ask the claimant for a new destruction photo.\n\nNo flag or deny rule applies, so the outcome is needs_info."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01U1qJXGMFNLkegLWns3moFz",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model B0726Y, a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 8/21 is within the recalled range.",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "Walmart is a listed retailer and the purchase date of 2017-05-06 is inside the sale window.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial number, or payout account.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show a helmet with cut straps, so it does not show the instructed destruction. The policy asks for a new destruction photo in this case.",
+      "cites": [
+       "R:destruction",
+       "R:policy",
+       "T5",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your destruction photo does not show the helmet with its straps cut off. Please send a new photo that clearly shows the helmet with the straps cut off as instructed.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

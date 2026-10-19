@@ -1,0 +1,62 @@
+{
+ "text": "The label is legible and shows PA-10, which is recalled, and the date code 2126 is in range. No duplicates were found. The purchase date of 2020-06-15 is before the sale window (2021-06-01 to 2023-11-30), so the claim is denied under the purchase rule. The retailer is listed, so the window is the only issue. The serial check was skipped because the program has no serial range rule.",
+ "usage": {
+  "input_tokens": 4373,
+  "output_tokens": 506,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3GZGFgz1UzLpoksocd",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2484,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows PA-10, which is recalled, and the date code 2126 is in range. No duplicates were found. The purchase date of 2020-06-15 is before the sale window (2021-06-01 to 2023-11-30), so the claim is denied under the purchase rule. The retailer is listed, so the window is the only issue. The serial check was skipped because the program has no serial range rule."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_012aCq4KQkDwGN16Auruee8e",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PA-10, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The date code 2126 is within the recalled range of 2126 to 2319.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase date of 2020-06-15 is before the sale window of 2021-06-01 to 2023-11-30, so the unit was not sold within the recall period. The retailer is listed, but the date is outside the window.",
+      "cites": [
+       "R:sold_window",
+       "R:policy",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

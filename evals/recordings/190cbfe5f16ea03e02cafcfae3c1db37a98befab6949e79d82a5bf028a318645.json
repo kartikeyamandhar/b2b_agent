@@ -1,0 +1,69 @@
+{
+ "text": "Checking the policy in order:\n\n- Duplicates (T5): no hits, so no flag.\n- Model (T1, T2): label is legible and shows 96775, a recalled model. Model confirmed (R:models).\n- Serial/date code: the program has no serial or date code rules, so these don't apply.\n- Purchase (T3): ALDI is listed (R:sold_at), purchase date 2019-05-02 is inside the window 2016-01-01 to 2019-12-31 (R:sold_window). Receipt not required.\n- Destruction (T4): the photo was checked and does not show the instructed destruction. The cord appears intact with no visible cut, and the photo is not a repeat of the label photo. Per R:destruction and the FAQ (T6), a destruction photo that does not show the cut cord must be asked for again, so this is needs_info.\n- Refund $40.00 is under the $100 threshold (R:value_threshold).\n\nOutcome: needs_info, asking for a new destruction photo.",
+ "usage": {
+  "input_tokens": 2834,
+  "output_tokens": 837,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeUEVoDwCaXz2bXjr1g",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3955,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy in order:\n\n- Duplicates (T5): no hits, so no flag.\n- Model (T1, T2): label is legible and shows 96775, a recalled model. Model confirmed (R:models).\n- Serial/date code: the program has no serial or date code rules, so these don't apply.\n- Purchase (T3): ALDI is listed (R:sold_at), purchase date 2019-05-02 is inside the window 2016-01-01 to 2019-12-31 (R:sold_window). Receipt not required.\n- Destruction (T4): the photo was checked and does not show the instructed destruction. The cord appears intact with no visible cut, and the photo is not a repeat of the label photo. Per R:destruction and the FAQ (T6), a destruction photo that does not show the cut cord must be asked for again, so this is needs_info.\n- Refund $40.00 is under the $100 threshold (R:value_threshold).\n\nOutcome: needs_info, asking for a new destruction photo."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0181LF4pGYCXS13AbMvPufzL",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 96775, which is a recalled model, so the unit is confirmed as recalled.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase is at ALDI, a listed retailer, and the date 2019-05-02 falls inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the instructed destruction. The power cord appears intact with no visible cut, so the photo does not meet the requirement to show the unplugged cord cut.",
+      "cites": [
+       "R:destruction",
+       "T4",
+       "T6"
+      ]
+     },
+     {
+      "text": "The refund of $40.00 is under the $100 review threshold, so no person review is needed for value.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo of the destruction step showing the unplugged power cord cut. The photo you sent shows the cord intact, and it must show the cord cut, not the label or the cooker alone.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

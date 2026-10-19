@@ -1,0 +1,58 @@
+{
+ "text": "Model 34790 is confirmed as recalled. The date code is out of range, so the claim fails on that rule.",
+ "usage": {
+  "input_tokens": 3524,
+  "output_tokens": 388,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3vQSk5nuaAU7jWb3Hi",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2852,
+ "content": [
+  {
+   "type": "text",
+   "text": "Model 34790 is confirmed as recalled. The date code is out of range, so the claim fails on that rule."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DdiXETLBjMXAXpKWAA6LRy",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 34790, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The label's date code 09/2025 is outside every recalled date code range, so the unit is not covered by the recall.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase is valid: Target is a listed retailer and the 2023-07-22 purchase date is inside the sale window. No duplicate claims were found. These checks do not change the outcome because the date code fails.",
+      "cites": [
+       "T2",
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,64 @@
+{
+ "text": "Checking the results against the policy:\n\n- Duplicates (T5): no hits, so no flag.\n- Model: label legible, shows 2G505B, which is recalled (T1, T2, R:models). Confirmed.\n- Serial/date code: the program's rules here don't include a serial or date code check, so no action.\n- Purchase: 2022-03-17 is before the sale window (2022-09-01 to 2025-07-31), so it is a deny (T3, R:sold_window, faq#1). The retailer is listed, but the date rule controls.\n- Destruction: T4 reports the photo shows the word \"RECALLED\" in printed white capitals, not handwritten permanent marker, so it does not comply. That would also require needs_info. But the policy's first-triggered rule is deny, which takes precedence.\n\nThe outcome is deny because the purchase predates the sale window. Destruction photo concerns are secondary.",
+ "usage": {
+  "input_tokens": 2811,
+  "output_tokens": 715,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB34JQTFgbFSLxLjtjKQ",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3725,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Duplicates (T5): no hits, so no flag.\n- Model: label legible, shows 2G505B, which is recalled (T1, T2, R:models). Confirmed.\n- Serial/date code: the program's rules here don't include a serial or date code check, so no action.\n- Purchase: 2022-03-17 is before the sale window (2022-09-01 to 2025-07-31), so it is a deny (T3, R:sold_window, faq#1). The retailer is listed, but the date rule controls.\n- Destruction: T4 reports the photo shows the word \"RECALLED\" in printed white capitals, not handwritten permanent marker, so it does not comply. That would also require needs_info. But the policy's first-triggered rule is deny, which takes precedence.\n\nThe outcome is deny because the purchase predates the sale window. Destruction photo concerns are secondary."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Sv5fG7q8UiwzUdShHUih7G",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The purchase date of 2022-03-17 is before the product's sale window (2022-09-01 to 2025-07-31), so the purchase is not eligible.",
+      "cites": [
+       "R:sold_window",
+       "T3",
+       "faq#1",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model 2G505B, which is a recalled model, so the model itself is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial number, or payout account, so the claim is not flagged.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The destruction photo does not appear to show the word 'Recalled' written in permanent marker (it appears to be printed text), so it does not meet the destruction requirement; this would also have required a new photo.",
+      "cites": [
+       "T4",
+       "R:destruction",
+       "faq#2"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

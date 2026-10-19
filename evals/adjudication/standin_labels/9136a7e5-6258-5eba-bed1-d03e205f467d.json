@@ -1,0 +1,10 @@
+{
+ "claim_id": "9136a7e5-6258-5eba-bed1-d03e205f467d",
+ "spec_id": "S35",
+ "program": "25206",
+ "category": "expect_deny",
+ "expected_outcome": "deny",
+ "rationale": "The typed AD10007GR is listed, but the legible label reads AD10009GR, which is not in notice 25206's model list (only AD10009BE and AD10007GR are), so photo_rules.label_shows_other_model denies whatever was typed.",
+ "violations": [],
+ "subtypes": {}
+}

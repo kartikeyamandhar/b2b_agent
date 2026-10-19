@@ -1,0 +1,72 @@
+{
+ "text": "Checking the policy in order: flag first. T7 finds a same_payout match with another claim (0ef480ac...), so flag takes precedence over everything else.",
+ "usage": {
+  "input_tokens": 2986,
+  "output_tokens": 520,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeTuQ6dbGgBTxRfwoR1",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2642,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy in order: flag first. T7 finds a same_payout match with another claim (0ef480ac...), so flag takes precedence over everything else."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01KUEpcymAQifBpjD6z6L2QR",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim sharing a payout destination, so this claim must go to a person for review together with the matching claim.",
+      "cites": [
+       "T7",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model 34785, a recalled model, so the model is confirmed despite the typed model being in a different format.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial number SN12296843 and the December 2023 date code fall within the recalled date range (manufactured prior to January 2024).",
+      "cites": [
+       "T1",
+       "T4",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Dick's is a listed retailer and the 2021-12-26 purchase falls inside the sale window, so purchase eligibility is confirmed.",
+      "cites": [
+       "T5",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this replacement remedy, and the refund is not over the review threshold.",
+      "cites": [
+       "T6",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

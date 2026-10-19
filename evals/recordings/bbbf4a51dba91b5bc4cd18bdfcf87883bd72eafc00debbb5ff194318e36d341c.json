@@ -1,0 +1,62 @@
+{
+ "text": "The model is confirmed as recalled, the purchase is valid, and there are no duplicates. The destruction photo does not show the instructed destruction, so the claim needs more information.",
+ "usage": {
+  "input_tokens": 3506,
+  "output_tokens": 479,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4BBJdNxAXxRTkazhg7",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2289,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed as recalled, the purchase is valid, and there are no duplicates. The destruction photo does not show the instructed destruction, so the claim needs more information."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01XtEe1XteVttL2MYpnM7Wfu",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model BB4640PU, which matches the typed model and is a recalled model.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase at Amazon.com on 2024-05-26 falls inside the sale window and the retailer is listed; no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the instructed destruction: it does not show a seatback marked with RECALLED on both the front and rear with a marker.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new destruction photo showing the seatback with \"RECALLED\" written in large letters with a marker on both the front and the rear of the seatback.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

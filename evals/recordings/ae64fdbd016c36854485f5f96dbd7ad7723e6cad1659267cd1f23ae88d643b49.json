@@ -1,0 +1,63 @@
+{
+ "text": "The label is legible and shows recalled model 93550. The purchase date of 2015-12-19 falls before the sale window (2016-01-01 to 2019-12-31), which is a deny condition. Duplicates found nothing. The destruction photo doesn't show a cut cord, but the purchase denial is already decisive. The date code check was skipped by the tool since the program has no date code rule, so I won't rely on it.",
+ "usage": {
+  "input_tokens": 3332,
+  "output_tokens": 535,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB48fUx1Amwk5dQTCHAS",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2839,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows recalled model 93550. The purchase date of 2015-12-19 falls before the sale window (2016-01-01 to 2019-12-31), which is a deny condition. Duplicates found nothing. The destruction photo doesn't show a cut cord, but the purchase denial is already decisive. The date code check was skipped by the tool since the program has no date code rule, so I won't rely on it."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0185P5Z5sbSLJaB7ixevqCQ4",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The purchase date of 2015-12-19 is before the program's sale window, which runs from 2016-01-01 to 2019-12-31. A purchase before the window is denied.",
+      "cites": [
+       "R:sold_window",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows recalled model 93550, so the model is confirmed. The model is not the reason for denial.",
+      "cites": [
+       "T1",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The retailer, ALDI, is on the list, and no duplicate claims were found.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not appear to show the required cut power cord, so the destruction requirement is also not met. This is noted but is not the basis of the denial.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.92
+   }
+  }
+ ]
+}

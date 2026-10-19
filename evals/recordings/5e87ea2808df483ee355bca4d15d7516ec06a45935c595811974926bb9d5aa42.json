@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": true, \"complies\": false, \"observed\": \"The photo shows a gray rectangular device with a black cord and the word RECALLED printed on it, but it is unclear whether this is a seatback, the marking was made by hand with a marker on the front and rear, and the rear is not visible, so the instructed marking is not clearly confirmed.\", \"confidence\": 0.5}",
+ "usage": {
+  "input_tokens": 1199,
+  "output_tokens": 123,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeEtc7TChNfaqUbeYrA",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 2073
+}

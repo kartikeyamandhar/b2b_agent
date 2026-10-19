@@ -1,0 +1,70 @@
+{
+ "text": "Checking the policy in order: flag takes precedence. T5 found a same_payout match with another claim (346832ea...), so the claim must be flagged for review regardless of the other checks passing.",
+ "usage": {
+  "input_tokens": 2769,
+  "output_tokens": 540,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeQ7ZifpV5mt8mUfY9d",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 10977,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy in order: flag takes precedence. T5 found a same_payout match with another claim (346832ea...), so the claim must be flagged for review regardless of the other checks passing."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01TDYQAy4uUuUE1SCR5SFpas",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The payout destination is shared with another claim (346832ea-de2b-56c4-b9cd-069ba5d59963), so the claim must go to a person for duplicate review together with the matched claim.",
+      "cites": [
+       "T5",
+       "R:policy",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model 9421, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number SN28211436 is on the label; the program has no serial or date code range rule that applies here, so it does not cause a denial.",
+      "cites": [
+       "T1",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Purchase at Amazon.com on 2023-04-25 is before the sale window (2023-10-01 to 2024-05-31), which makes it ineligible on its own; this would be a denial, but the flag rule takes precedence.",
+      "cites": [
+       "T3",
+       "R:sold_window",
+       "R:sold_at"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy.",
+      "cites": [
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

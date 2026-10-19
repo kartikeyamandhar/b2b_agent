@@ -1,0 +1,71 @@
+{
+ "text": "Checking the results against the policy:\n\n- Duplicates: T6 found no matches, so no flag.\n- Model: T1 reads a legible label showing B0726Y, which is recalled (T2 match).\n- Date code: T1 and T3 show 8/21, within the recalled range.\n- Purchase: T4 shows Walmart (listed) and a date inside the window; no receipt required.\n- Serial: the program has no serial rule, so it does not apply.\n- Destruction: T5 reports the destruction photo does not show the instructed destruction (no cut straps visible), with confidence 0.6. Under the policy and FAQ, a destruction photo that does not show the instructed destruction is asked for again, so this is needs_info.\n\nRefund is $40.49, under the $100 threshold, so no person review is needed on that basis.",
+ "usage": {
+  "input_tokens": 2924,
+  "output_tokens": 745,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeHT6XcwwXjhidnqhgE",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4379,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Duplicates: T6 found no matches, so no flag.\n- Model: T1 reads a legible label showing B0726Y, which is recalled (T2 match).\n- Date code: T1 and T3 show 8/21, within the recalled range.\n- Purchase: T4 shows Walmart (listed) and a date inside the window; no receipt required.\n- Serial: the program has no serial rule, so it does not apply.\n- Destruction: T5 reports the destruction photo does not show the instructed destruction (no cut straps visible), with confidence 0.6. Under the policy and FAQ, a destruction photo that does not show the instructed destruction is asked for again, so this is needs_info.\n\nRefund is $40.49, under the $100 threshold, so no person review is needed on that basis."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01GDpTwhwhMrbwFjUxttN5Ht",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model B0726Y, a recalled model, and the date code 8/21 is within the recalled range.",
+      "cites": [
+       "T1",
+       "T2",
+       "T3",
+       "R:models",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase was at Walmart, a listed retailer, within the sale window; no receipt is required.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The destruction photo does not appear to show the helmet with its straps cut off, which is the instructed destruction, so it must be requested again.",
+      "cites": [
+       "T5",
+       "R:destruction",
+       "T7"
+      ]
+     },
+     {
+      "text": "The refund of $40.49 is below the $100 review threshold.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo of the destroyed helmet showing that the straps have been cut off. The current destruction photo does not clearly show the helmet with its straps cut.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

@@ -1,0 +1,70 @@
+{
+ "text": "The typed model is recalled, and the label is unreadable, so the typed model stands. The destruction photo does not show the required marking on both front and rear of the seatback, so the claim needs more information.",
+ "usage": {
+  "input_tokens": 3588,
+  "output_tokens": 628,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB45BpUWNnDCGX57MQrV",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2933,
+ "content": [
+  {
+   "type": "text",
+   "text": "The typed model is recalled, and the label is unreadable, so the typed model stands. The destruction photo does not show the required marking on both front and rear of the seatback, so the claim needs more information."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01XTsEACJ3PDowtvUiTi3xDp",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is unreadable, so no model reading comes from the label. The typed model AD10025BE is on the recalled list, so the model is accepted from the typed value.",
+      "cites": [
+       "R:models",
+       "R:policy",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase is from Amazon.com, a listed retailer, and dated 2024-08-31, which is inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show a seatback marked RECALLED on both the front and rear, as the destruction rule requires.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The serial check was skipped, so the serial number SN83733513 has not been verified against the recalled serial ranges. The claim also cannot be approved because the destruction requirement is unmet.",
+      "cites": [
+       "R:policy",
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a clearer photo of the sewn-in label on the top cover of the seat so the model, serial, and date code can be read. Please also send a new destruction photo showing the seatback with \"RECALLED\" written in large letters on both the front and the rear, using a marker.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

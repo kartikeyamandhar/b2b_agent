@@ -1,0 +1,68 @@
+{
+ "text": "The model is confirmed. The destruction photo does not show the required cord cut, so the claim cannot be approved yet. Under the policy, that calls for needs_info.",
+ "usage": {
+  "input_tokens": 3650,
+  "output_tokens": 545,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3bSxmW9jtJ8uQkqfPg",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3235,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed. The destruction photo does not show the required cord cut, so the claim cannot be approved yet. Under the policy, that calls for needs_info."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QKRvvcrR4uez2GUA6eVLi3",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 96775, which is on the recalled models list, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase is from ALDI, a listed retailer, dated 2018-08-07, which is inside the 2016-01-01 to 2019-12-31 sale window. No receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The remedy requires the unplugged power cord to be cut. The destruction photo shows the cord intact with no visible cut, so it does not show the required destruction.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The serial check was not applicable under the program rules, so it does not affect the outcome.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your destruction photo does not show the power cord cut. Please send a new photo showing the unplugged power cord cut through, with the cooker visible in the same image.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

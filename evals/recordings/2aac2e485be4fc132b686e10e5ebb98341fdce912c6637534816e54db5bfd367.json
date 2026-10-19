@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and shows model 34790. The purchase date of 2017-12-20 is before the sale window that opens 2019-01-01, so that is a deny. Before recording it, I'll confirm the model against the program list.",
+ "usage": {
+  "input_tokens": 3348,
+  "output_tokens": 121,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3vZmKHPFWzY5uDPs2x",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1119,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows model 34790. The purchase date of 2017-12-20 is before the sale window that opens 2019-01-01, so that is a deny. Before recording it, I'll confirm the model against the program list."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01NksvEbiNyeHw9YVRyPPLQm",
+   "name": "check_model",
+   "input": {
+    "model_text": "34790"
+   }
+  }
+ ]
+}

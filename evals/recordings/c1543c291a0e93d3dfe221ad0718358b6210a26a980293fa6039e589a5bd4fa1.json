@@ -1,0 +1,65 @@
+{
+ "text": "Checking the policy against the results:\n\n- Model: The label photo is legible and reads \"TEV 16 Kids Bike,\" which is not on the recalled list (T1, T2). The policy says a legible label showing a non-recalled model means deny (R:policy, R:models). The typed model \"TEV 16\" resembles \"REV 16,\" but the policy decides by the label photo, not the typed value, and the label reads TEV.\n- Serial, date code, purchase window, retailer: all pass (T3, T4, T5).\n- Duplicates: none (T7), so no flag applies.\n\nSince the flag rule does not trigger, the deny rule applies on the label model mismatch.",
+ "usage": {
+  "input_tokens": 3033,
+  "output_tokens": 630,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeMsPdMz4yZTkNSNYF3",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3326,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy against the results:\n\n- Model: The label photo is legible and reads \"TEV 16 Kids Bike,\" which is not on the recalled list (T1, T2). The policy says a legible label showing a non-recalled model means deny (R:policy, R:models). The typed model \"TEV 16\" resembles \"REV 16,\" but the policy decides by the label photo, not the typed value, and the label reads TEV.\n- Serial, date code, purchase window, retailer: all pass (T3, T4, T5).\n- Duplicates: none (T7), so no flag applies.\n\nSince the flag rule does not trigger, the deny rule applies on the label model mismatch."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01WXUkRQm6EuecDMGopRQ4wR",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows the model 'TEV 16 Kids Bike', which is not a recalled model. Under the policy, a legible label showing a non-recalled model means the unit is not part of the recall.",
+      "cites": [
+       "R:policy",
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The typed model 'TEV 16 Kids Bike' does not match a recalled model, and the label photo confirms the same non-recalled reading, so the typed value does not override the label.",
+      "cites": [
+       "T2",
+       "R:models",
+       "T8"
+      ]
+     },
+     {
+      "text": "The serial number, date code, purchase date and retailer all pass their checks, but these do not cure the model mismatch.",
+      "cites": [
+       "T3",
+       "T4",
+       "T5"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not flagged for review.",
+      "cites": [
+       "T7",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

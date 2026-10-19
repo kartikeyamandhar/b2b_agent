@@ -1,18 +1,16 @@
 # Adjudication eval
 
-Generated 2026-10-18 23:16 UTC by `make eval`. Pre-registration: evals/adjudication/PREREG.md.
+Generated 2026-10-19 07:50 UTC by `make eval`. Pre-registration: evals/adjudication/PREREG.md.
 
-- Golden claims: 300 synthetic claims from 20 golden notices (gold rules), planted violations, expected outcomes from outcome_policy.yaml (decided 2026-10-17). The 60 owner-reviewed and 40 classmate claims arrive in M2.
+- Golden claims: 300 synthetic claims from 20 golden notices (gold rules), planted violations, expected outcomes from outcome_policy.yaml (decided 2026-10-17). The owner-reviewed and classmate blocks were replaced by probe60 and standin40 (PREREG Revision 2; see ablation.md).
 - Rules-only decision table 1.0.0; pure-code tools; destruction photo presence only (no vision).
-- **Kill criterion not evaluable in M1:** there is no agent row yet. It compares macro F1 below with the agent's in M2.
+- This table is the rules-only baseline. Every agent row, and the kill criterion (rules_only vs loop_full on these 300 claims), is in evals/results/ablation.md.
 - The first run (tools 1.0.0) flagged 44 legitimate claims: all 82 false duplicate hits were receipt photos matched by pHash, which ignores the text that distinguishes template documents. Tools 1.0.1 match receipts on exact bytes only (decisions log). Both rows are shown; 1.0.1 is the baseline going forward.
 
 | row | n | outcome acc | macro F1 | approval acc | fraud P | fraud R | needs_info P | routed to human | mean steps | mean cost USD | p50 s |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | rules_only (tools 1.0.1, receipts sha256 only) | 300 | 0.987 | 0.982 | 0.987 | 1.000 | 1.000 | 1.000 | 0.253 | 7.0 | 0.0000 | 0.0001 |
 | rules_only (tools 1.0.0, first run, pHash on receipts) | 300 | 0.843 | 0.850 | 0.920 | 0.621 | 1.000 | 1.000 | 0.393 | 7.0 | 0.0000 | 0.0001 |
-| rules_plus_vision | | M2 | | | | | | | | | |
-| single_pass, loop_* | | M2 | | | | | | | | | |
 
 Per class:
 

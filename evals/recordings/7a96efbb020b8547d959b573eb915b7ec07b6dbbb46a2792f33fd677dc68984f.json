@@ -1,0 +1,64 @@
+{
+ "text": "The model matches, and the date code is in range. However, the purchase was made before the sale window, which is a denial trigger under the policy.",
+ "usage": {
+  "input_tokens": 3496,
+  "output_tokens": 422,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3wEt3yZwyw8qap1bb3",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2304,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model matches, and the date code is in range. However, the purchase was made before the sale window, which is a denial trigger under the policy."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Ef4R9vqxxJL2tF4rjtTTRL",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The claimed purchase date of 2018-02-22 is before the program's sale window, which opens 2019-01-01. Purchases before the window are denied.",
+      "cites": [
+       "R:sold_window",
+       "R:policy",
+       "T2"
+      ]
+     },
+     {
+      "text": "The label is legible and shows model 34785, which is a recalled model, so the model requirement is met.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The retailer, Target, is on the list of approved sellers, and the label date code 10/2021 falls within a recalled range.",
+      "cites": [
+       "T2",
+       "T5",
+       "R:date_codes",
+       "R:sold_at"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found that share a photo, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

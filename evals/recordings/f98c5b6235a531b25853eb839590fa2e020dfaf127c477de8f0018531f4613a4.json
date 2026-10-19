@@ -1,0 +1,57 @@
+{
+ "text": "Key facts: The label photo is legible (T1) and reads \"RGV 16 Kids Bike\", which is not on the recalled list (T2 mismatch). Under the policy, a legible label showing a non-recalled model means deny, regardless of the typed model \"RGV 16 Kids Bike\" (which also doesn't match). The typed model is not the decider when the label is legible. Serial and date code are in range, purchase is in window at a listed retailer, no duplicates. But the model rule is decisive: deny.\n\nNote the flag check comes first: check_duplicates found no hits (T7), so no flag applies.",
+ "usage": {
+  "input_tokens": 3033,
+  "output_tokens": 574,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeNFf5WfCxf9GUwyHpG",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3360,
+ "content": [
+  {
+   "type": "text",
+   "text": "Key facts: The label photo is legible (T1) and reads \"RGV 16 Kids Bike\", which is not on the recalled list (T2 mismatch). Under the policy, a legible label showing a non-recalled model means deny, regardless of the typed model \"RGV 16 Kids Bike\" (which also doesn't match). The typed model is not the decider when the label is legible. Serial and date code are in range, purchase is in window at a listed retailer, no duplicates. But the model rule is decisive: deny.\n\nNote the flag check comes first: check_duplicates found no hits (T7), so no flag applies."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DHL6RAySTCahN9UH5eXkKm",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows the model 'RGV 16 Kids Bike', which is not a recalled model. The recalled models are REV 12, REV 16 and REV 20 Kids Bike, so the unit is not part of this recall.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy",
+       "T8"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not routed for duplicate review.",
+      "cites": [
+       "T7"
+      ]
+     },
+     {
+      "text": "The serial number (07VX50697893) and date code (2022) are within recalled ranges, and the purchase (REI.com, 2023-10-20) is inside the sale window at a listed retailer. These do not override the model result.",
+      "cites": [
+       "T3",
+       "T4",
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

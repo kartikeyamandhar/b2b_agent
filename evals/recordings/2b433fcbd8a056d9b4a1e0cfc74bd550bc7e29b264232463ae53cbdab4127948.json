@@ -1,0 +1,68 @@
+{
+ "text": "The label is legible and shows AD10004LS, which is recalled. The duplicate check found a shared address with another claim, which triggers a flag and takes precedence over the other outcomes. I'll record that decision now.",
+ "usage": {
+  "input_tokens": 3536,
+  "output_tokens": 537,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3ubrZEdua2mNd8qemB",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2601,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows AD10004LS, which is recalled. The duplicate check found a shared address with another claim, which triggers a flag and takes precedence over the other outcomes. I'll record that decision now."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01V3CuqUyJW2fk12CSd4waKG",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Duplicate check found another claim (ff9ff144-82bc-52b1-bbfe-c388c3398321) sharing this claim's address, so the claim must be flagged for review.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The legible label photo shows model AD10004LS, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "R:models"
+      ]
+     },
+     {
+      "text": "Purchase at Amazon.com on 2024-02-13 is within the sale window and the retailer is listed; no receipt required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the required marker writing on both front and rear of the seatback; the rear is not visible. This would otherwise require needs_info.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The refund of $180.23 exceeds the $100.00 threshold, so a person will review it in any case.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

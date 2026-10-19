@@ -1,0 +1,77 @@
+{
+ "text": "Checking the results against the policy:\n\n- Duplicates (T7): no hits. No flag.\n- Model (T1, T2): label is legible and shows FCRG3051BS, a recalled model. Confirmed.\n- Serial (T3): VF34618277 is within VF34618193\u2013VF34618322. In range.\n- Date code (T4): October 2023 is within the recalled range.\n- Purchase (T5): Lowe's is listed, but the purchase date 2023-07-27 is before the sale window (2023-10-01 to 2023-12-31). Per policy, a purchase before the window is a denial.\n- Destruction photo (T6): not required, since the remedy is repair/replacement.\n\nThe purchase-date check is the deciding factor. The date is before the sale window, so the claim is denied regardless of the other passing checks. The claimant's receipt should be consistent with the typed date; the policy does not call for a re-ask because the date is clearly outside the window rather than unknown.",
+ "usage": {
+  "input_tokens": 3211,
+  "output_tokens": 796,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeHCa9Tnek4gSjjFK9C",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3568,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Duplicates (T7): no hits. No flag.\n- Model (T1, T2): label is legible and shows FCRG3051BS, a recalled model. Confirmed.\n- Serial (T3): VF34618277 is within VF34618193\u2013VF34618322. In range.\n- Date code (T4): October 2023 is within the recalled range.\n- Purchase (T5): Lowe's is listed, but the purchase date 2023-07-27 is before the sale window (2023-10-01 to 2023-12-31). Per policy, a purchase before the window is a denial.\n- Destruction photo (T6): not required, since the remedy is repair/replacement.\n\nThe purchase-date check is the deciding factor. The date is before the sale window, so the claim is denied regardless of the other passing checks. The claimant's receipt should be consistent with the typed date; the policy does not call for a re-ask because the date is clearly outside the window rather than unknown."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01RxZzWqNkmHdyXBW2w2Av4g",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The purchase date of 2023-07-27 is before the recall sale window of 2023-10-01 to 2023-12-31, so the unit is not eligible under the purchase rule.",
+      "cites": [
+       "R:policy",
+       "R:sold_window",
+       "T5"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows FCRG3051BS, a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "Serial VF34618277 falls within the recalled range VF34618193 thru VF34618322.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "Date code October 2023 is within the recalled production range.",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T7"
+      ]
+     },
+     {
+      "text": "Retailer Lowe's is on the list, and no destruction photo is required for a repair or replacement remedy.",
+      "cites": [
+       "R:sold_at",
+       "T5",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

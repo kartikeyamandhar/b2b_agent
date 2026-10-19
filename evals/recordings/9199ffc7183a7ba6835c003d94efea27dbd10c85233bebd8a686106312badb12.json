@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and shows a recalled model, the serial is in range, and there are no duplicates. The purchase date of 2014-04-05 falls before the sale window, which is a deny condition under the purchase rule. I'll confirm the model against the typed value before recording the decision.",
+ "usage": {
+  "input_tokens": 3799,
+  "output_tokens": 143,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3tGZRNYdmjNvUgmvUS",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1247,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows a recalled model, the serial is in range, and there are no duplicates. The purchase date of 2014-04-05 falls before the sale window, which is a deny condition under the purchase rule. I'll confirm the model against the typed value before recording the decision."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QiX7VrGEC3DWvZzZzLaUas",
+   "name": "check_model",
+   "input": {
+    "model_text": "LSE4613BD"
+   }
+  }
+ ]
+}

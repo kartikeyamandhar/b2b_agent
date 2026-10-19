@@ -1,0 +1,64 @@
+{
+ "text": "The typed model matches a recalled model (T5), but the label is unreadable, so I can't confirm the model from the photo itself. The date code was not parsed as a recalled code (T4 returned \"unparsed,\" not a match), and no serial was provided. Under the policy, an unreadable label means I need a clearer photo, so the outcome is needs_info.",
+ "usage": {
+  "input_tokens": 3422,
+  "output_tokens": 620,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4ATnYa4TKNJHbSHVVN",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3146,
+ "content": [
+  {
+   "type": "text",
+   "text": "The typed model matches a recalled model (T5), but the label is unreadable, so I can't confirm the model from the photo itself. The date code was not parsed as a recalled code (T4 returned \"unparsed,\" not a match), and no serial was provided. Under the policy, an unreadable label means I need a clearer photo, so the outcome is needs_info."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DD6Jfte4qKxD5Fyt5SNprD",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo could not be read: no legible model, serial, or date code was extracted, so the label cannot confirm the model.",
+      "cites": [
+       "T1",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The typed model SE4570 matches a recalled model, but under the policy the typed model alone is not enough when the label is unreadable; a clearer label photo is needed to confirm it.",
+      "cites": [
+       "T5",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The typed date code 07/22 NH could not be verified against the recalled codes (result unparsed), and no serial number was provided to cross-check.",
+      "cites": [
+       "T4",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Purchase checks pass: Grainger is a listed retailer and the 2023-01-17 purchase date is inside the sale window, with no receipt required. No duplicate claims were found.",
+      "cites": [
+       "T2",
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please upload a clearer, well-lit photo of the product's label showing the model number, serial number, and date code. Also, if you can, please confirm the date code exactly as printed on the label and provide the serial number if one is present.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

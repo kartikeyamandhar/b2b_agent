@@ -1,0 +1,69 @@
+{
+ "text": "Checking the policy against the results:\n\n- Duplicates (T5): no hits, so no flag.\n- Model: the label photo is unreadable (T1: legible false, no model text). Without a usable label reading, the typed model \"93550\" decides, and T2 confirms it is a match to a recalled model. So the model passes.\n- Serial/date code: the program has no serial or date code rules for this recall, so those do not apply.\n- Purchase: ALDI is listed (T3), the date 2018-10-30 is inside the window, and no receipt is required (T3).\n- Destruction: T4 shows the product with the cord visibly cut, and the photo is not a repeat of the label photo. It complies.\n- Refund $40.00 is under the $100 threshold.\n\nNo rule triggers a flag, deny, or needs_info. The claim is approved.\n\nOne note: the label photo was unreadable, so the approval relies on the typed model. The FAQ says a clear label photo confirms the model, but the policy only asks for a clearer photo when the model can't be resolved otherwise. Here the typed model matches a recalled model, so that request isn't required.",
+ "usage": {
+  "input_tokens": 2822,
+  "output_tokens": 796,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3AJAUjnX1YShuF1yr7",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4001,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy against the results:\n\n- Duplicates (T5): no hits, so no flag.\n- Model: the label photo is unreadable (T1: legible false, no model text). Without a usable label reading, the typed model \"93550\" decides, and T2 confirms it is a match to a recalled model. So the model passes.\n- Serial/date code: the program has no serial or date code rules for this recall, so those do not apply.\n- Purchase: ALDI is listed (T3), the date 2018-10-30 is inside the window, and no receipt is required (T3).\n- Destruction: T4 shows the product with the cord visibly cut, and the photo is not a repeat of the label photo. It complies.\n- Refund $40.00 is under the $100 threshold.\n\nNo rule triggers a flag, deny, or needs_info. The claim is approved.\n\nOne note: the label photo was unreadable, so the approval relies on the typed model. The FAQ says a clear label photo confirms the model, but the policy only asks for a clearer photo when the model can't be resolved otherwise. Here the typed model matches a recalled model, so that request isn't required."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01C6WLjdCvUxpSndLjqHo55s",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is unreadable, so the typed model 93550 decides; it matches a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase was at ALDI, a listed retailer, on 2018-10-30, which is inside the 2016-2019 sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the product with the power cord cut, as instructed, and is not a repeat of the label photo.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial and date code rules do not apply to this recall. The $40.00 refund is under the $100 review threshold.",
+      "cites": [
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.8
+   }
+  }
+ ]
+}

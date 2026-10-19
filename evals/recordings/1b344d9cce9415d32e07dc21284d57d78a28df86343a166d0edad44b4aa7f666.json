@@ -1,0 +1,47 @@
+{
+ "text": "Per the policy, the first step is to read the label, check the purchase, check duplicates, and check the serial in parallel, since the rules include serials and the claim has no date-code or destruction requirement.",
+ "usage": {
+  "input_tokens": 2612,
+  "output_tokens": 192,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3oiwnViyD6z8GQJ7qR",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1837,
+ "content": [
+  {
+   "type": "text",
+   "text": "Per the policy, the first step is to read the label, check the purchase, check duplicates, and check the serial in parallel, since the rules include serials and the claim has no date-code or destruction requirement."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01SzNYBkWz2onCCE6a8Dd3xx",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01BXuAiX2LJFzkDrne3aU91Y",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Ca1JbTUVNiBBk3gjZ26dUK",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_013619NzU7dRZmVMW5Bmftnc",
+   "name": "check_serial",
+   "input": {
+    "serial": "SN38222685"
+   }
+  }
+ ]
+}

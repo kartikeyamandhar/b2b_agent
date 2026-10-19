@@ -1,0 +1,70 @@
+{
+ "text": "Policy order: flag first. check_duplicates (T5) found a same_photo hit (label sha256) with another claim, so the outcome is flag.\n\nOther checks for the record: label legible and shows 98527, a recalled model (T1, T2). Purchase at ALDI within the window, no receipt required (T3). Destruction photo shows the cut cord (T4). Date code 2017-03 has no stated range rule here, so it does not change the outcome.",
+ "usage": {
+  "input_tokens": 2882,
+  "output_tokens": 626,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3AKTcoNXiyBsvJAqay",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3119,
+ "content": [
+  {
+   "type": "text",
+   "text": "Policy order: flag first. check_duplicates (T5) found a same_photo hit (label sha256) with another claim, so the outcome is flag.\n\nOther checks for the record: label legible and shows 98527, a recalled model (T1, T2). Purchase at ALDI within the window, no receipt required (T3). Destruction photo shows the cut cord (T4). Date code 2017-03 has no stated range rule here, so it does not change the outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01FwXDXS2teSs6BoRZ8vQPDi",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo is shared with another claim (same photo hash), so the claim must go to a person for duplicate review under the program's duplicate rules.",
+      "cites": [
+       "T5",
+       "R:policy",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model 98527, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase was at ALDI, a listed retailer, dated 2018-01-20, inside the 2016-01-01 to 2019-12-31 sale window; no receipt is required for this claim.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the power cord cut through, as the remedy requires, and it is not a repeat of the label photo.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The $40.00 refund is under the $100.00 person-review threshold; the flag, not the amount, is what sends this claim to review.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

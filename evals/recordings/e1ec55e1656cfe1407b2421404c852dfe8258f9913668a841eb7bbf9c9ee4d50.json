@@ -1,0 +1,70 @@
+{
+ "text": "Everything checks out. One note: the retailer is \"LG.com,\" which is not on the program's listed retailers (Best Buy, Costco, The Home Depot, Lowe's, LG.com). The purchase check (T2) reports the retailer as \"listed,\" and LG.com does appear in R:sold_at, so it is eligible. No destruction photo is required because the remedy is repair or replacement.",
+ "usage": {
+  "input_tokens": 3975,
+  "output_tokens": 546,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3uG4Rmj8qu2PQ5xkhe",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2620,
+ "content": [
+  {
+   "type": "text",
+   "text": "Everything checks out. One note: the retailer is \"LG.com,\" which is not on the program's listed retailers (Best Buy, Costco, The Home Depot, Lowe's, LG.com). The purchase check (T2) reports the retailer as \"listed,\" and LG.com does appear in R:sold_at, so it is eligible. No destruction photo is required because the remedy is repair or replacement."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_015kui7PNqW2ct4AcoqDc1ov",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model LSEL6331F, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number 606KM1749168 falls within a recalled serial range.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The purchase date of 2022-03-22 is inside the sale window, and LG.com is an eligible retailer. No receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The remedy is repair or replacement with no refund requested, so no destruction photo is needed and the value threshold does not apply.",
+      "cites": [
+       "R:policy",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

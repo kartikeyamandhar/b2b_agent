@@ -1,0 +1,68 @@
+{
+ "text": "Every check passes. The label is legible and matches the recalled model, the serial is in range, the purchase is inside the window at a listed retailer with no receipt required, and there are no duplicate claims. The remedy is repair or replacement, so no refund threshold applies and no destruction photo is required.",
+ "usage": {
+  "input_tokens": 4142,
+  "output_tokens": 491,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3PYWJfZ46sy8XzCdpQ",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2236,
+ "content": [
+  {
+   "type": "text",
+   "text": "Every check passes. The label is legible and matches the recalled model, the serial is in range, the purchase is inside the window at a listed retailer with no receipt required, and there are no duplicate claims. The remedy is repair or replacement, so no refund threshold applies and no destruction photo is required."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01HYZuZMYiSDkDCqR9HLfLvR",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model LDE4413BD, which is on the recalled models list.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial number 107MM3075484 falls within a recalled serial range.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase at The Home Depot on 2016-07-12 is inside the sale window and at a listed retailer; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claimant requests repair or replacement, so no destruction photo or value-threshold review applies.",
+      "cites": [
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

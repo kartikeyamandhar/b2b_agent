@@ -1,0 +1,70 @@
+{
+ "text": "Checking the policy: flag first (duplicates: T7 has no hits, so no flag). Deny rules: model confirmed by legible label (T1, T2 match). Serial \"QQ66014935\" does not begin with ET22, ET23, 01VX, or 07VX, so it is out of range per R:serials and T3. Serial out of range is a deny under the policy (\"Serial number or date code... outside the recalled ranges is deny\"). Date code 2022 is in range (T4). Purchase is inside the window at a listed retailer with no receipt required (T5). No destruction photo required (T6).\n\nDeny is the outcome, since the serial rule triggers and no flag applies.",
+ "usage": {
+  "input_tokens": 3005,
+  "output_tokens": 680,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeNWotzELShvfQsLBx9",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4237,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy: flag first (duplicates: T7 has no hits, so no flag). Deny rules: model confirmed by legible label (T1, T2 match). Serial \"QQ66014935\" does not begin with ET22, ET23, 01VX, or 07VX, so it is out of range per R:serials and T3. Serial out of range is a deny under the policy (\"Serial number or date code... outside the recalled ranges is deny\"). Date code 2022 is in range (T4). Purchase is inside the window at a listed retailer with no receipt required (T5). No destruction photo required (T6).\n\nDeny is the outcome, since the serial rule triggers and no flag applies."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01NZTH7x8P2uMAraKrFW1zhN",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows the REV 12 Kids Bike, a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial number QQ66014935 does not begin with ET22, ET23, 01VX, or 07VX, so it is outside the recalled serial ranges, and the policy requires denial for an out-of-range serial.",
+      "cites": [
+       "R:serials",
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The date code 2022 is within the recalled range of model years 2022-2024.",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase at REI.com on 2023-08-21 is inside the sale window and at a listed retailer, so purchase requirements are met; this does not change the denial.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T5"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not flagged.",
+      "cites": [
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

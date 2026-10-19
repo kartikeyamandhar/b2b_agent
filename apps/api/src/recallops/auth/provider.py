@@ -39,12 +39,19 @@ class AuthProvider(Protocol):
 
 @dataclass(frozen=True, slots=True)
 class ClaimTokenContext:
+    """What a verified portal token names. The firm is part of the signed token, so the portal opens a tenant
+    session directly (the API never needs the BYPASSRLS role to find a claim's firm)."""
+
+    firm_id: UUID
     claim_id: UUID
 
 
 class ClaimTokenVerifier(Protocol):
-    """Portal tokens (invariant 10). The login owner replaces the dev verifier with HMAC tokens."""
+    """Portal tokens (invariant 10). The login owner (component 4) replaces the dev verifier with signed HMAC tokens
+    behind this protocol. The backend stores token_hash(token) on the claim; the raw token appears only in the link."""
 
     def verify(self, token: str) -> ClaimTokenContext: ...
 
     def token_hash(self, token: str) -> str: ...
+
+    def issue(self, firm_id: UUID, claim_id: UUID) -> str: ...

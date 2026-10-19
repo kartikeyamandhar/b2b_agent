@@ -1,0 +1,73 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3902,
+  "output_tokens": 536,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB378zzsYRDt9VSvrshF",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2177,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01Lc9B2jhEZ6snxKBpY7kmpc",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo could not be read, so the typed model B0726Y decides; it matches a recalled model.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The typed date code 8/21 is within the recalled range.",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Walmart is a listed retailer and the purchase date is inside the sale window; no receipt is required.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The destruction photo does not appear to show the helmet with its straps cut off, which is the instructed destruction, so it must be asked for again.",
+      "cites": [
+       "T5",
+       "R:destruction",
+       "T7"
+      ]
+     },
+     {
+      "text": "The refund of $32.43 is under the $100 review threshold.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send two things: (1) a new photo of the helmet after you have cut off the straps, showing the cut straps clearly on the helmet; and (2) a clearer photo of the white inner label with the model number and date code, since the current label photo could not be read.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

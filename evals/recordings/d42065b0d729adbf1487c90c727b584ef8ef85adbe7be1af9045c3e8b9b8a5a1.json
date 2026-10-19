@@ -1,0 +1,70 @@
+{
+ "text": "The model is confirmed, the serial and date code are in range, and the purchase is valid. However, another claim shares this serial number (T3), so the policy requires a flag.",
+ "usage": {
+  "input_tokens": 3558,
+  "output_tokens": 469,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3yytE64WFLnDuES8so",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2166,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed, the serial and date code are in range, and the purchase is valid. However, another claim shares this serial number (T3), so the policy requires a flag."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01KkiBadBSpUhhh7KW2m8Grb",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program shares this same serial number, so the claim must be flagged for review under the duplicate rule.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model DR2E, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number J2D45572794 begins with J2D, which is in the recalled serial range.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The date code 2017 is within the recalled model year range 2017-2024.",
+      "cites": [
+       "T5",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase was from a listed retailer (Yamaha dealers) on 2024-06-01, inside the sale window, and no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

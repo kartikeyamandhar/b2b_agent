@@ -24,9 +24,14 @@ def set_firm(session: Session, firm_id: UUID) -> None:
 
 
 @contextmanager
-def tenant_session(ctx: FirmContext, engine: Engine | None = None) -> Iterator[Session]:
-    """API path: recallops_app role, RLS enforced, firm from the verified context."""
-    with Session(engine or app_engine(), expire_on_commit=False) as session, session.begin():
+def tenant_session(ctx: FirmContext, engine: Engine | None = None, isolation: str | None = None) -> Iterator[Session]:
+    """API path: recallops_app role, RLS enforced, firm from the verified context. isolation (for example
+    "REPEATABLE READ", one snapshot for every read of a report) is set on the connection before the transaction
+    starts, because Postgres refuses to change it after the first query (set_config is one)."""
+    bind = engine or app_engine()
+    if isolation:
+        bind = bind.execution_options(isolation_level=isolation)
+    with Session(bind, expire_on_commit=False) as session, session.begin():
         set_firm(session, ctx.firm_id)
         yield session
 

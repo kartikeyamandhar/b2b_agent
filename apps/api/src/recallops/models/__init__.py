@@ -8,7 +8,7 @@ from typing import Any
 from uuid import UUID
 
 from pgvector.sqlalchemy import Vector
-from sqlalchemy import Boolean, Date, DateTime, ForeignKey, Integer, Numeric, Text, func
+from sqlalchemy import Boolean, Date, DateTime, ForeignKey, Integer, LargeBinary, Numeric, Text, func
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
@@ -95,6 +95,15 @@ class WorkerHeartbeat(Base):
     worker_id: Mapped[str] = mapped_column(primary_key=True)
     seen_at: Mapped[datetime] = _now()
     info: Mapped[dict[str, Any]] = mapped_column(server_default="{}")
+
+
+class GraphState(Base):
+    """Non-tenant key-value rows for the fraud graph projection (0004): the epoch shared with Neo4j's GraphMeta."""
+
+    __tablename__ = "graph_state"
+    key: Mapped[str] = mapped_column(primary_key=True)
+    value: Mapped[str]
+    updated_at: Mapped[datetime] = _now()
 
 
 class StripeEvent(Base):
@@ -195,6 +204,9 @@ class Claim(Base):
     lease_until: Mapped[datetime | None]
     attempts: Mapped[int] = mapped_column(server_default="0")
     messages: Mapped[list[dict[str, Any]]] = mapped_column(JSONB, server_default="[]")
+    first_submitted_at: Mapped[datetime | None]  # set by trigger (0004); the MPR's contact date
+    graph_version: Mapped[int] = mapped_column(server_default="0")  # bumped by triggers (0004)
+    graph_synced_version: Mapped[int | None]
 
 
 class ClaimPhoto(Base):
@@ -279,6 +291,62 @@ class Payout(Base):
     last_error: Mapped[str | None]
     created_at: Mapped[datetime] = _now()
     updated_at: Mapped[datetime] = _now()
+    export_batch: Mapped[UUID | None]
+    connect_account_id: Mapped[str | None]
+    hold_requested: Mapped[bool] = mapped_column(server_default="false")
+
+
+class ExportBatch(Base):
+    """A check/ACH batch file, stored with the transaction that marks its payouts exported (0004)."""
+
+    __tablename__ = "export_batches"
+    id: Mapped[UUID] = _pk()
+    firm_id: Mapped[UUID]
+    created_at: Mapped[datetime] = _now()
+    created_by: Mapped[str]
+    row_count: Mapped[int]
+    total_cents: Mapped[int]
+    sha256: Mapped[str]
+    csv: Mapped[bytes] = mapped_column(LargeBinary)
+
+
+class Registration(Base):
+    """A product owner the firm already knows (0005). Synthetic only."""
+
+    __tablename__ = "registrations"
+    id: Mapped[UUID] = _pk()
+    firm_id: Mapped[UUID]
+    program_id: Mapped[UUID]
+    external_ref: Mapped[str]
+    name: Mapped[str | None]
+    email: Mapped[str | None]
+    phone: Mapped[str | None]
+    address: Mapped[str | None]
+    model: Mapped[str | None]
+    serial: Mapped[str | None]
+    date_code: Mapped[str | None]
+    purchase_date: Mapped[date | None]
+    matched: Mapped[bool | None]
+    match_reasons: Mapped[list[str]] = mapped_column(JSONB, server_default="[]")
+    claim_id: Mapped[UUID | None]
+    created_at: Mapped[datetime] = _now()
+    updated_at: Mapped[datetime] = _now()
+
+
+class Notification(Base):
+    """One outreach per registration and channel (0005); sending is simulated."""
+
+    __tablename__ = "notifications"
+    id: Mapped[UUID] = _pk()
+    firm_id: Mapped[UUID]
+    program_id: Mapped[UUID]
+    registration_id: Mapped[UUID]
+    channel: Mapped[str]
+    status: Mapped[str] = mapped_column(server_default="draft")
+    subject: Mapped[str]
+    body: Mapped[str]
+    drafted_at: Mapped[datetime] = _now()
+    sent_at: Mapped[datetime | None]
 
 
 class MprReport(Base):
@@ -327,6 +395,9 @@ TENANT_MODELS: tuple[type[Base], ...] = (
     AgentStep,
     FraudCluster,
     Payout,
+    ExportBatch,
+    Registration,
+    Notification,
     MprReport,
     AuditLog,
     UsageMeter,

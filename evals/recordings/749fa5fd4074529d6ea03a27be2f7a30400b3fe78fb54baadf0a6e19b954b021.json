@@ -1,0 +1,64 @@
+{
+ "text": "The model 37785 is not on the recalled list, the date code 09/2025 falls outside the recalled ranges, and the serial check was skipped. The duplicate payout account is the first triggered rule, so the outcome is flag.",
+ "usage": {
+  "input_tokens": 3567,
+  "output_tokens": 480,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3w58RAnLwxSLuCJgmX",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2528,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model 37785 is not on the recalled list, the date code 09/2025 falls outside the recalled ranges, and the serial check was skipped. The duplicate payout account is the first triggered rule, so the outcome is flag."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01WFezxrjYMt3H5sLTJNNsb4",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim (7d3c79f9-7b7f-5326-ab17-fd6cc5dfe5eb) shares this claim's payout destination, which requires flagging under the claim policy.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model 37785, which is not one of the recalled models (34692, 34785, 34790), so the model is not confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label date code 09/2025 is outside the recalled date code ranges.",
+      "cites": [
+       "T5",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase is from Amazon.com, a listed retailer, within the sale window, and no receipt was required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,63 @@
+{
+ "text": "The typed model 96775 is recalled, the purchase is valid, there are no duplicates, but the destruction photo does not show the required cut cord. The serial check was skipped because the program's serial rule is not in the rules list. The outcome is needs_info, asking for a clearer label photo and a destruction photo showing the cut cord.",
+ "usage": {
+  "input_tokens": 3454,
+  "output_tokens": 567,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB46CQUcAQ1zFJgjj9BL",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3506,
+ "content": [
+  {
+   "type": "text",
+   "text": "The typed model 96775 is recalled, the purchase is valid, there are no duplicates, but the destruction photo does not show the required cut cord. The serial check was skipped because the program's serial rule is not in the rules list. The outcome is needs_info, asking for a clearer label photo and a destruction photo showing the cut cord."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Jfq2nhtbH7kmUXHi62Eqx7",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is unreadable, so the model cannot be confirmed from the label. The typed model 96775 matches a recalled model, so the claim can proceed once a clearer label photo is provided.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the required destruction. It shows the device with an intact cord and no cut section, so the unplugged power cord cut is not evidenced.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The purchase is at a listed retailer (ALDI) within the sale window, and no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a clearer photo of the permanent product label on the bottom of the cooker, so the model number can be read. Please also send a destruction photo showing the unplugged power cord cut off.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

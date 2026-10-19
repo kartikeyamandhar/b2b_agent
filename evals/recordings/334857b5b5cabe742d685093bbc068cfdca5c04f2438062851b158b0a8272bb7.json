@@ -1,0 +1,69 @@
+{
+ "text": "All checks pass: the model is recalled, the date code is in range, the purchase is from a listed retailer within the window with no receipt required, and there are no duplicate claims. The remedy is repair or replacement, so no destruction photo or refund review is needed.",
+ "usage": {
+  "input_tokens": 3519,
+  "output_tokens": 494,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB48LUCT5MXkWy19JpCk",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2844,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass: the model is recalled, the date code is in range, the purchase is from a listed retailer within the window with no receipt required, and there are no duplicate claims. The remedy is repair or replacement, so no destruction photo or refund review is needed."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Rpp7FsvJPt1oFmT56zCEvs",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model SE4570, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label date code 07/22 is within the recalled date codes.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "Purchased from Saf-Gard Safety Shoe Company, a listed retailer, on 2023-03-13, which is inside the sale window; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claimant requested repair or replacement, not a refund, so the value threshold review does not apply and no destruction photo is required.",
+      "cites": [
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

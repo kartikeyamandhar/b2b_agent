@@ -1,0 +1,10 @@
+{
+ "claim_id": "57358129-2f76-5775-9b95-fc7aa55751f5",
+ "spec_id": "S07",
+ "program": "26007",
+ "category": "expect_needs_info",
+ "expected_outcome": "needs_info",
+ "rationale": "Everything matches notice 26007 except that the destruction photo shows the power cord uncut, so it does not show the instructed cut cord and photo_rules.destruction_photo_intact gives needs_info.",
+ "violations": [],
+ "subtypes": {}
+}

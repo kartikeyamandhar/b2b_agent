@@ -1,0 +1,76 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: T1 reads the label legibly as CXP-03, which is recalled (R:models, T2 match).\n- Serial: T3 shows the serial prefix ZFC32B is in range (R:serials).\n- Purchase: T4 shows retailer JHTNA is listed and the date 2023-07-07 is inside the sale window (R:sold_at, R:sold_window). No receipt required.\n- Destruction photo: not required for this remedy (T5).\n- Duplicates: none found (T6), so no flag.\n- Refund: none requested (repair or replacement), so the value threshold does not apply.\n\nNo rule triggers a flag, deny, or needs_info, so the claim is approved.",
+ "usage": {
+  "input_tokens": 3012,
+  "output_tokens": 683,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeQwTngJHmHQB1YB85M",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3899,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: T1 reads the label legibly as CXP-03, which is recalled (R:models, T2 match).\n- Serial: T3 shows the serial prefix ZFC32B is in range (R:serials).\n- Purchase: T4 shows retailer JHTNA is listed and the date 2023-07-07 is inside the sale window (R:sold_at, R:sold_window). No receipt required.\n- Destruction photo: not required for this remedy (T5).\n- Duplicates: none found (T6), so no flag.\n- Refund: none requested (repair or replacement), so the value threshold does not apply.\n\nNo rule triggers a flag, deny, or needs_info, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01E9t7kC5eD3i3V2JeHwkdok",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model CXP-03, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial number ZFC32B59392644 has a recalled prefix (ZFC32B).",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The retailer JHTNA is on the list and the purchase date 2023-07-07 falls inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for a repair or replacement remedy.",
+      "cites": [
+       "T5",
+       "faq#2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6",
+       "faq#3"
+      ]
+     },
+     {
+      "text": "No refund is requested, so the $100 value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

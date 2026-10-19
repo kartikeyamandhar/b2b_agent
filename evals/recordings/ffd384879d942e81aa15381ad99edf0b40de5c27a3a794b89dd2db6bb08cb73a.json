@@ -1,0 +1,68 @@
+{
+ "text": "The label is legible and shows recalled model 2G505B. The purchase date is before the sale window, which results in a denial. The serial check was skipped, so it doesn't factor in. Since the purchase falls before the window, that denial takes precedence over the destruction question.",
+ "usage": {
+  "input_tokens": 3377,
+  "output_tokens": 577,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3xajRAMiLaYwJGCJhs",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3010,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows recalled model 2G505B. The purchase date is before the sale window, which results in a denial. The serial check was skipped, so it doesn't factor in. Since the purchase falls before the window, that denial takes precedence over the destruction question."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01XgGmHaKwkVTHoRu81rgCf8",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The claimed purchase date of 2022-03-17 is before the program's sale window, which runs from 2022-09-01 to 2025-07-31, so the unit was not sold under the recall's covered period.",
+      "cites": [
+       "R:sold_window",
+       "R:policy",
+       "T2"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model 2G505B, which is a recalled model, so the model is confirmed. The model check does not change the outcome.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The retailer Esrtech.com is on the list of approved sellers, so the retailer is not the reason for denial.",
+      "cites": [
+       "R:sold_at",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim, so there is no duplicate concern.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo appears to show a printed 'RECALLED' label rather than the handwritten permanent-marker word the recall requires. This is a secondary concern, since the purchase date already requires denial.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

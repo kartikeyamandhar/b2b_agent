@@ -1,0 +1,63 @@
+{
+ "text": "The model is confirmed. Two independent grounds lead to denial: the purchase predates the sale window, and the date code is not in the recalled range.",
+ "usage": {
+  "input_tokens": 3519,
+  "output_tokens": 436,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB425KDpCy5kqjCTZMQu",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 5195,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed. Two independent grounds lead to denial: the purchase predates the sale window, and the date code is not in the recalled range."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01TAZnNjuT1htnT4Lv7ShWs5",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The purchase date of 2024-02-15 is before the program's sale window (2024-09-01 to 2025-06-30), so the unit was not sold within the recalled sales period.",
+      "cites": [
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The label date code reads 'July 2026', which is outside the recalled date codes (manufactured prior to July 2025).",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The model MK04 is confirmed as a recalled model from the legible label photo, and the serial BN23890321 is in the recalled range, but the purchase and date code requirements are not met.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T4",
+       "T6"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

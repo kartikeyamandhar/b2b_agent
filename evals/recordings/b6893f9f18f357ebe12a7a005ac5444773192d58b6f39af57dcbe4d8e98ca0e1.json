@@ -1,0 +1,62 @@
+{
+ "text": "The label is legible and shows recalled model 2G520. The purchase date of 2021-08-25 is before the sale window (2022-09-01 to 2025-07-31), so the claim is denied. The serial check was skipped, and the typed serial is not needed for this outcome.",
+ "usage": {
+  "input_tokens": 3539,
+  "output_tokens": 487,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3TfBWU2D1tKPqRtTZe",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2273,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows recalled model 2G520. The purchase date of 2021-08-25 is before the sale window (2022-09-01 to 2025-07-31), so the claim is denied. The serial check was skipped, and the typed serial is not needed for this outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01JqLFNcU4Vy6eojmA9RkyXX",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The legible label photo shows recalled model 2G520, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2021-08-25 is before the program's sale window (2022-09-01 to 2025-07-31), so the product was not sold in the recalled period and the claim is denied.",
+      "cites": [
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The retailer Homedepot.com is on the list of sellers, but that does not cure the purchase date falling before the sale window.",
+      "cites": [
+       "R:sold_at",
+       "T2"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, and the destruction photo shows the instructed 'Recalled' marking, so these do not change the outcome.",
+      "cites": [
+       "T3",
+       "T4",
+       "R:destruction"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

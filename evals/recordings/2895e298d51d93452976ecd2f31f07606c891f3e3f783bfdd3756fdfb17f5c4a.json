@@ -1,0 +1,75 @@
+{
+ "text": "The label confirms the recalled model, and the serial, date code, retailer, and purchase window all fall within the recall. No duplicates were found. The claim is for repair or replacement, so no destruction photo is required.",
+ "usage": {
+  "input_tokens": 3950,
+  "output_tokens": 558,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3DJmYJftwFPTaUjXg1",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2549,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label confirms the recalled model, and the serial, date code, retailer, and purchase window all fall within the recall. No duplicates were found. The claim is for repair or replacement, so no destruction photo is required."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01XGgYEBMJ2ShrcTAfUzGDXN",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model FCRE306CAS, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The typed serial VF34512239 falls within the recalled range VF34512157 through VF34512300.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code October 2023 is within the recalled production range of October through November 2023.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase was at Lowe's, a listed retailer, on 2023-10-29, inside the sale window of 2023-10-01 to 2023-12-31. No receipt is required under the rule.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claim seeks repair or replacement, so no destruction photo is needed, and the refund value threshold does not apply.",
+      "cites": [
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

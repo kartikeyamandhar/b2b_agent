@@ -22,6 +22,15 @@ jobs:
         ports: ["55432:5432"]
         options: >-
           --health-cmd "pg_isready -U postgres" --health-interval 2s --health-timeout 3s --health-retries 30
+      graph:
+        image: neo4j:2026.09.0-community
+        env:
+          NEO4J_AUTH: neo4j/graph-dev-only
+          NEO4J_server_memory_heap_max__size: 512m
+        ports: ["57687:7687"]
+        options: >-
+          --health-cmd "cypher-shell -u neo4j -p graph-dev-only 'RETURN 1'" --health-interval 3s
+          --health-timeout 5s --health-retries 60
     env:
       PGPASSWORD: postgres-dev-only
     steps:
@@ -59,8 +68,8 @@ jobs:
         run: uv run --frozen pytest --cov --cov-report=term --cov-fail-under=85
 
   # ---------------------------------------------------------------------------------------------
-  # WEB HALF: owned by the UI owner (component 2). Runs once apps/web/package-lock.json exists (the starter
-  # code in apps/web has a package.json but no lockfile until the UI owner runs npm install with Node 22.22.0).
+  # WEB HALF: owned by the UI owner (component 2). apps/web does not exist yet; this job switches on when the UI
+  # owner commits apps/web/package-lock.json (npm install with Node 22.22.0), and reports skipped until then.
   # hashFiles() is not allowed in a job-level if, so the job detects the lockfile in its first step.
   # ---------------------------------------------------------------------------------------------
   web:

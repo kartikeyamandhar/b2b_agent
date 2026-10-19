@@ -1,0 +1,71 @@
+{
+ "text": "I left out the required confidence field. Resubmitting with it included.",
+ "usage": {
+  "input_tokens": 3953,
+  "output_tokens": 568,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3BwKQvjtsMNzNBR56h",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2329,
+ "content": [
+  {
+   "type": "text",
+   "text": "I left out the required confidence field. Resubmitting with it included."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Wh1ivST6NtPf8ziEHUEoxU",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model AD10014SL, which is a recalled model. The typed model has a typo, but the label confirms the model.",
+      "cites": [
+       "R:models",
+       "R:policy",
+       "T1",
+       "T2",
+       "T3"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "Purchase at Amazon.com on 2024-01-05 is inside the sale window and the retailer is listed. No receipt is required, though one was attached.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the instructed destruction (\"RECALLED\" in large letters on the front and rear of the seatback). The checker reports it does not comply, with low confidence, so a clearer photo is needed.",
+      "cites": [
+       "R:destruction",
+       "T5",
+       "T7"
+      ]
+     },
+     {
+      "text": "The refund of $89.99 is under the $100 threshold, so no person review is required for value.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a clearer photo of the destroyed unit showing \"RECALLED\" written in large letters on both the front and the rear of the seatback, in marker. The photo should show the seatback clearly.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

@@ -172,12 +172,12 @@ def render(summary: dict[str, Any], violations: dict[str, dict[str, Any]], first
         "evals/adjudication/PREREG.md.",
         "",
         f"- Golden claims: {s['n']} synthetic claims from 20 golden notices (gold rules), planted violations, "
-        "expected outcomes from outcome_policy.yaml (decided 2026-10-17). The 60 owner-reviewed and 40 classmate "
-        "claims arrive in M2.",
+        "expected outcomes from outcome_policy.yaml (decided 2026-10-17). The owner-reviewed and classmate blocks "
+        "were replaced by probe60 and standin40 (PREREG Revision 2; see ablation.md).",
         f"- Rules-only decision table {DECISION_TABLE_VERSION}; pure-code tools; destruction photo presence only "
         "(no vision).",
-        "- **Kill criterion not evaluable in M1:** there is no agent row yet. It compares macro F1 below with the "
-        "agent's in M2.",
+        "- This table is the rules-only baseline. Every agent row, and the kill criterion (rules_only vs loop_full "
+        "on these 300 claims), is in evals/results/ablation.md.",
         "- The first run (tools 1.0.0) flagged 44 legitimate claims: all 82 false duplicate hits were receipt photos "
         "matched by pHash, which ignores the text that distinguishes template documents. Tools 1.0.1 match receipts "
         "on exact bytes only (decisions log). Both rows are shown; 1.0.1 is the baseline going forward.",
@@ -187,8 +187,6 @@ def render(summary: dict[str, Any], violations: dict[str, dict[str, Any]], first
         "|---|---|---|---|---|---|---|---|---|---|---|---|",
         _row(f"rules_only (tools {TOOLS_VERSION}, receipts sha256 only)", s),
         _row("rules_only (tools 1.0.0, first run, pHash on receipts)", first_run),
-        "| rules_plus_vision | | M2 | | | | | | | | | |",
-        "| single_pass, loop_* | | M2 | | | | | | | | | |",
         "",
         "Per class:",
         "",

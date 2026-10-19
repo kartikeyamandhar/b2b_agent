@@ -1,0 +1,75 @@
+{
+ "text": "The policy confirms that a destruction photo that does not show the instructed destruction (straps cut off) requires a new request. The claimant should resubmit.",
+ "usage": {
+  "input_tokens": 4630,
+  "output_tokens": 610,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4CGL2SZJESeb9iSreX",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3779,
+ "content": [
+  {
+   "type": "text",
+   "text": "The policy confirms that a destruction photo that does not show the instructed destruction (straps cut off) requires a new request. The claimant should resubmit."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01L1ZpQrX1rYuoZ5GLuR7JNE",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows recalled model B0726Y, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The date code 8/21 is within the recalled range (August 2021 or earlier).",
+      "cites": [
+       "R:date_codes",
+       "T6"
+      ]
+     },
+     {
+      "text": "Fred Meyer is a listed retailer and the 2023-09-03 purchase date is inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the instructed destruction. It shows no helmet with straps cut off, and the policy asks for a new photo in this case.",
+      "cites": [
+       "R:destruction",
+       "T4",
+       "T7"
+      ]
+     },
+     {
+      "text": "The serial check was skipped because the program has no serial rule, so the serial was not used in the decision.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please upload a new photo of your recalled helmet (model B0726Y) with both straps cut off, as the recall instructs, and send it to consumersupport-bell@bellhelmets.com. The photo should clearly show the helmet and the cut straps, and should not be the label photo.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

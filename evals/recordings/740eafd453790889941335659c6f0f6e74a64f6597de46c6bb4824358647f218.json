@@ -1,0 +1,62 @@
+{
+ "text": "The model is confirmed as recalled. The destruction photo does not show the required cord cut, so the claim needs more information.",
+ "usage": {
+  "input_tokens": 3527,
+  "output_tokens": 478,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB46agAcG5ACN9KgMPJd",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3153,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed as recalled. The destruction photo does not show the required cord cut, so the claim needs more information."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01UZp4pJUDjkEDa5bjdGAX4S",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 98527, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase at ALDI on 2018-02-06 falls within the sale window and at a listed retailer; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the required unplugged power cord cut; it shows a gap in the cord but no visible cut through it, so it does not comply with the destruction requirement.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": "Thank you for your claim. To complete it, please send a clearer destruction photo showing the unplugged power cord cut through, with the cut clearly visible. The cooker's label and model are already confirmed.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

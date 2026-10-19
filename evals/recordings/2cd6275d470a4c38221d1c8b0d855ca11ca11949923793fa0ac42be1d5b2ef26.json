@@ -1,0 +1,84 @@
+{
+ "text": "Checking the policy in order: flag (duplicates) \u2014 T7 has no hits, so no flag. Deny: model confirmed by legible label (T1, T2) as recalled DR2E; serial J0E is in range (T3); date code 2017 in range (T4); purchase at listed retailer inside window with no receipt required (T5); destruction photo not required (T6); remedy is repair, no refund, so no value-threshold review. Nothing triggers deny or needs_info. Approve.",
+ "usage": {
+  "input_tokens": 2887,
+  "output_tokens": 686,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB356Khzi5WKg4ePMwFw",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3588,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy in order: flag (duplicates) \u2014 T7 has no hits, so no flag. Deny: model confirmed by legible label (T1, T2) as recalled DR2E; serial J0E is in range (T3); date code 2017 in range (T4); purchase at listed retailer inside window with no receipt required (T5); destruction photo not required (T6); remedy is repair, no refund, so no value-threshold review. Nothing triggers deny or needs_info. Approve."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_018M1oUoAkui9AsAPG1B8Sik",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model DR2E, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial number J0E66794845 begins with J0E, which is within the recalled serial ranges.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The date code 2017 falls within the recalled model years 2017-2024.",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase was from Yamaha dealers (a listed retailer) on 2022-03-15, inside the sale window, and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy (repair), so that check does not apply.",
+      "cites": [
+       "T6",
+       "T8"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account, so the claim is not flagged.",
+      "cites": [
+       "T7",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No refund is requested (repair or replacement), so the refund value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

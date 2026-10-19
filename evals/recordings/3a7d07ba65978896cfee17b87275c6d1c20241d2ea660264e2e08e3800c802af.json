@@ -1,0 +1,69 @@
+{
+ "text": "Checking the policy against the results:\n\n- Duplicates (T5): no hits, so no flag.\n- Model (T1, T2): label is legible and shows P1410-P, which is a recalled model. Model confirmed.\n- Serial/date code: the program's rules here don't include serial or date code checks, so no action.\n- Purchase (T3): retailer walmart.com is listed; purchase date 2005-11-16 is before the sale window (2006-10-01). Per policy, a purchase before the window is a deny.\n- Destruction (T4): not required.\n- Refund $87.02 is under the $100 threshold, but that doesn't override the deny.\n\nOutcome: deny, driven by the purchase date falling before the sale window.",
+ "usage": {
+  "input_tokens": 2732,
+  "output_tokens": 662,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeKst6H6AZKyKMh76hq",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 5202,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy against the results:\n\n- Duplicates (T5): no hits, so no flag.\n- Model (T1, T2): label is legible and shows P1410-P, which is a recalled model. Model confirmed.\n- Serial/date code: the program's rules here don't include serial or date code checks, so no action.\n- Purchase (T3): retailer walmart.com is listed; purchase date 2005-11-16 is before the sale window (2006-10-01). Per policy, a purchase before the window is a deny.\n- Destruction (T4): not required.\n- Refund $87.02 is under the $100 threshold, but that doesn't override the deny.\n\nOutcome: deny, driven by the purchase date falling before the sale window."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_019JkJmfrk3ZKQzMjp6W1PDA",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model P1410-P, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase date of 2005-11-16 is before the program's sale window, which begins 2006-10-01. Purchases before the window are denied.",
+      "cites": [
+       "T3",
+       "R:sold_window",
+       "R:policy",
+       "T6"
+      ]
+     },
+     {
+      "text": "The retailer (walmart.com) is on the list of sellers, so the retailer check passes. The denial rests on the purchase date alone.",
+      "cites": [
+       "T3",
+       "R:sold_at"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not flagged.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The refund of $87.02 is under the $100 review threshold, but the threshold does not override a denial.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

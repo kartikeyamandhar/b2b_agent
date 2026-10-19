@@ -1,0 +1,75 @@
+{
+ "text": "All checks pass: the legible label shows a recalled model, the serial and date code are in range, the purchase is from a listed retailer within the window, and there are no duplicate claims. The claimant asked for repair or replacement, so no refund over the threshold applies and no destruction photo is required.",
+ "usage": {
+  "input_tokens": 3646,
+  "output_tokens": 544,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3VZSXaJgAiKXWomKAx",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2357,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass: the legible label shows a recalled model, the serial and date code are in range, the purchase is from a listed retailer within the window, and there are no duplicate claims. The claimant asked for repair or replacement, so no refund over the threshold applies and no destruction photo is required."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01FhGuMqR9G9Y3RBpVtHmYJS",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model DR2A, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number J0D11922104 begins with J0D, which is in the recalled serial ranges.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code 2017 falls within the recalled model year range 2017-2024.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase from Yamaha dealers on 2024-10-03 is a listed retailer inside the sale window, and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claimant requested repair or replacement, not a refund, so the value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

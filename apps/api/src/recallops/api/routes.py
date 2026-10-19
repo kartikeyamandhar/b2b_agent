@@ -1,5 +1,5 @@
-"""Every route in 01-backend.md section 9. Read routes are implemented over the database in M1 so the UI owner
-can build against `make seed`; write routes keep their final contract and return 501 until their milestone."""
+"""Every route in 01-backend.md section 9, implemented over the database. The only 501 answers left are the payments
+owner's (component 3): billing checkout and portal, the Stripe webhook, and Connect onboarding from the portal."""
 
 from __future__ import annotations
 
@@ -8,36 +8,55 @@ from datetime import date, datetime
 from typing import Annotated, Any
 from uuid import UUID
 
-from fastapi import APIRouter, File, Form, HTTPException, Query, UploadFile, status
-from fastapi.responses import FileResponse
+from fastapi import APIRouter, Body, File, Form, Header, HTTPException, Query, UploadFile, status
+from fastapi.responses import Response
 from sqlalchemy import func, select, text
 from sqlalchemy.orm import Session
 
+from recallops import portal as portal_service
+from recallops import programs as program_service
 from recallops.api import schemas as s
 from recallops.api import views
 from recallops.api.deps import PublicDb, TenantDb
-from recallops.api.problems import NotYetImplemented
+from recallops.api.problems import NotYetImplemented, PaymentRequired
 from recallops.auth.deps import AdminDep, ClaimTokenDep, FirmDep, build_claim_verifier
-from recallops.db.engine import internal_engine
+from recallops.billing.fake import AllowAllBilling
+from recallops.billing.interface import BillingGate
+from recallops.claims.review import ReviewConflict, submit_action
+from recallops.db.engine import app_engine
 from recallops.db.repos import ClaimsRepo, ProgramsRepo, RunsRepo, UsageRepo
 from recallops.db.session import tenant_session
-from recallops.models import Claim, Recall, RecallProgram
-from recallops.rules.schemas import RemedyRules
+from recallops.fraud.view import FraudGraphView
+from recallops.logs import get_logger, log_event
+from recallops.models import Claim, Recall, RecallProgram, WorkerHeartbeat
+from recallops.payouts.db_ledger import DbPayoutLedger
 from recallops.settings import get_settings
+from recallops.storage import InvalidKey, Storage, StorageError, build_storage
 from recallops.tenancy import FirmContext
+
+log = get_logger("api.routes")
 
 Responses = dict[int | str, dict[str, Any]]
 NOT_FOUND: Responses = {404: {"model": s.Problem, "description": "not found, or belongs to another firm"}}
 AUTH: Responses = {401: {"model": s.Problem}, 403: {"model": s.Problem}}
 LATER: Responses = {501: {"model": s.Problem, "description": "contract final, implementation in a later milestone"}}
-IMAGE: Responses = {200: {"content": {"image/jpeg": {}}}}
+CONFLICT: Responses = {409: {"model": s.Problem, "description": "the resource is not in a state that allows this"}}
+PAYMENT: Responses = {402: {"model": s.Problem, "description": "over the plan's limit (component 3 entitlement)"}}
+IMAGE: Responses = {200: {"content": {"image/jpeg": {}, "image/png": {}}}}
 PDF: Responses = {200: {"content": {"application/pdf": {}}}}
+MPR_PERIOD = r"^\d{4}-(0[1-9]|1[0-2])$"
+PHOTO_STORAGE_DOWN = "photo storage unavailable"
 
 firm = APIRouter(prefix="/v1", tags=["firm"], responses=AUTH)
 billing = APIRouter(prefix="/v1/billing", tags=["billing (component 3)"], responses={**AUTH, **LATER})
 portal = APIRouter(prefix="/portal", tags=["portal"])
 internal = APIRouter(prefix="/internal", tags=["internal"])
 health = APIRouter(tags=["health"])
+
+
+def billing_gate() -> BillingGate:
+    """The payments owner swaps in the plan-aware gate here (component 3)."""
+    return AllowAllBilling()
 
 
 # Public archive
@@ -90,21 +109,47 @@ def get_program(program_id: UUID, ctx: FirmDep, db: TenantDb) -> s.Program:
     "/programs",
     response_model=s.Program,
     status_code=201,
-    responses=LATER,
+    responses={**NOT_FOUND, **PAYMENT},
     summary="Open a program from a recall; runs rule extraction and returns rules for review",
 )
-def create_program(body: s.ProgramCreate, ctx: AdminDep) -> s.Program:
-    raise NotYetImplemented("POST /v1/programs", "M2")
+def create_program(body: s.ProgramCreate, ctx: AdminDep, db: TenantDb) -> s.Program:
+    if (body.recall_id is None) == (body.manual is None):
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "give exactly one of recall_id or manual")
+    try:
+        program, _, _ = program_service.create_program(
+            db,
+            ctx,
+            get_settings(),
+            billing_gate(),
+            body.recall_id,
+            body.manual.model_dump() if body.manual else None,
+            body.value_threshold_cents,
+        )
+    except program_service.NotEntitled as exc:
+        raise PaymentRequired(exc.action, exc.reason) from exc
+    except LookupError as exc:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "recall not found") from exc
+    return _program_view(db, ctx, program)
 
 
 @firm.patch(
     "/programs/{program_id}",
     response_model=s.Program,
-    responses={**NOT_FOUND, **LATER},
+    responses={**NOT_FOUND, **PAYMENT, **CONFLICT},
     summary="Edit rules, threshold, or status",
 )
-def patch_program(program_id: UUID, body: s.ProgramPatch, ctx: AdminDep) -> s.Program:
-    raise NotYetImplemented("PATCH /v1/programs/{id}", "M2")
+def patch_program(program_id: UUID, body: s.ProgramPatch, ctx: AdminDep, db: TenantDb) -> s.Program:
+    p = ProgramsRepo(db, ctx).get(program_id)
+    if p is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "program not found")
+    changes = body.model_dump(mode="json", exclude_unset=True)
+    try:
+        p = program_service.patch_program(db, ctx, get_settings(), billing_gate(), p, changes)
+    except program_service.NotEntitled as exc:
+        raise PaymentRequired(exc.action, exc.reason) from exc
+    except program_service.Conflict as exc:
+        raise HTTPException(status.HTTP_409_CONFLICT, str(exc)) from exc
+    return _program_view(db, ctx, p)
 
 
 def _decode_cursor(cursor: str | None) -> tuple[datetime, UUID] | None:
@@ -147,11 +192,18 @@ def list_claims(
 @firm.post(
     "/programs/{program_id}/claims/issue",
     response_model=s.IssueResponse,
-    responses={**NOT_FOUND, **LATER},
+    responses={**NOT_FOUND, **CONFLICT},
     summary="Issue n single-claim portal links for distribution",
 )
-def issue_links(program_id: UUID, body: s.IssueRequest, ctx: AdminDep) -> s.IssueResponse:
-    raise NotYetImplemented("POST /v1/programs/{id}/claims/issue", "M2", "backend owner, tokens by login owner")
+def issue_links(program_id: UUID, body: s.IssueRequest, ctx: AdminDep, db: TenantDb) -> s.IssueResponse:
+    p = ProgramsRepo(db, ctx).get(program_id)
+    if p is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "program not found")
+    try:
+        links = program_service.issue_links(db, ctx, get_settings(), build_claim_verifier(), p, body.n)
+    except program_service.Conflict as exc:
+        raise HTTPException(status.HTTP_409_CONFLICT, str(exc)) from exc
+    return s.IssueResponse(links=[s.IssuedLink(claim_id=c, url=u) for c, u in links])
 
 
 # Claims
@@ -197,18 +249,30 @@ def get_claim(claim_id: UUID, ctx: FirmDep, db: TenantDb) -> s.ClaimDetail:
 
 @firm.get(
     "/claims/{claim_id}/photos/{photo_id}",
-    responses={**NOT_FOUND, **IMAGE},
-    response_class=FileResponse,
-    summary="Photo bytes (dev stand-in for a signed storage URL)",
+    responses={**NOT_FOUND, **IMAGE, 503: {"model": s.Problem, "description": "photo storage unavailable"}},
+    response_class=Response,
+    summary="Photo bytes, read from the private store after the firm check (no storage URL reaches the browser)",
 )
-def get_photo(claim_id: UUID, photo_id: UUID, ctx: FirmDep, db: TenantDb) -> FileResponse:
+def get_photo(claim_id: UUID, photo_id: UUID, ctx: FirmDep, db: TenantDb) -> Response:
+    # The bytes are proxied from storage after the RLS lookup, so the bucket stays private and no signed storage URL
+    # reaches a browser. A storage failure answers a fixed 503 detail, never the storage error's text. (A comment,
+    # not a docstring: a docstring would become the route's description in docs/contracts/openapi.json.)
     photo = next((p for p in ClaimsRepo(db, ctx).photos(claim_id) if p.id == photo_id), None)
     if photo is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "photo not found")
-    path = get_settings().storage_dir / photo.storage_path
-    if not path.is_file():
+    try:
+        data = photo_storage().get(photo.storage_path)
+    except InvalidKey:
+        data = None
+    except StorageError as exc:
+        log_event(
+            log, "photo_read_failed", level=40, firm_id=str(ctx.firm_id), claim_id=str(claim_id), error=str(exc)[:300]
+        )
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, PHOTO_STORAGE_DOWN) from exc
+    if data is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "photo file missing from storage")
-    return FileResponse(path, media_type="image/jpeg")
+    media = "image/png" if photo.storage_path.lower().endswith(".png") else "image/jpeg"
+    return Response(content=data, media_type=media, headers={"X-Content-Type-Options": "nosniff"})
 
 
 @firm.get(
@@ -226,45 +290,342 @@ def get_trace(claim_id: UUID, ctx: FirmDep, db: TenantDb) -> s.Trace:
     caps = s.Caps(
         max_steps=settings.run_cap_steps, max_usd=str(settings.run_cap_usd), max_seconds=settings.run_cap_seconds
     )
-    return s.Trace(run=views.run_summary(run), caps=caps, steps=[views.trace_step(t) for t in runs.steps(run.id)])
+    steps = runs.steps(run.id)
+    used = s.Used(
+        steps=sum(1 for t in steps if t.counted),
+        cost_usd=f"{sum((t.nominal_cost_usd for t in steps), start=0):.6f}",
+        seconds=round(sum(t.latency_ms for t in steps) / 1000, 3),
+    )
+    return s.Trace(run=views.run_summary(run), caps=caps, used=used, steps=[views.trace_step(t) for t in steps])
 
 
 @firm.post(
     "/claims/{claim_id}/actions",
     response_model=s.ClaimDetail,
-    responses={**NOT_FOUND, **LATER},
-    summary="Reviewer action: resume_override, request_info, mark_fraud (writes audit_log)",
+    responses={**NOT_FOUND, **CONFLICT},
+    summary="Reviewer action: resume_override, request_info, mark_fraud, mark_delivered (writes audit_log)",
 )
-def claim_action(claim_id: UUID, body: s.ClaimAction, ctx: FirmDep) -> s.ClaimDetail:
-    raise NotYetImplemented("POST /v1/claims/{id}/actions", "M3")
+def claim_action(claim_id: UUID, body: s.ClaimAction, ctx: FirmDep, db: TenantDb) -> s.ClaimDetail:
+    c = ClaimsRepo(db, ctx).get(claim_id)
+    if c is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "claim not found")
+    try:
+        submit_action(
+            db,
+            app_engine(),
+            ctx,
+            c,
+            body.action,
+            body.outcome,
+            body.message,
+            DbPayoutLedger(app_engine()),
+            billing_gate(),
+            get_settings().phash_duplicate_bits,
+        )
+    except ReviewConflict as exc:
+        raise HTTPException(status.HTTP_409_CONFLICT, str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(exc)) from exc
+    db.flush()
+    db.expire_all()
+    return get_claim(claim_id, ctx, db)
 
 
 # MPR (M4)
 
 
+def _mpr_view(r: Any) -> s.MprReport:
+    return s.MprReport(
+        id=r.id,
+        program_id=r.program_id,
+        period_start=r.period_start,
+        period_end=r.period_end,
+        payload=r.payload,
+        reconciled=r.reconciled,
+        generated_at=r.generated_at,
+    )
+
+
 @firm.get(
     "/programs/{program_id}/mpr",
     response_model=s.MprReport,
-    responses={**NOT_FOUND, **LATER},
-    summary="MPR for a period (YYYY-MM)",
+    responses=NOT_FOUND,
+    summary="Latest MPR generated for a period (YYYY-MM)",
 )
-def get_mpr(program_id: UUID, ctx: FirmDep, period: str = Query(pattern=r"^\d{4}-\d{2}$")) -> s.MprReport:
-    raise NotYetImplemented("GET /v1/programs/{id}/mpr", "M4")
+def get_mpr(program_id: UUID, ctx: FirmDep, db: TenantDb, period: str = Query(pattern=MPR_PERIOD)) -> s.MprReport:
+    from recallops.models import MprReport
+    from recallops.mpr.generate import Period
+
+    p = Period.parse(period)
+    row = db.scalars(
+        select(MprReport)
+        .where(MprReport.firm_id == ctx.firm_id, MprReport.program_id == program_id, MprReport.period_start == p.start)
+        .order_by(MprReport.generated_at.desc())
+        .limit(1)
+    ).first()
+    if row is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "no report for that period; generate one first")
+    return _mpr_view(row)
 
 
 @firm.post(
     "/programs/{program_id}/mpr/generate",
     response_model=s.MprReport,
-    responses={**NOT_FOUND, **LATER},
-    summary="Generate the MPR for a period",
+    responses=NOT_FOUND,
+    summary="Generate the MPR for a period; reconciled is true when the independent recount agrees",
 )
-def generate_mpr(program_id: UUID, ctx: AdminDep, period: str = Query(pattern=r"^\d{4}-\d{2}$")) -> s.MprReport:
-    raise NotYetImplemented("POST /v1/programs/{id}/mpr/generate", "M4")
+def generate_mpr(
+    program_id: UUID,
+    ctx: AdminDep,
+    period: str = Query(pattern=MPR_PERIOD),
+    manual: Annotated[
+        s.MprManual | None, Body(description="boxes the system cannot know; omitted boxes use their defaults")
+    ] = None,
+) -> s.MprReport:
+    """One REPEATABLE READ snapshot: the SQL report and the recount's row exports see the same data, so a payout
+    delivered while the report is generated cannot produce a false discrepancy."""
+    from recallops.models import AuditLog, MprReport
+    from recallops.mpr.generate import Period, build_payload
+    from recallops.mpr.recount import export, reconcile, recount
+
+    entered = manual.model_dump(exclude_none=True) if manual else {}
+    with tenant_session(ctx, isolation="REPEATABLE READ") as db:
+        if ProgramsRepo(db, ctx).get(program_id) is None:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "program not found")
+        p = Period.parse(period)
+        payload = build_payload(db, ctx.firm_id, program_id, p, entered)
+        diffs = reconcile(payload["computed"], recount(export(db, ctx.firm_id, program_id), p.label, entered))
+        payload["reconciliation"] = {"discrepancies": diffs}
+        row = MprReport(
+            firm_id=ctx.firm_id,
+            program_id=program_id,
+            period_start=p.start,
+            period_end=p.end,
+            payload=payload,
+            reconciled=not diffs,
+            generated_by=ctx.user_id,
+        )
+        db.add(row)
+        db.flush()
+        db.add(
+            AuditLog(
+                firm_id=ctx.firm_id,
+                actor=ctx.user_id,
+                action="mpr_generated",
+                target_type="program",
+                target_id=str(program_id),
+                before=None,
+                after={"period": period, "reconciled": not diffs, "manual_boxes": sorted(entered)},
+            )
+        )
+        db.refresh(row)
+        if diffs:
+            log_event(log, "mpr_unreconciled", level=40, firm_id=str(ctx.firm_id), program_id=str(program_id))
+        return _mpr_view(row)
 
 
-@firm.get("/programs/{program_id}/mpr/{report_id}.pdf", responses={**NOT_FOUND, **LATER, **PDF}, summary="MPR as PDF")
-def mpr_pdf(program_id: UUID, report_id: UUID, ctx: FirmDep) -> None:
-    raise NotYetImplemented("GET /v1/programs/{id}/mpr/{report_id}.pdf", "M4")
+@firm.get("/programs/{program_id}/mpr/{report_id}.pdf", responses={**NOT_FOUND, **PDF}, summary="MPR as PDF")
+def mpr_pdf(program_id: UUID, report_id: UUID, ctx: FirmDep, db: TenantDb) -> Response:
+    from recallops.models import MprReport
+    from recallops.mpr.pdf import render_pdf
+
+    row = db.scalars(
+        select(MprReport).where(
+            MprReport.firm_id == ctx.firm_id, MprReport.program_id == program_id, MprReport.id == report_id
+        )
+    ).first()
+    if row is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "report not found")
+    program = ProgramsRepo(db, ctx).get(program_id)
+    recall = db.get(Recall, program.recall_id) if program and program.recall_id else None
+    body = render_pdf(
+        recall.title if recall else "Recall program", row.payload["period"], row.payload["boxes"], row.payload["notes"]
+    )
+    return Response(body, media_type="application/pdf")
+
+
+# Fraud graph (M5; Neo4j projection, decisions log 2026-10-18)
+
+GRAPH_DOWN = "fraud graph unavailable"
+
+
+@firm.get(
+    "/programs/{program_id}/fraud-graph",
+    response_model=FraudGraphView,
+    responses={**NOT_FOUND, 503: {"model": s.Problem, "description": "the graph is disabled or unreachable"}},
+    summary="Fraud rings across every duplicate kind: claims, links, rings (statuses from Postgres)",
+)
+def fraud_graph_view(
+    program_id: UUID, ctx: FirmDep, db: TenantDb, limit: int = Query(500, ge=1, le=2000)
+) -> FraudGraphView:
+    """Program first (404 for another firm's program), then a read-only graph query whose every claim id is checked
+    against this firm's claims under RLS. A graph error answers a fixed 503 detail (never the driver's message)."""
+    from recallops.fraud.graph import GraphError
+    from recallops.fraud.view import fraud_graph
+
+    _open_program(db, ctx, program_id)
+    store = graph_store()
+    if store is None:
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, GRAPH_DOWN)
+    try:
+        return fraud_graph(db, store, ctx, program_id, node_cap=limit)
+    except GraphError as exc:
+        log_event(log, "fraud_graph_unavailable", level=30, firm_id=str(ctx.firm_id), error=type(exc).__name__)
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, GRAPH_DOWN) from exc
+
+
+# Notification campaigns (M5): registrations, matching, drafts, simulated send
+
+
+def _open_program(db: Session, ctx: FirmContext, program_id: UUID) -> RecallProgram:
+    program = ProgramsRepo(db, ctx).get(program_id)
+    if program is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "program not found")
+    return program
+
+
+@firm.post(
+    "/programs/{program_id}/registrations",
+    response_model=s.RegistrationUpload,
+    responses={**NOT_FOUND, 413: {"model": s.Problem}},
+    summary="Upload product-owner registrations (CSV, synthetic rows only); upserts on external_ref",
+)
+async def upload_registrations(
+    program_id: UUID, ctx: AdminDep, file: Annotated[UploadFile, File(description="CSV with external_ref")]
+) -> s.RegistrationUpload:
+    from recallops import campaigns
+
+    settings = get_settings()
+    raw = await file.read(settings.registrations_max_bytes + 1)
+    if len(raw) > settings.registrations_max_bytes:
+        raise HTTPException(status.HTTP_413_CONTENT_TOO_LARGE, "registrations CSV too large")
+    try:
+        parsed = campaigns.parse_registrations(raw, settings.registrations_max_rows)
+    except campaigns.UploadRejected as exc:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(exc)) from exc
+    with tenant_session(ctx) as db:
+        _open_program(db, ctx, program_id)
+        accepted = campaigns.upsert_registrations(db, ctx, program_id, parsed.rows)
+    return s.RegistrationUpload(accepted=accepted, rejected=parsed.rejected[:50], rejected_total=len(parsed.rejected))
+
+
+@firm.post(
+    "/programs/{program_id}/campaign/match",
+    response_model=s.CampaignCounts,
+    responses=NOT_FOUND,
+    summary="Match registrations against the program's identification rules",
+)
+def campaign_match(program_id: UUID, ctx: AdminDep, db: TenantDb) -> s.CampaignCounts:
+    from recallops import campaigns
+
+    return s.CampaignCounts(counts=campaigns.match(db, ctx, _open_program(db, ctx, program_id)))
+
+
+@firm.post(
+    "/programs/{program_id}/campaign/drafts",
+    response_model=s.CampaignCounts,
+    responses={**NOT_FOUND, **CONFLICT},
+    summary="Draft notices for matched owners (quotes the notice verbatim; one claim link per owner)",
+)
+def campaign_drafts(program_id: UUID, body: s.CampaignDraftRequest, ctx: AdminDep, db: TenantDb) -> s.CampaignCounts:
+    from recallops import campaigns
+
+    program = _open_program(db, ctx, program_id)
+
+    def issue(n: int) -> list[tuple[UUID, str]]:
+        return program_service.issue_links(db, ctx, get_settings(), build_claim_verifier(), program, n)
+
+    try:
+        return s.CampaignCounts(counts=campaigns.draft(db, ctx, program, list(dict.fromkeys(body.channels)), issue))
+    except program_service.Conflict as exc:
+        raise HTTPException(status.HTTP_409_CONFLICT, str(exc)) from exc
+
+
+@firm.post(
+    "/programs/{program_id}/campaign/send",
+    response_model=s.CampaignCounts,
+    responses=NOT_FOUND,
+    summary="Mark drafts sent (simulated: no message leaves the system); feeds the MPR notified_* boxes",
+)
+def campaign_send(program_id: UUID, body: s.CampaignSendRequest, ctx: AdminDep, db: TenantDb) -> s.CampaignCounts:
+    from recallops import campaigns
+
+    _open_program(db, ctx, program_id)
+    return s.CampaignCounts(counts=campaigns.send(db, ctx, program_id, body.channel))
+
+
+@firm.get(
+    "/programs/{program_id}/campaign",
+    response_model=s.CampaignSummary,
+    responses=NOT_FOUND,
+    summary="Campaign status: registrations, matches, notices by channel and status, three sample drafts",
+)
+def campaign_summary(program_id: UUID, ctx: FirmDep, db: TenantDb) -> s.CampaignSummary:
+    from recallops import campaigns
+
+    _open_program(db, ctx, program_id)
+    return s.CampaignSummary(**campaigns.summary(db, ctx, program_id))
+
+
+# Payout export batches (the check/ACH fallback, invariant 9)
+
+CSV: Responses = {200: {"content": {"text/csv": {}}}}
+
+
+def _batch_view(b: Any) -> s.ExportBatchSummary:
+    return s.ExportBatchSummary(
+        id=b.id,
+        created_at=b.created_at,
+        created_by=b.created_by,
+        row_count=b.row_count,
+        total_cents=b.total_cents,
+        sha256=b.sha256,
+    )
+
+
+@firm.post(
+    "/payouts/exports",
+    response_model=s.ExportBatchSummary | None,
+    summary="Write one export batch of this firm's approved payouts waiting for a check (null when none)",
+)
+def create_export(ctx: AdminDep) -> s.ExportBatchSummary | None:
+    from recallops.models import ExportBatch
+    from recallops.payouts.export import export_firm
+
+    result = export_firm(app_engine(), ctx.firm_id, actor=ctx.user_id, tenant=True)
+    if result is None:
+        return None
+    with tenant_session(ctx) as session:
+        return _batch_view(session.get(ExportBatch, UUID(result["batch"])))
+
+
+@firm.get("/payouts/exports", response_model=s.ExportBatchList, summary="Export batches, newest first")
+def list_exports(ctx: AdminDep, db: TenantDb, limit: int = Query(50, ge=1, le=200)) -> s.ExportBatchList:
+    from recallops.models import ExportBatch
+
+    rows = db.scalars(
+        select(ExportBatch)
+        .where(ExportBatch.firm_id == ctx.firm_id)
+        .order_by(ExportBatch.created_at.desc())
+        .limit(limit)
+    ).all()
+    return s.ExportBatchList(items=[_batch_view(b) for b in rows])
+
+
+@firm.get("/payouts/exports/{batch_id}.csv", responses={**NOT_FOUND, **CSV}, summary="Download an export batch (admin)")
+def download_export(batch_id: UUID, ctx: AdminDep, db: TenantDb) -> Response:
+    from recallops.models import ExportBatch
+
+    batch = db.scalars(
+        select(ExportBatch).where(ExportBatch.firm_id == ctx.firm_id, ExportBatch.id == batch_id)
+    ).first()
+    if batch is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "batch not found")
+    return Response(
+        bytes(batch.csv),
+        media_type="text/csv",
+        headers={"Content-Disposition": f'attachment; filename="{batch.id}.csv"', "Cache-Control": "no-store"},
+    )
 
 
 # Usage
@@ -299,19 +660,21 @@ def customer_portal(ctx: AdminDep) -> s.CheckoutSession:
 # Portal (token in path)
 
 
-def _portal_claim(token_ctx: Any) -> tuple[FirmContext, Claim]:
-    verifier = build_claim_verifier()
-    with Session(internal_engine()) as session:
-        row = session.execute(select(Claim.firm_id).where(Claim.id == token_ctx.claim_id)).first()
-    if row is None:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, "claim link not found or expired")
-    ctx = FirmContext(firm_id=row.firm_id, user_id="portal", role="reviewer")
-    with tenant_session(ctx) as session:
-        claim = ClaimsRepo(session, ctx).get(token_ctx.claim_id)
-        if claim is None or claim.token_hash != verifier.token_hash(f"dev.{token_ctx.claim_id}"):
-            raise HTTPException(status.HTTP_404_NOT_FOUND, "claim link not found or expired")
-        session.expunge(claim)
-    return ctx, claim
+def _portal(token: str, token_ctx: Any) -> tuple[FirmContext, UUID]:
+    """The verified token names the firm, so the portal opens that firm's tenant session directly (RLS); a token
+    whose firm does not hold the claim finds nothing and answers 404."""
+    return FirmContext(firm_id=token_ctx.firm_id, user_id="portal", role="reviewer"), token_ctx.claim_id
+
+
+def _portal_claim_in(session: Session, token: str, claim_id: UUID) -> portal_service.PortalClaim:
+    try:
+        return portal_service.resolve(session, build_claim_verifier(), token, claim_id)
+    except portal_service.LinkInvalid as exc:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "claim link not found or expired") from exc
+
+
+def _portal_view(session: Session, pc: portal_service.PortalClaim) -> s.PortalView:
+    return s.PortalView.model_validate(portal_service.view(session, pc))
 
 
 @portal.get(
@@ -321,79 +684,136 @@ def _portal_claim(token_ctx: Any) -> tuple[FirmContext, Claim]:
     summary="Program public info, required steps, status, pending question",
 )
 def portal_view(token: str, token_ctx: ClaimTokenDep) -> s.PortalView:
-    ctx, claim = _portal_claim(token_ctx)
+    ctx, claim_id = _portal(token, token_ctx)
     with tenant_session(ctx) as session:
-        p = ProgramsRepo(session, ctx).get(claim.program_id)
-        assert p is not None
-        recall = session.get(Recall, p.recall_id) if p.recall_id else None
-        remedy = RemedyRules.model_validate(p.remedy_rules or {})
-        ident = p.identification_rules or {}
-        required: list[Any] = ["label"]
-        if remedy.destruction_instruction or any("destruction_photo" in o.proof_required for o in remedy.options):
-            required.append("destruction")
-        if any("receipt" in o.proof_required for o in remedy.options):
-            required.append("receipt")
-        decision = claim.decision or {}
-        return s.PortalView(
-            claim_id=claim.id,
-            status=claim.status,
-            program=s.PortalProgram(
-                title=recall.title if recall else "Recall",
-                models=ident.get("models", []),
-                model_label_location=ident.get("model_label_location"),
-                remedy_type=remedy.remedy_type,
-                destruction_instruction=remedy.destruction_instruction,
-                required_photos=required,
-            ),
-            pending_question=decision.get("question_for_claimant"),
-            decision_reasons=decision.get("reasons", [])
-            if claim.status in ("approved", "denied", "needs_info")
-            else [],
-        )
+        return _portal_view(session, _portal_claim_in(session, token, claim_id))
 
 
 @portal.post(
-    "/{token}/submit", response_model=s.PortalView, responses={**NOT_FOUND, **LATER}, summary="Submit claim fields"
+    "/{token}/submit",
+    response_model=s.PortalView,
+    responses={**NOT_FOUND, 409: {"model": s.Problem}},
+    summary="Submit claim fields (idempotent: a second submission changes nothing)",
 )
 def portal_submit(token: str, body: s.PortalSubmit, token_ctx: ClaimTokenDep) -> s.PortalView:
-    raise NotYetImplemented("POST /portal/{token}/submit", "M2")
+    ctx, claim_id = _portal(token, token_ctx)
+    with tenant_session(ctx) as session:
+        pc = _portal_claim_in(session, token, claim_id)
+        portal_service.submit(session, pc, body.model_dump())
+        session.expire_all()
+        return _portal_view(session, _portal_claim_in(session, token, claim_id))
 
 
 @portal.post(
     "/{token}/photos",
     response_model=s.Photo,
-    responses={**NOT_FOUND, **LATER},
-    summary="Upload a photo (multipart); sha256 and pHash computed server-side",
+    responses={
+        **NOT_FOUND,
+        409: {"model": s.Problem},
+        422: {"model": s.Problem},
+        503: {"model": s.Problem, "description": "photo storage unavailable; nothing was saved"},
+    },
+    summary="Upload a photo (multipart, JPEG or PNG); sha256 and pHash computed server-side",
 )
 def portal_photo(
     token: str, token_ctx: ClaimTokenDep, kind: Annotated[str, Form()], file: Annotated[UploadFile, File()]
 ) -> s.Photo:
-    raise NotYetImplemented("POST /portal/{token}/photos", "M2")
+    ctx, claim_id = _portal(token, token_ctx)
+    settings = get_settings()
+    storage = photo_storage()
+    data = file.file.read(settings.max_photo_bytes + 1)
+    with tenant_session(ctx) as session:
+        pc = _portal_claim_in(session, token, claim_id)
+        try:
+            photo, replaced = portal_service.add_photo(
+                session,
+                pc,
+                storage,
+                kind,
+                file.content_type,
+                data,
+                settings.max_photo_bytes,
+                settings.max_photo_pixels,
+            )
+        except portal_service.NotEditable as exc:
+            raise HTTPException(status.HTTP_409_CONFLICT, str(exc)) from exc
+        except portal_service.PhotoRejected as exc:
+            raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(exc)) from exc
+        except StorageError as exc:  # nothing was stored, and the transaction rolls back: no row without its bytes
+            log_event(log, "portal_photo_store_failed", level=40, claim_id=str(claim_id), error=str(exc)[:300])
+            raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, PHOTO_STORAGE_DOWN) from exc
+        view = views.photo(photo)
+    for key in replaced:  # only after the commit: a failed commit keeps the old rows and their objects
+        try:
+            storage.delete(key)
+        except StorageError as exc:  # the upload is committed; a leftover object is unreferenced, not an error
+            log_event(log, "portal_photo_delete_failed", level=30, claim_id=str(claim_id), error=str(exc)[:300])
+    return view
 
 
 @portal.post(
-    "/{token}/answer", response_model=s.PortalView, responses={**NOT_FOUND, **LATER}, summary="Reply to needs_info"
+    "/{token}/answer",
+    response_model=s.PortalView,
+    responses={**NOT_FOUND, 409: {"model": s.Problem}},
+    summary="Reply to needs_info; the claim is adjudicated again",
 )
 def portal_answer(token: str, body: s.PortalAnswer, token_ctx: ClaimTokenDep) -> s.PortalView:
-    raise NotYetImplemented("POST /portal/{token}/answer", "M2")
+    ctx, claim_id = _portal(token, token_ctx)
+    with tenant_session(ctx) as session:
+        pc = _portal_claim_in(session, token, claim_id)
+        try:
+            portal_service.answer(session, pc, body.message)
+        except portal_service.NotEditable as exc:
+            raise HTTPException(status.HTTP_409_CONFLICT, str(exc)) from exc
+        session.expire_all()
+        return _portal_view(session, _portal_claim_in(session, token, claim_id))
 
 
 @portal.post(
     "/{token}/payout",
     response_model=s.PortalView,
-    responses={**NOT_FOUND, **LATER},
+    responses={**NOT_FOUND, **LATER, **CONFLICT},
     summary="Payout destination (Connect onboarding handoff is component 3)",
 )
 def portal_payout(token: str, body: s.PortalPayout, token_ctx: ClaimTokenDep) -> s.PortalView:
-    raise NotYetImplemented("POST /portal/{token}/payout", "M4", "backend owner with payments owner")
+    """The claimant picks how an approved refund is paid. check_export moves the payout to the export batch (the
+    ledger's fallback); stripe_connect onboarding is the payments owner's (component 3) and answers 501 until then."""
+    if body.method == "stripe_connect":
+        raise NotYetImplemented("Connect onboarding from the portal", "M4", "payments owner")
+    ctx, claim_id = _portal(token, token_ctx)
+    settings = get_settings()
+    secret = settings.graph_key_secret
+    raw = secret.get_secret_value() if hasattr(secret, "get_secret_value") else str(secret)
+    with tenant_session(ctx) as session:
+        pc = _portal_claim_in(session, token, claim_id)
+        try:
+            portal_service.choose_check_payout(session, pc, body.mailing_address, raw)
+        except portal_service.PayoutConflict as exc:
+            raise HTTPException(status.HTTP_409_CONFLICT, str(exc)) from exc
+    with tenant_session(ctx) as session:
+        return _portal_view(session, _portal_claim_in(session, token, claim_id))
 
 
 # Internal
 
 
-@internal.post("/feeds/pull", status_code=202, responses=LATER, summary="Nightly feed pull (shared secret header)")
-def feeds_pull() -> dict[str, str]:
-    raise NotYetImplemented("POST /internal/feeds/pull", "M2")
+@internal.post(
+    "/feeds/pull",
+    status_code=202,
+    responses={401: {"model": s.Problem}},
+    summary="Nightly feed pull (X-Internal-Secret header); pulls the CPSC windows since the last run",
+)
+def feeds_pull(x_internal_secret: Annotated[str | None, Header()] = None) -> dict[str, Any]:
+    import hmac
+
+    from recallops.ingest.runner import pull_since_last
+
+    settings = get_settings()
+    if not x_internal_secret or not hmac.compare_digest(x_internal_secret, settings.internal_shared_secret):
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "missing or wrong X-Internal-Secret")
+    if settings.app_env == "prod" and settings.internal_shared_secret == "internal-dev-only":
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, "the example internal secret is refused in prod")
+    return pull_since_last(app_engine(), settings)  # recalls and feed_runs are public tables (migration 0003)
 
 
 @internal.post("/stripe/webhook", responses=LATER, summary="Stripe webhook (component 3 replaces this stub)")
@@ -409,14 +829,47 @@ def healthz() -> s.Health:
     return s.Health(status="ok", database=True, worker_heartbeat_age_s=None)
 
 
-@health.get("/readyz", response_model=s.Health, responses={503: {"model": s.Health}})
+@health.get("/readyz", response_model=s.Health, responses={503: {"model": s.Problem}})
 def readyz() -> s.Health:
+    """Database reachable and a worker heartbeat younger than WORKER_HEARTBEAT_MAX_AGE_S (01-backend.md section 9)."""
     try:
-        with internal_engine().connect() as conn:
-            conn.execute(text("SELECT 1"))
-        ok = True
-    except Exception:  # noqa: BLE001 - readiness reports, never raises
-        ok = False
-    if not ok:
-        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, "database unreachable")
-    return s.Health(status="ok", database=True, worker_heartbeat_age_s=None)
+        with Session(app_engine()) as session:
+            seen = session.scalar(select(func.max(WorkerHeartbeat.seen_at)))
+            age = session.scalar(select(func.extract("epoch", func.now() - seen))) if seen else None
+    except Exception as exc:
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, "database unreachable") from exc
+    age_s = round(float(age), 1) if age is not None else None
+    if age_s is None or age_s > get_settings().worker_heartbeat_max_age_s:
+        raise HTTPException(
+            status.HTTP_503_SERVICE_UNAVAILABLE,
+            "no worker heartbeat" if age_s is None else f"worker heartbeat is {age_s} s old",
+        )
+    return s.Health(status="ok", database=True, worker_heartbeat_age_s=age_s, graph=_graph_status())
+
+
+_STORAGE: dict[str, Storage] = {}
+
+
+def photo_storage() -> Storage:
+    """One claim-photo storage per process (the Supabase client pools connections), built from settings."""
+    if "storage" not in _STORAGE:
+        _STORAGE["storage"] = build_storage(get_settings())
+    return _STORAGE["storage"]
+
+
+_GRAPH: dict[str, Any] = {}
+
+
+def graph_store() -> Any:
+    """One store per process (the driver pools connections); None when NEO4J_URI is empty."""
+    from recallops.fraud.graph import build_graph_store
+
+    if "store" not in _GRAPH:
+        _GRAPH["store"] = build_graph_store(get_settings())
+    return _GRAPH["store"]
+
+
+def _graph_status() -> Any:
+    from recallops.fraud.graph import graph_status
+
+    return graph_status(graph_store())

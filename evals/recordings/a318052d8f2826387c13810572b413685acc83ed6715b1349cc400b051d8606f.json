@@ -1,0 +1,64 @@
+{
+ "text": "The model is confirmed, but the serial is outside the recalled range, so the claim is denied.",
+ "usage": {
+  "input_tokens": 3578,
+  "output_tokens": 419,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB42M1muenQHQgFLboYg",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2038,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed, but the serial is outside the recalled range, so the claim is denied."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_019pBsvXQp9peFYuEF22m1Lg",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number QQ75936211 does not start with \"BN\", so it is outside the recalled serial ranges.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code June 2025 is within the recalled range (manufactured prior to July 2025), but that does not cure the serial mismatch.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (TEMU.com) within the sale window, and no duplicate claims were found, so these checks do not change the outcome.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

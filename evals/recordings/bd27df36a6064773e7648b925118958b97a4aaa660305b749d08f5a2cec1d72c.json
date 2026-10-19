@@ -1,0 +1,64 @@
+{
+ "text": "The label is legible and shows a recalled model, but the serial falls outside every recalled range, so I'm denying the claim.",
+ "usage": {
+  "input_tokens": 3959,
+  "output_tokens": 422,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3E8bsWdWx3NUNN1qJn",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2869,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows a recalled model, but the serial falls outside every recalled range, so I'm denying the claim."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Gk9MDUiTvEbrzw7mWjQz5V",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model FCRG3052BW, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number QQ13292281 is outside all recalled serial ranges, so the unit is not covered by the recall.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code October 2023 is within the recalled production range, and the Lowe's purchase on 2023-11-06 is inside the sale window, but these do not overcome the out-of-range serial.",
+      "cites": [
+       "R:date_codes",
+       "T5",
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

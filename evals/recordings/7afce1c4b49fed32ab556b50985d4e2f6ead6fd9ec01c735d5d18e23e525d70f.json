@@ -1,0 +1,29 @@
+{
+ "text": "The duplicate check found another claim sharing this claim's payout account, so the policy requires a flag. I'll also check the model, since the label reads KY-311A, which is not on the recalled list.",
+ "usage": {
+  "input_tokens": 3535,
+  "output_tokens": 114,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3T1NRPGPWJm4uexSZ8",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1870,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing this claim's payout account, so the policy requires a flag. I'll also check the model, since the label reads KY-311A, which is not on the recalled list."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01HkWBZ4ExDFgknGcwp2oaW2",
+   "name": "check_model",
+   "input": {
+    "model_text": "KY-311A"
+   }
+  }
+ ]
+}

@@ -1,0 +1,71 @@
+{
+ "text": "The model matches, the date code is in range, the purchase is valid, and there are no duplicates. The serial check was skipped both times and returned no verdict. The program's rules list no serial range, so the serial does not decide the outcome. The remedy is repair or replacement, so no destruction photo is required.",
+ "usage": {
+  "input_tokens": 3838,
+  "output_tokens": 568,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3d9g1CxTGEVqBozU8Q",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2849,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model matches, the date code is in range, the purchase is valid, and there are no duplicates. The serial check was skipped both times and returned no verdict. The program's rules list no serial range, so the serial does not decide the outcome. The remedy is repair or replacement, so no destruction photo is required."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01UfxP9V9psu4UoKEFpMWmiH",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model SE4570, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label's date code 07/22 is within the recalled date codes (07/22 NH or 08/22 NH).",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase was from Saf-Gard Safety Shoe Company, a listed retailer, on 2023-03-13, which is inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The serial check was skipped with no verdict, and the program rules set no serial range to test against, so it does not block approval. The remedy is repair or replacement, so no destruction photo is required. No refund is requested, so the value threshold does not apply.",
+      "cites": [
+       "T4",
+       "T7",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

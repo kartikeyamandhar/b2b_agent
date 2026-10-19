@@ -1,0 +1,47 @@
+{
+ "text": "Per the policy, I'll first run the independent checks in parallel: the label photo, the purchase check, duplicates, and the date code check against the typed value.",
+ "usage": {
+  "input_tokens": 2648,
+  "output_tokens": 182,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4A8WBbK9GuoyWTF2j9",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1480,
+ "content": [
+  {
+   "type": "text",
+   "text": "Per the policy, I'll first run the independent checks in parallel: the label photo, the purchase check, duplicates, and the date code check against the typed value."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01RYbP7nCQ9oFtkWiFfvbEbT",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Sw9xfrkoN7u7ShNYGwYfy1",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01VJJYmbgyPhAFLBtcVneiQC",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01VmhHrwong7oP6VDcdUWqXK",
+   "name": "check_date_code",
+   "input": {
+    "date_code": "06/22 NH"
+   }
+  }
+ ]
+}

@@ -1,0 +1,60 @@
+{
+ "text": "The label reads DT2E, which is not a recalled model (recalled are DR2A and DR2E). The typed model \"DT2E\" matches the label, so this isn't a typo in the label reading. Under the policy, a legible label showing a non-recalled model is a denial, regardless of the matching serial, date code, purchase, and no duplicates.",
+ "usage": {
+  "input_tokens": 3490,
+  "output_tokens": 507,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3yrcBQpYxr2wbbNV31",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2318,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label reads DT2E, which is not a recalled model (recalled are DR2A and DR2E). The typed model \"DT2E\" matches the label, so this isn't a typo in the label reading. Under the policy, a legible label showing a non-recalled model is a denial, regardless of the matching serial, date code, purchase, and no duplicates."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01EYb3FuEPNrpXn8rFTRB8Vp",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model DT2E, which is not one of the recalled models (DR2A, DR2E). Under the claim policy, a legible label showing a non-recalled model is denied.",
+      "cites": [
+       "R:policy",
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial J0D72580518 is within the recalled serial prefixes, and the 2017 date code is within the recalled model years, but these do not cure the model mismatch.",
+      "cites": [
+       "R:serials",
+       "R:date_codes",
+       "T4",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (Yamaha dealers) within the sale window, and no duplicate claims were found, so these checks do not change the outcome.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

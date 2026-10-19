@@ -1,0 +1,71 @@
+{
+ "text": "Checking the results: model MK04 matches (T1, T2). Serial \"BM2411A05582\" does not start with \"BN\" and is out of range (T3, R:serials). Date code 11/2024 is in range (T4). Purchase is inside the window at a listed retailer (T5). No duplicates (T7). Destruction photo not required (T6).\n\nPolicy order: flag (no), deny (serial out of range triggers deny under the serial rule, which applies to the typed serial as instructed), so the outcome is deny.",
+ "usage": {
+  "input_tokens": 2911,
+  "output_tokens": 623,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3AbyoGQJxUJHcKTStE",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2834,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results: model MK04 matches (T1, T2). Serial \"BM2411A05582\" does not start with \"BN\" and is out of range (T3, R:serials). Date code 11/2024 is in range (T4). Purchase is inside the window at a listed retailer (T5). No duplicates (T7). Destruction photo not required (T6).\n\nPolicy order: flag (no), deny (serial out of range triggers deny under the serial rule, which applies to the typed serial as instructed), so the outcome is deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01JqUxBq3NCfKYHGAHa1BQz6",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The serial number on the claim does not fall within the recalled range. Recalled serials start with \"BN\", but the claimed serial is \"BM2411A05582\".",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model, so the model requirement is met.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The date code 11/2024 is within the recalled range (manufactured prior to July 2025).",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase at Amazon.com on 2025-01-06 is inside the sale window at a listed retailer, and no receipt is required. Purchase is not the reason for denial.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T5"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, and no destruction photo is required for this remedy.",
+      "cites": [
+       "T7",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

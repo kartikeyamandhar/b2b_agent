@@ -1,0 +1,64 @@
+{
+ "text": "Applying the policy in order: flag takes precedence. T5 finds a same_photo match with another claim (ebc26ba7-...), so the claim must be flagged for person review regardless of the other checks passing.",
+ "usage": {
+  "input_tokens": 2754,
+  "output_tokens": 473,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeLaX6aFkLs679wfq4Q",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2716,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: flag takes precedence. T5 finds a same_photo match with another claim (ebc26ba7-...), so the claim must be flagged for person review regardless of the other checks passing."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01GZTs6z59nrYwYJUPU6NQ5X",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo shares a photo with another claim (ebc26ba7-a962-5bf6-aff2-3d7cd5d1945b), so this claim is flagged as a possible duplicate and sent to a person for review.",
+      "cites": [
+       "T5",
+       "R:policy",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows SM1979, a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The REI retailer is on the list and the purchase date of 2002-04-13 falls inside the sale window, with no receipt required for this check.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy (repair), so that check does not block the claim.",
+      "cites": [
+       "T4",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

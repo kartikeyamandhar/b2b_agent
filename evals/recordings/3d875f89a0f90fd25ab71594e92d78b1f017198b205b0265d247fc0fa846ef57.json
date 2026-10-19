@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": true, \"complies\": true, \"observed\": \"The photo shows a gray device with a black cord that appears cut or severed near the end, consistent with the plug having been cut off.\", \"confidence\": 0.7}",
+ "usage": {
+  "input_tokens": 1178,
+  "output_tokens": 71,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeB3DvFQFuU8HowkbAD",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 2718
+}

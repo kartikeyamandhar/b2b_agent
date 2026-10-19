@@ -1,0 +1,70 @@
+{
+ "text": "Checking the policy in order:\n\n- Flag: check_duplicates (T5) found no matching photo, address, email, serial, or payout account. Not triggered.\n- Model: label photo is legible and shows BB4640RE, a recalled model (T1, R:models). Confirmed.\n- Serial/date code: the program's rules here are model-based only and no serial or date code range is specified in R:models, so this does not apply.\n- Purchase: Amazon.com is listed, and 2024-03-09 falls inside the window 2023-04-01 to 2024-08-31 (T3, R:sold_at, R:sold_window). Receipt not required, and one was attached anyway.\n- Destruction: required by R:destruction. T4 reports the destruction photo does not clearly show the instructed destruction. The photo shows only one face with a cord visible, and the instruction calls for RECALLED on both the front and rear of the seatback. Per faq#3, a destruction photo that does not show the instructed destruction is asked for again. This triggers needs_info.\n\nRefund of $125.06 exceeds the $100 threshold, so a person reviews it after approval, but that does not change the outcome here.",
+ "usage": {
+  "input_tokens": 2903,
+  "output_tokens": 900,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "max_tokens",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeT84KFLoeiSW3Mbvt1",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4374,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy in order:\n\n- Flag: check_duplicates (T5) found no matching photo, address, email, serial, or payout account. Not triggered.\n- Model: label photo is legible and shows BB4640RE, a recalled model (T1, R:models). Confirmed.\n- Serial/date code: the program's rules here are model-based only and no serial or date code range is specified in R:models, so this does not apply.\n- Purchase: Amazon.com is listed, and 2024-03-09 falls inside the window 2023-04-01 to 2024-08-31 (T3, R:sold_at, R:sold_window). Receipt not required, and one was attached anyway.\n- Destruction: required by R:destruction. T4 reports the destruction photo does not clearly show the instructed destruction. The photo shows only one face with a cord visible, and the instruction calls for RECALLED on both the front and rear of the seatback. Per faq#3, a destruction photo that does not show the instructed destruction is asked for again. This triggers needs_info.\n\nRefund of $125.06 exceeds the $100 threshold, so a person reviews it after approval, but that does not change the outcome here."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_013PcdZ1rfBR9K95Gm7S8MWE",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model BB4640RE, which is on the recalled list, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Amazon.com is a listed retailer and the purchase date of 2024-03-09 is inside the sale window, so no receipt is required and purchase is not a problem.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the required destruction. The instruction is to write RECALLED in large letters on both the front and rear of the seatback, but only one face with a cord is visible.",
+      "cites": [
+       "T4",
+       "R:destruction",
+       "T6"
+      ]
+     },
+     {
+      "text": "Per program guidance, a destruction photo that does not show the instructed destruction is asked for again rather than denied.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

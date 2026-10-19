@@ -1,0 +1,68 @@
+{
+ "text": "The model is confirmed. Because the destruction photo does not clearly show the required marking, the claim needs more information from the claimant.",
+ "usage": {
+  "input_tokens": 3701,
+  "output_tokens": 553,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3fYXEnYxFD59bukNL7",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3061,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed. Because the destruction photo does not clearly show the required marking, the claim needs more information from the claimant."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01K1S13aPxaLqjc9GN89YCYU",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model AD10025GR, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase at Amazon.com on 2023-08-12 is inside the sale window and from a listed retailer; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the required marking: 'RECALLED' written in marker on the front and rear of the seatback. The rear is not visible and it is unclear the photo shows a seatback.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "The refund of $119.99 is over the $100 threshold, so a person will review it after the destruction proof is resolved.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new destruction photo that clearly shows the seat with 'RECALLED' written in large marker letters on both the front and the rear of the seatback. The rear of the seatback must be visible in the photo.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

@@ -1,0 +1,63 @@
+{
+ "text": "The legible label shows 200LQ, which is not a recalled model (the recalled model is 200LX). The serial falls in range, but the model rule controls, so the claim is denied.",
+ "usage": {
+  "input_tokens": 3441,
+  "output_tokens": 433,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3YUJHtw2XSzKhnWkeQ",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2054,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows 200LQ, which is not a recalled model (the recalled model is 200LX). The serial falls in range, but the model rule controls, so the claim is denied."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_018xwesJtgipmJaELxkMnDQM",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 200LQ, which is not a recalled model. The recalled model is 200LX.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The typed model 200LQ matches the label reading and is not on the recall list, so the model requirement is not met.",
+      "cites": [
+       "R:models",
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial LX003221 is within the recalled range, but that does not cure the model mismatch.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase date of 2021-07-20 is inside the sale window, and no duplicate claims were found, but neither of these satisfies the model requirement.",
+      "cites": [
+       "R:sold_window",
+       "T2",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

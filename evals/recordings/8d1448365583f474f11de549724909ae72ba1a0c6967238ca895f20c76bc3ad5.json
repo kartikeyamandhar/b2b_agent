@@ -1,0 +1,63 @@
+{
+ "text": "Let me work through the policy against the results.\n\n- Flag check: T5 found no duplicates. No flag.\n- Model: T1 reads the label legibly as \"2421\", which is not the recalled model 9421. T2 confirms a mismatch. Per policy, a legible label showing a non-recalled model means deny. The typed model \"2421\" matches the label reading, not the recalled model, so the typed value doesn't rescue the claim.\n- Serial/date code: no serial rule applies for this program per the rules provided, so nothing further.\n- Purchase: T3 shows a listed retailer within the window, so purchase is fine.\n- Destruction: not required (T4).\n\nThe model rule triggers denial, and denial takes precedence over the other clean results.",
+ "usage": {
+  "input_tokens": 2722,
+  "output_tokens": 613,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeP1P7eWQQ62wMVfF6B",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 6040,
+ "content": [
+  {
+   "type": "text",
+   "text": "Let me work through the policy against the results.\n\n- Flag check: T5 found no duplicates. No flag.\n- Model: T1 reads the label legibly as \"2421\", which is not the recalled model 9421. T2 confirms a mismatch. Per policy, a legible label showing a non-recalled model means deny. The typed model \"2421\" matches the label reading, not the recalled model, so the typed value doesn't rescue the claim.\n- Serial/date code: no serial rule applies for this program per the rules provided, so nothing further.\n- Purchase: T3 shows a listed retailer within the window, so purchase is fine.\n- Destruction: not required (T4).\n\nThe model rule triggers denial, and denial takes precedence over the other clean results."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_012iBWJPQUudModBjdq3om8y",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and reads model 2421, which is not a recalled model. The recalled model is 9421, so this unit is not part of the recall.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The typed model 2421 also does not match the recalled model 9421, so the claimant's entry cannot override the label reading.",
+      "cites": [
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so no review flag applies.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The retailer is on the list and the purchase date falls inside the sale window, so purchase eligibility is not the reason for denial.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

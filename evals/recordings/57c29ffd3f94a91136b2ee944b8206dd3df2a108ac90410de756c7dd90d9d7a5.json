@@ -1,0 +1,63 @@
+{
+ "text": "The label is legible and shows recalled model B0726Y, the purchase is inside the window at a listed retailer with no receipt required, and there are no duplicates. The date code is in range. However, the destruction photo does not show a helmet with cut straps, so it does not meet R:destruction and needs a new photo. The serial check was skipped because the program has no serial rule, so it isn't relevant.",
+ "usage": {
+  "input_tokens": 3521,
+  "output_tokens": 553,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB43wZCBMXqmmGUaZTZd",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2765,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows recalled model B0726Y, the purchase is inside the window at a listed retailer with no receipt required, and there are no duplicates. The date code is in range. However, the destruction photo does not show a helmet with cut straps, so it does not meet R:destruction and needs a new photo. The serial check was skipped because the program has no serial rule, so it isn't relevant."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_015A32dCRhF2qqViXPdNYu4F",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows recalled model B0726Y, with date code 8/21 that falls within the recalled range.",
+      "cites": [
+       "T1",
+       "R:models",
+       "R:date_codes",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase at Walmart on 2021-12-22 is inside the sale window and at a listed retailer; no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo shows an abstract graphic, not a helmet with cut straps, so it does not meet the required destruction.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo showing the helmet itself with the straps cut off, as the recall requires. The photo you sent shows an unrelated graphic instead.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

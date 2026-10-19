@@ -1,0 +1,64 @@
+{
+ "text": "Checks: model SE4570 confirmed by legible label (T1, T2). Date code 08/23 is outside the recalled range 07/22 or 08/22 NH (T3), so the claim is denied under the serial/date code rule. No duplicates (T6), retailer listed and within window (T4), no destruction photo required (T5). Flag does not apply, so deny applies first.",
+ "usage": {
+  "input_tokens": 2786,
+  "output_tokens": 542,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeFY8qAgCwFL2v4Kgqr",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 8374,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checks: model SE4570 confirmed by legible label (T1, T2). Date code 08/23 is outside the recalled range 07/22 or 08/22 NH (T3), so the claim is denied under the serial/date code rule. No duplicates (T6), retailer listed and within window (T4), no destruction photo required (T5). Flag does not apply, so deny applies first."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01NjtiXqginhBEozYuH72f9B",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code on the label is 08/23, which is outside the recalled date codes of 07/22 NH and 08/22 NH. A date code outside the recalled range means the unit is not part of this recall.",
+      "cites": [
+       "R:date_codes",
+       "R:policy",
+       "T1",
+       "T3"
+      ]
+     },
+     {
+      "text": "The purchase at www.justinboots.com on 2023-05-06 is a listed retailer and inside the sale window, so purchase rules do not change the outcome.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account, so no duplicate flag applies.",
+      "cites": [
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

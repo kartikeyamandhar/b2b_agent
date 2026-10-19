@@ -1,0 +1,65 @@
+{
+ "text": "I'll resubmit with the missing fields, `question_for_claimant` and `confidence`.",
+ "usage": {
+  "input_tokens": 3870,
+  "output_tokens": 552,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB37pfDBxEW8pVeN4Eot",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2335,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll resubmit with the missing fields, `question_for_claimant` and `confidence`."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0148Fbz5F9wwAx79MNAUXYbX",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The typed model AD10025BE is on the recalled list and matches, so the model is accepted from the typed value because the label photo is unreadable.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase was at Amazon.com, a listed retailer, on 2024-08-31, which is inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account, so there is no flag.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the instructed destruction (RECALLED marked on the front and rear of the seatback); the check did not confirm compliance. A destruction photo that does not show the instructed destruction is asked for again.",
+      "cites": [
+       "R:destruction",
+       "T4",
+       "T6",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a clearer photo of the destroyed seat showing \"RECALLED\" written in large letters on both the front and the rear of the seatback. If possible, also send a clearer photo of the sewn-in label on the top cover of the seat so we can read the model number.",
+    "confidence": 0.7
+   }
+  }
+ ]
+}

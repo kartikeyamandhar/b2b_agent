@@ -1,0 +1,61 @@
+{
+ "text": "Applying the policy in order: flag takes precedence. check_duplicates (T7) found a same_photo match with another claim, so the outcome is flag regardless of the other checks (serial is out of range per T3, which would otherwise be a deny).",
+ "usage": {
+  "input_tokens": 3064,
+  "output_tokens": 502,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeN8yFdFrSkZQXCFTHq",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2979,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: flag takes precedence. check_duplicates (T7) found a same_photo match with another claim, so the outcome is flag regardless of the other checks (serial is out of range per T3, which would otherwise be a deny)."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01BMx6rmu8LHTGLFJJiRYgkB",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo is shared with another claim (6ad40725-9ac1-54ac-bd07-7bd91e6ec19e), so this claim must go to a person for duplicate review.",
+      "cites": [
+       "T7",
+       "R:policy",
+       "T8"
+      ]
+     },
+     {
+      "text": "For context, the label is legible and shows REV 12 Kids Bike, a recalled model, and the date code 2022 is in range, and the REI.com purchase on 2024-05-06 is inside the sale window.",
+      "cites": [
+       "T1",
+       "T2",
+       "T4",
+       "T5",
+       "R:models",
+       "R:date_codes",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The serial QQ52456269 does not begin with ET22, ET23, 01VX or 07VX, so it is outside the recalled serial ranges; a reviewer should confirm this before any remedy.",
+      "cites": [
+       "T3",
+       "R:serials"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

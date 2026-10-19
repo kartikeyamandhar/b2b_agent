@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": true, \"complies\": false, \"observed\": \"The photo shows a maroon rectangular object with a thin tan line down the middle and a black cord or strap trailing off the right edge, with no visible cut or cut-off straps and no clear helmet shape.\", \"confidence\": 0.55}",
+ "usage": {
+  "input_tokens": 1187,
+  "output_tokens": 97,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeC6xAuTifk1BPsqEjV",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 1449
+}

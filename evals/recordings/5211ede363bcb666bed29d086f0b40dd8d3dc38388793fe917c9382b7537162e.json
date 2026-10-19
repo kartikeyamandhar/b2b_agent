@@ -1,0 +1,71 @@
+{
+ "text": "Checking the policy order: flag first. T6 shows a same_serial duplicate with another claim, so flag applies and overrides the other outcomes.",
+ "usage": {
+  "input_tokens": 2987,
+  "output_tokens": 534,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeHZtoN7TLnifisZ2b9",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2664,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy order: flag first. T6 shows a same_serial duplicate with another claim, so flag applies and overrides the other outcomes."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01VF5mWNVri97YitEWicZ6Ya",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The serial number SN90206042 matches another claim (ee711bb5-a1fe-5f3b-a296-40991bd1cd5d). Duplicate or suspicious claims sharing a serial number must go to a person for review.",
+      "cites": [
+       "T6",
+       "R:policy",
+       "T7"
+      ]
+     },
+     {
+      "text": "Model is confirmed: the label photo is legible and shows B0726Y, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "Date code 8/21 is within the recalled range (August 2021 or earlier).",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Purchase on 2020-09-08 from www.Amazon.com is inside the sale window and from a listed retailer; no receipt required.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the helmet with straps cut off, so it would otherwise need a new photo; this is noted for the reviewer.",
+      "cites": [
+       "T5",
+       "R:destruction"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,63 @@
+{
+ "text": "The label is legible and shows PA-10, a recalled model. The purchase date of 2020-05-16 falls before the sale window (2021-06-01 to 2023-11-30), which the policy says is a denial. No duplicates were found. The serial check returned \"skipped,\" so I'll rely on the purchase denial and the confirmed model.",
+ "usage": {
+  "input_tokens": 3360,
+  "output_tokens": 504,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3n7Z1h3T1CeRfZKA4a",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2417,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows PA-10, a recalled model. The purchase date of 2020-05-16 falls before the sale window (2021-06-01 to 2023-11-30), which the policy says is a denial. No duplicates were found. The serial check returned \"skipped,\" so I'll rely on the purchase denial and the confirmed model."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_011JhBHX98UzSgGEsUU5vZZz",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PA-10, a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2020-05-16 is before the program's sale window of 2021-06-01 to 2023-11-30, so the purchase is outside the eligible window.",
+      "cites": [
+       "T2",
+       "R:sold_window",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The retailer Sweetwater Sound is on the list, and the date code 2126 is within the recalled range, but these do not overcome the purchase-date denial.",
+      "cites": [
+       "T2",
+       "T5",
+       "R:sold_at",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

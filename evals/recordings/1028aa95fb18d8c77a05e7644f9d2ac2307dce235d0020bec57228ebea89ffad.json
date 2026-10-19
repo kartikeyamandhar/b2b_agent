@@ -1,0 +1,68 @@
+{
+ "text": "The duplicate check found another claim at the same address, which triggers a flag and overrides the other outcomes. The serial check was skipped, but the flag already settles the outcome.",
+ "usage": {
+  "input_tokens": 3683,
+  "output_tokens": 505,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3RAdUfvBBXFu6fUDXZ",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2526,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim at the same address, which triggers a flag and overrides the other outcomes. The serial check was skipped, but the flag already settles the outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01AmjYyuDfLtUFzjJgarxBsi",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program shares this claimant's address, so the claim is flagged for duplicate review before any payout.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows AD10025GR, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The retailer is Amazon.com and the purchase date of 2024-06-16 falls inside the sale window, so the purchase qualifies.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the required marker writing of RECALLED on both the front and rear of the seatback, so it would need more evidence if the claim is cleared.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The refund of $168.44 is over the $100 threshold, so a person must review it in any case.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

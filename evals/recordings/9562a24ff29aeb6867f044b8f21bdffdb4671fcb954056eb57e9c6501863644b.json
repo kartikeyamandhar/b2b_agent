@@ -1,0 +1,59 @@
+{
+ "text": "The label confirms model SE4570, which is recalled. The purchase is at a listed retailer within the sale window, and there are no duplicates. However, the label's date code is 06/22 NH, and the policy states that only 07/22 NH and 08/22 NH are recalled. A date code outside them is not part of the recall, so this unit is denied.",
+ "usage": {
+  "input_tokens": 4317,
+  "output_tokens": 469,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3f9UR1xiKeoCJBxPmK",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2485,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label confirms model SE4570, which is recalled. The purchase is at a listed retailer within the sale window, and there are no duplicates. However, the label's date code is 06/22 NH, and the policy states that only 07/22 NH and 08/22 NH are recalled. A date code outside them is not part of the recall, so this unit is denied."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017GCfngrFuNJfrcRnG12wbD",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The label's date code is 06/22 NH. The recalled date codes are only 07/22 NH and 08/22 NH, so this unit is outside the recall.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T4",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (Grainger) inside the sale window, and no duplicate claims were found, but these do not make an unrecalled date code eligible.",
+      "cites": [
+       "T2",
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

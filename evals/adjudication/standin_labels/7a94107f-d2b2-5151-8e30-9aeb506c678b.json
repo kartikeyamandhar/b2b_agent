@@ -1,0 +1,10 @@
+{
+ "claim_id": "7a94107f-d2b2-5151-8e30-9aeb506c678b",
+ "spec_id": "S02",
+ "program": "26007",
+ "category": "expect_approve",
+ "expected_outcome": "approve",
+ "rationale": "KY-318A is the notice's own alternate designation for recalled model 96775 and the label confirms it, the January 9, 2016 purchase falls inside the window that starts January 2016, a 2015 date code does not matter because 26007 has no date-code range, and 26007 requires no receipt, so the claim is clean: approve.",
+ "violations": [],
+ "subtypes": {}
+}

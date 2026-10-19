@@ -1,0 +1,67 @@
+{
+ "text": "The label is legible and shows recalled model 2G505. The serial check returned \"skipped\" with no cited rule, so the serial is not a tested rule here. Duplicates are clear, the retailer and date are in the window, and the destruction photo complies. I'll record the approval.",
+ "usage": {
+  "input_tokens": 3406,
+  "output_tokens": 493,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB475DA7ZqTRsBrAzBsP",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2475,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows recalled model 2G505. The serial check returned \"skipped\" with no cited rule, so the serial is not a tested rule here. Duplicates are clear, the retailer and date are in the window, and the destruction photo complies. I'll record the approval."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_019KR1nkqYddviiZW6fvvxeq",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2G505, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The purchase was from Esrtech.com, a listed retailer, on 2024-05-12, which is inside the sale window; no receipt is required for this claim.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the product with the word RECALLED written on it, as the recall instructs.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The refund of $32.15 is below the $100.00 review threshold, so no person review is needed.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

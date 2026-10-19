@@ -1,0 +1,70 @@
+{
+ "text": "Let me work through the policy.\n\n- Duplicates (T5): no hits, so no flag.\n- Model: label legible (T1) showing 2G512B, a recalled model (R:models). Confirmed.\n- Serial/date code: the program has no serial or date code rules per the policy as written here, so no serial deny applies.\n- Purchase: Amazon.com is listed (T3), date 2024-04-15 is inside the window, no receipt required (T3).\n- Destruction: required with \"Recalled\" written in permanent marker (R:destruction). T4 reports the word appears to be printed or on-screen rather than hand-written, with complies false at 0.6 confidence. The policy says a destruction photo that does not show the instructed destruction is needs_info. The photo shows the device, but the \"Recalled\" word does not appear to be hand-written in permanent marker, so the instructed destruction is not clearly shown. This triggers needs_info, asking for a clearer photo of the marker-written destruction.\n- Refund $49.91, under the $100 threshold.\n\nNo flag or deny rule applies, so the outcome is needs_info for the destruction photo.",
+ "usage": {
+  "input_tokens": 2817,
+  "output_tokens": 900,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "max_tokens",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB396E7xxR4nBNmhH12x",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4562,
+ "content": [
+  {
+   "type": "text",
+   "text": "Let me work through the policy.\n\n- Duplicates (T5): no hits, so no flag.\n- Model: label legible (T1) showing 2G512B, a recalled model (R:models). Confirmed.\n- Serial/date code: the program has no serial or date code rules per the policy as written here, so no serial deny applies.\n- Purchase: Amazon.com is listed (T3), date 2024-04-15 is inside the window, no receipt required (T3).\n- Destruction: required with \"Recalled\" written in permanent marker (R:destruction). T4 reports the word appears to be printed or on-screen rather than hand-written, with complies false at 0.6 confidence. The policy says a destruction photo that does not show the instructed destruction is needs_info. The photo shows the device, but the \"Recalled\" word does not appear to be hand-written in permanent marker, so the instructed destruction is not clearly shown. This triggers needs_info, asking for a clearer photo of the marker-written destruction.\n- Refund $49.91, under the $100 threshold.\n\nNo flag or deny rule applies, so the outcome is needs_info for the destruction photo."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01AX76k6TzXdRpAMQ2Kv7V4G",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2G512B, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Amazon.com is a listed retailer and the purchase date of 2024-04-15 falls inside the sale window. No receipt is required.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this claim.",
+      "cites": [
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the instructed destruction. The word 'Recalled' appears to be printed or on-screen rather than written in permanent marker, so the photo must be requested again.",
+      "cites": [
+       "T4",
+       "R:destruction",
+       "T6"
+      ]
+     },
+     {
+      "text": "The requested refund of $49.91 is under the $100 review threshold, so no person review is triggered by value.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo of the product after it has been destroyed, showing the word \"Recalled\" written by hand on the unit in permanent marker. The current photo appears to show the word printed or on a screen rather than hand-written."
+   }
+  }
+ ]
+}

@@ -1,0 +1,10 @@
+{
+ "claim_id": "19fe806a-3d79-56cb-8d99-d73af10bc561",
+ "spec_id": "S08",
+ "program": "26007",
+ "category": "expect_needs_info",
+ "expected_outcome": "needs_info",
+ "rationale": "The label photo is unreadable, so the model number and date code that the 26007 remedy asks to be photographed cannot be confirmed, and photo_rules.label_unreadable gives needs_info.",
+ "violations": [],
+ "subtypes": {}
+}

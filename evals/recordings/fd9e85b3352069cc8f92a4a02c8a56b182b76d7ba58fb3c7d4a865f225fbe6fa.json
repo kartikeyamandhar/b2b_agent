@@ -1,0 +1,15 @@
+{
+ "text": "{\"legible\": true, \"model_text\": \"MODEL 34785\", \"serial_text\": \"SER SN12296843\", \"date_code_text\": \"DATE December 2023\", \"confidence\": 0.96}",
+ "usage": {
+  "input_tokens": 1372,
+  "output_tokens": 63,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAe9gaRQzQn6dkVwjtjf",
+ "purpose": "read_label_photo",
+ "max_tokens": 400,
+ "latency_ms": 955
+}

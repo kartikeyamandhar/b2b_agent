@@ -1,0 +1,69 @@
+{
+ "text": "The label reads as a recalled model, and the date code on the label (08/22) matches a recalled code. The retailer, justinboots.com, is listed, and the purchase date falls inside the sale window. No duplicate claims were found, and the program does not require a receipt for this purchase. The refund is repair or replacement, so no value threshold applies. The serial and destruction rules do not apply to this program. I'll record an approval.",
+ "usage": {
+  "input_tokens": 3584,
+  "output_tokens": 596,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3evouHQ5biu5Wvfs69",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2670,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label reads as a recalled model, and the date code on the label (08/22) matches a recalled code. The retailer, justinboots.com, is listed, and the purchase date falls inside the sale window. No duplicate claims were found, and the program does not require a receipt for this purchase. The refund is repair or replacement, so no value threshold applies. The serial and destruction rules do not apply to this program. I'll record an approval."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01GwB2LFLyoy3nQaPgnBwHHP",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The date code on the label reads 08/22, which matches the recalled date code 08/22 NH. The typed value '08/22 NH' was not parsed by the date code checker, but the label reading confirms it.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase was from justinboots.com, which is on the sold-at list, and the purchase date of 2023-09-30 is inside the sale window of 2022-09-01 to 2023-09-30. A receipt is not required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The remedy is repair or replacement, so the refund value threshold does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

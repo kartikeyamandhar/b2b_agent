@@ -1,0 +1,76 @@
+{
+ "text": "The label is legible and shows the recalled model LXT-CL-1.0, the date code 0722 is in range, and the purchase is inside the window. The serial check was skipped because the program has no serial rule. The retailer is Nordstrom, which is on the sold-at list, so the purchase is in range. Duplicates are none, and the destruction photo complies. The remedy is repair or replacement with no refund, so the value threshold does not apply. Everything supports approval.\n\nNote: the \"receipt\" photo is not required for this retailer per T2, and the check did not flag a problem with it.",
+ "usage": {
+  "input_tokens": 3712,
+  "output_tokens": 673,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3WJCGw3Z1yBwaMUYJL",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 4040,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows the recalled model LXT-CL-1.0, the date code 0722 is in range, and the purchase is inside the window. The serial check was skipped because the program has no serial rule. The retailer is Nordstrom, which is on the sold-at list, so the purchase is in range. Duplicates are none, and the destruction photo complies. The remedy is repair or replacement with no refund, so the value threshold does not apply. Everything supports approval.\n\nNote: the \"receipt\" photo is not required for this retailer per T2, and the check did not flag a problem with it."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_012JniS9kFkoxW3JgQjehSPa",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows recalled model LXT-CL-1.0, matching the typed model.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The label date code 0722 is inside the recalled date code range 0722 to 1223.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase at Nordstrom on 2022-11-04 is on the sold-at list and inside the sale window; no receipt is required for this retailer.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the cord cut through, as the recall instructs.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The serial rule does not apply to this program, so no serial check was needed. The remedy is repair or replacement with no refund requested, so the value threshold does not apply.",
+      "cites": [
+       "T5",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

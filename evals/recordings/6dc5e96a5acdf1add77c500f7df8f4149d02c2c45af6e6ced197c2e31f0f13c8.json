@@ -1,0 +1,69 @@
+{
+ "text": "Checking the claim against the policy:\n\n- Model: label photo is legible and shows PA-10, a recalled model. Confirmed (T1, T2, R:models).\n- Date code: 2126 is within the recalled range 2126\u20132319 (T3, R:date_codes).\n- Serial: no serial rule in the program, so not applicable.\n- Purchase: 2020-05-16 is before the sale window (2021-06-01 to 2023-11-30). Per policy, a purchase before the window is deny (T4, R:sold_window, R:policy), even though the retailer is listed.\n- Destruction photo: not required for this remedy (T5).\n- Duplicates: none found (T6), so flag does not apply.\n\nFlag does not trigger, and deny takes precedence over needs_info and approve. The purchase predates the window, so the claim is denied.",
+ "usage": {
+  "input_tokens": 2840,
+  "output_tokens": 699,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeKMtnX4At93aC8C65g",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3739,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the claim against the policy:\n\n- Model: label photo is legible and shows PA-10, a recalled model. Confirmed (T1, T2, R:models).\n- Date code: 2126 is within the recalled range 2126\u20132319 (T3, R:date_codes).\n- Serial: no serial rule in the program, so not applicable.\n- Purchase: 2020-05-16 is before the sale window (2021-06-01 to 2023-11-30). Per policy, a purchase before the window is deny (T4, R:sold_window, R:policy), even though the retailer is listed.\n- Destruction photo: not required for this remedy (T5).\n- Duplicates: none found (T6), so flag does not apply.\n\nFlag does not trigger, and deny takes precedence over needs_info and approve. The purchase predates the window, so the claim is denied."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01LWJAk5NGm4sxUr7TbH1N5b",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PA-10, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The date code 2126 falls within the recalled range of 2126 to 2319.",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase date of 2020-05-16 is before the sale window of 2021-06-01 to 2023-11-30. A purchase before the window is not eligible, even though the retailer (Sweetwater Sound) is on the list.",
+      "cites": [
+       "T4",
+       "R:sold_window",
+       "R:sold_at",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not sent for review.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for a repair or replacement remedy.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

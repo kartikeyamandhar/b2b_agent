@@ -1,0 +1,61 @@
+{
+ "text": "The duplicate check found another claim that shares the same label photo, which triggers a flag regardless of the other results. The serial check was skipped by the tool, but the flag already settles the outcome.",
+ "usage": {
+  "input_tokens": 3378,
+  "output_tokens": 450,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3K5v3EktK7pz12CiWf",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2279,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim that shares the same label photo, which triggers a flag regardless of the other results. The serial check was skipped by the tool, but the flag already settles the outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01CycwsFk4RpZh3sCPaiXNr2",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo on this claim is identical (same SHA-256) to the label photo on another existing claim, so the claim is flagged for review as a possible duplicate.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The label is legible and shows model TD3318B, which is a recalled model, so the model itself is confirmed.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The retailer Designbydelta.com is on the list and the purchase date of 2004-05-22 is inside the sale window, and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial check was skipped by the tool, so no serial verdict was recorded; this does not change the flag outcome.",
+      "cites": [
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

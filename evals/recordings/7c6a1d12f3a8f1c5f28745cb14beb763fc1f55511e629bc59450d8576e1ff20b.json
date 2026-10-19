@@ -1,0 +1,80 @@
+{
+ "text": "Applying the policy: check_duplicates (T7) found a same_serial match with another claim, so the flag rule takes precedence over all other outcomes.\n\nNote the discrepancy: the typed serial is J2D45572794, but the label photo reads J0D14638083. Both begin with recalled prefixes, so the serial check passes either way. The shared serial with another claim is what triggers the flag.",
+ "usage": {
+  "input_tokens": 2948,
+  "output_tokens": 654,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB34rKLaizvLdHEtuQY6",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3120,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy: check_duplicates (T7) found a same_serial match with another claim, so the flag rule takes precedence over all other outcomes.\n\nNote the discrepancy: the typed serial is J2D45572794, but the label photo reads J0D14638083. Both begin with recalled prefixes, so the serial check passes either way. The shared serial with another claim is what triggers the flag."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01KmriD8wR8Mf7asqG6XC7Vo",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim sharing the same serial number, so the claim must go to a person for review together with the matching claim.",
+      "cites": [
+       "T7",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model DR2E, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number is in the recalled range (J0D/J2D prefix) and the date code 2017 is within the recalled model years.",
+      "cites": [
+       "T3",
+       "T4",
+       "T1",
+       "R:serials",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase at a listed Yamaha dealer on 2022-12-15 falls inside the sale window, and no receipt is required for this claim.",
+      "cites": [
+       "T5",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The typed serial (J2D45572794) differs from the serial read on the label (J0D14638083); both are in the recalled range, but the reviewer should confirm which is correct.",
+      "cites": [
+       "T1",
+       "T3",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for the repair or replacement remedy.",
+      "cites": [
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

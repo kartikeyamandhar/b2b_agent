@@ -1,0 +1,29 @@
+{
+ "text": "The duplicate check found another claim sharing this serial number, which triggers a flag under the policy. I'll still confirm the model against the label before recording the decision.",
+ "usage": {
+  "input_tokens": 3410,
+  "output_tokens": 102,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3yufjBbRCNrKgGMNDY",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 891,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing this serial number, which triggers a flag under the policy. I'll still confirm the model against the label before recording the decision."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0121XgfxsVsigmvENUBsioCw",
+   "name": "check_model",
+   "input": {
+    "model_text": "DR2E"
+   }
+  }
+ ]
+}

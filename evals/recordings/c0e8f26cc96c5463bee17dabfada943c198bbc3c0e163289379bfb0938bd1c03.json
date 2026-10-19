@@ -1,0 +1,70 @@
+{
+ "text": "The destruction photo does not show the required \"RECALLED\" marking on both the front and rear of the seatback, and the policy says such a photo is asked for again. Serial and date code checks were skipped, and the date code is not required by the rules, so they don't affect the outcome. The model is confirmed, the retailer and window are fine, there are no duplicates, and the refund is under the $100 threshold.",
+ "usage": {
+  "input_tokens": 5275,
+  "output_tokens": 640,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4CHfeX4FGyfUGw8KzP",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3164,
+ "content": [
+  {
+   "type": "text",
+   "text": "The destruction photo does not show the required \"RECALLED\" marking on both the front and rear of the seatback, and the policy says such a photo is asked for again. Serial and date code checks were skipped, and the date code is not required by the rules, so they don't affect the outcome. The model is confirmed, the retailer and window are fine, there are no duplicates, and the refund is under the $100 threshold."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01W4iAXcG4siRKpfNKhDq65K",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model BB4640CF, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase was from Amazon.com, a listed retailer, on 2023-10-30, which is inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the instructed destruction. It shows the word RECALLED on one face only, and the rear of the seatback is not visible. The program asks for a new destruction photo in this case.",
+      "cites": [
+       "R:destruction",
+       "T4",
+       "T8"
+      ]
+     },
+     {
+      "text": "The serial check was skipped by the tool, so no serial finding is made. The rules do not require a date code, so none is needed.",
+      "cites": [
+       "T5",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo of the seat with \"RECALLED\" written in large letters on both the front and the rear of the seatback, using a marker, so the destruction can be confirmed.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

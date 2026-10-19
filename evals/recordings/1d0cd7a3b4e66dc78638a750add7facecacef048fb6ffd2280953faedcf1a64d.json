@@ -1,0 +1,77 @@
+{
+ "text": "Every check passes: the label is legible and matches a recalled model, the serial and date code are in range, the purchase is from a listed retailer within the window, and there are no duplicate claims. The remedy is repair or replacement, so no destruction photo is required and no refund exceeds the threshold.",
+ "usage": {
+  "input_tokens": 3747,
+  "output_tokens": 600,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3LfioQfPRWGAZJK4q6",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2451,
+ "content": [
+  {
+   "type": "text",
+   "text": "Every check passes: the label is legible and matches a recalled model, the serial and date code are in range, the purchase is from a listed retailer within the window, and there are no duplicate claims. The remedy is repair or replacement, so no destruction photo is required and no refund exceeds the threshold."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QqtsQ1RzF4ReeAVUd5oKij",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows the recalled model REV 12 Kids Bike, so the model is confirmed despite the typed model matching.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number ET224938413 begins with ET22, which is within the recalled serial ranges.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code 2022 is within the recalled model years 2022-2024.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase was from REI.com, a listed retailer, on 2024-02-25, which is inside the sale window 2022-03-01 to 2024-05-31. No receipt is required for this retailer.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The claimant requested repair or replacement, so no destruction photo is needed and the value threshold does not apply.",
+      "cites": [
+       "R:policy",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

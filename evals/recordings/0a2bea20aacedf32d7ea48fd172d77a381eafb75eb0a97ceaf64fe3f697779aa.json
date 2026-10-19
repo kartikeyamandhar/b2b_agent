@@ -1,0 +1,72 @@
+{
+ "text": "Checking the results: model confirmed (T1, T2). Date code 1224 is outside the recalled range 0722\u20131223 (T3), so the policy says deny. Duplicates: none (T6). Flag doesn't apply. Deny takes precedence over needs_info and approve.\n\nRetailer Nordstrom is on the list (R:sold_at, T4 lists it as listed in the window). Destruction photo complies (T5), though confidence is moderate, but the deny outcome stands regardless.",
+ "usage": {
+  "input_tokens": 2911,
+  "output_tokens": 631,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB35XzoWb14SvSJUYiqX",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3120,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results: model confirmed (T1, T2). Date code 1224 is outside the recalled range 0722\u20131223 (T3), so the policy says deny. Duplicates: none (T6). Flag doesn't apply. Deny takes precedence over needs_info and approve.\n\nRetailer Nordstrom is on the list (R:sold_at, T4 lists it as listed in the window). Destruction photo complies (T5), though confidence is moderate, but the deny outcome stands regardless."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01AQJnNgB4ubggxTkDNyy9mT",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The date code on the label is 1224, which falls outside the recalled range of 0722 to 1223, so this unit is not part of the recall.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T3",
+       "T7"
+      ]
+     },
+     {
+      "text": "The model is confirmed as LXT-CL-1.0 from a legible label photo, so the model check passes and does not change the outcome.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account, so the claim is not flagged.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "Purchase at Nordstrom on 2023-03-05 is inside the sale window and at a listed retailer, and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "The destruction photo appears to show the plug cut off, but the date code failure is sufficient for denial under the claim policy.",
+      "cites": [
+       "R:destruction",
+       "T5",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

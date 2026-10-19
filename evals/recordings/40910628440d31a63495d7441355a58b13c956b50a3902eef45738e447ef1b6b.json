@@ -1,0 +1,77 @@
+{
+ "text": "Every check passes: the label is legible and matches a recalled model, the serial and date code are in range, the purchase is from a listed retailer within the window and needs no receipt, and there are no duplicate claims. The refund is for repair or replacement, not a cash refund, so the value threshold doesn't apply.",
+ "usage": {
+  "input_tokens": 3755,
+  "output_tokens": 571,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3LUMCJ7qzE7bqchqVM",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2437,
+ "content": [
+  {
+   "type": "text",
+   "text": "Every check passes: the label is legible and matches a recalled model, the serial and date code are in range, the purchase is from a listed retailer within the window and needs no receipt, and there are no duplicate claims. The refund is for repair or replacement, not a cash refund, so the value threshold doesn't apply."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_018qDhPQ6yxQQHBAnUzCL5j7",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows the REV 12 Kids Bike, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number 01VX34978848 begins with 01VX, which is inside the recalled serial ranges.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The date code 2022 is within the recalled model years 2022-2024.",
+      "cites": [
+       "T5",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "REI.com is a listed retailer, the purchase date of 2024-02-07 falls inside the sale window, and no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The claimant requested repair or replacement rather than a refund, so the $100 value threshold does not apply.",
+      "cites": [
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

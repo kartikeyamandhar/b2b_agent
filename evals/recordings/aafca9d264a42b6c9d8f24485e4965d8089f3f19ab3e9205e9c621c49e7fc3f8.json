@@ -1,0 +1,68 @@
+{
+ "text": "The model is confirmed, the purchase is valid, and there are no duplicates. The destruction photo is the only blocker, so I'll request a proper one.",
+ "usage": {
+  "input_tokens": 3614,
+  "output_tokens": 530,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3v5RW5GCHfEGoKNEvf",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3217,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed, the purchase is valid, and there are no duplicates. The destruction photo is the only blocker, so I'll request a proper one."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01SdoBUP8DNDrc38TykxF2MK",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows recalled model BE10019US-PI, which the model check confirms.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase at Amazon.com on 2024-04-26 falls within the sale window and the retailer is listed; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo duplicates the label photo and does not show the required destruction (writing RECALLED in large letters on the front and rear of the seatback with a marker).",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "The serial check returned no verdict, so the serial was not relied on for this decision.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new destruction photo showing the seatback with 'RECALLED' written in large letters on both the front and rear, made with a marker. The photo you sent is a copy of your label photo.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

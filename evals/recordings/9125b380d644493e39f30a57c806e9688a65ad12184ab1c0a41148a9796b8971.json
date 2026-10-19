@@ -1,0 +1,65 @@
+{
+ "text": "Applying the policy in order: flag takes precedence. T6 shows a same_payout match with another claim, so the claim is flagged for review regardless of the other checks.",
+ "usage": {
+  "input_tokens": 2838,
+  "output_tokens": 511,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeFWpCxhxGnN56dSWVD",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 8374,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: flag takes precedence. T6 shows a same_payout match with another claim, so the claim is flagged for review regardless of the other checks."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_016HGmpMyao2vuY5Wx67WYCd",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim (1abb80d3-d118-5c60-aaa1-6324977c1a81) sharing the same payout destination. Under the policy, claims sharing a payout account are sent to a person for review together with the matched claim.",
+      "cites": [
+       "T6",
+       "R:policy",
+       "T7"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The date code 08/23 is outside the recalled date codes (07/22 NH or 08/22 NH). This would normally be a denial, but the flag rule takes precedence in the outcome.",
+      "cites": [
+       "T3",
+       "R:date_codes",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase at Grainger on 2023-07-30 is inside the sale window and the retailer is listed; no receipt is required.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

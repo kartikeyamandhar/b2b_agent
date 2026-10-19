@@ -1,0 +1,59 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3377,
+  "output_tokens": 470,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB43JGbp6khhPmkVi47D",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2215,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_013j3roccMcQiEK57qKi1BFb",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo's SHA-256 matches a photo already submitted in another claim (17991bfa-eb3c-534d-96c8-4b33bf7984a8), so this claim shares a photo with another claim and must be flagged for review.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label is legible and shows model 200LX, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial read from the label (QQ19420553) does not match the typed serial (HA07762). The typed serial is within a recalled range, but the label serial is not in any recalled range, so the serial discrepancy needs reviewer attention.",
+      "cites": [
+       "T1",
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The purchase date of 2018-06-19 falls inside the sale window (2017-05-01 to 2026-02-28). The retailer is listed as an online marketplace and receipt is not required.",
+      "cites": [
+       "T2",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,59 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3358,
+  "output_tokens": 398,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB43KxYuNgytPYJKN9yw",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2516,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_014XU9qPtUYwAFp4yRaJa3Ge",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo is shared with another claim in the program (same image hash), so this claim is flagged for review as a possible duplicate.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label is legible and shows model 200LX, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The typed serial QQ19420553 falls outside the recalled serial ranges. This would be a denial on its own, but the duplicate flag takes precedence.",
+      "cites": [
+       "T4",
+       "R:serials",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase date of 2018-09-25 is inside the sale window, and no receipt is required for this claim, so the purchase rule is satisfied.",
+      "cites": [
+       "T2",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

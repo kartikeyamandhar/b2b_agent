@@ -1,0 +1,45 @@
+{
+ "text": "Per the claim, I'll check the label photo, purchase, duplicates, and destruction photo in parallel, since each is independent and the rules require them.",
+ "usage": {
+  "input_tokens": 2899,
+  "output_tokens": 156,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3fjPLyBA5ACd1UBdgt",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1247,
+ "content": [
+  {
+   "type": "text",
+   "text": "Per the claim, I'll check the label photo, purchase, duplicates, and destruction photo in parallel, since each is independent and the rules require them."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01GsRm3tCRrZSqHEddFKq5me",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01SPeUvjPKhL9jCDoDm7Vwds",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01UB7XxYFnW7eFHZozZjKapK",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01D3UecqFWcm4wwDDedWbdh9",
+   "name": "check_destruction_photo",
+   "input": {}
+  }
+ ]
+}

@@ -1,0 +1,60 @@
+{
+ "text": "The legible label shows AD10314BE, which is not a recalled model, and the typed model BB4640BL does not match the label. Under the policy, a legible label showing a non-recalled model means denial. The other checks (purchase, duplicates) pass, but they don't override the model result.",
+ "usage": {
+  "input_tokens": 3957,
+  "output_tokens": 475,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Zk66fBo2MmbfUA5gP",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2241,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows AD10314BE, which is not a recalled model, and the typed model BB4640BL does not match the label. Under the policy, a legible label showing a non-recalled model means denial. The other checks (purchase, duplicates) pass, but they don't override the model result."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01GfNg1tDrc8W3s7VTbrt5az",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model AD10314BE, which is not one of the recalled models. The claimant's typed model BB4640BL does not match the label, and the label is the controlling evidence.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "Under the claim policy, a legible label showing a non-recalled model is denied, even though the typed model is a recalled model.",
+      "cites": [
+       "R:policy",
+       "R:models",
+       "T1",
+       "T6",
+       "T7"
+      ]
+     },
+     {
+      "text": "The purchase itself is valid: Amazon.com is a listed retailer and the 2023-04-26 date is inside the sale window. No duplicate claims were found. These checks do not change the denial.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

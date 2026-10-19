@@ -1,0 +1,65 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3713,
+  "output_tokens": 574,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3ecYoUBLNzGuBJcqCK",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2905,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01TNqfo64rYtDJGoEGkdiyT8",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number BN2501B08803 starts with BN and is within the recalled range.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code 01/2025 is prior to July 2025, so it is within the recalled date codes.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The purchase date of 2025-03-09 falls inside the sale window, but the retailer Walmart.com is not on the list of sold-at retailers (Amazon.com, Shopify.com, TEMU.com, TikTok.com). Under the purchase rule, a retailer not on the list requires more information about proof of ownership.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your unit's model, serial, and date code match the recall, and your purchase date is within the sale window. However, Walmart.com is not one of the retailers covered by this program. Can you tell us where the unit was originally sold, and provide any additional proof of ownership showing that the purchase was from a covered retailer, if you have it?",
+    "confidence": 0.7
+   }
+  }
+ ]
+}

@@ -1,0 +1,79 @@
+{
+ "text": "The call failed validation because two required fields were missing: `question_for_claimant` and `confidence`. I'm resubmitting with both filled in.",
+ "usage": {
+  "input_tokens": 3974,
+  "output_tokens": 650,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB359WSXnG212GFggALE",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3233,
+ "content": [
+  {
+   "type": "text",
+   "text": "The call failed validation because two required fields were missing: `question_for_claimant` and `confidence`. I'm resubmitting with both filled in."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Qo1qvQeZReF5MGyrb91X6a",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model DR2A, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial number J0D63321830 (label reads J0D6332 1830, same serial) begins with J0D, which is in the recalled range.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The date code 2017 falls within the recalled model years 2017-2024.",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase date of 2020-06-13 is inside the sale window, so it is not a denial on date.",
+      "cites": [
+       "R:sold_window",
+       "T5"
+      ]
+     },
+     {
+      "text": "The retailer 'Corner Hardware Co' is not on the Yamaha dealer list. Under policy this requires proof of ownership, not denial, so the claim needs more information.",
+      "cites": [
+       "R:sold_at",
+       "T5",
+       "T8",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not flagged. Destruction photo is not required for a repair remedy.",
+      "cites": [
+       "T7",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your golf car's label matches a recalled model, but the retailer you bought it from (Corner Hardware Co) is not a Yamaha dealer. Please send proof of ownership, such as a receipt, bill of sale, or other document showing you bought or were given the unit.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

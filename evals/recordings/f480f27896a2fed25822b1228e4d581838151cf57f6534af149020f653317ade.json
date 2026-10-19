@@ -1,0 +1,63 @@
+{
+ "text": "Checking the results: label legible, model 2G520 is recalled (T1, T2). Purchase at Homedepot.com, listed retailer, date 2021-08-25 is before the sale window 2022-09-01 (T3, R:sold_window), so the policy says deny. Duplicates: none (T5). Destruction photo complies (T4), but the purchase rule is triggered and deny takes precedence over approve.\n\nFlag does not apply (no duplicates). Deny applies because of the purchase date before the window.",
+ "usage": {
+  "input_tokens": 2804,
+  "output_tokens": 554,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeUtCSkrNkqvSEUcoZT",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 5144,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results: label legible, model 2G520 is recalled (T1, T2). Purchase at Homedepot.com, listed retailer, date 2021-08-25 is before the sale window 2022-09-01 (T3, R:sold_window), so the policy says deny. Duplicates: none (T5). Destruction photo complies (T4), but the purchase rule is triggered and deny takes precedence over approve.\n\nFlag does not apply (no duplicates). Deny applies because of the purchase date before the window."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01A5wh4KoKRw3tMqHqhkxtbe",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2G520, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase date of 2021-08-25 is before the sale window (2022-09-01 to 2025-07-31), and purchases before the window are not eligible.",
+      "cites": [
+       "T3",
+       "R:sold_window",
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account, so the claim is not flagged.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the product marked with RECALLED, so it complies, but this does not overcome the purchase-date denial.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

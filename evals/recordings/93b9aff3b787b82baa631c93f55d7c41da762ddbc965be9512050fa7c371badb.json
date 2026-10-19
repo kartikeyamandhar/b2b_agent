@@ -1,0 +1,61 @@
+{
+ "text": "Checking the results: label legible showing 9421 (recalled) \u2014 T1, T2. Purchase date 2022-12-19 is before the sale window 2023-10-01 to 2024-05-31, so T3 says \"before\" \u2192 deny. Duplicates none (T5). Destruction not required (T4). Refund not requested; policy ordering: flag doesn't apply, deny triggers before needs_info/approve.",
+ "usage": {
+  "input_tokens": 2718,
+  "output_tokens": 493,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAePTGcAEM3Yx1YrFmia",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 9704,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results: label legible showing 9421 (recalled) \u2014 T1, T2. Purchase date 2022-12-19 is before the sale window 2023-10-01 to 2024-05-31, so T3 says \"before\" \u2192 deny. Duplicates none (T5). Destruction not required (T4). Refund not requested; policy ordering: flag doesn't apply, deny triggers before needs_info/approve."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01N1drFfyz8xUCfrhjHgQBXD",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The claimed purchase date of 2022-12-19 is before the product's sale window (2023-10-01 to 2024-05-31), so the unit is not eligible.",
+      "cites": [
+       "R:sold_window",
+       "T3",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model 9421, which is a recalled model, so the model itself is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account, so no flag applies.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy, so that check does not affect the outcome.",
+      "cites": [
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

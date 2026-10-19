@@ -1,0 +1,56 @@
+{
+ "text": "The label confirms the PA-10 model with a date code in range, and no duplicates were found. The serial check was skipped because the program has no serial rule, so it doesn't matter here. The sole disqualifier is the purchase date: 2020-06-15 is before the sale window that opens 2021-06-01. That makes this a denial under the purchase rule.",
+ "usage": {
+  "input_tokens": 4550,
+  "output_tokens": 462,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4DgFxvJb5XowUodM3o",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3026,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label confirms the PA-10 model with a date code in range, and no duplicates were found. The serial check was skipped because the program has no serial rule, so it doesn't matter here. The sole disqualifier is the purchase date: 2020-06-15 is before the sale window that opens 2021-06-01. That makes this a denial under the purchase rule."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01CEsuAFa1tPj9vZdEXMRW6P",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The purchase date of 2020-06-15 is before the program's sale window (2021-06-01 to 2023-11-30), so the unit was not sold within the recalled sale period.",
+      "cites": [
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows the recalled model PA-10 with date code 2126, which is within the recalled range, so the model and date code are confirmed. This does not overcome the purchase-window failure.",
+      "cites": [
+       "T1",
+       "T5",
+       "T6",
+       "R:models",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

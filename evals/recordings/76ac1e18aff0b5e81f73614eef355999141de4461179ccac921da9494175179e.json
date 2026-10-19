@@ -1,0 +1,47 @@
+{
+ "text": "Per the program rules, I'll check the label photo, purchase, duplicates, and the serial in parallel, since the claim relies on the serial rule and the purchase rules.",
+ "usage": {
+  "input_tokens": 2768,
+  "output_tokens": 185,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3JXCYFTxBqR48mSBFC",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1284,
+ "content": [
+  {
+   "type": "text",
+   "text": "Per the program rules, I'll check the label photo, purchase, duplicates, and the serial in parallel, since the claim relies on the serial rule and the purchase rules."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01SJSS8MVybwq8GeBj19v7RR",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01LGBxG7bmMsK1rMB9Z3EV2X",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0119JWKsVfSXC6DszyqLVskM",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DCyTgiieFjSnEHwi5c8A5s",
+   "name": "check_serial",
+   "input": {
+    "serial": "SN51205155"
+   }
+  }
+ ]
+}

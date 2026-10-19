@@ -1,0 +1,64 @@
+{
+ "text": "The legible label shows model 93580, which is not on the recalled list (93550, KY-318B, 96775, KY-318A, 98527, 6L-PC). Under the policy, a legible label showing a non-recalled model is a denial. The serial check was skipped, but the denial rests on the model, so I'll record the decision now.",
+ "usage": {
+  "input_tokens": 3793,
+  "output_tokens": 485,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Sf8kXr77dLEE6y16k",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2391,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows model 93580, which is not on the recalled list (93550, KY-318B, 96775, KY-318A, 98527, 6L-PC). Under the policy, a legible label showing a non-recalled model is a denial. The serial check was skipped, but the denial rests on the model, so I'll record the decision now."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_014KwZa6AGCTKfLH9CUW1igB",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model 93580, which is not one of the program's recalled models, so the product is not covered by the recall.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The typed model 93580 also does not match any recalled model, consistent with the label reading.",
+      "cites": [
+       "R:models",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase is at a listed retailer (ALDI) within the sale window, and no duplicate claims were found, but these do not make an unrecalled model eligible.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T3"
+      ]
+     },
+     {
+      "text": "The serial check was skipped by the tool, so the serial could not be used to confirm eligibility.",
+      "cites": [
+       "T5",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

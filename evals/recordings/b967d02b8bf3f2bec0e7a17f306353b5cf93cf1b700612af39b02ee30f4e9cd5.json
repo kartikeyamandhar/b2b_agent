@@ -1,0 +1,76 @@
+{
+ "text": "The label confirms a recalled model, and every other check passes, so I'm approving the claim.",
+ "usage": {
+  "input_tokens": 3484,
+  "output_tokens": 506,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB49Xw4CoTPn53Gi3ehk",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2903,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label confirms a recalled model, and every other check passes, so I'm approving the claim."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01HLRD3SqmReDmyBsmv9ZUho",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model MK04, which matches the recalled model list. The typed model 'MKO4' is a typo for this model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number BN2408B02265 starts with BN and is within the recalled serial range.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code 08/2024 is prior to July 2025, so it is within the recalled date codes.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase was from TEMU.com, a listed retailer, on 2024-09-02, inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "No refund was requested (repair or replacement), so the refund value threshold does not apply.",
+      "cites": [
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

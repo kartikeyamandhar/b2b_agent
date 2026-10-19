@@ -1,0 +1,56 @@
+{
+ "text": "Applying the policy in order: flag rules first. T7 shows a same_address match with another claim (c02b790b...), so the outcome is flag regardless of the other checks.",
+ "usage": {
+  "input_tokens": 2954,
+  "output_tokens": 481,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3AtN2uQK6VDzRsM7vt",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2978,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: flag rules first. T7 shows a same_address match with another claim (c02b790b...), so the outcome is flag regardless of the other checks."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01A5cxoJFvuyh2ybr78cbPYL",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim (c02b790b-365e-5529-aa5e-52f3a264772b) sharing the same address with this claim. Under the claim policy, claims sharing an address with another claim must be sent to a person for review, together with the matched claim.",
+      "cites": [
+       "R:policy",
+       "T7",
+       "T8"
+      ]
+     },
+     {
+      "text": "The other eligibility checks passed: the label photo is legible and shows model MK04, the serial starts with BN, the date code 02/2025 is before July 2025, and the eBay purchase on 2025-05-03 falls inside the sale window. eBay is not a listed retailer, but that only calls for proof of ownership, not a denial. These findings do not override the duplicate flag.",
+      "cites": [
+       "T1",
+       "T2",
+       "T3",
+       "T4",
+       "T5",
+       "R:models",
+       "R:serials",
+       "R:date_codes",
+       "R:sold_window",
+       "R:sold_at"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

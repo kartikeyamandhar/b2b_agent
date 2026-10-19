@@ -1,0 +1,55 @@
+{
+ "text": "Checking the results: the label photo is legible and shows model 9424, which is not recalled (only 9421 is). The typed model \"9424\" matches the label, so the unit is not part of the recall. Per policy, a legible label showing a non-recalled model means deny. Duplicates: none. Purchase retailer is not on the list, but that only triggers needs_info, and the model denial takes precedence since deny outranks needs_info.",
+ "usage": {
+  "input_tokens": 2723,
+  "output_tokens": 434,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeP374LFjPANucvD9j4",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 5635,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results: the label photo is legible and shows model 9424, which is not recalled (only 9421 is). The typed model \"9424\" matches the label, so the unit is not part of the recall. Per policy, a legible label showing a non-recalled model means deny. Duplicates: none. Purchase retailer is not on the list, but that only triggers needs_info, and the model denial takes precedence since deny outranks needs_info."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01WuczcQpocrY6SS2YPniAGo",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 9424, which is not on the recalled list (only model 9421 is recalled), so the unit is not part of this recall.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The typed model also reads 9424, consistent with the label, so there is no typo that could change the model reading.",
+      "cites": [
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so duplicate review does not apply.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

@@ -1,0 +1,55 @@
+{
+ "text": "The duplicate check found another claim sharing this serial number, which triggers a flag under the claim policy and takes precedence over the other outcomes. The label is legible and shows a recalled model, and the purchase is from a listed retailer within the window, but the flag controls the outcome.",
+ "usage": {
+  "input_tokens": 3231,
+  "output_tokens": 405,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3pBpobQsnQj1yud5fZ",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2296,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing this serial number, which triggers a flag under the claim policy and takes precedence over the other outcomes. The label is legible and shows a recalled model, and the purchase is from a listed retailer within the window, but the flag controls the outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Lz4cxhdVbXcAxmwSGh5bu8",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program shares this claim's serial number, which requires flagging for review under the claim policy.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model SM1977, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The retailer Designbydelta.com is on the sold-at list and the purchase date of 2008-12-24 falls inside the sale window; no receipt is required for this retailer.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

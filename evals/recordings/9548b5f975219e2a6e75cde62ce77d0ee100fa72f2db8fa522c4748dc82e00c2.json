@@ -1,0 +1,29 @@
+{
+ "text": "The label photo is unreadable, so the typed model decides. The serial check was skipped, and the program's serial rule is not in the rules list. I'll check the typed model against the recall list.",
+ "usage": {
+  "input_tokens": 3485,
+  "output_tokens": 110,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3csg6LcuXgZW6j4hGV",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1988,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label photo is unreadable, so the typed model decides. The serial check was skipped, and the program's serial rule is not in the rules list. I'll check the typed model against the recall list."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01ToSXGD5Nt9qMuAYfBgQ2GR",
+   "name": "check_model",
+   "input": {
+    "model_text": "SE4570"
+   }
+  }
+ ]
+}

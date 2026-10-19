@@ -1,0 +1,72 @@
+{
+ "text": "I missed two required fields. Resubmitting with the claimant question and a confidence value.",
+ "usage": {
+  "input_tokens": 3947,
+  "output_tokens": 592,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeHnqB1UFGg2Hcp8wRb",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2463,
+ "content": [
+  {
+   "type": "text",
+   "text": "I missed two required fields. Resubmitting with the claimant question and a confidence value."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01YcKjceQYkYYpeK1F7YYvKo",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model B0726Y, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 8/21 falls within the recalled range (August 2021 or earlier).",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "The purchase date of 2023-05-14 is inside the sale window, but the retailer Corner Hardware Co is not on the list of sales locations, so proof of ownership is needed.",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "T4",
+       "faq#1"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the helmet with its straps cut off as instructed; it shows an intact helmet with a cord. A new destruction photo is required.",
+      "cites": [
+       "R:destruction",
+       "T5",
+       "faq#2"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not flagged.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo of the helmet with both straps cut off, as instructed. Also, since Corner Hardware Co is not one of the listed retailers (Fred Meyer, Walmart, or Amazon), please provide proof of ownership, such as a receipt, order record, or other document showing you bought or received the helmet.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

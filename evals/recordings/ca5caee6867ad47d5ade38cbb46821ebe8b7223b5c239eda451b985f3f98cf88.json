@@ -1,0 +1,54 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 2755,
+  "output_tokens": 383,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeLw3N3noQVZJHU7Qyi",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2226,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01KFiFxAX1WE5vfAuFswFv16",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model TD3318B, which is on the recalled list, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The duplicate check found another claim (d99b5c3c-6342-5210-8016-e531b84bb7e8) sharing the same label photo, so the claim must be sent to a person for review.",
+      "cites": [
+       "T5",
+       "R:policy",
+       "T6"
+      ]
+     },
+     {
+      "text": "Retailer Designbydelta.com is on the sold-at list and the purchase date 2004-05-22 is inside the sale window; no receipt is required and no destruction photo is needed, so these checks do not block the claim.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

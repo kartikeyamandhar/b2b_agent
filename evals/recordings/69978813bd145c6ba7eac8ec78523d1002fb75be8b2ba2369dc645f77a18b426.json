@@ -1,0 +1,63 @@
+{
+ "text": "The duplicate check found a shared payout account with another claim, which triggers a flag under the policy. The serial check was skipped, and since the program has no serial rule in this set, it doesn't apply. The label is legible and shows model 34785, which is recalled, and the typed model matches it.",
+ "usage": {
+  "input_tokens": 3567,
+  "output_tokens": 487,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3SRqJ6hFu3vhsU19jn",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2693,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found a shared payout account with another claim, which triggers a flag under the policy. The serial check was skipped, and since the program has no serial rule in this set, it doesn't apply. The label is legible and shows model 34785, which is recalled, and the typed model matches it."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_018rLpFx7JqKFHhhaxfTxkoo",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim (0ef480ac-011e-51f8-98ff-5b3956537649) shares this claim's payout destination account, which requires flagging for review under the claim policy.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The legible label photo shows model 34785, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The label date code December 2023 falls within the recalled range of manufacture prior to January 2024.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "Retailer Dick's is on the sold-at list and the purchase date 2021-12-26 is inside the sale window; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

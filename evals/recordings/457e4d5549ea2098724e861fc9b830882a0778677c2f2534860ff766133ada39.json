@@ -1,0 +1,66 @@
+{
+ "text": "Applying the policy in order:\n\n- Flag check: T5 shows a same_address match with another claim, so the claim is flagged for review regardless of the other rules.\n- Model: T1 is legible and reads CD10004LS, which is not on the recalled list (T2 mismatch, R:models). A legible label showing a non-recalled model means deny.\n- Purchase, retailer, and window pass (T3), but the model outcome already denies.\n- Destruction photo (T4) is not a clear pass, but it is moot given the other results.\n\nThe flag rule takes precedence over deny in the policy's ordering, so the outcome is flag.",
+ "usage": {
+  "input_tokens": 2965,
+  "output_tokens": 639,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeSSFAsGq7uQJD931pz",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3834,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order:\n\n- Flag check: T5 shows a same_address match with another claim, so the claim is flagged for review regardless of the other rules.\n- Model: T1 is legible and reads CD10004LS, which is not on the recalled list (T2 mismatch, R:models). A legible label showing a non-recalled model means deny.\n- Purchase, retailer, and window pass (T3), but the model outcome already denies.\n- Destruction photo (T4) is not a clear pass, but it is moot given the other results.\n\nThe flag rule takes precedence over deny in the policy's ordering, so the outcome is flag."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01JbxoYSswSWviVxPxMbcRZG",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The claim shares an address with another claim (b23dacd4-9aa7-58cd-929f-2810aea341e3), so it must go to a person for duplicate review.",
+      "cites": [
+       "T5",
+       "R:policy",
+       "T6"
+      ]
+     },
+     {
+      "text": "The legible label photo reads CD10004LS, which is not a recalled model, so the unit does not appear to be part of this recall. This is a denial basis that the reviewer should also consider.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Purchase at Amazon.com within the sale window passes, and the receipt is not required.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the seatback with RECALLED written on both front and rear, so it would also need to be asked for again if the claim proceeds.",
+      "cites": [
+       "T4",
+       "R:destruction",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

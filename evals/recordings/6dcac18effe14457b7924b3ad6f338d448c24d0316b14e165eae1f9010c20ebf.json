@@ -1,0 +1,64 @@
+{
+ "text": "Checking the policy against the results:\n\n- Duplicates (T5): no hits, so no flag.\n- Model (T1, T2): legible label shows 9421, a recalled model. Confirmed.\n- Serial/date code: the program's serial and date code rules are not applied here beyond the serial that matches the label; no date code rule triggers a denial.\n- Purchase (T3): Amazon.com is on the list, but the purchase date 2023-02-26 is before the sale window (2023-10-01 to 2024-05-31). Per policy, a purchase before the window is denied.\n- Destruction: not required (T4).\n- Refund: none requested, so the threshold does not apply.\n\nThe purchase-date denial is the first triggered outcome that applies (no flag applies). The claim is denied.",
+ "usage": {
+  "input_tokens": 2710,
+  "output_tokens": 667,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeNcavHmaYod4emJyhy",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 5255,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy against the results:\n\n- Duplicates (T5): no hits, so no flag.\n- Model (T1, T2): legible label shows 9421, a recalled model. Confirmed.\n- Serial/date code: the program's serial and date code rules are not applied here beyond the serial that matches the label; no date code rule triggers a denial.\n- Purchase (T3): Amazon.com is on the list, but the purchase date 2023-02-26 is before the sale window (2023-10-01 to 2024-05-31). Per policy, a purchase before the window is denied.\n- Destruction: not required (T4).\n- Refund: none requested, so the threshold does not apply.\n\nThe purchase-date denial is the first triggered outcome that applies (no flag applies). The claim is denied."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01PqQLRDb6MWMjVMojp65RDS",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 9421, which is a recalled model, so the unit itself is confirmed as recalled.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2023-02-26 is before the sale window of 2023-10-01 to 2024-05-31. Purchases before the sale window are not eligible, even though the retailer (Amazon.com) is on the list.",
+      "cites": [
+       "T3",
+       "R:sold_window",
+       "R:sold_at",
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account, so no review flag applies.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy and no refund over the value threshold is requested.",
+      "cites": [
+       "T4",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

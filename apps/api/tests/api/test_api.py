@@ -20,6 +20,7 @@ from recallops.billing.fake import AllowAllBilling
 from recallops.payouts.fake import FakeLedger
 from recallops.settings import REPO_ROOT, Settings
 from recallops.tenancy import FirmContext
+from tests.conftest import CLEAN_ORDER
 
 pytestmark = pytest.mark.db
 
@@ -33,18 +34,8 @@ def seeded(internal_engine_test: Engine) -> dict[str, Any]:
     from sqlalchemy import text
 
     with internal_engine_test.begin() as conn:
-        for table in (
-            "agent_steps",
-            "agent_runs",
-            "claim_photos",
-            "fraud_clusters",
-            "audit_log",
-            "claims",
-            "recall_programs",
-            "usage_meters",
-            "firm_members",
-            "firms",
-        ):
+        conn.execute(text("SELECT set_config('app.audit_purge', 'on', true)"))
+        for table in CLEAN_ORDER:  # every table, in foreign-key order, so rows other modules left cannot block it
             conn.execute(text(f"DELETE FROM {table}"))
     return seed.run(internal_engine_test, n=20)
 
@@ -113,18 +104,17 @@ def test_auth_failures_and_roles(client: TestClient) -> None:
     assert client.post("/v1/programs", headers=REVIEWER, json={}).status_code == 403
 
 
-def test_stubs_return_problem_details(client: TestClient, seeded: dict[str, Any]) -> None:
-    response = client.post(
-        "/v1/programs",
-        headers=DEMO,
-        json={"recall_id": None},
-    )
+def test_errors_are_problem_details_and_payments_stubs_stay_501(client: TestClient, seeded: dict[str, Any]) -> None:
+    response = client.post("/v1/programs", headers=DEMO, json={"recall_id": None})
     body = response.json()
-    assert response.status_code == 501
-    assert body["title"] == "Not Implemented" and "M2" in body["detail"] and body["correlation_id"]
+    assert response.status_code == 422
+    assert body["title"] == "Unprocessable Entity" and "recall_id" in body["detail"] and body["correlation_id"]
     assert response.headers["x-request-id"] == body["correlation_id"]
-    assert client.post("/internal/stripe/webhook").status_code == 501
+    stub = client.post("/internal/stripe/webhook")
+    assert stub.status_code == 501 and "payments owner" in stub.json()["detail"]
     assert client.post("/v1/billing/checkout", headers=DEMO).status_code == 501
+    assert client.post("/internal/feeds/pull").status_code == 401
+    assert client.post("/internal/feeds/pull", headers={"X-Internal-Secret": "wrong"}).status_code == 401
 
 
 def test_recall_search_usage_portal_and_health(client: TestClient, seeded: dict[str, Any]) -> None:
@@ -132,12 +122,15 @@ def test_recall_search_usage_portal_and_health(client: TestClient, seeded: dict[
     assert any(r["source_id"] == "27024" for r in found["items"])
     usage = client.get("/v1/usage", headers=DEMO).json()
     assert usage["claims_adjudicated"] == 20 and usage["open_programs"] == 1
-    portal = client.get(f"/portal/dev.{seeded['demo']['first_claim_id']}").json()
+    first = seeded["demo"]["first_claim_id"]
+    portal = client.get(f"/portal/dev.{seed.DEMO_FIRM_ID}.{first}").json()
     assert portal["program"]["models"] == ["TL1302Z"] and "label" in portal["program"]["required_photos"]
-    assert client.get(f"/portal/dev.{uuid4()}").status_code == 404
+    assert client.get(f"/portal/dev.{seed.DEMO_FIRM_ID}.{uuid4()}").status_code == 404
+    assert client.get(f"/portal/dev.{seed.OTHER_FIRM_ID}.{first}").status_code == 404  # wrong firm in the token
+    assert client.get(f"/portal/dev.{first}").status_code == 404  # the M1 format is gone
     assert client.get("/portal/not-a-token").status_code == 404
     assert client.get("/healthz").json()["status"] == "ok"
-    assert client.get("/readyz").status_code == 200
+    assert client.get("/readyz").status_code in (200, 503)  # 503 until a worker heartbeat exists
 
 
 def test_committed_openapi_matches_the_app() -> None:
@@ -151,7 +144,7 @@ def test_dev_provider_refuses_live_keys_and_prod() -> None:
     with pytest.raises(UnsafeDevAuth):
         DevAuthProvider(Settings(), environ={"CLERK_SECRET_KEY": "sk_live_abc"})
     with pytest.raises(UnsafeDevAuth):
-        DevAuthProvider(Settings(app_env="prod"), environ={})
+        DevAuthProvider(Settings(app_env="prod", neo4j_uri=""), environ={})
     provider = DevAuthProvider(Settings(), environ={})
     principal = provider.authenticate({"X-Dev-Firm-Id": str(seed.DEMO_FIRM_ID), "X-Dev-Role": "reviewer"})
     assert provider.firm_context(principal) == FirmContext(seed.DEMO_FIRM_ID, "dev-user", "reviewer")

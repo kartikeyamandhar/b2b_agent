@@ -1,0 +1,63 @@
+{
+ "text": "The legible label shows a recalled model (SM1979), and the purchase is at a listed retailer inside the window. However, check_duplicates (T3) found another claim sharing the same label photo, which triggers a flag under the policy and overrides the other outcomes.",
+ "usage": {
+  "input_tokens": 3560,
+  "output_tokens": 518,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3K9X5KF2b9WLjBhRfo",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2339,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows a recalled model (SM1979), and the purchase is at a listed retailer inside the window. However, check_duplicates (T3) found another claim sharing the same label photo, which triggers a flag under the policy and overrides the other outcomes."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01AuTcC7nD1vPAP1Z81KdTX2",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The claim shares a label photo with another claim in the program (other claim 9a75ad4b-57ea-55eb-8295-8aa2025069b5), which requires a flag for review.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model SM1979, which is a recalled model, so the model is confirmed despite the typed model TD3418B differing.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase was at REI, a listed retailer, dated 2020-04-19, which is inside the sale window; no receipt is required for this claim.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The serial on the label (SN85636551) differs from the typed serial (SN24836186). The serial check was skipped, so this discrepancy is noted for the reviewer.",
+      "cites": [
+       "T1",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

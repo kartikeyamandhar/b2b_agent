@@ -1,0 +1,64 @@
+{
+ "text": "The label is legible and shows AF10025PI, which is not a recalled model. Under the policy, a legible label showing a non-recalled model is a denial, and that rule takes priority over the destruction issue.",
+ "usage": {
+  "input_tokens": 3588,
+  "output_tokens": 465,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3upuciVu7arDqAJuuM",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2337,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows AF10025PI, which is not a recalled model. Under the policy, a legible label showing a non-recalled model is a denial, and that rule takes priority over the destruction issue."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_012qF3c6kVRbVhnZqtNMFGmA",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model AF10025PI, which is not on the program's recalled models list. The typed model was also not on the list.",
+      "cites": [
+       "R:models",
+       "R:policy",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number was not checked against the recalled ranges because the model is not recalled, so the serial result is not relied on.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase is at Amazon.com within the sale window and there are no duplicate claims, but these do not cure the model mismatch.",
+      "cites": [
+       "T2",
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo duplicates the label photo and does not show the required destruction, which would be a further needs-info issue if the model were recalled.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

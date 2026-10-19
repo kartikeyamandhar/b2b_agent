@@ -1,0 +1,71 @@
+{
+ "text": "Checking the results: label legible, model TD3418S is recalled (T1, T2, R:models). Purchase 2015-03-06 falls inside the sale window (T3, R:sold_window), retailer Designbydelta.com is listed (T3, R:sold_at). No destruction photo required for repair remedy (T4). No duplicates (T5). Serial number not a rule for this program. Remedy is repair, no refund, so no value review.",
+ "usage": {
+  "input_tokens": 2699,
+  "output_tokens": 574,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeLnURSeD7vhZc8T7cL",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3008,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results: label legible, model TD3418S is recalled (T1, T2, R:models). Purchase 2015-03-06 falls inside the sale window (T3, R:sold_window), retailer Designbydelta.com is listed (T3, R:sold_at). No destruction photo required for repair remedy (T4). No duplicates (T5). Serial number not a rule for this program. Remedy is repair, no refund, so no value review."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01EU4ynkKxgGBsyKkBYHW9c6",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model TD3418S, which is on the recalled list, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase date of 2015-03-06 is inside the sale window, and the retailer Designbydelta.com is on the list of authorized sellers.",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "T3"
+      ]
+     },
+     {
+      "text": "No receipt is required for this purchase, and no destruction photo is required for the repair remedy.",
+      "cites": [
+       "T3",
+       "T4",
+       "T6"
+      ]
+     },
+     {
+      "text": "The duplicate check found no other claim sharing a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The remedy is repair with no refund requested, so the refund value review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

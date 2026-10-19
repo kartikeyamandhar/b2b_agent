@@ -1,0 +1,10 @@
+{
+ "claim_id": "38ccadb7-8e58-59ae-82bc-8455cba7d371",
+ "spec_id": "S33",
+ "program": "25206",
+ "category": "expect_approve",
+ "expected_outcome": "approve",
+ "rationale": "Typed 'AD1OO14SL' uses a letter O for both zeros, a confusable typo that the legible sewn-in label (AD10014SL, a listed model) corrects, so photo_rules.label_confirms_typed_typo approves.",
+ "violations": [],
+ "subtypes": {}
+}

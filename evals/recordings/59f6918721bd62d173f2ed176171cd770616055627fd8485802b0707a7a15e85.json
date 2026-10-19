@@ -1,0 +1,73 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 2914,
+  "output_tokens": 487,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB39DyCWpw8M9Z8vFtYw",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2704,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01AjXE3LzoHJ7kGSqnemoNE9",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account, so no flag is needed.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows the recalled model LXT-CL-1.0, confirming the model.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The date code 0722 is within the recalled range 0722 to 1223.",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Purchase at Amazon, a listed retailer, on 2023-11-13, which is inside the sale window; no receipt is required.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the device with the plug cut off, as the remedy requires, and it is not a repeat of the label photo.",
+      "cites": [
+       "T5",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The remedy is repair or replacement with no refund requested, so the value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

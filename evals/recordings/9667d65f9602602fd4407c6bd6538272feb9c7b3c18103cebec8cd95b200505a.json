@@ -1,0 +1,64 @@
+{
+ "text": "Applying the policy in order: flag takes precedence. check_duplicates (T6) found the label photo is the same as another claim (4039c80a-...), so the claim must be flagged for review, regardless of the other checks passing.\n\nOther checks for the record: the label is legible and shows TD3318B, a recalled model (T1, R:models), overriding the typed TD3318S typo. Retailer REI is listed and the purchase date is inside the window (T4). No destruction photo is required (T5), and the remedy is repair, not a refund.",
+ "usage": {
+  "input_tokens": 2808,
+  "output_tokens": 583,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeM2R59EjAmb8mDj2NQ",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3208,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: flag takes precedence. check_duplicates (T6) found the label photo is the same as another claim (4039c80a-...), so the claim must be flagged for review, regardless of the other checks passing.\n\nOther checks for the record: the label is legible and shows TD3318B, a recalled model (T1, R:models), overriding the typed TD3318S typo. Retailer REI is listed and the purchase date is inside the window (T4). No destruction photo is required (T5), and the remedy is repair, not a refund."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_018nXqmMnszSzvgTHVCZ4tEf",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo is identical to a photo on another claim (4039c80a-c704-5f06-8c8d-f0a915590069), which is a possible duplicate and must go to a person for review.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label is legible and shows model TD3318B, which is a recalled model; the typed TD3318S is a typo but the label confirms the recall.",
+      "cites": [
+       "T1",
+       "T3",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "REI is a listed retailer and the purchase date 2003-06-13 falls inside the sale window; no receipt is required.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for a repair remedy, and no refund over the threshold is requested.",
+      "cites": [
+       "T5",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

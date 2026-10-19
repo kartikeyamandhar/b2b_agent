@@ -1,0 +1,69 @@
+{
+ "text": "Applying the policy: flag takes precedence. T6 shows a same_payout match with another claim, so the outcome is flag regardless of other checks.\n\nOther checks for the record: the label photo is legible (T1) and shows model 37785, which is not recalled (T2 mismatch against 34692, 34785, 34790), so the model check alone would deny. The date code 09/2025 is outside the recalled ranges (T3). The purchase is in-window at a listed retailer (T4). Destruction is not required (T5).\n\nSince flag applies first under the policy, the claim goes to a person for review together with the matching claim.",
+ "usage": {
+  "input_tokens": 2926,
+  "output_tokens": 624,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeTro5DfnBmh3cgoQcu",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3402,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy: flag takes precedence. T6 shows a same_payout match with another claim, so the outcome is flag regardless of other checks.\n\nOther checks for the record: the label photo is legible (T1) and shows model 37785, which is not recalled (T2 mismatch against 34692, 34785, 34790), so the model check alone would deny. The date code 09/2025 is outside the recalled ranges (T3). The purchase is in-window at a listed retailer (T4). Destruction is not required (T5).\n\nSince flag applies first under the policy, the claim goes to a person for review together with the matching claim."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01BwbavgUyXctjK4fn2n4kZJ",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The payout destination matches another claim (7d3c79f9-7b7f-5326-ab17-fd6cc5dfe5eb), so this claim must go to a person for review together with the matched claim.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "For the record, the legible label photo shows model 37785, which is not on the recalled model list, so the model check does not support a remedy.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The typed date code 09/2025 is outside the recalled date code ranges.",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer within the sale window, and no receipt is required for this retailer and window.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

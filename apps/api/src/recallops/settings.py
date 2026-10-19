@@ -6,16 +6,31 @@ from decimal import Decimal
 from functools import lru_cache
 from pathlib import Path
 from typing import Literal
+from urllib.parse import urlsplit
 
-from pydantic import Field, field_validator
+from pydantic import Field, SecretStr, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
 
+# Fraud graph values that must never reach production (the committed defaults and .env.example values).
+EXAMPLE_NEO4J_PASSWORD = "graph-dev-only"
+EXAMPLE_GRAPH_KEY_SECRET = "ZmFrZS1ncmFwaC1rZXktc2VjcmV0LTMyLWJ5dGVz"
+GRAPH_KEY_MIN_BYTES = 32
+# Photo storage values that must never reach production (the committed defaults and .env.example values).
+EXAMPLE_SUPABASE_URL = "https://example.supabase.co"
+EXAMPLE_SUPABASE_SERVICE_KEY = "fake-service-key"
+LOCAL_HOSTS = frozenset({"localhost", "127.0.0.1", "::1"})
+
+
+def is_local_uri(uri: str) -> bool:
+    return (urlsplit(uri).hostname or "") in LOCAL_HOSTS
+
 
 class Settings(BaseSettings):
+    # hide_input_in_errors: a validation error never echoes the inputs, which include keys and passwords.
     model_config = SettingsConfigDict(
-        env_file=REPO_ROOT / ".env", env_file_encoding="utf-8", extra="ignore", frozen=True
+        env_file=REPO_ROOT / ".env", env_file_encoding="utf-8", extra="ignore", frozen=True, hide_input_in_errors=True
     )
 
     app_env: Literal["dev", "test", "prod"] = Field("dev", description="Deployment environment.")
@@ -43,6 +58,9 @@ class Settings(BaseSettings):
     clerk_jwks_url: str = Field("https://example.clerk.accounts.dev/.well-known/jwks.json")
     clerk_allowed_origins: str = Field("http://localhost:3000", description="Comma-separated azp values.")
     claim_token_secret: str = Field("ZmFrZS1jbGFpbS10b2tlbi1zZWNyZXQtMzItYnl0ZXM=")
+    claim_token_provider: Literal["dev", "hmac"] = Field(
+        "dev", description="dev: dev.<firm>.<claim> links (development only); hmac: the login owner's signed links."
+    )
 
     # Payments seam (component 3).
     stripe_secret_key: str = Field("sk_test_fake", description="Stripe test-mode secret key only.")
@@ -93,15 +111,115 @@ class Settings(BaseSettings):
     embedding_model_id: str = Field("hash-ngram-v1")
     embedding_dim: int = Field(1024, description="Must match migration 0002 (vector(1024)).")
 
-    # Storage for claim photos. Local directory in dev; Supabase private bucket in prod.
+    # Storage for claim photos (recallops.storage). Local directory in dev and tests; Supabase private bucket in prod.
+    # Browsers never get a storage URL: the API's photo route proxies the bytes after an RLS lookup.
+    storage_backend: Literal["local", "supabase"] = Field(
+        "local", description="local writes under STORAGE_DIR; supabase uses the private bucket (Storage REST API)."
+    )
+    storage_timeout_s: float = Field(10.0, gt=0, description="Connect, read, write, and pool timeout per request.")
     storage_dir: Path = Field(REPO_ROOT / "data" / "generated" / "storage")
-    supabase_url: str = Field("https://example.supabase.co")
-    supabase_service_key: str = Field("fake-service-key")
-    supabase_bucket: str = Field("claim-photos")
+    supabase_url: str = Field(EXAMPLE_SUPABASE_URL, description="Project URL; https in prod.")
+    supabase_service_key: SecretStr = Field(
+        SecretStr(EXAMPLE_SUPABASE_SERVICE_KEY), description="Service role key, server only; real key only in .env."
+    )
+    supabase_bucket: str = Field("claim-photos", pattern=r"^[A-Za-z0-9][A-Za-z0-9._-]{0,62}$")
+
+    # Fraud graph (Neo4j, a projection of Postgres; decisions log 2026-10-18). An empty NEO4J_URI disables the graph.
+    # AuraDB uses neo4j+s://<instance>.databases.neo4j.io. One Community database serves dev and test, so every node
+    # carries a namespace; tests run in their own.
+    neo4j_uri: str = Field("bolt://localhost:57687", description="Bolt URI; empty disables the fraud graph.")
+    neo4j_user: str = Field("neo4j")
+    neo4j_password: SecretStr = Field(SecretStr(EXAMPLE_NEO4J_PASSWORD), description="Real password only in .env.")
+    neo4j_database: str = Field("neo4j", description="Community and AuraDB Free have one user database.")
+    neo4j_namespace: str = Field("dev", pattern=r"^[a-z][a-z0-9_]{0,31}$", description="Separates dev from test.")
+    neo4j_timeout_s: float = Field(3.0, description="Connection and per-transaction timeout.")
+    graph_key_secret: SecretStr = Field(
+        SecretStr(EXAMPLE_GRAPH_KEY_SECRET),
+        description="HMAC key for identity keys in the graph (addresses, emails, payout destinations are never stored "
+        "raw); its UTF-8 bytes are the key, at least 32 in prod. Rotating it requires make graph-sync.",
+    )
+    graph_resync_batch: int = Field(25, description="Decided claims the worker re-projects per idle tick.")
+    graph_backoff_s: float = Field(
+        30.0, description="After a graph failure, graph calls fail fast for this long (per-process circuit breaker)."
+    )
 
     # Adjudication defaults.
     phash_duplicate_bits: int = Field(6)
     default_value_threshold_cents: int = Field(10_000)
+
+    # Worker (claims/worker.py). ADJUDICATOR=agent needs LLM_MODE=live (or recordings for every request);
+    # rules_only runs offline at no cost.
+    adjudicator: Literal["agent", "rules_only"] = Field("agent", description="What the worker runs on a claim.")
+    agent_variant: str = Field("loop_full", description="claims.graph.VARIANTS key used by the worker.")
+    worker_poll_s: float = Field(1.0, description="Seconds between polls when there is no work.")
+    worker_lease_s: int = Field(90, description="A claim or resume lease; expiry lets another worker retry.")
+    worker_max_attempts: int = Field(3, description="Failed attempts before a claim is held for a person.")
+    worker_heartbeat_max_age_s: float = Field(300.0, description="/readyz reports degraded past this age.")
+
+    # Portal (component 4 owns the token format; the backend owns the routes).
+    portal_base_url: str = Field("http://localhost:3000/claim", description="Base of issued claim links.")
+    max_photo_bytes: int = Field(8_000_000, description="Largest accepted upload.")
+    max_photo_pixels: int = Field(40_000_000, description="Larger images are refused (decompression bombs).")
+    portal_rate_per_token_hour: int = Field(60, description="Portal requests per claim link per hour (04-login.md).")
+    portal_uploads_per_token_hour: int = Field(10, description="Photo uploads per claim link per hour.")
+    portal_rate_per_ip_hour: int = Field(300, description="Portal requests per client IP per hour.")
+    trusted_proxy_hops: int = Field(
+        0,
+        ge=0,
+        le=3,
+        description="Proxies in front of the API that append to X-Forwarded-For (Render: 1). The client is the entry "
+        "that many places from the right; 0 trusts no header and uses the socket peer.",
+    )
+
+    # Campaigns (M5): owner registration uploads.
+    registrations_max_bytes: int = Field(5_000_000, description="Largest registrations CSV accepted.")
+    registrations_max_rows: int = Field(50_000, description="Rows per registrations CSV.")
+
+    @model_validator(mode="after")
+    def _graph_guards(self) -> Settings:
+        """Production graph settings must be real; development must never write the production namespace. A prod
+        process with the graph disabled (empty NEO4J_URI) needs none of the graph values."""
+        if self.app_env != "prod":
+            if self.neo4j_namespace == "prod":
+                raise ValueError("NEO4J_NAMESPACE=prod is reserved for APP_ENV=prod")
+            return self
+        if not self.neo4j_uri:
+            return self
+        problems = []
+        if self.neo4j_namespace != "prod":
+            problems.append("NEO4J_NAMESPACE must be prod")
+        secret = self.graph_key_secret.get_secret_value()
+        if secret == EXAMPLE_GRAPH_KEY_SECRET:
+            problems.append("GRAPH_KEY_SECRET is the example value")
+        if len(secret.encode("utf-8")) < GRAPH_KEY_MIN_BYTES:
+            problems.append(f"GRAPH_KEY_SECRET is shorter than {GRAPH_KEY_MIN_BYTES} bytes")
+        if self.neo4j_password.get_secret_value() == EXAMPLE_NEO4J_PASSWORD:
+            problems.append("NEO4J_PASSWORD is the development password")
+        if not is_local_uri(self.neo4j_uri) and not urlsplit(self.neo4j_uri).scheme.endswith("+s"):
+            problems.append("a remote NEO4J_URI must use TLS (neo4j+s:// or bolt+s://)")
+        if problems:
+            raise ValueError("unsafe fraud graph settings for APP_ENV=prod: " + "; ".join(problems))
+        return self
+
+    @model_validator(mode="after")
+    def _storage_guards(self) -> Settings:
+        """A production process on the Supabase backend must hold a real project URL over TLS and a real key."""
+        if self.app_env != "prod" or self.storage_backend != "supabase":
+            return self
+        problems = []
+        parts = urlsplit(self.supabase_url)
+        if self.supabase_url.rstrip("/") == EXAMPLE_SUPABASE_URL:
+            problems.append("SUPABASE_URL is the example value")
+        if parts.scheme != "https" or not parts.hostname:
+            problems.append("SUPABASE_URL must be an https URL with a host")
+        key = self.supabase_service_key.get_secret_value()
+        if key == EXAMPLE_SUPABASE_SERVICE_KEY:
+            problems.append("SUPABASE_SERVICE_KEY is the example value")
+        elif not key:
+            problems.append("SUPABASE_SERVICE_KEY is empty")
+        if problems:
+            raise ValueError("unsafe photo storage settings for APP_ENV=prod: " + "; ".join(problems))
+        return self
 
     @field_validator("storage_dir", "replay_dir", "llm_record_dir")
     @classmethod

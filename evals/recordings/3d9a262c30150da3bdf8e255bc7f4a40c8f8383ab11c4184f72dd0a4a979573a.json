@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": false, \"complies\": false, \"observed\": \"The photo shows an abstract illustration of a red rectangular shape with a black outline, a thin strip across it, and a black line on the right over a blurred colorful circle background, with no recognizable helmet or cut straps.\", \"confidence\": 0.9}",
+ "usage": {
+  "input_tokens": 1187,
+  "output_tokens": 101,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeCLtKUW7y4on1Jid2q",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 1413
+}

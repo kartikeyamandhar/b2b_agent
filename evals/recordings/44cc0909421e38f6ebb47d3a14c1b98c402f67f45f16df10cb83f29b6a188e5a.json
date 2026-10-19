@@ -1,0 +1,85 @@
+{
+ "text": "Resubmitting with the citation corrected to the valid retrieve_policy result, T8.",
+ "usage": {
+  "input_tokens": 3898,
+  "output_tokens": 541,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeNTMnn9iZ8mdcA9NM4",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2104,
+ "content": [
+  {
+   "type": "text",
+   "text": "Resubmitting with the citation corrected to the valid retrieve_policy result, T8."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01JkBv3aRHQ53Yh5aUqk2n9N",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "No duplicate claims share a photo, address, email, serial, or payout account.",
+      "cites": [
+       "T7",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows REV 20 Kids Bike, a recalled model, which confirms the model.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "T8"
+      ]
+     },
+     {
+      "text": "The serial number 01VX69798791 begins with the recalled prefix 01VX.",
+      "cites": [
+       "T3",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The date code 2022 falls within the recalled range of model years 2022-2024.",
+      "cites": [
+       "T4",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "REI is a listed retailer and the purchase date 2022-12-17 is inside the sale window of 2022-03-01 to 2024-05-31.",
+      "cites": [
+       "T5",
+       "R:sold_at",
+       "R:sold_window",
+       "T8"
+      ]
+     },
+     {
+      "text": "The remedy is repair, so no destruction photo is required.",
+      "cites": [
+       "T6",
+       "T8"
+      ]
+     },
+     {
+      "text": "No refund is requested, so the $100 value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

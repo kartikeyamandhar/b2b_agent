@@ -1,0 +1,77 @@
+{
+ "text": "All checks pass: the label confirms a recalled model, the serial and date code are in range, the purchase is from a listed retailer within the window, and there are no duplicate claims.",
+ "usage": {
+  "input_tokens": 3776,
+  "output_tokens": 554,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3M38fZZhjpkvS24DXX",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2549,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass: the label confirms a recalled model, the serial and date code are in range, the purchase is from a listed retailer within the window, and there are no duplicate claims."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01V8xLNbXoFEwsaVe8zVZLj2",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows REV 20 Kids Bike, a recalled model, and the model check matches.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number ET2213319691 begins with ET22 and is inside the recalled serial ranges.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code 2022 falls within the recalled model years 2022-2024.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase was from REI.com, a listed retailer, on 2022-04-11, inside the sale window of 2022-03-01 to 2024-05-31. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The claim seeks repair or replacement, not a refund, so no value-threshold review applies and no destruction photo is required.",
+      "cites": [
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

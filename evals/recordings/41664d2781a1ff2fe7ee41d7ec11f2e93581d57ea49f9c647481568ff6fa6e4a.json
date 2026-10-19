@@ -1,0 +1,70 @@
+{
+ "text": "The model matches a recall, the serial and date code are in range, the window is correct, and there are no duplicates. The one issue is the retailer: the sale rule covers only Lowe's, and the claimant bought from Corner Hardware Co. Under the policy, a retailer not on the list is needs_info, so I'll ask the claimant to clarify where the unit was bought.",
+ "usage": {
+  "input_tokens": 3815,
+  "output_tokens": 640,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3iSwyM8d7zGp8FCgzo",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 4382,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model matches a recall, the serial and date code are in range, the window is correct, and there are no duplicates. The one issue is the retailer: the sale rule covers only Lowe's, and the claimant bought from Corner Hardware Co. Under the policy, a retailer not on the list is needs_info, so I'll ask the claimant to clarify where the unit was bought."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_013adR2TqdMQdrPjTBQEyAhB",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model FCRG3052BW, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial VF34413519 falls within a recalled serial range.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The date code October 2023 is within the recalled production months.",
+      "cites": [
+       "T5",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase date 2023-12-17 is inside the sale window, but the claimed retailer Corner Hardware Co is not on the program's list of eligible retailers (Lowe's), so the purchase cannot be confirmed as eligible.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": "Thank you for your claim. The retailer you listed, Corner Hardware Co, is not one of the retailers covered by this recall program. Can you tell us where the appliance was purchased? If it was bought from Lowe's, or if you have any other proof of purchase showing the retailer and date, please send it.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

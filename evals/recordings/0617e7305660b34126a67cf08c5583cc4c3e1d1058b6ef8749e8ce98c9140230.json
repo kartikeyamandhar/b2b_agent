@@ -1,0 +1,37 @@
+{
+ "text": "The label is unreadable, so the typed model decides. Next I'll check the typed model, and the serial check was skipped, so I'll confirm the serial rule applies.",
+ "usage": {
+  "input_tokens": 3476,
+  "output_tokens": 167,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3auUg88w25MMiNNYHX",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1106,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is unreadable, so the typed model decides. Next I'll check the typed model, and the serial check was skipped, so I'll confirm the serial rule applies."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01YEAnXTH6Pf3GDzdU4fLYhn",
+   "name": "check_model",
+   "input": {
+    "model_text": "93550"
+   }
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0129dXuY6HdthkUE5ZAK9kPg",
+   "name": "retrieve_policy",
+   "input": {
+    "query": "serial number check when serial rules apply; date code requirements"
+   }
+  }
+ ]
+}

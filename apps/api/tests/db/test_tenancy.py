@@ -32,10 +32,14 @@ TENANT_TABLES = (
     "agent_steps",
     "fraud_clusters",
     "payouts",
+    "export_batches",
+    "registrations",
+    "notifications",
     "mpr_reports",
     "audit_log",
     "usage_meters",
 )
+APPEND_ONLY = ("audit_log", "export_batches")
 
 
 @dataclass(frozen=True)
@@ -65,6 +69,11 @@ def _seed_firm(conn: object, name: str) -> FirmRows:
         "INSERT INTO agent_steps (run_id, firm_id, idx, node) VALUES (:r, :f, 0, 'check_model')",
         "INSERT INTO fraud_clusters (firm_id, program_id, kind, member_claim_ids) VALUES (:f, :p, 'same_photo', ARRAY[CAST(:c AS uuid)])",
         "INSERT INTO payouts (firm_id, claim_id, amount_cents, method) VALUES (:f, :c, 1000, 'check_export')",
+        "INSERT INTO export_batches (firm_id, created_by, row_count, total_cents, sha256, csv) "
+        "VALUES (:f, 'system', 1, 1000, 'x', 'payout_id'::bytea)",
+        "INSERT INTO registrations (id, firm_id, program_id, external_ref) VALUES (:r, :f, :p, 'reg-1')",
+        "INSERT INTO notifications (firm_id, program_id, registration_id, channel, subject, body) "
+        "VALUES (:f, :p, :r, 'email', 's', 'b')",
         "INSERT INTO mpr_reports (firm_id, program_id, period_start, period_end, payload, generated_by) "
         "VALUES (:f, :p, '2026-10-01', '2026-10-31', '{}', 'system')",
         "INSERT INTO audit_log (firm_id, actor, action, target_type, target_id) VALUES (:f, 'system', 'seed', 'claim', 'x')",
@@ -141,7 +150,7 @@ def test_updates_and_deletes_of_firm_b_affect_zero_rows(
     a, b = two_firms
     with tenant_session(ctx(a), engine=app_engine_test) as session:
         for table in TENANT_TABLES:
-            if table == "audit_log":
+            if table in APPEND_ONLY:
                 continue
             updated = session.execute(
                 text(f"UPDATE {table} SET firm_id = firm_id WHERE firm_id = :b"), {"b": b.firm_id}
@@ -157,13 +166,18 @@ def test_updates_and_deletes_of_firm_b_affect_zero_rows(
             assert canary >= 1, f"firm B rows in {table} must survive"
 
 
-def test_app_role_cannot_delete_audit_rows(app_engine_test: Engine, two_firms: tuple[FirmRows, FirmRows]) -> None:
+@pytest.mark.parametrize(
+    "sql", ["DELETE FROM audit_log", "DELETE FROM export_batches", "UPDATE export_batches SET row_count = 2"]
+)
+def test_app_role_cannot_rewrite_append_only_rows(
+    app_engine_test: Engine, two_firms: tuple[FirmRows, FirmRows], sql: str
+) -> None:
     a, _ = two_firms
     with (
         pytest.raises(ProgrammingError, match="permission denied"),
         tenant_session(ctx(a), engine=app_engine_test) as session,
     ):
-        session.execute(text("DELETE FROM audit_log"))
+        session.execute(text(sql))
 
 
 @pytest.mark.parametrize(

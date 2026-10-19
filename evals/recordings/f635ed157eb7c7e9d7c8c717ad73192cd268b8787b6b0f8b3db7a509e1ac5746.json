@@ -1,0 +1,64 @@
+{
+ "text": "The policy says claims the checker could not finish are sent to a person for review. The serial check did not finish, so this claim cannot be auto-approved. The label confirms the recalled model, the purchase is inside the window at a listed retailer, and there are no duplicates. The unfinished serial check means the outcome should go to a person, which is the \"flag\" path for this case.",
+ "usage": {
+  "input_tokens": 4424,
+  "output_tokens": 522,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3JxptvE9yc5UE3WKRZ",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2447,
+ "content": [
+  {
+   "type": "text",
+   "text": "The policy says claims the checker could not finish are sent to a person for review. The serial check did not finish, so this claim cannot be auto-approved. The label confirms the recalled model, the purchase is inside the window at a listed retailer, and there are no duplicates. The unfinished serial check means the outcome should go to a person, which is the \"flag\" path for this case."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01TwEvogAR9t4xEhwEnrsozP",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model TD3418S, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase was from Designbydelta.com, a listed retailer, on 2015-03-06, which is inside the sale window. No receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The serial check did not complete (verdict skipped on two attempts), so the serial could not be verified against recalled ranges. Per the claims FAQ, claims the checker could not finish are sent to a person for review.",
+      "cites": [
+       "T4",
+       "T6",
+       "T7",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.6
+   }
+  }
+ ]
+}

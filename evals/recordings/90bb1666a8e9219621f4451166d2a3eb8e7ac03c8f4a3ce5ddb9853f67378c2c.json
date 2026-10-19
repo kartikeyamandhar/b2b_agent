@@ -1,0 +1,68 @@
+{
+ "text": "All checks pass. The remedy is repair or replacement with no refund requested, so the destruction and date-code rules don't apply.",
+ "usage": {
+  "input_tokens": 3555,
+  "output_tokens": 466,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3suDmSaZQ4sSTURLWH",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2148,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass. The remedy is repair or replacement with no refund requested, so the destruction and date-code rules don't apply."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_019zbHmDVPUt2r2UZiPLYkXv",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model CXM-02, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial FC3246186507 falls within a recalled serial prefix range (FC32).",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The retailer JHTNA is on the sold-at list and the purchase date 2024-05-23 is inside the 2021-01-01 to 2024-10-31 sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claimant requested repair or replacement, not a refund, so the value threshold does not apply and no destruction photo is required.",
+      "cites": [
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

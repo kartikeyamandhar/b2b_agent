@@ -1,0 +1,76 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: label photo is legible and shows 34790, a recalled model (T1, T2, R:models). Confirmed.\n- Date code: 10/2021 falls in the recalled range 10/2021-12/2022 (T3, R:date_codes).\n- Serial: no serial rule in the program, so no action.\n- Purchase: 2022-07-24 is inside the sale window (T4, R:sold_window). Target is a listed retailer; no receipt required (T4).\n- Destruction: not required for this remedy (T5).\n- Duplicates: none found (T6), so no flag.\n- Refund: none requested; remedy is replacement, so the value threshold does not apply.\n\nNo rule triggers a flag, deny, or needs_info, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2843,
+  "output_tokens": 708,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeTDgfEpgeBu6WGgwfH",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 5763,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: label photo is legible and shows 34790, a recalled model (T1, T2, R:models). Confirmed.\n- Date code: 10/2021 falls in the recalled range 10/2021-12/2022 (T3, R:date_codes).\n- Serial: no serial rule in the program, so no action.\n- Purchase: 2022-07-24 is inside the sale window (T4, R:sold_window). Target is a listed retailer; no receipt required (T4).\n- Destruction: not required for this remedy (T5).\n- Duplicates: none found (T6), so no flag.\n- Refund: none requested; remedy is replacement, so the value threshold does not apply.\n\nNo rule triggers a flag, deny, or needs_info, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DHd5TDy2CQ8JwkDgJx3BjH",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 34790, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The date code 10/2021 falls within the recalled range 10/2021-12/2022.",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase date 2022-07-24 is inside the sale window, and Target is a listed retailer. No receipt is required.",
+      "cites": [
+       "T4",
+       "R:sold_window",
+       "R:sold_at"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The remedy requested is repair or replacement with no refund, so the value threshold does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

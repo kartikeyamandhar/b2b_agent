@@ -1,0 +1,68 @@
+{
+ "text": "The duplicate check found another claim at the same address, so the flag rule takes precedence. I'll record that decision.",
+ "usage": {
+  "input_tokens": 3652,
+  "output_tokens": 497,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3QRdqgFUjcKygRdfbs",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3176,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim at the same address, so the flag rule takes precedence. I'll record that decision."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_016BJsxEdLFPDNEumgQWtUD3",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program shares this claimant's address, so the claim is flagged for review under the duplicate rule.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model AD10025GR, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The Amazon.com purchase on 2023-07-11 falls inside the 2023-04-01 to 2024-08-31 sale window, and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo shows only the front of the device marked RECALLED; the instruction requires marking both the front and rear of the seatback, so it does not fully comply. This is a secondary concern given the flag.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "The refund of $121.41 is over the $100 threshold, so a person reviews it in any case.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

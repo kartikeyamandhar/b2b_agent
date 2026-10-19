@@ -1,0 +1,10 @@
+{
+ "claim_id": "66997b46-6fb9-50a9-92c1-636e69e52dc5",
+ "spec_id": "S20",
+ "program": "26244",
+ "category": "expect_flag",
+ "expected_outcome": "flag",
+ "rationale": "It shares S19's exact address, so duplicate_address flags it, and flag outranks the needs_info from the unlisted eBay seller (retailer_not_listed) under the policy precedence.",
+ "violations": [],
+ "subtypes": {}
+}

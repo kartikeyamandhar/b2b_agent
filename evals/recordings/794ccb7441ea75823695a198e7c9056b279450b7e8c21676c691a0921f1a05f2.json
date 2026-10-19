@@ -1,0 +1,70 @@
+{
+ "text": "Model is confirmed, and the date code is in range. The payout-account overlap with another claim requires a flag.",
+ "usage": {
+  "input_tokens": 3739,
+  "output_tokens": 508,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3HHEsfcGKKydBrmgYp",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2439,
+ "content": [
+  {
+   "type": "text",
+   "text": "Model is confirmed, and the date code is in range. The payout-account overlap with another claim requires a flag."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01CCUQLKvt5Xy4xn8DjbecLR",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim (17782130-7f90-520f-abd4-395c0492f05f) that shares this claim's payout destination. Under the flag rule, any shared payout account requires review before any outcome.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model PA-10, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The label date code 2126 is within the recalled range of 2126 to 2319.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The retailer, Corner Hardware Co, is not on the program's list of sellers. This would normally require proof of ownership, but the flag takes precedence.",
+      "cites": [
+       "T2",
+       "R:sold_at"
+      ]
+     },
+     {
+      "text": "The purchase date of 2023-11-26 falls inside the sale window of 2021-06-01 to 2023-11-30.",
+      "cites": [
+       "T2",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

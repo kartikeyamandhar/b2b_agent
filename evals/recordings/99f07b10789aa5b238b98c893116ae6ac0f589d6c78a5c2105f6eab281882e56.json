@@ -1,0 +1,76 @@
+{
+ "text": "Checking the results: label legible and shows PLEFM399DCA1, which matches recalled PLEFM399DC*. Serial VF12216944 is within VF122xxxxx\u2013VF334xxxxx. Purchase date 2004-01-07 is before the sale window (2001-06-01 to 2009-08-31)? No: 2004 is inside the window. Retailer Sears is listed. Receipt present. No destruction photo required. No duplicates. Refund not requested (repair or replacement), so no threshold review.\n\nAll rules pass, so approve.",
+ "usage": {
+  "input_tokens": 3256,
+  "output_tokens": 662,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeM7ST4K9GjX4q4mdL4",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3082,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results: label legible and shows PLEFM399DCA1, which matches recalled PLEFM399DC*. Serial VF12216944 is within VF122xxxxx\u2013VF334xxxxx. Purchase date 2004-01-07 is before the sale window (2001-06-01 to 2009-08-31)? No: 2004 is inside the window. Retailer Sears is listed. Receipt present. No destruction photo required. No duplicates. Refund not requested (repair or replacement), so no threshold review.\n\nAll rules pass, so approve."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01MBGNNbWGNSZfi35ZZ3Q3Lg",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PLEFM399DCA1, which matches the recalled model series PLEFM399DC*. The typed model agrees.",
+      "cites": [
+       "R:models",
+       "R:policy",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial number VF12216944 falls inside the recalled range VF122xxxxx - VF334xxxxx.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The purchase date 2004-01-07 is inside the sale window, the retailer Sears is on the list, and a receipt is present.",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "R:receipt",
+       "T4"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy, so none is needed.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "No refund is requested (repair or replacement), so the refund value threshold does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

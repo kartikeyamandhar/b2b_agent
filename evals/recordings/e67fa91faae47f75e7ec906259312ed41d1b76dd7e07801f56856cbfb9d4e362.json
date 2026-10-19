@@ -1,0 +1,71 @@
+{
+ "text": "Findings: the label reads model B0726Y, which is recalled. The date code 8/21 is in range. The purchase is at a listed retailer within the window. However, there is a duplicate hit on serial, and the destruction photo does not show the instructed destruction. The duplicate check triggers flag, which takes precedence. The serial check was skipped, and the label serial (SN78865370) differs from the typed serial (SN82008760), but the flag rule governs.",
+ "usage": {
+  "input_tokens": 3578,
+  "output_tokens": 659,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3kFjavzG6eNmuAFd7G",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3175,
+ "content": [
+  {
+   "type": "text",
+   "text": "Findings: the label reads model B0726Y, which is recalled. The date code 8/21 is in range. The purchase is at a listed retailer within the window. However, there is a duplicate hit on serial, and the destruction photo does not show the instructed destruction. The duplicate check triggers flag, which takes precedence. The serial check was skipped, and the label serial (SN78865370) differs from the typed serial (SN82008760), but the flag rule governs."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_016wHnAJjfqpbpuJKEHkCv9s",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Duplicate check found another claim (106c9603-1800-5191-90f1-d14e7fe9d2b7) sharing the same serial number, so the claim is flagged for review under the program policy.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows recalled model B0726Y with date code 8/21, which is within the recalled range.",
+      "cites": [
+       "R:models",
+       "R:date_codes",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The retailer Walmart is on the sold-at list and the purchase date 2023-11-11 is inside the sale window, with no receipt required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show a helmet or cut straps, so it does not show the destruction the recall requires. This would need more information if the claim were otherwise eligible.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "The serial on the label photo (SN78865370) does not match the typed serial (SN82008760), and the serial check was skipped, so the serial could not be confirmed.",
+      "cites": [
+       "T1",
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

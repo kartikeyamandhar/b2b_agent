@@ -1,0 +1,64 @@
+{
+ "text": "The call failed validation because I left out two required fields. Retrying with the question for the claimant and a confidence value.",
+ "usage": {
+  "input_tokens": 3767,
+  "output_tokens": 585,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeUgJZo1CjSfy7WhQbt",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2637,
+ "content": [
+  {
+   "type": "text",
+   "text": "The call failed validation because I left out two required fields. Retrying with the question for the claimant and a confidence value."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017yTbuKPGzozhRJ1LFD2AKK",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 6L-PC, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase date is inside the sale window, but the retailer (Corner Hardware Co) is not on the ALDI list. Owners buying from an unlisted store are asked for proof of ownership rather than denied.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3",
+       "T6"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the instructed destruction (a product with the unplugged power cord cut). It shows no identifiable product or cut cord, so it must be provided again.",
+      "cites": [
+       "R:destruction",
+       "T4",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": "Thank you for your claim. To finish it, please send two things: (1) proof of ownership for the cooker, such as a receipt, bank or card statement, or other record showing you bought it, since the store you named is not one of the program's ALDI retailers; and (2) a new photo of the cooker itself with the power cord unplugged and cut, as the instructions require. The photo you sent did not show the product or a cut cord.",
+    "confidence": 0.9
+   }
+  }
+ ]
+}

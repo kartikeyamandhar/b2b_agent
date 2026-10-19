@@ -1,0 +1,63 @@
+{
+ "text": "The legible label shows LXT-DL-1.0, which is not a recalled model (the recalled model is LXT-CL-1.0). Under the model rule, a legible label showing a non-recalled model means deny. The typed model doesn't override the label. The serial check was skipped, but the serial isn't needed for the outcome since the model already fails.",
+ "usage": {
+  "input_tokens": 3878,
+  "output_tokens": 525,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3cPBaVSZCZLpYZTe1a",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2757,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows LXT-DL-1.0, which is not a recalled model (the recalled model is LXT-CL-1.0). Under the model rule, a legible label showing a non-recalled model means deny. The typed model doesn't override the label. The serial check was skipped, but the serial isn't needed for the outcome since the model already fails."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01CWgEescYqYnHqB6jcC5dHz",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model LXT-DL-1.0, which is not a recalled model. The recalled model is LXT-CL-1.0. The typed model does not override a legible label.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The claimant's typed model LXT-CL-1.0 conflicts with the legible label reading, so the label controls and the model is not confirmed as recalled.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The retailer (Amazon) is listed, the purchase date (2024-02-16) is inside the sale window, and no duplicate claims were found. These do not offset the model failure.",
+      "cites": [
+       "T2",
+       "T3"
+      ]
+     },
+     {
+      "text": "The date code 0722 is within the recalled range, but the model rule still fails.",
+      "cites": [
+       "R:date_codes",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

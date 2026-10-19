@@ -1,0 +1,63 @@
+{
+ "text": "Reviewing the checks against the policy:\n\n- Model: The label photo is unreadable (T1 legible false, no model text). So the typed model decides. \"AD10025BE\" is on the recalled list (R:models) and check_model matches (T2), so the model is confirmed by the typed value.\n- Serial/date code: The program's rules in the message don't set serial or date code ranges, so these don't apply.\n- Purchase: Amazon.com is listed (R:sold_at, T3), and the date 2024-08-31 is inside the window (R:sold_window, T3). No receipt required (T3).\n- Duplicates: None found (T5), so no flag.\n- Destruction: The destruction photo is required. T4 indicates the photo shows the product with \"RECALLED\" written on it, but the check does not confirm it shows the seatback marked on both front and rear (complies false, confidence 0.55). Per the policy, a destruction photo that does not show the instructed destruction is needs_info, and FAQ#3 (T6) says the same.\n- Refund of $143.13 is over the $100 threshold, so a person reviews it after approval, but that does not change the outcome.\n\nThe outcome is needs_info: ask for a clearer destruction photo, and a clearer label photo would also help.",
+ "usage": {
+  "input_tokens": 2866,
+  "output_tokens": 900,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "max_tokens",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB37SXgxAMtCGszem564",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 5137,
+ "content": [
+  {
+   "type": "text",
+   "text": "Reviewing the checks against the policy:\n\n- Model: The label photo is unreadable (T1 legible false, no model text). So the typed model decides. \"AD10025BE\" is on the recalled list (R:models) and check_model matches (T2), so the model is confirmed by the typed value.\n- Serial/date code: The program's rules in the message don't set serial or date code ranges, so these don't apply.\n- Purchase: Amazon.com is listed (R:sold_at, T3), and the date 2024-08-31 is inside the window (R:sold_window, T3). No receipt required (T3).\n- Duplicates: None found (T5), so no flag.\n- Destruction: The destruction photo is required. T4 indicates the photo shows the product with \"RECALLED\" written on it, but the check does not confirm it shows the seatback marked on both front and rear (complies false, confidence 0.55). Per the policy, a destruction photo that does not show the instructed destruction is needs_info, and FAQ#3 (T6) says the same.\n- Refund of $143.13 is over the $100 threshold, so a person reviews it after approval, but that does not change the outcome.\n\nThe outcome is needs_info: ask for a clearer destruction photo, and a clearer label photo would also help."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01RoyXS9rFj1aPJXURdjLidM",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The typed model AD10025BE is on the recalled list and matches, so the model is accepted from the typed value because the label photo is unreadable.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase was at Amazon.com, a listed retailer, on 2024-08-31, which is inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account, so there is no flag.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the instructed destruction (RECALLED marked on the front and rear of the seatback); the check did not confirm compliance. A destruction photo that does not show the instructed destruction is asked for again.",
+      "cites": [
+       "R:destruction",
+       "T4",
+       "T6",
+       "R:policy"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

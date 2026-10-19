@@ -1,0 +1,68 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: label photo is legible and shows AD10014SL, a recalled model (R:models, T1, T2). Confirmed.\n- Serial/date code: the program has no serial or date code rules in this claim policy, so these are not applied.\n- Purchase: Amazon.com is listed (R:sold_at, T3), and 2024-01-07 falls inside the window 2023-04-01 to 2024-08-31 (R:sold_window, T3). No receipt is required (T3).\n- Destruction: the photo is attached. T4 reports it shows the product with \"RECALLED\" written on the front. Its confidence is 0.6, and it only checked the front face. The instruction requires writing on both the front and rear of the seatback (R:destruction). The tool did not confirm the rear, so the destruction photo does not clearly show the instructed destruction. Per policy, that means needs_info.\n- Duplicates: none found (T5), so no flag.\n- Refund $216.04 is over the $100 threshold (R:value_threshold), but that only means a person reviews it afterward; it does not change the outcome.\n\nThe outcome is needs_info: ask the claimant for a destruction photo that shows \"RECALLED\" on both the front and rear of the seatback.",
+ "usage": {
+  "input_tokens": 2871,
+  "output_tokens": 900,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "max_tokens",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB37snyS5puYqyzRpdaw",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4135,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: label photo is legible and shows AD10014SL, a recalled model (R:models, T1, T2). Confirmed.\n- Serial/date code: the program has no serial or date code rules in this claim policy, so these are not applied.\n- Purchase: Amazon.com is listed (R:sold_at, T3), and 2024-01-07 falls inside the window 2023-04-01 to 2024-08-31 (R:sold_window, T3). No receipt is required (T3).\n- Destruction: the photo is attached. T4 reports it shows the product with \"RECALLED\" written on the front. Its confidence is 0.6, and it only checked the front face. The instruction requires writing on both the front and rear of the seatback (R:destruction). The tool did not confirm the rear, so the destruction photo does not clearly show the instructed destruction. Per policy, that means needs_info.\n- Duplicates: none found (T5), so no flag.\n- Refund $216.04 is over the $100 threshold (R:value_threshold), but that only means a person reviews it afterward; it does not change the outcome.\n\nThe outcome is needs_info: ask the claimant for a destruction photo that shows \"RECALLED\" on both the front and rear of the seatback."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01LmBtwqhLoaNVL4hHwXwVQk",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows AD10014SL, a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase at Amazon.com on 2024-01-07 is inside the sale window and the retailer is listed; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the instructed destruction. It shows 'RECALLED' on the front only, and the check was low confidence (0.6). The instruction requires the word on both the front and rear of the seatback, so the photo is asked for again.",
+      "cites": [
+       "R:destruction",
+       "T4",
+       "T6"
+      ]
+     },
+     {
+      "text": "The $216.04 refund exceeds the $100 threshold, but that only means a person reviews it afterward; it does not change the outcome.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

@@ -1,0 +1,2431 @@
+{
+ "model": "claude-haiku-5-5",
+ "blocks": {
+  "golden300": {
+   "rules_only": {
+    "n": 300,
+    "outcome_accuracy": 0.9867,
+    "macro_f1": 0.9817,
+    "macro_f1_classes": [
+     "approve",
+     "deny",
+     "needs_info",
+     "flag"
+    ],
+    "approval_accuracy": 0.9867,
+    "fraud_precision": 1.0,
+    "fraud_recall": 1.0,
+    "needs_info_precision": 1.0,
+    "routed_share": 0.2533,
+    "capped_share": 0.0,
+    "mean_counted_steps": 0,
+    "mean_rows": 7,
+    "mean_cost_usd": 0.0,
+    "p50_seconds": 0.0,
+    "per_class": {
+     "approve": {
+      "f1": 0.9808,
+      "precision": 0.9623,
+      "recall": 1.0
+     },
+     "deny": {
+      "f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0
+     },
+     "needs_info": {
+      "f1": 0.9459,
+      "precision": 1.0,
+      "recall": 0.8974
+     },
+     "flag": {
+      "f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0
+     }
+    },
+    "confusion": {
+     "approve": {
+      "approve": 102
+     },
+     "deny": {
+      "deny": 87
+     },
+     "needs_info": {
+      "needs_info": 35,
+      "approve": 4
+     },
+     "flag": {
+      "flag": 72
+     }
+    },
+    "by_category": {
+     "clean": {
+      "n": 102,
+      "correct": 102
+     },
+     "date_code_out_of_range": {
+      "n": 8,
+      "correct": 8
+     },
+     "date_code_out_of_range,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "date_code_out_of_range,purchase_before_window": {
+      "n": 1,
+      "correct": 1
+     },
+     "date_code_out_of_range,retailer_not_listed": {
+      "n": 2,
+      "correct": 2
+     },
+     "date_code_out_of_range,wrong_model": {
+      "n": 1,
+      "correct": 1
+     },
+     "date_code_out_of_range,wrong_model,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "destruction_not_shown": {
+      "n": 9,
+      "correct": 5
+     },
+     "destruction_not_shown,retailer_not_listed": {
+      "n": 1,
+      "correct": 1
+     },
+     "destruction_not_shown,wrong_model": {
+      "n": 1,
+      "correct": 1
+     },
+     "duplicate_address": {
+      "n": 7,
+      "correct": 7
+     },
+     "duplicate_payout": {
+      "n": 13,
+      "correct": 13
+     },
+     "duplicate_photo": {
+      "n": 11,
+      "correct": 11
+     },
+     "duplicate_serial": {
+      "n": 18,
+      "correct": 18
+     },
+     "no_receipt_when_required": {
+      "n": 2,
+      "correct": 2
+     },
+     "purchase_before_window": {
+      "n": 29,
+      "correct": 29
+     },
+     "purchase_before_window,date_code_out_of_range": {
+      "n": 1,
+      "correct": 1
+     },
+     "purchase_before_window,duplicate_payout": {
+      "n": 2,
+      "correct": 2
+     },
+     "purchase_before_window,duplicate_serial": {
+      "n": 2,
+      "correct": 2
+     },
+     "purchase_before_window,retailer_not_listed": {
+      "n": 2,
+      "correct": 2
+     },
+     "purchase_before_window,serial_out_of_range": {
+      "n": 1,
+      "correct": 1
+     },
+     "purchase_before_window,wrong_model": {
+      "n": 2,
+      "correct": 2
+     },
+     "retailer_not_listed": {
+      "n": 26,
+      "correct": 26
+     },
+     "retailer_not_listed,date_code_out_of_range": {
+      "n": 1,
+      "correct": 1
+     },
+     "retailer_not_listed,destruction_not_shown": {
+      "n": 1,
+      "correct": 1
+     },
+     "retailer_not_listed,duplicate_payout": {
+      "n": 3,
+      "correct": 3
+     },
+     "retailer_not_listed,duplicate_serial": {
+      "n": 2,
+      "correct": 2
+     },
+     "retailer_not_listed,purchase_before_window": {
+      "n": 1,
+      "correct": 1
+     },
+     "retailer_not_listed,serial_out_of_range,duplicate_serial": {
+      "n": 1,
+      "correct": 1
+     },
+     "retailer_not_listed,wrong_model": {
+      "n": 1,
+      "correct": 1
+     },
+     "serial_out_of_range": {
+      "n": 8,
+      "correct": 8
+     },
+     "serial_out_of_range,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "serial_out_of_range,duplicate_photo": {
+      "n": 2,
+      "correct": 2
+     },
+     "serial_out_of_range,purchase_before_window,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "serial_out_of_range,retailer_not_listed": {
+      "n": 1,
+      "correct": 1
+     },
+     "serial_out_of_range,wrong_model,duplicate_serial": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model": {
+      "n": 24,
+      "correct": 24
+     },
+     "wrong_model,date_code_out_of_range": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,duplicate_address": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,duplicate_photo": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,duplicate_serial": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,purchase_before_window": {
+      "n": 2,
+      "correct": 2
+     },
+     "wrong_model,purchase_before_window,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,retailer_not_listed,duplicate_serial": {
+      "n": 1,
+      "correct": 1
+     }
+    }
+   },
+   "rules_plus_vision": {
+    "n": 300,
+    "outcome_accuracy": 0.9433,
+    "macro_f1": 0.9333,
+    "macro_f1_classes": [
+     "approve",
+     "deny",
+     "needs_info",
+     "flag"
+    ],
+    "approval_accuracy": 0.9433,
+    "fraud_precision": 1.0,
+    "fraud_recall": 1.0,
+    "needs_info_precision": 0.7091,
+    "routed_share": 0.24,
+    "capped_share": 0.0,
+    "mean_counted_steps": 1.23,
+    "mean_rows": 8.23,
+    "mean_cost_usd": 0.000201,
+    "p50_seconds": 1.305,
+    "per_class": {
+     "approve": {
+      "f1": 0.9091,
+      "precision": 1.0,
+      "recall": 0.8333
+     },
+     "deny": {
+      "f1": 0.9943,
+      "precision": 0.9886,
+      "recall": 1.0
+     },
+     "needs_info": {
+      "f1": 0.8298,
+      "precision": 0.7091,
+      "recall": 1.0
+     },
+     "flag": {
+      "f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0
+     }
+    },
+    "confusion": {
+     "approve": {
+      "approve": 85,
+      "needs_info": 16,
+      "deny": 1
+     },
+     "deny": {
+      "deny": 87
+     },
+     "needs_info": {
+      "needs_info": 39
+     },
+     "flag": {
+      "flag": 72
+     }
+    },
+    "by_category": {
+     "clean": {
+      "n": 102,
+      "correct": 85
+     },
+     "date_code_out_of_range": {
+      "n": 8,
+      "correct": 8
+     },
+     "date_code_out_of_range,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "date_code_out_of_range,purchase_before_window": {
+      "n": 1,
+      "correct": 1
+     },
+     "date_code_out_of_range,retailer_not_listed": {
+      "n": 2,
+      "correct": 2
+     },
+     "date_code_out_of_range,wrong_model": {
+      "n": 1,
+      "correct": 1
+     },
+     "date_code_out_of_range,wrong_model,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "destruction_not_shown": {
+      "n": 9,
+      "correct": 9
+     },
+     "destruction_not_shown,retailer_not_listed": {
+      "n": 1,
+      "correct": 1
+     },
+     "destruction_not_shown,wrong_model": {
+      "n": 1,
+      "correct": 1
+     },
+     "duplicate_address": {
+      "n": 7,
+      "correct": 7
+     },
+     "duplicate_payout": {
+      "n": 13,
+      "correct": 13
+     },
+     "duplicate_photo": {
+      "n": 11,
+      "correct": 11
+     },
+     "duplicate_serial": {
+      "n": 18,
+      "correct": 18
+     },
+     "no_receipt_when_required": {
+      "n": 2,
+      "correct": 2
+     },
+     "purchase_before_window": {
+      "n": 29,
+      "correct": 29
+     },
+     "purchase_before_window,date_code_out_of_range": {
+      "n": 1,
+      "correct": 1
+     },
+     "purchase_before_window,duplicate_payout": {
+      "n": 2,
+      "correct": 2
+     },
+     "purchase_before_window,duplicate_serial": {
+      "n": 2,
+      "correct": 2
+     },
+     "purchase_before_window,retailer_not_listed": {
+      "n": 2,
+      "correct": 2
+     },
+     "purchase_before_window,serial_out_of_range": {
+      "n": 1,
+      "correct": 1
+     },
+     "purchase_before_window,wrong_model": {
+      "n": 2,
+      "correct": 2
+     },
+     "retailer_not_listed": {
+      "n": 26,
+      "correct": 26
+     },
+     "retailer_not_listed,date_code_out_of_range": {
+      "n": 1,
+      "correct": 1
+     },
+     "retailer_not_listed,destruction_not_shown": {
+      "n": 1,
+      "correct": 1
+     },
+     "retailer_not_listed,duplicate_payout": {
+      "n": 3,
+      "correct": 3
+     },
+     "retailer_not_listed,duplicate_serial": {
+      "n": 2,
+      "correct": 2
+     },
+     "retailer_not_listed,purchase_before_window": {
+      "n": 1,
+      "correct": 1
+     },
+     "retailer_not_listed,serial_out_of_range,duplicate_serial": {
+      "n": 1,
+      "correct": 1
+     },
+     "retailer_not_listed,wrong_model": {
+      "n": 1,
+      "correct": 1
+     },
+     "serial_out_of_range": {
+      "n": 8,
+      "correct": 8
+     },
+     "serial_out_of_range,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "serial_out_of_range,duplicate_photo": {
+      "n": 2,
+      "correct": 2
+     },
+     "serial_out_of_range,purchase_before_window,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "serial_out_of_range,retailer_not_listed": {
+      "n": 1,
+      "correct": 1
+     },
+     "serial_out_of_range,wrong_model,duplicate_serial": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model": {
+      "n": 24,
+      "correct": 24
+     },
+     "wrong_model,date_code_out_of_range": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,duplicate_address": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,duplicate_photo": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,duplicate_serial": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,purchase_before_window": {
+      "n": 2,
+      "correct": 2
+     },
+     "wrong_model,purchase_before_window,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,retailer_not_listed,duplicate_serial": {
+      "n": 1,
+      "correct": 1
+     }
+    }
+   },
+   "single_pass": {
+    "n": 300,
+    "outcome_accuracy": 0.93,
+    "macro_f1": 0.9193,
+    "macro_f1_classes": [
+     "approve",
+     "deny",
+     "needs_info",
+     "flag"
+    ],
+    "approval_accuracy": 0.9367,
+    "fraud_precision": 1.0,
+    "fraud_recall": 1.0,
+    "needs_info_precision": 0.6863,
+    "routed_share": 0.26,
+    "capped_share": 0.01,
+    "mean_counted_steps": 2.37,
+    "mean_rows": 10.01,
+    "mean_cost_usd": 0.00091,
+    "p50_seconds": 5.396,
+    "per_class": {
+     "approve": {
+      "f1": 0.8995,
+      "precision": 0.977,
+      "recall": 0.8333
+     },
+     "deny": {
+      "f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0
+     },
+     "needs_info": {
+      "f1": 0.7778,
+      "precision": 0.6863,
+      "recall": 0.8974
+     },
+     "flag": {
+      "f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0
+     }
+    },
+    "confusion": {
+     "approve": {
+      "approve": 85,
+      "needs_info": 16,
+      "failed": 1
+     },
+     "deny": {
+      "deny": 87
+     },
+     "needs_info": {
+      "needs_info": 35,
+      "failed": 2,
+      "approve": 2
+     },
+     "flag": {
+      "flag": 72
+     }
+    },
+    "by_category": {
+     "clean": {
+      "n": 102,
+      "correct": 85
+     },
+     "date_code_out_of_range": {
+      "n": 8,
+      "correct": 8
+     },
+     "date_code_out_of_range,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "date_code_out_of_range,purchase_before_window": {
+      "n": 1,
+      "correct": 1
+     },
+     "date_code_out_of_range,retailer_not_listed": {
+      "n": 2,
+      "correct": 2
+     },
+     "date_code_out_of_range,wrong_model": {
+      "n": 1,
+      "correct": 1
+     },
+     "date_code_out_of_range,wrong_model,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "destruction_not_shown": {
+      "n": 9,
+      "correct": 9
+     },
+     "destruction_not_shown,retailer_not_listed": {
+      "n": 1,
+      "correct": 1
+     },
+     "destruction_not_shown,wrong_model": {
+      "n": 1,
+      "correct": 1
+     },
+     "duplicate_address": {
+      "n": 7,
+      "correct": 7
+     },
+     "duplicate_payout": {
+      "n": 13,
+      "correct": 13
+     },
+     "duplicate_photo": {
+      "n": 11,
+      "correct": 11
+     },
+     "duplicate_serial": {
+      "n": 18,
+      "correct": 18
+     },
+     "no_receipt_when_required": {
+      "n": 2,
+      "correct": 2
+     },
+     "purchase_before_window": {
+      "n": 29,
+      "correct": 29
+     },
+     "purchase_before_window,date_code_out_of_range": {
+      "n": 1,
+      "correct": 1
+     },
+     "purchase_before_window,duplicate_payout": {
+      "n": 2,
+      "correct": 2
+     },
+     "purchase_before_window,duplicate_serial": {
+      "n": 2,
+      "correct": 2
+     },
+     "purchase_before_window,retailer_not_listed": {
+      "n": 2,
+      "correct": 2
+     },
+     "purchase_before_window,serial_out_of_range": {
+      "n": 1,
+      "correct": 1
+     },
+     "purchase_before_window,wrong_model": {
+      "n": 2,
+      "correct": 2
+     },
+     "retailer_not_listed": {
+      "n": 26,
+      "correct": 22
+     },
+     "retailer_not_listed,date_code_out_of_range": {
+      "n": 1,
+      "correct": 1
+     },
+     "retailer_not_listed,destruction_not_shown": {
+      "n": 1,
+      "correct": 1
+     },
+     "retailer_not_listed,duplicate_payout": {
+      "n": 3,
+      "correct": 3
+     },
+     "retailer_not_listed,duplicate_serial": {
+      "n": 2,
+      "correct": 2
+     },
+     "retailer_not_listed,purchase_before_window": {
+      "n": 1,
+      "correct": 1
+     },
+     "retailer_not_listed,serial_out_of_range,duplicate_serial": {
+      "n": 1,
+      "correct": 1
+     },
+     "retailer_not_listed,wrong_model": {
+      "n": 1,
+      "correct": 1
+     },
+     "serial_out_of_range": {
+      "n": 8,
+      "correct": 8
+     },
+     "serial_out_of_range,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "serial_out_of_range,duplicate_photo": {
+      "n": 2,
+      "correct": 2
+     },
+     "serial_out_of_range,purchase_before_window,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "serial_out_of_range,retailer_not_listed": {
+      "n": 1,
+      "correct": 1
+     },
+     "serial_out_of_range,wrong_model,duplicate_serial": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model": {
+      "n": 24,
+      "correct": 24
+     },
+     "wrong_model,date_code_out_of_range": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,duplicate_address": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,duplicate_photo": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,duplicate_serial": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,purchase_before_window": {
+      "n": 2,
+      "correct": 2
+     },
+     "wrong_model,purchase_before_window,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,retailer_not_listed,duplicate_serial": {
+      "n": 1,
+      "correct": 1
+     }
+    }
+   },
+   "loop_full": {
+    "n": 300,
+    "outcome_accuracy": 0.9267,
+    "macro_f1": 0.9162,
+    "macro_f1_classes": [
+     "approve",
+     "deny",
+     "needs_info",
+     "flag"
+    ],
+    "approval_accuracy": 0.9267,
+    "fraud_precision": 0.9474,
+    "fraud_recall": 1.0,
+    "needs_info_precision": 0.6842,
+    "routed_share": 0.2567,
+    "capped_share": 0.0,
+    "mean_counted_steps": 4.06,
+    "mean_rows": 11.6,
+    "mean_cost_usd": 0.001594,
+    "p50_seconds": 6.753,
+    "per_class": {
+     "approve": {
+      "f1": 0.8791,
+      "precision": 1.0,
+      "recall": 0.7843
+     },
+     "deny": {
+      "f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0
+     },
+     "needs_info": {
+      "f1": 0.8125,
+      "precision": 0.6842,
+      "recall": 1.0
+     },
+     "flag": {
+      "f1": 0.973,
+      "precision": 0.9474,
+      "recall": 1.0
+     }
+    },
+    "confusion": {
+     "approve": {
+      "approve": 80,
+      "needs_info": 18,
+      "flag": 4
+     },
+     "deny": {
+      "deny": 87
+     },
+     "needs_info": {
+      "needs_info": 39
+     },
+     "flag": {
+      "flag": 72
+     }
+    },
+    "by_category": {
+     "clean": {
+      "n": 102,
+      "correct": 80
+     },
+     "date_code_out_of_range": {
+      "n": 8,
+      "correct": 8
+     },
+     "date_code_out_of_range,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "date_code_out_of_range,purchase_before_window": {
+      "n": 1,
+      "correct": 1
+     },
+     "date_code_out_of_range,retailer_not_listed": {
+      "n": 2,
+      "correct": 2
+     },
+     "date_code_out_of_range,wrong_model": {
+      "n": 1,
+      "correct": 1
+     },
+     "date_code_out_of_range,wrong_model,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "destruction_not_shown": {
+      "n": 9,
+      "correct": 9
+     },
+     "destruction_not_shown,retailer_not_listed": {
+      "n": 1,
+      "correct": 1
+     },
+     "destruction_not_shown,wrong_model": {
+      "n": 1,
+      "correct": 1
+     },
+     "duplicate_address": {
+      "n": 7,
+      "correct": 7
+     },
+     "duplicate_payout": {
+      "n": 13,
+      "correct": 13
+     },
+     "duplicate_photo": {
+      "n": 11,
+      "correct": 11
+     },
+     "duplicate_serial": {
+      "n": 18,
+      "correct": 18
+     },
+     "no_receipt_when_required": {
+      "n": 2,
+      "correct": 2
+     },
+     "purchase_before_window": {
+      "n": 29,
+      "correct": 29
+     },
+     "purchase_before_window,date_code_out_of_range": {
+      "n": 1,
+      "correct": 1
+     },
+     "purchase_before_window,duplicate_payout": {
+      "n": 2,
+      "correct": 2
+     },
+     "purchase_before_window,duplicate_serial": {
+      "n": 2,
+      "correct": 2
+     },
+     "purchase_before_window,retailer_not_listed": {
+      "n": 2,
+      "correct": 2
+     },
+     "purchase_before_window,serial_out_of_range": {
+      "n": 1,
+      "correct": 1
+     },
+     "purchase_before_window,wrong_model": {
+      "n": 2,
+      "correct": 2
+     },
+     "retailer_not_listed": {
+      "n": 26,
+      "correct": 26
+     },
+     "retailer_not_listed,date_code_out_of_range": {
+      "n": 1,
+      "correct": 1
+     },
+     "retailer_not_listed,destruction_not_shown": {
+      "n": 1,
+      "correct": 1
+     },
+     "retailer_not_listed,duplicate_payout": {
+      "n": 3,
+      "correct": 3
+     },
+     "retailer_not_listed,duplicate_serial": {
+      "n": 2,
+      "correct": 2
+     },
+     "retailer_not_listed,purchase_before_window": {
+      "n": 1,
+      "correct": 1
+     },
+     "retailer_not_listed,serial_out_of_range,duplicate_serial": {
+      "n": 1,
+      "correct": 1
+     },
+     "retailer_not_listed,wrong_model": {
+      "n": 1,
+      "correct": 1
+     },
+     "serial_out_of_range": {
+      "n": 8,
+      "correct": 8
+     },
+     "serial_out_of_range,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "serial_out_of_range,duplicate_photo": {
+      "n": 2,
+      "correct": 2
+     },
+     "serial_out_of_range,purchase_before_window,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "serial_out_of_range,retailer_not_listed": {
+      "n": 1,
+      "correct": 1
+     },
+     "serial_out_of_range,wrong_model,duplicate_serial": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model": {
+      "n": 24,
+      "correct": 24
+     },
+     "wrong_model,date_code_out_of_range": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,duplicate_address": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,duplicate_photo": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,duplicate_serial": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,purchase_before_window": {
+      "n": 2,
+      "correct": 2
+     },
+     "wrong_model,purchase_before_window,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,retailer_not_listed,duplicate_serial": {
+      "n": 1,
+      "correct": 1
+     }
+    }
+   },
+   "loop_no_retrieval": {
+    "n": 300,
+    "outcome_accuracy": 0.9233,
+    "macro_f1": 0.9083,
+    "macro_f1_classes": [
+     "approve",
+     "deny",
+     "needs_info",
+     "flag"
+    ],
+    "approval_accuracy": 0.93,
+    "fraud_precision": 1.0,
+    "fraud_recall": 1.0,
+    "needs_info_precision": 0.6429,
+    "routed_share": 0.2467,
+    "capped_share": 0.0,
+    "mean_counted_steps": 4.03,
+    "mean_rows": 11.41,
+    "mean_cost_usd": 0.001512,
+    "p50_seconds": 6.801,
+    "per_class": {
+     "approve": {
+      "f1": 0.8865,
+      "precision": 0.988,
+      "recall": 0.8039
+     },
+     "deny": {
+      "f1": 0.9886,
+      "precision": 0.9775,
+      "recall": 1.0
+     },
+     "needs_info": {
+      "f1": 0.7579,
+      "precision": 0.6429,
+      "recall": 0.9231
+     },
+     "flag": {
+      "f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0
+     }
+    },
+    "confusion": {
+     "approve": {
+      "approve": 82,
+      "needs_info": 20
+     },
+     "deny": {
+      "deny": 87
+     },
+     "needs_info": {
+      "needs_info": 36,
+      "deny": 2,
+      "approve": 1
+     },
+     "flag": {
+      "flag": 72
+     }
+    },
+    "by_category": {
+     "clean": {
+      "n": 102,
+      "correct": 82
+     },
+     "date_code_out_of_range": {
+      "n": 8,
+      "correct": 8
+     },
+     "date_code_out_of_range,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "date_code_out_of_range,purchase_before_window": {
+      "n": 1,
+      "correct": 1
+     },
+     "date_code_out_of_range,retailer_not_listed": {
+      "n": 2,
+      "correct": 2
+     },
+     "date_code_out_of_range,wrong_model": {
+      "n": 1,
+      "correct": 1
+     },
+     "date_code_out_of_range,wrong_model,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "destruction_not_shown": {
+      "n": 9,
+      "correct": 8
+     },
+     "destruction_not_shown,retailer_not_listed": {
+      "n": 1,
+      "correct": 1
+     },
+     "destruction_not_shown,wrong_model": {
+      "n": 1,
+      "correct": 1
+     },
+     "duplicate_address": {
+      "n": 7,
+      "correct": 7
+     },
+     "duplicate_payout": {
+      "n": 13,
+      "correct": 13
+     },
+     "duplicate_photo": {
+      "n": 11,
+      "correct": 11
+     },
+     "duplicate_serial": {
+      "n": 18,
+      "correct": 18
+     },
+     "no_receipt_when_required": {
+      "n": 2,
+      "correct": 2
+     },
+     "purchase_before_window": {
+      "n": 29,
+      "correct": 29
+     },
+     "purchase_before_window,date_code_out_of_range": {
+      "n": 1,
+      "correct": 1
+     },
+     "purchase_before_window,duplicate_payout": {
+      "n": 2,
+      "correct": 2
+     },
+     "purchase_before_window,duplicate_serial": {
+      "n": 2,
+      "correct": 2
+     },
+     "purchase_before_window,retailer_not_listed": {
+      "n": 2,
+      "correct": 2
+     },
+     "purchase_before_window,serial_out_of_range": {
+      "n": 1,
+      "correct": 1
+     },
+     "purchase_before_window,wrong_model": {
+      "n": 2,
+      "correct": 2
+     },
+     "retailer_not_listed": {
+      "n": 26,
+      "correct": 24
+     },
+     "retailer_not_listed,date_code_out_of_range": {
+      "n": 1,
+      "correct": 1
+     },
+     "retailer_not_listed,destruction_not_shown": {
+      "n": 1,
+      "correct": 1
+     },
+     "retailer_not_listed,duplicate_payout": {
+      "n": 3,
+      "correct": 3
+     },
+     "retailer_not_listed,duplicate_serial": {
+      "n": 2,
+      "correct": 2
+     },
+     "retailer_not_listed,purchase_before_window": {
+      "n": 1,
+      "correct": 1
+     },
+     "retailer_not_listed,serial_out_of_range,duplicate_serial": {
+      "n": 1,
+      "correct": 1
+     },
+     "retailer_not_listed,wrong_model": {
+      "n": 1,
+      "correct": 1
+     },
+     "serial_out_of_range": {
+      "n": 8,
+      "correct": 8
+     },
+     "serial_out_of_range,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "serial_out_of_range,duplicate_photo": {
+      "n": 2,
+      "correct": 2
+     },
+     "serial_out_of_range,purchase_before_window,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "serial_out_of_range,retailer_not_listed": {
+      "n": 1,
+      "correct": 1
+     },
+     "serial_out_of_range,wrong_model,duplicate_serial": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model": {
+      "n": 24,
+      "correct": 24
+     },
+     "wrong_model,date_code_out_of_range": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,duplicate_address": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,duplicate_photo": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,duplicate_serial": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,purchase_before_window": {
+      "n": 2,
+      "correct": 2
+     },
+     "wrong_model,purchase_before_window,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,retailer_not_listed,duplicate_serial": {
+      "n": 1,
+      "correct": 1
+     }
+    }
+   },
+   "loop_keyword_only": {
+    "n": 300,
+    "outcome_accuracy": 0.9267,
+    "macro_f1": 0.915,
+    "macro_f1_classes": [
+     "approve",
+     "deny",
+     "needs_info",
+     "flag"
+    ],
+    "approval_accuracy": 0.9267,
+    "fraud_precision": 0.96,
+    "fraud_recall": 1.0,
+    "needs_info_precision": 0.6786,
+    "routed_share": 0.2567,
+    "capped_share": 0.0,
+    "mean_counted_steps": 4.06,
+    "mean_rows": 11.6,
+    "mean_cost_usd": 0.001594,
+    "p50_seconds": 6.812,
+    "per_class": {
+     "approve": {
+      "f1": 0.8804,
+      "precision": 0.9878,
+      "recall": 0.7941
+     },
+     "deny": {
+      "f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0
+     },
+     "needs_info": {
+      "f1": 0.8,
+      "precision": 0.6786,
+      "recall": 0.9744
+     },
+     "flag": {
+      "f1": 0.9796,
+      "precision": 0.96,
+      "recall": 1.0
+     }
+    },
+    "confusion": {
+     "approve": {
+      "approve": 81,
+      "needs_info": 18,
+      "flag": 3
+     },
+     "deny": {
+      "deny": 87
+     },
+     "needs_info": {
+      "needs_info": 38,
+      "approve": 1
+     },
+     "flag": {
+      "flag": 72
+     }
+    },
+    "by_category": {
+     "clean": {
+      "n": 102,
+      "correct": 81
+     },
+     "date_code_out_of_range": {
+      "n": 8,
+      "correct": 8
+     },
+     "date_code_out_of_range,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "date_code_out_of_range,purchase_before_window": {
+      "n": 1,
+      "correct": 1
+     },
+     "date_code_out_of_range,retailer_not_listed": {
+      "n": 2,
+      "correct": 2
+     },
+     "date_code_out_of_range,wrong_model": {
+      "n": 1,
+      "correct": 1
+     },
+     "date_code_out_of_range,wrong_model,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "destruction_not_shown": {
+      "n": 9,
+      "correct": 9
+     },
+     "destruction_not_shown,retailer_not_listed": {
+      "n": 1,
+      "correct": 1
+     },
+     "destruction_not_shown,wrong_model": {
+      "n": 1,
+      "correct": 1
+     },
+     "duplicate_address": {
+      "n": 7,
+      "correct": 7
+     },
+     "duplicate_payout": {
+      "n": 13,
+      "correct": 13
+     },
+     "duplicate_photo": {
+      "n": 11,
+      "correct": 11
+     },
+     "duplicate_serial": {
+      "n": 18,
+      "correct": 18
+     },
+     "no_receipt_when_required": {
+      "n": 2,
+      "correct": 2
+     },
+     "purchase_before_window": {
+      "n": 29,
+      "correct": 29
+     },
+     "purchase_before_window,date_code_out_of_range": {
+      "n": 1,
+      "correct": 1
+     },
+     "purchase_before_window,duplicate_payout": {
+      "n": 2,
+      "correct": 2
+     },
+     "purchase_before_window,duplicate_serial": {
+      "n": 2,
+      "correct": 2
+     },
+     "purchase_before_window,retailer_not_listed": {
+      "n": 2,
+      "correct": 2
+     },
+     "purchase_before_window,serial_out_of_range": {
+      "n": 1,
+      "correct": 1
+     },
+     "purchase_before_window,wrong_model": {
+      "n": 2,
+      "correct": 2
+     },
+     "retailer_not_listed": {
+      "n": 26,
+      "correct": 25
+     },
+     "retailer_not_listed,date_code_out_of_range": {
+      "n": 1,
+      "correct": 1
+     },
+     "retailer_not_listed,destruction_not_shown": {
+      "n": 1,
+      "correct": 1
+     },
+     "retailer_not_listed,duplicate_payout": {
+      "n": 3,
+      "correct": 3
+     },
+     "retailer_not_listed,duplicate_serial": {
+      "n": 2,
+      "correct": 2
+     },
+     "retailer_not_listed,purchase_before_window": {
+      "n": 1,
+      "correct": 1
+     },
+     "retailer_not_listed,serial_out_of_range,duplicate_serial": {
+      "n": 1,
+      "correct": 1
+     },
+     "retailer_not_listed,wrong_model": {
+      "n": 1,
+      "correct": 1
+     },
+     "serial_out_of_range": {
+      "n": 8,
+      "correct": 8
+     },
+     "serial_out_of_range,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "serial_out_of_range,duplicate_photo": {
+      "n": 2,
+      "correct": 2
+     },
+     "serial_out_of_range,purchase_before_window,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "serial_out_of_range,retailer_not_listed": {
+      "n": 1,
+      "correct": 1
+     },
+     "serial_out_of_range,wrong_model,duplicate_serial": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model": {
+      "n": 24,
+      "correct": 24
+     },
+     "wrong_model,date_code_out_of_range": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,duplicate_address": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,duplicate_photo": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,duplicate_serial": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,purchase_before_window": {
+      "n": 2,
+      "correct": 2
+     },
+     "wrong_model,purchase_before_window,duplicate_payout": {
+      "n": 1,
+      "correct": 1
+     },
+     "wrong_model,retailer_not_listed,duplicate_serial": {
+      "n": 1,
+      "correct": 1
+     }
+    }
+   }
+  },
+  "probe60": {
+   "rules_only": {
+    "n": 60,
+    "outcome_accuracy": 0.1667,
+    "macro_f1": 0.0952,
+    "macro_f1_classes": [
+     "approve",
+     "deny",
+     "needs_info"
+    ],
+    "approval_accuracy": 0.1667,
+    "fraud_precision": null,
+    "fraud_recall": null,
+    "needs_info_precision": 0.0,
+    "routed_share": 0.1167,
+    "capped_share": 0.0,
+    "mean_counted_steps": 0,
+    "mean_rows": 7,
+    "mean_cost_usd": 0.0,
+    "p50_seconds": 0.0,
+    "per_class": {
+     "approve": {
+      "f1": 0.2857,
+      "precision": 0.25,
+      "recall": 0.3333
+     },
+     "deny": {
+      "f1": 0.0,
+      "precision": null,
+      "recall": 0.0
+     },
+     "needs_info": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": 0.0
+     },
+     "flag": {
+      "f1": 0.0,
+      "precision": null,
+      "recall": null
+     }
+    },
+    "confusion": {
+     "approve": {
+      "needs_info": 20,
+      "approve": 10
+     },
+     "deny": {
+      "approve": 10
+     },
+     "needs_info": {
+      "approve": 20
+     },
+     "flag": {}
+    },
+    "by_category": {
+     "clean": {
+      "n": 10,
+      "correct": 10
+     },
+     "destruction_photo_intact": {
+      "n": 10,
+      "correct": 0
+     },
+     "label_confirms_missing_typed_model": {
+      "n": 10,
+      "correct": 0
+     },
+     "label_confirms_typed_typo": {
+      "n": 10,
+      "correct": 0
+     },
+     "label_shows_other_model": {
+      "n": 10,
+      "correct": 0
+     },
+     "label_unreadable": {
+      "n": 10,
+      "correct": 0
+     }
+    }
+   },
+   "rules_plus_vision": {
+    "n": 60,
+    "outcome_accuracy": 0.6667,
+    "macro_f1": 0.7263,
+    "macro_f1_classes": [
+     "approve",
+     "deny",
+     "needs_info"
+    ],
+    "approval_accuracy": 0.6667,
+    "fraud_precision": null,
+    "fraud_recall": null,
+    "needs_info_precision": 0.5,
+    "routed_share": 0.0167,
+    "capped_share": 0.0,
+    "mean_counted_steps": 1.92,
+    "mean_rows": 8.92,
+    "mean_cost_usd": 0.000312,
+    "p50_seconds": 2.577,
+    "per_class": {
+     "approve": {
+      "f1": 0.5238,
+      "precision": 0.9167,
+      "recall": 0.3667
+     },
+     "deny": {
+      "f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0
+     },
+     "needs_info": {
+      "f1": 0.6552,
+      "precision": 0.5,
+      "recall": 0.95
+     },
+     "flag": {
+      "f1": 0.0,
+      "precision": null,
+      "recall": null
+     }
+    },
+    "confusion": {
+     "approve": {
+      "needs_info": 19,
+      "approve": 11
+     },
+     "deny": {
+      "deny": 10
+     },
+     "needs_info": {
+      "needs_info": 19,
+      "approve": 1
+     },
+     "flag": {}
+    },
+    "by_category": {
+     "clean": {
+      "n": 10,
+      "correct": 4
+     },
+     "destruction_photo_intact": {
+      "n": 10,
+      "correct": 9
+     },
+     "label_confirms_missing_typed_model": {
+      "n": 10,
+      "correct": 4
+     },
+     "label_confirms_typed_typo": {
+      "n": 10,
+      "correct": 3
+     },
+     "label_shows_other_model": {
+      "n": 10,
+      "correct": 10
+     },
+     "label_unreadable": {
+      "n": 10,
+      "correct": 10
+     }
+    }
+   },
+   "single_pass": {
+    "n": 60,
+    "outcome_accuracy": 0.5833,
+    "macro_f1": 0.6633,
+    "macro_f1_classes": [
+     "approve",
+     "deny",
+     "needs_info"
+    ],
+    "approval_accuracy": 0.5833,
+    "fraud_precision": null,
+    "fraud_recall": null,
+    "needs_info_precision": 0.4286,
+    "routed_share": 0.0667,
+    "capped_share": 0.0,
+    "mean_counted_steps": 3.13,
+    "mean_rows": 9.95,
+    "mean_cost_usd": 0.001111,
+    "p50_seconds": 6.475,
+    "per_class": {
+     "approve": {
+      "f1": 0.4444,
+      "precision": 0.6667,
+      "recall": 0.3333
+     },
+     "deny": {
+      "f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0
+     },
+     "needs_info": {
+      "f1": 0.5455,
+      "precision": 0.4286,
+      "recall": 0.75
+     },
+     "flag": {
+      "f1": 0.0,
+      "precision": null,
+      "recall": null
+     }
+    },
+    "confusion": {
+     "approve": {
+      "needs_info": 20,
+      "approve": 10
+     },
+     "deny": {
+      "deny": 10
+     },
+     "needs_info": {
+      "needs_info": 15,
+      "approve": 5
+     },
+     "flag": {}
+    },
+    "by_category": {
+     "clean": {
+      "n": 10,
+      "correct": 3
+     },
+     "destruction_photo_intact": {
+      "n": 10,
+      "correct": 9
+     },
+     "label_confirms_missing_typed_model": {
+      "n": 10,
+      "correct": 4
+     },
+     "label_confirms_typed_typo": {
+      "n": 10,
+      "correct": 3
+     },
+     "label_shows_other_model": {
+      "n": 10,
+      "correct": 10
+     },
+     "label_unreadable": {
+      "n": 10,
+      "correct": 6
+     }
+    }
+   },
+   "loop_full": {
+    "n": 60,
+    "outcome_accuracy": 0.6333,
+    "macro_f1": 0.7026,
+    "macro_f1_classes": [
+     "approve",
+     "deny",
+     "needs_info"
+    ],
+    "approval_accuracy": 0.6333,
+    "fraud_precision": 0.0,
+    "fraud_recall": null,
+    "needs_info_precision": 0.4865,
+    "routed_share": 0.0333,
+    "capped_share": 0.0,
+    "mean_counted_steps": 4.83,
+    "mean_rows": 12.6,
+    "mean_cost_usd": 0.001799,
+    "p50_seconds": 8.469,
+    "per_class": {
+     "approve": {
+      "f1": 0.4762,
+      "precision": 0.8333,
+      "recall": 0.3333
+     },
+     "deny": {
+      "f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0
+     },
+     "needs_info": {
+      "f1": 0.6316,
+      "precision": 0.4865,
+      "recall": 0.9
+     },
+     "flag": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": null
+     }
+    },
+    "confusion": {
+     "approve": {
+      "needs_info": 19,
+      "flag": 1,
+      "approve": 10
+     },
+     "deny": {
+      "deny": 10
+     },
+     "needs_info": {
+      "needs_info": 18,
+      "approve": 2
+     },
+     "flag": {}
+    },
+    "by_category": {
+     "clean": {
+      "n": 10,
+      "correct": 3
+     },
+     "destruction_photo_intact": {
+      "n": 10,
+      "correct": 9
+     },
+     "label_confirms_missing_typed_model": {
+      "n": 10,
+      "correct": 4
+     },
+     "label_confirms_typed_typo": {
+      "n": 10,
+      "correct": 3
+     },
+     "label_shows_other_model": {
+      "n": 10,
+      "correct": 10
+     },
+     "label_unreadable": {
+      "n": 10,
+      "correct": 9
+     }
+    }
+   },
+   "loop_no_retrieval": {
+    "n": 60,
+    "outcome_accuracy": 0.6333,
+    "macro_f1": 0.699,
+    "macro_f1_classes": [
+     "approve",
+     "deny",
+     "needs_info"
+    ],
+    "approval_accuracy": 0.6333,
+    "fraud_precision": null,
+    "fraud_recall": null,
+    "needs_info_precision": 0.4737,
+    "routed_share": 0.0167,
+    "capped_share": 0.0,
+    "mean_counted_steps": 4.83,
+    "mean_rows": 12.48,
+    "mean_cost_usd": 0.001724,
+    "p50_seconds": 8.455,
+    "per_class": {
+     "approve": {
+      "f1": 0.4762,
+      "precision": 0.8333,
+      "recall": 0.3333
+     },
+     "deny": {
+      "f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0
+     },
+     "needs_info": {
+      "f1": 0.6207,
+      "precision": 0.4737,
+      "recall": 0.9
+     },
+     "flag": {
+      "f1": 0.0,
+      "precision": null,
+      "recall": null
+     }
+    },
+    "confusion": {
+     "approve": {
+      "needs_info": 20,
+      "approve": 10
+     },
+     "deny": {
+      "deny": 10
+     },
+     "needs_info": {
+      "needs_info": 18,
+      "approve": 2
+     },
+     "flag": {}
+    },
+    "by_category": {
+     "clean": {
+      "n": 10,
+      "correct": 3
+     },
+     "destruction_photo_intact": {
+      "n": 10,
+      "correct": 9
+     },
+     "label_confirms_missing_typed_model": {
+      "n": 10,
+      "correct": 4
+     },
+     "label_confirms_typed_typo": {
+      "n": 10,
+      "correct": 3
+     },
+     "label_shows_other_model": {
+      "n": 10,
+      "correct": 10
+     },
+     "label_unreadable": {
+      "n": 10,
+      "correct": 9
+     }
+    }
+   },
+   "loop_keyword_only": {
+    "n": 60,
+    "outcome_accuracy": 0.6167,
+    "macro_f1": 0.6907,
+    "macro_f1_classes": [
+     "approve",
+     "deny",
+     "needs_info"
+    ],
+    "approval_accuracy": 0.6167,
+    "fraud_precision": 0.0,
+    "fraud_recall": null,
+    "needs_info_precision": 0.4722,
+    "routed_share": 0.05,
+    "capped_share": 0.0,
+    "mean_counted_steps": 4.85,
+    "mean_rows": 12.63,
+    "mean_cost_usd": 0.001815,
+    "p50_seconds": 8.497,
+    "per_class": {
+     "approve": {
+      "f1": 0.4651,
+      "precision": 0.7692,
+      "recall": 0.3333
+     },
+     "deny": {
+      "f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0
+     },
+     "needs_info": {
+      "f1": 0.6071,
+      "precision": 0.4722,
+      "recall": 0.85
+     },
+     "flag": {
+      "f1": 0.0,
+      "precision": 0.0,
+      "recall": null
+     }
+    },
+    "confusion": {
+     "approve": {
+      "needs_info": 19,
+      "flag": 1,
+      "approve": 10
+     },
+     "deny": {
+      "deny": 10
+     },
+     "needs_info": {
+      "needs_info": 17,
+      "approve": 3
+     },
+     "flag": {}
+    },
+    "by_category": {
+     "clean": {
+      "n": 10,
+      "correct": 3
+     },
+     "destruction_photo_intact": {
+      "n": 10,
+      "correct": 9
+     },
+     "label_confirms_missing_typed_model": {
+      "n": 10,
+      "correct": 4
+     },
+     "label_confirms_typed_typo": {
+      "n": 10,
+      "correct": 3
+     },
+     "label_shows_other_model": {
+      "n": 10,
+      "correct": 10
+     },
+     "label_unreadable": {
+      "n": 10,
+      "correct": 8
+     }
+    }
+   }
+  },
+  "standin40": {
+   "rules_only": {
+    "n": 40,
+    "outcome_accuracy": 0.525,
+    "macro_f1": 0.5833,
+    "macro_f1_classes": [
+     "approve",
+     "deny",
+     "needs_info",
+     "flag"
+    ],
+    "approval_accuracy": 0.575,
+    "fraud_precision": 1.0,
+    "fraud_recall": 0.75,
+    "needs_info_precision": 0.25,
+    "routed_share": 0.25,
+    "capped_share": 0.0,
+    "mean_counted_steps": 0,
+    "mean_rows": 7,
+    "mean_cost_usd": 0.0,
+    "p50_seconds": 0.0,
+    "per_class": {
+     "approve": {
+      "f1": 0.4138,
+      "precision": 0.4615,
+      "recall": 0.375
+     },
+     "deny": {
+      "f1": 0.7143,
+      "precision": 1.0,
+      "recall": 0.5556
+     },
+     "needs_info": {
+      "f1": 0.3478,
+      "precision": 0.25,
+      "recall": 0.5714
+     },
+     "flag": {
+      "f1": 0.8571,
+      "precision": 1.0,
+      "recall": 0.75
+     }
+    },
+    "confusion": {
+     "approve": {
+      "approve": 6,
+      "needs_info": 10
+     },
+     "deny": {
+      "deny": 5,
+      "approve": 2,
+      "needs_info": 2
+     },
+     "needs_info": {
+      "approve": 3,
+      "needs_info": 4
+     },
+     "flag": {
+      "flag": 6,
+      "approve": 2
+     }
+    },
+    "by_category": {
+     "expect_approve": {
+      "n": 16,
+      "correct": 6
+     },
+     "expect_deny": {
+      "n": 9,
+      "correct": 5
+     },
+     "expect_flag": {
+      "n": 8,
+      "correct": 6
+     },
+     "expect_needs_info": {
+      "n": 7,
+      "correct": 4
+     }
+    }
+   },
+   "rules_plus_vision": {
+    "n": 40,
+    "outcome_accuracy": 0.625,
+    "macro_f1": 0.6676,
+    "macro_f1_classes": [
+     "approve",
+     "deny",
+     "needs_info",
+     "flag"
+    ],
+    "approval_accuracy": 0.75,
+    "fraud_precision": 1.0,
+    "fraud_recall": 0.75,
+    "needs_info_precision": 0.3,
+    "routed_share": 0.15,
+    "capped_share": 0.0,
+    "mean_counted_steps": 1.48,
+    "mean_rows": 8.47,
+    "mean_cost_usd": 0.00024,
+    "p50_seconds": 1.484,
+    "per_class": {
+     "approve": {
+      "f1": 0.5455,
+      "precision": 1.0,
+      "recall": 0.375
+     },
+     "deny": {
+      "f1": 0.8235,
+      "precision": 0.875,
+      "recall": 0.7778
+     },
+     "needs_info": {
+      "f1": 0.4444,
+      "precision": 0.3,
+      "recall": 0.8571
+     },
+     "flag": {
+      "f1": 0.8571,
+      "precision": 1.0,
+      "recall": 0.75
+     }
+    },
+    "confusion": {
+     "approve": {
+      "approve": 6,
+      "needs_info": 10
+     },
+     "deny": {
+      "deny": 7,
+      "needs_info": 2
+     },
+     "needs_info": {
+      "deny": 1,
+      "needs_info": 6
+     },
+     "flag": {
+      "flag": 6,
+      "needs_info": 2
+     }
+    },
+    "by_category": {
+     "expect_approve": {
+      "n": 16,
+      "correct": 6
+     },
+     "expect_deny": {
+      "n": 9,
+      "correct": 7
+     },
+     "expect_flag": {
+      "n": 8,
+      "correct": 6
+     },
+     "expect_needs_info": {
+      "n": 7,
+      "correct": 6
+     }
+    }
+   },
+   "single_pass": {
+    "n": 40,
+    "outcome_accuracy": 0.675,
+    "macro_f1": 0.7103,
+    "macro_f1_classes": [
+     "approve",
+     "deny",
+     "needs_info",
+     "flag"
+    ],
+    "approval_accuracy": 0.75,
+    "fraud_precision": 1.0,
+    "fraud_recall": 0.75,
+    "needs_info_precision": 0.3077,
+    "routed_share": 0.35,
+    "capped_share": 0.025,
+    "mean_counted_steps": 2.8,
+    "mean_rows": 10.3,
+    "mean_cost_usd": 0.001106,
+    "p50_seconds": 6.513,
+    "per_class": {
+     "approve": {
+      "f1": 0.6429,
+      "precision": 0.75,
+      "recall": 0.5625
+     },
+     "deny": {
+      "f1": 0.9412,
+      "precision": 1.0,
+      "recall": 0.8889
+     },
+     "needs_info": {
+      "f1": 0.4,
+      "precision": 0.3077,
+      "recall": 0.5714
+     },
+     "flag": {
+      "f1": 0.8571,
+      "precision": 1.0,
+      "recall": 0.75
+     }
+    },
+    "confusion": {
+     "approve": {
+      "approve": 9,
+      "needs_info": 7
+     },
+     "deny": {
+      "deny": 8,
+      "needs_info": 1
+     },
+     "needs_info": {
+      "needs_info": 4,
+      "approve": 3
+     },
+     "flag": {
+      "flag": 6,
+      "failed": 1,
+      "needs_info": 1
+     }
+    },
+    "by_category": {
+     "expect_approve": {
+      "n": 16,
+      "correct": 9
+     },
+     "expect_deny": {
+      "n": 9,
+      "correct": 8
+     },
+     "expect_flag": {
+      "n": 8,
+      "correct": 6
+     },
+     "expect_needs_info": {
+      "n": 7,
+      "correct": 4
+     }
+    }
+   },
+   "loop_full": {
+    "n": 40,
+    "outcome_accuracy": 0.75,
+    "macro_f1": 0.7737,
+    "macro_f1_classes": [
+     "approve",
+     "deny",
+     "needs_info",
+     "flag"
+    ],
+    "approval_accuracy": 0.8,
+    "fraud_precision": 1.0,
+    "fraud_recall": 0.75,
+    "needs_info_precision": 0.4,
+    "routed_share": 0.275,
+    "capped_share": 0.0,
+    "mean_counted_steps": 4.45,
+    "mean_rows": 11.53,
+    "mean_cost_usd": 0.001675,
+    "p50_seconds": 7.346,
+    "per_class": {
+     "approve": {
+      "f1": 0.6923,
+      "precision": 0.9,
+      "recall": 0.5625
+     },
+     "deny": {
+      "f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0
+     },
+     "needs_info": {
+      "f1": 0.5455,
+      "precision": 0.4,
+      "recall": 0.8571
+     },
+     "flag": {
+      "f1": 0.8571,
+      "precision": 1.0,
+      "recall": 0.75
+     }
+    },
+    "confusion": {
+     "approve": {
+      "approve": 9,
+      "needs_info": 7
+     },
+     "deny": {
+      "deny": 9
+     },
+     "needs_info": {
+      "needs_info": 6,
+      "approve": 1
+     },
+     "flag": {
+      "flag": 6,
+      "needs_info": 2
+     }
+    },
+    "by_category": {
+     "expect_approve": {
+      "n": 16,
+      "correct": 9
+     },
+     "expect_deny": {
+      "n": 9,
+      "correct": 9
+     },
+     "expect_flag": {
+      "n": 8,
+      "correct": 6
+     },
+     "expect_needs_info": {
+      "n": 7,
+      "correct": 6
+     }
+    }
+   },
+   "loop_no_retrieval": {
+    "n": 40,
+    "outcome_accuracy": 0.7,
+    "macro_f1": 0.7178,
+    "macro_f1_classes": [
+     "approve",
+     "deny",
+     "needs_info",
+     "flag"
+    ],
+    "approval_accuracy": 0.775,
+    "fraud_precision": 1.0,
+    "fraud_recall": 0.75,
+    "needs_info_precision": 0.3077,
+    "routed_share": 0.3,
+    "capped_share": 0.0,
+    "mean_counted_steps": 4.35,
+    "mean_rows": 11.22,
+    "mean_cost_usd": 0.001555,
+    "p50_seconds": 7.456,
+    "per_class": {
+     "approve": {
+      "f1": 0.6667,
+      "precision": 0.8182,
+      "recall": 0.5625
+     },
+     "deny": {
+      "f1": 0.9474,
+      "precision": 0.9,
+      "recall": 1.0
+     },
+     "needs_info": {
+      "f1": 0.4,
+      "precision": 0.3077,
+      "recall": 0.5714
+     },
+     "flag": {
+      "f1": 0.8571,
+      "precision": 1.0,
+      "recall": 0.75
+     }
+    },
+    "confusion": {
+     "approve": {
+      "approve": 9,
+      "needs_info": 7
+     },
+     "deny": {
+      "deny": 9
+     },
+     "needs_info": {
+      "needs_info": 4,
+      "approve": 2,
+      "deny": 1
+     },
+     "flag": {
+      "flag": 6,
+      "needs_info": 2
+     }
+    },
+    "by_category": {
+     "expect_approve": {
+      "n": 16,
+      "correct": 9
+     },
+     "expect_deny": {
+      "n": 9,
+      "correct": 9
+     },
+     "expect_flag": {
+      "n": 8,
+      "correct": 6
+     },
+     "expect_needs_info": {
+      "n": 7,
+      "correct": 4
+     }
+    }
+   },
+   "loop_keyword_only": {
+    "n": 40,
+    "outcome_accuracy": 0.75,
+    "macro_f1": 0.7737,
+    "macro_f1_classes": [
+     "approve",
+     "deny",
+     "needs_info",
+     "flag"
+    ],
+    "approval_accuracy": 0.8,
+    "fraud_precision": 1.0,
+    "fraud_recall": 0.75,
+    "needs_info_precision": 0.4,
+    "routed_share": 0.275,
+    "capped_share": 0.0,
+    "mean_counted_steps": 4.45,
+    "mean_rows": 11.53,
+    "mean_cost_usd": 0.001678,
+    "p50_seconds": 7.337,
+    "per_class": {
+     "approve": {
+      "f1": 0.6923,
+      "precision": 0.9,
+      "recall": 0.5625
+     },
+     "deny": {
+      "f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0
+     },
+     "needs_info": {
+      "f1": 0.5455,
+      "precision": 0.4,
+      "recall": 0.8571
+     },
+     "flag": {
+      "f1": 0.8571,
+      "precision": 1.0,
+      "recall": 0.75
+     }
+    },
+    "confusion": {
+     "approve": {
+      "approve": 9,
+      "needs_info": 7
+     },
+     "deny": {
+      "deny": 9
+     },
+     "needs_info": {
+      "needs_info": 6,
+      "approve": 1
+     },
+     "flag": {
+      "flag": 6,
+      "needs_info": 2
+     }
+    },
+    "by_category": {
+     "expect_approve": {
+      "n": 16,
+      "correct": 9
+     },
+     "expect_deny": {
+      "n": 9,
+      "correct": 9
+     },
+     "expect_flag": {
+      "n": 8,
+      "correct": 6
+     },
+     "expect_needs_info": {
+      "n": 7,
+      "correct": 6
+     }
+    }
+   }
+  }
+ },
+ "kill_criterion": {
+  "gap": -0.0655,
+  "fired": true
+ }
+}

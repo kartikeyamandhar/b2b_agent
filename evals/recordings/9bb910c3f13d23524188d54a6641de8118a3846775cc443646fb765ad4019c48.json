@@ -1,0 +1,62 @@
+{
+ "text": "Model is confirmed as recalled, but the date code is out of range, which is a deny under the policy. No duplicates were found.",
+ "usage": {
+  "input_tokens": 3559,
+  "output_tokens": 419,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3nFXjJ5BBnw2rYyS9i",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2807,
+ "content": [
+  {
+   "type": "text",
+   "text": "Model is confirmed as recalled, but the date code is out of range, which is a deny under the policy. No duplicates were found."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01LWiVVWUpU4KjLJWuFVhCdJ",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PA-10, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The date code on the label, 2369, is outside the recalled date code range of 2126 to 2319, so the unit is not covered by the recall.",
+      "cites": [
+       "R:date_codes",
+       "T5",
+       "T1"
+      ]
+     },
+     {
+      "text": "Because the date code is outside the recalled range, the claim is denied under the claim policy, which denies on an out-of-range date code.",
+      "cites": [
+       "R:policy",
+       "T5"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim, so duplicates do not affect the outcome.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

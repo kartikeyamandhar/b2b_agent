@@ -1,0 +1,65 @@
+{
+ "text": "The model check confirms a mismatch. Under the policy, a legible label showing a non-recalled model is a denial, and the purchase date falls before the sale window, which is also a denial.",
+ "usage": {
+  "input_tokens": 3711,
+  "output_tokens": 486,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3jWChkmE6mkV5CPv3o",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2499,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model check confirms a mismatch. Under the policy, a legible label showing a non-recalled model is a denial, and the purchase date falls before the sale window, which is also a denial."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01BhS475e21wBTh66MFegf7p",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model B0026Y, which is not a recalled model. The recalled model is B0726Y.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T7",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2015-12-27 is before the program's sale window (2017-01-01 to 2024-01-31), so the purchase is outside eligible dates.",
+      "cites": [
+       "R:sold_window",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the helmet with its straps cut off, as the recall requires, so it does not meet the destruction requirement.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "The retailer (www.Amazon.com) is a listed retailer, and the date code 8/21 is in range; these do not change the outcome. No duplicate claims were found.",
+      "cites": [
+       "T2",
+       "T6",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

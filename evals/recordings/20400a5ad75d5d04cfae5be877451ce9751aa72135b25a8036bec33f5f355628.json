@@ -1,0 +1,68 @@
+{
+ "text": "The model is confirmed as recalled, and the purchase is valid. The destruction photo does not show the required \"RECALLED\" marking, so the claim needs more information before a refund.",
+ "usage": {
+  "input_tokens": 3498,
+  "output_tokens": 555,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4BGnXXNynTEFN3VhgU",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3146,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed as recalled, and the purchase is valid. The destruction photo does not show the required \"RECALLED\" marking, so the claim needs more information before a refund."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_013LHKDWn5neTL13h6NmiW65",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model AD10004GR, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase was made at Amazon.com on 2024-07-30, which is a listed retailer and inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the product but does not show the required 'RECALLED' writing on the front and rear of the seatback, so it does not comply with the destruction requirement.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "The refund is $139.99, which is over the $100 threshold, so a person will review it after the destruction proof is resubmitted.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new destruction photo showing the word \"RECALLED\" written in large letters with a marker on both the front and the rear of the seatback. The current photo shows the product but no such marking.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

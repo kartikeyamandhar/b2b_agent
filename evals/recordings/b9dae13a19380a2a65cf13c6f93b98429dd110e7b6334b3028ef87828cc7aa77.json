@@ -1,0 +1,29 @@
+{
+ "text": "The duplicate check found another claim sharing this claim's address, which triggers a flag under the policy and overrides the other results. I'll check the model against the recall list before recording the decision.",
+ "usage": {
+  "input_tokens": 3405,
+  "output_tokens": 108,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB49rtaP29eW5HBXJ2Mt",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2902,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing this claim's address, which triggers a flag under the policy and overrides the other results. I'll check the model against the recall list before recording the decision."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01P9Vz6R71VnfHhCgQaDPTLq",
+   "name": "check_model",
+   "input": {
+    "model_text": "MK04"
+   }
+  }
+ ]
+}

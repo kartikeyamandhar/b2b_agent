@@ -14,13 +14,13 @@ from uuid import UUID
 
 from recallops.auth.provider import AuthError, ClaimTokenContext, NoFirmError, Principal
 from recallops.logs import get_logger, log_event
-from recallops.settings import Settings
+from recallops.settings import Settings, is_local_uri
 from recallops.tenancy import FirmContext
 
 log = get_logger("auth.dev")
 
 LIVE_KEY = re.compile(r"_live_")
-DEV_TOKEN = re.compile(r"^dev\.([0-9a-fA-F-]{36})$")
+DEV_TOKEN = re.compile(r"^dev\.([0-9a-fA-F-]{36})\.([0-9a-fA-F-]{36})$")
 
 
 class UnsafeDevAuth(RuntimeError):
@@ -52,6 +52,8 @@ class DevAuthProvider:
         live = live_keys_present(settings, environ)
         if live:
             raise UnsafeDevAuth(f"refusing to load the dev auth provider: live keys present in {live}")
+        if settings.neo4j_uri and not is_local_uri(settings.neo4j_uri):
+            raise UnsafeDevAuth("refusing to load the dev auth provider next to a remote fraud graph (NEO4J_URI)")
         log_event(log, "dev_auth_provider_loaded", app_env=settings.app_env)
 
     def authenticate(self, headers: dict[str, str]) -> Principal:
@@ -76,17 +78,25 @@ class DevAuthProvider:
 
 
 class DevClaimTokenVerifier:
-    """Dev portal tokens are 'dev.<claim uuid>'. Not secret; the login owner replaces this with HMAC tokens."""
+    """Dev portal tokens are 'dev.<firm uuid>.<claim uuid>'. Not secret, so it refuses to load with APP_ENV=prod or
+    next to the Clerk login (CLAIM_TOKEN_PROVIDER=dev only in development); the login owner's HMAC verifier
+    (component 4, behind ClaimTokenVerifier) replaces it."""
+
+    def __init__(self, settings: Settings | None = None) -> None:
+        if settings is not None and (settings.app_env == "prod" or settings.auth_provider == "clerk"):
+            raise UnsafeDevAuth("dev claim tokens are not secret: refusing with APP_ENV=prod or AUTH_PROVIDER=clerk")
 
     def verify(self, token: str) -> ClaimTokenContext:
         m = DEV_TOKEN.match(token)
         if not m:
             raise AuthError("invalid claim token")
-        return ClaimTokenContext(claim_id=UUID(m.group(1)))
+        try:
+            return ClaimTokenContext(firm_id=UUID(m.group(1)), claim_id=UUID(m.group(2)))
+        except ValueError as exc:
+            raise AuthError("invalid claim token") from exc
 
     def token_hash(self, token: str) -> str:
         return hashlib.sha256(token.encode()).hexdigest()
 
-    @staticmethod
-    def issue(claim_id: UUID) -> str:
-        return f"dev.{claim_id}"
+    def issue(self, firm_id: UUID, claim_id: UUID) -> str:
+        return f"dev.{firm_id}.{claim_id}"

@@ -1,0 +1,58 @@
+{
+ "text": "Let me work through the policy.\n\nModel: The label photo read (T1) is legible and shows model \"B0026Y\", which is not on the recalled list (R:models, T3 mismatch). Per policy, a legible label showing a non-recalled model means deny. The typed model \"B0726Y\" matches, but the label photo takes precedence over the typed model when it is legible. The label reading is legible with confidence 0.95, so the label controls.\n\nFlag check comes first: T7 found no duplicates, so no flag.\n\nDeny applies from the model rule, which is earlier in the evaluation order than needs_info. Other checks (date code T4 in range, purchase T5 inside window at a listed retailer, destruction photo T6 unclear) do not override the denial.",
+ "usage": {
+  "input_tokens": 3001,
+  "output_tokens": 622,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB2zsGGmeQddGJNQ1dQb",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3027,
+ "content": [
+  {
+   "type": "text",
+   "text": "Let me work through the policy.\n\nModel: The label photo read (T1) is legible and shows model \"B0026Y\", which is not on the recalled list (R:models, T3 mismatch). Per policy, a legible label showing a non-recalled model means deny. The typed model \"B0726Y\" matches, but the label photo takes precedence over the typed model when it is legible. The label reading is legible with confidence 0.95, so the label controls.\n\nFlag check comes first: T7 found no duplicates, so no flag.\n\nDeny applies from the model rule, which is earlier in the evaluation order than needs_info. Other checks (date code T4 in range, purchase T5 inside window at a listed retailer, destruction photo T6 unclear) do not override the denial."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017YQ6fm2sAEHzRTy3ok4EUt",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and reads model B0026Y, which is not a recalled model. The recall covers only B0726Y, so the unit is not part of this recall. The typed model B0726Y does not override a legible label showing a non-recalled model.",
+      "cites": [
+       "R:models",
+       "R:policy",
+       "T1",
+       "T3"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so there is no fraud flag.",
+      "cites": [
+       "T7"
+      ]
+     },
+     {
+      "text": "The date code 8/21 is in range, the purchase at Walmart on 2017-04-01 is inside the sale window, and the retailer is listed. These checks pass but do not change the denial based on the model.",
+      "cites": [
+       "T4",
+       "T5",
+       "R:date_codes",
+       "R:sold_window",
+       "R:sold_at"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

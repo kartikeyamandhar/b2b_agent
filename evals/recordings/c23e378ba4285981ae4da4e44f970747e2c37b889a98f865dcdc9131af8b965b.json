@@ -1,0 +1,47 @@
+{
+ "text": "Per the policy, I'll first run the independent checks in parallel: reading the label photo, checking the purchase, checking for duplicates, and checking the typed serial.",
+ "usage": {
+  "input_tokens": 2614,
+  "output_tokens": 182,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB42gurZe2YL6EMtvj4g",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1444,
+ "content": [
+  {
+   "type": "text",
+   "text": "Per the policy, I'll first run the independent checks in parallel: reading the label photo, checking the purchase, checking for duplicates, and checking the typed serial."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_018jGroeR7AsCiWshfsjUv7n",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_013rWYW18MNsz8LQvvERTwnV",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01ChZ229EWyNgsCKpRrA5JFg",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_012NP5fAZfB8YCoKqfi8z3YP",
+   "name": "check_serial",
+   "input": {
+    "serial": "HA09882"
+   }
+  }
+ ]
+}

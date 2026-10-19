@@ -1,0 +1,64 @@
+{
+ "text": "I'll resubmit with the correct citation id for the FAQ passage, T7 in place of faq#2.",
+ "usage": {
+  "input_tokens": 3808,
+  "output_tokens": 421,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeR5KKNsap3obtmdLhV",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2306,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll resubmit with the correct citation id for the FAQ passage, T7 in place of faq#2."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01TyvLUDhQxSfeVzAUxBB5mv",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows CXC-02, a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial number prefix FC29D is on the recalled list.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The retailer JHTNA is on the approved list, but the stated purchase date of 2020-06-03 is before the sale window of 2021-01-01 to 2024-10-31. Purchases before the window are not eligible.",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "T4",
+       "T7"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, and no destruction photo is required for this repair or replacement remedy.",
+      "cites": [
+       "T5",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

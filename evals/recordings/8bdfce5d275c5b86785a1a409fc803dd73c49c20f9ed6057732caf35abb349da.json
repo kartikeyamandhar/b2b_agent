@@ -1,0 +1,75 @@
+{
+ "text": "Checking the policy against the results:\n\n- Duplicates (T5): no hits, so no flag.\n- Model (T1, T2): the label is legible and reads SM1977, which is a recalled model. Confirmed.\n- Serial/date code: the program's serial/date rules are not in the rule set provided, so no serial check applies. The label serial is SN51205155 and matches the typed value.\n- Purchase (T3): Amazon.com is on the list, and 2002-12-21 is inside the 1998-01-01 to 2024-01-31 window. No receipt is required.\n- Destruction (T4): not required for this remedy (repair).\n- Refund: none requested (repair or replacement), so the value threshold does not apply.\n\nAll checks pass, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2693,
+  "output_tokens": 704,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeLh12Y53uYULn2MHrK",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3203,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy against the results:\n\n- Duplicates (T5): no hits, so no flag.\n- Model (T1, T2): the label is legible and reads SM1977, which is a recalled model. Confirmed.\n- Serial/date code: the program's serial/date rules are not in the rule set provided, so no serial check applies. The label serial is SN51205155 and matches the typed value.\n- Purchase (T3): Amazon.com is on the list, and 2002-12-21 is inside the 1998-01-01 to 2024-01-31 window. No receipt is required.\n- Destruction (T4): not required for this remedy (repair).\n- Refund: none requested (repair or replacement), so the value threshold does not apply.\n\nAll checks pass, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01MvdxgLEaHtH5VS7VRv4UpR",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SM1977, which is a recalled model; the typed model matches.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "Purchase at Amazon.com, a listed retailer, on 2002-12-21, which falls inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for the repair remedy requested.",
+      "cites": [
+       "T4"
+      ]
+     },
+     {
+      "text": "No refund is requested, so the value threshold review does not apply. The typed serial matches the label serial.",
+      "cites": [
+       "R:value_threshold",
+       "T1"
+      ]
+     },
+     {
+      "text": "Under the claim policy, no rule triggers flag, deny, or needs_info, so the claim is approved.",
+      "cites": [
+       "R:policy",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.92
+   }
+  }
+ ]
+}

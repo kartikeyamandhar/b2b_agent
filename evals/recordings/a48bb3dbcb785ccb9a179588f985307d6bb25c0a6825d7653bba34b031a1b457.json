@@ -1,0 +1,64 @@
+{
+ "text": "Evaluating the policy against the check results:\n\n- Duplicates (T7): no hits, so no flag.\n- Model: the label photo is legible (T1) and shows FCRG3054BB, which is not on the recalled list (R:models, T2). A legible label showing a non-recalled model means deny.\n- The other checks (serial in range T3, date code out of range T4, purchase inside window at a listed retailer T5) do not change this outcome.\n\nSince the model rule alone triggers a denial and no flag applies, the outcome is deny.",
+ "usage": {
+  "input_tokens": 3249,
+  "output_tokens": 576,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeGowNQAPgcc8EDr1zN",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4891,
+ "content": [
+  {
+   "type": "text",
+   "text": "Evaluating the policy against the check results:\n\n- Duplicates (T7): no hits, so no flag.\n- Model: the label photo is legible (T1) and shows FCRG3054BB, which is not on the recalled list (R:models, T2). A legible label showing a non-recalled model means deny.\n- The other checks (serial in range T3, date code out of range T4, purchase inside window at a listed retailer T5) do not change this outcome.\n\nSince the model rule alone triggers a denial and no flag applies, the outcome is deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01UT1TsjLtRh9HAxyjFnaQPu",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model FCRG3054BB, which is not on the recalled model list. A legible label showing a non-recalled model means the unit is not part of this recall.",
+      "cites": [
+       "R:models",
+       "R:policy",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code November 2024 is outside the recalled range (produced October 2023 through November 2023), which independently indicates the unit is not covered.",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not flagged for review.",
+      "cites": [
+       "T7"
+      ]
+     },
+     {
+      "text": "The serial number is in a recalled range and the purchase at Lowe's within the sale window is valid, but these do not override the model mismatch.",
+      "cites": [
+       "T3",
+       "T5",
+       "R:sold_window",
+       "R:sold_at"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.92
+   }
+  }
+ ]
+}

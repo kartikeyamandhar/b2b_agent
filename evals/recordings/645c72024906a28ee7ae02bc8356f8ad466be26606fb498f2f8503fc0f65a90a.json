@@ -1,0 +1,53 @@
+{
+ "text": "Per the policy, I need to check the label, purchase, duplicates, destruction photo, and date code in parallel, since the claim requires destruction and date codes are part of the claim data. Serial is not provided and the program has no serial rule listed, so I'll skip it.",
+ "usage": {
+  "input_tokens": 2633,
+  "output_tokens": 244,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB48x47BY65g1F9RmDmR",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1642,
+ "content": [
+  {
+   "type": "text",
+   "text": "Per the policy, I need to check the label, purchase, duplicates, destruction photo, and date code in parallel, since the claim requires destruction and date codes are part of the claim data. Serial is not provided and the program has no serial rule listed, so I'll skip it."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01FD1iuU6zYA2RTZZ5UpsFYw",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_015QC1jKwebntYkShNrk5Las",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01PKBWFQqeNhsKBn715ZouZz",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0185Lp5Eiqpw8chz4gRQaWgW",
+   "name": "check_destruction_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Uepm1V59ECSw29j4BFFhhj",
+   "name": "check_date_code",
+   "input": {
+    "date_code": "2017-03"
+   }
+  }
+ ]
+}

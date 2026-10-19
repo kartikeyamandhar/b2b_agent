@@ -1,0 +1,29 @@
+{
+ "text": "The serial check was skipped, so I'll retry it with the label's serial value.",
+ "usage": {
+  "input_tokens": 3365,
+  "output_tokens": 78,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3kZDK5TMMwJabKn2Vy",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 934,
+ "content": [
+  {
+   "type": "text",
+   "text": "The serial check was skipped, so I'll retry it with the label's serial value."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01FhJSH7VvCHvqGcDgABzyfi",
+   "name": "check_serial",
+   "input": {
+    "serial": "SN48549698"
+   }
+  }
+ ]
+}

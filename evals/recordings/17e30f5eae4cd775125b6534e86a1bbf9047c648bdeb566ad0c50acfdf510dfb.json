@@ -1,0 +1,64 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: label legible (T1) shows 98527, a recalled model (R:models, T2 match). Confirmed.\n- Serial/date code: the program lists no serial or date code rules, so these don't apply.\n- Purchase: ALDI is listed (R:sold_at, T3), and 2017-04-28 is inside the window (R:sold_window, T3). No receipt is required for this claim (T3), and the receipt photo is attached regardless.\n- Destruction: required (R:destruction). T4 reports the cord appears intact with no visible cut, so the photo does not show the instructed destruction. Per the policy and FAQ, this is needs_info.\n- Duplicates: none found (T5), so flag does not apply.\n- Refund $40 is under the $100 threshold (R:value_threshold).\n\nPriority order: flag does not apply, deny does not apply, needs_info does apply because of the destruction photo. The outcome is needs_info.",
+ "usage": {
+  "input_tokens": 2828,
+  "output_tokens": 805,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeUovi3HYSFhTdes1U4",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 6138,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: label legible (T1) shows 98527, a recalled model (R:models, T2 match). Confirmed.\n- Serial/date code: the program lists no serial or date code rules, so these don't apply.\n- Purchase: ALDI is listed (R:sold_at, T3), and 2017-04-28 is inside the window (R:sold_window, T3). No receipt is required for this claim (T3), and the receipt photo is attached regardless.\n- Destruction: required (R:destruction). T4 reports the cord appears intact with no visible cut, so the photo does not show the instructed destruction. Per the policy and FAQ, this is needs_info.\n- Duplicates: none found (T5), so flag does not apply.\n- Refund $40 is under the $100 threshold (R:value_threshold).\n\nPriority order: flag does not apply, deny does not apply, needs_info does apply because of the destruction photo. The outcome is needs_info."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01ADP3kcmLvpnLzM7a5WBT3K",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 98527, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase was at ALDI, a listed retailer, on 2017-04-28, which is inside the 2016-2019 sale window. No receipt is required for this claim.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the instructed destruction. The power cord appears intact with no visible cut, so a new destruction photo is needed.",
+      "cites": [
+       "R:destruction",
+       "T4",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, and the $40.00 refund is under the $100 review threshold.",
+      "cites": [
+       "T5",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Thank you for your claim. Your label and purchase details check out, but the destruction photo does not show the power cord cut. Please send a new photo of the unplugged cooker with its power cord cut through, so it is clearly visible, and not a repeat of the label photo.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

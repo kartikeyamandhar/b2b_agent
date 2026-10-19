@@ -1,0 +1,10 @@
+{
+ "claim_id": "78e4eb34-4813-5d34-bc8d-39712d49afda",
+ "spec_id": "S22",
+ "program": "24082",
+ "category": "expect_approve",
+ "expected_outcome": "approve",
+ "rationale": "Date code 08/22 NH is the second of the two recalled codes and the September 30, 2023 justinboots.com purchase is the last day of a window that runs through September 2023, so approve.",
+ "violations": [],
+ "subtypes": {}
+}

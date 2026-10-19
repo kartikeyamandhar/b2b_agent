@@ -1,0 +1,29 @@
+{
+ "text": "The label reads AD10009GR, which differs from the typed AD10007GR. I'll check the label reading against the recalled models list.",
+ "usage": {
+  "input_tokens": 3504,
+  "output_tokens": 96,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3foo1BR6gPEjrPBCwE",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1012,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label reads AD10009GR, which differs from the typed AD10007GR. I'll check the label reading against the recalled models list."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01AFY8E1Gvw6jde7aUFreFEb",
+   "name": "check_model",
+   "input": {
+    "model_text": "AD10009GR"
+   }
+  }
+ ]
+}

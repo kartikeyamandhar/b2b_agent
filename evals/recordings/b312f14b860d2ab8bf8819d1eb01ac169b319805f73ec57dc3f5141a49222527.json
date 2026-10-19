@@ -1,0 +1,68 @@
+{
+ "text": "Checking the results against policy:\n\n- Model: label legible and shows TD3418B, a recalled model (T1, T2, R:models). Confirmed.\n- Serial/date code: the program has no serial or date code rules in this recall, so nothing to check.\n- Purchase: 1998-09-26 is inside the sale window (T3, R:sold_window), and Amazon.com is a listed retailer (T3, R:sold_at). Receipt not required (T3).\n- Destruction: not required for this remedy (T4).\n- Duplicates: none found (T5).\n- Refund: none requested; repair or replacement, so no value threshold review applies.\n\nFlag, deny, and needs_info don't apply, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2697,
+  "output_tokens": 639,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeLVfszjVzhtEJivvzM",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4134,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against policy:\n\n- Model: label legible and shows TD3418B, a recalled model (T1, T2, R:models). Confirmed.\n- Serial/date code: the program has no serial or date code rules in this recall, so nothing to check.\n- Purchase: 1998-09-26 is inside the sale window (T3, R:sold_window), and Amazon.com is a listed retailer (T3, R:sold_at). Receipt not required (T3).\n- Destruction: not required for this remedy (T4).\n- Duplicates: none found (T5).\n- Refund: none requested; repair or replacement, so no value threshold review applies.\n\nFlag, deny, and needs_info don't apply, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Nx45Bma9vbZiKGSCP5Zktn",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model TD3418B, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase date of 1998-09-26 falls inside the sale window and the retailer Amazon.com is on the list of sellers; no receipt is required.",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "T3"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for the repair or replacement remedy.",
+      "cites": [
+       "T4"
+      ]
+     },
+     {
+      "text": "The duplicate check found no other claim sharing a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "No refund was requested, so the refund value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

@@ -1,0 +1,84 @@
+{
+ "text": "Checking the policy against the results:\n\n- Duplicates: T7 shows no hits, so no flag.\n- Model: T1 is legible and reads \"REV 20 Kids Bike\", a recalled model (R:models, T2 match).\n- Serial: T3 shows \"01VX69798791\" is in range (R:serials).\n- Date code: T4 shows 2022, in range (R:date_codes).\n- Purchase: T5 shows REI is listed and the 2022-12-17 date is inside the window (R:sold_window, R:sold_at). No receipt is required, though one was attached.\n- Destruction: T6 says not required, since the remedy is repair.\n- Refund: none requested, so the value threshold (R:value_threshold) does not apply.\n\nEvery check passes, so the claim is approved.",
+ "usage": {
+  "input_tokens": 3005,
+  "output_tokens": 768,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeN8zyy4En4LiNtS5m2",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4521,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy against the results:\n\n- Duplicates: T7 shows no hits, so no flag.\n- Model: T1 is legible and reads \"REV 20 Kids Bike\", a recalled model (R:models, T2 match).\n- Serial: T3 shows \"01VX69798791\" is in range (R:serials).\n- Date code: T4 shows 2022, in range (R:date_codes).\n- Purchase: T5 shows REI is listed and the 2022-12-17 date is inside the window (R:sold_window, R:sold_at). No receipt is required, though one was attached.\n- Destruction: T6 says not required, since the remedy is repair.\n- Refund: none requested, so the value threshold (R:value_threshold) does not apply.\n\nEvery check passes, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017wfrDeiQij7aZHo9i3Qvgy",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "No duplicate claims share a photo, address, email, serial, or payout account.",
+      "cites": [
+       "T7",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows REV 20 Kids Bike, a recalled model, which confirms the model.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "faq#2"
+      ]
+     },
+     {
+      "text": "The serial number 01VX69798791 begins with the recalled prefix 01VX.",
+      "cites": [
+       "T3",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The date code 2022 falls within the recalled range of model years 2022-2024.",
+      "cites": [
+       "T4",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "REI is a listed retailer and the purchase date 2022-12-17 is inside the sale window of 2022-03-01 to 2024-05-31.",
+      "cites": [
+       "T5",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The remedy is repair, so no destruction photo is required.",
+      "cites": [
+       "T6",
+       "faq#2"
+      ]
+     },
+     {
+      "text": "No refund is requested, so the $100 value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

@@ -1,0 +1,62 @@
+{
+ "text": "The model is confirmed as recalled, but the purchase predates the sale window, so the claim is denied.",
+ "usage": {
+  "input_tokens": 4144,
+  "output_tokens": 434,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3PVGqouzFxYWYUwvDz",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2203,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed as recalled, but the purchase predates the sale window, so the claim is denied."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01TJ17ivi3hkKGLvxdNL9tvZ",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model LSE4613BD, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2014-04-05 is before the program's sale window, which opens 2015-01-01. Purchases before the window are denied.",
+      "cites": [
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The retailer, LG.com, is not on the program's list of sales channels. Under the sale rules, a non-listed retailer would require proof of ownership, but the date denial controls the outcome.",
+      "cites": [
+       "R:sold_at",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial 309KM7640401 is within a recalled range and no duplicate claims were found, so these checks do not change the outcome.",
+      "cites": [
+       "T3",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

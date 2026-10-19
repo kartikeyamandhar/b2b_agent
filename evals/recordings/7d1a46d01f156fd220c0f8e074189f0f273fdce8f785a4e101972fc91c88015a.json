@@ -1,0 +1,70 @@
+{
+ "text": "All checks pass: the label model matches the recalled PLEFZ398GC* series, the serial is in range, the purchase is at Sears within the window with a receipt, and there are no duplicate claims. The refund is not requested (repair or replacement), so the value threshold does not apply.",
+ "usage": {
+  "input_tokens": 3795,
+  "output_tokens": 547,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3L5xYPwkb6Ro7LQy6v",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2242,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass: the label model matches the recalled PLEFZ398GC* series, the serial is in range, the purchase is at Sears within the window with a receipt, and there are no duplicate claims. The refund is not requested (repair or replacement), so the value threshold does not apply."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_014DEdAfLJyG1BhDTKauDEdH",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model PLEFZ398GCA1, which matches the recalled PLEFZ398GC* series.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial number VF12245437 falls within the recalled range VF122xxxxx - VF334xxxxx.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase was from Sears, a listed retailer, on 2009-02-12, which is inside the sale window of 2001-06-01 to 2009-08-31, and a receipt is present.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "R:receipt",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claimant requests repair or replacement, not a refund, so the $100 value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

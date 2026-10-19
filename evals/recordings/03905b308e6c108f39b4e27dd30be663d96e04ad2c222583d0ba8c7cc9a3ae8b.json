@@ -1,0 +1,65 @@
+{
+ "text": "The label is legible and shows the recalled model MK04, the serial and date code are in range, and there are no duplicates. The purchase date of 2024-06-30 is before the sale window that starts 2024-09-01, so the claim is denied.",
+ "usage": {
+  "input_tokens": 3658,
+  "output_tokens": 509,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3WoJ16Shf4kZGvWg69",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2291,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows the recalled model MK04, the serial and date code are in range, and there are no duplicates. The purchase date of 2024-06-30 is before the sale window that starts 2024-09-01, so the claim is denied."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01NkXaTzBod5ywADSMGap2hs",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2024-06-30 is before the program's sale window, which runs from 2024-09-01 to 2025-06-30. Purchases before the window are denied.",
+      "cites": [
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The retailer, Amazon.com, is on the list of sold-at retailers, and the serial (BN prefix) and date code (June 2025) are within the recalled ranges. These do not change the outcome because the purchase date is outside the window.",
+      "cites": [
+       "R:sold_at",
+       "R:serials",
+       "R:date_codes",
+       "T2",
+       "T4",
+       "T5"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

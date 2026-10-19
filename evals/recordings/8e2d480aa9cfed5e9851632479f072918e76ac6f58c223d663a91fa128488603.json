@@ -1,0 +1,77 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3208,
+  "output_tokens": 501,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeGTbWNHBmHsK6pcdEk",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2716,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_015eNqVsYdLfsa4na1FDwtDa",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model FCRG3051BB, which is on the recalled model list, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The typed serial VF34508527 falls within the recalled range VF34508449 through VF34508592.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The date code October 2023 is within the recalled production range (October through November 2023).",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     },
+     {
+      "text": "Purchase at Lowe's on 2023-11-29 is a listed retailer and inside the sale window, and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T5"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this repair remedy.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T7"
+      ]
+     },
+     {
+      "text": "The refund requested is none (repair or replacement), so the refund value threshold does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

@@ -1,0 +1,69 @@
+{
+ "text": "Everything checks out: the label model is recalled, the serial is in range, the purchase is at Sears inside the window with a receipt, and there are no duplicates. The claim is approved.",
+ "usage": {
+  "input_tokens": 3765,
+  "output_tokens": 512,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Kpwf9LJ2btnzw2dkq",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2427,
+ "content": [
+  {
+   "type": "text",
+   "text": "Everything checks out: the label model is recalled, the serial is in range, the purchase is at Sears inside the window with a receipt, and there are no duplicates. The claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_015iQ3DAtS1cp3vE2N4FQBSB",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model PLEFMZ99GCA1, which matches the recalled model PLEFMZ99GC* (the typed model matches the label).",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The label serial VF12294265 is within the recalled range VF122xxxxx - VF334xxxxx.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The claimed retailer Sears is on the list, the purchase date 2007-01-21 falls inside the sale window, and the receipt is present.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "R:receipt",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The requested remedy is repair or replacement, so no destruction photo is required, and no refund is requested, so the value threshold does not apply.",
+      "cites": [
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

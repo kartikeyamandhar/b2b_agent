@@ -1,0 +1,73 @@
+{
+ "text": "The duplicate rule takes precedence over every other outcome, so the claim goes to a person for review.",
+ "usage": {
+  "input_tokens": 4562,
+  "output_tokens": 499,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4F3JXtALiwyp6xLBrS",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2359,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate rule takes precedence over every other outcome, so the claim goes to a person for review."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01KpFhH35FJYDNuvpeZg1UNc",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program shares this unit's serial number, so the claim is flagged for person review together with the matching claim.",
+      "cites": [
+       "T3",
+       "R:policy",
+       "faq#2"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model MK04, a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number is in the recalled BN range and the date code (June 2025) is prior to July 2025, both within the recall.",
+      "cites": [
+       "T4",
+       "T5",
+       "R:serials",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The retailer TikTok.com is listed and the purchase date 2024-10-07 is inside the sale window; no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The typed serial (BN55928938) differs from the label serial (BN9097622); the discrepancy is also part of what the reviewer should look at.",
+      "cites": [
+       "T1",
+       "R:serials"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

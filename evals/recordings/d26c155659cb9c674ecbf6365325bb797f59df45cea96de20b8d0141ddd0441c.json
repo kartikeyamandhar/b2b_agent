@@ -1,0 +1,62 @@
+{
+ "text": "The label is legible and shows model 9421, which is recalled. The purchase is inside the window at a listed retailer, with no duplicates. The serial check was skipped because the program has no serial rule for this recall, so the outcome is approve.",
+ "usage": {
+  "input_tokens": 3402,
+  "output_tokens": 480,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3MXYi21nsaTkGaRgVr",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2443,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows model 9421, which is recalled. The purchase is inside the window at a listed retailer, with no duplicates. The serial check was skipped because the program has no serial rule for this recall, so the outcome is approve."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_014WnPzoZHbqo1KRvyVFSrEx",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows MODEL 9421, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The purchase date of 2024-04-20 falls inside the sale window, and the retailer comfortsolutions.caframobrands.com is on the list of sellers. No receipt is required.",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The program has no serial or date code rule for this recall, so those checks do not apply. The refund is not over the $100 threshold, and the claimant asked for repair or replacement.",
+      "cites": [
+       "R:policy",
+       "T4",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

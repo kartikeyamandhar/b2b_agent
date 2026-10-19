@@ -1,0 +1,78 @@
+{
+ "text": "I'll resubmit with the missing required fields: the question for the claimant and a confidence value.",
+ "usage": {
+  "input_tokens": 3905,
+  "output_tokens": 609,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB36M8xv9T62fptge9RF",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2636,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll resubmit with the missing required fields: the question for the claimant and a confidence value."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01MM1y7uAfNR9dHdzCTWaXGk",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T7"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Serial number BN87406677 starts with BN and is inside the recalled range.",
+      "cites": [
+       "T3",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "Date code June 2025 is before July 2025 and is inside the recalled range.",
+      "cites": [
+       "T4",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase date of 2025-02-20 is inside the sale window, but the retailer Corner Hardware Co is not on the list of sales channels, so proof of ownership must be requested rather than denying the claim.",
+      "cites": [
+       "T5",
+       "T8",
+       "R:sold_at",
+       "R:sold_window",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No destruction photo is required because the remedy is replacement.",
+      "cites": [
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your unit's label and serial number match the recall, but the store you bought it from (Corner Hardware Co) is not one of the approved sellers. Please provide proof of ownership showing how you got the air purifier, such as a receipt or order record, and tell us whether you bought it new, secondhand, or as a gift.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

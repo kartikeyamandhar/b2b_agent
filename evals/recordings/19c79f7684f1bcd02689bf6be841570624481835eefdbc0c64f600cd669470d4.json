@@ -1,0 +1,37 @@
+{
+ "text": "The label reads \"TEV 16 Kids Bike\", which is not the recalled \"REV 16\" as typed by the claimant at face value, so I need to check the model against the list. I'll check the label reading and the typed model.",
+ "usage": {
+  "input_tokens": 3468,
+  "output_tokens": 185,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3qJh5N5zDJT64GSdNa",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1404,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label reads \"TEV 16 Kids Bike\", which is not the recalled \"REV 16\" as typed by the claimant at face value, so I need to check the model against the list. I'll check the label reading and the typed model."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01V9NhMRDyA9MVKzgsNDpMRC",
+   "name": "check_model",
+   "input": {
+    "model_text": "TEV 16 Kids Bike"
+   }
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_013NBDtum6NMNdr616LsL16y",
+   "name": "check_model",
+   "input": {
+    "model_text": "REV 16 Kids Bike"
+   }
+  }
+ ]
+}

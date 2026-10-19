@@ -1,0 +1,63 @@
+{
+ "text": "The model is confirmed, but the purchase predates the sale window, so the claim is denied.",
+ "usage": {
+  "input_tokens": 3630,
+  "output_tokens": 421,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3mYLVqJyazL4KyNSz2",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2783,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed, but the purchase predates the sale window, so the claim is denied."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01CUxkF6d142fjJErgw3D9c5",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The purchase date of 2020-06-15 is before the program's sale window (2021-06-01 to 2023-11-30), so the unit was not sold within the recalled sale period.",
+      "cites": [
+       "R:sold_window",
+       "R:policy",
+       "T2"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model PA-10, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The date code 2126 is within the recalled range, and the retailer (www.shop.usa.yamaha.com/) is on the list of authorized sellers.",
+      "cites": [
+       "T5",
+       "R:date_codes",
+       "R:sold_at"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found sharing a photo, address, email, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

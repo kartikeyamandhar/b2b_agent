@@ -1,0 +1,72 @@
+{
+ "text": "The claim is flagged: the duplicate check (T3) found another claim sharing this unit's serial, and the policy sends such claims to a person. The other checks pass: the model matches (T6), the purchase is inside the window at a listed retailer (T2), and the date code is in range (T5). The typed serial is in range (T4), but the label reads J0D14638083, so the serial in the claim doesn't match the photo, which is another reason for review.",
+ "usage": {
+  "input_tokens": 4572,
+  "output_tokens": 600,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4EygkQqJDCcoYKKNmM",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2923,
+ "content": [
+  {
+   "type": "text",
+   "text": "The claim is flagged: the duplicate check (T3) found another claim sharing this unit's serial, and the policy sends such claims to a person. The other checks pass: the model matches (T6), the purchase is inside the window at a listed retailer (T2), and the date code is in range (T5). The typed serial is in range (T4), but the label reads J0D14638083, so the serial in the claim doesn't match the photo, which is another reason for review."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Wh9dgpQPsstGzzk5DKQ7q6",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim sharing this serial number, so the claim must go to a person for review alongside the matching claim.",
+      "cites": [
+       "R:policy",
+       "T3",
+       "T7"
+      ]
+     },
+     {
+      "text": "The serial on the label photo (J0D14638083) does not match the typed serial (J2D45572794). Both begin with recalled prefixes, but the mismatch needs a person to confirm which unit is being claimed.",
+      "cites": [
+       "T1",
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The model is confirmed as recalled from the legible label (DR2E).",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase is at a listed Yamaha dealer within the sale window (2022-12-15), and no receipt is required for this claim.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The date code 2017 is within the recalled model years 2017-2024.",
+      "cites": [
+       "T5",
+       "R:date_codes"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

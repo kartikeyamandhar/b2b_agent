@@ -1,0 +1,76 @@
+name: deploy
+
+# Deploy gate (CLAUDE.md invariant 13). On every pull request and every push to main: regenerate every results
+# table with `make eval` in replay mode (no network, no model calls; the committed recordings answer every request)
+# and fail if any headline metric regressed beyond tolerance against the base (evals/gate.py). The deploy job itself
+# is a placeholder: the project is tested locally, and Render and Vercel are not configured (no secrets exist here).
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    name: eval gate (replay, no network)
+    runs-on: ubuntu-24.04
+    services:
+      db:
+        image: pgvector/pgvector:0.8.6-pg16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres-dev-only
+        ports: ["55432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 2s --health-timeout 3s --health-retries 30
+    env:
+      PGPASSWORD: postgres-dev-only
+      LLM_MODE: replay
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.11.21"
+          python-version: "3.13"
+      - name: Environment
+        run: cp .env.example .env
+      - name: Install pinned dependencies
+        run: uv sync --project apps/api --frozen
+      - name: Roles and databases
+        run: |
+          for db in recallops recallops_test; do
+            psql -h localhost -p 55432 -U postgres -v ON_ERROR_STOP=1 -q \
+              -v owner_password=owner-dev-only -v app_password=app-dev-only \
+              -v internal_password=internal-dev-only -v dbname=$db -f apps/api/sql/bootstrap_roles.sql
+          done
+      - name: Migrations
+        working-directory: apps/api
+        run: uv run --frozen alembic -x dburl=postgresql://recallops_owner:owner-dev-only@localhost:55432/recallops upgrade head
+      - name: make eval (replay)
+        run: PYTHONPATH=apps/api/src uv run --project apps/api --frozen python -m recallops.evals.run_all
+      - name: Gate against the base
+        # Pull request: the base branch. Push: the previous tip (github.event.before), never the pushed commit, whose
+        # own regenerated tables would make the comparison vacuous. A new branch's all-zero before falls back to HEAD~1.
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          if [ "$EVENT" = "pull_request" ]; then REF="origin/$BASE_REF";
+          elif [ -n "$BEFORE" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ]; then REF="$BEFORE";
+          else REF="HEAD~1"; fi
+          PYTHONPATH=apps/api/src uv run --project apps/api --frozen python -m recallops.evals.gate --baseline-ref "$REF" --self-ref HEAD
+
+  deploy:
+    name: deploy (not configured; tested locally)
+    needs: gate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo "The gate passed. Deploying to Render (apps/api) and Vercel (apps/web) needs secrets this repository does not hold; see infra/render.yaml and README."

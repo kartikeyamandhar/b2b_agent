@@ -1,0 +1,29 @@
+{
+ "text": "The purchase date falls before the sale window, so that rule denies the claim. I'll confirm the model against the label reading before recording the decision.",
+ "usage": {
+  "input_tokens": 3518,
+  "output_tokens": 95,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Wis6iq5BRx8Rtu6h1",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 991,
+ "content": [
+  {
+   "type": "text",
+   "text": "The purchase date falls before the sale window, so that rule denies the claim. I'll confirm the model against the label reading before recording the decision."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DVEr7tSnYvms6WLHq6a6jN",
+   "name": "check_model",
+   "input": {
+    "model_text": "MK04"
+   }
+  }
+ ]
+}

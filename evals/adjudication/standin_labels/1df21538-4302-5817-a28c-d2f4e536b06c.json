@@ -1,0 +1,10 @@
+{
+ "claim_id": "1df21538-4302-5817-a28c-d2f4e536b06c",
+ "spec_id": "S04",
+ "program": "26007",
+ "category": "expect_approve",
+ "expected_outcome": "approve",
+ "rationale": "No model was typed but the legible label shows recalled model 93550 (KY-318B), which photo_rules.label_confirms_missing_typed_model approves, and the Aldi purchase, the 2018 date, and the cut-cord photo all satisfy notice 26007.",
+ "violations": [],
+ "subtypes": {}
+}

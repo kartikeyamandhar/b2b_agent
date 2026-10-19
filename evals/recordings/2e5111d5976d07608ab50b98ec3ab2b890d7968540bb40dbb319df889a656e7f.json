@@ -1,0 +1,57 @@
+{
+ "text": "Checking the results: T1 label is legible and shows model SE4500, which is not the recalled SE4570. Per policy, a legible label showing a non-recalled model means deny. The typed model matches the label reading (SE4500), so the typed model does not rescue the claim. Duplicates (T6) are empty, and the flag rule does not apply. The other checks (date code, purchase, destruction) are not decisive once the model fails.",
+ "usage": {
+  "input_tokens": 2786,
+  "output_tokens": 502,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeGThDbr3gcrmipHvS9",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2933,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results: T1 label is legible and shows model SE4500, which is not the recalled SE4570. Per policy, a legible label showing a non-recalled model means deny. The typed model matches the label reading (SE4500), so the typed model does not rescue the claim. Duplicates (T6) are empty, and the flag rule does not apply. The other checks (date code, purchase, destruction) are not decisive once the model fails."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_016S6Rb9kmrbqcjKUNZHnrTW",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and reads model SE4500, which is not on the recalled model list (only SE4570). A legible label showing a non-recalled model means the unit is not part of this recall.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account, so no review flag applies.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The date code (07/22) and purchase (Grainger, 2023-05-12, inside the sale window, no receipt required) would otherwise pass, but they do not cure the model mismatch.",
+      "cites": [
+       "T3",
+       "T4",
+       "R:date_codes",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

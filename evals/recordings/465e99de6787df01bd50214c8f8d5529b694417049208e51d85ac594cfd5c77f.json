@@ -1,0 +1,64 @@
+{
+ "text": "Checking the results: label is legible and shows 2G520 (recalled), model confirmed. Serial typed; no serial rule in this program beyond recorded value (no serial range rules listed). Purchase at Homedepot.com, inside window, receipt not required per T3 but claimant attached one anyway. Duplicates: none. Destruction photo: T4 reports missing (it duplicates the label photo), which per policy is needs_info, asking for a new destruction photo showing the product marked \"Recalled\" in permanent marker.\n\nFlag: no. Deny: no. Needs_info: destruction photo triggers it.",
+ "usage": {
+  "input_tokens": 2739,
+  "output_tokens": 651,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB34JcMdGgS3nX8qomiX",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3384,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results: label is legible and shows 2G520 (recalled), model confirmed. Serial typed; no serial rule in this program beyond recorded value (no serial range rules listed). Purchase at Homedepot.com, inside window, receipt not required per T3 but claimant attached one anyway. Duplicates: none. Destruction photo: T4 reports missing (it duplicates the label photo), which per policy is needs_info, asking for a new destruction photo showing the product marked \"Recalled\" in permanent marker.\n\nFlag: no. Deny: no. Needs_info: destruction photo triggers it."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DBAk3gSWUza8tioVyjJM5c",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2G520, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase at Homedepot.com on 2024-12-28 is from a listed retailer and inside the sale window.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this claim.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The destruction photo is missing or repeats the label photo, and it does not show the product marked with the word 'Recalled' in permanent marker as required.",
+      "cites": [
+       "T4",
+       "R:destruction",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your destruction photo appears to be the same as your label photo and does not show the product destroyed. Please send a new photo showing the power bank with the word \"Recalled\" written on it in permanent marker (destroyed as instructed).",
+    "confidence": 0.9
+   }
+  }
+ ]
+}

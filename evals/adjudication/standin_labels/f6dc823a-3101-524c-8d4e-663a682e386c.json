@@ -1,0 +1,10 @@
+{
+ "claim_id": "f6dc823a-3101-524c-8d4e-663a682e386c",
+ "spec_id": "S13",
+ "program": "26244",
+ "category": "expect_approve",
+ "expected_outcome": "approve",
+ "rationale": "Typed 'MKO4' uses a letter O for the zero, a confusable typo that the legible label (MODEL: MK04) corrects, so photo_rules.label_confirms_typed_typo approves, and the September 2, 2024 TEMU.com purchase is inside the window that starts September 2024.",
+ "violations": [],
+ "subtypes": {}
+}

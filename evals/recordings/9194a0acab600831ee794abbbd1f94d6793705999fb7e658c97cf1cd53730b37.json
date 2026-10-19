@@ -1,0 +1,47 @@
+{
+ "text": "I'll read the label photo, check the purchase, check for duplicates, and check the typed serial in parallel. The rules include R:serials, so I need check_serial; there's no R:date_codes or R:destruction rule, so those aren't needed.",
+ "usage": {
+  "input_tokens": 2998,
+  "output_tokens": 209,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3NR6nEMp8PMrKSKjJA",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1609,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll read the label photo, check the purchase, check for duplicates, and check the typed serial in parallel. The rules include R:serials, so I need check_serial; there's no R:date_codes or R:destruction rule, so those aren't needed."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01FfJecTXE7U9LDDe1DQuTiG",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01XeEjLHGAgeJQaQpR3HrcwS",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_014GFPvD3YXUzXodPvi6nvYE",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01G4BUcvWMWUD4ntqhcPAzUn",
+   "name": "check_serial",
+   "input": {
+    "serial": "QQ73531303"
+   }
+  }
+ ]
+}

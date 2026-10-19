@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and the model is B0726Y, so the model is confirmed. The serial check was skipped because the program has no serial rule. The destruction photo does not clearly show the helmet with straps cut off, so the claim needs more information. I'll confirm the model against the typed value as well, then decide.",
+ "usage": {
+  "input_tokens": 3521,
+  "output_tokens": 148,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3ju67qVs1sVUMYPeUe",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1456,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and the model is B0726Y, so the model is confirmed. The serial check was skipped because the program has no serial rule. The destruction photo does not clearly show the helmet with straps cut off, so the claim needs more information. I'll confirm the model against the typed value as well, then decide."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_019HtMiSMrmNrWCTtT9tFMRe",
+   "name": "check_model",
+   "input": {
+    "model_text": "B0726Y"
+   }
+  }
+ ]
+}

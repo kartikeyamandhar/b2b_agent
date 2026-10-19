@@ -1,0 +1,29 @@
+{
+ "text": "The label photo is unreadable, so I'll check the typed model against the recalled list. The destruction photo also doesn't show the required strap cutting, so I'll note that for the decision.",
+ "usage": {
+  "input_tokens": 3688,
+  "output_tokens": 111,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3ZBgCwYMD8Bqv7TWuo",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1506,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label photo is unreadable, so I'll check the typed model against the recalled list. The destruction photo also doesn't show the required strap cutting, so I'll note that for the decision."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_012nRFw65z5JecFv4Sy8bWsh",
+   "name": "check_model",
+   "input": {
+    "model_text": "B0726Y"
+   }
+  }
+ ]
+}

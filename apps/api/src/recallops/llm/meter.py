@@ -12,11 +12,10 @@ from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Literal, Protocol
 
-from sqlalchemy import Engine, func, select
+from sqlalchemy import Engine, text
 
 from recallops.llm.pricing import PriceTable, Usage
 from recallops.logs import get_logger, log_event
-from recallops.models import AgentStep
 
 log = get_logger("llm.meter")
 
@@ -51,8 +50,9 @@ class InMemoryLedger:
 class DbSpendLedger:
     """Total spend = carried spend from settings + sum(agent_steps.cost_usd) across all firms.
 
-    Reads through the internal role (BYPASSRLS) because the budget is global. agent_steps is the only
-    record of model cost (CLAUDE.md invariant 3: no second logging path).
+    The budget is global, so the sum crosses firms: it is read through recallops_spend_total(), a SECURITY DEFINER
+    function (migration 0003), which works for the API's recallops_app role and for jobs alike. agent_steps is
+    the only record of model cost (CLAUDE.md invariant 3: no second logging path).
     """
 
     def __init__(self, engine: Engine, carried: Decimal) -> None:
@@ -61,7 +61,7 @@ class DbSpendLedger:
 
     def spent_usd(self) -> Decimal:
         with self.engine.connect() as conn:
-            total = conn.execute(select(func.coalesce(func.sum(AgentStep.cost_usd), 0))).scalar_one()
+            total = conn.execute(text("SELECT recallops_spend_total()")).scalar_one()
         return self.carried + Decimal(total)
 
 

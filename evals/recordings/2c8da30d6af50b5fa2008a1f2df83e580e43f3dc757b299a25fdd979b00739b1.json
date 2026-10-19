@@ -1,0 +1,68 @@
+{
+ "text": "All checks pass.",
+ "usage": {
+  "input_tokens": 3405,
+  "output_tokens": 424,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB48kPsSP8f6A5Zj6ruo",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2589,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_015ATAwKbXBuZ9oJ3BoxDWJR",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model 93550, which is on the recalled models list.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase was at ALDI, a listed retailer, on 2017-11-24, which is inside the 2016-01-01 to 2019-12-31 sale window. No receipt is required for this claim.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the unplugged power cord cut, as the recall requires.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The $40.00 refund is below the $100.00 review threshold, so no person review is required.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

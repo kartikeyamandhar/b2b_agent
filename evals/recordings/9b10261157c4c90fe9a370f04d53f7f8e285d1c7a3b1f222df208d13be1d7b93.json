@@ -1,0 +1,55 @@
+{
+ "text": "The model matches, but the serial is out of range. The retailer is also not on the sold-at list, which would normally call for more information, but the serial denial takes precedence.",
+ "usage": {
+  "input_tokens": 3559,
+  "output_tokens": 339,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3sXXJupvmHTnp45S5R",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2623,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model matches, but the serial is out of range. The retailer is also not on the sold-at list, which would normally call for more information, but the serial denial takes precedence."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01LyE4x79K3zwp4PiF9EUYcg",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model CXC-02, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number QQ73531303 is outside the program's recalled serial ranges, so the unit is not covered by the recall.",
+      "cites": [
+       "T4",
+       "R:serials",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

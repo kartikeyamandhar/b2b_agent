@@ -1,0 +1,59 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3790,
+  "output_tokens": 567,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3UEF6eiVhi5VJdzAe4",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3535,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01BnUVfbGjkWA3pd44cWVQ1J",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2G505B, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The claimed retailer, Corner Hardware Co, is not on the program's list of sales channels (Amazon.com, Esrtech.com, Homedepot.com). The purchase date of 2023-06-04 is inside the sale window. An unlisted retailer requires proof of ownership and a closer look before a refund.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The destruction photo shows a dark gray device against a purple background with no visible word 'Recalled' written in permanent marker. It does not show the required destruction, so it cannot be accepted as is.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please tell us where you bought the power bank. Corner Hardware Co is not one of the approved retailers, so please send proof of purchase (such as a receipt or order record) showing the store, date, and product. Also, please send a new photo of the power bank with the word \"Recalled\" written on it in permanent marker, next to the device, so the destruction can be verified.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

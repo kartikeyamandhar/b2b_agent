@@ -1,0 +1,77 @@
+{
+ "text": "All checks pass: the label confirms a recalled model, the date code is in range, the retailer and purchase date fall within the sale window with no receipt required, the destruction photo shows the plug cut off, and there are no duplicate claims.",
+ "usage": {
+  "input_tokens": 3710,
+  "output_tokens": 563,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3zgfRYnjLE3Wge7vMM",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2579,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass: the label confirms a recalled model, the date code is in range, the retailer and purchase date fall within the sale window with no receipt required, the destruction photo shows the plug cut off, and there are no duplicate claims."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01HkNEcTt5N3DfLiiE7Bu62e",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model LXT-CL-1.0, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T7"
+      ]
+     },
+     {
+      "text": "The label date code 0722 is within the recalled range of 0722 to 1223.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "Amazon is a listed retailer, and the purchase date 2022-09-24 falls inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the cord cut with a gap, consistent with the required plug removal.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The program has no serial rule, so the serial check was skipped and does not affect the outcome. The refund is not requested (repair or replacement), so the value threshold does not apply.",
+      "cites": [
+       "T5",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

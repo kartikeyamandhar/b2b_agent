@@ -1,0 +1,10 @@
+{
+ "claim_id": "ed2908e7-84b2-5fa5-91a8-919a2cf990ad",
+ "spec_id": "S29",
+ "program": "24082",
+ "category": "expect_flag",
+ "expected_outcome": "flag",
+ "rationale": "S30 reused this claim's label photo exactly, and duplicate_photo flags both claims of the pair even though S29 alone is clean under notice 24082.",
+ "violations": [],
+ "subtypes": {}
+}

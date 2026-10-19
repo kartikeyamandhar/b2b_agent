@@ -1,0 +1,47 @@
+{
+ "text": "Per the policy, I need the label reading, purchase check, duplicate check, and serial check, all independent, so I'll run them together.",
+ "usage": {
+  "input_tokens": 2614,
+  "output_tokens": 171,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB43MW52j7EFKN5KdFHc",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1482,
+ "content": [
+  {
+   "type": "text",
+   "text": "Per the policy, I need the label reading, purchase check, duplicate check, and serial check, all independent, so I'll run them together."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_013ayspZ74nrUyWNVe7xppeQ",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01B7aSYRj7xx6tZZnRikTqsM",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_015hbrknbWV4eDP5LqNUNDee",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01WgMveP6ugfb3UTK3tAAvo3",
+   "name": "check_serial",
+   "input": {
+    "serial": "HA03695"
+   }
+  }
+ ]
+}

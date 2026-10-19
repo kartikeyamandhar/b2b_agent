@@ -1,0 +1,75 @@
+{
+ "text": "Every check passes: the legible label confirms a recalled model, the serial and date code are in range, the Lowe's purchase falls inside the sale window with no receipt required, and there are no duplicate claims. The claim is approved for repair or replacement. No refund is requested, so the value threshold does not apply.",
+ "usage": {
+  "input_tokens": 3945,
+  "output_tokens": 578,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3DHVtA1isvbUFEPLAV",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2605,
+ "content": [
+  {
+   "type": "text",
+   "text": "Every check passes: the legible label confirms a recalled model, the serial and date code are in range, the Lowe's purchase falls inside the sale window with no receipt required, and there are no duplicate claims. The claim is approved for repair or replacement. No refund is requested, so the value threshold does not apply."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_016s4hEVBC54br9aJVa8Gnbd",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model FCRG3051BB, which is a recalled model; the typed model matches.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial VF34508527 falls within the recalled range VF34508449 through VF34508592.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code October 2023 is within the recalled production range of October through November 2023.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase at Lowe's on 2023-11-29 is a listed retailer and inside the sale window 2023-10-01 to 2023-12-31; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claimant requests repair or replacement, not a refund, so the $100 value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

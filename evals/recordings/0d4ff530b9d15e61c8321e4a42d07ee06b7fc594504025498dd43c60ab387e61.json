@@ -1,0 +1,68 @@
+{
+ "text": "Checking the policy in order: flag first. T7 found no duplicates, so no flag. Deny next: the label is legible and shows FCRE3052BS (recalled, T1, T2), so the model is confirmed. The typed serial QQ66988261 is outside all recalled serial ranges (T3), which is a deny under R:serials. The date code October 2023 is in range (T4). The purchase at Lowe's on 2023-06-08 is before the sale window of 2023-10-01 to 2023-12-31 (T5, R:sold_window), which is a deny. Destruction photo is not required (T6), and the remedy is repair, so no refund threshold applies.\n\nMultiple denial grounds apply (serial out of range, purchase before window), so the outcome is deny.",
+ "usage": {
+  "input_tokens": 3216,
+  "output_tokens": 673,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeGgNCvXvk2SFyv3ocS",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 6383,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy in order: flag first. T7 found no duplicates, so no flag. Deny next: the label is legible and shows FCRE3052BS (recalled, T1, T2), so the model is confirmed. The typed serial QQ66988261 is outside all recalled serial ranges (T3), which is a deny under R:serials. The date code October 2023 is in range (T4). The purchase at Lowe's on 2023-06-08 is before the sale window of 2023-10-01 to 2023-12-31 (T5, R:sold_window), which is a deny. Destruction photo is not required (T6), and the remedy is repair, so no refund threshold applies.\n\nMultiple denial grounds apply (serial out of range, purchase before window), so the outcome is deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01YSUUPx8C2XV86aEY5zzTRS",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model FCRE3052BS, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial number QQ66988261 is outside all recalled serial number ranges, so the unit is not part of the recall.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The purchase date of 2023-06-08 is before the sale window of 2023-10-01 to 2023-12-31, so the purchase is not eligible.",
+      "cites": [
+       "R:sold_window",
+       "T5"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not flagged.",
+      "cites": [
+       "T7"
+      ]
+     },
+     {
+      "text": "The date code October 2023 is within the recalled range, but this does not overcome the serial and purchase-date denials.",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

@@ -1,0 +1,10 @@
+{
+ "claim_id": "46170806-b734-5f01-98f4-610282f32465",
+ "spec_id": "S34",
+ "program": "25206",
+ "category": "expect_approve",
+ "expected_outcome": "approve",
+ "rationale": "No model was typed but the legible label shows BE10019US-PI, a listed model, which photo_rules.label_confirms_missing_typed_model approves; 'Amazon' is the notice's Amazon.com and April 3, 2023 is inside the window that starts April 2023.",
+ "violations": [],
+ "subtypes": {}
+}

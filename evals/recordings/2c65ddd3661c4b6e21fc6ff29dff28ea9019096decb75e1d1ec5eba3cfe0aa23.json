@@ -1,0 +1,70 @@
+{
+ "text": "The label photo legibly shows SE4570 with date code 07/22 NH, which matches the recalled date code. The purchase is from a listed retailer within the sale window, there are no duplicates, and the remedy is replacement (no destruction photo required by the rules). I'll record an approval.",
+ "usage": {
+  "input_tokens": 4370,
+  "output_tokens": 548,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4D5Da4e5khHiNNbWTT",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2575,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label photo legibly shows SE4570 with date code 07/22 NH, which matches the recalled date code. The purchase is from a listed retailer within the sale window, there are no duplicates, and the remedy is replacement (no destruction photo required by the rules). I'll record an approval."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01FWiufYnvPXo5RnhrZqFVGj",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows recalled model SE4570, confirming the model even though the typed model matches.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The label's date code 07/22 NH is one of the recalled date codes.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "Purchase at Grainger, a listed retailer, dated 2022-10-14, is inside the sale window 2022-09-01 to 2023-09-30; no receipt is required under the program rules.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The requested remedy is replacement, which carries no destruction-photo requirement in the rules, and the refund amount is not requested, so no value-threshold review applies.",
+      "cites": [
+       "R:value_threshold",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

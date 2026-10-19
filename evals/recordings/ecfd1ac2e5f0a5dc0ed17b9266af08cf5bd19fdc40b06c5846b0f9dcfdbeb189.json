@@ -1,0 +1,75 @@
+{
+ "text": "Every check passes: the legible label shows recalled model MK04, the serial and date code are in range, the retailer and purchase window are valid, and there are no duplicates. The remedy is repair or replacement, not a refund, so no destruction photo or value review applies.",
+ "usage": {
+  "input_tokens": 3484,
+  "output_tokens": 557,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB49dQDQtFApiZkSEvEz",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2974,
+ "content": [
+  {
+   "type": "text",
+   "text": "Every check passes: the legible label shows recalled model MK04, the serial and date code are in range, the retailer and purchase window are valid, and there are no duplicates. The remedy is repair or replacement, not a refund, so no destruction photo or value review applies."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017ahKqA5omXVqs6LXy2qZkK",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model. The typed model was missing, but the label confirms it.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number BN2412D19950 starts with BN, which is in the recalled range.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code 12/2024 is prior to July 2025, so it is in the recalled range.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The retailer Shopify.com is on the list, and the purchase date 2025-02-14 is inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claim requests repair or replacement, not a refund, so the destruction requirement and the value review threshold do not apply.",
+      "cites": [
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

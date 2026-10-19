@@ -1,0 +1,62 @@
+{
+ "text": "The label reads CXP-33, which is not on the recalled list (the list has CXP-03, not CXP-33). The label is legible, so the label controls, and this is a non-recalled model. The typed model \"CXP-33\" matches the label, so this is not a typo case.",
+ "usage": {
+  "input_tokens": 3717,
+  "output_tokens": 464,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3P7nWqJU7fu4JXxNNY",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2525,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label reads CXP-33, which is not on the recalled list (the list has CXP-03, not CXP-33). The label is legible, so the label controls, and this is a non-recalled model. The typed model \"CXP-33\" matches the label, so this is not a typo case."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0179g6U58FgNNyjhVQqodet3",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model CXP-33, which is not one of the program's recalled models. The recalled list includes CXP-03, not CXP-33, so the model is not covered.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The typed model matches the label reading, so this is not a typo that would make the typed model the deciding evidence. The legible label controls, and it is not recalled.",
+      "cites": [
+       "R:policy",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial number is in a recalled range and the purchase is at a listed retailer within the sale window, but these do not cure a non-recalled model.",
+      "cites": [
+       "T2",
+       "T4"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

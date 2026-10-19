@@ -1,0 +1,65 @@
+{
+ "text": "The label is legible and reads \"TEV 16 Kids Bike,\" which is not a recalled model. Under the policy, a legible label showing a non-recalled model is a deny. The typed model \"TEV 16\" matches the label, not the recalled \"REV 16,\" so I'm not treating it as a typo.",
+ "usage": {
+  "input_tokens": 3957,
+  "output_tokens": 545,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Lc3oJebBJ1oLVqJLH",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2888,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and reads \"TEV 16 Kids Bike,\" which is not a recalled model. Under the policy, a legible label showing a non-recalled model is a deny. The typed model \"TEV 16\" matches the label, not the recalled \"REV 16,\" so I'm not treating it as a typo."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01LGRU6TNJrmC9t57TLtukg2",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows the model 'TEV 16 Kids Bike'. That is not one of the recalled models (REV 12, REV 16, REV 20), so the model is not confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The typed model 'TEV 16 Kids Bike' matches the label reading, and it differs from the recalled 'REV 16 Kids Bike' by more than a typo, so the typed model cannot override the legible label.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6",
+       "T7",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial ET2342024992 and date code 2022 are within the recalled ranges, and the purchase at REI.com on 2022-03-11 is inside the sale window from a listed retailer. These do not cure the model mismatch.",
+      "cites": [
+       "T2",
+       "T4",
+       "T5"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

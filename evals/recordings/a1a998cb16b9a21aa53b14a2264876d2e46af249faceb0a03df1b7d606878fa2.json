@@ -1,0 +1,63 @@
+{
+ "text": "The model is confirmed. The retailer does not match the sale rule, so this claim cannot be approved.",
+ "usage": {
+  "input_tokens": 3482,
+  "output_tokens": 397,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4B8xVZPYfkq6nMsHHu",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1889,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed. The retailer does not match the sale rule, so this claim cannot be approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017xKWSAjL4YdPWtgc1ReLVG",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model AD10025BE, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The claimed retailer, Walmart.com, is not Amazon.com, the only retailer the program covers for this recall.",
+      "cites": [
+       "T2",
+       "R:sold_at"
+      ]
+     },
+     {
+      "text": "The purchase date of 2024-02-17 is inside the sale window, so the date alone does not disqualify the claim.",
+      "cites": [
+       "T2",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, and the destruction photo shows the instructed RECALLED marking.",
+      "cites": [
+       "T3",
+       "T4",
+       "R:destruction"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

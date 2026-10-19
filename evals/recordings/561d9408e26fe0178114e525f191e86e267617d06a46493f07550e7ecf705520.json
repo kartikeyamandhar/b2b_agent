@@ -1,0 +1,61 @@
+{
+ "text": "The model is confirmed as recalled, the purchase is from a listed retailer inside the sale window with no receipt required, and there are no duplicate claims. The serial and date code rules are not part of this program's rules, so they don't affect the outcome.",
+ "usage": {
+  "input_tokens": 3390,
+  "output_tokens": 432,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3yWAraPjxrdjzhJvxt",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2129,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed as recalled, the purchase is from a listed retailer inside the sale window with no receipt required, and there are no duplicate claims. The serial and date code rules are not part of this program's rules, so they don't affect the outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01SxeUGvXj2oNrEKRaVzMD1Q",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model 2G505B, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "Retailer Esrtech.com is on the sold-at list and the purchase date 2025-04-30 falls inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "Refund of $39.05 is under the $100.00 value threshold, so no person review is needed.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

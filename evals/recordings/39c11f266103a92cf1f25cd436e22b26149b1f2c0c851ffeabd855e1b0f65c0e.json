@@ -1,0 +1,85 @@
+{
+ "text": "The decision was rejected because I cited \"faq#2\" directly; the valid id for that passage is T8. Resubmitting with the corrected citations.",
+ "usage": {
+  "input_tokens": 3952,
+  "output_tokens": 554,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeN7Ww8FB8t1yC4U5SU",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2476,
+ "content": [
+  {
+   "type": "text",
+   "text": "The decision was rejected because I cited \"faq#2\" directly; the valid id for that passage is T8. Resubmitting with the corrected citations."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DF4hd4Xs8TzfdiQmBEoXiA",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows REV 12 Kids Bike, a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial number 01VX34978848 begins with 01VX, which is within the recalled serial ranges.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The date code 2022 is within the recalled range of model years 2022-2024.",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     },
+     {
+      "text": "Purchased at REI.com, a listed retailer, on 2024-02-07, which is inside the sale window; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T5",
+       "T8"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for the repair remedy requested.",
+      "cites": [
+       "T6",
+       "T8"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T7",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No refund was requested, so the $100 person-review threshold does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

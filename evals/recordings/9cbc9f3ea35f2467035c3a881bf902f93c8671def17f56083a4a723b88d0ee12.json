@@ -1,0 +1,70 @@
+{
+ "text": "Applying the policy in order: flag takes precedence. T5 shows a same_address match with another claim, so the claim must be flagged for person review, regardless of the other checks.",
+ "usage": {
+  "input_tokens": 2935,
+  "output_tokens": 550,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeSuQZnjKVm9cP4GYoL",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2824,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: flag takes precedence. T5 shows a same_address match with another claim, so the claim must be flagged for person review, regardless of the other checks."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01GgPcCmdqZjNqJJTPX6NY5K",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Duplicate check found another claim (798a66d4-6d64-5362-aeda-adc363841a12) sharing the same address, so the claim must go to a person for review together with the matching claim.",
+      "cites": [
+       "T5",
+       "R:policy",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model AD10009BE, which is on the recalled list, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "Purchase at Amazon.com on 2023-05-23 is on the listed retailer and inside the sale window; no receipt is required for this claim.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show a seatback or the marker writing on the front and rear, so it does not show the instructed destruction; it would need to be requested again if the claim proceeds.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "The refund of $156.19 exceeds the $100.00 threshold, so a person reviews it.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

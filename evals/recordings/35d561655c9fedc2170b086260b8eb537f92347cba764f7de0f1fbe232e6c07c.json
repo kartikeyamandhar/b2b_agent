@@ -1,0 +1,58 @@
+{
+ "text": "Retrying with the corrected citation id for the FAQ passage (T6 in place of faq#1).",
+ "usage": {
+  "input_tokens": 3450,
+  "output_tokens": 395,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeLZDTdxsMwoxWVF4ys",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 1674,
+ "content": [
+  {
+   "type": "text",
+   "text": "Retrying with the corrected citation id for the FAQ passage (T6 in place of faq#1)."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QSRpHCCD1XEtTuQHSrVcPt",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model P1411, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2006-05-22 is before the product's sale window, which opens 2006-10-01. Purchases before the window are denied under the claim policy, even though the retailer (www.walmart.com) is on the list.",
+      "cites": [
+       "R:policy",
+       "R:sold_window",
+       "R:sold_at",
+       "T3",
+       "T6"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, and no destruction photo is required for this remedy, so neither of those checks changes the outcome.",
+      "cites": [
+       "T5",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

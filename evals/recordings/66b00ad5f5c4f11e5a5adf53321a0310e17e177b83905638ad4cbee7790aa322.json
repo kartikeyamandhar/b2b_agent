@@ -1,0 +1,58 @@
+{
+ "text": "The legible label shows model 34085, which is not one of the recalled models (34692, 34785, 34790). The label controls, so the claim is denied on model grounds regardless of the in-range date code and listed retailer.",
+ "usage": {
+  "input_tokens": 3465,
+  "output_tokens": 414,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3vsZPjhEZLavSAfGaF",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2204,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows model 34085, which is not one of the recalled models (34692, 34785, 34790). The label controls, so the claim is denied on model grounds regardless of the in-range date code and listed retailer."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_016NzgKaFVkaR6invAWZfndu",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model 34085, which is not a recalled model. The recalled models are 34692, 34785 and 34790.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase is at a listed retailer (Costco) inside the sale window, and there are no duplicate claims. These do not cure the model mismatch.",
+      "cites": [
+       "T2",
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The date code 07/2020 is in a recalled range, but the model is not recalled, so the claim cannot be approved.",
+      "cites": [
+       "T5",
+       "R:date_codes",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

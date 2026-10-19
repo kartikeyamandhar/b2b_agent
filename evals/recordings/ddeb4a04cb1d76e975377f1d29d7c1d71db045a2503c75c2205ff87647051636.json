@@ -1,0 +1,65 @@
+{
+ "text": "The policy says a date code outside the recalled codes is not part of the recall. The label photo is the evidence, and it reads 09/22 NH, which is not recalled. The typed 08/22 NH conflicts with the label and cannot override it. The label is legible and the model matches, but the unit's date code is outside the recall, so this is a denial.",
+ "usage": {
+  "input_tokens": 4537,
+  "output_tokens": 542,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3fLj5mbz8VaXKCvSx7",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2382,
+ "content": [
+  {
+   "type": "text",
+   "text": "The policy says a date code outside the recalled codes is not part of the recall. The label photo is the evidence, and it reads 09/22 NH, which is not recalled. The typed 08/22 NH conflicts with the label and cannot override it. The label is legible and the model matches, but the unit's date code is outside the recall, so this is a denial."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01VbiRRDKuAp5aBnNtT3cuKr",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label photo shows date code 09/22 NH. Only 07/22 NH and 08/22 NH are recalled, so this unit is outside the recall. The typed date code 08/22 NH conflicts with the label, and the label photo is the evidence.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T4",
+       "T5",
+       "T7"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (Safety Shoes Distributors) on 2022-12-09, inside the sale window, and no receipt is required. This does not change the outcome, since the date code is outside the recall.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.8
+   }
+  }
+ ]
+}

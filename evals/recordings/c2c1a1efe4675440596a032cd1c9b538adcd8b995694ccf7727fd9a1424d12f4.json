@@ -1,0 +1,75 @@
+{
+ "text": "Every check passes: the label shows a recalled model, the serial and date code are in range, the purchase is at a listed retailer within the window, and there are no duplicate claims. The remedy is repair or replacement, so no destruction photo is required and no refund threshold applies.",
+ "usage": {
+  "input_tokens": 3484,
+  "output_tokens": 534,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3zBqpHqiaNK2HyE3xF",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2292,
+ "content": [
+  {
+   "type": "text",
+   "text": "Every check passes: the label shows a recalled model, the serial and date code are in range, the purchase is at a listed retailer within the window, and there are no duplicate claims. The remedy is repair or replacement, so no destruction photo is required and no refund threshold applies."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01L4rYTpRGr2tWnEWUmzxb3o",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model DR2E, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number J0E66794845 begins with J0E, which is in the recalled serial ranges.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code 2017 falls within the recalled model year range 2017-2024.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase at Yamaha dealers on 2022-03-15 is at a listed retailer and inside the sale window; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claimant requests repair or replacement, so no destruction photo or refund review applies.",
+      "cites": [
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

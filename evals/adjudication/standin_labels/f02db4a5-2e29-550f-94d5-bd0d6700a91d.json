@@ -1,0 +1,10 @@
+{
+ "claim_id": "f02db4a5-2e29-550f-94d5-bd0d6700a91d",
+ "spec_id": "S16",
+ "program": "26244",
+ "category": "expect_deny",
+ "expected_outcome": "deny",
+ "rationale": "The serial starts with BN, but date code 07/2025 is not 'prior to July 2025', so date_code_out_of_range denies; the July 2025 purchase after the sale window has no policy rule and does not change the outcome.",
+ "violations": [],
+ "subtypes": {}
+}

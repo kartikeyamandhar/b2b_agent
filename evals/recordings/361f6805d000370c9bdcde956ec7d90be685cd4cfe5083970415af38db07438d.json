@@ -1,0 +1,68 @@
+{
+ "text": "Everything checks out: the model is recalled, the serial is in range, the purchase is at a listed retailer within the window, and there are no duplicates. The refund is a repair or replacement, not a refund over $100, so no person review is needed.",
+ "usage": {
+  "input_tokens": 3578,
+  "output_tokens": 505,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3tGZRZZHJY37pMg4aN",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2278,
+ "content": [
+  {
+   "type": "text",
+   "text": "Everything checks out: the model is recalled, the serial is in range, the purchase is at a listed retailer within the window, and there are no duplicates. The refund is a repair or replacement, not a refund over $100, so no person review is needed."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01GcKHQ7LwPZXrYVBEJ2cFFh",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model CXC-02, which is a recalled model, matching the typed model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial FC2746049693 falls within the recalled serial prefixes.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The claimant bought the cycle at JHTNA, a listed retailer, on 2024-09-01, which is inside the sale window of 2021-01-01 to 2024-10-31. No receipt is required for this retailer.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The remedy is repair or replacement with no refund requested, so the value threshold does not require person review.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

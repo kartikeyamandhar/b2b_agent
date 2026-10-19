@@ -1,0 +1,12 @@
+{
+ "claim_id": "0c585cef-7070-52ce-8003-32a37df8d391",
+ "program": "25206",
+ "category": "destruction_photo_intact",
+ "expected_outcome": "needs_info",
+ "violations": [
+  "destruction_photo_intact"
+ ],
+ "label_model_printed": "BE10019US-PI",
+ "label_unreadable": false,
+ "subtypes": {}
+}

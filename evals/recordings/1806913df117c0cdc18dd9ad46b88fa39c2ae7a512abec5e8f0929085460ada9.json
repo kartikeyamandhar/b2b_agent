@@ -1,0 +1,71 @@
+{
+ "text": "The model is confirmed. The retailer is not on the sold-at list, and the policy sends unknown or unlisted retailers to needs_info, so I'll ask the claimant for proof of purchase.",
+ "usage": {
+  "input_tokens": 3646,
+  "output_tokens": 644,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3r8QE4Cv5vSX6jN93A",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3684,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed. The retailer is not on the sold-at list, and the policy sends unknown or unlisted retailers to needs_info, so I'll ask the claimant for proof of purchase."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01A2aGigByvmbogNkUs84Mpu",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows the recalled model REV 12 Kids Bike, and the typed model matches.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number ET2264836962 begins with ET22, which is in the recalled range.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The date code 2022 is within the recalled model years 2022-2024.",
+      "cites": [
+       "T5",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase date 2022-09-04 falls inside the sale window, but the retailer Corner Hardware Co is not on the list of sellers (REI, REI.com), so the purchase cannot be confirmed as eligible.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found that share a photo, address, email, serial, or payout account.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your bike's model, serial number, and date code match the recall, but the retailer you named, Corner Hardware Co, is not one of the authorized sellers for this program. Can you send proof of where and when you bought the bike, such as a receipt, order confirmation, or a statement showing the seller was REI or REI.com? If you bought it secondhand or as a gift, please say so and tell us what you know about the original purchase.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

@@ -34,3 +34,48 @@ Two changes, each reported rather than folded in silently:
 
 1. Tool change, tools 1.0.0 to 1.0.1. The first run flagged 44 legitimate claims. All 82 false duplicate hits were receipt photos matched by pHash: receipts are template documents, and pHash ignores the text that tells two of them apart. check_duplicates now matches receipts on exact bytes (sha256) only; label and destruction photos keep the 6-bit pHash threshold. adjudication.md shows both rows.
 2. Golden set v1.0 to v1.1. A unit test found 3 mislabeled claims: two serial_out_of_range claims on notice 25126 whose serials were in fact inside a wrap-around range (the generator found no outside value and kept the in-range serial), and one date_code_out_of_range claim on notice 24118 ("8/21", a one-digit month the generator could not parse). The generator now searches harder for an outside value and drops a violation it cannot build. Regenerating changed exactly those 3 claims; every other claim and the composition (102 approve, 87 deny, 72 flag, 39 needs_info) are identical.
+
+## Revision 2 (2026-10-18, before any row that reads photos is run)
+
+Adopted after a red-team review of the M2 plan (decisions log 2026-10-18).
+
+### Rows
+
+On the 300 golden claims (the kill-criterion block, unchanged): rules_only (the M1 row), rules_plus_vision (the rules-only tools plus the two vision tools, decision table 2.0.0 implementing outcome_policy.yaml with photo_rules), single_pass (every tool once in a fixed order, then one decide call), loop_full (the ReAct loop with keyword plus vector retrieval), loop_no_retrieval (the same loop without retrieve_policy), loop_keyword_only (the loop with keyword retrieval only). loop_full_cheap_model is not applicable: one model is priced, and it is already the cheapest vision model the project uses. Every agent row gets outcome_policy.yaml, photo_rules included, in its instructions.
+
+### Blocks
+
+- golden300: the 300 synthetic claims. The kill criterion compares rules_only and loop_full macro F1 here, as pre-registered in M1. Expected: rules_only stays at 0.982 and the agent cannot exceed it by 0.05, so the criterion fires by construction (decisions log 2026-10-16).
+- probe60: an assistant-designed capability probe of 60 claims, 10 per category, built to target rules_only's blind spots by construction. It is never kill-criterion evidence and never stands in for the owner-reviewed claims. Categories and expected outcomes from photo_rules: label_shows_other_model (deny), destruction_photo_intact (needs_info), label_unreadable (needs_info; a dedicated render with heavy blur and occlusion of the model line, distinct from the hard image tier of the 300, whose labels stay readable), label_confirms_typed_typo (approve), label_confirms_missing_typed_model (approve), clean controls (approve). The claims are built from the frozen program rules of 6 golden programs, under program keys prefixed probe:, with their own claimant streams. Each claim is scored against only the other claims of its own block and program, and a freeze check asserts that no unplanted claim has a duplicate hit in that population.
+- standin40: 40 claims written by one sub-agent that has not seen the generator, the tools, or the labels, from 4 notice texts and outcome_policy.yaml. The specs and expected outcomes are frozen and hashed before any agent run. Labeled "agent-written stand-in for the classmate set; shares the generator's renderer". Scored in its own population.
+
+### Expectations stated before the run
+
+- golden300: rules_plus_vision and loop_full macro F1 at least 0.90. Vision misreads on hard-tier labels may cost a few points.
+- probe60: rules_only macro F1 at most 0.5; rules_plus_vision and loop_full at least 0.75.
+- Retrieval: loop_full and loop_no_retrieval within 0.02 macro F1 of each other on every block, because the policy is in the instructions. If so, the write-up says retrieval did not earn its place on these sets.
+- Cost: loop_full mean cost per claim at most 0.005 USD; capped share at most 5 percent; mean counted steps at most 6.
+- Budget: total model spend for M2 to M4 at most 3 USD. If the ledger passes 3.00 USD (the warn line), loop_keyword_only runs on probe60 and standin40 only, and the change is logged.
+
+### Columns
+
+mean counted steps (model calls plus rejected tool calls; rules_only counts 0) and mean written rows are reported separately. Cost is nominal (recorded usage times the price table), identical in live and replay. p50 seconds comes from the replay virtual clock (recorded live latency).
+
+## Outcome of the Revision 2 expectations (recorded 2026-10-19, after the full live run)
+
+Every row ran on every block from recordings (ledger 1.614 USD after the run, 0 errors, 0 missing claims). Numbers are macro F1 from evals/results/ablation.md. Reported as observed; nothing was tuned after the run.
+
+| expectation | observed | verdict |
+|---|---|---|
+| golden300: rules_plus_vision and loop_full at least 0.90 | 0.933 and 0.916 | met |
+| golden300: rules_only unchanged at 0.982 | 0.9817 (pinned exactly by tests/unit/test_freeze.py) | met |
+| kill criterion fires on golden300 (by construction) | loop_full minus rules_only = -0.066 | fired: the agent's case rests on photo reading, fraud routing, and the other blocks |
+| probe60: rules_only at most 0.5 | 0.095 | met |
+| probe60: rules_plus_vision and loop_full at least 0.75 | 0.726 and 0.703 | missed |
+| retrieval: loop_full and loop_no_retrieval within 0.02 on every block | golden300 0.008, probe60 0.004, standin40 0.056 | missed on standin40 (40 claims; 2 claims differ) |
+| loop_full mean cost per claim at most 0.005 USD | 0.0016 | met |
+| capped share at most 5 percent | 0 percent | met |
+| mean counted steps at most 6 | 4.1 to 4.8 | met |
+| total spend for M2 to M4 at most 3 USD | 1.62 USD including M1 | met |
+
+Why probe60 missed: every row that reads photos gets only 3 or 4 of the 10 clean controls right, and 19 of the 30 expected-approve claims go to needs_info. Replaying those claims shows the label reads are correct (legible, the right model, confidence about 0.9); the destruction check rejects the renderer's compliant destruction photos ("an abstract illustration", "no visible cut in the cord", "RECALLED printed rather than handwritten"). The synthetic destruction renders are too schematic to count as evidence for a vision model, which also explains most of the gap between rules_plus_vision (0.933) and rules_only (0.982) on golden300. A real-photo block is needed before the destruction check's numbers mean anything; changing the renderer would change frozen blocks and needs a new revision and new recordings.

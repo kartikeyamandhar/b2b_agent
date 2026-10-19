@@ -1,0 +1,61 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3812,
+  "output_tokens": 428,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3jGmZejN2vGFW5NP6M",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2288,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01XJDwMQ7tir6ZF6QLqoYXy1",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label is legible and shows model FCRG3051BS, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial VF34618277 falls within a recalled serial range, and the date code October 2023 is within the recalled production dates.",
+      "cites": [
+       "T4",
+       "T5",
+       "R:serials",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2023-07-27 is before the sale window of 2023-10-01 to 2023-12-31, so the unit was not sold within the recall-eligible period. The retailer Lowe's is listed, but the date places the purchase outside the window.",
+      "cites": [
+       "T2",
+       "R:sold_window",
+       "R:sold_at",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

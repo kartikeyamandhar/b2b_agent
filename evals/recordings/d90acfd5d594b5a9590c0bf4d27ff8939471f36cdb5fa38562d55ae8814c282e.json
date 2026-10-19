@@ -1,0 +1,55 @@
+{
+ "text": "Per the policy, I'll check the label photo, purchase, duplicates, and the typed serial and date code in parallel, since the claim needs all of them. No destruction check is needed because the remedy is repair or replacement, not destruction.",
+ "usage": {
+  "input_tokens": 2680,
+  "output_tokens": 254,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3mPzTRFSLwUBmTPMdi",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1680,
+ "content": [
+  {
+   "type": "text",
+   "text": "Per the policy, I'll check the label photo, purchase, duplicates, and the typed serial and date code in parallel, since the claim needs all of them. No destruction check is needed because the remedy is repair or replacement, not destruction."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Pw9XXKAtFiGvSMr6TwyTB6",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01CTDNt3ey2oY5NDYwBRDQWa",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01E3kY5kf8CeaQyeHuNNrWDL",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01JkVEEMgqGSecfN76LuZybV",
+   "name": "check_serial",
+   "input": {
+    "serial": "SN84244316"
+   }
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01E9VGHTv8jhm7eVa4Limukb",
+   "name": "check_date_code",
+   "input": {
+    "date_code": "2126"
+   }
+  }
+ ]
+}

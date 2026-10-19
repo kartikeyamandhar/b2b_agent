@@ -1,0 +1,76 @@
+{
+ "text": "Checking each rule against the results:\n\n- Model: label legible, shows SE4570 (T1, T2), a recalled model. Confirmed.\n- Serial/date code: the program's date code rule applies. Date code 07/22 is in range (T3).\n- Purchase: 2023-09-05 is inside the window 2022-09-01 to 2023-09-30 (T4). Retailer Saf-Gard Safety Shoe Company is listed (T4). No receipt required.\n- Destruction photo: not required, since the remedy is replacement (T5, T7).\n- Duplicates: none found (T6), so no flag.\n- Refund: none requested; the value threshold does not apply.\n\nEvery rule is satisfied, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2792,
+  "output_tokens": 708,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeG8rtLup1ZreVcYfr6",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4068,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking each rule against the results:\n\n- Model: label legible, shows SE4570 (T1, T2), a recalled model. Confirmed.\n- Serial/date code: the program's date code rule applies. Date code 07/22 is in range (T3).\n- Purchase: 2023-09-05 is inside the window 2022-09-01 to 2023-09-30 (T4). Retailer Saf-Gard Safety Shoe Company is listed (T4). No receipt required.\n- Destruction photo: not required, since the remedy is replacement (T5, T7).\n- Duplicates: none found (T6), so no flag.\n- Refund: none requested; the value threshold does not apply.\n\nEvery rule is satisfied, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Bf2aYXFC1iEftiaTbTqsxw",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 07/22 is within the recalled date codes (07/22 NH or 08/22 NH).",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "The purchase date of 2023-09-05 falls inside the sale window, and the retailer Saf-Gard Safety Shoe Company is on the list of sellers. No receipt is required.",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "T4",
+       "T7"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The remedy is replacement, so no destruction photo is required.",
+      "cites": [
+       "T5",
+       "T7"
+      ]
+     },
+     {
+      "text": "No refund is requested, so the value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.92
+   }
+  }
+ ]
+}

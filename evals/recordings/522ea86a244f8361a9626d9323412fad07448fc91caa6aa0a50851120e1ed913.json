@@ -1,0 +1,66 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: label photo is legible and shows 2G520, a recalled model (T1, T2, R:models). Confirmed.\n- Serial: the program has no serial or date code rule in this recall's checks, so nothing to apply.\n- Purchase: Homedepot.com is listed, date 2022-11-12 is inside the window, no receipt required (T3, R:sold_at, R:sold_window).\n- Duplicates: none found (T5), so no flag.\n- Destruction: the policy requires the word \"Recalled\" written in permanent marker. T4 reports the word appears as a printed white label rather than handwritten marker. The tool itself gives low confidence (0.6) and notes the mismatch with the instructed method. Per policy, a destruction photo that does not show the instructed destruction needs asking again, so this is needs_info.\n\nThe outcome is needs_info: ask for a destruction photo showing the unit with \"Recalled\" written on it in permanent marker.",
+ "usage": {
+  "input_tokens": 2815,
+  "output_tokens": 832,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB34ZAxkCzdMExRBjPbX",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3934,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: label photo is legible and shows 2G520, a recalled model (T1, T2, R:models). Confirmed.\n- Serial: the program has no serial or date code rule in this recall's checks, so nothing to apply.\n- Purchase: Homedepot.com is listed, date 2022-11-12 is inside the window, no receipt required (T3, R:sold_at, R:sold_window).\n- Duplicates: none found (T5), so no flag.\n- Destruction: the policy requires the word \"Recalled\" written in permanent marker. T4 reports the word appears as a printed white label rather than handwritten marker. The tool itself gives low confidence (0.6) and notes the mismatch with the instructed method. Per policy, a destruction photo that does not show the instructed destruction needs asking again, so this is needs_info.\n\nThe outcome is needs_info: ask for a destruction photo showing the unit with \"Recalled\" written on it in permanent marker."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01J2jgWBYonYGcRQjQQTgwAv",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2G520, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Homedepot.com is a listed retailer and the purchase date of 2022-11-12 falls inside the sale window; no receipt is required.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the instructed destruction. The word RECALLED appears as a printed label rather than written in permanent marker, and the check's confidence is low (0.6). Per policy, a destruction photo that does not show the instructed destruction is asked for again.",
+      "cites": [
+       "T4",
+       "R:destruction",
+       "T6",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo of the destroyed power bank showing the word \"Recalled\" handwritten in permanent marker on the unit. The current photo shows the word as a printed label, which does not meet the destruction instructions.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

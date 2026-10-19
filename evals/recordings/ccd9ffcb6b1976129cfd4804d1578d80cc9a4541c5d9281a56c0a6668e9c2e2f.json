@@ -1,0 +1,70 @@
+{
+ "text": "All checks pass: the label shows a recalled model, the serial is in range, the Sears purchase falls inside the window with a receipt, and there are no duplicates. Repair or replacement needs no destruction photo, and the refund amount is not stated, so no value review applies.",
+ "usage": {
+  "input_tokens": 3826,
+  "output_tokens": 549,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3KYSEZS6ojyBjkCdWM",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2717,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass: the label shows a recalled model, the serial is in range, the Sears purchase falls inside the window with a receipt, and there are no duplicates. Repair or replacement needs no destruction photo, and the refund amount is not stated, so no value review applies."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01R1Tyg4NhevQ5Undk9tnHD7",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PLEFM399DCA1, which matches the recalled model PLEFM399DC*.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial number VF12216944 is inside the recalled range VF122xxxxx - VF334xxxxx.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The claimed retailer Sears is on the listed sellers and the purchase date 2004-01-07 falls inside the sale window 2001-06-01 to 2009-08-31. A receipt is present.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "R:receipt",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The remedy is repair or replacement, so no destruction photo is required, and no refund over the value threshold is requested.",
+      "cites": [
+       "R:policy",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

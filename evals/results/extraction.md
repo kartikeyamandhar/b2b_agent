@@ -1,6 +1,6 @@
 # Extraction eval
 
-Generated 2026-10-18 23:16 UTC by `make eval`. Pre-registration: evals/extraction/PREREG.md (Revisions 1 and 2).
+Generated 2026-10-19 07:50 UTC by `make eval`. Pre-registration: evals/extraction/PREREG.md (Revisions 1 and 2).
 
 - Golden set: 100 notices, **model-labeled, assistant-audited (owner delegated)**; golden_notices.json sha256 e701caae2d5efde9. The 60 extension notices were labeled blind by sub-agents and audited before either extractor ran on them; the 40 M1 notices were labeled and audited by the main session, which had seen both extractors' M1 results.
 - Baseline: rules/baseline.py 1.0.0, developed only on the 15 baseline-test notices.

@@ -1,0 +1,75 @@
+{
+ "text": "The model is confirmed, the serial and date code are in range, the REI purchase is inside the window, and there are no duplicates. The remedy is repair or replacement, so no destruction photo or refund threshold applies. This claim should be approved.",
+ "usage": {
+  "input_tokens": 3759,
+  "output_tokens": 538,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3LodJf4usirSUVBUiU",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2289,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed, the serial and date code are in range, the REI purchase is inside the window, and there are no duplicates. The remedy is repair or replacement, so no destruction photo or refund threshold applies. This claim should be approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01H8Z6F1iVQPoez9JZsAbowH",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows REV 20 Kids Bike, a recalled model, and the typed model matches.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number 01VX69798791 begins with the recalled prefix 01VX.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code 2022 falls within the recalled model years 2022-2024.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase was made at REI, a listed retailer, on 2022-12-17, inside the sale window, and no receipt is required for this claim.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The remedy is repair or replacement, so no destruction photo is required and no refund exceeds the value threshold.",
+      "cites": [
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

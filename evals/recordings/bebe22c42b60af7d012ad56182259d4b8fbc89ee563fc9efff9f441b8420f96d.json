@@ -1,0 +1,64 @@
+{
+ "text": "Applying the policy in order: flag takes precedence.\n\n- T6 finds a same-serial match with another claim (c79db397...), so flag applies regardless of the other checks.\n- Independently, T1 is legible and shows 500LX, which is not a recalled model (T2 mismatch against 200LX), so deny would apply. Serial QQ41130245 is also outside the recalled ranges (T3).\n\nSince flag is first in precedence, the outcome is flag.",
+ "usage": {
+  "input_tokens": 2750,
+  "output_tokens": 546,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAfztfAih7TvvYSTDh1H",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3764,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: flag takes precedence.\n\n- T6 finds a same-serial match with another claim (c79db397...), so flag applies regardless of the other checks.\n- Independently, T1 is legible and shows 500LX, which is not a recalled model (T2 mismatch against 200LX), so deny would apply. Serial QQ41130245 is also outside the recalled ranges (T3).\n\nSince flag is first in precedence, the outcome is flag."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_011QWECfAWdoeQkCLGS3jSBr",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim sharing this serial number, so the claim must go to a person for review together with the matching claim.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model 500LX, which is not a recalled model (the recalled model is 200LX), so the unit does not appear to be part of this recall.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The typed serial QQ41130245 falls outside all recalled serial ranges.",
+      "cites": [
+       "T3",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The purchase date of 2019-01-04 is inside the sale window and no receipt is required; the destruction photo is not required for a repair remedy.",
+      "cites": [
+       "T4",
+       "T5",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

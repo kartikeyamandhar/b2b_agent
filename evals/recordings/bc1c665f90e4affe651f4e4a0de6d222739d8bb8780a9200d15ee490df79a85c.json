@@ -1,0 +1,66 @@
+{
+ "text": "The model matches, but the serial is outside the recalled range, which is a denial under the policy.",
+ "usage": {
+  "input_tokens": 3533,
+  "output_tokens": 476,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB427nnpX8aJqHbKCg7M",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2326,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model matches, but the serial is outside the recalled range, which is a denial under the policy."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01XkBjZWSJBRWhu1UJ8ht4pn",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number QQ38160549 does not start with \"BN\", so it is outside the recalled serial ranges. Under the policy, an out-of-range serial is a denial. The label reading matches the typed serial, so this is not a typing error.",
+      "cites": [
+       "T1",
+       "T4",
+       "R:serials",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The retailer (Amazon.com), the purchase date (2025-05-14, inside the 2024-09-01 to 2025-06-30 window), and the date code (June 2025, prior to July 2025) all pass. These do not offset the serial failure.",
+      "cites": [
+       "T2",
+       "T5",
+       "R:sold_at",
+       "R:sold_window",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

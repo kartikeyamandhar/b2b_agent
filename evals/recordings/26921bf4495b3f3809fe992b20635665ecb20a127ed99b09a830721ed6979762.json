@@ -1,0 +1,57 @@
+{
+ "text": "The duplicate check found another claim sharing this serial number, which triggers a flag under the policy. I'll record that outcome.",
+ "usage": {
+  "input_tokens": 3577,
+  "output_tokens": 444,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3X7Yr4nSXUK1xz74CG",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2313,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing this serial number, which triggers a flag under the policy. I'll record that outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01BwSGnV7Xu6z8aHP3CJuyFJ",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program (a4a47ccc-ed8b-5bdd-adda-3ea23de865c1) shares this same serial number, so the claim is flagged for review under the duplicate rule.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model, and the serial BN55928938 and date code June 2025 are within the recalled ranges.",
+      "cites": [
+       "T1",
+       "R:models",
+       "R:serials",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The retailer Corner Hardware Co is not on the list of sales channels, though the purchase date falls inside the sale window and no receipt is required. This is noted for the reviewer but does not by itself decide the outcome.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

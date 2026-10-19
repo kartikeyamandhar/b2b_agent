@@ -1,0 +1,71 @@
+{
+ "text": "I'll resubmit with the required fields.",
+ "usage": {
+  "input_tokens": 3602,
+  "output_tokens": 555,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3CEqsLUWvqzD3tHyvB",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3534,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll resubmit with the required fields."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_011b7kM8tDWdQtk6LM1gtnDQ",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows AD10025BE, a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The retailer is Walmart.com, which is not on the program's sold-at list (Amazon.com only). Proof of ownership is required before the claim can proceed.",
+      "cites": [
+       "R:sold_at",
+       "T3",
+       "R:policy",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase date of 2024-02-17 falls inside the sale window, and no duplicate claims were found.",
+      "cites": [
+       "R:sold_window",
+       "T3",
+       "T5"
+      ]
+     },
+     {
+      "text": "The destruction photo appears to show the product marked RECALLED on the seatback, which meets the destruction requirement.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "The $109.99 refund exceeds the $100 threshold, so it will be reviewed by a person after approval, but this does not change the outcome.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "The product was recorded as sold by Walmart.com, but this recall covers units sold at Amazon.com. Please send proof of ownership, such as a receipt or order record showing how and where you obtained the seat, so we can confirm eligibility.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

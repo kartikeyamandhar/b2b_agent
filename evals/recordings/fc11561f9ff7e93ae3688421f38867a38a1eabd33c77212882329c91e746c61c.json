@@ -1,0 +1,64 @@
+{
+ "text": "The model is confirmed, the serial is in range, and there are no duplicates. However, the date code is out of the recalled range, and the retailer isn't on the list (Lowe's is the only listed seller). The date code is out of range, which triggers a denial under the date-code rule, and the retailer is a separate issue. Since the date code is a clear, verified mismatch with the recall, I'll deny.",
+ "usage": {
+  "input_tokens": 3774,
+  "output_tokens": 531,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3iq5jY55tFATCkPef7",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2695,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed, the serial is in range, and there are no duplicates. However, the date code is out of the recalled range, and the retailer isn't on the list (Lowe's is the only listed seller). The date code is out of range, which triggers a denial under the date-code rule, and the retailer is a separate issue. Since the date code is a clear, verified mismatch with the recall, I'll deny."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01CQgmcQhmBJs9x2JBK7jy7A",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo shows a date code of November 2024, which is outside the recalled production window of October through November 2023.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The label photo confirms a recalled model (FCRE3052BW), and the serial VF34508573 is within a recalled range, so the model and serial do not by themselves prevent a denial.",
+      "cites": [
+       "T1",
+       "T4",
+       "T6",
+       "R:models",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The claimed retailer, Corner Hardware Co, is not on the program's list of sellers (Lowe's), so the purchase cannot be verified under the sale rules.",
+      "cites": [
+       "R:sold_at",
+       "T2"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

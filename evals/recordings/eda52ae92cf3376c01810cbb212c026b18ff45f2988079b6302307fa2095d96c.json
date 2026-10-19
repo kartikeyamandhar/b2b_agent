@@ -1,0 +1,59 @@
+{
+ "text": "The legible label shows model 2G805, which is not a recalled model (T6), and the typed model 2G520 does not override a legible label. Under the model rule, a legible label showing a non-recalled model is a deny. The other checks passed (purchase window and retailer T2, no duplicates T3, destruction photo T4), but the model rule controls.",
+ "usage": {
+  "input_tokens": 3847,
+  "output_tokens": 514,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3bZxi2zBfQ8vj4eRjh",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2429,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows model 2G805, which is not a recalled model (T6), and the typed model 2G520 does not override a legible label. Under the model rule, a legible label showing a non-recalled model is a deny. The other checks passed (purchase window and retailer T2, no duplicates T3, destruction photo T4), but the model rule controls."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01V5pBr5refKYZcZanE3ojtT",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2G805, which is not one of the recalled models (2G505, 2G520, 2G505B, 2G512B). The typed model 2G520 does not override a legible label showing a non-recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The typed model 2G520 matches the recall list, but the label photo is the controlling evidence and it contradicts the typed value.",
+      "cites": [
+       "R:models",
+       "T7",
+       "T1"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (Esrtech.com) within the sale window, and no duplicate claims were found, and the destruction photo shows the 'RECALLED' marking. None of these cure the model mismatch.",
+      "cites": [
+       "T2",
+       "T3",
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+{
+ "claim_id": "7501596b-3ec5-5ce2-9614-4835b5cf1f0a",
+ "program": "25206",
+ "category": "destruction_photo_intact",
+ "expected_outcome": "needs_info",
+ "violations": [
+  "destruction_photo_intact"
+ ],
+ "label_model_printed": "AD10004BE",
+ "label_unreadable": false,
+ "subtypes": {}
+}

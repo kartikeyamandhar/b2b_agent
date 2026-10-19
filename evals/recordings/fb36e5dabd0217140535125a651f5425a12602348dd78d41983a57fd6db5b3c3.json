@@ -1,0 +1,75 @@
+{
+ "text": "Checking against the policy:\n\n- Duplicates: T5 found no matches, so no flag.\n- Model: T1 reads the label as legible and showing 9421, a recalled model (T2 match, R:models). Confirmed.\n- Serial/date code: the program's rules here don't include serial or date code checks, so these don't apply.\n- Purchase: T3 shows the date is inside the sale window (R:sold_window). The retailer \"Corner Hardware Co\" is not on the list (R:sold_at). Per policy, an unlisted retailer means proof of ownership is requested, not denial. T3 says no receipt is required, and the FAQ says a photo of the label is the proof used, which the claimant supplied. So this is not a needs_info trigger on its own under the stated receipt rule, though the retailer mismatch is noted.\n- Destruction: not required for this remedy (T4).\n\nUnder the policy, the retailer-not-listed case is explicitly \"still eligible: asked for proof of ownership.\" The label photo serves as the proof of the recalled unit, and T3 indicates no receipt is required. The outcome that fits the rules without a denial is approval, with the unlisted retailer noted for the record.",
+ "usage": {
+  "input_tokens": 2716,
+  "output_tokens": 871,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeP3Y6gG74ReTsCjUeq",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 5575,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking against the policy:\n\n- Duplicates: T5 found no matches, so no flag.\n- Model: T1 reads the label as legible and showing 9421, a recalled model (T2 match, R:models). Confirmed.\n- Serial/date code: the program's rules here don't include serial or date code checks, so these don't apply.\n- Purchase: T3 shows the date is inside the sale window (R:sold_window). The retailer \"Corner Hardware Co\" is not on the list (R:sold_at). Per policy, an unlisted retailer means proof of ownership is requested, not denial. T3 says no receipt is required, and the FAQ says a photo of the label is the proof used, which the claimant supplied. So this is not a needs_info trigger on its own under the stated receipt rule, though the retailer mismatch is noted.\n- Destruction: not required for this remedy (T4).\n\nUnder the policy, the retailer-not-listed case is explicitly \"still eligible: asked for proof of ownership.\" The label photo serves as the proof of the recalled unit, and T3 indicates no receipt is required. The outcome that fits the rules without a denial is approval, with the unlisted retailer noted for the record."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_012mC2yY37TuNrHex2TcqYAp",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 9421, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase date of 2024-01-26 falls inside the sale window of 2023-10-01 to 2024-05-31.",
+      "cites": [
+       "T3",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The retailer Corner Hardware Co is not on the list, but the program treats unlisted retailers as still eligible with proof of ownership. The label photo is the proof supplied, and the check reports no receipt is required.",
+      "cites": [
+       "T3",
+       "T6",
+       "R:sold_at"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for a repair or replacement remedy.",
+      "cites": [
+       "T4"
+      ]
+     },
+     {
+      "text": "The program has no serial number or date code rule that applies here, so those checks do not block approval.",
+      "cites": [
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.8
+   }
+  }
+ ]
+}

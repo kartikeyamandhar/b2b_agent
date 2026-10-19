@@ -1,0 +1,47 @@
+{
+ "text": "Per the policy, I'll check the label photo, purchase, duplicates, and serial in parallel, since the claim relies on a serial number and no destruction is required for a repair or replacement remedy. No date code rule applies here, so I won't check one.",
+ "usage": {
+  "input_tokens": 2604,
+  "output_tokens": 209,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3oCMGcGHnVnTQRaRqB",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1472,
+ "content": [
+  {
+   "type": "text",
+   "text": "Per the policy, I'll check the label photo, purchase, duplicates, and serial in parallel, since the claim relies on a serial number and no destruction is required for a repair or replacement remedy. No date code rule applies here, so I won't check one."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01CEmFuUzr2JnYAVTbGMTKEk",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01XL75HASrebfM7U8KM1v4sk",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_011NVA3s2o4zGtQNjUtsr8tS",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01BJqPbpiWRZ5dnCW3uNZ6Mv",
+   "name": "check_serial",
+   "input": {
+    "serial": "SN29627406"
+   }
+  }
+ ]
+}

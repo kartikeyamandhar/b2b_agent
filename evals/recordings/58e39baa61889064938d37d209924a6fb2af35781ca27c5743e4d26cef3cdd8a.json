@@ -1,0 +1,68 @@
+{
+ "text": "The serial check is still skipped, and the program rules don't list a serial rule (R:serials) for this claim, so it doesn't bear on the outcome. Every other check passes, so I'll approve.",
+ "usage": {
+  "input_tokens": 3834,
+  "output_tokens": 477,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3c74Dzui65r2JheEER",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2212,
+ "content": [
+  {
+   "type": "text",
+   "text": "The serial check is still skipped, and the program rules don't list a serial rule (R:serials) for this claim, so it doesn't bear on the outcome. Every other check passes, so I'll approve."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DbqmUJEUeFDsp5SgpZT4vH",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model 2G505, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The retailer Esrtech.com is on the sold-at list and the purchase date 2024-05-12 falls inside the sale window; no receipt is required for this retailer.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the product with the word RECALLED written on it, matching the instructed destruction.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The refund of $32.15 is under the $100.00 value threshold, so no person review is required.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

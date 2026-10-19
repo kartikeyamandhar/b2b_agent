@@ -1,0 +1,64 @@
+{
+ "text": "Applying the policy in order: flag first. T6 shows no duplicates, so no flag. Deny next: the label is legible and shows PA-10 (recalled, T1/T2), so the model passes. But the date code 2369 is outside the recalled range 2126\u20132319 (T3), and the policy says a date code outside the ranges is deny. The purchase is inside the window (T4), and the retailer being unlisted would only trigger needs_info, but the deny from the date code takes precedence. No destruction photo is required (T5).",
+ "usage": {
+  "input_tokens": 2849,
+  "output_tokens": 567,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeKT6q182x7WczEx1Tn",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3144,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: flag first. T6 shows no duplicates, so no flag. Deny next: the label is legible and shows PA-10 (recalled, T1/T2), so the model passes. But the date code 2369 is outside the recalled range 2126\u20132319 (T3), and the policy says a date code outside the ranges is deny. The purchase is inside the window (T4), and the retailer being unlisted would only trigger needs_info, but the deny from the date code takes precedence. No destruction photo is required (T5)."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01CFEvbPMZ3MB1GDYaur56mq",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model PA-10, which is a recalled model, so the model itself is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The date code on the label, 2369, is outside the recalled date code range of 2126 to 2319, so this unit is not part of the recall.",
+      "cites": [
+       "T1",
+       "T3",
+       "R:date_codes",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not flagged for review.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase date of 2021-12-12 is inside the sale window, and the unlisted retailer would only require proof of ownership, which does not change the outcome given the out-of-range date code.",
+      "cites": [
+       "T4",
+       "R:sold_window",
+       "R:sold_at"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

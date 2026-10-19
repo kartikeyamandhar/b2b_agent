@@ -1,0 +1,73 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: label legible, shows 2G520, which is recalled (T1, T2). Confirmed.\n- Serial/date code: the program has no serial or date code rule here, so nothing to apply.\n- Purchase: 2022-10-25 is inside the sale window (T3). Retailer \"Corner Hardware Co\" is not on the list, but per policy a store not on the list is still eligible and is asked for proof of ownership (T3, T6 faq#1). Receipt is \"not_required\" per T3, so no receipt is missing.\n- Destruction: the remedy requires destruction, and the destruction photo is missing (T4). Per policy, a missing destruction photo is needs_info.\n- Duplicates: none found (T5), so flag does not apply.\n\nPrecedence: flag does not trigger, deny does not trigger, needs_info does (missing destruction photo, and the unlisted retailer requires proof of ownership). Refund of $41.40 is under the $100 threshold, so no person review is needed for value.\n\nThe claimant needs to provide a destruction photo showing the power bank with \"Recalled\" written on it in permanent marker, and proof of ownership for the retailer purchase.",
+ "usage": {
+  "input_tokens": 2728,
+  "output_tokens": 900,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "max_tokens",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeVGgYD7gtCDA2Jdnqj",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4556,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: label legible, shows 2G520, which is recalled (T1, T2). Confirmed.\n- Serial/date code: the program has no serial or date code rule here, so nothing to apply.\n- Purchase: 2022-10-25 is inside the sale window (T3). Retailer \"Corner Hardware Co\" is not on the list, but per policy a store not on the list is still eligible and is asked for proof of ownership (T3, T6 faq#1). Receipt is \"not_required\" per T3, so no receipt is missing.\n- Destruction: the remedy requires destruction, and the destruction photo is missing (T4). Per policy, a missing destruction photo is needs_info.\n- Duplicates: none found (T5), so flag does not apply.\n\nPrecedence: flag does not trigger, deny does not trigger, needs_info does (missing destruction photo, and the unlisted retailer requires proof of ownership). Refund of $41.40 is under the $100 threshold, so no person review is needed for value.\n\nThe claimant needs to provide a destruction photo showing the power bank with \"Recalled\" written on it in permanent marker, and proof of ownership for the retailer purchase."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01856WpbTFAFz82q31ibfSgQ",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2G520, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase date of 2022-10-25 falls inside the sale window, so the purchase is not too early or too late.",
+      "cites": [
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "The retailer Corner Hardware Co is not on the list of sales channels. Under program policy, owners who bought from an unlisted store are still eligible but must provide proof of ownership.",
+      "cites": [
+       "R:sold_at",
+       "T3",
+       "T6"
+      ]
+     },
+     {
+      "text": "The remedy requires destruction, and no destruction photo was submitted. A missing destruction photo requires a new request.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not sent for review.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The refund of $41.40 is under the $100 review threshold.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

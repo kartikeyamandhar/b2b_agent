@@ -1,0 +1,70 @@
+{
+ "text": "I'll resubmit with the correct citation id for the FAQ passage, which is T6.",
+ "usage": {
+  "input_tokens": 3645,
+  "output_tokens": 498,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB38g7Xi8KUNB89kkRiE",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 1999,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll resubmit with the correct citation id for the FAQ passage, which is T6."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Jmzt6rdX1QHHYCGkiyXueN",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 6L-PC, which is a recalled model, so the unit is confirmed as recalled.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase was at ALDI, a listed retailer, on 2016-03-27, which is inside the 2016-01-01 to 2019-12-31 sale window. No receipt is required for this check.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3",
+       "T6"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the power cord cut, is distinct from the label photo, and complies with the required destruction.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this claim.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The $40.00 refund is under the $100.00 threshold, so it does not require person review. The program has no serial or date code rules that apply.",
+      "cites": [
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

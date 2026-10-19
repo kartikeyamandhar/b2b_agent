@@ -1,0 +1,15 @@
+{
+ "text": "{\"shows_product\": true, \"complies\": false, \"observed\": \"The photo shows a gray device with a cord attached and the word \\\"RECALLED\\\" displayed in white lettering on its screen or face, but it appears to be a digital or printed display rather than handwritten with permanent marker on the product.\", \"confidence\": 0.6}",
+ "usage": {
+  "input_tokens": 1190,
+  "output_tokens": 104,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "end_turn",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeDaPhjuHa3jnxZGU2R",
+ "purpose": "check_destruction_photo",
+ "max_tokens": 400,
+ "latency_ms": 2201
+}

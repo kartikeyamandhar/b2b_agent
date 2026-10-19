@@ -1,0 +1,62 @@
+{
+ "text": "The label photo shows a legible, recalled model (TD3318B), but it also matches another claim's photo, and the label serial (SN98297492) differs from the typed serial. The duplicate photo triggers a flag, which takes precedence over every other outcome.",
+ "usage": {
+  "input_tokens": 3391,
+  "output_tokens": 522,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3K7KNxiDtQfDHUEEAT",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2447,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label photo shows a legible, recalled model (TD3318B), but it also matches another claim's photo, and the label serial (SN98297492) differs from the typed serial. The duplicate photo triggers a flag, which takes precedence over every other outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01AvpKRFV2TNzuTwQXPkUHsv",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo is the same image (same SHA-256) as a photo on another claim in the program, so this claim is flagged for review.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The legible label shows model TD3318B, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The purchase at REI on 2003-06-13 is a listed retailer, but the date falls before the sale window that starts 1998-01-01? No: it falls inside the window 1998-01-01 to 2024-01-31, and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The typed serial SN71502921 was not checked against the recalled ranges because the serial check was skipped; the label serial reads SN98297492, which does not match the typed serial and needs review as part of the flag.",
+      "cites": [
+       "T1",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

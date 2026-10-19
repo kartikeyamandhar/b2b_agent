@@ -1,0 +1,65 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3748,
+  "output_tokens": 453,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB47fNjHLWN2Wa83dgP9",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2298,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01FHWiGVa2Nj2728xGwNCzWE",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model LXT-CL-1.0, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T7"
+      ]
+     },
+     {
+      "text": "The date code 0722 is within the recalled range.",
+      "cites": [
+       "R:date_codes",
+       "T6"
+      ]
+     },
+     {
+      "text": "Bioionic.com is a listed retailer and the purchase date of 2023-10-27 falls inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the required destruction. It shows an intact power cord with no cut plug, so the destruction requirement is not met.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo showing the power cord with the plug cut off, as the recall requires. The current photo shows the cord intact.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

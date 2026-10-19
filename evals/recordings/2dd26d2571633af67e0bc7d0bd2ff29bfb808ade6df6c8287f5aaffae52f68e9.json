@@ -1,0 +1,61 @@
+{
+ "text": "The model is confirmed, but the serial is out of range. Under the policy, an out-of-range serial means denial. No duplicates were found, and the purchase is inside the sale window.",
+ "usage": {
+  "input_tokens": 3298,
+  "output_tokens": 426,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB42ujnC3kPTUZCPJrZi",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2124,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed, but the serial is out of range. Under the policy, an out-of-range serial means denial. No duplicates were found, and the purchase is inside the sale window."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01F8fv6QJ72CsLVN2fPEac1X",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 200LX, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial number QQ58710406 is outside all recalled serial ranges, so the unit is not covered by the recall.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase date of 2018-10-14 is inside the sale window, and no receipt is required, so the purchase rule is satisfied, but this does not cure the serial mismatch.",
+      "cites": [
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

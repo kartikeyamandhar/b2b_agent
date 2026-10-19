@@ -1,0 +1,64 @@
+{
+ "text": "The duplicate check found another claim sharing this serial number, which triggers a flag under the policy and takes precedence over the other outcomes. I'll record the decision now.",
+ "usage": {
+  "input_tokens": 3753,
+  "output_tokens": 465,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Em4cCrZgJzBBwKPfe",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2596,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing this serial number, which triggers a flag under the policy and takes precedence over the other outcomes. I'll record the decision now."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01JQUUnEZd2jTx2Kjo8TqZYy",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program shares this serial number, which requires flagging for review before any payout.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model B0726Y, a recalled model, with serial SN90206042 and date code 8/21, which is in the recalled range.",
+      "cites": [
+       "T1",
+       "R:models",
+       "R:date_codes",
+       "T6"
+      ]
+     },
+     {
+      "text": "The retailer (www.Amazon.com) is on the sale list and the purchase date of 2020-09-08 falls inside the sale window; no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo does not appear to show the helmet with its straps cut off, so it does not meet the required destruction step; this also needs review.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

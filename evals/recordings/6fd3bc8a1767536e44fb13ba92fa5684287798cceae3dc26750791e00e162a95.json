@@ -1,0 +1,69 @@
+{
+ "text": "The typed model 93550 is recalled, and the label is unreadable, so the typed model is the basis. The rest of the checks are clean: ALDI is a listed retailer, the purchase date is inside the window, there are no duplicates, and the destruction photo shows a cut cord. The date code and serial rules do not apply to this claim's required checks beyond what's listed, and no serial was provided. Since the model rule's usable-label fallback is satisfied by the typed match, I'll approve.\n\nNote: the rules list no serial or date-code check as required for this claim, so I did not run them.",
+ "usage": {
+  "input_tokens": 3328,
+  "output_tokens": 625,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB49A2S8RLuCrqMz3hFN",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 4303,
+ "content": [
+  {
+   "type": "text",
+   "text": "The typed model 93550 is recalled, and the label is unreadable, so the typed model is the basis. The rest of the checks are clean: ALDI is a listed retailer, the purchase date is inside the window, there are no duplicates, and the destruction photo shows a cut cord. The date code and serial rules do not apply to this claim's required checks beyond what's listed, and no serial was provided. Since the model rule's usable-label fallback is satisfied by the typed match, I'll approve.\n\nNote: the rules list no serial or date-code check as required for this claim, so I did not run them."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01TvEwhyqcbsJTrtNCDBWWCJ",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is unreadable, so the typed model decides. The typed model 93550 is on the recalled models list.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase is from ALDI, a listed retailer, dated 2018-10-30, which is inside the 2016-01-01 to 2019-12-31 sale window. No receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the unit with a cut power cord, which is the destruction the recall requires.",
+      "cites": [
+       "T4",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The $40.00 refund is below the $100.00 review threshold, so no person review is needed.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.7
+   }
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+{
+ "claim_id": "97d5494f-e81a-5e77-8ca5-5f8074179a64",
+ "program": "26011",
+ "category": "label_shows_other_model",
+ "expected_outcome": "deny",
+ "violations": [
+  "label_shows_other_model"
+ ],
+ "label_model_printed": "2G805",
+ "label_unreadable": false,
+ "subtypes": {}
+}

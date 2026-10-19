@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and shows PA-10, a recalled model. The date code 2126 is in range, there are no duplicates, and the purchase window is inside. However, the retailer \"Corner Hardware Co\" is not on the sold-at list, so the purchase needs proof of ownership. The serial check returned \"skipped\" rather than a verdict, so I'll confirm the model against the typed value too.",
+ "usage": {
+  "input_tokens": 3369,
+  "output_tokens": 177,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3nCBKgKJ1MtFLtfquH",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1449,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows PA-10, a recalled model. The date code 2126 is in range, there are no duplicates, and the purchase window is inside. However, the retailer \"Corner Hardware Co\" is not on the sold-at list, so the purchase needs proof of ownership. The serial check returned \"skipped\" rather than a verdict, so I'll confirm the model against the typed value too."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01F3unZA3b8jMXhH1anrTS5b",
+   "name": "check_model",
+   "input": {
+    "model_text": "PA-10"
+   }
+  }
+ ]
+}

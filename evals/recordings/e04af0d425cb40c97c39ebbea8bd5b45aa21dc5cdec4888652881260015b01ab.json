@@ -1,0 +1,81 @@
+{
+ "text": "Checking the policy order: flag first \u2014 T8 shows no duplicates, so no flag. Deny next: the label is legible (T1) and shows MK04, a recalled model, so the model is confirmed despite the typed \"MKO4\" typo (T2 ambiguous, T3 match). Serial BN... is in range (T4). Date code 08/2024 is prior to July 2025 (T5). Purchase 2024-09-02 is inside the window, retailer TEMU.com is listed (T6). No destruction photo required (T7). Remedy is replacement, no refund, so no value threshold review. Everything passes, so approve.",
+ "usage": {
+  "input_tokens": 2968,
+  "output_tokens": 733,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3AZ98yKm6NkupNWJ61",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3533,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy order: flag first \u2014 T8 shows no duplicates, so no flag. Deny next: the label is legible (T1) and shows MK04, a recalled model, so the model is confirmed despite the typed \"MKO4\" typo (T2 ambiguous, T3 match). Serial BN... is in range (T4). Date code 08/2024 is prior to July 2025 (T5). Purchase 2024-09-02 is inside the window, retailer TEMU.com is listed (T6). No destruction photo required (T7). Remedy is replacement, no refund, so no value threshold review. Everything passes, so approve."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01PiPtRyjJVTxiS1z7XtuEqj",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T8",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model. The typed model 'MKO4' is a typo, and the label confirms the model.",
+      "cites": [
+       "T1",
+       "T3",
+       "R:models",
+       "R:policy",
+       "faq#0"
+      ]
+     },
+     {
+      "text": "Serial number BN2408B02265 starts with 'BN', which is in the recalled range.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "Date code 08/2024 is manufactured prior to July 2025, which is in the recalled range.",
+      "cites": [
+       "T5",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Purchase on 2024-09-02 falls inside the sale window, and TEMU.com is a listed retailer. No receipt is required.",
+      "cites": [
+       "T6",
+       "R:sold_window",
+       "R:sold_at",
+       "faq#1"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy, and the claimant requests repair or replacement, not a refund, so no value threshold review applies.",
+      "cites": [
+       "T7",
+       "R:value_threshold",
+       "faq#2"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

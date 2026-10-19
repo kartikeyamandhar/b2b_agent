@@ -1,0 +1,70 @@
+{
+ "text": "Checking the results against policy:\n\n- Duplicates: T6 found no matches, so no flag.\n- Model: T1 is legible and shows LXT-CL-1.0, a recalled model (T2 match).\n- Date code: 0722 is in range (T3).\n- Serial: the program has no serial rule, so it is not a deciding factor.\n- Purchase: Bioionic.com is listed and the date 2023-10-27 is inside the window (T4). No receipt is required.\n- Destruction: the policy requires the plug to be cut off. T5 says the photo shows an intact power cord with no visible cutting, so it does not show the instructed destruction. Per policy, this is needs_info, asking for a new destruction photo.\n\nNo other rule triggers a deny or flag, so the outcome is needs_info.",
+ "usage": {
+  "input_tokens": 2908,
+  "output_tokens": 727,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB39MFzuEuMVq16rgKbG",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3536,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against policy:\n\n- Duplicates: T6 found no matches, so no flag.\n- Model: T1 is legible and shows LXT-CL-1.0, a recalled model (T2 match).\n- Date code: 0722 is in range (T3).\n- Serial: the program has no serial rule, so it is not a deciding factor.\n- Purchase: Bioionic.com is listed and the date 2023-10-27 is inside the window (T4). No receipt is required.\n- Destruction: the policy requires the plug to be cut off. T5 says the photo shows an intact power cord with no visible cutting, so it does not show the instructed destruction. Per policy, this is needs_info, asking for a new destruction photo.\n\nNo other rule triggers a deny or flag, so the outcome is needs_info."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01HGxYEJ3k8GcaWmJwFZg7ea",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows the recalled model LXT-CL-1.0, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The date code 0722 is within the recalled range.",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "The purchase at Bioionic.com on 2023-10-27 is on the retailer list and inside the sale window; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the instructed destruction. The power cord is intact and the plug is not cut off, so the photo is asked for again.",
+      "cites": [
+       "R:destruction",
+       "T5",
+       "faq#2"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new photo of the curling iron showing the power plug cut off, as the recall instructs. The current photo shows the cord intact.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

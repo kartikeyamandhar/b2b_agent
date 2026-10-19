@@ -1,0 +1,70 @@
+{
+ "text": "Checking the results against policy:\n\n- Duplicates: T5 found no matches, so no flag.\n- Model: T1 reads a legible label showing 2G505, which is recalled (R:models). Confirmed.\n- Serial/date code: the program's serial check here uses the typed serial SN22377959, which matches the label reading in T1. No serial range rule is given as applicable beyond that, so it does not trigger a denial.\n- Purchase: T3 shows Esrtech.com is a listed retailer and 2024-05-12 is inside the sale window (R:sold_at, R:sold_window). No receipt is required per T3, so the receipt photo is extra.\n- Destruction: T4 shows the product with \"RECALLED\" written on it, matching the instructed destruction, and it is a distinct photo from the label (R:destruction).\n- Refund $32.15 is under the $100 threshold (R:value_threshold).\n\nAll checks pass, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2795,
+  "output_tokens": 754,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB395D6rq7ntsWyTysLL",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4144,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against policy:\n\n- Duplicates: T5 found no matches, so no flag.\n- Model: T1 reads a legible label showing 2G505, which is recalled (R:models). Confirmed.\n- Serial/date code: the program's serial check here uses the typed serial SN22377959, which matches the label reading in T1. No serial range rule is given as applicable beyond that, so it does not trigger a denial.\n- Purchase: T3 shows Esrtech.com is a listed retailer and 2024-05-12 is inside the sale window (R:sold_at, R:sold_window). No receipt is required per T3, so the receipt photo is extra.\n- Destruction: T4 shows the product with \"RECALLED\" written on it, matching the instructed destruction, and it is a distinct photo from the label (R:destruction).\n- Refund $32.15 is under the $100 threshold (R:value_threshold).\n\nAll checks pass, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_018eCfmEJzfkxvRPtSVBTjXX",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2G505, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase was from Esrtech.com, a listed retailer, on 2024-05-12, which is inside the sale window; no receipt is required for this path.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3",
+       "T6"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the product with the word 'Recalled' written on it, which matches the instructed destruction and is not a copy of the label photo.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "The refund of $32.15 is under the $100 review threshold, so no person review is required.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

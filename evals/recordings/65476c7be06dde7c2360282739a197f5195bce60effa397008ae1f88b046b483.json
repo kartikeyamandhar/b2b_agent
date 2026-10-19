@@ -1,0 +1,69 @@
+{
+ "text": "All checks pass: the label shows a recalled model, the serial is in range, the Sears purchase falls inside the sale window with a receipt, and there are no duplicates. No destruction or date code check is required by the rules, and the refund is repair or replacement, so the claim is approved.",
+ "usage": {
+  "input_tokens": 3599,
+  "output_tokens": 534,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3pKyggYsqT5XXeyysR",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2945,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass: the label shows a recalled model, the serial is in range, the Sears purchase falls inside the sale window with a receipt, and there are no duplicates. No destruction or date code check is required by the rules, and the refund is repair or replacement, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01DRmxXaSzHi8LwvbKcPvFgJ",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model PLEFM399DCA1, which matches the recalled model PLEFM399DC*.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The serial number VF12216944 falls within the recalled range VF122xxxxx - VF334xxxxx.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The unit was bought at Sears, a listed retailer, on 2004-01-07, which is inside the 2001-06-01 to 2009-08-31 sale window, and a receipt is present.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "R:receipt",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claim requests repair or replacement with no refund, so the value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

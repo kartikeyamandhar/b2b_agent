@@ -1,0 +1,12 @@
+{
+ "claim_id": "fe9a1685-3a29-5a15-b48e-ddc0922f40b6",
+ "program": "24118",
+ "category": "label_confirms_typed_typo",
+ "expected_outcome": "approve",
+ "violations": [
+  "label_confirms_typed_typo"
+ ],
+ "label_model_printed": "B0726Y",
+ "label_unreadable": false,
+ "subtypes": {}
+}

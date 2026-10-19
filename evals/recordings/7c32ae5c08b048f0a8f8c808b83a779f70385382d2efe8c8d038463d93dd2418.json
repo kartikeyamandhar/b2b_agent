@@ -1,0 +1,83 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: label photo legible and shows MK04 (T1, T2). Confirmed.\n- Serial: BN49554855 starts with \"BN\" (T3). In range.\n- Date code: June 2025 is prior to July 2025 (T4). In range.\n- Purchase: 2025-06-14 is inside the window, and TikTok.com is listed (T5). Receipt not required.\n- Destruction photo: not required (T6), remedy is replacement.\n- Duplicates: none found (T7).\n\nNo flag, deny, or needs_info trigger applies. No refund is requested, so the value threshold does not apply.",
+ "usage": {
+  "input_tokens": 2903,
+  "output_tokens": 714,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB363d1kUsMjaezTByZs",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3150,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: label photo legible and shows MK04 (T1, T2). Confirmed.\n- Serial: BN49554855 starts with \"BN\" (T3). In range.\n- Date code: June 2025 is prior to July 2025 (T4). In range.\n- Purchase: 2025-06-14 is inside the window, and TikTok.com is listed (T5). Receipt not required.\n- Destruction photo: not required (T6), remedy is replacement.\n- Duplicates: none found (T7).\n\nNo flag, deny, or needs_info trigger applies. No refund is requested, so the value threshold does not apply."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01AgF5q5nxELX8aPf8SUMecV",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial number BN49554855 starts with BN, which is in the recalled range.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The date code June 2025 is manufactured prior to July 2025, which is in the recalled range.",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase date 2025-06-14 falls inside the sale window and TikTok.com is a listed retailer; no receipt is required.",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "T5"
+      ]
+     },
+     {
+      "text": "No destruction photo is required because the remedy is replacement.",
+      "cites": [
+       "T6",
+       "T8"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T7"
+      ]
+     },
+     {
+      "text": "No refund is requested, so the refund value threshold does not apply. All checks pass.",
+      "cites": [
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

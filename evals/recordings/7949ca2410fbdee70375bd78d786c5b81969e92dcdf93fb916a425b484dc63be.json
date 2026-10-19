@@ -1,0 +1,77 @@
+{
+ "text": "Checking the policy against the results:\n\n- Duplicates (T6): no hits, so no flag.\n- Model: label photo legible (T1) and shows LDE4413BD, a recalled model (T2, R:models). Confirmed.\n- Serial: 704KM5319755 is in range (T3, R:serials, 704KM pairing).\n- Purchase: Costco is listed, the date 2016-09-08 is inside the window (T4, R:sold_window), and no receipt is required for this remedy (T4).\n- Destruction: not required for a repair remedy (T5).\n- Refund: none requested; repair or replacement, so no value threshold applies.\n\nNo rule triggers a flag, deny, or needs_info, so the claim is approved.",
+ "usage": {
+  "input_tokens": 3567,
+  "output_tokens": 706,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeS16qSJvMVzfbB5qhr",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3464,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy against the results:\n\n- Duplicates (T6): no hits, so no flag.\n- Model: label photo legible (T1) and shows LDE4413BD, a recalled model (T2, R:models). Confirmed.\n- Serial: 704KM5319755 is in range (T3, R:serials, 704KM pairing).\n- Purchase: Costco is listed, the date 2016-09-08 is inside the window (T4, R:sold_window), and no receipt is required for this remedy (T4).\n- Destruction: not required for a repair remedy (T5).\n- Refund: none requested; repair or replacement, so no value threshold applies.\n\nNo rule triggers a flag, deny, or needs_info, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01V71evFWR2gpyW2nfA6KsSn",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model LDE4413BD, which is on the recalled list, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial number 704KM5319755 falls within the recalled serial ranges.",
+      "cites": [
+       "T3",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "Costco is an approved retailer, and the purchase date of 2016-09-08 falls inside the sale window. No receipt is required for this remedy.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No destruction photo is required because the remedy is repair or replacement.",
+      "cites": [
+       "T5",
+       "faq#2"
+      ]
+     },
+     {
+      "text": "The duplicate check found no other claim sharing a photo, address, email, serial, or payout account.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No refund amount is requested, so the value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

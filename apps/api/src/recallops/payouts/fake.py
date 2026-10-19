@@ -1,9 +1,10 @@
-"""FakeLedger: allows every transition, keeps state in memory, and logs each call. M1 and M2 only."""
+"""FakeLedger: allows every transition, keeps state in memory, and logs each call (unit tests and the seed)."""
 
 from __future__ import annotations
 
 import uuid
 from dataclasses import replace
+from typing import Any
 from uuid import UUID
 
 from recallops.logs import get_logger, log_event
@@ -31,8 +32,19 @@ class FakeLedger:
         )
         return ref
 
-    def create_pending(self, ctx: FirmContext, claim_id: UUID, amount_cents: int) -> PayoutRef:
-        ref = PayoutRef(payout_id=uuid.uuid4(), claim_id=claim_id, amount_cents=amount_cents, status="pending")
+    def create_pending(
+        self,
+        ctx: FirmContext,
+        claim_id: UUID,
+        amount_cents: int,
+        method: str = "stripe_connect",
+        session: Any = None,
+    ) -> PayoutRef:
+        existing = next((r for r in self.rows.values() if r.claim_id == claim_id), None)
+        if existing is not None:
+            return existing  # idempotent per claim, like the database ledger
+        status: PayoutStatus = "pending_export" if method in ("check_export", "ach_export") else "pending"
+        ref = PayoutRef(payout_id=uuid.uuid4(), claim_id=claim_id, amount_cents=amount_cents, status=status)
         self.rows[ref.payout_id] = ref
         log_event(
             log,
@@ -46,6 +58,9 @@ class FakeLedger:
 
     def mark_onboarding(self, ctx: FirmContext, payout_id: UUID, connect_account_id: str) -> PayoutRef:
         return self._set(ctx, payout_id, "onboarding", connect_account_id=connect_account_id)
+
+    def claim_for_transfer(self, ctx: FirmContext, payout_id: UUID) -> PayoutRef:
+        return self._set(ctx, payout_id, "transferring")
 
     def mark_transferred(self, ctx: FirmContext, payout_id: UUID, stripe_transfer_id: str) -> PayoutRef:
         return self._set(ctx, payout_id, "transferred", stripe_transfer_id=stripe_transfer_id)

@@ -1,0 +1,71 @@
+{
+ "text": "Key checks:\n- Duplicates: none (T6).\n- Model: label photo unreadable (T1 legible false), typed model B0726Y matches (T2), so model is confirmed by typed value.\n- Date code 8/21 in range (T3).\n- Purchase: Amazon listed, inside window, no receipt required (T4).\n- Destruction photo: T5 says it does not clearly show a helmet or cut straps. Per policy, a destruction photo that does not show the instructed destruction is needs_info. T5 confidence is 0.6 and complies is false, so this triggers needs_info.\n- Serial: no serial rule in the program rules, so not applicable.\n\nFlag doesn't trigger, deny doesn't trigger, so needs_info is the outcome, asking for a clearer destruction photo. The label photo also was unreadable, so I'll ask for a clear label photo as well.",
+ "usage": {
+  "input_tokens": 2928,
+  "output_tokens": 802,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB36qBwF3wCp7JS2btVY",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3768,
+ "content": [
+  {
+   "type": "text",
+   "text": "Key checks:\n- Duplicates: none (T6).\n- Model: label photo unreadable (T1 legible false), typed model B0726Y matches (T2), so model is confirmed by typed value.\n- Date code 8/21 in range (T3).\n- Purchase: Amazon listed, inside window, no receipt required (T4).\n- Destruction photo: T5 says it does not clearly show a helmet or cut straps. Per policy, a destruction photo that does not show the instructed destruction is needs_info. T5 confidence is 0.6 and complies is false, so this triggers needs_info.\n- Serial: no serial rule in the program rules, so not applicable.\n\nFlag doesn't trigger, deny doesn't trigger, so needs_info is the outcome, asking for a clearer destruction photo. The label photo also was unreadable, so I'll ask for a clear label photo as well."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01JNMAatB3WPeCFPKY54Mb2M",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The destruction photo does not clearly show the helmet with its straps cut off, as the program requires; it does not appear to show the instructed destruction.",
+      "cites": [
+       "R:destruction",
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo could not be read, so the model was confirmed only from the typed model number, which matches the recalled model.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The date code 8/21 is within the recalled range.",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The retailer Amazon is on the list, the purchase date of 2017-11-10 is inside the sale window, and no receipt is required.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send two things: (1) a clear photo of the white/inner helmet sticker showing the model number, so the label can be read; and (2) a new photo of the destroyed helmet with the straps cut off, clearly showing the helmet itself, not a different object.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

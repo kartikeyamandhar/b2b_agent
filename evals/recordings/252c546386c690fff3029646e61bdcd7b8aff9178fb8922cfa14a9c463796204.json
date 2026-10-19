@@ -1,0 +1,78 @@
+{
+ "text": "Checking the results against the policy:\n\n- Duplicates: T6 found no matches, so no flag.\n- Model: T1 reads the label as legible showing LXT-CL-1.0, a recalled model (T2 match).\n- Serial/date code: The date code 0722 is within the recalled range (T3). The serial number is not subject to a range rule in this program, so no serial check applies.\n- Purchase: Amazon is a listed retailer and 2023-09-09 falls inside the sale window (T4). No receipt is required, though one was attached anyway.\n- Destruction: T5 shows the cord cut with a gap, consistent with the plug removed, and the photo shows the product. It is not a repeat of the label photo per the claim's attachments, so it complies.\n- Remedy: replacement, no refund requested, so the value threshold does not apply.\n\nEverything passes, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2908,
+  "output_tokens": 790,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB35FHCw2hs1Pw3ySxZd",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3699,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Duplicates: T6 found no matches, so no flag.\n- Model: T1 reads the label as legible showing LXT-CL-1.0, a recalled model (T2 match).\n- Serial/date code: The date code 0722 is within the recalled range (T3). The serial number is not subject to a range rule in this program, so no serial check applies.\n- Purchase: Amazon is a listed retailer and 2023-09-09 falls inside the sale window (T4). No receipt is required, though one was attached anyway.\n- Destruction: T5 shows the cord cut with a gap, consistent with the plug removed, and the photo shows the product. It is not a repeat of the label photo per the claim's attachments, so it complies.\n- Remedy: replacement, no refund requested, so the value threshold does not apply.\n\nEverything passes, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_018ccPRCp6TESjxp9GwtNe9Q",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows the recalled model LXT-CL-1.0, so the unit is confirmed as part of the recall.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The date code 0722 is within the recalled range 0722 to 1223.",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "The purchase was from Amazon, a listed retailer, on 2023-09-09, which is inside the sale window 2022-08-01 to 2024-07-31. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the cord cut off as instructed and is a different image from the label photo.",
+      "cites": [
+       "R:destruction",
+       "T5"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The claimant requests a repair or replacement with no refund, so the value threshold review does not apply.",
+      "cites": [
+       "R:value_threshold",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+{
+ "claim_id": "304fbfe1-56a8-5b24-b55f-a8b0e1d182ce",
+ "program": "26011",
+ "category": "destruction_photo_intact",
+ "expected_outcome": "needs_info",
+ "violations": [
+  "destruction_photo_intact"
+ ],
+ "label_model_printed": "2G520",
+ "label_unreadable": false,
+ "subtypes": {}
+}

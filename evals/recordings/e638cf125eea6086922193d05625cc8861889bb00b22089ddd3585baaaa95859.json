@@ -1,0 +1,77 @@
+{
+ "text": "Every check passes: the label confirms a recalled model, the serial and date code are in range, the retailer and purchase date fall within the window, there are no duplicates, and no destruction photo is required because the remedy is repair or replacement.",
+ "usage": {
+  "input_tokens": 3481,
+  "output_tokens": 541,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB423gzRX1LorSiAHWXd",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2642,
+ "content": [
+  {
+   "type": "text",
+   "text": "Every check passes: the label confirms a recalled model, the serial and date code are in range, the retailer and purchase date fall within the window, there are no duplicates, and no destruction photo is required because the remedy is repair or replacement."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_011Z2SKBSiG2qTyEp5PRBsVw",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model MK04, which is a recalled model, and the typed model matches.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The label serial BN23139927 starts with BN and is inside the recalled serial range.",
+      "cites": [
+       "R:serials",
+       "T1",
+       "T4"
+      ]
+     },
+     {
+      "text": "The label date code June 2025 is manufactured prior to July 2025, so it is in the recalled range.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "Shopify.com is a listed retailer and the purchase date 2024-12-21 is inside the sale window, and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The remedy is repair or replacement with no refund requested, so no destruction photo or value review applies.",
+      "cites": [
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

@@ -1,0 +1,63 @@
+{
+ "text": "The label is legible and shows model 2G520, which is recalled. The purchase date of 2021-08-25 falls before the sale window (2022-09-01 to 2025-07-31), so the claim is denied under the purchase rule. The serial check was skipped, so it does not factor in.",
+ "usage": {
+  "input_tokens": 3366,
+  "output_tokens": 497,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3xHjibJj6bNVzvSJx4",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2362,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows model 2G520, which is recalled. The purchase date of 2021-08-25 falls before the sale window (2022-09-01 to 2025-07-31), so the claim is denied under the purchase rule. The serial check was skipped, so it does not factor in."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017jAVrhpfnUJUja7pbZJB8V",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The purchase date of 2021-08-25 is before the program's sale window of 2022-09-01 to 2025-07-31, so the purchase is not eligible.",
+      "cites": [
+       "R:sold_window",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model 2G520, which is a recalled model, so the product itself is confirmed as recalled.",
+      "cites": [
+       "T1",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The retailer Homedepot.com is on the list of sales locations, and the destruction photo shows the device marked RECALLED, but these do not overcome the purchase date being outside the window.",
+      "cites": [
+       "T2",
+       "T4",
+       "R:sold_at",
+       "R:destruction"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

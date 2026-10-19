@@ -71,6 +71,139 @@
         "title": "Body_portal_photo_portal__token__photos_post",
         "type": "object"
       },
+      "Body_upload_registrations_v1_programs__program_id__registrations_post": {
+        "properties": {
+          "file": {
+            "contentMediaType": "application/octet-stream",
+            "description": "CSV with external_ref",
+            "title": "File",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file"
+        ],
+        "title": "Body_upload_registrations_v1_programs__program_id__registrations_post",
+        "type": "object"
+      },
+      "CampaignCounts": {
+        "additionalProperties": false,
+        "properties": {
+          "counts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Counts",
+            "type": "object"
+          }
+        },
+        "required": [
+          "counts"
+        ],
+        "title": "CampaignCounts",
+        "type": "object"
+      },
+      "CampaignDraftRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "channels": {
+            "items": {
+              "enum": [
+                "email",
+                "mail",
+                "phone_text"
+              ],
+              "type": "string"
+            },
+            "maxItems": 3,
+            "minItems": 1,
+            "title": "Channels",
+            "type": "array"
+          }
+        },
+        "required": [
+          "channels"
+        ],
+        "title": "CampaignDraftRequest",
+        "type": "object"
+      },
+      "CampaignSendRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "channel": {
+            "anyOf": [
+              {
+                "enum": [
+                  "email",
+                  "mail",
+                  "phone_text"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "send one channel's drafts; all channels when omitted",
+            "title": "Channel"
+          }
+        },
+        "title": "CampaignSendRequest",
+        "type": "object"
+      },
+      "CampaignSummary": {
+        "additionalProperties": false,
+        "properties": {
+          "claim_links": {
+            "title": "Claim Links",
+            "type": "integer"
+          },
+          "matched": {
+            "title": "Matched",
+            "type": "integer"
+          },
+          "notifications": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "description": "channel:status -> count",
+            "title": "Notifications",
+            "type": "object"
+          },
+          "registrations": {
+            "title": "Registrations",
+            "type": "integer"
+          },
+          "sample": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Sample",
+            "type": "array"
+          },
+          "simulated": {
+            "default": true,
+            "description": "sending is simulated: no message leaves the system",
+            "title": "Simulated",
+            "type": "boolean"
+          },
+          "unmatched": {
+            "title": "Unmatched",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "registrations",
+          "matched",
+          "unmatched",
+          "claim_links",
+          "notifications",
+          "sample"
+        ],
+        "title": "CampaignSummary",
+        "type": "object"
+      },
       "Caps": {
         "additionalProperties": false,
         "properties": {
@@ -120,10 +253,12 @@
         ],
         "properties": {
           "action": {
+            "description": "mark_delivered records that an approved repair or replacement reached the consumer (an MPR correction); the claim closes",
             "enum": [
               "resume_override",
               "request_info",
-              "mark_fraud"
+              "mark_fraud",
+              "mark_delivered"
             ],
             "title": "Action",
             "type": "string"
@@ -146,8 +281,7 @@
                 "enum": [
                   "approve",
                   "deny",
-                  "needs_info",
-                  "flag"
+                  "needs_info"
                 ],
                 "type": "string"
               },
@@ -667,7 +801,8 @@
               "same_photo",
               "same_address",
               "same_payout",
-              "same_serial"
+              "same_serial",
+              "same_mailing"
             ],
             "title": "Kind",
             "type": "string"
@@ -799,6 +934,181 @@
         "title": "Decision",
         "type": "object"
       },
+      "ExportBatchList": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ExportBatchSummary"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "ExportBatchList",
+        "type": "object"
+      },
+      "ExportBatchSummary": {
+        "additionalProperties": false,
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "created_by": {
+            "title": "Created By",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "row_count": {
+            "title": "Row Count",
+            "type": "integer"
+          },
+          "sha256": {
+            "description": "sha256 of the CSV bytes, for the bank upload record",
+            "title": "Sha256",
+            "type": "string"
+          },
+          "total_cents": {
+            "title": "Total Cents",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "created_at",
+          "created_by",
+          "row_count",
+          "total_cents",
+          "sha256"
+        ],
+        "title": "ExportBatchSummary",
+        "type": "object"
+      },
+      "FraudGraphEdge": {
+        "additionalProperties": false,
+        "properties": {
+          "a": {
+            "format": "uuid",
+            "title": "A",
+            "type": "string"
+          },
+          "b": {
+            "format": "uuid",
+            "title": "B",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "same_photo",
+              "same_address",
+              "same_serial",
+              "same_payout",
+              "same_mailing"
+            ],
+            "title": "Kind",
+            "type": "string"
+          }
+        },
+        "required": [
+          "a",
+          "b",
+          "kind"
+        ],
+        "title": "FraudGraphEdge",
+        "type": "object"
+      },
+      "FraudGraphNode": {
+        "additionalProperties": false,
+        "properties": {
+          "claim_id": {
+            "format": "uuid",
+            "title": "Claim Id",
+            "type": "string"
+          },
+          "cluster_kinds": {
+            "items": {
+              "enum": [
+                "same_photo",
+                "same_address",
+                "same_serial",
+                "same_payout",
+                "same_mailing"
+              ],
+              "type": "string"
+            },
+            "title": "Cluster Kinds",
+            "type": "array"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "claim_id",
+          "status",
+          "cluster_kinds"
+        ],
+        "title": "FraudGraphNode",
+        "type": "object"
+      },
+      "FraudGraphView": {
+        "additionalProperties": false,
+        "properties": {
+          "edges": {
+            "items": {
+              "$ref": "#/components/schemas/FraudGraphEdge"
+            },
+            "title": "Edges",
+            "type": "array"
+          },
+          "nodes": {
+            "items": {
+              "$ref": "#/components/schemas/FraudGraphNode"
+            },
+            "title": "Nodes",
+            "type": "array"
+          },
+          "program_id": {
+            "format": "uuid",
+            "title": "Program Id",
+            "type": "string"
+          },
+          "rings": {
+            "items": {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "title": "Rings",
+            "type": "array"
+          },
+          "truncated": {
+            "title": "Truncated",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "program_id",
+          "nodes",
+          "edges",
+          "rings",
+          "truncated"
+        ],
+        "title": "FraudGraphView",
+        "type": "object"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -819,6 +1129,17 @@
             "title": "Database",
             "type": "boolean"
           },
+          "graph": {
+            "default": "disabled",
+            "description": "the Neo4j fraud graph; a projection, so it never makes the service unready",
+            "enum": [
+              "ok",
+              "disabled",
+              "unavailable"
+            ],
+            "title": "Graph",
+            "type": "string"
+          },
           "status": {
             "enum": [
               "ok",
@@ -836,7 +1157,7 @@
                 "type": "null"
               }
             ],
-            "description": "null until the M2 worker exists",
+            "description": "seconds since the worker's last heartbeat",
             "title": "Worker Heartbeat Age S"
           }
         },
@@ -1029,6 +1350,265 @@
         "title": "ManualRecall",
         "type": "object"
       },
+      "MprManual": {
+        "additionalProperties": false,
+        "description": "Boxes the system cannot know (01-backend.md section 8). Omitted boxes keep their documented defaults;\ncontacts_email overrides the computed count and the report notes it.",
+        "properties": {
+          "contacts_email": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contacts Email"
+          },
+          "contacts_mail": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contacts Mail"
+          },
+          "contacts_phone": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contacts Phone"
+          },
+          "contacts_registration_card": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contacts Registration Card"
+          },
+          "deaths_after": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deaths After"
+          },
+          "deaths_before": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deaths Before"
+          },
+          "homepage_posting": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Homepage Posting"
+          },
+          "homepage_posting_explanation": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Homepage Posting Explanation"
+          },
+          "incidents_after": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Incidents After"
+          },
+          "incidents_before": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Incidents Before"
+          },
+          "injuries_after": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Injuries After"
+          },
+          "injuries_before": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Injuries Before"
+          },
+          "marketplace_monitoring": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Marketplace Monitoring"
+          },
+          "notified_email": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notified Email"
+          },
+          "notified_mail": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notified Mail"
+          },
+          "notified_phone_text": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notified Phone Text"
+          },
+          "social_posts": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Social Posts"
+          },
+          "units_with_distributor": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Units With Distributor"
+          },
+          "units_with_manufacturer": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Units With Manufacturer"
+          },
+          "units_with_retailers": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Units With Retailers"
+          },
+          "website_hits": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Website Hits"
+          }
+        },
+        "title": "MprManual",
+        "type": "object"
+      },
       "MprReport": {
         "additionalProperties": false,
         "properties": {
@@ -1144,9 +1724,11 @@
               "pending",
               "pending_export",
               "onboarding",
+              "transferring",
               "transferred",
               "failed",
-              "exported"
+              "exported",
+              "held"
             ],
             "title": "Status",
             "type": "string"
@@ -1214,6 +1796,7 @@
         "additionalProperties": false,
         "properties": {
           "message": {
+            "maxLength": 2000,
             "title": "Message",
             "type": "string"
           }
@@ -1224,12 +1807,42 @@
         "title": "PortalAnswer",
         "type": "object"
       },
+      "PortalMessage": {
+        "additionalProperties": false,
+        "properties": {
+          "at": {
+            "format": "date-time",
+            "title": "At",
+            "type": "string"
+          },
+          "sender": {
+            "enum": [
+              "firm",
+              "claimant"
+            ],
+            "title": "Sender",
+            "type": "string"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "sender",
+          "text",
+          "at"
+        ],
+        "title": "PortalMessage",
+        "type": "object"
+      },
       "PortalPayout": {
         "additionalProperties": false,
         "properties": {
           "mailing_address": {
             "anyOf": [
               {
+                "maxLength": 300,
                 "type": "string"
               },
               {
@@ -1328,16 +1941,19 @@
         "additionalProperties": false,
         "properties": {
           "address_line1": {
+            "maxLength": 200,
             "title": "Address Line1",
             "type": "string"
           },
           "city": {
+            "maxLength": 100,
             "title": "City",
             "type": "string"
           },
           "date_code_claimed": {
             "anyOf": [
               {
+                "maxLength": 40,
                 "type": "string"
               },
               {
@@ -1347,20 +1963,31 @@
             "title": "Date Code Claimed"
           },
           "email": {
+            "maxLength": 200,
             "title": "Email",
             "type": "string"
           },
           "model_claimed": {
-            "title": "Model Claimed",
-            "type": "string"
+            "anyOf": [
+              {
+                "maxLength": 80,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Claimed"
           },
           "name": {
+            "maxLength": 120,
             "title": "Name",
             "type": "string"
           },
           "phone": {
             "anyOf": [
               {
+                "maxLength": 40,
                 "type": "string"
               },
               {
@@ -1383,6 +2010,7 @@
           },
           "quantity": {
             "default": 1,
+            "maximum": 20.0,
             "minimum": 1.0,
             "title": "Quantity",
             "type": "integer"
@@ -1390,6 +2018,7 @@
           "retailer_claimed": {
             "anyOf": [
               {
+                "maxLength": 120,
                 "type": "string"
               },
               {
@@ -1401,6 +2030,7 @@
           "serial_claimed": {
             "anyOf": [
               {
+                "maxLength": 80,
                 "type": "string"
               },
               {
@@ -1410,10 +2040,12 @@
             "title": "Serial Claimed"
           },
           "state": {
+            "maxLength": 40,
             "title": "State",
             "type": "string"
           },
           "zip": {
+            "maxLength": 20,
             "title": "Zip",
             "type": "string"
           }
@@ -1424,8 +2056,7 @@
           "address_line1",
           "city",
           "state",
-          "zip",
-          "model_claimed"
+          "zip"
         ],
         "title": "PortalSubmit",
         "type": "object"
@@ -1446,6 +2077,35 @@
             "title": "Decision Reasons",
             "type": "array"
           },
+          "messages": {
+            "description": "needs_info questions and replies",
+            "items": {
+              "$ref": "#/components/schemas/PortalMessage"
+            },
+            "title": "Messages",
+            "type": "array"
+          },
+          "payout_status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "pending",
+                  "pending_export",
+                  "onboarding",
+                  "transferring",
+                  "transferred",
+                  "failed",
+                  "exported",
+                  "held"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Payout Status"
+          },
           "pending_question": {
             "anyOf": [
               {
@@ -1456,6 +2116,19 @@
               }
             ],
             "title": "Pending Question"
+          },
+          "photos_uploaded": {
+            "items": {
+              "enum": [
+                "label",
+                "destruction",
+                "receipt",
+                "other"
+              ],
+              "type": "string"
+            },
+            "title": "Photos Uploaded",
+            "type": "array"
           },
           "program": {
             "$ref": "#/components/schemas/PortalProgram"
@@ -1965,6 +2638,35 @@
         "title": "RecallSummary",
         "type": "object"
       },
+      "RegistrationUpload": {
+        "additionalProperties": false,
+        "properties": {
+          "accepted": {
+            "title": "Accepted",
+            "type": "integer"
+          },
+          "rejected": {
+            "description": "row number (1-based, header is row 1) and reason; first 50",
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Rejected",
+            "type": "array"
+          },
+          "rejected_total": {
+            "title": "Rejected Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "accepted",
+          "rejected",
+          "rejected_total"
+        ],
+        "title": "RegistrationUpload",
+        "type": "object"
+      },
       "RemedyOption": {
         "additionalProperties": false,
         "properties": {
@@ -2104,7 +2806,8 @@
             "enum": [
               "extract_rules",
               "adjudicate",
-              "rules_only"
+              "rules_only",
+              "rules_plus_vision"
             ],
             "title": "Graph",
             "type": "string"
@@ -2277,6 +2980,16 @@
             },
             "title": "Steps",
             "type": "array"
+          },
+          "used": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Used"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -2306,6 +3019,12 @@
             "title": "Cost Usd",
             "type": "string"
           },
+          "counted": {
+            "default": false,
+            "description": "counts toward caps.max_steps (a model call or a rejected tool call)",
+            "title": "Counted",
+            "type": "boolean"
+          },
           "created_at": {
             "format": "date-time",
             "title": "Created At",
@@ -2321,6 +3040,12 @@
           },
           "node": {
             "title": "Node",
+            "type": "string"
+          },
+          "nominal_cost_usd": {
+            "default": "0.000000",
+            "description": "cost from reported usage; cost_usd is 0 when replayed",
+            "title": "Nominal Cost Usd",
             "type": "string"
           },
           "result": {
@@ -2412,6 +3137,31 @@
         "title": "Usage",
         "type": "object"
       },
+      "Used": {
+        "additionalProperties": false,
+        "description": "What the run has used, to show against caps in the trace viewer header (counted steps, nominal cost).",
+        "properties": {
+          "cost_usd": {
+            "title": "Cost Usd",
+            "type": "string"
+          },
+          "seconds": {
+            "title": "Seconds",
+            "type": "number"
+          },
+          "steps": {
+            "title": "Steps",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "steps",
+          "cost_usd",
+          "seconds"
+        ],
+        "title": "Used",
+        "type": "object"
+      },
       "ValidationError": {
         "properties": {
           "ctx": {
@@ -2455,9 +3205,9 @@
     }
   },
   "info": {
-    "description": "RecallOps backend API (component 1). Contract for the UI (component 2), payments (component 3),\nand login (component 4) owners. In development, authenticate with X-Dev-Firm-Id and X-Dev-Role headers\n(AUTH_PROVIDER=dev); the login owner's Clerk provider replaces them with a bearer token. Errors are RFC 7807\nproblem details with a correlation_id. Routes marked 501 have a final contract and arrive in the named milestone.",
+    "description": "RecallOps backend API (component 1). Contract for the UI (component 2), payments (component 3),\nand login (component 4) owners. In development, authenticate with X-Dev-Firm-Id and X-Dev-Role headers\n(AUTH_PROVIDER=dev); the login owner's Clerk provider replaces them with a bearer token. Errors are RFC 7807\nproblem details with a correlation_id. Routes answering 501 belong to the payments owner (component 3) and keep their\nfinal contract.",
     "title": "RecallOps API",
-    "version": "0.1.0-m1"
+    "version": "0.5.0"
   },
   "openapi": "3.1.0",
   "paths": {
@@ -2485,14 +3235,30 @@
     "/internal/feeds/pull": {
       "post": {
         "operationId": "feeds_pull_internal_feeds_pull_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-internal-secret",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Internal-Secret"
+            }
+          }
+        ],
         "responses": {
           "202": {
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": {
-                    "type": "string"
-                  },
+                  "additionalProperties": true,
                   "title": "Response Feeds Pull Internal Feeds Pull Post",
                   "type": "object"
                 }
@@ -2500,7 +3266,7 @@
             },
             "description": "Successful Response"
           },
-          "501": {
+          "401": {
             "content": {
               "application/json": {
                 "schema": {
@@ -2508,10 +3274,20 @@
                 }
               }
             },
-            "description": "contract final, implementation in a later milestone"
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Nightly feed pull (shared secret header)",
+        "summary": "Nightly feed pull (X-Internal-Secret header); pulls the CPSC windows since the last run",
         "tags": [
           "internal"
         ]
@@ -2649,6 +3425,16 @@
             },
             "description": "not found, or belongs to another firm"
           },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
           "422": {
             "content": {
               "application/json": {
@@ -2658,19 +3444,9 @@
               }
             },
             "description": "Validation Error"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "contract final, implementation in a later milestone"
           }
         },
-        "summary": "Reply to needs_info",
+        "summary": "Reply to needs_info; the claim is adjudicated again",
         "tags": [
           "portal"
         ]
@@ -2678,6 +3454,7 @@
     },
     "/portal/{token}/payout": {
       "post": {
+        "description": "The claimant picks how an approved refund is paid. check_export moves the payout to the export batch (the\nledger's fallback); stripe_connect onboarding is the payments owner's (component 3) and answers 501 until then.",
         "operationId": "portal_payout_portal__token__payout_post",
         "parameters": [
           {
@@ -2720,6 +3497,16 @@
               }
             },
             "description": "not found, or belongs to another firm"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "the resource is not in a state that allows this"
           },
           "422": {
             "content": {
@@ -2793,17 +3580,7 @@
             },
             "description": "not found, or belongs to another firm"
           },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            },
-            "description": "Validation Error"
-          },
-          "501": {
+          "409": {
             "content": {
               "application/json": {
                 "schema": {
@@ -2811,10 +3588,30 @@
                 }
               }
             },
-            "description": "contract final, implementation in a later milestone"
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "photo storage unavailable; nothing was saved"
           }
         },
-        "summary": "Upload a photo (multipart); sha256 and pHash computed server-side",
+        "summary": "Upload a photo (multipart, JPEG or PNG); sha256 and pHash computed server-side",
         "tags": [
           "portal"
         ]
@@ -2865,6 +3662,16 @@
             },
             "description": "not found, or belongs to another firm"
           },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
           "422": {
             "content": {
               "application/json": {
@@ -2874,19 +3681,9 @@
               }
             },
             "description": "Validation Error"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "contract final, implementation in a later milestone"
           }
         },
-        "summary": "Submit claim fields",
+        "summary": "Submit claim fields (idempotent: a second submission changes nothing)",
         "tags": [
           "portal"
         ]
@@ -2894,6 +3691,7 @@
     },
     "/readyz": {
       "get": {
+        "description": "Database reachable and a worker heartbeat younger than WORKER_HEARTBEAT_MAX_AGE_S (01-backend.md section 9).",
         "operationId": "readyz_readyz_get",
         "responses": {
           "200": {
@@ -2910,7 +3708,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Health"
+                  "$ref": "#/components/schemas/Problem"
                 }
               }
             },
@@ -3164,6 +3962,16 @@
             },
             "description": "not found, or belongs to another firm"
           },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "the resource is not in a state that allows this"
+          },
           "422": {
             "content": {
               "application/json": {
@@ -3173,19 +3981,9 @@
               }
             },
             "description": "Validation Error"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "contract final, implementation in a later milestone"
           }
         },
-        "summary": "Reviewer action: resume_override, request_info, mark_fraud (writes audit_log)",
+        "summary": "Reviewer action: resume_override, request_info, mark_fraud, mark_delivered (writes audit_log)",
         "tags": [
           "firm"
         ]
@@ -3219,7 +4017,8 @@
         "responses": {
           "200": {
             "content": {
-              "image/jpeg": {}
+              "image/jpeg": {},
+              "image/png": {}
             },
             "description": "Successful Response"
           },
@@ -3262,9 +4061,19 @@
               }
             },
             "description": "Validation Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "photo storage unavailable"
           }
         },
-        "summary": "Photo bytes (dev stand-in for a signed storage URL)",
+        "summary": "Photo bytes, read from the private store after the firm check (no storage URL reaches the browser)",
         "tags": [
           "firm"
         ]
@@ -3343,6 +4152,190 @@
         ]
       }
     },
+    "/v1/payouts/exports": {
+      "get": {
+        "operationId": "list_exports_v1_payouts_exports_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExportBatchList"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Export batches, newest first",
+        "tags": [
+          "firm"
+        ]
+      },
+      "post": {
+        "operationId": "create_export_v1_payouts_exports_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/ExportBatchSummary"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "title": "Response Create Export V1 Payouts Exports Post"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "summary": "Write one export batch of this firm's approved payouts waiting for a check (null when none)",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/payouts/exports/{batch_id}.csv": {
+      "get": {
+        "operationId": "download_export_v1_payouts_exports__batch_id__csv_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "batch_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Batch Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              },
+              "text/csv": {}
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Download an export batch (admin)",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
     "/v1/programs": {
       "get": {
         "operationId": "list_programs_v1_programs_get",
@@ -3416,6 +4409,16 @@
             },
             "description": "Unauthorized"
           },
+          "402": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "over the plan's limit (component 3 entitlement)"
+          },
           "403": {
             "content": {
               "application/json": {
@@ -3426,6 +4429,16 @@
             },
             "description": "Forbidden"
           },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
           "422": {
             "content": {
               "application/json": {
@@ -3435,16 +4448,6 @@
               }
             },
             "description": "Validation Error"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "contract final, implementation in a later milestone"
           }
         },
         "summary": "Open a program from a recall; runs rule extraction and returns rules for review",
@@ -3570,6 +4573,99 @@
             },
             "description": "Unauthorized"
           },
+          "402": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "over the plan's limit (component 3 entitlement)"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "the resource is not in a state that allows this"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Edit rules, threshold, or status",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/programs/{program_id}/campaign": {
+      "get": {
+        "operationId": "campaign_summary_v1_programs__program_id__campaign_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "program_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Program Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignSummary"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
           "403": {
             "content": {
               "application/json": {
@@ -3599,8 +4695,51 @@
               }
             },
             "description": "Validation Error"
+          }
+        },
+        "summary": "Campaign status: registrations, matches, notices by channel and status, three sample drafts",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/programs/{program_id}/campaign/drafts": {
+      "post": {
+        "operationId": "campaign_drafts_v1_programs__program_id__campaign_drafts_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "program_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Program Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CampaignDraftRequest"
+              }
+            }
           },
-          "501": {
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignCounts"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
             "content": {
               "application/json": {
                 "schema": {
@@ -3608,10 +4747,206 @@
                 }
               }
             },
-            "description": "contract final, implementation in a later milestone"
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "the resource is not in a state that allows this"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "Edit rules, threshold, or status",
+        "summary": "Draft notices for matched owners (quotes the notice verbatim; one claim link per owner)",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/programs/{program_id}/campaign/match": {
+      "post": {
+        "operationId": "campaign_match_v1_programs__program_id__campaign_match_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "program_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Program Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignCounts"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Match registrations against the program's identification rules",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/programs/{program_id}/campaign/send": {
+      "post": {
+        "operationId": "campaign_send_v1_programs__program_id__campaign_send_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "program_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Program Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CampaignSendRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CampaignCounts"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Mark drafts sent (simulated: no message leaves the system); feeds the MPR notified_* boxes",
         "tags": [
           "firm"
         ]
@@ -3812,6 +5147,102 @@
             },
             "description": "not found, or belongs to another firm"
           },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "the resource is not in a state that allows this"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Issue n single-claim portal links for distribution",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/programs/{program_id}/fraud-graph": {
+      "get": {
+        "description": "Program first (404 for another firm's program), then a read-only graph query whose every claim id is checked\nagainst this firm's claims under RLS. A graph error answers a fixed 503 detail (never the driver's message).",
+        "operationId": "fraud_graph_view_v1_programs__program_id__fraud_graph_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "program_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Program Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 500,
+              "maximum": 2000,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FraudGraphView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
           "422": {
             "content": {
               "application/json": {
@@ -3822,7 +5253,7 @@
             },
             "description": "Validation Error"
           },
-          "501": {
+          "503": {
             "content": {
               "application/json": {
                 "schema": {
@@ -3830,10 +5261,10 @@
                 }
               }
             },
-            "description": "contract final, implementation in a later milestone"
+            "description": "the graph is disabled or unreachable"
           }
         },
-        "summary": "Issue n single-claim portal links for distribution",
+        "summary": "Fraud rings across every duplicate kind: claims, links, rings (statuses from Postgres)",
         "tags": [
           "firm"
         ]
@@ -3858,7 +5289,7 @@
             "name": "period",
             "required": true,
             "schema": {
-              "pattern": "^\\d{4}-\\d{2}$",
+              "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
               "title": "Period",
               "type": "string"
             }
@@ -3914,19 +5345,9 @@
               }
             },
             "description": "Validation Error"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "contract final, implementation in a later milestone"
           }
         },
-        "summary": "MPR for a period (YYYY-MM)",
+        "summary": "Latest MPR generated for a period (YYYY-MM)",
         "tags": [
           "firm"
         ]
@@ -3934,6 +5355,7 @@
     },
     "/v1/programs/{program_id}/mpr/generate": {
       "post": {
+        "description": "One REPEATABLE READ snapshot: the SQL report and the recount's row exports see the same data, so a payout\ndelivered while the report is generated cannot produce a false discrepancy.",
         "operationId": "generate_mpr_v1_programs__program_id__mpr_generate_post",
         "parameters": [
           {
@@ -3951,12 +5373,30 @@
             "name": "period",
             "required": true,
             "schema": {
-              "pattern": "^\\d{4}-\\d{2}$",
+              "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
               "title": "Period",
               "type": "string"
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/MprManual"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "boxes the system cannot know; omitted boxes use their defaults",
+                "title": "Manual"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "content": {
@@ -4007,19 +5447,9 @@
               }
             },
             "description": "Validation Error"
-          },
-          "501": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "contract final, implementation in a later milestone"
           }
         },
-        "summary": "Generate the MPR for a period",
+        "summary": "Generate the MPR for a period; reconciled is true when the independent recount agrees",
         "tags": [
           "firm"
         ]
@@ -4099,8 +5529,51 @@
               }
             },
             "description": "Validation Error"
+          }
+        },
+        "summary": "MPR as PDF",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/programs/{program_id}/registrations": {
+      "post": {
+        "operationId": "upload_registrations_v1_programs__program_id__registrations_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "program_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Program Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_registrations_v1_programs__program_id__registrations_post"
+              }
+            }
           },
-          "501": {
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationUpload"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
             "content": {
               "application/json": {
                 "schema": {
@@ -4108,10 +5581,50 @@
                 }
               }
             },
-            "description": "contract final, implementation in a later milestone"
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Content Too Large"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
-        "summary": "MPR as PDF",
+        "summary": "Upload product-owner registrations (CSV, synthetic rows only); upserts on external_ref",
         "tags": [
           "firm"
         ]

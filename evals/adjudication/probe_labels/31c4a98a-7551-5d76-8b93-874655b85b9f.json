@@ -1,0 +1,12 @@
+{
+ "claim_id": "31c4a98a-7551-5d76-8b93-874655b85b9f",
+ "program": "26011",
+ "category": "label_confirms_typed_typo",
+ "expected_outcome": "approve",
+ "violations": [
+  "label_confirms_typed_typo"
+ ],
+ "label_model_printed": "2G512B",
+ "label_unreadable": false,
+ "subtypes": {}
+}

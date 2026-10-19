@@ -1,0 +1,62 @@
+{
+ "text": "The model check says SM4979 is a mismatch, meaning it is not among the recalled models (TD3318B, TD3318S, TD3418B, TD3418S, SM1977, SM1979). The label is legible, so the label model decides: it is not recalled, which is a deny under the model rule. The serial check was skipped, so it doesn't change the outcome.",
+ "usage": {
+  "input_tokens": 3489,
+  "output_tokens": 462,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3JZJ3Ejbb6ki57yiEo",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2373,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model check says SM4979 is a mismatch, meaning it is not among the recalled models (TD3318B, TD3318S, TD3418B, TD3418S, SM1977, SM1979). The label is legible, so the label model decides: it is not recalled, which is a deny under the model rule. The serial check was skipped, so it doesn't change the outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01EEJ82NrgbcCB8W3b4toqXJ",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SM4979, which is not one of the program's recalled models.",
+      "cites": [
+       "T1",
+       "R:models",
+       "T5"
+      ]
+     },
+     {
+      "text": "The typed model matches the label reading, so there is no typo that would make the label model a recalled one.",
+      "cites": [
+       "T1",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The retailer (Designbydelta.com) and purchase date (2016-07-08) are valid, but eligibility on those grounds does not override a non-recalled model.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

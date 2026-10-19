@@ -1,0 +1,47 @@
+{
+ "text": "I'll check the label photo, purchase, duplicates, and serial in parallel, since the rules require model, serial, and purchase checks and no date code applies.",
+ "usage": {
+  "input_tokens": 2658,
+  "output_tokens": 181,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3rET7P5yghj7UPShCp",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1352,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll check the label photo, purchase, duplicates, and serial in parallel, since the rules require model, serial, and purchase checks and no date code applies."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01EPPApq98N7ZjCKExB9Y2tg",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01UmpPLW6PPwoQVeQ9TV7TaW",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01TE3uoJJjtFmggzKKDG1Kcx",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QGE5jQjDip1nFVkqrYCYKT",
+   "name": "check_serial",
+   "input": {
+    "serial": "SN91574452"
+   }
+  }
+ ]
+}

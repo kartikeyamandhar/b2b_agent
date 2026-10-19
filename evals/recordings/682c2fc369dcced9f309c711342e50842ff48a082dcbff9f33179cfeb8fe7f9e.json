@@ -1,0 +1,55 @@
+{
+ "text": "The label shows A17B3, which is not on the recalled list (A17B0, A17A0, A17A1, A17A2). Since the label is legible, it controls the model determination, and this is a deny regardless of the serial and purchase window.",
+ "usage": {
+  "input_tokens": 3483,
+  "output_tokens": 443,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3G6G3kHskjN9kkb3kg",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2922,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label shows A17B3, which is not on the recalled list (A17B0, A17A0, A17A1, A17A2). Since the label is legible, it controls the model determination, and this is a deny regardless of the serial and purchase window."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017174Xwy8tNedt65D1LMgT6",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model A17B3, which is not one of the recalled models (A17B0, A17A0, A17A1, A17A2), so the unit is not covered by the recall.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase is also before the sale window (2023-05-01 to 2023-09-30) even though the retailer, Best Buy, is listed; the purchase date of 2022-10-27 falls outside the eligible period.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account, so the denial is not based on a duplicate.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.92
+   }
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+{
+ "claim_id": "3417a8d5-af68-5c6b-b006-55e2d7642a60",
+ "program": "24118",
+ "category": "label_unreadable",
+ "expected_outcome": "needs_info",
+ "violations": [
+  "label_unreadable"
+ ],
+ "label_model_printed": "B0726Y",
+ "label_unreadable": true,
+ "subtypes": {}
+}

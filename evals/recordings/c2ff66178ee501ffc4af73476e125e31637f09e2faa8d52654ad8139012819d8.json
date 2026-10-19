@@ -1,0 +1,57 @@
+{
+ "text": "The policy confirms that a date code outside 07/22 and 08/22 is not part of the recall. The model is recalled, but the unit's date code 08/23 falls outside the recalled codes, so the claim is denied.",
+ "usage": {
+  "input_tokens": 4340,
+  "output_tokens": 451,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3CuHA9YUTYbmDT2b5Q",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2525,
+ "content": [
+  {
+   "type": "text",
+   "text": "The policy confirms that a date code outside 07/22 and 08/22 is not part of the recall. The model is recalled, but the unit's date code 08/23 falls outside the recalled codes, so the claim is denied."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Wr5U39pNqFB2bcgxZUpcUb",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The label's date code is 08/23, which is outside the recalled date codes of 07/22 NH and 08/22 NH. A date code outside those is not part of the recall, so the unit is not covered.",
+      "cites": [
+       "R:date_codes",
+       "T5",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (www.justinboots.com) and dated 2022-11-24, inside the sale window, and no duplicate claims were found. These checks do not change the outcome, since the date code is out of range.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: label legible, reads CXM-02, which is recalled (T1, T2, R:models). Confirmed.\n- Serial: prefix ZFC32B is in the recalled list, in range (T3, R:serials).\n- Purchase: date 2023-04-06 is inside the sale window (T4, R:sold_window). The retailer \"Corner Hardware Co\" is not on the list (T4), but the policy says an unlisted retailer means proof of ownership is requested, not denial. The FAQ says the proof needed is a label photo, which was provided (T7, faq#2). Since the label photo is the proof, no further item is needed. Receipt not required (T4).\n- Destruction photo: not required; the remedy is repair (T5, T7).\n- Duplicates: none (T6), so no flag.\n- Refund: none requested, so the value threshold does not apply.\n\nNothing triggers flag, deny, or needs_info. The claim is approved.",
+ "usage": {
+  "input_tokens": 3018,
+  "output_tokens": 813,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeRf6JjmatUkojUKsY5",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4927,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: label legible, reads CXM-02, which is recalled (T1, T2, R:models). Confirmed.\n- Serial: prefix ZFC32B is in the recalled list, in range (T3, R:serials).\n- Purchase: date 2023-04-06 is inside the sale window (T4, R:sold_window). The retailer \"Corner Hardware Co\" is not on the list (T4), but the policy says an unlisted retailer means proof of ownership is requested, not denial. The FAQ says the proof needed is a label photo, which was provided (T7, faq#2). Since the label photo is the proof, no further item is needed. Receipt not required (T4).\n- Destruction photo: not required; the remedy is repair (T5, T7).\n- Duplicates: none (T6), so no flag.\n- Refund: none requested, so the value threshold does not apply.\n\nNothing triggers flag, deny, or needs_info. The claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01WiJyPZXMGEfYjPhdyUm2zM",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows CXM-02, a recalled model, so the model is confirmed even though it matches the typed value.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial number prefix ZFC32B is in the recalled range.",
+      "cites": [
+       "R:serials",
+       "T3"
+      ]
+     },
+     {
+      "text": "The purchase date of 2023-04-06 falls inside the sale window. The retailer is not on the listed sellers, but the FAQ says unlisted retailers are asked for proof of ownership, and the label photo serves as that proof. No receipt is required.",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "T4",
+       "T7"
+      ]
+     },
+     {
+      "text": "No destruction photo is required because the remedy is repair.",
+      "cites": [
+       "T5",
+       "T7"
+      ]
+     },
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T6",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No refund is requested, so the $100 value threshold does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.92
+   }
+  }
+ ]
+}

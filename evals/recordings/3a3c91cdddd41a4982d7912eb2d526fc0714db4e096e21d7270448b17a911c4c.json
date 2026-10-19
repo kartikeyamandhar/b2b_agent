@@ -1,0 +1,61 @@
+{
+ "text": "The model is confirmed, but the purchase is outside the window, so the claim is denied.",
+ "usage": {
+  "input_tokens": 3658,
+  "output_tokens": 412,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3fxHz8qoJ5AZfQXLeU",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2019,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed, but the purchase is outside the window, so the claim is denied."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017fjBYNNJXc4LGpZQdpv2RG",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model AD10004LS, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2023-03-27 is before the program's sale window of 2023-04-01 to 2024-08-31, so the purchase is not eligible for a refund.",
+      "cites": [
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The retailer, Amazon.com, is on the listed sellers, but that does not cure the out-of-window purchase date.",
+      "cites": [
+       "R:sold_at",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim, so no flag applies.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

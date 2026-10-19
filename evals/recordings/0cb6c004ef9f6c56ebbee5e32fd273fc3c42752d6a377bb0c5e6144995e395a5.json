@@ -1,0 +1,66 @@
+{
+ "text": "Checking the results against the policy:\n\n- Model: label photo is legible and shows MK04, a recalled model. Confirmed.\n- Serial: BN23890321 starts with \"BN\", in range.\n- Date code: typed \"July 2026\" is outside the recalled range (manufactured prior to July 2025). Per R:date_codes and T4, this is out of range, which is a deny.\n- Purchase: Shopify.com is listed, but the purchase date 2024-02-15 is before the sale window (2024-09-01 to 2025-06-30), per T5. That is also a deny.\n- Duplicates: none (T7). Destruction photo not required (T6).\n\nFlag does not apply, so the deny outcomes stand. Date code out of range and purchase before the window are both independent grounds for denial.",
+ "usage": {
+  "input_tokens": 2904,
+  "output_tokens": 716,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAfs2g9xjYZHMmUvCKNK",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3334,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Model: label photo is legible and shows MK04, a recalled model. Confirmed.\n- Serial: BN23890321 starts with \"BN\", in range.\n- Date code: typed \"July 2026\" is outside the recalled range (manufactured prior to July 2025). Per R:date_codes and T4, this is out of range, which is a deny.\n- Purchase: Shopify.com is listed, but the purchase date 2024-02-15 is before the sale window (2024-09-01 to 2025-06-30), per T5. That is also a deny.\n- Duplicates: none (T7). Destruction photo not required (T6).\n\nFlag does not apply, so the deny outcomes stand. Date code out of range and purchase before the window are both independent grounds for denial."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01YZpsrp8nF82ScxB2KGkEdj",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The date code is out of the recalled range. The recall covers units manufactured prior to July 2025, and the claim's date code is July 2026.",
+      "cites": [
+       "R:date_codes",
+       "T4"
+      ]
+     },
+     {
+      "text": "The purchase date of 2024-02-15 is before the sale window of 2024-09-01 to 2025-06-30, so the unit is not eligible. The retailer (Shopify.com) is listed, so the retailer check is not the issue.",
+      "cites": [
+       "R:sold_window",
+       "R:sold_at",
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows MK04, a recalled model, and the serial BN23890321 is in range. These do not change the outcome, since the date code and purchase date already disqualify the claim.",
+      "cites": [
+       "T1",
+       "T2",
+       "T3",
+       "R:models",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so no flag applies. No destruction photo is required for this remedy.",
+      "cites": [
+       "T7",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

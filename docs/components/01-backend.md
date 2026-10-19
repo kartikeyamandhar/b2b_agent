@@ -22,9 +22,14 @@ apps/api/
     text.py                 canonicalizer (source_text) shared by ingestion, extractors, labeling, evals
     ingest/                 cpsc_api.py, units.py, recallbench.py, runner.py
     rules/                  schemas.py, baseline.py, graph.py, verify.py
-    claims/                 tools/ (pure code), rules_only.py, outcome_policy.py; graph.py and worker.py (M2)
-    fraud/                  phash.py (M1, shared with synth); cluster.py (M2, networkx)
-    payouts/                ledger.py (protocol), fake.py; state machine in M4; stripe_connect.py is component 3's
+    claims/                 tools/ (pure code), rules_only.py, policy.py, graph.py, worker.py, effects.py (decision
+                            transaction, reopen-on-duplicate), review.py (reviewer actions)
+    fraud/                  phash.py; cypher.py, graph.py, graph_admin.py, sync.py, view.py (the Neo4j fraud graph,
+                            section 13); python -m recallops.fraud sync|status
+    payouts/                ledger.py (protocol), db_ledger.py (state machine), export.py (batches), fake.py;
+                            stripe_connect.py is component 3's
+    mpr/                    generate.py (SQL report), recount.py (independent Polars recount), pdf.py
+    campaigns.py            M5 registrations, matching, drafts, simulated send
     billing/                interface.py (protocol), fake.py; component 3 owns this package
     auth/                   provider.py (AuthProvider protocol), dev.py, deps.py; component 4 owns this package
     llm/                    client.py (one wrapper), pricing.py, meter.py; model id and prices from settings
@@ -65,8 +70,12 @@ Policies: `USING (firm_id = recallops_current_firm())` and the same WITH CHECK, 
 - claim_photos: id, firm_id, claim_id, kind (label|destruction|receipt|other), storage_path, sha256, phash (64-bit as 16 hex chars), exif (jsonb), uploaded_at.
 - agent_runs: id, firm_id (nullable only for archive extraction), claim_id (nullable for extraction runs), program_id (nullable), recall_id (nullable), graph (extract_rules|adjudicate|rules_only), thread_id, status (running|done|capped|failed|waiting_human), started_at, finished_at, steps, cost_usd (numeric(10,6)), model_id, outcome (jsonb).
 - agent_steps: id, run_id, firm_id (copied from the run; nullable only for archive extraction), idx (unique per run), node, thought (text), tool, args (jsonb), result (jsonb), latency_ms, tokens_in, tokens_out, cost_usd, created_at. Shape documented for the UI in docs/contracts/trace.md.
-- fraud_clusters: id, firm_id, program_id, kind (same_photo|same_address|same_payout|same_serial), member_claim_ids (uuid[]), score, created_at.
-- payouts: id, firm_id, claim_id (unique), amount_cents, currency, method (stripe_connect|check_export|ach_export), status (pending|pending_export|onboarding|transferred|failed|exported), stripe_transfer_id, idempotency_key (= payouts.id), attempts, last_error, created_at, updated_at.
+- fraud_clusters: id, firm_id, program_id, kind (same_photo|same_address|same_payout|same_serial|same_mailing), member_claim_ids (uuid[]), score, created_at. Written only by the graph projection (section 13); a trigger refuses a member outside the row's firm and program (0004).
+- payouts: id, firm_id, claim_id (unique), amount_cents, currency, method (stripe_connect|check_export|ach_export), status (pending|pending_export|onboarding|transferring|transferred|failed|exported|held), stripe_transfer_id, connect_account_id, export_batch (fk export_batches), hold_requested, idempotency_key (= payouts.id), attempts, last_error, created_at, updated_at. held: the claim left approved before money moved; transferring: component 3 claimed the row for one Stripe transfer (0004).
+- export_batches (0004): id, firm_id, created_at, created_by, row_count, total_cents, sha256, csv (bytea). Written in the transaction that marks its payouts exported; append-only for recallops_app.
+- registrations (0005): id, firm_id, program_id, external_ref (unique per program), name, email, phone, address, model, serial, date_code, purchase_date, matched, match_reasons, claim_id. Synthetic rows only.
+- notifications (0005): id, firm_id, program_id, registration_id, channel (email|mail|phone_text), status (draft|sent), subject, body, drafted_at, sent_at; unique per registration and channel.
+- graph_state (0004, non-tenant, no claim data): key, value, updated_at; the fraud graph's epoch.
 - stripe_events: id (Stripe event id, pk), type, received_at, processed_at, payload (jsonb). Written by component 3, defined here so migrations are in one place. Not readable by recallops_app.
 - mpr_reports: id, firm_id, program_id, period_start, period_end, payload (jsonb matching section 8 schema), reconciled (bool), generated_at, generated_by.
 - audit_log: id, firm_id, actor (clerk user id or "agent" or "system"), action, target_type, target_id, before (jsonb), after (jsonb), at.
@@ -132,39 +141,43 @@ Nodes and tools (every tool is a pydantic-typed function; every node writes an a
 5. check_date_code (tool, pure code): only if date_codes non-empty.
 6. check_purchase (tool, pure code): retailer in sold_at, purchase_date within sold window, receipt photo present if proof_required includes receipt.
 7. check_destruction_photo (tool, vision): given remedy_rules.destruction_instruction and the destruction photo, returns {complies: bool, observed: str, confidence}. Only when the remedy requires it.
-8. check_duplicates (tool, pure code): phash distance to other photos in the program (threshold 6 bits), sha256 exact matches, same claimant address or email, same payout destination, same serial already claimed. Returns the list of hits with cluster ids.
+8. check_duplicates (tool, pure code): phash distance to other photos in the program (threshold 6 bits), sha256 exact matches, same claimant address or email, same payout destination, same serial already claimed. Returns the list of hits (without cluster ids: the tool is frozen with the ablation and clusters form after the decision; claim detail and the fraud graph carry them).
 9. retrieve_policy (tool, keyword + vector): fetches relevant chunks from the program's documents for edge cases (e.g., what the corrective action plan says about receipts). The ablation turns this off.
 10. decide: model call that must return {outcome: approve|deny|needs_info|flag, reasons: list[str], cited_rules: list[str], question_for_claimant: str | None, confidence}. Every reason must cite a rule id or a tool result id; uncited reasons are rejected and the node retries once.
-11. route: approve -> ledger.create_pending (payouts protocol) and status approved; deny -> status denied with reasons; needs_info -> status needs_info with the question, portal shows it; flag -> status flagged and LangGraph interrupt waiting for a reviewer; refund_cents above program.value_threshold_cents -> interrupt regardless of outcome.
+11. route: approve -> ledger.create_pending (payouts protocol) and status approved; deny -> status denied with reasons; needs_info -> status needs_info with the question, portal shows it; flag -> status flagged and LangGraph interrupt waiting for a reviewer; an approval with refund_cents above program.value_threshold_cents -> interrupt (approvals only: only an approval moves money; invariant 6 as amended 2026-10-18).
+
+Decision effects (claims/effects.py), all in the decision's own fenced transaction, claim row locked before any payout row: an approval creates its payout row; a claim leaving approved holds its payout; an automated decision reopens earlier duplicates (check_duplicates over the program's other claims): a partner approved with money not yet moved, or in needs_info, goes back to submitted with its payout held so the adjudicator decides it again with the new evidence; a partner already with a person loses any queued, unleased review; a reviewer's decision records the duplicates it saw (duplicates_ack) so they never reopen it. An automated re-approval of a claim whose payout is held goes to a person instead (under_review).
 
 Caps (invariant 4): 8 steps, 0.02 USD, 60 seconds. The cost meter in llm/ raises CapExceeded before a call that would cross a cap; the graph catches it, writes status capped, and interrupts.
 
 Rules-only adjudicator (claims/rules_only.py, M1 deliverable and the baseline row in the ablation table): pure-code tools only, in fixed order (check_model on the typed model_claimed, check_serial, check_date_code, check_purchase, check_duplicates with sha256 and pHash), destruction photo presence only, no vision, and a fixed decision table that implements evals/adjudication/outcome_policy.yaml. It writes agent_runs (graph = rules_only) and one agent_steps row per tool, so its steps, latency, and zero cost come from the same trace path. M2 adds the ablation row rules_plus_vision (the same table fed by tools 2 and 7).
 
-Reviewer actions (called by the UI through the API): resume with override outcome, request more info, mark fraud. Each writes audit_log with before and after.
+Reviewer actions (called by the UI through the API): resume with override outcome, request more info, mark fraud, and mark_delivered (an approved repair or replacement reached the consumer: the claim closes and the MPR counts a correction). Each writes audit_log with before and after.
 
 Runtime trace required: one claim through every path (approve, deny, needs_info, flag, capped), with step timestamps and costs, stored in docs/traces/M2-adjudication.md.
 
 ## 7. Synthetic claim generator (synth/)
 
-`python -m recallops.synth --program <id> --n 500 --seed 42 --violations evals/adjudication/planted.yaml`
+`python -m recallops.synth --program <id> --n 500 --seed 42 --violations evals/adjudication/planted.yaml` (inserts submitted claims with stored photos for `make worker`), `python -m recallops.synth --golden`, and `python -m recallops.synth --registrations owners.csv --program <id> --n 200` (M5 campaign demo).
 
 Generates claimants (fake names and addresses from a deterministic generator, never real people: emails only at example.com, example.net, or example.org; phones only in 555-0100 to 555-0199), model and serial values drawn from the program's rules, and photos. Photos (Pillow): programmatically rendered label images (model and serial text with distractor fields on a seeded procedural background, with blur, rotation, and JPEG quality drawn per claim from a stream independent of the violation) and destruction images (a rendered product silhouette with or without the instructed destruction: severed cord, cut fabric, or RECALLED marking), so the vision tools have something real to read without any real consumer imagery. Fonts are Pillow's bundled default only. Planted violations with labels: wrong_model, serial_out_of_range, date_code_out_of_range, retailer_not_listed, purchase_before_window, no_receipt_when_required, destruction_not_shown, duplicate_photo, duplicate_address, duplicate_serial, duplicate_payout. Each generated claim carries its ground-truth label and expected outcome (from outcome_policy.yaml) in a sidecar file under evals/adjudication/labels/. Nothing under apps/api/src reads the sidecars.
 
-The 300-claim golden set is generated from 20 golden-labeled notices (a subset of the 40), using the golden rules rather than extracted rules. In M2, 60 of those claims are hand-reviewed by the owner and 40 adversarial ones are written by a classmate who has not seen the generator. The classmate set is held out and reported separately.
+The 300-claim golden set is generated from 20 golden-labeled notices (a subset of the 40), using the golden rules rather than extracted rules. The planned 60 owner-reviewed and 40 classmate-written claims were replaced by probe60 (an assistant-designed capability probe) and standin40 (written by a sub-agent that never saw the generator), each reported as its own block and labeled as such (PREREG Revision 2).
 
 ## 8. MPR generator (mpr/)
 
 Aggregation in SQL over claims and payouts for a program and period, into exactly these boxes (from the CPSC instructional guide):
-- total_units_affected (from the program, constant)
-- corrections_this_period, cumulative_corrections (approved claims with remedy delivered: paid, or repair/replacement marked delivered)
-- units_with_manufacturer, distributor, retailers, consumers (manual inputs with defaults; consumers = total minus the others)
+- total_units_affected (the program's rules first, so a firm's correction wins; then the recall record)
+- corrections_this_period, cumulative_corrections: each delivered remedy counted once, in the month of its first delivery event: a refund payout reaching transferred or exported, or a repair or replacement a reviewer marked delivered
+- units_with_manufacturer, distributor, retailers (manual), units_with_consumers = total minus those minus cumulative corrections
 - incidents_before, incidents_after, injuries_before, injuries_after, deaths_before, deaths_after (manual inputs)
-- notified_phone_text, notified_email, notified_mail (from M5 campaign tooling; manual until then)
-- contacts_phone, contacts_email, contacts_mail, contacts_registration_card (portal submissions count as contacts_email by default; manual overrides allowed)
+- notified_phone_text, notified_email, notified_mail: owners whose M5 campaign notice on that channel was sent in the month (sending is simulated); a hand-entered value overrides and is noted
+- contacts_phone, contacts_email, contacts_mail, contacts_registration_card: portal submissions count as contacts_email in the month of first submission (claims.first_submitted_at); manual overrides allowed and noted
 - homepage_posting (bool, explanation if false), website_hits, social_posts (jsonb), marketplace_monitoring (jsonb)
 
-Reconciliation test: regenerate the report from scratch and compare with a second computation written independently in Polars over a claims export; the two must agree on every count. Zero tolerance. This is evals/reporting/run.py.
+The payload stores computed and manual values apart; POST .../mpr/generate takes the manual boxes as an optional JSON body. The report and its recount run in one REPEATABLE READ snapshot.
+
+Reconciliation: the SQL report (mpr/generate.py) against an independent Polars recount over row exports (mpr/recount.py), which shares no constant or date logic with it and counts distinct items, plus the truth the reporting eval's scenario builder kept (evals: recallops.evals.reporting). Zero tolerance on every computed box; mutation tests prove a month-boundary or row-counting bug fails it.
 
 The completion forecast was killed on 2026-10-16: the public MPR spreadsheet holds one cumulative row per recall per snapshot, not per-recall monthly rows (CLAUDE.md decisions log).
 
@@ -177,11 +190,14 @@ Firm routes:
 - POST /v1/programs  {recall_id | manual fields} -> runs extraction, returns program with rules for review
 - GET /v1/programs, GET /v1/programs/{id}, PATCH /v1/programs/{id} (edit rules, threshold, status)
 - GET /v1/programs/{id}/claims?status=&cursor=  queue with filters
-- GET /v1/claims/{id}  claim, photos (signed URLs), decision, run summary
+- GET /v1/claims/{id}  claim, photos (API paths; the photo route proxies the private bucket, no signed URLs), decision, run summary
 - GET /v1/claims/{id}/trace  agent_steps for the latest run
-- POST /v1/claims/{id}/actions  {action: resume_override|request_info|mark_fraud, payload}
+- POST /v1/claims/{id}/actions  {action: resume_override|request_info|mark_fraud|mark_delivered, payload}
 - POST /v1/programs/{id}/claims/issue  {n} -> issues n claim tokens (links) for distribution
-- GET /v1/programs/{id}/mpr?period=YYYY-MM, POST .../mpr/generate, GET .../mpr/{id}.pdf (M4, simple HTML to PDF)
+- GET /v1/programs/{id}/mpr?period=YYYY-MM, POST .../mpr/generate (optional JSON body of manual boxes), GET .../mpr/{id}.pdf (a hand-written one-page PDF)
+- POST /v1/payouts/exports (admin: write one export batch), GET /v1/payouts/exports, GET /v1/payouts/exports/{id}.csv
+- GET /v1/programs/{id}/fraud-graph  rings across every duplicate kind from Neo4j, statuses from Postgres; 503 when the graph is down
+- POST /v1/programs/{id}/registrations (CSV, synthetic rows only), POST .../campaign/match, POST .../campaign/drafts, POST .../campaign/send, GET .../campaign (M5)
 - GET /v1/usage  current period meters (read by billing UI)
 
 Billing routes (component 3 replaces the stubs; listed so the UI can code against them):
@@ -192,12 +208,12 @@ Portal routes (token in path, rate-limited):
 - POST /portal/{token}/submit  fields
 - POST /portal/{token}/photos  multipart, kind, stored to Supabase Storage, phash computed server-side
 - POST /portal/{token}/answer  reply to needs_info
-- POST /portal/{token}/payout  payout destination (Connect onboarding link handoff lives in component 3)
+- POST /portal/{token}/payout  check_export with an optional mailing address (one locked transaction; a mailing address another claim of the program uses holds the payout and sends the claims to a person); stripe_connect onboarding is component 3's and answers 501 until it lands
 
 Internal:
 - POST /internal/feeds/pull  shared secret header
 - POST /internal/stripe/webhook  (component 3 implements; registered here as a stub that verifies nothing and returns 501)
-- GET /healthz, GET /readyz (checks DB and, from M2, that the worker heartbeat is under 5 minutes old)
+- GET /healthz, GET /readyz (checks DB and that the worker heartbeat is under 5 minutes old; reports the fraud graph as ok, disabled, or unavailable without ever going unready over it)
 
 Responses are pydantic schemas; errors are RFC 7807 problem details.
 
@@ -205,10 +221,10 @@ Responses are pydantic schemas; errors are RFC 7807 problem details.
 
 `make eval` runs all of the following and rewrites evals/results/*.md:
 - extraction: baseline vs graph, per field, on the golden notices.
-- adjudication: rows = rules_only, rules_plus_vision (M2), single_pass (graph with decide only, no loop), loop_no_retrieval, loop_keyword_only, loop_full, loop_full_cheap_model; columns = approval accuracy, fraud precision, fraud recall, needs_info precision, share routed to human, mean steps, mean cost USD, p50 seconds. On the 300-claim set, with the 40 classmate claims reported as a separate block.
-- reporting: reconciliation pass or fail with the count diff (M4).
+- adjudication (adjudication.md: rules_only; ablation.md: every row): rows = rules_only, rules_plus_vision, single_pass (every tool once, then one decide), loop_full, loop_no_retrieval, loop_keyword_only (loop_full_cheap_model is not applicable: one model is priced); columns = outcome accuracy, macro F1, approval accuracy, fraud precision and recall, needs_info precision, routed and capped shares, counted steps, trace rows, mean cost USD, p50 seconds. Blocks golden300 (the kill-criterion block), probe60, and standin40, each reported separately. Every row replays from evals/recordings.
+- reporting: MPR reconciliation, three ways, with the scenario's pre-registered composition.
 
-Deploy gate (.github/workflows/deploy.yml, M4): runs make eval on the committed golden sets with recorded model outputs (replay mode, no live model calls) and fails if any headline metric regresses more than its tolerance: extraction fields 2 points, adjudication accuracy and fraud F1 0.02, reconciliation any discrepancy.
+Deploy gate (.github/workflows/deploy.yml): runs make eval in replay mode (no network, no model calls) and fails if any headline metric regresses more than its tolerance against the base (a pull request's base branch; a push's previous tip, never the pushed commit): extraction fields 2 points, adjudication outcome accuracy and fraud F1 0.02 on every complete row of every block (a row that was complete and no longer replays fails), reconciliation any discrepancy. It also fails when the tables committed at the commit differ from what replay produces there (wall-clock seconds aside), and when the baseline ref does not resolve. tests/unit/test_freeze.py pins the decision logic and eval-program documents the recordings were made against, and the rules_only numbers exactly.
 
 ## 11. Tasks in order (for Claude Code)
 
@@ -229,7 +245,7 @@ M1 (backend only, plus the team seams)
 M2
 12. llm/ vision call path; live model calls only after the meter's estimate is approved.
 13. claims/graph.py with all tools, caps, interrupt, checkpointer; worker; agent_steps tracing.
-14. fraud/: clusters, networkx connected components.
+14. fraud/: the Neo4j projection, clusters and rings (section 13; replaced the planned networkx clustering).
 15. API routes implemented behind the M1 contract (programs, claims, trace, portal).
 16. Golden set extended to 100 owner-audited notices; document_chunks and retrieve_policy.
 17. Runtime trace docs/traces/M2-adjudication.md.
@@ -244,14 +260,26 @@ M4
 
 ## 12. Acceptance tests (must exist and pass)
 
-- The tenancy test connects as recallops_app and first asserts the role is neither superuser nor owner of any table. Then: under firm A's context, raw SQL returns zero rows of firm B in every tenant table, UPDATE and DELETE of B's rows affect zero rows, and an INSERT with B's firm_id is rejected; with no context set, every tenant table returns zero rows. From M2: a request with firm A's dev headers (from M3: Clerk token) to GET /v1/claims/{id} for firm B's claim returns 404.
-- A meta-test asserts every table with a firm_id column has RLS enabled and forced.
-- Replaying the same claim submission twice creates one claim.
-- A claim whose label photo text does not match any rule model is denied with a cited rule.
-- A claim with serial outside range is denied only when serial_ranges exist; otherwise serial is ignored.
-- Two claims with photos within phash distance 6 are both flagged and share a cluster id.
-- A run that would exceed 0.02 USD stops with status capped and an interrupt; resuming after reviewer override completes without re-running prior steps.
-- The meter refuses a call whose projected cost would cross the run cap or the global budget, and the fake transport records zero requests.
-- MPR reconciliation passes on a program with 500 synthetic claims in mixed states.
-- make eval completes in replay mode without network access.
-- The committed docs/contracts/openapi.json equals the document generated from the app.
+Each line names where it is tested (apps/api/tests).
+
+- Tenancy as recallops_app: neither superuser nor owner of any table; under firm A's context, raw SQL returns zero rows of firm B in every tenant table, UPDATE and DELETE of B's rows affect zero rows, an INSERT with B's firm_id is rejected; with no context set, every tenant table returns zero rows (db/test_tenancy.py). Firm A's dev headers get 404 for firm B's claim, program, actions, exports, and fraud graph (api/test_api.py, api/test_m2_flows.py). The Clerk-token version waits for component 4's provider.
+- Every table with a firm_id column has RLS enabled and forced (db/test_tenancy.py).
+- Replaying the same claim submission twice creates one claim (api/test_m2_flows.py).
+- A claim whose label photo shows a model the rules do not list is denied with a cited rule (unit/test_acceptance.py).
+- A serial outside range is denied only when the notice has serial ranges; otherwise the serial is ignored (unit/test_acceptance.py).
+- Two claims with photos within pHash distance 6, decided one after the other by the worker, are both flagged and share a cluster id (api/test_m2_flows.py, through the Neo4j projection; the reopen of the earlier claim is in the same test).
+- A run that would exceed 0.02 USD stops capped with an interrupt; resuming after a reviewer override completes without re-running prior steps (unit/test_acceptance.py; unit/test_agent_graph.py for each cap).
+- The meter refuses a call whose projected cost would cross the run cap or the global budget, and the fake transport records zero requests (unit/test_llm_meter.py).
+- MPR reconciliation passes on a 500-claim program in mixed states, three ways, and fails under injected definition bugs (db/test_reporting.py).
+- make eval completes in replay mode without network access (db/test_evals_and_clis.py blocks non-loopback sockets while an agent row replays).
+- The committed docs/contracts/openapi.json equals the document generated from the app (api/test_api.py).
+- The committed results tables equal what replay produces (the deploy gate), and the ablation's decision logic and documents match their freeze manifest (unit/test_freeze.py).
+
+## 13. Fraud graph (fraud/, Neo4j; owner decision 2026-10-18)
+
+Neo4j does what networkx was planned for: connected-component fraud clusters and the M5 fraud graph. It is a projection of Postgres, never a decision maker: check_duplicates (frozen) decides, money safety lives in the decision transaction (section 6), and a graph outage only delays clusters.
+
+- Model: (:Claim {uid, ns, firm_id, program_id, claim_id}) and (:Identity {uid, ns, firm_id, program_id, kind, key}). Identity kinds: photo_<photo kind> (sha256 of the bytes, so identical bytes under different photo kinds never link), address, email, serial, payout (claimant.payout_destination; only the synthetic generators set it), mailing (the payout mailing address). Keys are HMAC-SHA256 with a firm-scoped key derived from GRAPH_KEY_SECRET, never raw values; empty normalized values make no identity. Relationship types per duplicate kind (SAME_PHOTO, SAME_ADDRESS, SAME_SERIAL, SAME_PAYOUT, SAME_MAILING) plus claim-to-claim SIMILAR_PHOTO for pHash within PHASH_DUPLICATE_BITS on label, destruction, and other photos of the same kind.
+- Tenancy (invariant 2): ns, firm_id, and program_id on every node and relationship; uids built inside Cypher from bound parameters; every traversal hop constrained by them; all Cypher in fraud/cypher.py constants (an AST meta-test refuses interpolated queries); admin statements in graph_admin.py, which api/ may not import; graph output intersected with Postgres under RLS before any write; the fraud_clusters trigger refuses foreign members.
+- Sync (fraud/sync.py): sync_claim after a decision commits (per-program advisory lock; the claim's relationships are deleted and re-merged; components per kind; fraud_clusters rows rewritten, a growing component keeps its oldest id; claims.graph_synced_version fenced on graph_version, which triggers bump on any projected fact change); resync_dirty on worker idle ticks; check_epoch at worker start (an emptied or replaced graph marks every claim dirty); sync_program in bulk for seed and `make graph-sync`.
+- Operations: driver timeouts derive from NEO4J_TIMEOUT_S, a circuit breaker fails fast after an outage, /readyz reports the graph but never goes unready over it, and GET /v1/programs/{id}/fraud-graph answers a fixed 503 when it is down. Prod settings refuse the example secret, the dev password, a non-TLS remote URI, and any namespace but prod; tests run in their own namespace on a local server only.

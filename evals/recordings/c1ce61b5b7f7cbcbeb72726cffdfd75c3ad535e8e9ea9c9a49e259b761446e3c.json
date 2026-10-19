@@ -1,0 +1,55 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 2859,
+  "output_tokens": 432,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeL3w5dxjbr4XkcZ8LP",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3106,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01PQePkJD1AgdnGCT8no21g4",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The check_duplicates tool found another claim (ef1da974-38bd-554b-b93d-2fb9f981eaad) sharing the same label photo, so the claim must be sent to a person for review under the duplicate rule.",
+      "cites": [
+       "T6",
+       "R:policy",
+       "T7"
+      ]
+     },
+     {
+      "text": "The label photo reads clearly as model P1441, which is not on the recalled list (P1410, P1410-P, P1411, P1411-P), and the typed model P1410-P does not match the legible label; this mismatch would otherwise support denial, but the duplicate flag takes precedence.",
+      "cites": [
+       "T1",
+       "T3",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (walmart.com) within the sale window, and no receipt or destruction photo is required, so those checks pass.",
+      "cites": [
+       "T4",
+       "T5",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

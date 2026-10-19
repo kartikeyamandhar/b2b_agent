@@ -1,0 +1,29 @@
+{
+ "text": "The label is unreadable, and the destruction photo does not clearly show the required front and rear marking. I'll check the typed model against the recalled list.",
+ "usage": {
+  "input_tokens": 3592,
+  "output_tokens": 100,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3ZykPLD1coV4VsUV2F",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1099,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is unreadable, and the destruction photo does not clearly show the required front and rear marking. I'll check the typed model against the recalled list."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01EdJcwVRDBmpKpeTmSkzmsd",
+   "name": "check_model",
+   "input": {
+    "model_text": "AD10007GR"
+   }
+  }
+ ]
+}

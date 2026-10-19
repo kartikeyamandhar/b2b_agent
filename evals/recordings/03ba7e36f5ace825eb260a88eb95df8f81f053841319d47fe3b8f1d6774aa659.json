@@ -1,0 +1,58 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 3475,
+  "output_tokens": 532,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4A5EjGw7ijXY1k6baH",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2385,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01XghjGCLCtM46iGZK8Qw7q7",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The label date code 07/22 NH matches a recalled date code, and the typed date code is the same.",
+      "cites": [
+       "R:date_codes",
+       "T1"
+      ]
+     },
+     {
+      "text": "The purchase date of 2023-05-20 falls inside the sale window, but the claimed retailer, Boot Barn, is not on the program's list of sellers, so the sale location cannot be confirmed.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim, so there is no duplicate concern.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your boots are a recalled model and the label date code matches. However, Boot Barn is not one of the retailers authorized to sell the recalled product. Please provide proof that you bought these boots from an authorized seller (Grainger, Safety Shoes Distributors, Saf-Gard Safety Shoe Company, grainger.com, or justinboots.com), or tell us where else you purchased them, along with any receipt or order confirmation showing the seller's name.",
+    "confidence": 0.6
+   }
+  }
+ ]
+}

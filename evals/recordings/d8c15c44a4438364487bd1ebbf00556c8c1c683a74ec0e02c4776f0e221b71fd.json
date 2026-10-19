@@ -1,0 +1,62 @@
+{
+ "text": "The label is legible and shows a recalled model, the serial is in range, and there are no duplicates. The retailer \"Corner Hardware Co\" is not on the sold-at list, so the purchase needs proof of ownership, which makes this a needs_info outcome.",
+ "usage": {
+  "input_tokens": 4122,
+  "output_tokens": 604,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Q5GEPe2RLSiXats9a",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3230,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows a recalled model, the serial is in range, and there are no duplicates. The retailer \"Corner Hardware Co\" is not on the sold-at list, so the purchase needs proof of ownership, which makes this a needs_info outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01U8osg6BBBBs9HLXRybfdWK",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model LSE4613ST, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The typed serial 802KM8396444 falls within the recalled serial ranges.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The claimed retailer, Corner Hardware Co, is not on the program's list of eligible retailers, so the purchase cannot be verified from the retailer alone. The purchase date of 2021-02-08 is inside the sale window.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim, so no duplicate flag applies.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your appliance's retailer, Corner Hardware Co, is not on the program's list of eligible sellers (Best Buy, Costco, The Home Depot, Lowe's, or LG.com). Please send proof of ownership, such as a receipt or order confirmation, showing where and when you bought the unit. If it was bought from a different eligible retailer, please tell us which one.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

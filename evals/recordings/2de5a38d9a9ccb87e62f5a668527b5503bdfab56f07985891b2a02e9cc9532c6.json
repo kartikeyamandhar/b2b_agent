@@ -1,0 +1,55 @@
+{
+ "text": "The label clearly shows model 9424, which is not a recalled model. The policy says a legible label showing a non-recalled model is a denial, regardless of the typed model.",
+ "usage": {
+  "input_tokens": 3384,
+  "output_tokens": 392,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3rmeqT4nN7HybBnsLw",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2183,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label clearly shows model 9424, which is not a recalled model. The policy says a legible label showing a non-recalled model is a denial, regardless of the typed model."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01MJ6CaAsMgpqovw6S771q6u",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 9424. The recalled model is 9421, so the claimed unit is not covered by the recall.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The retailer, Corner Hardware Co, is not on the list of authorized sellers, so the purchase cannot be verified under the sale rules. This is a secondary issue, since the model mismatch alone is sufficient for denial.",
+      "cites": [
+       "R:sold_at",
+       "T2"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

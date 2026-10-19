@@ -1,0 +1,57 @@
+{
+ "text": "The purchase predates the sale window, and the FAQ says that is not eligible, so this claim is denied.",
+ "usage": {
+  "input_tokens": 4208,
+  "output_tokens": 377,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4E2oEmGHZe27UTjVFC",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1870,
+ "content": [
+  {
+   "type": "text",
+   "text": "The purchase predates the sale window, and the FAQ says that is not eligible, so this claim is denied."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Stoq1Uakska13KnctNsqNm",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model 9421, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2022-12-19 is before the recall sale window of 2023-10-01 to 2024-05-31. A purchase before the window is not eligible, even though the retailer is on the list.",
+      "cites": [
+       "T2",
+       "R:sold_window",
+       "R:sold_at",
+       "T6"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so no flag applies. The serial check was skipped and did not affect the outcome.",
+      "cites": [
+       "T3",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

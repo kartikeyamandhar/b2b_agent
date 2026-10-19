@@ -1,0 +1,57 @@
+{
+ "text": "The legible label shows CXM-06, which is not on the recalled list (CXP-03, CXC-02, CXM-03, CXV, CXM-02). Under the model rule, a legible label showing a non-recalled model means deny, even though the serial, purchase, and duplicate checks all pass.",
+ "usage": {
+  "input_tokens": 3781,
+  "output_tokens": 495,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Nuao25fRt1eb2kdfT",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2737,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows CXM-06, which is not on the recalled list (CXP-03, CXC-02, CXM-03, CXV, CXM-02). Under the model rule, a legible label showing a non-recalled model means deny, even though the serial, purchase, and duplicate checks all pass."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_011V8XEYWvJh9oFj5bDLb8YE",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model CXM-06, which is not one of the recalled models (CXP-03, CXC-02, CXM-03, CXV, CXM-02). The model check confirmed a mismatch, so the claim fails the model requirement.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The typed serial FC3391363666 falls within a recalled serial prefix range, and the purchase at JHTNA on 2023-10-18 is inside the sale window with no receipt required. These checks pass but do not cure the model mismatch.",
+      "cites": [
+       "R:serials",
+       "T4",
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found sharing a photo, address, email, serial, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

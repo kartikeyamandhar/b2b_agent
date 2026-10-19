@@ -1,0 +1,62 @@
+{
+ "text": "The label is legible and shows a recalled model, the purchase is inside the window at a listed retailer, and the serial is in range. However, the duplicate check found another claim sharing the same payout destination, which triggers a flag, and that takes precedence over every other outcome.",
+ "usage": {
+  "input_tokens": 4126,
+  "output_tokens": 439,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3PnLzzsBmT4EMUnza4",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2500,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows a recalled model, the purchase is inside the window at a listed retailer, and the serial is in range. However, the duplicate check found another claim sharing the same payout destination, which triggers a flag, and that takes precedence over every other outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_016ED96QX3U21Fr2NNTT7Rap",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program shares this claim's payout destination, which requires review before any payment.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model LSE4613ST, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The typed serial 802KM9595131 falls within a recalled serial range.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The Home Depot is a listed retailer and the purchase date of 2023-08-19 is inside the sale window; no receipt is required for this retailer.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

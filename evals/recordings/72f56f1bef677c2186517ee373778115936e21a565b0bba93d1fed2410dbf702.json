@@ -1,0 +1,70 @@
+{
+ "text": "The duplicate check found another claim sharing a serial number, and the label serial (J0E78347421) differs from the typed serial. The flag rule takes priority, so I'll record a flag.",
+ "usage": {
+  "input_tokens": 3573,
+  "output_tokens": 533,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3UnRc4zQ5WttKXg456",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2851,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing a serial number, and the label serial (J0E78347421) differs from the typed serial. The flag rule takes priority, so I'll record a flag."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Wuft8mShocvNs3Qf8kni3p",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Duplicate check found another claim (cf996e0a-e6a8-5b26-a49c-9495cab7d6de) sharing the same serial number, which requires a flag under the claim policy.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows recalled model DR2E, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The label serial reads J0E78347421, while the typed serial is J0E5490210. Both begin with a recalled prefix (J0E), but the mismatch adds to the review need.",
+      "cites": [
+       "R:serials",
+       "T1",
+       "T4"
+      ]
+     },
+     {
+      "text": "Purchase at a listed retailer (Yamaha dealers) on 2022-08-05 falls inside the sale window; no receipt required for this remedy.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "Date code 2017 is within the recalled model year range.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

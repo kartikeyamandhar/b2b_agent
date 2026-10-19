@@ -1,0 +1,77 @@
+{
+ "text": "The legible label confirms a recalled model (MK04), the serial and date code are in range, the purchase is from a listed retailer within the window, and there are no duplicate claims. The remedy is repair or replacement, so no destruction photo is required, and the refund is under the threshold.",
+ "usage": {
+  "input_tokens": 3644,
+  "output_tokens": 622,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3eNQ1bQho2zxYohrJW",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2547,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label confirms a recalled model (MK04), the serial and date code are in range, the purchase is from a listed retailer within the window, and there are no duplicate claims. The remedy is repair or replacement, so no destruction photo is required, and the refund is under the threshold."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01V6mrsru8ridvSdsBbmE98J",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model. The typed model \"MKO4\" has a typo, but the label confirms the model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number BN2408B02265 starts with \"BN\", which is in the recalled range.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code 08/2024 is manufactured prior to July 2025, so it is within the recalled date codes.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase from TEMU.com on 2024-09-02 is a listed retailer and falls inside the sale window of 2024-09-01 to 2025-06-30. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim, so it is not flagged.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The claimant requests repair or replacement, not a refund, so no destruction photo is required and the value threshold does not apply.",
+      "cites": [
+       "R:policy",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

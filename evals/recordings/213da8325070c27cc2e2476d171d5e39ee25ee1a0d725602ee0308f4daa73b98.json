@@ -1,0 +1,58 @@
+{
+ "text": "",
+ "usage": {
+  "input_tokens": 4039,
+  "output_tokens": 517,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3tySoE8BG1hoPCiiUF",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2588,
+ "content": [
+  {
+   "type": "tool_use",
+   "id": "toolu_01N1WUdKEgHiKQePgAdicXq3",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model LSE4613ST, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial number 802KM8396444 falls within a recalled serial range.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The claimed retailer, Corner Hardware Co, is not on the program's list of eligible sellers (Best Buy, Costco, The Home Depot, Lowe's, LG.com), so proof of purchase must be provided before the claim can be confirmed. The purchase date of 2021-02-08 is within the sale window and no receipt is required by the rule.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your appliance's model and serial match a recalled unit, but the retailer you named, Corner Hardware Co, is not one of the eligible sellers for this program. Please send proof of ownership, such as a receipt, order confirmation, or other document showing where and when you bought the oven, so we can verify the purchase.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

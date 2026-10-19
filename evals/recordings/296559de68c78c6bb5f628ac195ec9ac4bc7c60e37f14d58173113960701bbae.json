@@ -1,0 +1,64 @@
+{
+ "text": "The model matches, and the serial and date code are in range. The purchase was made before the sale window, which is a denial under the purchase rule.",
+ "usage": {
+  "input_tokens": 4003,
+  "output_tokens": 442,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3E8tFNq7rV52iW8w6K",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2889,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model matches, and the serial and date code are in range. The purchase was made before the sale window, which is a denial under the purchase rule."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01LUoKUExogbyvWMK95TxPsX",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model FCRE306CAS, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The typed serial VF34410338 is within the recalled serial range, and the date code October 2023 is within the recalled production dates.",
+      "cites": [
+       "T4",
+       "T5",
+       "R:serials",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2023-01-04 is before the sale window of 2023-10-01 to 2023-12-31, so the purchase does not qualify even though the retailer, Lowe's, is listed.",
+      "cites": [
+       "T2",
+       "R:sold_window",
+       "R:sold_at"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

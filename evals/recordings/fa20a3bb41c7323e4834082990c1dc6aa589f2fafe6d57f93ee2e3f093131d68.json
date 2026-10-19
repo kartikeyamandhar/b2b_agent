@@ -1,0 +1,63 @@
+{
+ "text": "The label photo is too blurry to read, and the policy says the claimant must then be asked for a clearer photo. The typed model is a match, but the label is the evidence, and the date code on the unit can't be verified (T4 unparsed). The claimant needs to provide a clearer label photo showing the model and date code.",
+ "usage": {
+  "input_tokens": 4308,
+  "output_tokens": 578,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3fTk18DLjjKRXa2ZTT",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2982,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label photo is too blurry to read, and the policy says the claimant must then be asked for a clearer photo. The typed model is a match, but the label is the evidence, and the date code on the unit can't be verified (T4 unparsed). The claimant needs to provide a clearer label photo showing the model and date code."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017aGzcohaUmcMRHHTs1KPcX",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo could not be read (not legible, no model or date code text), so the label cannot confirm the model or date code.",
+      "cites": [
+       "T1",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The typed model SE4570 matches the recalled model list.",
+      "cites": [
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The date code check could not parse the typed value '07/22 NH', so the date code cannot be confirmed as one of the recalled codes (07/22 NH or 08/22 NH) from the data provided.",
+      "cites": [
+       "T4",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Purchase is valid: Grainger is a listed retailer and the purchase date 2023-01-17 is inside the sale window; no receipt is required. No duplicate claims were found.",
+      "cites": [
+       "T2",
+       "T3",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your label photo is too blurry to read. Please send a clearer, well-lit photo of the product label showing the model number, serial/date code area, so we can confirm the model and the date code (07/22 or 08/22 NH).",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

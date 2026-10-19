@@ -1,0 +1,65 @@
+{
+ "text": "The policy says any shared serial number triggers a flag, and T3 reports one. That outranks the other outcomes, so I'm recording a flag.",
+ "usage": {
+  "input_tokens": 3555,
+  "output_tokens": 418,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3yr2Td9EhasCgbXyus",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2375,
+ "content": [
+  {
+   "type": "text",
+   "text": "The policy says any shared serial number triggers a flag, and T3 reports one. That outranks the other outcomes, so I'm recording a flag."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_017sTpzrNifRY9c5a9ecuzvg",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Duplicate check found another claim in the program sharing this claim's serial number.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model DR2E, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase is from a listed retailer (Yamaha dealers) within the sale window, and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The typed serial J2D45572794 is in a recalled range, and the label-read date code 2017 is in the recalled model-year range.",
+      "cites": [
+       "R:serials",
+       "R:date_codes",
+       "T4",
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

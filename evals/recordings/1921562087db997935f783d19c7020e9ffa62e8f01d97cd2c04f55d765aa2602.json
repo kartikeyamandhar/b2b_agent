@@ -1,0 +1,50 @@
+{
+ "text": "Label photo is legible and shows model 2G523, which is not recalled. Per policy, a legible label showing a non-recalled model means deny. Duplicates check is clean, purchase is within window at a listed retailer. The destruction photo is questionable but the model denial is decisive.",
+ "usage": {
+  "input_tokens": 2831,
+  "output_tokens": 392,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB34UnJ59iHC3TbTB8PB",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2224,
+ "content": [
+  {
+   "type": "text",
+   "text": "Label photo is legible and shows model 2G523, which is not recalled. Per policy, a legible label showing a non-recalled model means deny. Duplicates check is clean, purchase is within window at a listed retailer. The destruction photo is questionable but the model denial is decisive."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01UWMyR4BrQH6QTbbBDqiHji",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2G523, which is not on the recalled list (2G505, 2G520, 2G505B, 2G512B). A legible label showing a non-recalled model means the unit is not part of this recall.",
+      "cites": [
+       "R:policy",
+       "R:models",
+       "T1",
+       "T2",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase is inside the sale window at a listed retailer, and no duplicate claims were found, but these do not make a non-recalled unit eligible.",
+      "cites": [
+       "T3",
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,77 @@
+{
+ "text": "Key points: label photo is unreadable (T1 legible false), so the typed model decides. Typed model SE4570 matches (T2), so the model is confirmed by the typed value. Date code \"07/22 NH\" is listed by the rule as recalled, but the check returned \"unparsed\" (T3); the date code field itself is not a serial-number-type rule with an unparsed-outside-range result. The typed value text exactly matches a recalled code string, so it is in range. Purchase at Grainger (listed), within window (T4), no receipt required. No destruction photo required (T5). No duplicates (T6).\n\nThe remaining question is whether the date code check being \"unparsed\" is a problem. The typed value \"07/22 NH\" literally equals one of the two recalled date codes, so it falls within the recalled range. The tool's failure to parse does not place it outside the range, and the policy only denies codes outside the recalled ranges and asks for missing ones. The code is present, so it is not missing.\n\nOutcome: approve, with the repair/replacement remedy and no refund, so the value threshold does not apply.",
+ "usage": {
+  "input_tokens": 2773,
+  "output_tokens": 846,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3BKtSke2X8uPe5b7od",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3984,
+ "content": [
+  {
+   "type": "text",
+   "text": "Key points: label photo is unreadable (T1 legible false), so the typed model decides. Typed model SE4570 matches (T2), so the model is confirmed by the typed value. Date code \"07/22 NH\" is listed by the rule as recalled, but the check returned \"unparsed\" (T3); the date code field itself is not a serial-number-type rule with an unparsed-outside-range result. The typed value text exactly matches a recalled code string, so it is in range. Purchase at Grainger (listed), within window (T4), no receipt required. No destruction photo required (T5). No duplicates (T6).\n\nThe remaining question is whether the date code check being \"unparsed\" is a problem. The typed value \"07/22 NH\" literally equals one of the two recalled date codes, so it falls within the recalled range. The tool's failure to parse does not place it outside the range, and the policy only denies codes outside the recalled ranges and asks for missing ones. The code is present, so it is not missing.\n\nOutcome: approve, with the repair/replacement remedy and no refund, so the value threshold does not apply."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01PhWioW191rnnS7eUTXo5uT",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is unreadable, so the typed model decides; the typed model SE4570 matches the recalled model list.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The typed date code '07/22 NH' is exactly one of the recalled date codes, so it is present and within the recalled range. The parser's 'unparsed' verdict does not place it outside the range.",
+      "cites": [
+       "T3",
+       "R:date_codes",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Purchase was at Grainger, a listed retailer, on 2023-01-17, inside the sale window; no receipt is required.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this remedy.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The remedy is repair or replacement with no refund requested, so the refund value threshold does not apply.",
+      "cites": [
+       "R:value_threshold",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.8
+   }
+  }
+ ]
+}

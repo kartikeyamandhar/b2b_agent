@@ -1,0 +1,70 @@
+{
+ "text": "The label is legible and shows DR2E, which is recalled. The serial, date code, and purchase all fall within the rules. However, another claim shares this serial number, so the policy requires a flag.",
+ "usage": {
+  "input_tokens": 3716,
+  "output_tokens": 493,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3VZdvxLPw4qvrEhagL",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2477,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows DR2E, which is recalled. The serial, date code, and purchase all fall within the rules. However, another claim shares this serial number, so the policy requires a flag."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01SpLyce5hHRXfo8Lvi4vXPj",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program (28ebf13f-547e-5126-9fd8-1de55e80bce7) shares this same serial number, so the claim must be flagged for review under the duplicate rule.",
+      "cites": [
+       "T3",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model DR2E, which is a recalled model.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The serial J2D45572794 begins with J2D and is within the recalled serial ranges.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "Model year 2017 is within the recalled date code range.",
+      "cites": [
+       "T5",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "Purchase at a listed Yamaha dealer on 2024-06-01 is inside the sale window, and no receipt is required.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

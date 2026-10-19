@@ -1,0 +1,75 @@
+{
+ "text": "The model is confirmed as recalled. The only failing check is the destruction photo, which does not show the required strap cutting, so this needs more information from the claimant.",
+ "usage": {
+  "input_tokens": 3749,
+  "output_tokens": 569,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3jd9RTHvCeFRQxHmtf",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2616,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed as recalled. The only failing check is the destruction photo, which does not show the required strap cutting, so this needs more information from the claimant."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QScHCLVAvFeKPGVkBZpahG",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model B0726Y, which is a recalled model.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T7"
+      ]
+     },
+     {
+      "text": "The date code 8/21 is within the recalled range (August 2021 or earlier).",
+      "cites": [
+       "R:date_codes",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase was at Walmart, a listed retailer, on 2022-05-07, which is inside the sale window. No receipt is required for this claim.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the helmet with its straps cut off, so it does not meet the required destruction.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "The refund of $40.49 is under the $100 review threshold, so no person review is triggered.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send a new destruction photo showing the recalled helmet with both straps cut off, as the recall instructs. The current photo shows a red object with a cord and no visible cut straps.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

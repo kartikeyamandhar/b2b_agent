@@ -1,0 +1,70 @@
+{
+ "text": "All checks pass: the model matches a recalled model, the serial is in range, the purchase is at Sears inside the window with a receipt, and there are no duplicates. The repair-or-replacement remedy has no destruction requirement, and the refund is not over the threshold.",
+ "usage": {
+  "input_tokens": 3597,
+  "output_tokens": 537,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3pTJxjF6EAevCfN6ws",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2965,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass: the model matches a recalled model, the serial is in range, the purchase is at Sears inside the window with a receipt, and there are no duplicates. The repair-or-replacement remedy has no destruction requirement, and the refund is not over the threshold."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01EJWEWWzEDq5iCmF5ZYpPBx",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model 790.990131A1, which matches the recalled model pattern 790.990131*.",
+      "cites": [
+       "T1",
+       "T5",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The typed serial VF12256713 falls within the recalled range VF122xxxxx - VF334xxxxx.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The purchase was from Sears, a listed retailer, dated inside the 2001-06-01 to 2009-08-31 sale window, and a receipt is present.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window",
+       "R:receipt"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claim requests repair or replacement, so no destruction photo is required; no refund is requested, so the value threshold does not apply.",
+      "cites": [
+       "R:policy",
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.95
+   }
+  }
+ ]
+}

@@ -1,0 +1,47 @@
+{
+ "text": "I'll start by reading the label photo, checking the purchase, checking for duplicates, and checking the serial, since these all apply to this claim. Remedy is repair or replacement, so no destruction check is needed. No date code was provided, and the rules include date codes, but the typed value is missing, so I'll note that.",
+ "usage": {
+  "input_tokens": 2924,
+  "output_tokens": 229,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3pqWhii5v4yaHcv6ES",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1670,
+ "content": [
+  {
+   "type": "text",
+   "text": "I'll start by reading the label photo, checking the purchase, checking for duplicates, and checking the serial, since these all apply to this claim. Remedy is repair or replacement, so no destruction check is needed. No date code was provided, and the rules include date codes, but the typed value is missing, so I'll note that."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01KtbTYyBxY9SE8CNTEatPHD",
+   "name": "read_label_photo",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_013XDGVwcthuGFA8tKrSLTfY",
+   "name": "check_purchase",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01NZKjVvZSFfXf93rmBK5Jmv",
+   "name": "check_duplicates",
+   "input": {}
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01BjMntbMBADTSEuA3gPfWCw",
+   "name": "check_serial",
+   "input": {
+    "serial": "VF12294579"
+   }
+  }
+ ]
+}

@@ -1,0 +1,53 @@
+{
+ "text": "Applying the policy: check_duplicates (T5) found a shared payout destination with another claim, so the flag rule takes precedence over all other outcomes.",
+ "usage": {
+  "input_tokens": 2804,
+  "output_tokens": 432,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeJSz6YhiEVGoWVEdeE",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2373,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy: check_duplicates (T5) found a shared payout destination with another claim, so the flag rule takes precedence over all other outcomes."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01GVndSHZX8XKRMtTWxMxyjB",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The duplicate check found another claim (ed2ea2ef-2c4e-5e40-ba2f-3d8db7cd5a06) that shares a payout destination with this claim. Claims sharing a payout account are sent to a person for review, together with the matched claim.",
+      "cites": [
+       "R:policy",
+       "T5",
+       "T6"
+      ]
+     },
+     {
+      "text": "The other checks pass: the label photo is legible and shows model A17A2, which is recalled; the serial SN59891877 matches the label; the purchase from TD Synnex on 2023-07-28 is a listed retailer inside the sale window; no destruction photo is required for a replacement remedy.",
+      "cites": [
+       "T1",
+       "T2",
+       "T3",
+       "T4",
+       "R:models",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,76 @@
+{
+ "text": "Checking the results against the policy:\n\n- Duplicates: T5 found no matches, so no flag.\n- Model: T1 reads the label as legible with model 98527, which is recalled (R:models). T2 also matches. Confirmed.\n- Serial/date code: the program's rules here use typed values only for serial and date code; the recall lists no serial or date code ranges in R:models or the FAQ, so no serial/date-code rule applies. The typed date code is missing, but no date-code rule exists for this program, so it does not trigger needs_info.\n- Purchase: ALDI is listed (T3), and 2018-10-11 falls inside the 2016-01-01 to 2019-12-31 window (T3). Receipt not required per T3, though one was supplied anyway.\n- Destruction: T4 reports the photo shows the product with the power cord visibly severed, which matches the instructed destruction. It is not the label photo (T4 describes a device with a cut cord, and T1 is a label reading). Complies.\n- Refund $40.00 is under the $100 threshold (R:value_threshold).\n\nNo rule triggers a flag, deny, or needs_info, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2839,
+  "output_tokens": 863,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeUUXQXs6XaGrVwyYze",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4368,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Duplicates: T5 found no matches, so no flag.\n- Model: T1 reads the label as legible with model 98527, which is recalled (R:models). T2 also matches. Confirmed.\n- Serial/date code: the program's rules here use typed values only for serial and date code; the recall lists no serial or date code ranges in R:models or the FAQ, so no serial/date-code rule applies. The typed date code is missing, but no date-code rule exists for this program, so it does not trigger needs_info.\n- Purchase: ALDI is listed (T3), and 2018-10-11 falls inside the 2016-01-01 to 2019-12-31 window (T3). Receipt not required per T3, though one was supplied anyway.\n- Destruction: T4 reports the photo shows the product with the power cord visibly severed, which matches the instructed destruction. It is not the label photo (T4 describes a device with a cut cord, and T1 is a label reading). Complies.\n- Refund $40.00 is under the $100 threshold (R:value_threshold).\n\nNo rule triggers a flag, deny, or needs_info, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_018kBCg5jaTESZ4bTbdTogUe",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 98527, which is a recalled model; the typed model matches.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The retailer ALDI is on the sold-at list and the purchase date of 2018-10-11 falls inside the sale window, so the purchase is eligible.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the product with the unplugged power cord cut, as instructed, and is not a repeat of the label photo.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The refund of $40.00 is below the $100.00 person-review threshold.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     },
+     {
+      "text": "The program sets no serial or date-code range for this recall, so the missing typed date code does not block approval.",
+      "cites": [
+       "R:models",
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

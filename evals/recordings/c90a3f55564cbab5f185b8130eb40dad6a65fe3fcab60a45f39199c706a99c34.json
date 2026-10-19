@@ -1,0 +1,54 @@
+{
+ "text": "The label is legible and shows model 9421, which is recalled. The purchase date of 2023-02-26 falls before the sale window (2023-10-01 to 2024-05-31), so that is a deny under the purchase rule. The serial check was skipped, so I won't rely on it. No duplicates were found.",
+ "usage": {
+  "input_tokens": 3231,
+  "output_tokens": 411,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3rLVWFWmdzr6TfzPns",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2211,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows model 9421, which is recalled. The purchase date of 2023-02-26 falls before the sale window (2023-10-01 to 2024-05-31), so that is a deny under the purchase rule. The serial check was skipped, so I won't rely on it. No duplicates were found."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01U2cqAgWNnJWYkuxYENURKa",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 9421, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The claimed purchase date of 2023-02-26 is before the program's sale window of 2023-10-01 to 2024-05-31, so the unit was not sold within the recalled sale period.",
+      "cites": [
+       "T3",
+       "R:sold_window",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial, or payout account.",
+      "cites": [
+       "T2"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

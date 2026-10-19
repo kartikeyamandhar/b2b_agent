@@ -1,0 +1,77 @@
+{
+ "text": "All checks pass, so I'll approve the claim.",
+ "usage": {
+  "input_tokens": 3760,
+  "output_tokens": 540,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB47sTFz6c3VFEZNjJpr",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2994,
+ "content": [
+  {
+   "type": "text",
+   "text": "All checks pass, so I'll approve the claim."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QTDgaQ9D68UVAHtYTw6tW9",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model LXT-CL-1.0, which matches the recalled model list. The typed model 'LXT-CL-I.0' has a typo, but the label controls.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T7"
+      ]
+     },
+     {
+      "text": "The label date code 0722 falls within the recalled range of 0722 to 1223.",
+      "cites": [
+       "R:date_codes",
+       "T6"
+      ]
+     },
+     {
+      "text": "Nordstrom is a listed retailer, and the purchase date of 2023-05-13 is inside the sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the power cord cut apart with a gap where the plug was removed, which complies with the required destruction.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No other claims share a photo, address, email, serial, or payout account with this claim.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The serial check was skipped because the program has no serial rule. The repair or replacement remedy is under the refund threshold, so no person review is needed.",
+      "cites": [
+       "T5",
+       "R:value_threshold",
+       "R:policy"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,71 @@
+{
+ "text": "Checking the results: label legible and shows 790.990121A1, matching recalled 790.990121*. Serial VF12293019 is within VF122xxxxx\u2013VF334xxxxx. Purchase at Sears on 2009-01-05, inside the window 2001-06-01 to 2009-08-31, and Sears is listed. Receipt is present. No destruction photo required (remedy is repair/replacement, T5). No duplicates (T6). No flag, deny, or needs_info triggers apply, so approve.",
+ "usage": {
+  "input_tokens": 3240,
+  "output_tokens": 608,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeMG6bNT4A5eXNoqk2W",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2811,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results: label legible and shows 790.990121A1, matching recalled 790.990121*. Serial VF12293019 is within VF122xxxxx\u2013VF334xxxxx. Purchase at Sears on 2009-01-05, inside the window 2001-06-01 to 2009-08-31, and Sears is listed. Receipt is present. No destruction photo required (remedy is repair/replacement, T5). No duplicates (T6). No flag, deny, or needs_info triggers apply, so approve."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01Uuq9zHoiQVYwh5wb21P16C",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 790.990121A1, which matches the recalled model 790.990121*.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The typed serial VF12293019 falls within the recalled range VF122xxxxx - VF334xxxxx.",
+      "cites": [
+       "T3",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "The purchase was at Sears, a listed retailer, on 2009-01-05, which is inside the sale window 2001-06-01 to 2009-08-31, and a receipt is present.",
+      "cites": [
+       "T4",
+       "R:sold_at",
+       "R:sold_window",
+       "R:receipt"
+      ]
+     },
+     {
+      "text": "No destruction photo is required for this repair/replacement remedy.",
+      "cites": [
+       "T5",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial number, or payout account with this one.",
+      "cites": [
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.93
+   }
+  }
+ ]
+}

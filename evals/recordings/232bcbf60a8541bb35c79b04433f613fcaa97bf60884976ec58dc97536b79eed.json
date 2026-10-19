@@ -1,0 +1,76 @@
+{
+ "text": "Checking the results against the policy:\n\n- Duplicates: T6 found no matches, so no flag.\n- Model: T1 is legible and shows LXT-CL-1.0, a recalled model (T2 match).\n- Date code: 0722 is in range (T3).\n- Serial: the program has no serial rule, so it is not a basis for denial.\n- Purchase: Salon Centric is on the list and the date 2023-12-26 is inside the window (T4). No receipt is required per T4, though one was attached.\n- Destruction: T5 shows the cord cut, consistent with cutting off the plug. Confidence is 0.7, but it reports the photo complies, and it is a distinct photo from the label.\n- Remedy: replacement, no refund requested, so the threshold does not apply.\n\nEverything passes, so the claim is approved.",
+ "usage": {
+  "input_tokens": 2907,
+  "output_tokens": 756,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB35NqdxCvog1NZeA1Xp",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3963,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Duplicates: T6 found no matches, so no flag.\n- Model: T1 is legible and shows LXT-CL-1.0, a recalled model (T2 match).\n- Date code: 0722 is in range (T3).\n- Serial: the program has no serial rule, so it is not a basis for denial.\n- Purchase: Salon Centric is on the list and the date 2023-12-26 is inside the window (T4). No receipt is required per T4, though one was attached.\n- Destruction: T5 shows the cord cut, consistent with cutting off the plug. Confidence is 0.7, but it reports the photo complies, and it is a distinct photo from the label.\n- Remedy: replacement, no refund requested, so the threshold does not apply.\n\nEverything passes, so the claim is approved."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_0171CoxmZfPyAPxNf6XeqmoM",
+   "name": "decide",
+   "input": {
+    "outcome": "approve",
+    "reasons": [
+     {
+      "text": "No duplicate claims share a photo, address, email, serial number, or payout account.",
+      "cites": [
+       "T6"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model LXT-CL-1.0, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Date code 0722 falls within the recalled range 0722 to 1223.",
+      "cites": [
+       "R:date_codes",
+       "T3"
+      ]
+     },
+     {
+      "text": "Retailer Salon Centric is on the sold-at list and the purchase date 2023-12-26 is inside the sale window.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T4"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the device with the cord cut, consistent with the required cut-off-the-plug destruction, and it is distinct from the label photo.",
+      "cites": [
+       "R:destruction",
+       "T5"
+      ]
+     },
+     {
+      "text": "The remedy is replacement with no refund requested, so the refund value threshold does not apply.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

@@ -1,0 +1,10 @@
+{
+ "claim_id": "b9412cf7-9cd8-5bdb-8572-7f26fffbb45a",
+ "spec_id": "S39",
+ "program": "25206",
+ "category": "expect_flag",
+ "expected_outcome": "flag",
+ "rationale": "S40 gives the same address under another name (1880 Wrenfield Lane written as Ln, same city, state, and ZIP), and duplicate_address flags both claims even though S39 alone is clean under notice 25206.",
+ "violations": [],
+ "subtypes": {}
+}

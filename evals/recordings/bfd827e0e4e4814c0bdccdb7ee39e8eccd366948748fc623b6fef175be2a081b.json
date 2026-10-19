@@ -1,0 +1,68 @@
+{
+ "text": "Checking the policy in order:\n\n- Flag: check_duplicates (T5) found no hits. No flag.\n- Model: label photo unreadable (T1 legible false, no model text). Typed model \"96775\" matches recalled list (T2, R:models). With no usable label reading, the typed model decides: recalled, so the model is confirmed.\n- Serial/date code: the program has no serial or date code rules for this recall, so these don't apply.\n- Purchase: ALDI is listed, date 2017-04-17 is inside the window, no receipt required (T3, R:sold_at, R:sold_window).\n- Destruction: required (R:destruction). T4 says the photo does not show the cord cut; it shows an intact cord with no visible cut (confidence 0.8). That is a photo that does not show the instructed destruction, so needs_info.\n- Refund $40 is under the $100 threshold, so no person review is triggered for value.\n\nDestruction photo fails the rule, so the outcome is needs_info, asking for a new destruction photo showing the unplugged cord cut. The label photo also needs to be clearer, since it was unreadable.",
+ "usage": {
+  "input_tokens": 2822,
+  "output_tokens": 897,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB38F2RazHei91BryRCd",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4198,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the policy in order:\n\n- Flag: check_duplicates (T5) found no hits. No flag.\n- Model: label photo unreadable (T1 legible false, no model text). Typed model \"96775\" matches recalled list (T2, R:models). With no usable label reading, the typed model decides: recalled, so the model is confirmed.\n- Serial/date code: the program has no serial or date code rules for this recall, so these don't apply.\n- Purchase: ALDI is listed, date 2017-04-17 is inside the window, no receipt required (T3, R:sold_at, R:sold_window).\n- Destruction: required (R:destruction). T4 says the photo does not show the cord cut; it shows an intact cord with no visible cut (confidence 0.8). That is a photo that does not show the instructed destruction, so needs_info.\n- Refund $40 is under the $100 threshold, so no person review is triggered for value.\n\nDestruction photo fails the rule, so the outcome is needs_info, asking for a new destruction photo showing the unplugged cord cut. The label photo also needs to be clearer, since it was unreadable."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01WYCai4Ut3MTVFnibtTimhT",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The model is confirmed as recalled: the typed model 96775 is on the recalled list, and the label photo could not be read, so the typed model decides.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase is eligible: ALDI is a listed retailer, the date 2017-04-17 falls inside the 2016-2019 sale window, and no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not flagged.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The destruction photo does not show the required destruction. It shows an intact power cord with no visible cut, so it does not meet the requirement to show the unplugged cord cut.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "The refund of $40.00 is under the $100 review threshold, so value does not require person review.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send two things: (1) a new photo of the unplugged power cord with the cord visibly cut, as the recall instructs; and (2) a clearer photo of the permanent model label on the bottom of the cooker, so the model number can be read.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

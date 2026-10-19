@@ -1,0 +1,12 @@
+{
+ "claim_id": "1d1c72af-d526-5611-89ee-f7c68bdd8221",
+ "program": "25206",
+ "category": "label_confirms_missing_typed_model",
+ "expected_outcome": "approve",
+ "violations": [
+  "label_confirms_missing_typed_model"
+ ],
+ "label_model_printed": "AD10025GR",
+ "label_unreadable": false,
+ "subtypes": {}
+}

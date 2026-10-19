@@ -1,0 +1,10 @@
+{
+ "claim_id": "af40e444-ee8c-5312-9a21-b041a4abd776",
+ "spec_id": "S15",
+ "program": "26244",
+ "category": "expect_deny",
+ "expected_outcome": "deny",
+ "rationale": "The serial BM2411A05582, typed and on the legible label, does not start with 'BN' as notice 26244 requires, so serial_out_of_range denies even though the model, date code, seller, and purchase date all pass.",
+ "violations": [],
+ "subtypes": {}
+}

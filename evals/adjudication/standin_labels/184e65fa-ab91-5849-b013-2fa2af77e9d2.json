@@ -1,0 +1,10 @@
+{
+ "claim_id": "184e65fa-ab91-5849-b013-2fa2af77e9d2",
+ "spec_id": "S17",
+ "program": "26244",
+ "category": "expect_needs_info",
+ "expected_outcome": "needs_info",
+ "rationale": "The label photo that carries the model, serial, and date code notice 26244 relies on is unreadable, so photo_rules.label_unreadable gives needs_info even though the typed values are all in range.",
+ "violations": [],
+ "subtypes": {}
+}

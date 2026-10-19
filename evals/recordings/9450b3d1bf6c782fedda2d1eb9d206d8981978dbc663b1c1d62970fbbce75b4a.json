@@ -1,0 +1,66 @@
+{
+ "text": "Applying the policy in order: flag takes precedence.\n\nT6 reports a same_serial duplicate with another claim (e61722a8-...). Under the policy, any shared serial number triggers flag, which comes before deny or needs_info. The other checks (model match T2, legible label T1, date code in range T3, purchase before the window T4) would otherwise lead to a deny on the purchase date, since 2016-04-22 is before the 2017-01-01 sale window. The flag rule still controls the outcome, so the claim goes to a person with the matching claim.\n\nThe destruction photo (T5) also does not clearly show the instructed destruction, which would have supported needs_info. It does not change the outcome, but it is worth noting for the reviewer.",
+ "usage": {
+  "input_tokens": 2981,
+  "output_tokens": 696,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeHihshTjcr3SLHwgBs",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3888,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy in order: flag takes precedence.\n\nT6 reports a same_serial duplicate with another claim (e61722a8-...). Under the policy, any shared serial number triggers flag, which comes before deny or needs_info. The other checks (model match T2, legible label T1, date code in range T3, purchase before the window T4) would otherwise lead to a deny on the purchase date, since 2016-04-22 is before the 2017-01-01 sale window. The flag rule still controls the outcome, so the claim goes to a person with the matching claim.\n\nThe destruction photo (T5) also does not clearly show the instructed destruction, which would have supported needs_info. It does not change the outcome, but it is worth noting for the reviewer."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01A4kjDgocztAYTuxZK3ZZAb",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The claim shares a serial number with another claim (e61722a8-2842-5ea3-ad00-f1e0f9646b72), so it must be sent to a person for duplicate review together with the matching claim.",
+      "cites": [
+       "T6",
+       "R:policy",
+       "faq#2"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows the recalled model B0726Y, and the date code 8/21 is in range, so the model and date code are confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "T3",
+       "R:models",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "The purchase was dated 2016-04-22, which is before the 2017-01-01 sale window, so on its own it would be a denial. The retailer Amazon is listed.",
+      "cites": [
+       "T4",
+       "R:sold_window",
+       "R:sold_at"
+      ]
+     },
+     {
+      "text": "The destruction photo does not clearly show the helmet with its straps cut off, which would also require a new photo if the claim proceeds.",
+      "cites": [
+       "T5",
+       "R:destruction"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

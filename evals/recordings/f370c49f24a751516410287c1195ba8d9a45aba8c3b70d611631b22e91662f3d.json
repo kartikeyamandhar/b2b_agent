@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and shows model 790.990141A1, which matches the recalled 790.990141* family. The serial is in range, the purchase is at Sears inside the window, and there are no duplicates. The receipt is missing, and R:receipt requires one, so I'll check the model against the recall list before deciding.",
+ "usage": {
+  "input_tokens": 3486,
+  "output_tokens": 152,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3prP2fTi5U6bvM424z",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1281,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows model 790.990141A1, which matches the recalled 790.990141* family. The serial is in range, the purchase is at Sears inside the window, and there are no duplicates. The receipt is missing, and R:receipt requires one, so I'll check the model against the recall list before deciding."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01QaoaUHbyKF5yRmuND61PLo",
+   "name": "check_model",
+   "input": {
+    "model_text": "790.990141A1"
+   }
+  }
+ ]
+}

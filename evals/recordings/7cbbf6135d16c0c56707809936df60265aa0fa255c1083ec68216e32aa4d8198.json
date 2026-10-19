@@ -1,0 +1,58 @@
+{
+ "text": "The legible label shows model A17B3, which is not among the recalled models (A17B0, A17A0, A17A1, A17A2). Under the policy, a legible label showing a non-recalled model is a denial. The purchase and duplicate checks are clean, but they don't change the model result.",
+ "usage": {
+  "input_tokens": 3478,
+  "output_tokens": 453,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3m2GFJfft1DG4mUT7r",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2499,
+ "content": [
+  {
+   "type": "text",
+   "text": "The legible label shows model A17B3, which is not among the recalled models (A17B0, A17A0, A17A1, A17A2). Under the policy, a legible label showing a non-recalled model is a denial. The purchase and duplicate checks are clean, but they don't change the model result."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_016CyaFqztHQijyJmzzJgedz",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model A17B3, which is not one of the recalled models (A17B0, A17A0, A17A1, A17A2).",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "Because the legible label shows a non-recalled model, the typed model cannot override it, so the claim is denied.",
+      "cites": [
+       "R:policy",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase at Best Buy on 2022-10-27 falls before the sale window (2023-05-01 to 2023-09-30), which independently is a denial ground, and no duplicate claims were found.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,10 @@
+{
+ "claim_id": "453c4ec8-a9a6-5e9c-98a9-44e1f65fe3ee",
+ "spec_id": "S18",
+ "program": "26244",
+ "category": "expect_needs_info",
+ "expected_outcome": "needs_info",
+ "rationale": "Walmart.com is not among the four sellers notice 26244 names (Amazon.com, Shopify.com, TEMU.com, TikTok.com), so retailer_not_listed gives needs_info even though the unit itself is in range.",
+ "violations": [],
+ "subtypes": {}
+}

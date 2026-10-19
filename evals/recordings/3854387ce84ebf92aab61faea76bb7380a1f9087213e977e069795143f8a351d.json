@@ -1,0 +1,58 @@
+{
+ "text": "Applying the policy: flag takes precedence. T5 finds the label photo shared with another claim (d8fab270...), so the claim must be flagged for person review regardless of the model mismatch.\n\nChecking the other rules for completeness: the legible label reads P1441, which is not a recalled model (T1, T2), so it would otherwise be a deny. But the flag rule comes first in the precedence order.",
+ "usage": {
+  "input_tokens": 2800,
+  "output_tokens": 529,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeLHQh79HJ5qBAwPqyJ",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 3573,
+ "content": [
+  {
+   "type": "text",
+   "text": "Applying the policy: flag takes precedence. T5 finds the label photo shared with another claim (d8fab270...), so the claim must be flagged for person review regardless of the model mismatch.\n\nChecking the other rules for completeness: the legible label reads P1441, which is not a recalled model (T1, T2), so it would otherwise be a deny. But the flag rule comes first in the precedence order."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01578ppTkNa25mwvykDVjaND",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "The label photo is identical (same sha256) to the photo on another claim, so this claim is flagged as a possible duplicate and must go to a person for review.",
+      "cites": [
+       "R:policy",
+       "T5",
+       "T6"
+      ]
+     },
+     {
+      "text": "The legible label photo reads model P1441, which is not on the recalled list (P1410, P1410-P, P1411, P1411-P), so the unit does not appear to be part of this recall; a reviewer should weigh this alongside the duplicate finding.",
+      "cites": [
+       "R:models",
+       "R:policy",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "Purchase at www.walmart.com on 2016-10-26 is inside the sale window and from a listed retailer, and no receipt is required, so purchase is not the issue.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,70 @@
+{
+ "text": "The label confirms a recalled model, the purchase is at a listed retailer within the sale window, and there are no duplicates. The destruction photo shows an intact cord, not the cut the recall requires, so per the policy this needs more information from the claimant. The serial check was skipped and the program's serial rule does not apply here, so the serial does not affect the outcome.",
+ "usage": {
+  "input_tokens": 4544,
+  "output_tokens": 663,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4EJrdZ3WVBvS73QdFk",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3333,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label confirms a recalled model, the purchase is at a listed retailer within the sale window, and there are no duplicates. The destruction photo shows an intact cord, not the cut the recall requires, so per the policy this needs more information from the claimant. The serial check was skipped and the program's serial rule does not apply here, so the serial does not affect the outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01GZStqKuU7SA5FCZU3hsA1D",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 96775, which is a recalled model, and the typed model matches.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase was at ALDI, a listed retailer, dated 2019-05-02, which is inside the 2016-2019 sale window. No receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No other claim shares a photo, address, email, serial, or payout account with this one.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The destruction photo shows the cooker with an intact, uncut power cord. The recall requires the unplugged power cord to be cut, so the destruction photo does not show the required destruction.",
+      "cites": [
+       "R:destruction",
+       "T4",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "Per the claim policy, a destruction photo that does not show the instructed destruction is asked for again, not denied.",
+      "cites": [
+       "R:policy",
+       "T7"
+      ]
+     }
+    ],
+    "question_for_claimant": "Thank you for your claim. The photo you sent does not show the power cord cut. Please send a new photo of your recalled pressure cooker with the unplugged power cord cut through, and make sure the model number and date code are visible. Once we have that photo, we can finish reviewing your refund.",
+    "confidence": 0.85
+   }
+  }
+ ]
+}

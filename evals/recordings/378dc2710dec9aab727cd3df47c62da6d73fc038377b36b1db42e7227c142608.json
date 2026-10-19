@@ -1,0 +1,70 @@
+{
+ "text": "The policy says a purchase from a store not on the list is still eligible, but proof of ownership is requested. The receipt is attached, and the purchase date is inside the window. The retailer is not on the list, so the claim needs the claimant's confirmation of proof of ownership, which the receipt photo supplies. Per the policy, the retailer-not-listed case is needs_info, not a denial.",
+ "usage": {
+  "input_tokens": 4469,
+  "output_tokens": 720,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3XhtbBv3Zd1hYxjzhb",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 3350,
+ "content": [
+  {
+   "type": "text",
+   "text": "The policy says a purchase from a store not on the list is still eligible, but proof of ownership is requested. The receipt is attached, and the purchase date is inside the window. The retailer is not on the list, so the claim needs the claimant's confirmation of proof of ownership, which the receipt photo supplies. Per the policy, the retailer-not-listed case is needs_info, not a denial."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01V5gA5MfQRUKQaob9cxEAAf",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model MK04, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T6"
+      ]
+     },
+     {
+      "text": "The serial number BN87406677 starts with BN and is in the recalled range.",
+      "cites": [
+       "R:serials",
+       "T4"
+      ]
+     },
+     {
+      "text": "The date code June 2025 is manufactured prior to July 2025, so it is in the recalled range.",
+      "cites": [
+       "R:date_codes",
+       "T5"
+      ]
+     },
+     {
+      "text": "The purchase date 2025-02-20 is inside the sale window, but the retailer Corner Hardware Co is not on the list of sold-at retailers. Under the FAQ, a purchase from a store not on the list is not denied; the claimant is asked for proof of ownership instead.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2",
+       "T7"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, serial, address, or payout account.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": "Your unit's label matches a recalled model, serial, and date code, and your purchase date falls within the sale window. However, Corner Hardware Co is not one of the retailers in the recall program (Amazon.com, Shopify.com, TEMU.com, or TikTok.com). Please provide proof of ownership, such as your receipt showing the date and retailer, or any other document that shows you own this unit. Then we can continue your claim.",
+    "confidence": 0.8
+   }
+  }
+ ]
+}

@@ -1,0 +1,29 @@
+{
+ "text": "The label is legible and shows A17B0, a recalled model. The purchase is from a listed retailer within the window, and there are no duplicates. The serial check was skipped, so I'll verify the serial against the recall rules, since the program includes a serial rule and the claimant typed one.",
+ "usage": {
+  "input_tokens": 3152,
+  "output_tokens": 141,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3kgc3oH2Eogw7omrus",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 1031,
+ "content": [
+  {
+   "type": "text",
+   "text": "The label is legible and shows A17B0, a recalled model. The purchase is from a listed retailer within the window, and there are no duplicates. The serial check was skipped, so I'll verify the serial against the recall rules, since the program includes a serial rule and the claimant typed one."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01VYuexESYLWas3AKFvGmLAc",
+   "name": "check_model",
+   "input": {
+    "model_text": "A17B0"
+   }
+  }
+ ]
+}

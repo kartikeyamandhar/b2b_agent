@@ -1,0 +1,75 @@
+{
+ "text": "The call failed validation because I left out two required fields. Retrying with `question_for_claimant` and `confidence` included.",
+ "usage": {
+  "input_tokens": 3744,
+  "output_tokens": 611,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeVcG1pe595cvyPuwYS",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2515,
+ "content": [
+  {
+   "type": "text",
+   "text": "The call failed validation because I left out two required fields. Retrying with `question_for_claimant` and `confidence` included."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01RhVLzZzFJASBGDvXXSUgnj",
+   "name": "decide",
+   "input": {
+    "outcome": "needs_info",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model 2G520, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T2"
+      ]
+     },
+     {
+      "text": "The purchase date of 2022-10-25 falls inside the sale window, so the purchase is not too early or too late.",
+      "cites": [
+       "R:sold_window",
+       "T3"
+      ]
+     },
+     {
+      "text": "The retailer Corner Hardware Co is not on the list of sales channels. Under program policy, owners who bought from an unlisted store are still eligible but must provide proof of ownership.",
+      "cites": [
+       "R:sold_at",
+       "T3",
+       "T6"
+      ]
+     },
+     {
+      "text": "The remedy requires destruction, and no destruction photo was submitted. A missing destruction photo requires a new request.",
+      "cites": [
+       "R:destruction",
+       "T4"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not sent for review.",
+      "cites": [
+       "T5"
+      ]
+     },
+     {
+      "text": "The refund of $41.40 is under the $100 review threshold.",
+      "cites": [
+       "R:value_threshold"
+      ]
+     }
+    ],
+    "question_for_claimant": "Please send (1) a photo of the power bank showing the word \"Recalled\" written on it in permanent marker, and (2) proof of ownership for your purchase from Corner Hardware Co, such as a receipt, order confirmation, or bank/card statement showing the 2022-10-25 purchase.",
+    "confidence": 0.9
+   }
+  }
+ ]
+}

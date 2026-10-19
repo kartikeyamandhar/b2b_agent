@@ -1,0 +1,62 @@
+{
+ "text": "The duplicate check found another claim sharing a serial number, which triggers a flag and takes precedence over the other outcomes. The label serial (SN39504716) also differs from the typed serial (SN14753743), but the flag already decides the outcome.",
+ "usage": {
+  "input_tokens": 3353,
+  "output_tokens": 474,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3HVbGAGVwo8Qmw6QEB",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2443,
+ "content": [
+  {
+   "type": "text",
+   "text": "The duplicate check found another claim sharing a serial number, which triggers a flag and takes precedence over the other outcomes. The label serial (SN39504716) also differs from the typed serial (SN14753743), but the flag already decides the outcome."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01VZ7o52BmUtst3Au1zVWYGQ",
+   "name": "decide",
+   "input": {
+    "outcome": "flag",
+    "reasons": [
+     {
+      "text": "Another claim in the program shares a serial number with this claim, which requires flagging for review under the claim policy.",
+      "cites": [
+       "R:policy",
+       "T3"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows recalled model P1410, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1"
+      ]
+     },
+     {
+      "text": "The retailer www.amazon.com is on the sold-at list and the purchase date of 2018-11-21 falls inside the sale window; no receipt is required.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "The serial on the label (SN39504716) does not match the typed serial (SN14753743); the serial check was skipped, so the discrepancy should be reviewed along with the duplicate.",
+      "cites": [
+       "T1",
+       "T4"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.85
+   }
+  }
+ ]
+}

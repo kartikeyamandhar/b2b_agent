@@ -1,0 +1,64 @@
+{
+ "text": "Checking the results against the policy:\n\n- Duplicates (T5): no hits, so no flag.\n- Model: label photo is legible and shows AD10004LS, a recalled model (T1, T2, R:models). Confirmed.\n- Serial/date code: the program has no serial or date code rules applied here, so they don't block.\n- Purchase: Amazon.com is listed (T3, R:sold_at), and 2023-03-27 is before the sale window opening 2023-04-01 (R:sold_window, T3 \"before\"). Per policy, a purchase before the window is deny.\n- Destruction photo: not reached as a deciding factor, since the purchase denial already controls; T4 was also inconclusive (rear not visible, confidence 0.5).\n\nDenial is the outcome. Flag doesn't apply (no duplicates), and deny takes precedence over needs_info and approve.",
+ "usage": {
+  "input_tokens": 2888,
+  "output_tokens": 666,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3Bjz2nzKFYkHHjvrms",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 4124,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results against the policy:\n\n- Duplicates (T5): no hits, so no flag.\n- Model: label photo is legible and shows AD10004LS, a recalled model (T1, T2, R:models). Confirmed.\n- Serial/date code: the program has no serial or date code rules applied here, so they don't block.\n- Purchase: Amazon.com is listed (T3, R:sold_at), and 2023-03-27 is before the sale window opening 2023-04-01 (R:sold_window, T3 \"before\"). Per policy, a purchase before the window is deny.\n- Destruction photo: not reached as a deciding factor, since the purchase denial already controls; T4 was also inconclusive (rear not visible, confidence 0.5).\n\nDenial is the outcome. Flag doesn't apply (no duplicates), and deny takes precedence over needs_info and approve."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_011QPge8MsV1oyFW8H3fzkKc",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model AD10004LS, which is on the recalled list, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The purchase date of 2023-03-27 is before the sale window, which opens 2023-04-01. Purchases before the window are not eligible.",
+      "cites": [
+       "T3",
+       "R:sold_window",
+       "R:policy",
+       "R:sold_at"
+      ]
+     },
+     {
+      "text": "Amazon.com is a listed retailer, but the date falls outside the window, so the claim is denied on purchase timing.",
+      "cites": [
+       "T3",
+       "R:sold_at",
+       "T6"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the claim is not flagged for review.",
+      "cites": [
+       "T5"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

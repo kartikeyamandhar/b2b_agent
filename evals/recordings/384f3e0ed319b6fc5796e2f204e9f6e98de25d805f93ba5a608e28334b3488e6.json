@@ -1,0 +1,64 @@
+{
+ "text": "The model is confirmed, the purchase is valid, and there are no duplicates. However, the label's date code 06/22 NH is outside the recalled codes (07/22 NH or 08/22 NH), and the policy says a date code outside them is not part of the recall.",
+ "usage": {
+  "input_tokens": 4412,
+  "output_tokens": 500,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB4D5ujaB1tHc7qqSaPB",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2676,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model is confirmed, the purchase is valid, and there are no duplicates. However, the label's date code 06/22 NH is outside the recalled codes (07/22 NH or 08/22 NH), and the policy says a date code outside them is not part of the recall."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_01C3SmJfXV1Q787yZAZiTM75",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The label photo is legible and shows model SE4570, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "R:models",
+       "T1",
+       "T5"
+      ]
+     },
+     {
+      "text": "The label's date code is 06/22 NH, which is not one of the recalled date codes (07/22 NH or 08/22 NH). The policy states a date code outside those is not part of the recall, so the unit is not covered.",
+      "cites": [
+       "R:date_codes",
+       "T1",
+       "T4",
+       "T6"
+      ]
+     },
+     {
+      "text": "The purchase is valid: retailer Grainger is on the list and the 2022-11-03 purchase date is inside the sale window. This does not outweigh the date code mismatch.",
+      "cites": [
+       "R:sold_at",
+       "R:sold_window",
+       "T2"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found, so the flag rule does not apply.",
+      "cites": [
+       "T3"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

@@ -1,0 +1,63 @@
+{
+ "text": "Checking the results: model PA-10 confirmed from legible label (T1, T2). Date code 2126 in range (T3). Purchase date 2020-06-15 is before the sale window 2021-06-01 (T4 says \"before\"), so under the policy, bought before the sale window is deny. The retailer is listed, but the date is outside the window. No duplicates (T6). No destruction photo required (T5). Deny applies.",
+ "usage": {
+  "input_tokens": 2850,
+  "output_tokens": 516,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgAeK5puUF5JdXzRqZQo1",
+ "purpose": "adjudicate_single_pass",
+ "max_tokens": 900,
+ "latency_ms": 2792,
+ "content": [
+  {
+   "type": "text",
+   "text": "Checking the results: model PA-10 confirmed from legible label (T1, T2). Date code 2126 in range (T3). Purchase date 2020-06-15 is before the sale window 2021-06-01 (T4 says \"before\"), so under the policy, bought before the sale window is deny. The retailer is listed, but the date is outside the window. No duplicates (T6). No destruction photo required (T5). Deny applies."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_016QfXUfbY1Z14ez42FiDRt5",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The purchase date of 2020-06-15 is before the recall's sale window (2021-06-01 to 2023-11-30), so the unit is not eligible for this recall.",
+      "cites": [
+       "R:sold_window",
+       "T4",
+       "T7",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The label photo is legible and shows model PA-10, which is a recalled model, so the model itself is confirmed.",
+      "cites": [
+       "T1",
+       "T2",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The date code 2126 is within the recalled range of 2126 to 2319.",
+      "cites": [
+       "T3",
+       "R:date_codes"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found for this photo, address, serial number, or payout account, so the claim is not flagged.",
+      "cites": [
+       "T6"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}

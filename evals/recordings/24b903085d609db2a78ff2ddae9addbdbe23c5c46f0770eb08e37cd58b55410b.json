@@ -1,0 +1,70 @@
+{
+ "text": "The model matches a recalled model, but the date code 2025 is outside the recalled model years (2017\u20132024), and the retailer \"Corner Hardware Co\" is not a Yamaha dealer. Under the policy, an out-of-range date code results in denial.",
+ "usage": {
+  "input_tokens": 3508,
+  "output_tokens": 505,
+  "cache_read_input_tokens": 0,
+  "cache_creation_input_tokens": 0
+ },
+ "stop_reason": "tool_use",
+ "model_id": "claude-haiku-5-5",
+ "request_id": "req_011CgB3zE9UiQ2UDeLW11fcz",
+ "purpose": "adjudicate_agent",
+ "max_tokens": 900,
+ "latency_ms": 2201,
+ "content": [
+  {
+   "type": "text",
+   "text": "The model matches a recalled model, but the date code 2025 is outside the recalled model years (2017\u20132024), and the retailer \"Corner Hardware Co\" is not a Yamaha dealer. Under the policy, an out-of-range date code results in denial."
+  },
+  {
+   "type": "tool_use",
+   "id": "toolu_013i945MmFDc4GDtSsPnmeoY",
+   "name": "decide",
+   "input": {
+    "outcome": "deny",
+    "reasons": [
+     {
+      "text": "The legible label photo shows model DR2A, which is a recalled model, so the model is confirmed.",
+      "cites": [
+       "T1",
+       "T6",
+       "R:models"
+      ]
+     },
+     {
+      "text": "The date code 2025 is outside the recalled model years 2017-2024, so the unit is not covered by the recall.",
+      "cites": [
+       "T5",
+       "R:date_codes",
+       "R:policy"
+      ]
+     },
+     {
+      "text": "The serial J0E64468529 is within a recalled serial range, but this does not override the out-of-range date code.",
+      "cites": [
+       "T4",
+       "R:serials"
+      ]
+     },
+     {
+      "text": "No duplicate claims were found.",
+      "cites": [
+       "T3"
+      ]
+     },
+     {
+      "text": "The claimed retailer, Corner Hardware Co, is not a Yamaha dealer, which is the required point of sale; the purchase date falls inside the sale window.",
+      "cites": [
+       "T2",
+       "R:sold_at",
+       "R:sold_window"
+      ]
+     }
+    ],
+    "question_for_claimant": null,
+    "confidence": 0.9
+   }
+  }
+ ]
+}
