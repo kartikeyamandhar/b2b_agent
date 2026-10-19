@@ -20,6 +20,8 @@ You build the firm console and the claim portal in apps/web (02-ui.md). The back
 - **Photos.** `photos[].url` is an API path in every environment (send the same auth headers). The API reads the bytes from storage after checking the firm (local disk in development, a private Supabase bucket in production), so no storage URL ever reaches the browser; treat the path as opaque.
 - **Money** is integer cents; costs are decimal strings in USD. Payout status can be `transferring` or `held` (CHANGES.md item 5).
 
+- **A working reference, not your app.** With the backend running in development, http://127.0.0.1:8000/dev/console is a single-file test console (apps/api/src/recallops/api/static/dev_console.html) that calls every route in the contract with the dev headers, including the portal's photo upload. Read its JS to see a request and response for any screen you build. It is served only with the dev auth provider, it is not in the contract, and it does not replace apps/web.
+
 ## Run the backend locally
 
 Prerequisites: Docker, uv 0.11.21, Python 3.13. A fresh machine pulls `pgvector/pgvector:0.8.6-pg16` and `neo4j:2026.09.0-community` once.

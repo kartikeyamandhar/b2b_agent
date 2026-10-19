@@ -1,0 +1,1750 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RecallOps test console</title>
+<link rel="icon" href="data:,">
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f4f5f7; --surface: #ffffff; --surface-2: #f0f2f5; --surface-3: #e4e8ed;
+  --border: #dde1e6; --border-strong: #c3c9d1;
+  --text: #1a1e23; --muted: #5b6470;
+  --accent: #2a78d6; --accent-hover: #2266b8; --accent-weak: #e6eff9; --link: #1f66bd;
+  --green-fg: #1d7a3e; --green-bg: #e2f3e7;
+  --red-fg: #b3261e; --red-bg: #fce8e6;
+  --amber-fg: #8a5800; --amber-bg: #fcefd2;
+  --violet-fg: #6a3db5; --violet-bg: #efe6fb;
+  --blue-fg: #1f5ea8; --blue-bg: #e3edfa;
+  --gray-fg: #59616c; --gray-bg: #e9ecef;
+  --k-photo: #e8590c; --k-address: #0b8a8a; --k-serial: #7048e8; --k-payout: #c2255c; --k-mailing: #5c940d;
+  --shadow: 0 1px 2px rgba(16, 24, 40, .05);
+  --shadow-lg: 0 10px 30px rgba(16, 24, 40, .20);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --bg: #111317; --surface: #191c21; --surface-2: #21252b; --surface-3: #2c3138;
+    --border: #2e333a; --border-strong: #434a54;
+    --text: #e5e8ec; --muted: #9ba4af;
+    --accent: #2a78d6; --accent-hover: #3b88e6; --accent-weak: #18293f; --link: #7fb2ef;
+    --green-fg: #6fcf8f; --green-bg: #16301f;
+    --red-fg: #f2958c; --red-bg: #3a1b19;
+    --amber-fg: #edc16a; --amber-bg: #352912;
+    --violet-fg: #c3a6f4; --violet-bg: #2a2140;
+    --blue-fg: #8db9ef; --blue-bg: #172b45;
+    --gray-fg: #b1b8c1; --gray-bg: #2a2e35;
+    --k-photo: #ff8a3d; --k-address: #2bb8b8; --k-serial: #a08af7; --k-payout: #f06595; --k-mailing: #94d82d;
+    --shadow: none;
+    --shadow-lg: 0 10px 30px rgba(0, 0, 0, .55);
+  }
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+code, pre, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size: 12.5px; }
+code { background: var(--surface-2); border: 1px solid var(--border); border-radius: 4px; padding: 0 4px; overflow-wrap: anywhere; }
+pre { background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; padding: 10px; overflow: auto; max-height: 420px; margin: 6px 0; }
+pre.wrap { white-space: pre-wrap; overflow-wrap: anywhere; }
+pre.inline { margin: 0; padding: 4px 8px; max-height: 160px; }
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+h1 { font-size: 20px; line-height: 1.3; margin: 0; font-weight: 650; }
+h2 { font-size: 15px; margin: 0 0 10px; font-weight: 650; }
+h3 { font-size: 12px; margin: 14px 0 6px; font-weight: 650; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+p { margin: 6px 0; }
+ul, ol { margin: 6px 0; padding-left: 22px; }
+.muted { color: var(--muted); }
+.small { font-size: 12.5px; }
+.nowrap { white-space: nowrap; }
+.lead { font-size: 16px; font-weight: 560; margin: 2px 0 14px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* top bar */
+.topbar { position: sticky; top: 0; z-index: 30; display: flex; align-items: center; gap: 10px 18px; flex-wrap: wrap; padding: 10px 16px; background: var(--surface); border-bottom: 1px solid var(--border); }
+.brand { display: flex; align-items: center; gap: 8px; font-weight: 650; font-size: 15px; white-space: nowrap; }
+.logo { width: 24px; height: 24px; border-radius: 6px; background: var(--accent); color: #fff; display: inline-grid; place-items: center; font-size: 13px; font-weight: 700; }
+.devtag { font-size: 11px; font-weight: 600; color: var(--amber-fg); background: var(--amber-bg); border-radius: 4px; padding: 1px 6px; }
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; flex: 1; min-width: 0; }
+.ctl { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--muted); min-width: 0; }
+.ctl.grow { flex: 1; min-width: 220px; }
+.ctl.grow select { width: 100%; min-width: 0; }
+.ctl input.bad { border-color: var(--red-fg); }
+.pill { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--border-strong); background: var(--surface-2); color: var(--text); border-radius: 999px; padding: 4px 12px; font: inherit; font-size: 12.5px; cursor: pointer; white-space: nowrap; }
+.pill-sep { width: 1px; height: 14px; background: var(--border-strong); margin: 0 3px; }
+
+/* shell */
+.shell { display: grid; grid-template-columns: 184px minmax(0, 1fr); align-items: start; }
+.sidenav { position: sticky; top: var(--top-h, 57px); height: calc(100vh - var(--top-h, 57px)); overflow-y: auto; padding: 14px 10px; border-right: 1px solid var(--border); background: var(--surface); }
+.sidenav a { display: block; padding: 7px 10px; border-radius: 7px; color: var(--text); margin-bottom: 2px; }
+.sidenav a:hover { background: var(--surface-2); text-decoration: none; }
+.sidenav a.active { background: var(--accent-weak); color: var(--link); font-weight: 600; }
+.sidenav .navnote { margin: 16px 10px 0; font-size: 12px; color: var(--muted); }
+main { padding: 20px 24px 90px; min-width: 0; }
+#view { max-width: 1320px; }
+
+/* cards and layout */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 16px; box-shadow: var(--shadow); min-width: 0; }
+.card.flush { padding: 0; overflow: hidden; }
+.page-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+.spacer { flex: 1; }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-bottom: 16px; }
+.grid2 > .card { margin-bottom: 0; }
+.claim-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; align-items: start; }
+.row { display: flex; align-items: center; gap: 8px; }
+.row.wrap { flex-wrap: wrap; }
+.row.end { align-items: flex-end; }
+.row + .row, form.row + form.row { margin-top: 10px; }
+.grow { flex: 1; }
+.kv { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 14px; margin: 0; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+.card .stat { background: var(--surface-2); }
+.stat-v { font-size: 22px; font-weight: 650; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.stat-l { color: var(--muted); font-size: 12.5px; }
+
+/* tones, badges, tags */
+.t-green { --tone-fg: var(--green-fg); --tone-bg: var(--green-bg); }
+.t-red { --tone-fg: var(--red-fg); --tone-bg: var(--red-bg); }
+.t-amber { --tone-fg: var(--amber-fg); --tone-bg: var(--amber-bg); }
+.t-violet { --tone-fg: var(--violet-fg); --tone-bg: var(--violet-bg); }
+.t-blue { --tone-fg: var(--blue-fg); --tone-bg: var(--blue-bg); }
+.t-gray { --tone-fg: var(--gray-fg); --tone-bg: var(--gray-bg); }
+.badge { display: inline-flex; align-items: center; gap: 5px; padding: 0 9px 0 7px; border-radius: 999px; font-size: 12px; font-weight: 600; line-height: 20px; white-space: nowrap; color: var(--tone-fg, var(--gray-fg)); background: var(--tone-bg, var(--gray-bg)); border: none; font-family: inherit; vertical-align: middle; }
+.badge::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+button.badge { cursor: pointer; }
+button.badge:hover { filter: brightness(.95); }
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex: none; background: var(--tone-fg, var(--gray-fg)); }
+.tag { display: inline-block; padding: 0 7px; border-radius: 5px; border: 1px solid var(--border-strong); font-size: 12px; color: var(--muted); line-height: 19px; white-space: nowrap; vertical-align: middle; }
+.tag-ok { border-color: var(--green-fg); color: var(--green-fg); }
+.tag-human { border-color: var(--amber-fg); color: var(--amber-fg); }
+.text-green { color: var(--green-fg); }
+.text-red { color: var(--red-fg); }
+.note { border-left: 3px solid var(--tone-fg, var(--border-strong)); background: var(--tone-bg, var(--surface-2)); border-radius: 6px; padding: 8px 12px; margin: 8px 0; }
+.counts { display: flex; flex-wrap: wrap; gap: 4px; }
+
+/* buttons and inputs */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font: inherit; font-size: 13px; font-weight: 550; padding: 6px 12px; border-radius: 7px; border: 1px solid var(--border-strong); background: var(--surface); color: var(--text); cursor: pointer; white-space: nowrap; }
+.btn:hover { background: var(--surface-2); text-decoration: none; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.primary:hover { background: var(--accent-hover); }
+.btn.danger { color: var(--red-fg); border-color: var(--red-fg); }
+.btn.small { padding: 3px 9px; font-size: 12.5px; }
+.btn:disabled { opacity: .55; cursor: progress; }
+.copy { font: inherit; font-size: 11px; padding: 0 6px; margin-left: 4px; border: 1px solid var(--border); border-radius: 4px; background: var(--surface-2); color: var(--muted); cursor: pointer; line-height: 18px; vertical-align: middle; }
+.copy:hover { color: var(--text); }
+input, select, textarea { font: inherit; font-size: 13px; color: var(--text); background: var(--surface); border: 1px solid var(--border-strong); border-radius: 6px; padding: 6px 8px; min-width: 0; }
+input[type=checkbox], input[type=radio] { accent-color: var(--accent); }
+input[type=file] { padding: 4px; max-width: 100%; }
+textarea { width: 100%; resize: vertical; }
+.field { display: flex; flex-direction: column; gap: 4px; font-size: 12.5px; color: var(--muted); min-width: 0; }
+.form-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+.form-actions { grid-column: 1 / -1; display: flex; gap: 8px; align-items: center; justify-content: flex-end; flex-wrap: wrap; }
+.form-actions .note { margin: 0 auto 0 0; }
+fieldset { border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px 8px; margin: 0; }
+legend { font-size: 12.5px; color: var(--muted); padding: 0 4px; }
+fieldset label { display: inline-flex; gap: 6px; margin-right: 14px; align-items: center; }
+fieldset.radios label { display: flex; margin: 4px 0; }
+.stack > * + * { margin-top: 10px; }
+
+/* tables */
+.table-wrap { overflow: auto; }
+.table-wrap.tall { max-height: 68vh; }
+table { border-collapse: separate; border-spacing: 0; width: 100%; font-size: 13px; }
+th { position: sticky; top: 0; z-index: 1; background: var(--surface-2); text-align: left; font-weight: 600; color: var(--muted); font-size: 12px; padding: 8px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+td { padding: 7px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+tbody tr:last-child td { border-bottom: none; }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+tr.rowlink { cursor: pointer; }
+tr.rowlink:hover td, tr.rowlink:focus-visible td { background: var(--accent-weak); }
+tr.rowlink:focus-visible { outline: none; }
+tr.selected td { background: var(--surface-2); }
+.table-foot { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; border-top: 1px solid var(--border); }
+.empty { text-align: center; color: var(--muted); padding: 24px; }
+.title-cell { font-weight: 550; }
+
+/* chips */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--border-strong); background: var(--surface); color: var(--text); font-size: 12.5px; }
+.chip:hover { text-decoration: none; background: var(--surface-2); }
+.chip.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.chip .count { opacity: .7; font-variant-numeric: tabular-nums; }
+.chip.active .dot { box-shadow: 0 0 0 1.5px #fff; }
+
+/* error panel and toast */
+.errors { position: fixed; right: 16px; bottom: 16px; z-index: 50; width: min(440px, calc(100vw - 32px)); display: flex; flex-direction: column; gap: 8px; max-height: calc(100vh - 110px); overflow: auto; }
+.errors:empty { display: none; }
+.err { background: var(--surface); border: 1px solid var(--red-fg); border-left-width: 4px; border-radius: 8px; padding: 10px 12px; box-shadow: var(--shadow-lg); font-size: 13px; }
+.err-head { display: flex; gap: 8px; align-items: baseline; }
+.err-head strong { color: var(--red-fg); }
+.err-req { color: var(--muted); font-size: 12px; overflow-wrap: anywhere; }
+.err .hint { background: var(--surface-2); border-radius: 6px; padding: 6px 8px; }
+.err-all { align-self: flex-end; }
+.toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--text); color: var(--bg); padding: 8px 14px; border-radius: 8px; font-size: 13px; z-index: 60; opacity: 0; pointer-events: none; transition: opacity .15s; }
+.toast.show { opacity: 1; }
+
+/* claim detail and trace */
+.trace { list-style: none; margin: 12px 0 0 6px; padding: 0; border-left: 2px solid var(--border); }
+.step { position: relative; padding: 6px 0 12px 18px; }
+.step::before { content: ""; position: absolute; left: -7px; top: 12px; width: 12px; height: 12px; border-radius: 50%; background: var(--surface); border: 2px solid var(--border-strong); }
+.step.llm::before { border-color: var(--accent); background: var(--accent); }
+.step-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.step-idx { color: var(--muted); min-width: 22px; }
+.step-node { font-weight: 650; }
+.metric { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.thought { margin: 6px 0; padding: 8px 12px; border-left: 3px solid var(--accent); background: var(--accent-weak); border-radius: 0 6px 6px 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.thought-label { font-size: 11px; font-weight: 650; color: var(--link); text-transform: uppercase; letter-spacing: .04em; display: block; }
+details > summary { cursor: pointer; color: var(--muted); font-size: 12.5px; padding: 2px 0; overflow-wrap: anywhere; }
+details > summary code { color: var(--text); }
+.meters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 12px 0; }
+.meter-top { display: flex; justify-content: space-between; gap: 8px; font-size: 12.5px; margin-bottom: 4px; }
+.bar { height: 8px; border-radius: 99px; background: var(--surface-3); overflow: hidden; }
+.fill { display: block; height: 100%; background: var(--accent); }
+.fill-amber { background: var(--amber-fg); }
+.fill-red { background: var(--red-fg); }
+.thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+.thumb { margin: 0; min-width: 0; }
+.thumb-btn { display: block; width: 100%; aspect-ratio: 4 / 3; padding: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--surface-2); cursor: zoom-in; position: relative; }
+.thumb-btn img { width: 100%; height: 100%; object-fit: cover; display: block; position: relative; z-index: 1; }
+.thumb-btn img:not([src]) { visibility: hidden; }
+.thumb-ph { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: 12px; padding: 6px; text-align: center; }
+.thumb figcaption { display: flex; flex-direction: column; font-size: 12px; margin-top: 4px; min-width: 0; }
+.thumb figcaption span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cluster { padding: 8px 0; border-top: 1px solid var(--border); }
+.cluster:first-of-type { border-top: none; padding-top: 0; }
+.cluster-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+.members { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; }
+.kind { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; margin-right: 8px; white-space: nowrap; }
+.swatch { width: 22px; height: 0; border-top: 3px solid var(--sw); flex: none; }
+.swatch.dashed { border-top-style: dashed; }
+.swatch.dotted { border-top-style: dotted; }
+dialog#lightbox { border: none; border-radius: 12px; padding: 12px; background: var(--surface); color: var(--text); max-width: 94vw; max-height: 94vh; box-shadow: var(--shadow-lg); }
+dialog::backdrop { background: rgba(0, 0, 0, .6); }
+#lightboxImg { max-width: 88vw; max-height: 80vh; display: block; margin: 8px auto; }
+.lb-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+
+/* portal */
+.photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.photo-card { border: 1px solid var(--border); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.photo-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.photo-preview { aspect-ratio: 4 / 3; border: 1px dashed var(--border-strong); border-radius: 8px; display: grid; place-items: center; overflow: hidden; background: var(--surface-2); }
+.photo-preview img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.messages { list-style: none; padding: 0; }
+.msg { padding: 6px 10px; border-radius: 8px; margin: 6px 0; background: var(--surface-2); }
+.msg-firm { border-left: 3px solid var(--accent); }
+
+/* fraud */
+.legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 6px 0; }
+.legend-item { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; }
+.ring-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 16px; align-items: start; }
+.ring-card { margin: 0; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 6px 10px 10px; min-width: 0; }
+.ring-card svg { width: 100%; height: auto; display: block; }
+.ring-card .edges line, .ring-card .edges path { stroke-width: 3; fill: none; stroke-linecap: round; }
+.ring-card circle.node { stroke: var(--surface); stroke-width: 2.5; }
+.ring-card a:hover circle.node, .ring-card a:focus-visible circle.node { stroke: var(--text); }
+.ring-card a:focus-visible { outline: none; }
+.ring-card figcaption { font-size: 12.5px; }
+
+/* misc */
+.cmd { display: flex; align-items: center; gap: 6px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; padding: 6px 8px; margin: 6px 0 2px; }
+.cmd code { border: none; background: none; padding: 0; flex: 1; }
+.cmd-note { margin: 0 0 8px; font-size: 12.5px; color: var(--muted); }
+.checklist li { margin: 7px 0; }
+.idchip { white-space: nowrap; }
+.option { border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; margin: 6px 0; }
+.evidence li { margin: 4px 0; }
+
+@media (max-width: 1100px) { .claim-grid { grid-template-columns: minmax(0, 1fr); } .topbar .controls { order: 3; flex-basis: 100%; } .topbar .brand { flex: 1; } }
+@media (max-width: 1000px) { .grid2 { grid-template-columns: minmax(0, 1fr); } .meters { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 760px) {
+  .topbar { position: static; } /* about 170 px tall when wrapped: pinned, it would cover a fifth of a phone screen */
+  .shell { grid-template-columns: minmax(0, 1fr); }
+  .sidenav { position: static; height: auto; display: flex; overflow-x: auto; border-right: none; border-bottom: 1px solid var(--border); padding: 6px 8px; }
+  .sidenav a { white-space: nowrap; margin: 0 2px; }
+  .sidenav .navnote { display: none; }
+  main { padding: 16px; }
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="logo" aria-hidden="true">R</span><span>RecallOps test console</span><span class="devtag">dev only</span></div>
+  <div class="controls">
+    <label class="ctl"><span>Firm</span><select id="firmSel"></select></label>
+    <label class="ctl" id="customWrap" hidden><span>Firm id</span><input id="firmCustom" class="mono" size="36" placeholder="00000000-0000-4000-8000-000000000000" spellcheck="false" autocomplete="off"></label>
+    <label class="ctl"><span>Role</span><select id="roleSel"><option value="admin">admin</option><option value="reviewer">reviewer</option></select></label>
+    <label class="ctl grow"><span>Program</span><select id="programSel"></select></label>
+  </div>
+  <button id="readyPill" class="pill" type="button" title="Readiness from GET /readyz. Click to check again.">checking readiness</button>
+</header>
+<div class="shell">
+  <nav class="sidenav" aria-label="Views" id="sidenav"></nav>
+  <main id="main"><div id="view"><p class="muted">Loading...</p></div></main>
+</div>
+<div id="errors" class="errors" aria-live="assertive"></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<dialog id="lightbox" aria-labelledby="lightboxCap">
+  <div class="lb-head"><strong id="lightboxCap">Photo</strong><form method="dialog"><button class="btn small">Close</button></form></div>
+  <img id="lightboxImg" alt="">
+</dialog>
+<script>
+'use strict';
+
+/* ---------- constants ---------- */
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const UUID_ANY = /([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i;
+const DEV_TOKEN_RE = /^dev\.([0-9a-f-]{36})\.([0-9a-f-]{36})$/i;
+const PERIOD_RE = /^\d{4}-(0[1-9]|1[0-2])$/;
+const FIRMS = [
+  { id: '00000000-0000-4000-8000-00000000d001', label: 'Demo firm (d001)' },
+  { id: '00000000-0000-4000-8000-00000000d002', label: 'Other firm (d002)' },
+];
+const CLAIM_STATUSES = ['draft', 'submitted', 'needs_info', 'under_review', 'approved', 'denied', 'flagged', 'capped', 'paid', 'closed'];
+const TONES = {
+  approved: 'green', paid: 'green', approve: 'green', transferred: 'green', exported: 'green', done: 'green', open: 'green', ok: 'green',
+  denied: 'red', deny: 'red', failed: 'red', unavailable: 'red',
+  needs_info: 'amber', held: 'amber', waiting_human: 'amber',
+  flagged: 'violet', flag: 'violet',
+  submitted: 'blue', under_review: 'blue', running: 'blue', pending: 'blue', pending_export: 'blue', onboarding: 'blue', transferring: 'blue',
+  capped: 'gray', draft: 'gray', closed: 'gray', disabled: 'gray',
+};
+const LINK_KINDS = [
+  { kind: 'same_photo', label: 'Same photo', color: 'var(--k-photo)', dash: '', sw: '' },
+  { kind: 'same_address', label: 'Same address', color: 'var(--k-address)', dash: '8 5', sw: 'dashed' },
+  { kind: 'same_serial', label: 'Same serial', color: 'var(--k-serial)', dash: '1 5', sw: 'dotted' },
+  { kind: 'same_payout', label: 'Same payout account', color: 'var(--k-payout)', dash: '14 5', sw: 'dashed' },
+  { kind: 'same_mailing', label: 'Same mailing address', color: 'var(--k-mailing)', dash: '10 4 2 4', sw: 'dashed' },
+];
+const KIND = Object.fromEntries(LINK_KINDS.map((k) => [k.kind, k]));
+const WORKER_CMDS = [
+  ['ADJUDICATOR=rules_only make worker ARGS=--once', 'Rules only. Free and offline. Decides every waiting claim, then exits.'],
+  ['ADJUDICATOR=rules_only make worker', 'Rules only, and it keeps running, so the readiness pill turns green.'],
+  ['ADJUDICATOR=agent LLM_MODE=live make worker ARGS=--once', 'The AI agent with live model calls. About 0.002 USD per claim.'],
+];
+const NAV = [['overview', 'Overview'], ['claims', 'Claims'], ['portal', 'Portal'], ['fraud', 'Fraud rings'], ['payouts', 'Payouts'], ['mpr', 'MPR'], ['campaigns', 'Campaigns'], ['recalls', 'Recalls'], ['program', 'Program']];
+const PHOTO_KINDS = ['label', 'destruction', 'receipt'];
+const PHOTO_LABEL = { label: 'Label photo', destruction: 'Destruction photo', receipt: 'Receipt', other: 'Other photo' };
+const PHOTO_HELP = {
+  label: 'The model label, so the model and serial can be read.',
+  destruction: 'The product after the destruction step, for example the cord cut.',
+  receipt: 'Proof of purchase with the retailer and the date.',
+  other: 'Any other photo.',
+};
+const BOX_ORDER = ['total_units_affected', 'corrections_this_period', 'cumulative_corrections', 'units_with_manufacturer', 'units_with_distributor', 'units_with_retailers', 'units_with_consumers', 'incidents_before', 'injuries_before', 'deaths_before', 'incidents_after', 'injuries_after', 'deaths_after', 'notified_phone_text', 'notified_email', 'notified_mail', 'contacts_phone', 'contacts_email', 'contacts_mail', 'contacts_registration_card', 'homepage_posting', 'homepage_posting_explanation', 'website_hits', 'social_posts', 'marketplace_monitoring'];
+
+/* ---------- storage (every access guarded: the page works without it) ---------- */
+const PREFIX = 'recallops.console.';
+function loadPref(k) { try { return window.localStorage.getItem(PREFIX + k); } catch (e) { return null; } }
+function savePref(k, v) {
+  try { if (v === null || v === undefined) window.localStorage.removeItem(PREFIX + k); else window.localStorage.setItem(PREFIX + k, String(v)); } catch (e) { /* blocked storage: settings last for this visit only */ }
+}
+
+/* ---------- state ---------- */
+const state = { firm: FIRMS[0].id, role: 'admin', program: null, programs: [], ready: null };
+(function initState() {
+  const f = loadPref('firm'); if (f && UUID_RE.test(f)) state.firm = f.toLowerCase();
+  if (loadPref('role') === 'reviewer') state.role = 'reviewer';
+  const p = loadPref('program'); if (p && UUID_RE.test(p)) state.program = p;
+  const q = new URLSearchParams(location.search); // ?firm=d002&role=reviewer&program=<id> for links and screenshots
+  const qf = q.get('firm');
+  if (qf) {
+    const known = FIRMS.find((x) => x.id.endsWith(qf.toLowerCase()));
+    const id = known ? known.id : qf;
+    if (UUID_RE.test(id)) { state.firm = id.toLowerCase(); savePref('firm', state.firm); }
+  }
+  const qr = q.get('role'); if (qr === 'admin' || qr === 'reviewer') { state.role = qr; savePref('role', qr); }
+  const qp = q.get('program'); if (qp && UUID_RE.test(qp)) { state.program = qp; savePref('program', qp); }
+  if (qf || qr || qp) { // applied and saved: drop them, or a reload would undo a firm or role picked in the top bar since
+    try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) { /* the URL keeps them; harmless */ }
+  }
+})();
+
+/* ---------- html helpers (every interpolation is escaped unless it is already Raw) ---------- */
+class Raw { constructor(s) { this.s = s; } toString() { return this.s; } }
+const raw = (s) => new Raw(String(s));
+const ESC = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+function esc(v) {
+  if (v instanceof Raw) return v.s;
+  if (Array.isArray(v)) return v.map(esc).join('');
+  if (v === null || v === undefined || v === false) return '';
+  return String(v).replace(/[&<>"']/g, (c) => ESC[c]);
+}
+function h(strings, ...vals) { let out = strings[0]; for (let i = 0; i < vals.length; i++) out += esc(vals[i]) + strings[i + 1]; return new Raw(out); }
+const NONE = raw('<span class="muted">none</span>');
+const $ = (sel, root = document) => root.querySelector(sel);
+const view = $('#view');
+function setView(r) { view.innerHTML = esc(r); }
+const pad = (n) => String(n).padStart(2, '0');
+function fmtTime(iso) {
+  if (!iso) return '';
+  const d = new Date(iso); if (isNaN(d)) return String(iso);
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+}
+function money(c) { return c === null || c === undefined ? '' : '$' + (c / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+function fmtNum(n) { return n === null || n === undefined ? '' : Number(n).toLocaleString('en-US'); }
+const shortId = (id) => String(id || '').slice(0, 8);
+const trunc = (s, n) => { s = String(s || ''); return s.length > n ? s.slice(0, n - 3) + '...' : s; };
+const sum = (o) => Object.values(o || {}).reduce((a, b) => a + b, 0);
+const or = (v) => (v === null || v === undefined || v === '' ? NONE : v);
+function compact(v, n = 110) { let s; try { s = JSON.stringify(v); } catch (e) { s = String(v); } if (s === undefined) s = ''; return s.length > n ? s.slice(0, n - 3) + '...' : s; }
+function pretty(v) { try { return JSON.stringify(v, null, 2); } catch (e) { return String(v); } }
+function safeUrl(u) { return /^https?:\/\//i.test(String(u || '')) ? u : '#'; }
+function thisMonth() { const d = new Date(); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}`; }
+function badge(v) { if (v === null || v === undefined || v === '') return NONE; return h`<span class="badge t-${TONES[v] || 'gray'}">${v}</span>`; }
+function idChip(id, href) {
+  if (!id) return '';
+  const s = shortId(id);
+  return h`<span class="idchip">${href ? h`<a class="mono" href="${href}" title="${id}">${s}</a>` : h`<code title="${id}">${s}</code>`}<button type="button" class="copy" data-act="copy" data-text="${id}" title="Copy ${id}" aria-label="Copy the full id ${id}">copy</button></span>`;
+}
+function claimLink(id) { return h`<a class="mono" href="#/claim/${id}" title="${id}">${shortId(id)}</a>`; }
+// Links full claim ids, and the 8-character prefixes that rules-only reasons cite ("duplicate same_photo with claim
+// 91691183") when one matches a known claim id, such as a member of this claim's clusters.
+function linkUuids(text, known = []) {
+  const s = String(text), re = new RegExp(UUID_ANY.source + '|\\b[0-9a-f]{8}\\b', 'gi');
+  let out = '', last = 0, m;
+  while ((m = re.exec(s))) {
+    const tok = m[0], full = tok.length === 36 ? tok : known.find((k) => k.toLowerCase().startsWith(tok.toLowerCase()));
+    if (!full) continue;
+    out += esc(s.slice(last, m.index)) + claimLink(full).s;
+    last = m.index + tok.length;
+  }
+  return raw(out + esc(s.slice(last)));
+}
+function kindTag(kind) {
+  const k = KIND[kind] || { label: kind, color: 'var(--gray-fg)', sw: '' };
+  return h`<span class="kind"><span class="swatch ${k.sw}" style="--sw: ${k.color}" aria-hidden="true"></span>${k.label}</span>`;
+}
+function stat(label, value) { return h`<div class="stat"><div class="stat-v">${value}</div><div class="stat-l">${label}</div></div>`; }
+function cmdRow(cmd, note) { return h`<div class="cmd"><code>${cmd}</code><button type="button" class="copy" data-act="copy" data-text="${cmd}" aria-label="Copy command">copy</button></div>${note ? h`<p class="cmd-note">${note}</p>` : ''}`; }
+function workerCmds() { return WORKER_CMDS.map(([c, n]) => cmdRow(c, n)); }
+function setTitle(t) { document.title = `${t} | RecallOps test console`; }
+
+/* ---------- errors and toast ---------- */
+class ApiError extends Error { constructor(o) { super(o.title || 'Request failed'); Object.assign(this, o); } }
+// A 422 detail is the Python repr of pydantic's error list, for example
+// [{'type': 'extra_forbidden', 'loc': ('body', 'identification_rules', 'bogus'), 'msg': 'Extra inputs are not permitted', ...}].
+// Show it as "identification_rules.bogus: Extra inputs are not permitted"; anything else passes through unchanged.
+function readableDetail(d) {
+  if (typeof d !== 'string' || !d.startsWith("[{'type'")) return d;
+  const out = [];
+  const re = /'loc': \(([^)]*)\), 'msg': (?:'((?:[^'\\]|\\.)*)'|"((?:[^"\\]|\\.)*)")/g;
+  let m;
+  while ((m = re.exec(d))) {
+    const loc = m[1].split(',').map((x) => x.trim().replace(/^'|'$/g, '')).filter((x) => x && !['body', 'query', 'path'].includes(x));
+    out.push(`${loc.join('.') || 'input'}: ${m[2] !== undefined ? m[2] : m[3]}`);
+  }
+  return out.length ? out.join('; ') : d;
+}
+// One line for a refusal the view explains inline (those statuses are passed as quiet, so the error panel does not repeat them).
+function refusal(e) { return `${e.status} ${e.title}${e.detail ? ': ' + e.detail : ''}${e.correlation_id ? ` (correlation id ${e.correlation_id})` : ''}`; }
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+// The API commits a write's transaction only after it has sent the response (the routes' database session is a FastAPI
+// dependency with yield), so a read sent straight after a write can still see the old rows: seen 4 times in 10 for the
+// campaign summary right after match. Re-read with a short backoff, about 3 s at most, until the write shows.
+async function settle(read, ok, ctx) {
+  let v = await read();
+  for (let i = 1; i <= 6 && !ok(v); i++) {
+    await sleep(150 * i);
+    if (ctx && !ctx.alive()) return v;
+    v = await read();
+  }
+  return v;
+}
+const errorsEl = $('#errors');
+function hintFor(e) {
+  const p = e.path || '';
+  if (e.status === 0) return 'The API did not answer. Is uvicorn still running?';
+  if (e.status === 501) return 'Not built yet (payments owner). The route exists in the contract and answers 501 until that code lands.';
+  if (e.status === 404 && /^\/v1\/claims\//.test(p)) return 'Tenant isolation: the API answers 404 for a claim that belongs to another firm, the same as for a claim that does not exist. Switch the firm in the top bar if this claim is yours.';
+  if (e.status === 404 && /^\/v1\/programs\//.test(p)) return 'The program is not visible to this firm (tenant isolation) or does not exist.';
+  if (e.status === 404 && /^\/portal\//.test(p)) return 'The claim link is not valid, or its program is closed. Dev tokens look like dev.<firm id>.<claim id>.';
+  if (e.status === 403 && /admin/.test(e.detail || '')) return 'This needs the admin role. Switch Role to admin in the top bar.';
+  if (e.status === 403) return 'Pick a firm in the top bar.';
+  if (e.status === 401) return 'The dev auth provider refused the headers.';
+  if (e.status === 409) return 'The request does not apply to the resource in its current state. Read the detail, then refresh.';
+  if (e.status === 422) return 'The API rejected the input. The detail names the fields.';
+  if (e.status === 413) return 'The upload is larger than the API accepts.';
+  if (e.status === 429) return 'Rate limited. The portal allows a fixed number of requests per link and per address each hour.';
+  if (e.status === 402) return 'The billing gate refused this action (plan limit).';
+  if (e.status === 503) return 'A dependency is down: ' + (e.detail || 'unknown') + '.';
+  return '';
+}
+function report(e) {
+  const hint = e.hint !== undefined ? e.hint : hintFor(e);
+  const card = h`<div class="err" role="alert">
+    <div class="err-head"><strong>${e.status === 0 ? 'Network error' : e.status} ${e.status === 0 ? '' : e.title || ''}</strong><span class="spacer"></span><button type="button" class="copy" data-act="dismiss" aria-label="Dismiss this error">dismiss</button></div>
+    ${e.method || e.path ? h`<div class="err-req mono">${e.method || ''} ${e.path || ''}</div>` : ''}
+    ${e.detail ? h`<p>${e.detail}</p>` : ''}
+    ${hint ? h`<p class="hint">${hint}</p>` : ''}
+    ${e.correlation_id ? h`<div class="small muted">correlation id <span class="mono">${e.correlation_id}</span><button type="button" class="copy" data-act="copy" data-text="${e.correlation_id}">copy</button></div>` : ''}
+  </div>`;
+  const allBtn = errorsEl.querySelector('.err-all');
+  if (allBtn) allBtn.insertAdjacentHTML('afterend', card.s); else errorsEl.insertAdjacentHTML('afterbegin', card.s);
+  const cards = errorsEl.querySelectorAll('.err');
+  for (let i = 6; i < cards.length; i++) cards[i].remove();
+  syncErrors();
+}
+function syncErrors() {
+  const n = errorsEl.querySelectorAll('.err').length;
+  const all = errorsEl.querySelector('.err-all');
+  if (n > 1 && !all) errorsEl.insertAdjacentHTML('afterbegin', '<button type="button" class="btn small err-all" data-act="dismissAll">Dismiss all errors</button>');
+  if (n <= 1 && all) all.remove();
+}
+function reportJs(err) {
+  console.error(err);
+  report({ status: 'Script', title: 'error in the console page', detail: String((err && err.message) || err), hint: 'This is a bug in the console page, not the API.' });
+}
+let toastTimer = null;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+window.addEventListener('error', (e) => reportJs(e.error || e.message));
+window.addEventListener('unhandledrejection', (e) => { if (!(e.reason instanceof ApiError)) reportJs(e.reason); });
+
+/* ---------- the one fetch helper ---------- */
+async function api(method, path, opts = {}) {
+  const quiet = opts.quiet || [];
+  const headers = {};
+  if (path.startsWith('/v1/')) { headers['X-Dev-Firm-Id'] = state.firm; headers['X-Dev-Role'] = state.role; }
+  let body;
+  if (opts.form) body = opts.form;
+  else if (opts.json !== undefined) { headers['Content-Type'] = 'application/json'; body = JSON.stringify(opts.json); }
+  let res;
+  try {
+    res = await fetch(path, { method, headers, body, cache: 'no-store' });
+  } catch (err) {
+    const e = new ApiError({ status: 0, title: 'Network error', detail: String(err.message || err), method, path });
+    if (!quiet.includes(0)) report(e);
+    throw e;
+  }
+  if (res.ok) {
+    if (opts.blob) return res.blob();
+    const text = await res.text();
+    if (!text) return null;
+    if ((res.headers.get('content-type') || '').includes('json')) {
+      try { return JSON.parse(text); } catch (err) { const e = new ApiError({ status: res.status, title: 'Bad JSON', detail: 'The response was not valid JSON.', method, path }); report(e); throw e; }
+    }
+    return text;
+  }
+  let p = {};
+  try { p = await res.json(); } catch (err) { p = {}; }
+  const e = new ApiError({
+    status: res.status, title: p.title || res.statusText || 'Error', detail: readableDetail(p.detail) || null,
+    correlation_id: p.correlation_id || res.headers.get('x-request-id'), instance: p.instance, method, path,
+  });
+  if (!quiet.includes(res.status)) report(e);
+  throw e;
+}
+const blobUrls = [];
+function revokeBlobs() { while (blobUrls.length) URL.revokeObjectURL(blobUrls.pop()); }
+function saveBlob(blob, name) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 5000);
+}
+async function copyText(t) {
+  try { await navigator.clipboard.writeText(t); toast('Copied'); return; } catch (e) { /* fall back below */ }
+  const ta = document.createElement('textarea'); ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  let ok = false; try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+  ta.remove(); toast(ok ? 'Copied' : 'Copy failed. Select the text by hand.');
+}
+
+/* ---------- top bar ---------- */
+const firmSel = $('#firmSel'), firmCustom = $('#firmCustom'), customWrap = $('#customWrap'), roleSel = $('#roleSel'), programSel = $('#programSel');
+function firmLabel(id) { const f = FIRMS.find((x) => x.id === id); return f ? f.label : 'Custom firm ' + shortId(id); }
+function renderFirmSel() {
+  firmSel.innerHTML = h`${FIRMS.map((f) => h`<option value="${f.id}">${f.label}</option>`)}<option value="custom">Custom firm id</option>`.s;
+  const known = FIRMS.some((f) => f.id === state.firm);
+  firmSel.value = known ? state.firm : 'custom';
+  customWrap.hidden = known;
+  if (!known) firmCustom.value = state.firm;
+}
+async function setFirm(id) {
+  state.firm = id.toLowerCase(); savePref('firm', state.firm);
+  renderFirmSel();
+  await loadPrograms();
+}
+function renderProgramSel() {
+  if (!state.programs.length) { programSel.innerHTML = '<option value="">No programs for this firm</option>'; programSel.disabled = true; return; }
+  programSel.disabled = false;
+  programSel.innerHTML = state.programs.map((p) => h`<option value="${p.id}">${trunc(p.title, 70)} (${p.status})</option>`.s).join('');
+  programSel.value = state.program;
+}
+async function loadPrograms() {
+  try { state.programs = (await api('GET', '/v1/programs')).items; } catch (e) { state.programs = []; }
+  if (!state.programs.some((p) => p.id === state.program)) {
+    const open = state.programs.find((p) => p.status === 'open');
+    state.program = (open || state.programs[0] || {}).id || null;
+    savePref('program', state.program);
+  }
+  renderProgramSel();
+}
+function currentProgram() { return state.programs.find((p) => p.id === state.program) || null; }
+function selectProgram(id, silent) {
+  state.program = id; savePref('program', id); renderProgramSel();
+  if (!silent) { toast('Program selected'); route(); }
+}
+async function checkReady() {
+  try {
+    const r = await api('GET', '/readyz', { quiet: [0, 503] });
+    state.ready = { api: true, db: true, worker: true, age: r.worker_heartbeat_age_s, graph: r.graph };
+  } catch (e) {
+    if (!(e instanceof ApiError)) throw e;
+    // /readyz reads the heartbeat table, so any answer but "database unreachable" means the database answered.
+    // (/healthz is liveness only: its database field is always true.)
+    state.ready = e.status === 0 ? { api: false, db: null, worker: false, detail: 'API unreachable' }
+      : { api: true, db: !/database unreachable/i.test(e.detail || ''), worker: false, detail: e.detail || e.title, graph: null };
+  }
+  renderPill();
+  return state.ready;
+}
+const HEARTBEAT_NOTE = 'GET /readyz counts a worker for WORKER_HEARTBEAT_MAX_AGE_S (300 s by default) after its last heartbeat, so a worker started with ARGS=--once still shows for a few minutes after it has exited.';
+function renderPill() {
+  const r = state.ready, pill = $('#readyPill');
+  if (!r) return;
+  const w = !r.api ? h`<span class="dot t-red"></span>API unreachable`
+    : r.worker ? h`<span class="dot t-green"></span>worker seen ${Math.round(r.age)} s ago` : h`<span class="dot t-amber"></span>worker not running`;
+  const g = r.graph ? h`<span class="dot t-${TONES[r.graph] || 'gray'}"></span>graph ${r.graph}` : h`<span class="dot t-gray"></span>graph unknown`;
+  pill.innerHTML = h`${w}<span class="pill-sep" aria-hidden="true"></span>${g}`.s;
+  pill.title = (r.worker ? `Worker heartbeat ${r.age} s ago. ${HEARTBEAT_NOTE}` : `GET /readyz: ${r.detail}.`) + (r.graph ? '' : ' The graph status is reported only when the worker is running.') + ' Click to check again.';
+}
+function bindTopbar() {
+  $('#sidenav').innerHTML = NAV.map(([k, label]) => h`<a href="#/${k}" data-view="${k}">${label}</a>`.s).join('') +
+    '<p class="navnote">A test console for the backend. The product UI lives in apps/web.</p>';
+  firmSel.addEventListener('change', async () => {
+    if (firmSel.value === 'custom') { customWrap.hidden = false; firmCustom.focus(); return; }
+    await setFirm(firmSel.value); route();
+  });
+  firmCustom.addEventListener('change', async () => {
+    const v = firmCustom.value.trim();
+    if (!UUID_RE.test(v)) { firmCustom.classList.add('bad'); toast('A firm id is a UUID.'); return; }
+    firmCustom.classList.remove('bad'); await setFirm(v); route();
+  });
+  roleSel.addEventListener('change', () => { state.role = roleSel.value; savePref('role', state.role); route(); });
+  programSel.addEventListener('change', () => { if (programSel.value) selectProgram(programSel.value); });
+  $('#readyPill').addEventListener('click', () => checkReady());
+  const topbar = $('.topbar');
+  const setTopH = () => document.documentElement.style.setProperty('--top-h', topbar.offsetHeight + 'px');
+  if (window.ResizeObserver) new ResizeObserver(setTopH).observe(topbar);
+  setTopH();
+}
+
+/* ---------- router ---------- */
+let seq = 0, lastKey = '', localActs = {}, localForms = {}, localChanges = {};
+function parseHash() {
+  const rawHash = location.hash.replace(/^#\/?/, '');
+  const qi = rawHash.indexOf('?');
+  const pathPart = qi >= 0 ? rawHash.slice(0, qi) : rawHash;
+  const parts = pathPart.split('/').filter(Boolean).map((s) => { try { return decodeURIComponent(s); } catch (e) { return s; } });
+  return { name: parts[0] || 'overview', arg: parts[1] || null, query: new URLSearchParams(qi >= 0 ? rawHash.slice(qi + 1) : '') };
+}
+function go(hash) { if (location.hash === hash) route(); else location.hash = hash; }
+async function route() {
+  const my = ++seq;
+  const r = parseHash();
+  const routes = { overview: viewOverview, claims: viewClaims, claim: viewClaim, portal: viewPortal, fraud: viewFraud, payouts: viewPayouts, mpr: viewMpr, campaigns: viewCampaigns, recalls: viewRecalls, program: viewProgram };
+  const fn = routes[r.name];
+  const navKey = r.name === 'claim' ? 'claims' : r.name;
+  document.querySelectorAll('#sidenav a').forEach((a) => {
+    const on = a.dataset.view === navKey; a.classList.toggle('active', on);
+    if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+  });
+  revokeBlobs(); localActs = {}; localForms = {}; localChanges = {};
+  document.documentElement.dataset.busy = '1';
+  const ctx = { ...r, alive: () => my === seq };
+  const key = r.name + '/' + (r.arg || '');
+  if (key !== lastKey) view.innerHTML = '<p class="muted">Loading...</p>'; // a refresh of the same view keeps it on screen
+  lastKey = key;
+  try {
+    if (!fn) { setTitle('Not found'); setView(h`<section class="card"><h1>No such view</h1><p>Go to the <a href="#/overview">overview</a>.</p></section>`); }
+    else await fn(ctx);
+  } catch (e) {
+    if (ctx.alive()) {
+      if (!(e instanceof ApiError)) reportJs(e);
+      setView(h`<section class="card"><h1>This view did not load</h1><p>${e.status ? e.status + ' ' : ''}${e.title || e.message}</p>${e.detail ? h`<p class="muted">${e.detail}</p>` : ''}<p><button class="btn" data-act="reroute">Try again</button></p></section>`);
+    }
+  } finally {
+    if (ctx.alive()) document.documentElement.dataset.busy = '0';
+  }
+}
+function noProgram() {
+  setView(h`<section class="card"><h1>No program selected</h1><p>${firmLabel(state.firm)} has no programs. Open one from <a href="#/recalls">Recalls</a>, or switch the firm in the top bar.</p></section>`);
+}
+
+/* ---------- overview ---------- */
+function countBadges(pid, counts) {
+  return CLAIM_STATUSES.filter((s) => counts && counts[s]).map((s) => h`<button type="button" class="badge t-${TONES[s] || 'gray'}" data-act="gotoClaims" data-id="${pid}" data-status="${s}" title="Open the ${s} claims">${s} ${counts[s]}</button>`);
+}
+function programsTable() {
+  if (!state.programs.length) return h`<p class="muted">This firm has no programs. Open one from <a href="#/recalls">Recalls</a>.</p>`;
+  return h`<div class="table-wrap"><table><thead><tr><th>Program</th><th>Status</th><th class="num">Threshold</th><th class="num">Claims</th><th>Claims by status (click to open)</th><th></th></tr></thead><tbody>
+  ${state.programs.map((p) => {
+    const sel = p.id === state.program;
+    return h`<tr class="${sel ? 'selected' : ''}"><td><div class="title-cell">${p.title}</div><div class="small muted">${idChip(p.id)} ${sel ? h`<span class="tag">selected</span>` : ''}</div></td>
+      <td>${badge(p.status)}</td><td class="num">${money(p.value_threshold_cents)}</td><td class="num">${sum(p.claim_counts)}</td>
+      <td><div class="counts">${countBadges(p.id, p.claim_counts)}</div></td>
+      <td class="nowrap">${sel ? '' : h`<button class="btn small" data-act="selectProgram" data-id="${p.id}">Select</button> `}<a class="btn small" href="#/program/${p.id}">Rules</a></td></tr>`;
+  })}</tbody></table></div>`;
+}
+async function viewOverview(ctx) {
+  setTitle('Overview');
+  const [usage, health] = await Promise.all([
+    api('GET', '/v1/usage').catch(() => null),
+    api('GET', '/healthz', { quiet: [0] }).catch(() => null),
+    loadPrograms(),
+    checkReady(),
+  ]);
+  if (!ctx.alive()) return;
+  const r = state.ready || {};
+  setView(h`
+  <div class="page-head"><h1>Overview</h1><span class="spacer"></span><button class="btn" data-act="reroute">Refresh</button></div>
+  <div class="grid2">
+    <section class="card">
+      <h2>Readiness</h2>
+      <dl class="kv">
+        <dt>API</dt><dd>${health ? h`<span class="badge t-green">ok</span>` : h`<span class="badge t-red">not answering</span>`}</dd>
+        <dt>Database</dt><dd>${r.db === true ? h`<span class="badge t-green">ok</span> <span class="muted small">GET /readyz read it</span>` : r.db === false ? h`<span class="badge t-red">unreachable</span>` : h`<span class="muted">unknown</span>`}</dd>
+        <dt>Worker</dt><dd>${r.worker ? h`<span class="badge t-green">heartbeat</span> <span class="muted">${r.age} s ago</span>` : h`<span class="badge t-amber">not running</span> <span class="muted small">${r.detail || ''}</span>`}</dd>
+        <dt>Fraud graph</dt><dd>${r.graph ? badge(r.graph) : h`<span class="muted">unknown. GET /readyz reports it only while the worker runs.</span>`}</dd>
+      </dl>
+      <p>${r.worker ? h`A worker sent a heartbeat ${r.age} s ago. A long-running worker decides new claims within seconds. ${HEARTBEAT_NOTE} If you used --once, run it again after you file a claim:` : raw('Claims wait in <code>submitted</code> until a worker runs. From the repository root, run one of these:')}</p>
+      ${workerCmds()}
+    </section>
+    <section class="card">
+      <h2>Usage this period</h2>
+      ${usage ? h`<div class="stats">${stat('Claims adjudicated', fmtNum(usage.claims_adjudicated))}${stat('Model cost', '$' + usage.model_cost_usd)}${stat('Open programs', usage.open_programs)}</div>
+        <p class="small muted">The period starts ${usage.period_start}. Replayed model calls are charged nothing.</p>` : h`<p class="muted">Usage did not load. See the error panel.</p>`}
+      <h3>Acting as</h3>
+      <p>${firmLabel(state.firm)} <code>${state.firm}</code> with the role <strong>${state.role}</strong>.</p>
+      <p class="small muted">Requests to /v1 carry the X-Dev-Firm-Id and X-Dev-Role headers. Portal requests carry no headers. This page exists only with the dev auth provider outside prod.</p>
+    </section>
+  </div>
+  <section class="card"><h2>Programs</h2>${programsTable()}</section>
+  <section class="card">
+    <h2>How to test the backend</h2>
+    <ol class="checklist">
+      <li><strong>File a claim as a consumer.</strong> In <a href="#/portal">Portal</a>, issue a claim link, use the generated test photos, and submit.</li>
+      <li><strong>Run the worker</strong> with a command above. The claim moves from submitted to a decision.</li>
+      <li><strong>Open the claim.</strong> In <a href="#/claims">Claims</a>, filter by status and click a row.</li>
+      <li><strong>Read the trace.</strong> Each step shows the node, the tool, the model's thought, the result, and the cost, against the run caps.</li>
+      <li><strong>Take a reviewer action</strong> on a <a href="#/claims?status=flagged">flagged claim</a>: override, request info, or mark fraud.</li>
+      <li><strong>Look at fraud rings</strong> in <a href="#/fraud">Fraud rings</a>: claims linked by a shared photo, address, serial, or payout.</li>
+      <li><strong>Export payouts</strong> in <a href="#/payouts">Payouts</a> and download the CSV.</li>
+      <li><strong>Generate the MPR</strong> in <a href="#/mpr">MPR</a> and check that it reconciles.</li>
+      <li><strong>Check tenant isolation.</strong> Open a claim, then switch the firm to Other firm. The API answers 404.</li>
+      <li><strong>Optional.</strong> Upload owner registrations in <a href="#/campaigns">Campaigns</a>, or open a program from <a href="#/recalls">Recalls</a>.</li>
+    </ol>
+  </section>`);
+}
+
+/* ---------- claims list ---------- */
+function claimsPath(pid, status, cursor) {
+  const q = new URLSearchParams({ limit: '50' });
+  if (status) q.set('status', status);
+  if (cursor) q.set('cursor', cursor);
+  return `/v1/programs/${pid}/claims?${q}`;
+}
+function claimRows(items) {
+  return h`${items.map((c) => h`<tr class="rowlink" data-href="#/claim/${c.id}" tabindex="0">
+    <td>${idChip(c.id, '#/claim/' + c.id)}</td><td>${badge(c.status)}</td><td>${c.outcome ? badge(c.outcome) : NONE}</td>
+    <td>${c.routed_to_human ? h`<span class="tag tag-human">yes</span>` : h`<span class="muted">no</span>`}</td>
+    <td class="mono">${c.model_claimed || ''}</td><td>${c.retailer_claimed || ''}</td><td class="nowrap">${c.purchase_date || ''}</td>
+    <td class="num">${money(c.refund_cents)}</td><td class="nowrap">${fmtTime(c.created_at)}</td></tr>`)}`;
+}
+async function viewClaims(ctx) {
+  setTitle('Claims');
+  const p = currentProgram(); if (!p) return noProgram();
+  const status = ctx.query.get('status') || '';
+  const [prog, page] = await Promise.all([
+    api('GET', `/v1/programs/${p.id}`).catch(() => p),
+    api('GET', claimsPath(p.id, status, null)),
+  ]);
+  if (!ctx.alive()) return;
+  const list = { items: page.items.slice(), cursor: page.next_cursor };
+  const counts = prog.claim_counts || {};
+  setView(h`
+  <div class="page-head"><h1>Claims</h1><span class="muted">${trunc(p.title, 90)}</span><span class="spacer"></span><button class="btn" data-act="reroute">Refresh</button></div>
+  <div class="chips" role="group" aria-label="Filter by status">
+    <a class="chip ${status ? '' : 'active'}" href="#/claims">all <span class="count">${sum(counts)}</span></a>
+    ${CLAIM_STATUSES.map((s) => h`<a class="chip ${status === s ? 'active' : ''}" href="#/claims?status=${s}"><span class="dot t-${TONES[s] || 'gray'}"></span>${s} <span class="count">${counts[s] || 0}</span></a>`)}
+  </div>
+  <section class="card flush">
+    <div class="table-wrap tall"><table>
+      <thead><tr><th>Claim</th><th>Status</th><th>Outcome</th><th>To a human</th><th>Model</th><th>Retailer</th><th>Purchased</th><th class="num">Refund</th><th>Created</th></tr></thead>
+      <tbody id="claimRows">${list.items.length ? claimRows(list.items) : h`<tr><td colspan="9" class="empty">No claims${status ? h` in status <strong>${status}</strong>` : ''}.</td></tr>`}</tbody>
+    </table></div>
+    <div class="table-foot"><span id="claimCount" class="muted small">${list.items.length} shown, oldest first</span><button class="btn" id="moreBtn" data-act="more" ${list.cursor ? '' : 'hidden'}>Load more</button></div>
+  </section>`);
+  localActs.more = async () => {
+    const r = await api('GET', claimsPath(p.id, status, list.cursor));
+    if (!ctx.alive()) return;
+    list.items.push(...r.items); list.cursor = r.next_cursor;
+    $('#claimRows').insertAdjacentHTML('beforeend', claimRows(r.items).s);
+    $('#claimCount').textContent = `${list.items.length} shown, oldest first`;
+    $('#moreBtn').hidden = !list.cursor;
+  };
+}
+
+/* ---------- claim detail ---------- */
+let flash = null;
+function tenantNote(id, e) {
+  const others = FIRMS.filter((f) => f.id !== state.firm);
+  return h`<section class="card">
+    <h1>This firm cannot see that claim</h1>
+    <div class="note t-amber"><code>GET /v1/claims/${id}</code> answered <strong>404 Not Found</strong>: ${e.detail || 'claim not found'}.</div>
+    <p>This is tenant isolation working. The API answers 404, not 403, for a claim that belongs to another firm, so the answer does not even confirm that the claim exists. Postgres row-level security hides the row from <strong>${firmLabel(state.firm)}</strong>.</p>
+    <p>If the claim is yours, switch the firm:</p>
+    <div class="row wrap">${others.map((f) => h`<button class="btn" data-act="switchFirm" data-id="${f.id}">Switch to ${f.label}</button>`)}<a class="btn" href="#/claims">Back to claims</a></div>
+    ${e.correlation_id ? h`<p class="small muted">correlation id <span class="mono">${e.correlation_id}</span></p>` : ''}
+  </section>`;
+}
+function stepHtml(s) {
+  const llm = s.node === 'agent' || s.tool === 'llm';
+  const asked = s.result && Array.isArray(s.result.tool_calls) ? s.result.tool_calls : null;
+  const hasArgs = s.args && Object.keys(s.args).length;
+  return h`<li class="step ${llm ? 'llm' : ''}">
+    <div class="step-head"><span class="step-idx mono">#${s.idx}</span><span class="step-node">${s.node}</span>
+      ${s.tool ? h`<span class="tag">${s.tool === 'llm' ? 'model call' : 'tool ' + s.tool}</span>` : ''}
+      ${s.counted ? h`<span class="tag tag-human" title="Counts toward the step cap">counted</span>` : ''}
+      <span class="spacer"></span>
+      <span class="metric">${fmtNum(s.latency_ms)} ms</span>
+      <span class="metric">${fmtNum(s.tokens_in)} in, ${fmtNum(s.tokens_out)} out</span>
+      <span class="metric" title="Charged cost; nominal is the cost from reported usage (replays are charged 0)">$${s.cost_usd} charged, $${s.nominal_cost_usd} nominal</span>
+    </div>
+    ${s.thought ? h`<div class="thought"><span class="thought-label">Thought</span>${s.thought}</div>` : ''}
+    ${asked ? h`<p class="small">Asked for: ${asked.map((t) => h`<code>${t}</code> `)}</p>` : ''}
+    ${hasArgs ? h`<details><summary>arguments <code>${compact(s.args)}</code></summary><pre>${pretty(s.args)}</pre></details>` : ''}
+    ${s.result ? h`<details><summary>result <code>${compact(s.result)}</code></summary><pre>${pretty(s.result)}</pre></details>` : ''}
+  </li>`;
+}
+function meter(label, used, max, fmt) {
+  const pct = max > 0 && used !== null && used !== undefined ? Math.min(100, (used / max) * 100) : 0;
+  const tone = pct >= 100 ? 'red' : pct >= 80 ? 'amber' : '';
+  return h`<div><div class="meter-top"><span>${label}</span><span class="mono">${used === null || used === undefined ? 'not reported' : fmt(used)} of ${fmt(max)}</span></div>
+    <div class="bar" role="meter" aria-label="${label}" aria-valuemin="0" aria-valuemax="${max}" aria-valuenow="${used || 0}"><span class="fill ${tone ? 'fill-' + tone : ''}" style="width: ${pct.toFixed(1)}%"></span></div></div>`;
+}
+function traceSection(c, trace) {
+  const run = (trace && trace.run) || c.run;
+  if (!run) return h`<section class="card" id="trace"><h2>Run and trace</h2><p class="muted">No run yet.${c.status === 'submitted' ? ' The claim waits for the worker.' : ''}</p>${c.status === 'submitted' ? workerCmds() : ''}</section>`;
+  // finished_at stays empty on a run that stopped for a person (capped, waiting_human) or failed, not only while it runs.
+  const UNFINISHED = { running: 'still running', waiting_human: 'paused, waiting for a person', capped: 'stopped at a cap, waiting for a person', failed: 'failed before it finished' };
+  const secs = run.finished_at ? ((new Date(run.finished_at) - new Date(run.started_at)) / 1000).toFixed(2) + ' s wall clock' : (UNFINISHED[run.status] || 'not finished');
+  const used = trace && trace.used, caps = trace && trace.caps;
+  return h`<section class="card" id="trace">
+    <h2>Run and trace</h2>
+    <dl class="kv">
+      <dt>Run</dt><dd>${idChip(run.run_id)} <span class="tag">${run.graph}</span> ${badge(run.status)}</dd>
+      <dt>Steps</dt><dd>${run.steps} logged${used ? h`, ${used.steps} counted toward the cap` : ''}</dd>
+      <dt>Cost</dt><dd>$${run.cost_usd} charged${used ? h`, $${used.cost_usd} nominal` : ''}</dd>
+      <dt>Time</dt><dd>${fmtTime(run.started_at)}, ${secs}</dd>
+    </dl>
+    ${caps ? h`<div class="meters">${meter('Steps', used ? used.steps : null, caps.max_steps, (v) => String(v))}${meter('Cost (USD)', used ? Number(used.cost_usd) : null, Number(caps.max_usd), (v) => '$' + Number(v).toFixed(4))}${meter('Step seconds', used ? used.seconds : null, caps.max_seconds, (v) => Number(v).toFixed(1) + ' s')}</div>
+      <p class="small muted">The meters show what counts toward the run caps: counted steps, nominal cost, and the sum of each step's recorded latency. A replayed run is charged nothing and can finish faster than its recorded step seconds.</p>` : ''}
+    ${trace && trace.steps ? (trace.steps.length ? h`<ol class="trace">${trace.steps.map(stepHtml)}</ol>` : h`<p class="muted">The run has no steps yet.</p>`) : h`<p class="muted">The trace did not load.</p>`}
+  </section>`;
+}
+async function viewClaim(ctx) {
+  const id = ctx.arg || '';
+  setTitle('Claim ' + shortId(id));
+  if (!UUID_RE.test(id)) { setView(h`<section class="card"><h1>Claim</h1><p>That is not a claim id.</p></section>`); return; }
+  let c;
+  const want = flash && flash.claimId === id ? flash.expect : null; // what the reviewer action answered (see settle)
+  try {
+    c = await settle(() => api('GET', `/v1/claims/${id}`, { quiet: [404] }),
+      (x) => !want || (x.status === want.status && x.audit.length >= want.audit), ctx);
+  } catch (e) {
+    if (!ctx.alive()) return;
+    if (e.status === 404) { setView(tenantNote(id, e)); return; }
+    throw e;
+  }
+  let trace = null;
+  try { trace = await api('GET', `/v1/claims/${id}/trace`, { quiet: [404] }); } catch (e) { if (!(e instanceof ApiError)) throw e; trace = null; }
+  if (!ctx.alive()) return;
+  const f = flash && flash.claimId === id ? flash : null; flash = null;
+  const d = c.decision, cl = c.claimant || {};
+  setView(h`
+  <div class="page-head">
+    <a href="#/claims">Claims</a><span class="muted">/</span><h1>Claim ${idChip(c.id)}</h1>
+    ${badge(c.status)}${d ? h`<span class="muted small">outcome</span>${badge(d.outcome)}` : ''}${d && d.routed_to_human ? h`<span class="tag tag-human">routed to a human</span>` : ''}
+    <span class="spacer"></span>
+    <a class="btn" href="#/portal/${'dev.' + state.firm + '.' + c.id}" title="Open this claim's portal view as the claimant">Open as claimant</a>
+    <button class="btn" data-act="reroute">Refresh</button>
+  </div>
+  <div class="claim-grid">
+    <div>
+      <section class="card"><h2>Claim</h2><dl class="kv">
+        <dt>Program</dt><dd>${idChip(c.program_id, '#/program/' + c.program_id)}</dd>
+        <dt>Model</dt><dd class="mono">${or(c.model_claimed)}</dd>
+        <dt>Serial</dt><dd class="mono">${or(c.serial_claimed)}</dd>
+        <dt>Date code</dt><dd class="mono">${or(c.date_code_claimed)}</dd>
+        <dt>Retailer</dt><dd>${or(c.retailer_claimed)}</dd>
+        <dt>Purchased</dt><dd>${or(c.purchase_date)}</dd>
+        <dt>Quantity</dt><dd>${c.quantity}</dd>
+        <dt>Refund</dt><dd>${or(money(c.refund_cents))}</dd>
+        <dt>Remedy</dt><dd>${or(c.remedy)}</dd>
+        <dt>Created</dt><dd>${fmtTime(c.created_at)}</dd>
+        <dt>Submitted</dt><dd>${or(fmtTime(c.submitted_at))}</dd>
+        <dt>Decided</dt><dd>${or(fmtTime(c.decided_at))}</dd>
+      </dl></section>
+      <section class="card"><h2>Claimant ${cl.synthetic ? h`<span class="tag">synthetic</span>` : ''}</h2><dl class="kv">
+        <dt>Name</dt><dd>${or(cl.name)}</dd><dt>Email</dt><dd>${or(cl.email)}</dd><dt>Phone</dt><dd>${or(cl.phone)}</dd>
+        <dt>Address</dt><dd>${cl.address_line1 ? h`${cl.address_line1}, ${cl.city || ''} ${cl.state || ''} ${cl.zip || ''}` : NONE}</dd>
+      </dl></section>
+      <section class="card"><h2>Photos <span class="muted">${c.photos.length}</span></h2>
+        ${c.photos.length ? h`<div class="thumbs">${c.photos.map((p, i) => h`<figure class="thumb">
+          <button type="button" class="thumb-btn" data-act="enlarge" data-i="${i}" aria-label="Enlarge the ${p.kind} photo"><span class="thumb-ph">loading</span><img data-src="${p.url}" alt="${p.kind} photo for claim ${shortId(c.id)}"></button>
+          <figcaption><strong>${p.kind}</strong><span class="mono" title="sha256 ${p.sha256}">sha256 ${p.sha256.slice(0, 12)}</span><span class="mono" title="perceptual hash">pHash ${p.phash}</span></figcaption></figure>`)}</div>` : h`<p class="muted">No photos.</p>`}
+      </section>
+    </div>
+    <div>
+      <section class="card"><h2>Decision</h2>
+        ${d ? h`<dl class="kv"><dt>Outcome</dt><dd>${badge(d.outcome)}</dd><dt>Confidence</dt><dd>${d.confidence === null || d.confidence === undefined ? h`<span class="muted">not given</span>` : d.confidence}</dd>
+          <dt>Decided by</dt><dd class="mono">${or(d.decided_by)}</dd><dt>To a human</dt><dd>${d.routed_to_human ? 'yes' : 'no'}</dd></dl>
+          <h3>Reasons</h3>${d.reasons.length ? h`<ul>${d.reasons.map((x) => h`<li>${linkUuids(x, c.clusters.flatMap((k) => k.member_claim_ids))}</li>`)}</ul>` : h`<p class="muted">none</p>`}
+          <h3>Cited rules</h3><p>${d.cited_rules.length ? d.cited_rules.map((x) => h`<code>${x}</code> `) : NONE}</p>`
+          : h`<p class="muted">No decision yet.${c.status === 'submitted' ? ' The claim waits for the worker.' : ''}</p>`}
+      </section>
+      <section class="card"><h2>Reviewer actions</h2>
+        <div id="actionResult" aria-live="polite">${f ? h`<div class="note t-${f.tone}">${f.text}</div>` : ''}</div>
+        <form data-form="override" class="row wrap end">
+          <label class="field"><span>Override outcome</span><select name="outcome"><option value="approve">approve</option><option value="deny">deny</option><option value="needs_info">needs_info</option></select></label>
+          <label class="field grow"><span>Note (optional)</span><input name="message" placeholder="checked the photos by hand"></label>
+          <button class="btn primary">Resume with override</button>
+        </form>
+        <form data-form="requestInfo" class="row wrap end">
+          <label class="field grow"><span>Question for the claimant</span><input name="message" required value="Please send a clearer photo of the model label."></label>
+          <button class="btn">Request info</button>
+        </form>
+        <div class="row wrap"><button class="btn danger" data-act="markFraud">Mark fraud</button><button class="btn" data-act="markDelivered">Mark delivered</button></div>
+        <p class="small muted">Override and request info apply to flagged, under_review, capped, needs_info, approved, and denied claims. When the run is paused for review, the worker applies the action, so the status changes after the worker runs. Mark delivered applies only to an approved repair or replacement.</p>
+      </section>
+      <section class="card"><h2>Payout</h2>
+        ${c.payout ? h`<dl class="kv"><dt>Status</dt><dd>${badge(c.payout.status)}</dd><dt>Amount</dt><dd>${money(c.payout.amount_cents)} ${String(c.payout.currency).toUpperCase()}</dd><dt>Method</dt><dd class="mono">${c.payout.method}</dd><dt>Id</dt><dd>${idChip(c.payout.id)}</dd></dl>`
+          : h`<p class="muted">No payout row. One is written only when a refund is approved.</p>`}
+      </section>
+      <section class="card"><h2>Duplicate clusters <span class="muted">${c.clusters.length}</span></h2>
+        ${c.clusters.length ? c.clusters.map((k) => h`<div class="cluster"><div class="cluster-head">${kindTag(k.kind)}<span class="small muted">score ${k.score}</span><span class="spacer"></span>${idChip(k.id)}</div>
+          <div class="members">${k.member_claim_ids.map((m) => (m === c.id ? h`<span class="tag">this claim</span>` : claimLink(m)))}</div></div>`)
+          : h`<p class="muted">Not in any cluster.</p>`}
+      </section>
+    </div>
+  </div>
+  ${traceSection(c, trace)}
+  <section class="card"><h2>Audit log</h2>
+    ${c.audit.length ? h`<div class="table-wrap"><table><thead><tr><th>When</th><th>Actor</th><th>Action</th><th>Before</th><th>After</th></tr></thead><tbody>
+      ${c.audit.map((a) => h`<tr><td class="nowrap">${fmtTime(a.at)}</td><td class="mono">${a.actor}</td><td>${a.action}</td><td class="mono small">${a.before ? compact(a.before, 160) : ''}</td><td class="mono small">${a.after ? compact(a.after, 160) : ''}</td></tr>`)}
+    </tbody></table></div>` : h`<p class="muted">No entries.</p>`}
+  </section>`);
+
+  const runAction = async (body, label) => {
+    const before = c.status;
+    try {
+      const after = await api('POST', `/v1/claims/${c.id}/actions`, { json: body, quiet: [409, 422] });
+      const expect = { status: after.status, audit: after.audit.length };
+      flash = after.status !== before
+        ? { claimId: c.id, expect, tone: 'green', text: `${label}: done. The status went from ${before} to ${after.status}.` }
+        : { claimId: c.id, expect, tone: 'blue', text: `${label}: recorded. The status is still ${after.status}. If the run was paused for review, the worker applies the action on its next pass.` };
+      if (ctx.alive()) route();
+    } catch (e) {
+      if (!(e instanceof ApiError)) throw e;
+      const out = $('#actionResult');
+      if (out && e.status === 409) out.innerHTML = h`<div class="note t-red"><strong>${label} does not apply now (409).</strong> The claim is ${c.status}, and the API says: ${e.detail || e.title}.</div>`.s;
+      else if (out) out.innerHTML = h`<div class="note t-red"><strong>${label} failed.</strong> ${refusal(e)}</div>`.s;
+    }
+  };
+  localForms.override = (form, fd) => runAction({ action: 'resume_override', outcome: fd.get('outcome'), message: String(fd.get('message') || '').trim() || null }, 'Override');
+  localForms.requestInfo = (form, fd) => runAction({ action: 'request_info', message: String(fd.get('message') || '').trim() }, 'Request info');
+  localActs.markFraud = () => (window.confirm('Mark this claim as fraud?') ? runAction({ action: 'mark_fraud' }, 'Mark fraud') : null);
+  localActs.markDelivered = () => runAction({ action: 'mark_delivered' }, 'Mark delivered');
+  localActs.enlarge = (el) => {
+    const img = el.querySelector('img'), p = c.photos[Number(el.dataset.i)];
+    if (!img || !img.src) { toast('The photo has not loaded.'); return; }
+    $('#lightboxImg').src = img.src; $('#lightboxImg').alt = img.alt;
+    $('#lightboxCap').textContent = `${p.kind} photo, claim ${shortId(c.id)}, sha256 ${p.sha256.slice(0, 16)}`;
+    $('#lightbox').showModal();
+  };
+  await Promise.all([...view.querySelectorAll('img[data-src]')].map(async (img) => {
+    const ph = img.parentElement.querySelector('.thumb-ph');
+    try {
+      const blob = await api('GET', img.dataset.src, { blob: true, quiet: [404, 503] });
+      if (!ctx.alive()) return;
+      const url = URL.createObjectURL(blob); blobUrls.push(url);
+      img.src = url; if (ph) ph.textContent = '';
+    } catch (e) {
+      if (!(e instanceof ApiError)) throw e;
+      if (ph) ph.textContent = `did not load: ${e.status} ${e.detail || e.title}`;
+    }
+  }));
+}
+
+/* ---------- portal (claimant simulator) ---------- */
+const portal = { token: null, view: null, form: null, photos: {}, last: {}, previews: [], note: null, filed: false, payout: null, issued: null };
+function resetPortal(token) {
+  portal.previews.forEach((u) => URL.revokeObjectURL(u));
+  Object.assign(portal, { token, view: null, form: null, photos: {}, previews: [], note: null, filed: false, payout: null });
+}
+// Issued links are PORTAL_BASE_URL/<token>, for example http://localhost:3000/claim/dev.<firm>.<claim>, so the token
+// is the link's last path segment. Also accepts a bare token or this console's own #/portal/<token> address.
+function tokenFrom(s) {
+  s = String(s || '').trim();
+  const dev = /dev\.[0-9a-f-]{36}\.[0-9a-f-]{36}/i.exec(s);
+  if (dev) return dev[0];
+  const i = s.indexOf('#/portal/');
+  s = i >= 0 ? s.slice(i + 9) : s.split(/[?#]/)[0];
+  let t = s.split('/').filter(Boolean).pop() || '';
+  try { t = decodeURIComponent(t); } catch (e) { /* keep as typed */ }
+  return t;
+}
+function addDays(day, n) { const d = new Date(day + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
+function defaultForm(v) {
+  const prog = state.programs.find((p) => p.title === v.program.title);
+  const ir = prog ? prog.identification_rules : null;
+  const rnd = (n) => Math.floor(Math.random() * n);
+  let purchase = '2024-07-15';
+  if (ir && ((ir.sold_from && purchase < ir.sold_from) || (ir.sold_to && purchase > ir.sold_to))) {
+    purchase = ir.sold_from ? addDays(ir.sold_from, 30) : addDays(ir.sold_to, -30);
+    if (ir.sold_to && purchase > ir.sold_to) purchase = ir.sold_to;
+  }
+  return {
+    name: 'Test Claimant', email: `test+${Math.random().toString(36).slice(2, 8)}@example.org`, phone: `(310) 555-01${pad(rnd(100))}`,
+    address_line1: `${100 + rnd(9800)} Test Street`, city: 'Los Angeles', state: 'CA', zip: '90001',
+    model_claimed: v.program.models[0] || 'TL1302Z', serial_claimed: 'SN' + String(10000000 + rnd(89999999)), date_code_claimed: '',
+    retailer_claimed: (ir && ir.sold_at && ir.sold_at[0]) || 'Amazon.com', purchase_date: purchase, quantity: '1',
+  };
+}
+function portalStart() {
+  const p = currentProgram();
+  return h`
+  <div class="page-head"><h1>Claimant portal</h1><span class="muted">Simulates a consumer. Portal requests send no firm headers.</span></div>
+  <div class="grid2">
+    <section class="card"><h2>Issue a new claim link</h2>
+      <p>Creates one draft claim in ${p ? h`<strong>${trunc(p.title, 80)}</strong>` : 'the selected program'} and opens its link here. Needs the admin role.</p>
+      <button class="btn primary" data-act="issue" ${p ? '' : 'disabled'}>Issue a new claim link</button>
+    </section>
+    <section class="card"><h2>Open a link you have</h2>
+      <form data-form="openToken" class="row wrap end"><label class="field grow"><span>Claim link or token</span><input name="token" class="mono" placeholder="dev.&lt;firm id&gt;.&lt;claim id&gt;" required spellcheck="false" autocomplete="off"></label><button class="btn">Open</button></form>
+      <p class="small muted">Dev tokens look like dev.&lt;firm id&gt;.&lt;claim id&gt;. Any claim's token opens its portal view, which is handy for testing answers and payouts. The claim page has an Open as claimant button.</p>
+    </section>
+  </div>`;
+}
+function bindPortalStart() {
+  localActs.issue = async () => {
+    const p = currentProgram(); if (!p) { toast('Pick a program first.'); return; }
+    const r = await api('POST', `/v1/programs/${p.id}/claims/issue`, { json: { n: 1 } });
+    const link = r && r.links && r.links[0];
+    if (!link) { toast('The API returned no link.'); return; }
+    toast('Claim link issued');
+    portal.issued = tokenFrom(link.url);
+    go('#/portal/' + encodeURIComponent(portal.issued));
+  };
+  localForms.openToken = (form, fd) => {
+    const t = tokenFrom(fd.get('token'));
+    if (!t) { toast('Paste a link or a token.'); return; }
+    go('#/portal/' + encodeURIComponent(t));
+  };
+}
+async function viewPortal(ctx) {
+  setTitle('Portal');
+  const token = ctx.arg;
+  if (!token) { setView(portalStart()); bindPortalStart(); return; }
+  if (portal.token !== token) resetPortal(token);
+  let v;
+  // A link issued a moment ago can answer 404 until the issuing transaction commits (see settle), so retry that one.
+  const fresh = portal.issued === token;
+  try {
+    const r = await settle(() => api('GET', `/portal/${encodeURIComponent(token)}`, { quiet: [404] }).catch((e) => {
+      if (e instanceof ApiError && e.status === 404) return e;
+      throw e;
+    }), (x) => !(x instanceof ApiError) || !fresh, ctx);
+    if (r instanceof ApiError) throw r;
+    v = r;
+  } catch (e) {
+    if (!ctx.alive() || !(e instanceof ApiError)) throw e;
+    setView(h`${portalStart()}<section class="card"><h2>That link did not open</h2><div class="note t-red">${refusal(e)}</div><p class="muted">A link opens only while it is valid, only for the firm that issued it, and only while its program is not closed. Dev tokens look like dev.&lt;firm id&gt;.&lt;claim id&gt;.</p></section>`);
+    bindPortalStart(); return;
+  }
+  if (fresh) portal.issued = null;
+  if (!ctx.alive()) return;
+  portal.view = v;
+  if (!portal.form) portal.form = defaultForm(v);
+  renderPortal(ctx);
+}
+function photoCard(kind) {
+  const ps = portal.photos[kind] || {};
+  const onFile = portal.view.photos_uploaded.includes(kind);
+  return h`<div class="photo-card" id="pc-${kind}">
+    <div class="photo-head"><strong>${PHOTO_LABEL[kind] || kind}</strong>${onFile ? h`<span class="badge t-green">on file</span>` : h`<span class="badge t-amber">needed</span>`}</div>
+    <p class="small muted">${PHOTO_HELP[kind] || ''}</p>
+    <div class="photo-preview">${ps.preview ? h`<img src="${ps.preview}" alt="Preview of the ${kind} photo">` : h`<span class="muted small">No photo chosen in this session</span>`}</div>
+    <div class="row wrap">
+      <button type="button" class="btn primary small" data-act="genPhoto" data-kind="${kind}">Use a generated test photo</button>
+      ${portal.last[kind] ? h`<button type="button" class="btn small" data-act="reusePhoto" data-kind="${kind}" title="Upload the same bytes again, to test duplicate detection">Reuse the last test photo</button>` : ''}
+    </div>
+    <label class="field"><span>Or choose a file (JPEG or PNG, up to 8 MB)</span><input type="file" accept="image/jpeg,image/png" data-change="filePhoto" data-kind="${kind}"></label>
+    <div class="small ${ps.tone === 'green' ? 'text-green' : ps.tone === 'red' ? 'text-red' : 'muted'}">${ps.message || ''}</div>
+  </div>`;
+}
+function pfield(name, label, type = 'text', required = false) {
+  return h`<label class="field"><span>${label}${required ? ' (required)' : ''}</span><input name="${name}" type="${type}" value="${portal.form[name] === undefined ? '' : portal.form[name]}" data-pf="${name}" ${required ? raw('required') : ''} ${type === 'number' ? raw('min="1" max="20"') : ''}></label>`;
+}
+function workerNote() {
+  return h`<div class="note t-blue"><strong>Waiting for the worker.</strong> Run one of these from the repository root, then press Refresh status.${workerCmds()}</div>`;
+}
+function renderPortal(ctx) {
+  const v = portal.view, t = portal.token, m = DEV_TOKEN_RE.exec(t);
+  const editable = v.status === 'draft' || v.status === 'needs_info';
+  const required = v.program.required_photos && v.program.required_photos.length ? v.program.required_photos : PHOTO_KINDS;
+  const missing = required.filter((k) => !v.photos_uploaded.includes(k));
+  const f = portal.form;
+  // The portal never shows the address on file, so the check address starts empty (the API then mails the check to
+  // the home address). It is kept with the method across re-renders, which happen on every upload and refusal.
+  const pay = portal.payout || (portal.payout = { method: 'check_export', mailing: '' });
+  const home = `${f.address_line1}, ${f.city}, ${f.state} ${f.zip}`;
+  setView(h`
+  <div class="page-head"><h1>Claimant portal</h1>${badge(v.status)}<span class="spacer"></span>
+    <button class="btn" data-act="portalRefresh">Refresh status</button>
+    ${m ? h`<button class="btn" data-act="openFirm">Open in the firm view</button>` : ''}
+    <a class="btn" href="#/portal">Another link</a>
+  </div>
+  <p class="small muted">Token <span class="mono">${t}</span><button type="button" class="copy" data-act="copy" data-text="${t}">copy</button>. Claim ${idChip(v.claim_id)}. These requests send no firm headers.</p>
+  ${portal.note ? h`<div class="note t-${portal.note.tone}">${portal.note.text}</div>` : ''}
+  <div class="grid2">
+    <section class="card"><h2>The recall</h2>
+      <p class="lead">${v.program.title}</p>
+      <dl class="kv">
+        <dt>Recalled models</dt><dd>${v.program.models.length ? v.program.models.map((x) => h`<code>${x}</code> `) : NONE}</dd>
+        <dt>Model printed at</dt><dd>${v.program.model_label_location || h`<span class="muted">not stated in the notice</span>`}</dd>
+        <dt>Remedy</dt><dd>${or(v.program.remedy_type)}</dd>
+        <dt>Destruction step</dt><dd>${or(v.program.destruction_instruction)}</dd>
+        <dt>Photos needed</dt><dd>${(v.program.required_photos || []).length ? v.program.required_photos.map((k) => h`<span class="tag ${v.photos_uploaded.includes(k) ? 'tag-ok' : ''}">${k}${v.photos_uploaded.includes(k) ? ' on file' : ''}</span> `) : NONE}</dd>
+      </dl>
+    </section>
+    <section class="card"><h2>Claim status</h2>
+      <dl class="kv"><dt>Status</dt><dd>${badge(v.status)}</dd><dt>Payout</dt><dd>${v.payout_status ? badge(v.payout_status) : NONE}</dd><dt>Photos on file</dt><dd>${v.photos_uploaded.length ? v.photos_uploaded.join(', ') : NONE}</dd></dl>
+      ${v.pending_question ? h`<div class="note t-amber"><strong>The firm asks:</strong> ${v.pending_question}</div>` : ''}
+      ${v.decision_reasons.length ? h`<h3>Decision reasons</h3><ul>${v.decision_reasons.map((x) => h`<li>${x}</li>`)}</ul>` : ''}
+      ${v.messages.length ? h`<h3>Messages</h3><ul class="messages">${v.messages.map((x) => h`<li class="msg msg-${x.sender}"><span class="small muted">${x.sender}, ${fmtTime(x.at)}</span><div>${x.text}</div></li>`)}</ul>` : ''}
+      ${['under_review', 'flagged', 'capped'].includes(v.status) ? h`<p class="muted small">A person at the firm reviews the claim next, so the claimant sees no reasons yet.${m ? ' Open in the firm view has the reviewer actions.' : ''}</p>` : ''}
+      ${v.status === 'submitted' ? workerNote() : ''}
+      ${v.status === 'draft' ? h`<p class="muted small">Not submitted yet. Upload the photos, then submit the form below.</p>` : ''}
+    </section>
+  </div>
+  ${editable ? h`<section class="card"><h2>1. Photos</h2><p class="small muted">Upload each photo before you submit. A generated test photo is drawn in this browser and uploaded as a PNG. Each one has its own random background, so two claims do not collide unless you reuse a photo.</p>
+    <div class="photo-grid">${required.map(photoCard)}</div></section>` : ''}
+  ${v.status === 'draft' ? h`<section class="card"><h2>2. Claim details</h2><p class="small muted">Prefilled with synthetic values. Change anything you like.</p>
+    <form data-form="submitClaim" class="form-grid">
+      ${pfield('name', 'Name', 'text', true)}${pfield('email', 'Email', 'email', true)}${pfield('phone', 'Phone')}${pfield('address_line1', 'Street address', 'text', true)}
+      ${pfield('city', 'City', 'text', true)}${pfield('state', 'State', 'text', true)}${pfield('zip', 'ZIP', 'text', true)}${pfield('model_claimed', 'Model')}
+      ${pfield('serial_claimed', 'Serial')}${pfield('date_code_claimed', 'Date code')}${pfield('retailer_claimed', 'Retailer')}${pfield('purchase_date', 'Purchase date', 'date')}${pfield('quantity', 'Quantity', 'number')}
+      <div class="form-actions">${missing.length ? h`<div class="note t-amber small">Not on file yet: ${missing.join(', ')}. You can still submit to see how the backend handles it.</div>` : ''}
+        <button type="button" class="btn" data-act="randomize">New random values</button><button class="btn primary">Submit claim</button></div>
+    </form></section>` : ''}
+  ${v.status === 'needs_info' || v.pending_question ? h`<section class="card"><h2>Answer the firm</h2>
+    <form data-form="answer" class="stack"><label class="field"><span>Your answer</span><textarea name="message" rows="3" required>I uploaded a clearer photo of the label.</textarea></label><button class="btn primary">Send answer</button></form></section>` : ''}
+  <section class="card"><h2>Payout</h2>
+    <p class="small muted">The claimant picks how an approved refund is paid. Before an approval the API answers 409.</p>
+    ${v.status !== 'approved' ? h`<div class="note t-gray small">The claim is ${v.status}, not approved, so a mailed check answers 409 now. Stripe Connect answers 501 in any state.</div>` : ''}
+    <form data-form="payout" class="stack">
+      <fieldset class="radios"><legend>Method</legend>
+        <label><input type="radio" name="method" value="check_export" data-pp="method" ${pay.method === 'check_export' ? raw('checked') : ''}> Mailed check. It goes into a check export batch.</label>
+        <label><input type="radio" name="method" value="stripe_connect" data-pp="method" ${pay.method === 'stripe_connect' ? raw('checked') : ''}> Stripe Connect. Not built yet (payments owner), so expect 501.</label>
+      </fieldset>
+      <label class="field"><span>Mailing address for the check (optional)</span><input name="mailing_address" data-pp="mailing" value="${pay.mailing}" placeholder="Leave empty to mail the check to the home address on file"></label>
+      <p class="small muted">${portal.filed ? h`The home address on file is ${home}. ` : 'The portal does not show the address on file. '}An address another claim of the program already uses, as its home or mailing address, sends this claim and every approved claim sharing it to a person, with their payouts held.</p>
+      <button class="btn primary">Choose payout</button>
+    </form>
+  </section>`);
+  const enc = encodeURIComponent(t);
+  const after = (nv, note) => { portal.view = nv; portal.note = note; if (ctx.alive()) renderPortal(ctx); };
+  const refused = (label, e) => {
+    if (!(e instanceof ApiError)) throw e;
+    portal.note = e.status === 501
+      ? { tone: 'amber', text: `${label}: not built yet (payments owner). The API answered 501, as expected.` }
+      : { tone: 'red', text: `${label} was refused. ${refusal(e)}` };
+    if (ctx.alive()) renderPortal(ctx);
+  };
+  const INLINE = [409, 413, 422, 429, 501, 503]; // refusals this view explains in its own note, so the error panel skips them
+  localActs.portalRefresh = async () => {
+    const nv = await api('GET', `/portal/${enc}`);
+    after(nv, { tone: 'blue', text: `Refreshed at ${fmtTime(new Date().toISOString())}. Status: ${nv.status}.` });
+  };
+  localActs.openFirm = async () => {
+    const [, firm, claim] = m;
+    if (firm.toLowerCase() !== state.firm) await setFirm(firm);
+    go('#/claim/' + claim);
+  };
+  localActs.randomize = () => { portal.form = defaultForm(v); renderPortal(ctx); };
+  const upload = async (kind, blob, filename) => {
+    const preview = URL.createObjectURL(blob); portal.previews.push(preview);
+    portal.photos[kind] = { preview, message: 'Uploading...', tone: '' };
+    if (ctx.alive()) renderPortal(ctx);
+    const fd = new FormData(); fd.append('kind', kind); fd.append('file', blob, filename);
+    try {
+      const ph = await api('POST', `/portal/${enc}/photos`, { form: fd, quiet: INLINE });
+      portal.photos[kind] = { preview, tone: 'green', message: `Uploaded. sha256 ${String(ph.sha256).slice(0, 12)}, pHash ${ph.phash}.` };
+      if (!portal.view.photos_uploaded.includes(kind)) portal.view.photos_uploaded.push(kind);
+    } catch (e) {
+      if (!(e instanceof ApiError)) throw e;
+      portal.photos[kind] = { preview, tone: 'red', message: `Upload refused. ${refusal(e)}` };
+    }
+    if (ctx.alive()) renderPortal(ctx);
+  };
+  localActs.genPhoto = async (el) => {
+    const kind = el.dataset.kind;
+    const blob = await makeTestPhoto(kind, portal.form);
+    portal.last[kind] = blob;
+    await upload(kind, blob, `test-${kind}.png`);
+  };
+  localActs.reusePhoto = async (el) => { const kind = el.dataset.kind; if (portal.last[kind]) await upload(kind, portal.last[kind], `test-${kind}.png`); };
+  localChanges.filePhoto = async (el) => { const file = el.files && el.files[0]; if (file) await upload(el.dataset.kind, file, file.name); };
+  localForms.submitClaim = async (form, fd) => {
+    const body = {};
+    for (const k of ['name', 'email', 'phone', 'address_line1', 'city', 'state', 'zip', 'model_claimed', 'serial_claimed', 'date_code_claimed', 'retailer_claimed', 'purchase_date', 'quantity']) {
+      const val = String(fd.get(k) === null ? '' : fd.get(k)).trim();
+      if (val !== '') body[k] = k === 'quantity' ? Number(val) : val;
+    }
+    try {
+      const nv = await api('POST', `/portal/${enc}/submit`, { json: body, quiet: INLINE });
+      portal.filed = true;
+      after(nv, { tone: 'green', text: `Submitted. The status is now ${nv.status}. Run the worker to decide it.` });
+    } catch (e) { refused('Submit', e); }
+  };
+  localForms.answer = async (form, fd) => {
+    try {
+      const nv = await api('POST', `/portal/${enc}/answer`, { json: { message: String(fd.get('message') || '').trim() }, quiet: INLINE });
+      after(nv, { tone: 'green', text: `Answer sent. The status is now ${nv.status}. The worker decides the claim again.` });
+    } catch (e) { refused('Answer', e); }
+  };
+  localForms.payout = async (form, fd) => {
+    const method = fd.get('method');
+    const mailing = String(fd.get('mailing_address') || '').trim();
+    const body = method === 'check_export' ? { method, mailing_address: mailing || null } : { method };
+    try {
+      const nv = await api('POST', `/portal/${enc}/payout`, { json: body, quiet: INLINE });
+      after(nv, nv.payout_status === 'held'
+        ? { tone: 'amber', text: `The check address is one another claim already uses, so the claim went to a person (status ${nv.status}) and its payout is held.` }
+        : { tone: 'green', text: `Payout method saved. The payout status is ${nv.payout_status || 'not set'}. The check goes to ${mailing || 'the home address on file'}.` });
+    } catch (e) { refused(method === 'stripe_connect' ? 'Stripe Connect' : 'Mailed check', e); }
+  };
+}
+
+/* ---------- generated test photos (drawn on a canvas, uploaded as PNG) ---------- */
+function rrect(g, x, y, w, hh, r) { g.beginPath(); if (g.roundRect) g.roundRect(x, y, w, hh, r); else g.rect(x, y, w, hh); }
+function fitFont(g, text, maxW, size, style) {
+  let s = size; g.font = `${style} ${s}px system-ui, sans-serif`;
+  while (s > 14 && g.measureText(text).width > maxW) { s -= 2; g.font = `${style} ${s}px system-ui, sans-serif`; }
+}
+function drawLabel(g, W, H, R, model, serial) {
+  const w = 540, hh = 300, x = (W - w) / 2, y = (H - hh) / 2;
+  g.save(); g.translate(W / 2, H / 2); g.rotate((R() - 0.5) * 0.08); g.translate(-W / 2, -H / 2);
+  g.fillStyle = '#ffffff'; g.strokeStyle = '#111111'; g.lineWidth = 4; rrect(g, x, y, w, hh, 14); g.fill(); g.stroke();
+  g.fillStyle = '#111111'; g.textAlign = 'left'; g.textBaseline = 'alphabetic';
+  g.font = '600 20px system-ui, sans-serif'; g.fillText('PRODUCT RATING LABEL', x + 28, y + 44);
+  fitFont(g, 'MODEL ' + model, w - 56, 56, 'bold'); g.fillText('MODEL ' + model, x + 28, y + 118);
+  fitFont(g, 'S/N ' + serial, w - 56, 34, '500'); g.fillText('S/N ' + serial, x + 28, y + 168);
+  g.font = '20px system-ui, sans-serif'; g.fillText('120V~ 60Hz 1.5A', x + 28, y + 206);
+  let bx = x + 28;
+  while (bx < x + w - 40) { const bw = 2 + Math.floor(R() * 4); g.fillRect(bx, y + 226, bw, 48); bx += bw + 2 + Math.floor(R() * 4); }
+  g.restore();
+}
+function drawCutCord(g, W, H, R) {
+  const bx = 70 + R() * 50, by = 170 + R() * 50, bw = 330, bh = 170;
+  g.save();
+  g.fillStyle = '#3b3f45'; rrect(g, bx, by, bw, bh, 22); g.fill();
+  g.fillStyle = '#1f2226'; g.fillRect(bx + 30, by + 30, bw - 60, 16);
+  g.fillStyle = '#a7adb4'; g.font = 'bold 20px system-ui, sans-serif'; g.fillText('DEVICE', bx + 30, by + bh - 28);
+  const sx = bx + bw, sy = by + bh * 0.65, cutX = 560 + R() * 20, cutY = 390 + R() * 40;
+  g.strokeStyle = '#111111'; g.lineWidth = 12; g.lineCap = 'butt';
+  g.beginPath(); g.moveTo(sx, sy); g.bezierCurveTo(sx + 60, sy + 10, cutX - 80, cutY - 40, cutX - 24, cutY); g.stroke();
+  const ex = cutX + 24, ey = cutY + 6, px = 700, py = 290 + R() * 30;
+  g.beginPath(); g.moveTo(ex, ey); g.bezierCurveTo(ex + 50, ey + 20, px - 40, py + 60, px, py); g.stroke();
+  g.strokeStyle = '#c87533'; g.lineWidth = 2;
+  for (let i = 0; i < 6; i++) {
+    g.beginPath(); g.moveTo(cutX - 24, cutY - 4 + i * 1.6); g.lineTo(cutX - 12 + R() * 6, cutY - 9 + i * 3); g.stroke();
+    g.beginPath(); g.moveTo(ex, ey - 4 + i * 1.6); g.lineTo(ex - 12 - R() * 6, ey - 9 + i * 3); g.stroke();
+  }
+  g.fillStyle = '#111111'; rrect(g, px - 8, py - 30, 44, 60, 8); g.fill();
+  g.fillStyle = '#bbbbbb'; g.fillRect(px + 36, py - 18, 18, 6); g.fillRect(px + 36, py + 12, 18, 6);
+  g.fillStyle = 'rgba(255,255,255,0.9)'; g.fillRect(40, 40, 330, 52);
+  g.fillStyle = '#b00020'; g.font = 'bold 28px system-ui, sans-serif'; g.fillText('POWER CORD CUT', 56, 77);
+  g.restore();
+}
+function drawReceipt(g, W, H, R, form, model) {
+  const qty = Math.max(1, Number(form.quantity) || 1);
+  const price = 44 + Math.floor(R() * 1200) / 100, tax = Math.round(price * qty * 9.5) / 100, total = price * qty + tax;
+  g.save(); g.translate(W / 2, H / 2); g.rotate((R() - 0.5) * 0.1);
+  const w = 380, hh = 540;
+  g.shadowColor = 'rgba(0,0,0,0.25)'; g.shadowBlur = 14; g.fillStyle = '#fdfdf8'; g.fillRect(-w / 2, -hh / 2, w, hh); g.shadowBlur = 0;
+  g.fillStyle = '#222222'; g.textAlign = 'center';
+  fitFont(g, String(form.retailer_claimed || 'Amazon.com').toUpperCase(), w - 40, 26, 'bold');
+  g.fillText(String(form.retailer_claimed || 'Amazon.com').toUpperCase(), 0, -hh / 2 + 52);
+  g.textAlign = 'left'; g.font = '16px ui-monospace, Menlo, monospace';
+  const lines = ['Order date: ' + (form.purchase_date || '2024-07-15'), 'Order no. ' + (100000000 + Math.floor(R() * 899999999)), '',
+    'Item: model ' + model, 'Qty ' + qty + ' at $' + price.toFixed(2), '', 'Subtotal      $' + (price * qty).toFixed(2), 'Tax           $' + tax.toFixed(2),
+    'TOTAL         $' + total.toFixed(2), '', 'Card ending 4242', 'Ship to: ' + (form.name || 'Test Claimant')];
+  lines.forEach((t, i) => g.fillText(t, -w / 2 + 26, -hh / 2 + 104 + i * 27));
+  g.rotate(-0.35); g.strokeStyle = '#c62828'; g.fillStyle = '#c62828'; g.lineWidth = 5;
+  g.strokeRect(-150, 50, 300, 72); g.font = 'bold 46px system-ui, sans-serif'; g.textAlign = 'center'; g.fillText('SYNTHETIC', 0, 104);
+  g.restore();
+}
+function makeTestPhoto(kind, form) {
+  const W = 800, H = 600, R = Math.random, f = form || {};
+  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const g = c.getContext('2d');
+  g.fillStyle = `hsl(${Math.floor(R() * 360)}, 16%, 80%)`; g.fillRect(0, 0, W, H);
+  for (let i = 0; i < 8; i++) { // a random background, so each generated photo gets its own perceptual hash
+    g.fillStyle = `hsla(${Math.floor(R() * 360)}, 30%, ${45 + Math.floor(R() * 40)}%, 0.5)`;
+    const x = R() * W, y = R() * H, w = 80 + R() * 300, hh = 60 + R() * 240;
+    g.beginPath(); if (R() < 0.5) g.rect(x - w / 2, y - hh / 2, w, hh); else g.ellipse(x, y, w / 2, hh / 2, R() * Math.PI, 0, Math.PI * 2); g.fill();
+  }
+  const model = f.model_claimed || 'TL1302Z';
+  const serial = f.serial_claimed || 'SN' + (10000000 + Math.floor(R() * 89999999));
+  if (kind === 'destruction') drawCutCord(g, W, H, R);
+  else if (kind === 'receipt') drawReceipt(g, W, H, R, f, model);
+  else drawLabel(g, W, H, R, model, serial);
+  g.fillStyle = 'rgba(0,0,0,0.78)'; g.fillRect(W - 176, H - 46, 164, 34);
+  g.fillStyle = '#ffffff'; g.font = 'bold 18px system-ui, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillText('TEST PHOTO', W - 94, H - 29);
+  return new Promise((resolve, reject) => c.toBlob((b) => (b ? resolve(b) : reject(new Error('The browser could not export the test photo.'))), 'image/png'));
+}
+
+/* ---------- fraud rings ---------- */
+function ringCard(ring, i, nodes, edges) {
+  const n = ring.length, VH = n === 2 ? 84 : 200, cx = 100, cy = VH / 2; // a pair needs only a short strip
+  const R = n <= 2 ? 54 : n <= 6 ? 62 : 72, r = n > 12 ? 6 : 10;
+  const start = n === 2 ? Math.PI : -Math.PI / 2;
+  const pos = new Map(ring.map((id, k) => [id, [cx + R * Math.cos(start + (2 * Math.PI * k) / n), cy + R * Math.sin(start + (2 * Math.PI * k) / n)]]));
+  const groups = new Map();
+  edges.forEach((e) => { const key = [e.a, e.b].sort().join('|'); if (!groups.has(key)) groups.set(key, []); groups.get(key).push(e); });
+  const f1 = (v) => v.toFixed(1);
+  const lines = [];
+  groups.forEach((list) => list.forEach((e, j) => {
+    const [x1, y1] = pos.get(e.a), [x2, y2] = pos.get(e.b);
+    const k = KIND[e.kind] || { label: e.kind, color: 'var(--gray-fg)', dash: '' };
+    const style = `stroke: ${k.color}; stroke-dasharray: ${k.dash || 'none'}`;
+    const off = (j - (list.length - 1) / 2) * 18;
+    if (!off) { lines.push(h`<line x1="${f1(x1)}" y1="${f1(y1)}" x2="${f1(x2)}" y2="${f1(y2)}" style="${style}"><title>${k.label}</title></line>`); return; }
+    const len = Math.hypot(x2 - x1, y2 - y1) || 1, qx = (x1 + x2) / 2 - ((y2 - y1) / len) * off * 2, qy = (y1 + y2) / 2 + ((x2 - x1) / len) * off * 2;
+    lines.push(h`<path d="M${f1(x1)} ${f1(y1)} Q${f1(qx)} ${f1(qy)} ${f1(x2)} ${f1(y2)}" style="${style}"><title>${k.label}</title></path>`);
+  }));
+  const kinds = [...new Set(edges.map((e) => e.kind))];
+  const dots = ring.map((id) => {
+    const [x, y] = pos.get(id), st = (nodes.get(id) || {}).status || 'unknown';
+    return h`<a href="#/claim/${id}" aria-label="Claim ${shortId(id)}, ${st}"><circle class="node" cx="${f1(x)}" cy="${f1(y)}" r="${r}" style="fill: var(--${TONES[st] || 'gray'}-fg)"><title>claim ${id} (${st})</title></circle></a>`;
+  });
+  return h`<figure class="ring-card"><svg viewBox="0 0 200 ${VH}" role="img" aria-label="Ring ${i + 1}: ${n} claims linked by ${kinds.join(', ')}"><g class="edges">${lines}</g><g>${dots}</g></svg>
+    <figcaption><strong>Ring ${i + 1}</strong> <span class="muted">${n} claims</span><div>${kinds.map(kindTag)}</div></figcaption></figure>`;
+}
+async function viewFraud(ctx) {
+  setTitle('Fraud rings');
+  const p = currentProgram(); if (!p) return noProgram();
+  let g;
+  try { g = await api('GET', `/v1/programs/${p.id}/fraud-graph?limit=500`, { quiet: [503] }); } catch (e) {
+    if (!ctx.alive()) return;
+    if (e.status === 503) {
+      setView(h`<div class="page-head"><h1>Fraud rings</h1><span class="spacer"></span><button class="btn" data-act="reroute">Try again</button></div><section class="card">
+        <div class="note t-amber"><strong>The fraud graph is unavailable (503).</strong> ${e.detail || ''}</div>
+        <p>The graph runs in Neo4j. Start it with <code>docker compose up -d graph</code>, check NEO4J_URI in .env, then rebuild it with <code>make graph-sync</code>.</p>
+        <p class="muted">Claim decisions and payouts never depend on the graph, so everything else keeps working.</p></section>`);
+      return;
+    }
+    throw e;
+  }
+  if (!ctx.alive()) return;
+  const nodes = new Map(g.nodes.map((n) => [n.claim_id, n]));
+  const ringOf = new Map(); g.rings.forEach((rg, i) => rg.forEach((id) => ringOf.set(id, i)));
+  const ringEdges = g.rings.map(() => []);
+  g.edges.forEach((e) => { const i = ringOf.get(e.a); if (i !== undefined && ringOf.get(e.b) === i) ringEdges[i].push(e); });
+  const kindCount = {}; g.edges.forEach((e) => { kindCount[e.kind] = (kindCount[e.kind] || 0) + 1; });
+  const statuses = [...new Set(g.nodes.map((n) => n.status))].sort();
+  setView(h`
+  <div class="page-head"><h1>Fraud rings</h1><span class="muted">${trunc(p.title, 80)}</span><span class="spacer"></span><button class="btn" data-act="reroute">Refresh</button></div>
+  <p class="muted">Claims that share a photo, address, serial, payout account, or mailing address with another claim of this program. The graph is a Neo4j projection of Postgres. No claim status or payout depends on it.</p>
+  <div class="stats">${stat('Claims in rings', g.nodes.length)}${stat('Links', g.edges.length)}${stat('Rings', g.rings.length)}${stat('Largest ring', g.rings.length ? Math.max(...g.rings.map((x) => x.length)) : 0)}</div>
+  ${g.truncated ? h`<div class="note t-amber">The answer hit the node or edge cap, so some rings are cut short.</div>` : ''}
+  <section class="card"><h2>Legend</h2>
+    <div class="legend">${LINK_KINDS.map((k) => h`<span class="legend-item"><svg width="34" height="10" aria-hidden="true"><line x1="2" y1="5" x2="32" y2="5" style="stroke: ${k.color}; stroke-width: 3; stroke-dasharray: ${k.dash || 'none'}; stroke-linecap: round"/></svg><span>${k.label}</span><span class="muted small">${kindCount[k.kind] || 0} links</span></span>`)}</div>
+    <div class="legend">${statuses.map((s) => h`<span class="legend-item"><svg width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="5" style="fill: var(--${TONES[s] || 'gray'}-fg)"/></svg>claim ${s}</span>`)}</div>
+    <p class="small muted">Node color is the claim status, line color and pattern the kind of link. Hover a node for its id and click it to open the claim.</p>
+  </section>
+  ${g.rings.length ? h`<div class="ring-grid">${g.rings.map((rg, i) => ringCard(rg, i, nodes, ringEdges[i]))}</div>` : h`<section class="card"><p class="muted">No rings in this program.</p></section>`}
+  ${g.rings.length ? h`<section class="card flush"><div class="table-wrap tall"><table><thead><tr><th>Ring</th><th class="num">Size</th><th>Link kinds</th><th>Members</th></tr></thead><tbody>
+    ${g.rings.map((rg, i) => h`<tr><td>${i + 1}</td><td class="num">${rg.length}</td><td>${[...new Set(ringEdges[i].map((e) => e.kind))].map(kindTag)}</td>
+      <td><div class="members">${rg.map((id) => h`<span>${claimLink(id)} ${badge((nodes.get(id) || {}).status)}</span>`)}</div></td></tr>`)}
+  </tbody></table></div></section>` : ''}`);
+}
+
+/* ---------- payouts ---------- */
+async function viewPayouts(ctx) {
+  setTitle('Payouts');
+  let list = null, denied = null;
+  try { list = await api('GET', '/v1/payouts/exports?limit=50', { quiet: [403] }); } catch (e) { if (e.status === 403) denied = e; else throw e; }
+  if (!ctx.alive()) return;
+  setView(h`
+  <div class="page-head"><h1>Payouts</h1><span class="spacer"></span><button class="btn" data-act="reroute">Refresh</button></div>
+  <section class="card"><h2>Check export batches</h2>
+    <p class="small muted">An approved refund whose claimant picked a mailed check waits in pending_export. Creating a batch writes those payouts into one CSV and marks them exported. Admin only.</p>
+    <div class="row wrap"><button class="btn primary" data-act="createBatch">Create export batch</button><span id="batchResult" aria-live="polite"></span></div>
+    ${denied ? h`<div class="note t-amber">Export batches need the admin role. You are a ${state.role}. Switch Role to admin in the top bar.</div>`
+      : list.items.length ? h`<div class="table-wrap" style="margin-top: 12px"><table><thead><tr><th>Created</th><th>By</th><th class="num">Rows</th><th class="num">Total</th><th>sha256</th><th>Batch</th><th></th></tr></thead><tbody>
+        ${list.items.map((b) => h`<tr><td class="nowrap">${fmtTime(b.created_at)}</td><td class="mono">${b.created_by}</td><td class="num">${b.row_count}</td><td class="num">${money(b.total_cents)}</td>
+          <td><span class="mono" title="${b.sha256}">${b.sha256.slice(0, 16)}</span></td><td>${idChip(b.id)}</td><td><button class="btn small" data-act="downloadCsv" data-id="${b.id}">Download CSV</button></td></tr>`)}
+      </tbody></table></div>` : h`<p class="muted">No batches yet.</p>`}
+  </section>
+  <section class="card"><h2>Billing (payments owner)</h2>
+    <p class="small muted">Stripe Billing and Connect belong to the payments owner. Their routes answer 501 until that code lands.</p>
+    <div class="row wrap"><button class="btn" data-act="tryCheckout">Try POST /v1/billing/checkout</button><span id="billingResult" aria-live="polite"></span></div>
+  </section>`);
+  localActs.createBatch = async () => {
+    const r = await api('POST', '/v1/payouts/exports');
+    if (r === null) { $('#batchResult').innerHTML = h`<span class="note t-blue">Nothing is waiting for a check, so no batch was written.</span>`.s; return; }
+    toast(`Batch written: ${r.row_count} rows, ${money(r.total_cents)}`);
+    if (ctx.alive()) route();
+  };
+  localActs.downloadCsv = async (el) => { const blob = await api('GET', `/v1/payouts/exports/${el.dataset.id}.csv`, { blob: true }); saveBlob(blob, `${el.dataset.id}.csv`); };
+  localActs.tryCheckout = async () => {
+    try { await api('POST', '/v1/billing/checkout', { quiet: [501] }); $('#billingResult').textContent = 'It answered. The payments owner has shipped it.'; } catch (e) {
+      if (!(e instanceof ApiError)) throw e;
+      const out = $('#billingResult');
+      if (out) out.innerHTML = (e.status === 501 ? h`<span class="badge t-amber">not built yet (payments owner)</span> <span class="small muted">The API answered 501, as expected.</span>` : h`<span class="badge t-red">${e.status} ${e.title}</span>`).s;
+    }
+  };
+}
+
+/* ---------- MPR ---------- */
+let mprManual = '{}';
+function fmtBox(v) {
+  if (v !== null && typeof v === 'object') return Object.keys(v).length ? h`<pre class="inline">${pretty(v)}</pre>` : h`<span class="muted">empty</span>`;
+  if (typeof v === 'boolean') return v ? 'yes' : 'no';
+  if (v === null || v === undefined) return NONE;
+  return h`<span class="mono">${typeof v === 'number' ? v.toLocaleString('en-US') : v}</span>`;
+}
+function mprReport(rep) {
+  const pl = rep.payload || {}, boxes = pl.boxes || {}, computed = pl.computed || {}, manual = pl.manual || {};
+  const disc = (pl.reconciliation && pl.reconciliation.discrepancies) || [];
+  const keys = [...BOX_ORDER.filter((k) => k in boxes), ...Object.keys(boxes).filter((k) => !BOX_ORDER.includes(k)).sort()];
+  return h`<section class="card">
+    <div class="row wrap"><h2 style="margin: 0">Report for ${pl.period || rep.period_start}</h2>${rep.reconciled ? h`<span class="badge t-green">reconciled</span>` : h`<span class="badge t-red">not reconciled</span>`}
+      <span class="small muted">${rep.period_start} to ${rep.period_end}, generated ${fmtTime(rep.generated_at)}</span>${idChip(rep.id)}</div>
+    ${disc.length ? h`<div class="note t-red"><strong>The report and the independent recount disagree:</strong><pre>${pretty(disc)}</pre></div>` : h`<p class="small muted">The independent recount agrees with every computed box.</p>`}
+    <div class="table-wrap"><table><thead><tr><th>Box</th><th>Value</th><th>Source</th></tr></thead><tbody>
+      ${keys.map((k) => h`<tr><td class="mono">${k}</td><td>${fmtBox(boxes[k])}</td><td>${k in manual ? h`<span class="tag tag-human">entered</span>` : k in computed ? h`<span class="tag tag-ok">computed</span>` : h`<span class="muted small">default</span>`}</td></tr>`)}
+    </tbody></table></div>
+    ${pl.notes && pl.notes.length ? h`<h3>Notes</h3><ul>${pl.notes.map((x) => h`<li>${x}</li>`)}</ul>` : ''}
+    <details><summary>Full payload</summary><pre>${pretty(pl)}</pre></details>
+  </section>`;
+}
+async function viewMpr(ctx) {
+  setTitle('MPR');
+  const p = currentProgram(); if (!p) return noProgram();
+  const qp = ctx.query.get('period') || '';
+  const period = PERIOD_RE.test(qp) ? qp : thisMonth();
+  let rep = null;
+  try { rep = await api('GET', `/v1/programs/${p.id}/mpr?period=${period}`, { quiet: [404] }); } catch (e) { if (e.status !== 404) throw e; }
+  if (!ctx.alive()) return;
+  setView(h`
+  <div class="page-head"><h1>Monthly progress report</h1><span class="muted">${trunc(p.title, 80)}</span></div>
+  <section class="card">
+    <form data-form="mprLoad" class="row wrap end">
+      <label class="field"><span>Period</span><input type="month" name="period" value="${period}" required></label>
+      <button class="btn">Load</button>
+      <button type="button" class="btn primary" data-act="mprGenerate">Generate</button>
+      ${rep ? h`<button type="button" class="btn" data-act="mprPdf">Download PDF</button>` : ''}
+      <span id="mprResult" aria-live="polite"></span>
+    </form>
+    <details style="margin-top: 10px"><summary>Manual boxes sent with Generate (optional JSON)</summary>
+      <label class="field"><span>Boxes the system cannot know, for example {"incidents_after": 0}. Omitted boxes keep their defaults.</span><textarea id="mprManual" rows="4" class="mono">${mprManual}</textarea></label>
+    </details>
+    <p class="small muted">Generate builds the report from the claims table in one snapshot and recounts it independently. Admin only.</p>
+  </section>
+  ${rep ? mprReport(rep) : h`<section class="card"><p><strong>Not generated yet</strong> for ${period}. Press Generate to build it.</p></section>`}`);
+  localForms.mprLoad = (form, fd) => { const v = String(fd.get('period') || ''); if (!PERIOD_RE.test(v)) { toast('Use a period like 2026-10.'); return; } go('#/mpr?period=' + v); };
+  localActs.mprGenerate = async () => {
+    const v = String(($('input[name=period]') || {}).value || period);
+    if (!PERIOD_RE.test(v)) { toast('Use a period like 2026-10.'); return; }
+    const text = ($('#mprManual') || {}).value || '{}';
+    let manual;
+    try { manual = JSON.parse(text.trim() || '{}'); } catch (e) { $('#mprResult').innerHTML = h`<span class="note t-red">The manual boxes are not valid JSON: ${e.message}</span>`.s; return; }
+    mprManual = text;
+    const r = await api('POST', `/v1/programs/${p.id}/mpr/generate?period=${v}`, { json: manual });
+    toast(r.reconciled ? 'Generated. It reconciles.' : 'Generated. It does NOT reconcile.');
+    go('#/mpr?period=' + v);
+  };
+  localActs.mprPdf = async () => { const blob = await api('GET', `/v1/programs/${p.id}/mpr/${rep.id}.pdf`, { blob: true }); saveBlob(blob, `mpr-${period}.pdf`); };
+}
+
+/* ---------- campaigns ---------- */
+let campLast = null;
+function countsTable(counts) {
+  const keys = Object.keys(counts || {});
+  if (!keys.length) return h`<p class="muted small">No counts.</p>`;
+  return h`<table><thead><tr><th>Key</th><th class="num">Count</th></tr></thead><tbody>${keys.sort().map((k) => h`<tr><td class="mono">${k}</td><td class="num">${counts[k]}</td></tr>`)}</tbody></table>`;
+}
+async function viewCampaigns(ctx) {
+  setTitle('Campaigns');
+  const p = currentProgram(); if (!p) return noProgram();
+  const pending = campLast && campLast.program === p.id ? campLast.shows : null; // the write just made (see settle)
+  const s = await settle(() => api('GET', `/v1/programs/${p.id}/campaign`), (x) => !pending || pending(x), ctx);
+  if (!ctx.alive()) return;
+  if (campLast) campLast.shows = null;
+  const last = campLast && campLast.program === p.id ? campLast : null;
+  const cmd = `PYTHONPATH=apps/api/src uv run --project apps/api --frozen python -m recallops.synth --registrations owners.csv --program ${p.id} --n 40`;
+  setView(h`
+  <div class="page-head"><h1>Notification campaign</h1><span class="muted">${trunc(p.title, 80)}</span><span class="spacer"></span><button class="btn" data-act="reroute">Refresh</button></div>
+  <p class="muted">Sending is simulated. No email, letter, or text leaves the system. Sent notices feed the MPR notified boxes. Every action here needs the admin role.</p>
+  <div class="stats">${stat('Registrations', s.registrations)}${stat('Matched', s.matched)}${stat('Unmatched', s.unmatched)}${stat('Claim links', s.claim_links)}</div>
+  ${last ? h`<section class="card"><h2>Last result: ${last.label}</h2>${last.counts ? countsTable(last.counts) : ''}${last.upload ? h`<p>Accepted ${last.upload.accepted} rows, rejected ${last.upload.rejected_total}.</p>${last.upload.rejected.length ? h`<details><summary>Rejected rows</summary><pre>${pretty(last.upload.rejected)}</pre></details>` : ''}` : ''}</section>` : ''}
+  <div class="grid2">
+    <section class="card"><h2>1. Upload registrations</h2>
+      <p class="small">Rows must be synthetic: example.* emails and 555-01xx phones. Make a CSV from the repository root:</p>
+      ${cmdRow(cmd)}
+      <form data-form="regUpload" class="row wrap end" style="margin-top: 10px"><label class="field grow"><span>Registrations CSV</span><input type="file" name="file" accept=".csv,text/csv" required></label><button class="btn primary">Upload</button></form>
+    </section>
+    <section class="card"><h2>2. Match, draft, send</h2>
+      <div class="row"><button class="btn" data-act="campMatch">Match registrations to the rules</button></div>
+      <form data-form="campDrafts" class="row wrap end"><fieldset><legend>Draft channels</legend><label><input type="checkbox" name="ch" value="email" checked> email</label><label><input type="checkbox" name="ch" value="mail"> mail</label><label><input type="checkbox" name="ch" value="phone_text"> phone_text</label></fieldset><button class="btn">Create drafts</button></form>
+      <form data-form="campSend" class="row wrap end"><label class="field"><span>Send channel</span><select name="channel"><option value="">all channels</option><option value="email">email</option><option value="mail">mail</option><option value="phone_text">phone_text</option></select></label><button class="btn primary">Send (simulated)</button></form>
+    </section>
+  </div>
+  <section class="card"><h2>Notices by channel and status</h2>${Object.keys(s.notifications).length ? countsTable(s.notifications) : h`<p class="muted">No notices yet.</p>`}</section>
+  <section class="card"><h2>Sample drafts</h2>${s.sample.length ? s.sample.map((x) => h`<details><summary>${x.channel}, ${x.status}: ${x.subject || 'no subject'}</summary><pre class="wrap">${x.body}</pre></details>`) : h`<p class="muted">No drafts yet.</p>`}</section>`);
+  // shows(summary) is true once the summary reflects the write; viewCampaigns re-reads until it is (see settle).
+  const done = (label, extra, shows) => { campLast = { program: p.id, label, shows, ...extra }; if (ctx.alive()) route(); };
+  const notices = (x, ch, status) => Object.entries(x.notifications).filter(([k]) => k.startsWith(ch + ':') && (!status || k === `${ch}:${status}`)).reduce((a, [, n]) => a + n, 0);
+  localForms.regUpload = async (form, fd) => {
+    const file = fd.get('file');
+    if (!file || !file.size) { toast('Choose a CSV first.'); return; }
+    const out = new FormData(); out.append('file', file, file.name);
+    const up = await api('POST', `/v1/programs/${p.id}/registrations`, { form: out });
+    done('upload', { upload: up }, (x) => x.registrations >= up.accepted);
+  };
+  localActs.campMatch = async () => {
+    const { counts } = await api('POST', `/v1/programs/${p.id}/campaign/match`);
+    done('match', { counts }, (x) => x.matched === counts.matched && x.unmatched === counts.unmatched); // match rescores every registration
+  };
+  localForms.campDrafts = async (form, fd) => {
+    const channels = fd.getAll('ch');
+    if (!channels.length) { toast('Pick at least one channel.'); return; }
+    const { counts } = await api('POST', `/v1/programs/${p.id}/campaign/drafts`, { json: { channels } });
+    done('drafts', { counts }, (x) => Object.keys(counts).every((ch) => notices(x, ch) >= counts[ch]));
+  };
+  localForms.campSend = async (form, fd) => {
+    const channel = fd.get('channel') || null;
+    const { counts } = await api('POST', `/v1/programs/${p.id}/campaign/send`, { json: { channel } });
+    done('send', { counts }, (x) => Object.keys(counts).every((ch) => notices(x, ch, 'sent') >= counts[ch]));
+  };
+}
+
+/* ---------- recalls ---------- */
+async function viewRecalls(ctx) {
+  setTitle('Recalls');
+  const q = ctx.query.get('q') || '', since = ctx.query.get('since') || '', limit = ['10', '25', '50', '100'].includes(ctx.query.get('limit')) ? ctx.query.get('limit') : '25';
+  const params = new URLSearchParams({ limit }); if (q) params.set('q', q); if (since) params.set('since', since);
+  const r = await api('GET', '/v1/recalls?' + params);
+  if (!ctx.alive()) return;
+  setView(h`
+  <div class="page-head"><h1>Recalls</h1><span class="muted">The public CPSC archive, keyword search</span></div>
+  <section class="card">
+    <form data-form="recallSearch" class="row wrap end">
+      <label class="field grow"><span>Search</span><input type="search" name="q" value="${q}" placeholder="laminator, TL1302Z, stroller"></label>
+      <label class="field"><span>Since</span><input type="date" name="since" value="${since}"></label>
+      <label class="field"><span>Show</span><select name="limit">${['10', '25', '50', '100'].map((n) => h`<option value="${n}" ${n === limit ? raw('selected') : ''}>${n}</option>`)}</select></label>
+      <button class="btn primary">Search</button>
+    </form>
+    <p class="small muted">${fmtNum(r.total)} ${r.total === 1 ? 'match' : 'matches'}${q ? h` for <strong>${q}</strong>, best first` : ', newest first'}. Opening a program extracts its rules from the notice. Admin only.</p>
+  </section>
+  <section class="card flush"><div class="table-wrap tall"><table><thead><tr><th>Date</th><th>Title</th><th class="num">Units</th><th>Category</th><th>Source</th><th></th></tr></thead><tbody>
+    ${r.items.length ? r.items.map((x) => h`<tr><td class="nowrap">${x.recall_date}</td><td>${x.title}</td>
+      <td class="num">${fmtNum(x.units_affected)}${x.units_status !== 'ok' ? h` <span class="tag" title="units parse status">${x.units_status}</span>` : ''}</td>
+      <td>${or(x.category)}</td><td class="nowrap"><a href="${safeUrl(x.url)}" target="_blank" rel="noopener noreferrer">CPSC ${x.source_id}</a></td>
+      <td><button class="btn small" data-act="openProgram" data-id="${x.id}">Open a program</button></td></tr>`) : h`<tr><td colspan="6" class="empty">No recalls match.</td></tr>`}
+  </tbody></table></div></section>`);
+  localForms.recallSearch = (form, fd) => {
+    const n = new URLSearchParams();
+    for (const k of ['q', 'since', 'limit']) { const v = String(fd.get(k) || '').trim(); if (v) n.set(k, v); }
+    go('#/recalls?' + n);
+  };
+  localActs.openProgram = async (el) => {
+    const prog = await api('POST', '/v1/programs', { json: { recall_id: el.dataset.id } });
+    toast(`Program created with status ${prog.status}. Review its rules.`);
+    await loadPrograms();
+    selectProgram(prog.id, true);
+    go('#/program/' + prog.id);
+  };
+}
+
+/* ---------- program ---------- */
+let programWant = null;
+function evidenceList(ev) {
+  if (!ev || !ev.length) return '';
+  return h`<details><summary>Evidence quotes from the notice (${ev.length})</summary><ul class="evidence small">${ev.map((s) => h`<li><span class="mono">${s.field}</span>: "${s.quote}" <span class="muted">[${s.start}, ${s.end}]</span></li>`)}</ul></details>`;
+}
+async function viewProgram(ctx) {
+  setTitle('Program');
+  const id = ctx.arg || state.program;
+  if (!id) return noProgram();
+  let p;
+  const want = programWant && programWant.id === id ? programWant : null; programWant = null; // the PATCH just made (see settle)
+  try {
+    p = await settle(() => api('GET', `/v1/programs/${id}`, { quiet: [404] }),
+      (x) => !want || (x.status === want.status && x.value_threshold_cents === want.value_threshold_cents
+        && JSON.stringify([x.identification_rules, x.remedy_rules]) === JSON.stringify([want.identification_rules, want.remedy_rules])), ctx);
+  } catch (e) {
+    if (!ctx.alive()) return;
+    if (e.status === 404) { setView(h`<section class="card"><h1>This firm cannot see that program</h1><div class="note t-amber">GET /v1/programs/${id} answered 404. The program belongs to another firm (tenant isolation) or does not exist.</div></section>`); return; }
+    throw e;
+  }
+  if (!ctx.alive()) return;
+  const ir = p.identification_rules || {}, rr = p.remedy_rules || {};
+  setView(h`
+  <div class="page-head"><h1>Program</h1>${badge(p.status)}${idChip(p.id)}<span class="spacer"></span>
+    ${p.id !== state.program ? h`<button class="btn" data-act="selectProgram" data-id="${p.id}">Select in the top bar</button>` : h`<span class="tag">selected</span>`}
+    <button class="btn" data-act="reroute">Refresh</button></div>
+  <p class="lead">${p.title}</p>
+  <div class="stats">${stat('Value threshold', money(p.value_threshold_cents))}${stat('Units affected', or(fmtNum(p.units_affected)))}${stat('Claims', sum(p.claim_counts))}${stat('Opened', p.opened_at ? fmtTime(p.opened_at).slice(0, 10) : 'not yet')}</div>
+  <div class="counts" style="margin-bottom: 16px">${countBadges(p.id, p.claim_counts)}</div>
+  <div class="grid2">
+    <section class="card"><h2>Identification rules</h2><dl class="kv">
+      <dt>Models</dt><dd>${ir.models && ir.models.length ? ir.models.map((x) => h`<code>${x}</code> `) : NONE}</dd>
+      <dt>Serial ranges</dt><dd>${ir.serial_ranges && ir.serial_ranges.length ? h`<ul>${ir.serial_ranges.map((s) => h`<li><span class="mono">${s.raw}</span> <span class="muted small">${s.prefix ? 'prefix ' + s.prefix + ', ' : ''}${s.start || '?'} to ${s.end || '?'}</span></li>`)}</ul>` : NONE}</dd>
+      <dt>Date codes</dt><dd>${ir.date_codes && ir.date_codes.length ? h`<ul>${ir.date_codes.map((s) => h`<li><span class="mono">${s.raw}</span> <span class="muted small">format ${s.format}, ${s.start || '?'} to ${s.end || '?'}</span></li>`)}</ul>` : NONE}</dd>
+      <dt>Sold at</dt><dd>${ir.sold_at && ir.sold_at.length ? ir.sold_at.map((x) => h`<span class="tag">${x}</span> `) : NONE}</dd>
+      <dt>Sale window</dt><dd>${ir.sold_from || ir.sold_to ? `${ir.sold_from || 'open'} to ${ir.sold_to || 'open'}` : NONE}</dd>
+      <dt>Price range</dt><dd>${ir.price_range_cents ? `${money(ir.price_range_cents.min_cents)} to ${money(ir.price_range_cents.max_cents)}` : NONE}</dd>
+      <dt>Units</dt><dd>${or(fmtNum(ir.units_affected))}</dd>
+      <dt>Label location</dt><dd>${or(ir.model_label_location)}</dd>
+    </dl>${evidenceList(ir.evidence)}</section>
+    <section class="card"><h2>Remedy rules</h2><dl class="kv">
+      <dt>Remedy type</dt><dd>${or(rr.remedy_type)}</dd>
+      <dt>Destruction</dt><dd>${or(rr.destruction_instruction)}</dd>
+      <dt>Registration</dt><dd>${rr.registration_url ? h`<a href="${safeUrl(rr.registration_url)}" target="_blank" rel="noopener noreferrer">${rr.registration_url}</a>` : NONE}</dd>
+      <dt>Contact</dt><dd>${or(rr.contact)}</dd>
+    </dl>
+    <h3>Options</h3>${rr.options && rr.options.length ? rr.options.map((o) => h`<div class="option"><strong>${o.type}</strong>
+      <div class="small">Proof required: ${o.proof_required.length ? o.proof_required.map((x) => h`<span class="tag">${x}</span> `) : NONE}</div>
+      ${o.steps.length ? h`<ol class="small">${o.steps.map((x) => h`<li>${x}</li>`)}</ol>` : ''}
+      <div class="small muted">Payout: ${o.payout && o.payout.method ? o.payout.method : 'method not stated'}${o.payout && o.payout.amount_rule ? ', ' + o.payout.amount_rule : ''}</div></div>`) : h`<p class="muted">No options.</p>`}
+    ${evidenceList(rr.evidence)}</section>
+  </div>
+  <div class="grid2">
+    <section class="card"><h2>Status and threshold</h2>
+      <form data-form="patchStatus" class="row wrap end"><label class="field"><span>Status</span><select name="status">${['draft', 'open', 'closed'].map((s) => h`<option value="${s}" ${s === p.status ? raw('selected') : ''}>${s}</option>`)}</select></label><button class="btn primary">Save status</button></form>
+      <form data-form="patchThreshold" class="row wrap end"><label class="field"><span>Value threshold in dollars</span><input type="number" name="dollars" min="0" step="0.01" value="${(p.value_threshold_cents / 100).toFixed(2)}"></label><button class="btn primary">Save threshold</button></form>
+      <p class="small muted">An approval above the threshold waits for a person. Changes need the admin role and go to the audit log. Closing is permanent: a closed program cannot be reopened, and its claim links stop working.</p>
+    </section>
+    <section class="card"><h2>Issue claim links</h2>
+      <form data-form="issueLinks" class="row wrap end"><label class="field"><span>How many</span><input type="number" name="n" min="1" max="50" value="3"></label><button class="btn primary">Issue</button></form>
+      <div id="issueResult"></div>
+    </section>
+  </div>
+  <section class="card"><details><summary>Edit the rules as JSON</summary>
+    <p class="small muted">Sends PATCH with identification_rules and remedy_rules. The API validates them against the rule schema.</p>
+    <div class="grid2"><label class="field"><span>identification_rules</span><textarea id="irJson" rows="14" class="mono">${pretty(ir)}</textarea></label><label class="field"><span>remedy_rules</span><textarea id="rrJson" rows="14" class="mono">${pretty(rr)}</textarea></label></div>
+    <button class="btn primary" data-act="patchRules">Save rules</button>
+  </details></section>`);
+  const patch = async (body, label) => {
+    const np = await api('PATCH', `/v1/programs/${p.id}`, { json: body });
+    toast(label + ' saved');
+    programWant = np;
+    await loadPrograms();
+    const i = state.programs.findIndex((x) => x.id === np.id); // the list can be read before the PATCH commits
+    if (i >= 0) { state.programs[i] = np; renderProgramSel(); }
+    if (ctx.alive()) route();
+  };
+  localForms.patchStatus = (form, fd) => {
+    const status = fd.get('status');
+    if (status === p.status) { toast(`The program is already ${status}.`); return null; }
+    if (status === 'closed' && !window.confirm(`Close "${trunc(p.title, 80)}"? A closed program cannot be reopened, and every claim link it issued stops working.`)) return null;
+    return patch({ status }, 'Status');
+  };
+  localForms.patchThreshold = (form, fd) => {
+    const d = Number(fd.get('dollars'));
+    if (!isFinite(d) || d < 0) { toast('Enter a dollar amount of 0 or more.'); return null; }
+    return patch({ value_threshold_cents: Math.round(d * 100) }, 'Threshold');
+  };
+  localActs.patchRules = () => {
+    let a, b;
+    try { a = JSON.parse($('#irJson').value); b = JSON.parse($('#rrJson').value); } catch (e) { toast('The rules are not valid JSON: ' + e.message); return null; }
+    return patch({ identification_rules: a, remedy_rules: b }, 'Rules');
+  };
+  localForms.issueLinks = async (form, fd) => {
+    const n = Math.max(1, Math.min(50, Number(fd.get('n')) || 1));
+    const r = await api('POST', `/v1/programs/${p.id}/claims/issue`, { json: { n } });
+    $('#issueResult').innerHTML = h`<p class="small">Issued ${r.links.length} draft claims. Open one as the claimant:</p><ul>${r.links.map((l) => h`<li>${claimLink(l.claim_id)} <a href="#/portal/${encodeURIComponent(tokenFrom(l.url))}">open in the portal</a></li>`)}</ul>`.s;
+  };
+}
+
+/* ---------- delegated events ---------- */
+const globalActs = {
+  copy: (el) => copyText(el.dataset.text),
+  dismiss: (el) => { el.closest('.err').remove(); syncErrors(); },
+  dismissAll: () => { errorsEl.innerHTML = ''; },
+  reroute: () => route(),
+  selectProgram: (el) => selectProgram(el.dataset.id),
+  gotoClaims: (el) => { selectProgram(el.dataset.id, true); go('#/claims?status=' + encodeURIComponent(el.dataset.status)); },
+  switchFirm: async (el) => { await setFirm(el.dataset.id); route(); },
+};
+async function runGuarded(el, fn) {
+  const btn = el && el.tagName === 'BUTTON' ? el : null;
+  if (btn) { if (btn.dataset.busy) return; btn.dataset.busy = '1'; btn.disabled = true; }
+  try { await fn(); } catch (e) { if (!(e instanceof ApiError)) reportJs(e); } finally { if (btn) { delete btn.dataset.busy; btn.disabled = false; } }
+}
+document.addEventListener('click', (ev) => {
+  const el = ev.target.closest('[data-act]');
+  if (el) {
+    const fn = localActs[el.dataset.act] || globalActs[el.dataset.act];
+    if (fn) { ev.preventDefault(); runGuarded(el, () => fn(el, ev)); }
+    return;
+  }
+  const row = ev.target.closest('tr[data-href]');
+  if (row && !ev.target.closest('a, button, input, select, textarea, summary, label')) location.hash = row.dataset.href;
+});
+document.addEventListener('keydown', (ev) => {
+  if (ev.key !== 'Enter') return;
+  const row = ev.target.closest && ev.target.closest('tr[data-href]');
+  if (row && ev.target === row) location.hash = row.dataset.href;
+});
+document.addEventListener('submit', (ev) => {
+  const form = ev.target.closest('form[data-form]');
+  if (!form) return;
+  ev.preventDefault();
+  const fn = localForms[form.dataset.form];
+  if (!fn) return;
+  const btn = ev.submitter || form.querySelector('button:not([type=button])');
+  runGuarded(btn || form, () => fn(form, new FormData(form)));
+});
+document.addEventListener('change', (ev) => {
+  const t = ev.target;
+  if (t && t.dataset && t.dataset.pp && portal.payout) portal.payout[t.dataset.pp] = t.value;
+  const el = t.closest && t.closest('[data-change]');
+  if (!el) return;
+  const fn = localChanges[el.dataset.change];
+  if (fn) runGuarded(el, () => fn(el, ev));
+});
+document.addEventListener('input', (ev) => {
+  const el = ev.target;
+  if (el && el.dataset && el.dataset.pf && portal.form) portal.form[el.dataset.pf] = el.value;
+  if (el && el.dataset && el.dataset.pp && portal.payout) portal.payout[el.dataset.pp] = el.value;
+});
+
+/* ---------- start ---------- */
+async function init() {
+  bindTopbar();
+  renderFirmSel();
+  roleSel.value = state.role;
+  await loadPrograms();
+  checkReady().catch(reportJs);
+  setInterval(() => { if (document.visibilityState === 'visible') checkReady().catch(() => {}); }, 15000);
+  window.addEventListener('hashchange', route);
+  await route();
+}
+init().catch(reportJs);
+</script>
+</body>
+</html>
