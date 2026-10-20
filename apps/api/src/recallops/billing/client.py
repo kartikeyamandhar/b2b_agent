@@ -18,10 +18,11 @@ class PaymentError(Exception):
 
 
 def _stripe_client(settings: Settings) -> stripe.StripeClient:
-    if settings.stripe_secret_key == "sk_test_fake":
+    key = settings.stripe_secret_key.get_secret_value()
+    if key == "sk_test_fake" or not key.startswith("sk_test_"):
         raise PaymentError("Stripe test credentials are not configured")
     return stripe.StripeClient(
-        settings.stripe_secret_key,
+        key,
         stripe_version=settings.stripe_api_version,
         max_network_retries=0,
         http_client=stripe.HTTPXClient(timeout=settings.stripe_timeout_s, allow_sync_methods=True),

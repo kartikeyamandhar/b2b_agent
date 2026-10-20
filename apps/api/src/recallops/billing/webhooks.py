@@ -38,22 +38,48 @@ def receive(engine: Engine, settings: Settings, payload: bytes, signature: str |
         raise PaymentError("a configured Stripe signature is required", 400)
     if len(payload) > 1_000_000:
         raise PaymentError("Stripe webhook body is too large", 413)
+    # Authenticate before parsing: the body is attacker-controlled until a signature matches (a deeply nested body
+    # would otherwise raise RecursionError in json.loads and answer 500). Snapshot events must match the snapshot
+    # endpoint's secret and thin (v2) notifications the Connect endpoint's (backend review of PR 6).
+    configured = {
+        kind: secret.get_secret_value()
+        for kind, secret in (
+            ("snapshot", settings.stripe_webhook_secret),
+            ("thin", settings.stripe_connect_webhook_secret),
+        )
+        if secret.get_secret_value() not in ("", "whsec_fake")
+    }
+    if not configured:
+        raise PaymentError("a configured Stripe signature is required", 400)
+    matched = set()
+    for kind_name, secret in configured.items():
+        try:
+            stripe.WebhookSignature.verify_header(payload, signature, secret, 300)
+            matched.add(kind_name)
+        except stripe.SignatureVerificationError:
+            continue
+    if not matched:
+        raise PaymentError("invalid Stripe webhook signature or payload", 400)
     try:
         event: dict[str, Any] = json.loads(payload)
         if not isinstance(event, dict):
             raise ValueError("Stripe webhook must be an object")
-        secret = (
-            settings.stripe_connect_webhook_secret
-            if event.get("object") == "v2.core.event"
-            else settings.stripe_webhook_secret
-        )
-        if secret == "whsec_fake":
-            raise PaymentError("a configured Stripe signature is required", 400)
-        stripe.WebhookSignature.verify_header(payload, signature, secret, 300)
-    except (ValueError, stripe.SignatureVerificationError) as exc:
+    except (ValueError, RecursionError) as exc:
         raise PaymentError("invalid Stripe webhook signature or payload", 400) from exc
+    thin = event.get("object") == "v2.core.event"
+    if ("thin" if thin else "snapshot") not in matched:
+        raise PaymentError("invalid Stripe webhook signature or payload", 400)
     test_object(event)
     kind, event_id = str(event["type"]), str(event["id"])
+    if thin and kind not in ACCOUNT_EVENTS:
+        # A signed notification we do not act on (a destination ping, another account event): record and
+        # acknowledge it, as for snapshot events, so Stripe stops retrying it.
+        with Session(engine) as session, session.begin():
+            if not record(session, event):
+                return {"status": "replayed"}
+            processed(session, event_id)
+        log_event(log, "stripe_webhook_ignored", stripe_event_id=event_id, stripe_event_type=kind)
+        return {"status": "ignored"}
     if kind not in ACCOUNT_EVENTS and event.get("api_version") != settings.stripe_api_version:
         raise PaymentError("Stripe webhook API version does not match the pinned version", 400)
     obj: dict[str, Any] = (

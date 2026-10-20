@@ -240,7 +240,7 @@ class Acceptance:
                 self.settings.stripe_connect_webhook_secret
                 if row.payload.get("object") == "v2.core.event"
                 else self.settings.stripe_webhook_secret
-            )
+            ).get_secret_value()
             signature = stripe.WebhookSignature.generate_signature_header(raw.decode(), secret)
             with self.internal.connect() as conn:
                 before = conn.scalar(text("SELECT count(*) FROM audit_log WHERE firm_id=:f"), {"f": self.ctx.firm_id})
@@ -820,7 +820,7 @@ def main() -> None:
 
         try:
             for name, events in selections.items():
-                env = {**os.environ, "STRIPE_API_KEY": run.settings.stripe_secret_key}
+                env = {**os.environ, "STRIPE_API_KEY": run.settings.stripe_secret_key.get_secret_value()}
                 child = subprocess.Popen(
                     [
                         stripe_cli,

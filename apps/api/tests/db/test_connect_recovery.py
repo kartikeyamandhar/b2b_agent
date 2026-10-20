@@ -10,6 +10,7 @@ from unittest.mock import MagicMock
 
 import pytest
 import stripe
+from pydantic import SecretStr
 from sqlalchemy import Engine, text
 from sqlalchemy.exc import DBAPIError
 from sqlalchemy.orm import Session
@@ -195,7 +196,7 @@ def test_thin_account_notification_reconciles_current_readiness_once_without_dis
         "sk_test_fake",
     )
     monkeypatch.setattr(webhooks, "connect_client", lambda _: core)
-    settings = get_settings().model_copy(update={"stripe_connect_webhook_secret": "whsec_thin_test"})
+    settings = get_settings().model_copy(update={"stripe_connect_webhook_secret": SecretStr("whsec_thin_test")})
     raw = json.dumps(
         {
             "id": "evt_thin_test",
@@ -209,7 +210,7 @@ def test_thin_account_notification_reconciles_current_readiness_once_without_dis
     signature = (
         f"t={at},v1="
         + hmac.new(
-            settings.stripe_connect_webhook_secret.encode(), at.encode() + b"." + raw, hashlib.sha256
+            settings.stripe_connect_webhook_secret.get_secret_value().encode(), at.encode() + b"." + raw, hashlib.sha256
         ).hexdigest()
     )
     assert webhooks.receive(app_engine_test, settings, raw, signature)["status"] == "processed"

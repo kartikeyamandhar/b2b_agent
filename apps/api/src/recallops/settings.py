@@ -63,11 +63,11 @@ class Settings(BaseSettings):
     )
 
     # Payments seam (component 3).
-    stripe_secret_key: str = Field("sk_test_fake", description="Stripe test-mode secret key only.")
+    stripe_secret_key: SecretStr = Field(SecretStr("sk_test_fake"), description="Stripe test-mode secret key only.")
     stripe_publishable_key: str = Field("pk_test_fake")
-    stripe_webhook_secret: str = Field("whsec_fake")
-    stripe_connect_webhook_secret: str = Field(
-        "whsec_fake", description="Accounts v2 thin-notification endpoint secret."
+    stripe_webhook_secret: SecretStr = Field(SecretStr("whsec_fake"))
+    stripe_connect_webhook_secret: SecretStr = Field(
+        SecretStr("whsec_fake"), description="Accounts v2 thin-notification endpoint secret."
     )
     stripe_api_version: Literal["2026-09-30.endive"] = "2026-09-30.endive"
     stripe_timeout_s: float = Field(15.0, gt=0, le=30)
@@ -88,8 +88,17 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def _stripe_test_only(self) -> Settings:
-        if not self.stripe_secret_key.startswith("sk_test_") or not self.stripe_publishable_key.startswith("pk_test_"):
+        secret_key = self.stripe_secret_key.get_secret_value()
+        if not secret_key.startswith("sk_test_") or not self.stripe_publishable_key.startswith("pk_test_"):
             raise ValueError("Stripe test-mode key prefixes are required in every environment")
+        if self.app_env == "prod" and secret_key != "sk_test_fake":
+            # Payments configured in prod: no localhost or dev-console return page (never served there) and the
+            # prices must exist. Without a key, payments stay off and none of these are needed.
+            for url in (self.billing_return_url, self.connect_return_url, self.connect_refresh_url):
+                if is_local_uri(url) or "/dev/console" in url:
+                    raise ValueError("payment return URLs must point at the deployed UI in prod")
+            if not self.stripe_program_price_id or not self.stripe_claim_price_id:
+                raise ValueError("STRIPE_PROGRAM_PRICE_ID and STRIPE_CLAIM_PRICE_ID are required in prod")
         for url in (self.billing_return_url, self.connect_return_url, self.connect_refresh_url):
             parts = urlsplit(url)
             if not parts.hostname or parts.username or parts.password or parts.query:

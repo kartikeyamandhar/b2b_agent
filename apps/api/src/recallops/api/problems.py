@@ -107,12 +107,28 @@ def install(app: FastAPI) -> None:
 
     @app.exception_handler(stripe.StripeError)
     async def stripe_problem(request: Request, exc: stripe.StripeError) -> JSONResponse:
-        return problem(
-            503,
-            "Payment integration unavailable",
-            "Stripe test-mode request failed; retry or contact the operator",
-            request,
+        """Never Stripe's message (it can carry request data). A configuration error (bad key or permission, an
+        invalid request such as a wrong price id) is permanent, so the caller is not told to retry it."""
+        from recallops.api.guards import redact
+
+        permanent = isinstance(exc, (stripe.AuthenticationError, stripe.PermissionError, stripe.InvalidRequestError))
+        log_event(
+            log,
+            "stripe_request_failed",
+            level=logging.WARNING,
+            error=type(exc).__name__,
+            code=getattr(exc, "code", None),
+            http_status=getattr(exc, "http_status", None),
+            request_id=getattr(exc, "request_id", None),
+            path=redact(request.url.path),
+            correlation_id=getattr(request.state, "correlation_id", None),
         )
+        detail = (
+            "the payment configuration needs operator attention"
+            if permanent
+            else "Stripe test-mode request failed; retry or contact the operator"
+        )
+        return problem(503, "Payment integration unavailable", detail, request)
 
     @app.exception_handler(PaymentRequired)
     async def payment_required(request: Request, exc: PaymentRequired) -> JSONResponse:
