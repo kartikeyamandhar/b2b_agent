@@ -127,7 +127,15 @@ def cluster(f: FraudCluster) -> s.Cluster:
 
 
 def payout(p: Payout) -> s.PayoutView:
-    return s.PayoutView(id=p.id, amount_cents=p.amount_cents, currency=p.currency, method=p.method, status=p.status)
+    return s.PayoutView(
+        id=p.id,
+        amount_cents=p.amount_cents,
+        currency=p.currency,
+        method=p.method,
+        status=p.status,
+        stripe_transfer_id=p.stripe_transfer_id,
+        stripe_reversed_cents=p.stripe_reversed_cents,
+    )
 
 
 def audit(a: AuditLog) -> s.AuditEntry:

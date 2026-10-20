@@ -1,16 +1,16 @@
-"""Every route in 01-backend.md section 9, implemented over the database. The only 501 answers left are the payments
-owner's (component 3): billing checkout and portal, the Stripe webhook, and Connect onboarding from the portal."""
+"""Tenant-scoped firm APIs, single-claim portal routes, and signed integration webhooks."""
 
 from __future__ import annotations
 
 import base64
-from datetime import date, datetime
+from datetime import UTC, date, datetime
 from typing import Annotated, Any
 from uuid import UUID
 
-from fastapi import APIRouter, Body, File, Form, Header, HTTPException, Query, UploadFile, status
+from fastapi import APIRouter, Body, File, Form, Header, HTTPException, Query, Request, UploadFile, status
 from fastapi.responses import Response
 from sqlalchemy import func, select, text
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from recallops import portal as portal_service
@@ -18,10 +18,11 @@ from recallops import programs as program_service
 from recallops.api import schemas as s
 from recallops.api import views
 from recallops.api.deps import PublicDb, TenantDb
-from recallops.api.problems import NotYetImplemented, PaymentRequired
+from recallops.api.problems import PaymentRequired
 from recallops.auth.deps import AdminDep, ClaimTokenDep, FirmDep, build_claim_verifier
-from recallops.billing.fake import AllowAllBilling
 from recallops.billing.interface import BillingGate
+from recallops.billing.policy import PlanBilling
+from recallops.billing.service import billing_summary
 from recallops.claims.review import ReviewConflict, submit_action
 from recallops.db.engine import app_engine
 from recallops.db.repos import ClaimsRepo, ProgramsRepo, RunsRepo, UsageRepo
@@ -39,7 +40,6 @@ log = get_logger("api.routes")
 Responses = dict[int | str, dict[str, Any]]
 NOT_FOUND: Responses = {404: {"model": s.Problem, "description": "not found, or belongs to another firm"}}
 AUTH: Responses = {401: {"model": s.Problem}, 403: {"model": s.Problem}}
-LATER: Responses = {501: {"model": s.Problem, "description": "contract final, implementation in a later milestone"}}
 CONFLICT: Responses = {409: {"model": s.Problem, "description": "the resource is not in a state that allows this"}}
 PAYMENT: Responses = {402: {"model": s.Problem, "description": "over the plan's limit (component 3 entitlement)"}}
 IMAGE: Responses = {200: {"content": {"image/jpeg": {}, "image/png": {}}}}
@@ -48,15 +48,18 @@ MPR_PERIOD = r"^\d{4}-(0[1-9]|1[0-2])$"
 PHOTO_STORAGE_DOWN = "photo storage unavailable"
 
 firm = APIRouter(prefix="/v1", tags=["firm"], responses=AUTH)
-billing = APIRouter(prefix="/v1/billing", tags=["billing (component 3)"], responses={**AUTH, **LATER})
+billing = APIRouter(
+    prefix="/v1/billing",
+    tags=["billing (component 3)"],
+    responses={**AUTH, **NOT_FOUND, **CONFLICT, 503: {"model": s.Problem}},
+)
 portal = APIRouter(prefix="/portal", tags=["portal"])
 internal = APIRouter(prefix="/internal", tags=["internal"])
 health = APIRouter(tags=["health"])
 
 
-def billing_gate() -> BillingGate:
-    """The payments owner swaps in the plan-aware gate here (component 3)."""
-    return AllowAllBilling()
+def billing_gate(session: Session | None = None) -> BillingGate:
+    return PlanBilling(app_engine(), get_settings(), session)
 
 
 # Public archive
@@ -109,7 +112,7 @@ def get_program(program_id: UUID, ctx: FirmDep, db: TenantDb) -> s.Program:
     "/programs",
     response_model=s.Program,
     status_code=201,
-    responses={**NOT_FOUND, **PAYMENT},
+    responses=NOT_FOUND,  # created as a draft: the plan is checked when it is opened (PATCH status=open)
     summary="Open a program from a recall; runs rule extraction and returns rules for review",
 )
 def create_program(body: s.ProgramCreate, ctx: AdminDep, db: TenantDb) -> s.Program:
@@ -120,7 +123,7 @@ def create_program(body: s.ProgramCreate, ctx: AdminDep, db: TenantDb) -> s.Prog
             db,
             ctx,
             get_settings(),
-            billing_gate(),
+            billing_gate(db),
             body.recall_id,
             body.manual.model_dump() if body.manual else None,
             body.value_threshold_cents,
@@ -144,7 +147,7 @@ def patch_program(program_id: UUID, body: s.ProgramPatch, ctx: AdminDep, db: Ten
         raise HTTPException(status.HTTP_404_NOT_FOUND, "program not found")
     changes = body.model_dump(mode="json", exclude_unset=True)
     try:
-        p = program_service.patch_program(db, ctx, get_settings(), billing_gate(), p, changes)
+        p = program_service.patch_program(db, ctx, get_settings(), billing_gate(db), p, changes)
     except program_service.NotEntitled as exc:
         raise PaymentRequired(exc.action, exc.reason) from exc
     except program_service.Conflict as exc:
@@ -631,9 +634,11 @@ def download_export(batch_id: UUID, ctx: AdminDep, db: TenantDb) -> Response:
 # Usage
 
 
-@firm.get("/usage", response_model=s.Usage, summary="Current period meters (read by the billing UI)")
+@firm.get(
+    "/usage", response_model=s.Usage, responses=NOT_FOUND, summary="Current period meters (read by the billing UI)"
+)
 def get_usage(ctx: FirmDep, db: TenantDb) -> s.Usage:
-    period = date.today().replace(day=1)
+    period = datetime.now(UTC).date().replace(day=1)
     meter = UsageRepo(db, ctx).for_period(period)
     open_programs = sum(1 for p in ProgramsRepo(db, ctx).list() if p.status == "open")
     return s.Usage(
@@ -641,20 +646,28 @@ def get_usage(ctx: FirmDep, db: TenantDb) -> s.Usage:
         claims_adjudicated=meter.claims_adjudicated if meter else 0,
         model_cost_usd=f"{meter.model_cost_usd:.6f}" if meter else "0.000000",
         open_programs=open_programs,
+        **billing_summary(db, ctx, get_settings()),
     )
 
 
-# Billing (component 3 replaces these stubs)
+# Billing
 
 
 @billing.post("/checkout", response_model=s.CheckoutSession, summary="Stripe Checkout session for the growth plan")
 def checkout(ctx: AdminDep) -> s.CheckoutSession:
-    raise NotYetImplemented("POST /v1/billing/checkout", "M3", "payments owner")
+    from recallops.billing.service import checkout as create_checkout
+
+    try:
+        return s.CheckoutSession(url=create_checkout(app_engine(), get_settings(), ctx))
+    except SQLAlchemyError as exc:
+        raise HTTPException(503, "payment persistence unavailable; reconcile the operation before retrying") from exc
 
 
 @billing.post("/portal", response_model=s.CheckoutSession, summary="Stripe Customer Portal session")
 def customer_portal(ctx: AdminDep) -> s.CheckoutSession:
-    raise NotYetImplemented("POST /v1/billing/portal", "M3", "payments owner")
+    from recallops.billing.service import portal as create_portal
+
+    return s.CheckoutSession(url=create_portal(app_engine(), get_settings(), ctx))
 
 
 # Portal (token in path)
@@ -772,15 +785,31 @@ def portal_answer(token: str, body: s.PortalAnswer, token_ctx: ClaimTokenDep) ->
 @portal.post(
     "/{token}/payout",
     response_model=s.PortalView,
-    responses={**NOT_FOUND, **LATER, **CONFLICT},
+    responses={
+        **NOT_FOUND,
+        **PAYMENT,
+        **CONFLICT,
+        400: {"model": s.Problem, "description": "Stripe onboarding needs the claimant's email"},
+        503: {"model": s.Problem},
+    },
     summary="Payout destination (Connect onboarding handoff is component 3)",
 )
 def portal_payout(token: str, body: s.PortalPayout, token_ctx: ClaimTokenDep) -> s.PortalView:
-    """The claimant picks how an approved refund is paid. check_export moves the payout to the export batch (the
-    ledger's fallback); stripe_connect onboarding is the payments owner's (component 3) and answers 501 until then."""
-    if body.method == "stripe_connect":
-        raise NotYetImplemented("Connect onboarding from the portal", "M4", "payments owner")
     ctx, claim_id = _portal(token, token_ctx)
+    if body.method == "stripe_connect":
+        from recallops.payouts.stripe_connect import onboarding
+
+        try:
+            with tenant_session(ctx) as session:
+                _portal_claim_in(session, token, claim_id)
+            url = onboarding(app_engine(), get_settings(), ctx, claim_id)
+            with tenant_session(ctx) as session:
+                view = _portal_view(session, _portal_claim_in(session, token, claim_id))
+        except SQLAlchemyError as exc:
+            raise HTTPException(
+                503, "onboarding persistence unavailable; reconcile the operation before retrying"
+            ) from exc
+        return view.model_copy(update={"connect_onboarding_url": url})
     settings = get_settings()
     secret = settings.graph_key_secret
     raw = secret.get_secret_value() if hasattr(secret, "get_secret_value") else str(secret)
@@ -816,9 +845,27 @@ def feeds_pull(x_internal_secret: Annotated[str | None, Header()] = None) -> dic
     return pull_since_last(app_engine(), settings)  # recalls and feed_runs are public tables (migration 0003)
 
 
-@internal.post("/stripe/webhook", responses=LATER, summary="Stripe webhook (component 3 replaces this stub)")
-def stripe_webhook() -> dict[str, str]:
-    raise NotYetImplemented("POST /internal/stripe/webhook", "M3", "payments owner")
+@internal.post(
+    "/stripe/webhook",
+    responses={400: {"model": s.Problem}, 413: {"model": s.Problem}, 503: {"model": s.Problem}},
+    summary="Signed Stripe test-mode webhook",
+)
+async def stripe_webhook(request: Request) -> dict[str, str]:
+    from starlette.concurrency import run_in_threadpool
+
+    from recallops.billing.webhooks import receive
+
+    payload = bytearray()
+    async for chunk in request.stream():
+        payload.extend(chunk)
+        if len(payload) > 1_000_000:
+            raise HTTPException(413, "Stripe webhook body is too large")
+    try:
+        return await run_in_threadpool(
+            receive, app_engine(), get_settings(), bytes(payload), request.headers.get("stripe-signature")
+        )
+    except SQLAlchemyError as exc:
+        raise HTTPException(503, "Stripe event persistence unavailable; retry this event") from exc
 
 
 # Health

@@ -56,17 +56,21 @@ class FakeLedger:
         )
         return ref
 
-    def mark_onboarding(self, ctx: FirmContext, payout_id: UUID, connect_account_id: str) -> PayoutRef:
+    def mark_onboarding(
+        self, ctx: FirmContext, payout_id: UUID, connect_account_id: str, session: Any = None
+    ) -> PayoutRef:
         return self._set(ctx, payout_id, "onboarding", connect_account_id=connect_account_id)
 
-    def claim_for_transfer(self, ctx: FirmContext, payout_id: UUID) -> PayoutRef:
+    def claim_for_transfer(self, ctx: FirmContext, payout_id: UUID, session: Any = None) -> PayoutRef:
         return self._set(ctx, payout_id, "transferring")
 
-    def mark_transferred(self, ctx: FirmContext, payout_id: UUID, stripe_transfer_id: str) -> PayoutRef:
+    def mark_transferred(
+        self, ctx: FirmContext, payout_id: UUID, stripe_transfer_id: str, session: Any = None
+    ) -> PayoutRef:
         return self._set(ctx, payout_id, "transferred", stripe_transfer_id=stripe_transfer_id)
 
-    def mark_failed(self, ctx: FirmContext, payout_id: UUID, error: str) -> PayoutRef:
+    def mark_failed(self, ctx: FirmContext, payout_id: UUID, error: str, session: Any = None) -> PayoutRef:
         return self._set(ctx, payout_id, "failed", error=error)
 
-    def mark_exported(self, ctx: FirmContext, payout_id: UUID, export_batch: str) -> PayoutRef:
+    def mark_exported(self, ctx: FirmContext, payout_id: UUID, export_batch: str, session: Any = None) -> PayoutRef:
         return self._set(ctx, payout_id, "exported", export_batch=export_batch)

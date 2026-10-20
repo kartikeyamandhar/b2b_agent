@@ -31,7 +31,7 @@ def test_categorize_and_sampling_are_deterministic(tmp_path: Path) -> None:
     assert sampling.categorize("Children's Bike Helmets Recalled") == "children"
     assert sampling.categorize("Scotch Thermal Laminators") == "appliance_electrical"
     assert sampling.categorize("Garden Gnome") == "other"
-    (tmp_path / "w.json").write_text(FIXTURE.read_text(encoding="utf-8"))
+    (tmp_path / "w.json").write_text(FIXTURE.read_text(encoding="utf-8"), encoding="utf-8")
     pool = sampling.build_pool(sampling.load_archive(tmp_path))
     assert pool.height == 51
     first, second = sampling.draw_sample(pool), sampling.draw_sample(pool)

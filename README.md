@@ -5,7 +5,7 @@
 <p align="center">
   <a href="https://github.com/kartikeyamandhar/b2b_agent/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/kartikeyamandhar/b2b_agent/ci.yml?branch=main&amp;label=CI" alt="CI status"></a>
   <a href="https://github.com/kartikeyamandhar/b2b_agent/actions/workflows/deploy.yml"><img src="https://img.shields.io/github/actions/workflow/status/kartikeyamandhar/b2b_agent/deploy.yml?branch=main&amp;label=eval%20gate" alt="Evaluation gate status"></a>
-  <img src="https://img.shields.io/badge/coverage-92%25-1baf7a" alt="Coverage 92 percent">
+  <img src="https://img.shields.io/badge/coverage-90%25-1baf7a" alt="Coverage 90 percent">
   <img src="https://img.shields.io/badge/python-3.13-2a78d6" alt="Python 3.13">
   <img src="https://img.shields.io/badge/FastAPI-0.143-2a78d6" alt="FastAPI 0.143">
   <img src="https://img.shields.io/badge/LangGraph-1.2-2a78d6" alt="LangGraph 1.2">
@@ -44,14 +44,14 @@ When a company recalls a consumer product in the United States, the press releas
 ## How it works
 
 <p align="center">
-  <img src="docs/assets/architecture.svg" alt="Architecture. Inputs (the CPSC recall API, owner registrations, the claim portal) feed the backend modules (rule extraction, the cost meter, campaigns, the MPR generator, the claims agent, the payouts ledger), which sit over photo storage, Postgres 16 with pgvector, and a Neo4j fraud graph. The HTTP API is the contract that the teammates' firm console, Clerk sign-in, and Stripe test-mode components will use (none is built yet), and the backend produces the monthly progress report PDF." width="100%">
+  <img src="docs/assets/architecture.svg" alt="Architecture. Inputs (the CPSC recall API, owner registrations, the claim portal) feed the backend modules (rule extraction, the cost meter, campaigns, the MPR generator, the claims agent, the payouts ledger), which sit over photo storage, Postgres 16 with pgvector, and a Neo4j fraud graph. The HTTP API is the contract that the teammates' firm console, Clerk sign-in, and Stripe test-mode components will use (product UI and login integration remain with their owners), and the backend produces the monthly progress report PDF." width="100%">
 </p>
 
 1. **Load the recall.** The API pulls the CPSC recall API in 30-day windows. A nightly GitHub Actions job is wired to trigger the pull and skips until the API is deployed; locally, `make seed` loads a fixture of 51 real records. Each notice becomes identification rules (model numbers, serial and date-code ranges, retailers, the sale window) and remedy rules (refund, repair, or replacement, and what the claimant must show). The regex extractor takes every value straight from the notice text, and the model-based fallback has any value it cannot quote verbatim from the notice dropped.
 2. **Take claims.** Each claimant gets a link to exactly one claim, with no account or password, and uploads a label photo, a photo of the destroyed product, and a receipt. In development the link carries a plain `dev.<firm>.<claim>` token; signed, expiring tokens come with the sign-in component, which is not built yet.
 3. **Decide each claim.** A polling worker runs the claims agent on every submitted claim, inside hard caps on steps, cost, and time. The model may be stricter than the rules table (the outcome the pure-code checks and the run's own photo readings give under the same policy), and a more lenient decision never takes effect on its own. A flagged claim, an approval over the program's money threshold, a run that hits a cap or fails, and a decision more lenient than the rules all stop and wait for a person.
 4. **Catch fraud.** Reused photos, addresses, serial numbers, and payout destinations are caught when each claim is decided. A Neo4j graph then links them into clusters and rings for review.
-5. **Pay.** An approved refund creates its payout row in the same transaction as the approval. Money can leave only through the ledger, as a check batch or a Stripe Connect transfer, never both and never twice. The Stripe calls belong to the payments component, which is not built yet; in this repository the tests and `make seed` drive the transfer states through the same ledger calls.
+5. **Pay.** An approved refund creates its payout row in the same transaction as the approval. Money can leave only through the ledger, as a check batch or a Stripe Connect transfer, never both and never twice. The Stripe calls belong to the payments component, implemented here in test mode; the development console and payment jobs drive the same ledger calls.
 6. **Report.** The monthly progress report is computed in SQL, checked against an independent recount, and rendered to PDF.
 
 Each firm's data is isolated by Postgres row-level security, forced on every tenant table. The graph is partitioned by firm too, so two firms never share a node.
@@ -234,7 +234,7 @@ ADJUDICATOR=rules_only make worker
 
 `ADJUDICATOR=rules_only` runs offline at no cost. The agent itself (`ADJUDICATOR=agent LLM_MODE=live`, about 0.0016 USD per claim) needs an Anthropic key in `.env`, and every call goes through the cost meter.
 
-Other targets: `make check` runs lint, strict type checks, and the test suite (363 tests, 92 percent coverage). `make eval` reruns every evaluation from the recordings with no network. `make graph-sync` rebuilds the fraud graph from Postgres. `make help` lists everything.
+Other targets: `make check` runs lint, strict type checks, and the test suite (460 tests, 90 percent coverage). `make eval` reruns every evaluation from the recordings with no network. `make graph-sync` rebuilds the fraud graph from Postgres. `make help` lists everything.
 
 Nothing is deployed yet. `infra/render.yaml` deploys the API with `APP_ENV=prod`, where the header-based development sign-in refuses to load, so the API stays closed until the Clerk sign-in component lands.
 
@@ -298,9 +298,9 @@ curl -s -X POST "${A[@]}" -H 'content-type: application/json' -d '{"channels": [
 curl -s -X POST "${A[@]}" -H 'content-type: application/json' -d '{"channel": "email"}' $B/v1/programs/$P/campaign/send
 curl -s "${R[@]}" $B/v1/programs/$P/campaign
 
-# Usage, and the payments owner's stubs
+# Usage and test-mode billing (requires the backend payment schema)
 curl -s "${R[@]}" $B/v1/usage
-curl -s -X POST "${A[@]}" $B/v1/billing/checkout    # 501 until the payments component lands
+curl -s -X POST "${A[@]}" $B/v1/billing/checkout    # returns a Checkout URL after Stripe test configuration
 
 # Claim portal (token in the path)
 curl -s $B/portal/$T
@@ -324,7 +324,8 @@ The full contract is [docs/contracts/openapi.json](docs/contracts/openapi.json),
 | Retrieval | Postgres full-text search for notices, because model numbers are tokens, not meanings; pgvector over a deterministic local hashed n-gram embedder for policy prose (lexical, not neural, so it needs no extra provider) |
 | Photos | A storage seam: local disk in development, a private Supabase bucket in production, bytes proxied by the API |
 | Quality | ruff, mypy strict, pytest with coverage, replayable evaluations, GitHub Actions with real Postgres and Neo4j |
-| Console, payments, sign-in | Planned by their owners against the API contract, not built yet: Next.js and React, Stripe in test mode (Billing and Connect Express), Clerk organizations |
+| Console and sign-in | Planned by their owners against the API contract, not built yet: Next.js and React, Clerk organizations |
+| Payments | Stripe in test mode: Billing and the Customer Portal for firms, Connect for claimant refunds |
 
 ## Repository map
 
@@ -353,7 +354,7 @@ RecallOps is a four-person team project for the UCLA MSBA program (fall 2026). E
 |---|---|---|
 | Backend: API, agent, ledger, report, fraud graph, evaluations | `apps/api`, `evals` | Complete and tested; what this page describes |
 | Firm console and claim portal | `apps/web` (not in the repository yet) | Not built yet; its owner codes against [the API contract](docs/contracts/openapi.json) and [the trace contract](docs/contracts/trace.md) |
-| Payments: Stripe Billing and Connect | `apps/api/src/recallops/billing`, `apps/api/src/recallops/payouts/stripe_connect.py` | Not built yet; the ledger and billing seams, with working fakes, and a 501 webhook stub are in place for its owner |
+| Payments: Stripe Billing and Connect | `apps/api/src/recallops/billing`, `apps/api/src/recallops/payouts/stripe_connect.py` | Built in test mode by its owner; adopted after a backend review that added regression tests for the payout and usage paths |
 | Sign-in: Clerk and signed claimant links | `apps/api/src/recallops/auth` | Not built yet; the sign-in seam and a development provider are in place for its owner |
 
 Each component's design is in [docs/components](docs/components), and each owner's starting point is in [docs/onboarding](docs/onboarding).
@@ -368,3 +369,8 @@ Each component's design is in [docs/components](docs/components), and each owner
 | [Results tables](evals/results) | Extraction, adjudication, the ablation, the report reconciliation, and the vision tools on real CPSC photos, regenerated by `make eval` |
 | [Runtime traces](docs/traces) | Real runs: claims through every adjudication path, payouts, the report, the fraud graph, a clean-clone setup |
 | [Contract changes](docs/contracts/CHANGES.md) | What changed in the API contract, grouped by the teammate it affects |
+
+
+### Payments, in Stripe test mode
+
+Built by the payments owner and adopted after a backend review: Checkout and the Customer Portal for a firm's subscription, signed Billing and Connect webhooks, plan limits and usage metering, and refunds to claimants through Connect (Accounts v2 recipients with an Express dashboard). Transfers keep the ledger-first rules above: a payout row before any Stripe call, the row id as the idempotency key, a hold that no transfer can pass, and an unknown Stripe outcome that stays open for reconciliation and is never turned into a check. Migration `0006_payments` adds the billing tables, with row-level security forced like every other tenant table. Everything runs offline in the test suite against a fake Stripe boundary; the payments owner's runs against a Stripe test account are recorded in [the sandbox trace](docs/traces/M4-payments-stripe-sandbox.md). Start with [the payments guide](docs/onboarding/payments.md) and [the runtime guide](docs/onboarding/payments-runtime.md).

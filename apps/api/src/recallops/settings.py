@@ -27,6 +27,9 @@ def is_local_uri(uri: str) -> bool:
     return (urlsplit(uri).hostname or "") in LOCAL_HOSTS
 
 
+PINNED_STRIPE_API_VERSION: Literal["2026-09-30.endive"] = "2026-09-30.endive"  # stripe 16.0.0
+
+
 class Settings(BaseSettings):
     # hide_input_in_errors: a validation error never echoes the inputs, which include keys and passwords.
     model_config = SettingsConfigDict(
@@ -63,10 +66,61 @@ class Settings(BaseSettings):
     )
 
     # Payments seam (component 3).
-    stripe_secret_key: str = Field("sk_test_fake", description="Stripe test-mode secret key only.")
+    stripe_secret_key: SecretStr = Field(SecretStr("sk_test_fake"), description="Stripe test-mode secret key only.")
     stripe_publishable_key: str = Field("pk_test_fake")
-    stripe_webhook_secret: str = Field("whsec_fake")
-    stripe_api_version: str = Field("2026-09-30.fake", description="Pinned Stripe API version.")
+    stripe_webhook_secret: SecretStr = Field(SecretStr("whsec_fake"))
+    stripe_connect_webhook_secret: SecretStr = Field(
+        SecretStr("whsec_fake"), description="Accounts v2 thin-notification endpoint secret."
+    )
+    stripe_api_version: Literal["2026-09-30.endive"] = PINNED_STRIPE_API_VERSION
+    stripe_timeout_s: float = Field(15.0, gt=0, le=30)
+    stripe_program_price_id: str = ""
+    stripe_claim_price_id: str = ""
+    stripe_meter_event_name: str = "recallops_claims"
+    stripe_portal_configuration_id: str = ""
+    billing_return_url: str = "http://localhost:8000/dev/console#payouts"
+    connect_return_url: str = "http://localhost:8000/dev/console#connect-return"
+    connect_refresh_url: str = "http://localhost:8000/dev/console#connect-refresh"
+    payment_poll_s: float = Field(30.0, gt=0)
+    free_open_programs: int = Field(1, ge=1)
+    free_claims_per_month: int = Field(100, ge=1)
+    free_reviewer_seats: int = Field(1, ge=1)
+    growth_program_price_cents: int = Field(19900, gt=0)
+    growth_included_claims: int = Field(1000, ge=0)
+    growth_claim_price_cents: int = Field(25, gt=0)
+
+    @field_validator("stripe_api_version", mode="before")
+    @classmethod
+    def _pinned_stripe_version(cls, value: object) -> object:
+        """The version is pinned in code. An empty value or the placeholder older .env.example files carried
+        ("2026-09-30.fake") means the pinned one, so an existing .env keeps working; any other value is refused with
+        a message naming the fix (backend review of PR 6)."""
+        if value in (None, "", "2026-09-30.fake"):
+            return PINNED_STRIPE_API_VERSION
+        if value != PINNED_STRIPE_API_VERSION:
+            raise ValueError(f"STRIPE_API_VERSION must be {PINNED_STRIPE_API_VERSION}; delete the line from .env")
+        return value
+
+    @model_validator(mode="after")
+    def _stripe_test_only(self) -> Settings:
+        secret_key = self.stripe_secret_key.get_secret_value()
+        if not secret_key.startswith("sk_test_") or not self.stripe_publishable_key.startswith("pk_test_"):
+            raise ValueError("Stripe test-mode key prefixes are required in every environment")
+        if self.app_env == "prod" and secret_key != "sk_test_fake":
+            # Payments configured in prod: no localhost or dev-console return page (never served there) and the
+            # prices must exist. Without a key, payments stay off and none of these are needed.
+            for url in (self.billing_return_url, self.connect_return_url, self.connect_refresh_url):
+                if is_local_uri(url) or "/dev/console" in url:
+                    raise ValueError("payment return URLs must point at the deployed UI in prod")
+            if not self.stripe_program_price_id or not self.stripe_claim_price_id:
+                raise ValueError("STRIPE_PROGRAM_PRICE_ID and STRIPE_CLAIM_PRICE_ID are required in prod")
+        for url in (self.billing_return_url, self.connect_return_url, self.connect_refresh_url):
+            parts = urlsplit(url)
+            if not parts.hostname or parts.username or parts.password or parts.query:
+                raise ValueError("payment return URLs need a host and must not contain credentials or query tokens")
+            if parts.scheme != "https" and not (parts.scheme == "http" and is_local_uri(url)):
+                raise ValueError("payment return URLs require HTTPS except on localhost")
+        return self
 
     internal_shared_secret: str = Field("internal-dev-only", description="Header secret for /internal/*.")
 

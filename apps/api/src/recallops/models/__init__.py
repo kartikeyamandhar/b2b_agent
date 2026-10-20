@@ -294,6 +294,12 @@ class Payout(Base):
     export_batch: Mapped[UUID | None]
     connect_account_id: Mapped[str | None]
     hold_requested: Mapped[bool] = mapped_column(server_default="false")
+    connect_started_at: Mapped[datetime | None]
+    connect_ready: Mapped[bool] = mapped_column(server_default="false")
+    transfer_started_at: Mapped[datetime | None]
+    transfer_retry_at: Mapped[datetime | None]
+    transfer_request: Mapped[dict[str, Any] | None]
+    stripe_reversed_cents: Mapped[int] = mapped_column(server_default="0")
 
 
 class ExportBatch(Base):

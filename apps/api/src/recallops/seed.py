@@ -57,6 +57,11 @@ OTHER_RECALL = "27025"
 FIXTURE = REPO_ROOT / "data" / "samples" / "cpsc_sample.json"
 STATUS = {"approve": "approved", "deny": "denied", "needs_info": "needs_info", "flag": "flagged"}
 TENANT_DELETE_ORDER = (
+    "billing_invoices",
+    "claim_usage",
+    "run_usage_costs",
+    "usage_reports",
+    "billing_accounts",
     "document_chunks",
     "agent_steps",
     "agent_runs",
@@ -315,7 +320,10 @@ def run(engine: Engine | None = None, n: int = 500, seed: int = 42) -> dict[str,
         _wipe(session, [DEMO_FIRM_ID, OTHER_FIRM_ID])
         session.add_all(
             [
-                Firm(id=DEMO_FIRM_ID, name="Demo Recall Co", plan="growth"),
+                # Enterprise: unlimited and never billed or synced to Stripe, so the seeded 500 claims leave the
+                # demo path (new claims decided within seconds) working. A growth firm without a paid subscription
+                # counts as free (100 claims a month). Try Checkout with the other firm, which is free (PR 6 review).
+                Firm(id=DEMO_FIRM_ID, name="Demo Recall Co", plan="enterprise"),
                 Firm(id=OTHER_FIRM_ID, name="Other Firm Inc", plan="free"),
             ]
         )

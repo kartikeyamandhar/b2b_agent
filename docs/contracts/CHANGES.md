@@ -42,3 +42,45 @@ CLAUDE.md ("Working in a team") requires a decisions-log entry and a message to 
 17. **Breaking: `ClaimTokenVerifier`** returns `ClaimTokenContext(firm_id, claim_id)` from `verify`, and has `issue(firm_id, claim_id) -> str`. Your HMAC token must carry the firm id.
 18. `AUTH_PROVIDER=clerk` and `CLAIM_TOKEN_PROVIDER=hmac` must ship together: the dev claim-token verifier refuses to load when `AUTH_PROVIDER=clerk`, and the dev auth provider refuses `APP_ENV=prod`. infra/render.yaml deploys with `APP_ENV=prod`, so the API fails closed until both of yours are registered in `auth/deps.py`.
 19. The rate-limit table exists (`rate_limits`, migration 0003) with a fixed-window limiter in `api/guards.py`; you can replace the limiter, the table stays.
+
+
+## Payments integration (2026-10-20; built by the payments owner, adopted by the backend owner)
+
+20. The four payment 501 handlers are replaced. Checkout/Customer Portal retain bodyless requests and `{url}`
+    responses. Missing test configuration returns 503; unavailable Portal customer returns 409. Invalid webhook
+    signature, live-mode event, or mismatched API version returns 400. Snapshot events use 2026-09-30.endive.
+21. **Breaking for strict response consumers:** PortalView adds nullable `connect_onboarding_url` (only populated
+    by the Connect payout POST; never stored). Usage adds plan, effective_plan, subscription_status, limits,
+    invoices, billing_sync_error. PayoutView adds stripe_transfer_id and stripe_reversed_cents.
+22. **Ledger protocol:** transition methods accept caller-owned `session`; webhook event/state/audit/processed_at
+    now share that transaction. Payout states and lock ordering are preserved. Reversals are cumulative facts and
+    alerts, never a new payable state. A timeout is not a failure that permits export.
+23. **BillingGate:** `check_entitlement(ctx, action, claim_id=None)` may recognize an already-counted claim.
+    `record_usage(ctx, claim_id, run_id, model_cost_usd, *, session=None)` deduplicates claims/month and cost/run.
+    Runtime allow-all wiring is removed. Free exports refunds; the second unpaid invoice collection failure
+    applies free access. Commercial plan is separate from effective access and Stripe status.
+24. Migration `0006_payments` is the backend owner's, adopted 2026-10-20 (it was drafted by the payments owner for review).
+25. UTC calendar months; one-program minimum; prorated initial month; only growth-time claim usage is billed.
+    Growth waits in onboarding; existing pending_export rows cannot become Connect on upgrade. Product UI and
+    reviewer-seat enforcement are explicit UI/login handoffs. Runtime verification remains pending; local checks
+    are recorded separately in docs/traces/M4-payments-local-validation.md.
+
+26. (Folded into item 24 at adoption.)
+27. **Accounts v2 revision (owner-approved):** replace legacy Express creation/account.updated handling with
+    Accounts v2 recipient configuration, Express dashboard, application fee/loss responsibility, and claimant
+    contact email. Recipient Stripe transfer and payout capabilities must both be active. Thin account events
+    resolve their related account through the stored ID, then retrieve current capabilities. Their separate
+    endpoint secret is STRIPE_CONNECT_WEBHOOK_SECRET; Billing/transfer snapshot version/secret stay unchanged.
+    No alternate Stripe-managed-liability funds flow or legacy account path is added.
+
+28. The payments owner's runs against a Stripe test account are recorded in `docs/traces/M4-payments-stripe-sandbox.md`; runtime commands are in `docs/onboarding/payments-runtime.md`.
+29. (Folded into item 24 at adoption.)
+
+Changes the backend owner made while adopting the PR (2026-10-20):
+
+30. **Rebuild any database migrated from the fork.** Migration 0006's trigger changed after some databases recorded it (it now also lets a pending or onboarding payout switch to a mailed check), and Alembic does not rerun a recorded revision. Run `alembic downgrade 0005` then `upgrade head`, or recreate the volume.
+31. **Contract:** `POST /v1/programs` no longer lists 402 (a program is created as a draft; the plan is checked when it is opened with `PATCH status=open`). `POST /portal/{token}/payout` lists 400 (Stripe onboarding needs the claimant's email) and 402 (the firm's plan pays by check). The webhook lists 413, and `/v1/usage` and the billing routes list 404. A Stripe configuration error now answers 503 with "the payment configuration needs operator attention" instead of telling the caller to retry.
+32. **Payouts:** a held Connect payout that a person re-approves goes back to `onboarding` when the claimant already linked an account (it went to `pending`, where nothing picks it up). An unreadable Stripe response is an unknown outcome and stays `transferring`. A refund that falls back to a mailed check after a confirmed Connect failure passes the same shared-address hold as a claimant's own check choice.
+33. **Demo data:** `make seed` makes the demo firm `enterprise` (unlimited, never billed) so its 500 seeded claims do not block new ones. The other firm is `free`: use it to try Checkout.
+34. **Settings:** an existing `.env` with the old placeholder `STRIPE_API_VERSION=2026-09-30.fake` keeps working (it means the pinned version); any other value is refused with a message to delete the line. The Stripe secret key and both webhook secrets are masked (SecretStr).
+35. **Tests:** Stripe TEST account checks in `tests/manual/` are deselected by default (`-m 'not stripe_test'` in pyproject addopts); run them with `-m stripe_test` and the approval variables.

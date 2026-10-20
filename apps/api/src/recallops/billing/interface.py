@@ -6,7 +6,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from decimal import Decimal
-from typing import Literal, Protocol
+from typing import Any, Literal, Protocol
+from uuid import UUID
 
 from recallops.tenancy import FirmContext
 
@@ -21,6 +22,8 @@ class Entitlement:
 
 
 class BillingGate(Protocol):
-    def check_entitlement(self, ctx: FirmContext, action: Action) -> Entitlement: ...
+    def check_entitlement(self, ctx: FirmContext, action: Action, claim_id: UUID | None = None) -> Entitlement: ...
 
-    def record_usage(self, ctx: FirmContext, claims_adjudicated: int, model_cost_usd: Decimal) -> None: ...
+    def record_usage(
+        self, ctx: FirmContext, claim_id: UUID, run_id: UUID, model_cost_usd: Decimal, *, session: Any = None
+    ) -> None: ...

@@ -208,6 +208,8 @@ class DbEffects:
     lease_owner: str | None = None  # set for the worker's adjudication run; None for a reviewer resume
     phash_bits: int = 6
 
+    run_id: UUID | None = None
+
     def _prior(self) -> tuple[str, ...]:
         return ("submitted",) if self.lease_owner else HUMAN_PRIOR
 
@@ -298,6 +300,7 @@ class DbEffects:
                 self.ledger.create_pending(self.ctx, self.claim_id, self.refund_cents, method, session=session)
             elif before == "approved" and status != "approved":
                 hold_for_claim(session, self.ctx, self.claim_id, f"claim {status} by {final['decided_by']}")
+            self._record_usage_in(session)
             if automated and partners:
                 reopen_duplicates(session, self.ctx, self.claim_id, partners, str(final["decided_by"]))
         log_event(log, "claim_decided", firm_id=str(self.ctx.firm_id), claim_id=str(self.claim_id), outcome=outcome)
@@ -333,7 +336,14 @@ class DbEffects:
                 {"status": "submitted"},
                 {"status": held["claim_status"], "reason": held["reason"], "detail": held.get("detail")},
             )
+            self._record_usage_in(session)
             partners = duplicate_partners(session, self.ctx.firm_id, self.claim_id, self.phash_bits)
             if partners:
                 reopen_duplicates(session, self.ctx, self.claim_id, partners, "agent")
         log_event(log, "claim_held_for_review", claim_id=str(self.claim_id), reason=held["reason"])
+
+    def _record_usage_in(self, session: Session) -> None:
+        if self.run_id is not None:
+            from decimal import Decimal
+
+            self.billing.record_usage(self.ctx, self.claim_id, self.run_id, Decimal(0), session=session)

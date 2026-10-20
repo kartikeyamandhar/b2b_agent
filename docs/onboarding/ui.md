@@ -2,11 +2,15 @@
 
 You build the firm console and the claim portal in apps/web (02-ui.md). The backend keeps a local API with realistic data and a contract that only changes with a decisions-log entry and a note to you. The latest note is **docs/contracts/CHANGES.md**: read it first, several items affect screens you may have started.
 
+For billing screens, upgrade prompts, claimant onboarding, payout status or export downloads, follow the
+[payments handoff: UI owner](payments.md#ui-owner). It lists the implemented routes, redirect semantics,
+new response fields and checks required before UI acceptance.
+
 ## What exists (backend M2 to M5, October 2026)
 
-- Every route in 01-backend.md section 9 is implemented, in **docs/contracts/openapi.json** (generate your zod types and client from it: `npm run gen:api`; also live at http://127.0.0.1:8000/openapi.json, docs at /docs). The only 501s left are the payments owner's: billing checkout and portal, the Stripe webhook, and Connect onboarding from the portal payout step.
+- Every route in 01-backend.md section 9 is implemented, in **docs/contracts/openapi.json** (generate your zod types and client from it: `npm run gen:api`; also live at http://127.0.0.1:8000/openapi.json, docs at /docs). Payment Checkout, Customer Portal, signed webhooks and claimant Connect onboarding are implemented in test mode; use the payments handoff for their integration.
 - Console data: recalls search, programs (create from a recall with extracted rules, patch rules, threshold, and status), the claims queue (status filter, keyset cursor), claim detail (photos, decision, run summary, clusters, payout, audit), the trace (docs/contracts/trace.md), reviewer actions (`resume_override`, `request_info`, `mark_fraud`, `mark_delivered`), MPR (get, generate with manual boxes, PDF), payout export batches (create, list, CSV download), the fraud graph (rings across duplicate kinds, a 503 when the graph is down), campaigns (registrations upload, match, drafts, simulated send), and usage.
-- Portal: view, photo upload, submit, needs_info answer, payout choice (mailed check now; Connect is component 3's).
+- Portal: view, photo upload, submit, needs_info answer, payout choice (mailed check or Stripe-hosted Accounts v2 onboarding).
 - A claim filed through the portal is decided by the worker (`make worker`) a few seconds after submit. Poll `GET /v1/claims/{id}/trace` every 1 to 2 s while `run.status` is `running`. Flagged claims wait for a reviewer: an action is queued and the worker resumes the same run.
 - `make seed` loads a demo firm with the real Scotch thermal laminator recall (CPSC 27024) and 500 synthetic claims decided by the rules-only adjudicator (182 approved, 94 denied, 107 needs_info, 117 flagged). The approved refunds' payouts then move through the ledger, so the statuses you see after seeding are: paid 110 (56 exported in one export batch, 54 transferred), approved 72 (payouts 36 pending, 18 onboarding, 18 failed), denied 94, needs_info 107, flagged 117. Paid claims, an export download, and a non-zero MPR exist. 58 fraud clusters come from the Neo4j graph. A second firm has 5 claims, for tenant isolation.
 

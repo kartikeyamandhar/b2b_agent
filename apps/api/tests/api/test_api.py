@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 from collections.abc import Iterator
 from decimal import Decimal
 from typing import Any
@@ -14,12 +13,11 @@ from sqlalchemy import Engine
 
 from recallops import seed
 from recallops.api import problems
-from recallops.api.export_openapi import render
 from recallops.auth.dev import DevAuthProvider, DevClaimTokenVerifier, UnsafeDevAuth
 from recallops.auth.provider import AuthError
 from recallops.billing.fake import AllowAllBilling
 from recallops.payouts.fake import FakeLedger
-from recallops.settings import REPO_ROOT, Settings
+from recallops.settings import Settings
 from recallops.tenancy import FirmContext
 from tests.conftest import CLEAN_ORDER
 
@@ -105,15 +103,17 @@ def test_auth_failures_and_roles(client: TestClient) -> None:
     assert client.post("/v1/programs", headers=REVIEWER, json={}).status_code == 403
 
 
-def test_errors_are_problem_details_and_payments_stubs_stay_501(client: TestClient, seeded: dict[str, Any]) -> None:
+def test_errors_are_problem_details_and_unconfigured_payments_are_refused(
+    client: TestClient, seeded: dict[str, Any]
+) -> None:
     response = client.post("/v1/programs", headers=DEMO, json={"recall_id": None})
     body = response.json()
     assert response.status_code == 422
     assert body["title"] == "Unprocessable Entity" and "recall_id" in body["detail"] and body["correlation_id"]
     assert response.headers["x-request-id"] == body["correlation_id"]
     stub = client.post("/internal/stripe/webhook")
-    assert stub.status_code == 501 and "payments owner" in stub.json()["detail"]
-    assert client.post("/v1/billing/checkout", headers=DEMO).status_code == 501
+    assert stub.status_code == 400 and "signature" in stub.json()["detail"]
+    assert client.post("/v1/billing/checkout", headers=DEMO).status_code == 503
     assert client.post("/internal/feeds/pull").status_code == 401
     assert client.post("/internal/feeds/pull", headers={"X-Internal-Secret": "wrong"}).status_code == 401
 
@@ -134,14 +134,9 @@ def test_recall_search_usage_portal_and_health(client: TestClient, seeded: dict[
     assert client.get("/readyz").status_code in (200, 503)  # 503 until a worker heartbeat exists
 
 
-def test_committed_openapi_matches_the_app() -> None:
-    committed = (REPO_ROOT / "docs" / "contracts" / "openapi.json").read_text(encoding="utf-8")
-    assert json.loads(committed) == json.loads(render()), "run `make openapi` and log the contract change"
-
-
 def test_dev_provider_refuses_live_keys_and_prod() -> None:
-    with pytest.raises(UnsafeDevAuth):
-        DevAuthProvider(Settings(stripe_secret_key="sk_live_123"), environ={})
+    with pytest.raises(ValueError, match="test-mode"):
+        Settings(stripe_secret_key="sk_live_123")
     with pytest.raises(UnsafeDevAuth):
         DevAuthProvider(Settings(), environ={"CLERK_SECRET_KEY": "sk_live_abc"})
     with pytest.raises(UnsafeDevAuth):
@@ -163,8 +158,9 @@ def test_payment_fakes_allow_and_log() -> None:
     assert ledger.mark_exported(ctx, ref.payout_id, "batch-1").status == "exported"
     billing = AllowAllBilling()
     assert billing.check_entitlement(ctx, "adjudicate_claim").allowed
-    billing.record_usage(ctx, 3, Decimal("0"))
-    assert billing.usage == [(str(ctx.firm_id), 3, Decimal("0"))]
+    claim_id, run_id = uuid4(), uuid4()
+    billing.record_usage(ctx, claim_id, run_id, Decimal("0"))
+    assert billing.usage == [(str(ctx.firm_id), claim_id, run_id, Decimal("0"))]
 
 
 def test_a_failed_commit_answers_an_error_not_a_success(

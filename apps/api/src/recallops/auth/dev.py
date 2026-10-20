@@ -12,6 +12,8 @@ import re
 from collections.abc import Mapping
 from uuid import UUID
 
+from pydantic import SecretStr
+
 from recallops.auth.provider import AuthError, ClaimTokenContext, NoFirmError, Principal
 from recallops.logs import get_logger, log_event
 from recallops.settings import Settings, is_local_uri
@@ -29,13 +31,13 @@ class UnsafeDevAuth(RuntimeError):
 
 def live_keys_present(settings: Settings, environ: Mapping[str, str] | None = None) -> list[str]:
     """Names of Stripe or Clerk settings or environment variables holding a live key."""
-    found = [
-        name
-        for name, value in settings.model_dump().items()
-        if (name.startswith("stripe_") or name.startswith("clerk_"))
-        and isinstance(value, str)
-        and LIVE_KEY.search(value)
-    ]
+    found = []
+    for name, value in settings.model_dump().items():
+        if not (name.startswith("stripe_") or name.startswith("clerk_")):
+            continue
+        raw = value.get_secret_value() if isinstance(value, SecretStr) else value  # secrets are masked in dumps
+        if isinstance(raw, str) and LIVE_KEY.search(raw):
+            found.append(name)
     for name, value in (environ if environ is not None else os.environ).items():
         upper = name.upper()
         if (upper.startswith("STRIPE") or upper.startswith("CLERK")) and LIVE_KEY.search(value):

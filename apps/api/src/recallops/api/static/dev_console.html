@@ -458,7 +458,6 @@ const errorsEl = $('#errors');
 function hintFor(e) {
   const p = e.path || '';
   if (e.status === 0) return 'The API did not answer. Is uvicorn still running?';
-  if (e.status === 501) return 'Not built yet (payments owner). The route exists in the contract and answers 501 until that code lands.';
   if (e.status === 404 && /^\/v1\/claims\//.test(p)) return 'Tenant isolation: the API answers 404 for a claim that belongs to another firm, the same as for a claim that does not exist. Switch the firm in the top bar if this claim is yours.';
   if (e.status === 404 && /^\/v1\/programs\//.test(p)) return 'The program is not visible to this firm (tenant isolation) or does not exist.';
   if (e.status === 404 && /^\/portal\//.test(p)) return 'The claim link is not valid, or its program is closed. Dev tokens look like dev.<firm id>.<claim id>.';
@@ -648,6 +647,20 @@ function go(hash) { if (location.hash === hash) route(); else location.hash = ha
 async function route() {
   const my = ++seq;
   const r = parseHash();
+  if (r.name === 'connect-return' || r.name === 'connect-refresh') {
+    const token = sessionStorage.getItem('recallops-connect-claim');
+    if (!token) { go('#/portal'); toast('Reopen your claim link to continue onboarding.'); return; }
+    if (r.name === 'connect-refresh') {
+      try {
+        const v = await api('POST', `/portal/${encodeURIComponent(token)}/payout`, { json: { method: 'stripe_connect' } });
+        if (v.connect_onboarding_url) { location.assign(v.connect_onboarding_url); return; }
+      } catch (e) { toast(e.detail || 'Onboarding could not be refreshed. Reopen the claim to retry.'); }
+    }
+    sessionStorage.removeItem('recallops-connect-claim');
+    go('#/portal/' + encodeURIComponent(token));
+    toast('Returned from Stripe. Readiness is confirmed by Stripe and the payout worker.');
+    return;
+  }
   const routes = { overview: viewOverview, claims: viewClaims, claim: viewClaim, portal: viewPortal, fraud: viewFraud, payouts: viewPayouts, mpr: viewMpr, campaigns: viewCampaigns, recalls: viewRecalls, program: viewProgram };
   const fn = routes[r.name];
   const navKey = r.name === 'claim' ? 'claims' : r.name;
@@ -925,7 +938,7 @@ async function viewClaim(ctx) {
         <p class="small muted">Override and request info apply to flagged, under_review, capped, needs_info, approved, and denied claims. When the run is paused for review, the worker applies the action, so the status changes after the worker runs. Mark delivered applies only to an approved repair or replacement.</p>
       </section>
       <section class="card"><h2>Payout</h2>
-        ${c.payout ? h`<dl class="kv"><dt>Status</dt><dd>${badge(c.payout.status)}</dd><dt>Amount</dt><dd>${money(c.payout.amount_cents)} ${String(c.payout.currency).toUpperCase()}</dd><dt>Method</dt><dd class="mono">${c.payout.method}</dd><dt>Id</dt><dd>${idChip(c.payout.id)}</dd></dl>`
+        ${c.payout ? h`<dl class="kv"><dt>Status</dt><dd>${badge(c.payout.status)}</dd><dt>Amount</dt><dd>${money(c.payout.amount_cents)} ${String(c.payout.currency).toUpperCase()}</dd><dt>Method</dt><dd class="mono">${c.payout.method}</dd><dt>Id</dt><dd>${idChip(c.payout.id)}</dd><dt>Stripe transfer</dt><dd>${c.payout.stripe_transfer_id || 'none'}</dd><dt>Reversed</dt><dd>${money(c.payout.stripe_reversed_cents)}${c.payout.stripe_reversed_cents ? '  /  operator review required; never automatically repaid' : ''}</dd></dl>`
           : h`<p class="muted">No payout row. One is written only when a refund is approved.</p>`}
       </section>
       <section class="card"><h2>Duplicate clusters <span class="muted">${c.clusters.length}</span></h2>
@@ -1149,11 +1162,11 @@ function renderPortal(ctx) {
     <form data-form="answer" class="stack"><label class="field"><span>Your answer</span><textarea name="message" rows="3" required>I uploaded a clearer photo of the label.</textarea></label><button class="btn primary">Send answer</button></form></section>` : ''}
   <section class="card"><h2>Payout</h2>
     <p class="small muted">The claimant picks how an approved refund is paid. Before an approval the API answers 409.</p>
-    ${v.status !== 'approved' ? h`<div class="note t-gray small">The claim is ${v.status}, not approved, so a mailed check answers 409 now. Stripe Connect answers 501 in any state.</div>` : ''}
+    ${v.status !== 'approved' ? h`<div class="note t-gray small">The claim is ${v.status}, not approved, so a mailed check answers 409 now. Stripe Connect also requires an eligible plan and an approved Connect payout.</div>` : ''}
     <form data-form="payout" class="stack">
       <fieldset class="radios"><legend>Method</legend>
         <label><input type="radio" name="method" value="check_export" data-pp="method" ${pay.method === 'check_export' ? raw('checked') : ''}> Mailed check. It goes into a check export batch.</label>
-        <label><input type="radio" name="method" value="stripe_connect" data-pp="method" ${pay.method === 'stripe_connect' ? raw('checked') : ''}> Stripe Connect. Not built yet (payments owner), so expect 501.</label>
+        <label><input type="radio" name="method" value="stripe_connect" data-pp="method" ${pay.method === 'stripe_connect' ? raw('checked') : ''}> Stripe Connect Express (test mode).</label>
       </fieldset>
       <label class="field"><span>Mailing address for the check (optional)</span><input name="mailing_address" data-pp="mailing" value="${pay.mailing}" placeholder="Leave empty to mail the check to the home address on file"></label>
       <p class="small muted">${portal.filed ? h`The home address on file is ${home}. ` : 'The portal does not show the address on file. '}An address another claim of the program already uses, as its home or mailing address, sends this claim and every approved claim sharing it to a person, with their payouts held.</p>
@@ -1164,12 +1177,12 @@ function renderPortal(ctx) {
   const after = (nv, note) => { portal.view = nv; portal.note = note; if (ctx.alive()) renderPortal(ctx); };
   const refused = (label, e) => {
     if (!(e instanceof ApiError)) throw e;
-    portal.note = e.status === 501
-      ? { tone: 'amber', text: `${label}: not built yet (payments owner). The API answered 501, as expected.` }
+    portal.note = e.status === 503
+      ? { tone: 'amber', text: `${label}: ${e.detail || 'payment integration unavailable'}` }
       : { tone: 'red', text: `${label} was refused. ${refusal(e)}` };
     if (ctx.alive()) renderPortal(ctx);
   };
-  const INLINE = [409, 413, 422, 429, 501, 503]; // refusals this view explains in its own note, so the error panel skips them
+  const INLINE = [409, 413, 422, 429, 503]; // refusals this view explains in its own note, so the error panel skips them
   localActs.portalRefresh = async () => {
     const nv = await api('GET', `/portal/${enc}`);
     after(nv, { tone: 'blue', text: `Refreshed at ${fmtTime(new Date().toISOString())}. Status: ${nv.status}.` });
@@ -1227,6 +1240,11 @@ function renderPortal(ctx) {
     const body = method === 'check_export' ? { method, mailing_address: mailing || null } : { method };
     try {
       const nv = await api('POST', `/portal/${enc}/payout`, { json: body, quiet: INLINE });
+      if (nv.connect_onboarding_url) {
+        sessionStorage.setItem('recallops-connect-claim', t);
+        location.assign(nv.connect_onboarding_url);
+        return;
+      }
       after(nv, nv.payout_status === 'held'
         ? { tone: 'amber', text: `The check address is one another claim already uses, so the claim went to a person (status ${nv.status}) and its payout is held.` }
         : { tone: 'green', text: `Payout method saved. The payout status is ${nv.payout_status || 'not set'}. The check goes to ${mailing || 'the home address on file'}.` });
@@ -1382,6 +1400,9 @@ async function viewFraud(ctx) {
 
 /* ---------- payouts ---------- */
 async function viewPayouts(ctx) {
+  // A billing failure must not hide the export batches, which work without Stripe.
+  let usage = null, usageError = null;
+  try { usage = await api('GET', '/v1/usage', { quiet: [404, 500, 503] }); } catch (e) { usageError = e; }
   setTitle('Payouts');
   let list = null, denied = null;
   try { list = await api('GET', '/v1/payouts/exports?limit=50', { quiet: [403] }); } catch (e) { if (e.status === 403) denied = e; else throw e; }
@@ -1397,10 +1418,15 @@ async function viewPayouts(ctx) {
           <td><span class="mono" title="${b.sha256}">${b.sha256.slice(0, 16)}</span></td><td>${idChip(b.id)}</td><td><button class="btn small" data-act="downloadCsv" data-id="${b.id}">Download CSV</button></td></tr>`)}
       </tbody></table></div>` : h`<p class="muted">No batches yet.</p>`}
   </section>
-  <section class="card"><h2>Billing (payments owner)</h2>
-    <p class="small muted">Stripe Billing and Connect belong to the payments owner. Their routes answer 501 until that code lands.</p>
-    <div class="row wrap"><button class="btn" data-act="tryCheckout">Try POST /v1/billing/checkout</button><span id="billingResult" aria-live="polite"></span></div>
-  </section>`);
+  ${usageError ? h`<section class="card"><h2>Billing  /  Stripe test mode</h2><div class="note t-amber">The billing summary is unavailable (HTTP ${usageError.status || '?'}${usageError.detail ? ': ' + usageError.detail : ''}). Export batches above still work.</div></section>` : h`<section class="card"><h2>Billing  /  Stripe test mode</h2>
+    <p>Plan: <strong>${usage.plan}</strong>. Effective access: <strong>${usage.effective_plan}</strong>. Subscription: ${usage.subscription_status || 'none'}.</p>
+    <div class="stats">${stat('Claims this month', fmtNum(usage.claims_adjudicated))}${stat('Open programs', usage.open_programs)}${stat('Model cost', '$' + usage.model_cost_usd)}</div>
+    <p class="small muted">Plan limits: ${usage.limits.open_programs ?? 'unlimited'} open programs, ${usage.limits.claims_per_month ?? 'unlimited'} claims/month, ${usage.limits.reviewer_seats ?? 'unlimited'} reviewer seats.</p>
+    ${usage.billing_sync_error ? h`<p class="note t-amber">Billing synchronization needs attention: ${usage.billing_sync_error}</p>` : ''}
+    <div class="row wrap"><button class="btn primary" data-act="checkout">Upgrade with Checkout</button><button class="btn" data-act="customerPortal">Manage subscription</button></div>
+    <h3>Recent invoices</h3>
+    ${usage.invoices.length ? h`<table><thead><tr><th>Invoice</th><th>Status</th><th>Attempts</th><th>Due</th><th>Paid</th></tr></thead><tbody>${usage.invoices.map(i => h`<tr><td>${i.id}</td><td>${i.status}</td><td>${i.attempt_count}</td><td>${money(i.amount_due_cents)}</td><td>${money(i.amount_paid_cents)}</td></tr>`)}</tbody></table>` : h`<p class="muted">No invoices.</p>`}
+  </section>`}`);
   localActs.createBatch = async () => {
     const r = await api('POST', '/v1/payouts/exports');
     if (r === null) { $('#batchResult').innerHTML = h`<span class="note t-blue">Nothing is waiting for a check, so no batch was written.</span>`.s; return; }
@@ -1408,12 +1434,13 @@ async function viewPayouts(ctx) {
     if (ctx.alive()) route();
   };
   localActs.downloadCsv = async (el) => { const blob = await api('GET', `/v1/payouts/exports/${el.dataset.id}.csv`, { blob: true }); saveBlob(blob, `${el.dataset.id}.csv`); };
-  localActs.tryCheckout = async () => {
-    try { await api('POST', '/v1/billing/checkout', { quiet: [501] }); $('#billingResult').textContent = 'It answered. The payments owner has shipped it.'; } catch (e) {
-      if (!(e instanceof ApiError)) throw e;
-      const out = $('#billingResult');
-      if (out) out.innerHTML = (e.status === 501 ? h`<span class="badge t-amber">not built yet (payments owner)</span> <span class="small muted">The API answered 501, as expected.</span>` : h`<span class="badge t-red">${e.status} ${e.title}</span>`).s;
-    }
+  localActs.checkout = async () => {
+    const r = await api('POST', '/v1/billing/checkout');
+    location.assign(r.url);
+  };
+  localActs.customerPortal = async () => {
+    const r = await api('POST', '/v1/billing/portal');
+    location.assign(r.url);
   };
 }
 

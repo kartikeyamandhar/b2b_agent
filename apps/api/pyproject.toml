@@ -77,11 +77,12 @@ ignore_missing_imports = true
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
-addopts = "-ra --strict-markers"
+addopts = "-ra --strict-markers -m 'not stripe_test'"  # Stripe TEST runs: pytest -m stripe_test <file> (overrides)
 markers = [
     "db: needs the docker compose Postgres (make db-up && make migrate)",
     "contract: API-shape probes for the pinned libraries",
     "graph: needs the docker compose Neo4j (make db-up)",
+    "stripe_test: manually approved Stripe TEST account integration; never part of offline CI",
 ]
 
 [tool.coverage.run]

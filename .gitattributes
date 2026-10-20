@@ -1,0 +1,14 @@
+# These files are byte-hashed by the adjudication preregistration; Windows CRLF conversion breaks the evidence gate.
+apps/api/src/recallops/claims/tools/checks.py text eol=lf
+apps/api/src/recallops/claims/policy.py text eol=lf
+apps/api/src/recallops/claims/agent_tools.py text eol=lf
+apps/api/src/recallops/claims/graph.py text eol=lf
+apps/api/src/recallops/claims/rules_only.py text eol=lf
+apps/api/src/recallops/claims/rules_plus_vision.py text eol=lf
+apps/api/src/recallops/claims/vision.py text eol=lf
+evals/adjudication/golden_claims.json text eol=lf
+evals/adjudication/probe_claims.json text eol=lf
+evals/adjudication/standin_claims.json text eol=lf
+evals/adjudication/labels/*.json text eol=lf
+evals/adjudication/probe_labels/*.json text eol=lf
+evals/adjudication/standin_labels/*.json text eol=lf

@@ -23,6 +23,7 @@ PY := $(RUN) python
 PSQL := docker compose exec -T db psql -U postgres -v ON_ERROR_STOP=1 -q
 DATABASES := recallops recallops_test
 
+.PHONY: billing-bootstrap billing-jobs connect-payouts
 .PHONY: help setup db-up db-bootstrap migrate downgrade api dev worker export-payouts graph-sync seed test lint format typecheck check eval ingest label profile openapi readme-assets
 
 help: ## List targets
@@ -100,3 +101,13 @@ readme-assets: ## Rebuild the README charts in docs/assets from evals/results an
 
 openapi: ## Regenerate docs/contracts/openapi.json from the app
 	$(PY) -m recallops.api.export_openapi docs/contracts/openapi.json
+
+
+billing-bootstrap: ## Provision Stripe TEST resources (explicit network approval required)
+	$(PY) -m recallops.billing.bootstrap $(ARGS)
+
+billing-jobs: ## Synchronize quantities and report closed-day usage; ARGS="--loop" polls
+	$(PY) -m recallops.billing.jobs $(ARGS)
+
+connect-payouts: ## Dispatch and reconcile ledger-first Stripe TEST transfers; ARGS="--loop" polls
+	$(PY) -m recallops.payouts.stripe_connect $(ARGS)
