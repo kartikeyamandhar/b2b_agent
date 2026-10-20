@@ -116,3 +116,12 @@ def test_permanent_stripe_errors_are_not_reported_as_retryable(make: Any, detail
     body = response.json()
     assert response.status_code == 503 and detail in body["detail"]
     assert "bad key" not in response.text and "reset" not in response.text  # Stripe's message never reaches a client
+
+
+def test_an_old_env_placeholder_version_still_loads_and_a_wrong_one_names_the_fix() -> None:
+    """Older .env.example files carried STRIPE_API_VERSION=2026-09-30.fake; with the pinned Literal, every existing
+    .env refused to start the API."""
+    assert Settings(stripe_api_version="2026-09-30.fake").stripe_api_version == "2026-09-30.endive"
+    assert Settings(stripe_api_version="").stripe_api_version == "2026-09-30.endive"
+    with pytest.raises(ValidationError, match="delete the line"):
+        Settings(stripe_api_version="2020-08-27")

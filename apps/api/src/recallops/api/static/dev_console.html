@@ -1400,7 +1400,9 @@ async function viewFraud(ctx) {
 
 /* ---------- payouts ---------- */
 async function viewPayouts(ctx) {
-  const usage = await api('GET', '/v1/usage');
+  // A billing failure must not hide the export batches, which work without Stripe.
+  let usage = null, usageError = null;
+  try { usage = await api('GET', '/v1/usage', { quiet: [404, 500, 503] }); } catch (e) { usageError = e; }
   setTitle('Payouts');
   let list = null, denied = null;
   try { list = await api('GET', '/v1/payouts/exports?limit=50', { quiet: [403] }); } catch (e) { if (e.status === 403) denied = e; else throw e; }
@@ -1416,7 +1418,7 @@ async function viewPayouts(ctx) {
           <td><span class="mono" title="${b.sha256}">${b.sha256.slice(0, 16)}</span></td><td>${idChip(b.id)}</td><td><button class="btn small" data-act="downloadCsv" data-id="${b.id}">Download CSV</button></td></tr>`)}
       </tbody></table></div>` : h`<p class="muted">No batches yet.</p>`}
   </section>
-  <section class="card"><h2>Billing  /  Stripe test mode</h2>
+  ${usageError ? h`<section class="card"><h2>Billing  /  Stripe test mode</h2><div class="note t-amber">The billing summary is unavailable (HTTP ${usageError.status || '?'}${usageError.detail ? ': ' + usageError.detail : ''}). Export batches above still work.</div></section>` : h`<section class="card"><h2>Billing  /  Stripe test mode</h2>
     <p>Plan: <strong>${usage.plan}</strong>. Effective access: <strong>${usage.effective_plan}</strong>. Subscription: ${usage.subscription_status || 'none'}.</p>
     <div class="stats">${stat('Claims this month', fmtNum(usage.claims_adjudicated))}${stat('Open programs', usage.open_programs)}${stat('Model cost', '$' + usage.model_cost_usd)}</div>
     <p class="small muted">Plan limits: ${usage.limits.open_programs ?? 'unlimited'} open programs, ${usage.limits.claims_per_month ?? 'unlimited'} claims/month, ${usage.limits.reviewer_seats ?? 'unlimited'} reviewer seats.</p>
@@ -1424,7 +1426,7 @@ async function viewPayouts(ctx) {
     <div class="row wrap"><button class="btn primary" data-act="checkout">Upgrade with Checkout</button><button class="btn" data-act="customerPortal">Manage subscription</button></div>
     <h3>Recent invoices</h3>
     ${usage.invoices.length ? h`<table><thead><tr><th>Invoice</th><th>Status</th><th>Attempts</th><th>Due</th><th>Paid</th></tr></thead><tbody>${usage.invoices.map(i => h`<tr><td>${i.id}</td><td>${i.status}</td><td>${i.attempt_count}</td><td>${money(i.amount_due_cents)}</td><td>${money(i.amount_paid_cents)}</td></tr>`)}</tbody></table>` : h`<p class="muted">No invoices.</p>`}
-  </section>`);
+  </section>`}`);
   localActs.createBatch = async () => {
     const r = await api('POST', '/v1/payouts/exports');
     if (r === null) { $('#batchResult').innerHTML = h`<span class="note t-blue">Nothing is waiting for a check, so no batch was written.</span>`.s; return; }

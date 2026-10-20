@@ -15,7 +15,7 @@ needed for that task. Payments runs in Stripe test mode for the life of this pro
    separates receiving-owner sign-off from the payments tests that already passed.
 
 The API, entitlement policy, signed webhooks, durable metering, payout processing, migration and development
-console are implemented. The [validation trace](../traces/M-payments-stripe-validation.md) records sandbox
+console are implemented. The [validation trace](../traces/M4-payments-stripe-sandbox.md) records sandbox
 Checkout/worker resumption, Portal, delinquency/recovery, metering, quantity changes, transfers, crash recovery,
 reversal and exports. It also distinguishes provider checks, local tests and owner-confirmed settings.
 Product UI, login integration, upstream refund correctness and deployment require the receiving owners below.
@@ -117,7 +117,7 @@ own validated resources. Deployment is a separate action.
 
 ## Acceptance record
 
-Use the [validation trace](../traces/M-payments-stripe-validation.md) for completed checks, dates, fixture
+Use the [validation trace](../traces/M4-payments-stripe-sandbox.md) for completed checks, dates, fixture
 boundaries, skips and validation outputs. Prior payments verification is evidence for the build, not acceptance
 of another owner's integration.
 
@@ -135,3 +135,19 @@ unit tests pass.
 A redirect treated as payment success can grant access or claim delivery prematurely; refresh authoritative API state.
 Retrying/exporting an uncertain transfer can deliver twice; preserve its identity and follow reconciliation rules.
 Losing firm/claim context on onboarding return can target the wrong record; verify the original token and tenant.
+
+## Tests that must stay green
+
+- `tests/unit/test_billing.py` and `tests/unit/test_payments_review_security.py`: webhook signatures and secrets, entitlements, the client's pinned version and timeouts, and Stripe error answers.
+- `tests/db/test_connect_recovery.py`, `tests/db/test_payments_review_fixes.py`, and `tests/db/test_money_paths.py`: the ledger around the Stripe boundary (holds, retries, unknown outcomes, the check fallback, re-approval).
+- `tests/db/test_billing_usage.py` and `tests/db/test_seed_entitlements.py`: usage counting across resumes and months, and the seeded demo firm staying entitled.
+- `tests/db/test_tenancy.py` (every payment table) and `tests/api/test_payments.py` (routes and the contract drift check).
+- Stripe TEST account checks in `tests/manual/` are deselected by default (pyproject addopts) and also need `RUN_STRIPE_TESTS=1` or `RUN_STRIPE_ACCEPTANCE=1`.
+
+## Three commands to verify your work
+
+```
+make check                                                         # lint, strict types, every offline test
+cd apps/api && uv run --frozen pytest -q tests/db/test_connect_recovery.py tests/db/test_payments_review_fixes.py
+cd apps/api && RUN_STRIPE_TESTS=1 uv run --frozen pytest -q -m stripe_test tests/manual/test_stripe_readonly.py   # read-only, needs a Stripe test key in .env
+```

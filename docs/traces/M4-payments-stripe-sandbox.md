@@ -1,7 +1,7 @@
-# Payments migration and Stripe validation — 2026-10-20
+# Payments migration and Stripe validation: 2026-10-20
 
 This trace supersedes the missing-schema/network limitations in the earlier
-[offline](M-payments-local-validation.md) and [Postgres setup](M-payments-postgres-setup.md) traces.
+[offline](M4-payments-local-validation.md) and [Postgres setup](M4-payments-postgres-setup.md) traces.
 The later bounded sandbox acceptance below supersedes the initial read-only limitations.
 All provider objects were in Stripe **test mode**, and all claimant/usage data was synthetic. Timestamps are UTC.
 

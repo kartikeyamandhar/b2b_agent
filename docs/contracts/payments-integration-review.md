@@ -1,5 +1,7 @@
 # Payments integration: ownership review before merge
 
+> Written by the payments owner for the backend review of PR 6, before the merge; kept as the record of that review. The backend owner adopted the PR on 2026-10-20 with the fixes in CLAUDE.md's decisions log. The source of truth is now the migration (apps/api/migrations/versions/0006_payments.py), docs/components/03-payments.md, and docs/contracts/openapi.json.
+
 This is a review map for the proposed payments change set, prepared 2026-10-20. Recheck the PR diff and
 CODEOWNERS when rebasing or changing scope. Task authorization to implement/test shared changes does not record
 acceptance by the backend, UI or login teammate. Component-owner sign-off is still required.
@@ -109,9 +111,9 @@ those files to the backend reviewer. None of these paths is reassigned to paymen
 | [docs/onboarding/payments-runtime.md](../../docs/onboarding/payments-runtime.md) | Backend |
 | [docs/onboarding/payments.md](../../docs/onboarding/payments.md) | Backend |
 | [docs/onboarding/ui.md](../../docs/onboarding/ui.md) | Backend |
-| [docs/traces/M-payments-local-validation.md](../../docs/traces/M-payments-local-validation.md) | Backend |
-| [docs/traces/M-payments-postgres-setup.md](../../docs/traces/M-payments-postgres-setup.md) | Backend |
-| [docs/traces/M-payments-stripe-validation.md](../../docs/traces/M-payments-stripe-validation.md) | Backend |
+| [docs/traces/M4-payments-local-validation.md](../../docs/traces/M4-payments-local-validation.md) | Backend |
+| [docs/traces/M4-payments-postgres-setup.md](../../docs/traces/M4-payments-postgres-setup.md) | Backend |
+| [docs/traces/M4-payments-stripe-sandbox.md](../../docs/traces/M4-payments-stripe-sandbox.md) | Backend |
 
 ## Failure modes
 

@@ -1,10 +1,12 @@
 # Payments schema request for the backend owner
 
+> Written by the payments owner for the backend review of PR 6, before the merge; kept as the record of that review. The backend owner adopted the PR on 2026-10-20 with the fixes in CLAUDE.md's decisions log. The source of truth is now the migration (apps/api/migrations/versions/0006_payments.py), docs/components/03-payments.md, and docs/contracts/openapi.json.
+
 Status: **tested draft migration `0006_payments`, locally applied; backend-owner adoption/review pending**.
 The user authorized local implementation/application on 2026-10-20; migration ownership remains with the backend.
 The contract below is implemented through Alembic,
 with forced RLS and restricted grants; there is no DDL startup hook or `metadata.create_all`.
-See [the validation trace](../traces/M-payments-stripe-validation.md) for passing checks and remaining gates.
+See [the validation trace](../traces/M4-payments-stripe-sandbox.md) for passing checks and remaining gates.
 
 Application declarations are in `billing/models.py` and `models.Payout`; the migration installs the constraints,
 grants and functions that ORM declarations alone do not install. Run-cost ownership uses a run FK plus a

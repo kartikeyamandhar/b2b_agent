@@ -31,7 +31,6 @@ from dotenv import dotenv_values
 from pydantic import BaseModel, Field
 from sqlalchemy import text
 from sqlalchemy.engine import make_url
-from tests.db.test_ledger_retrieval_worker import _firm_program_claim
 
 from recallops.billing.client import PaymentError, client, connect_client, data, firm_lock
 from recallops.billing.client import test_object as require_test_object
@@ -47,6 +46,7 @@ from recallops.payouts.db_ledger import DbPayoutLedger
 from recallops.payouts.stripe_connect import process_payout, ready
 from recallops.settings import REPO_ROOT, Settings, get_settings
 from recallops.tenancy import FirmContext
+from tests.db.test_ledger_retrieval_worker import _firm_program_claim
 
 DATABASE = "recallops_payments_acceptance"
 BASE_URL = "http://127.0.0.1:18000"

@@ -75,6 +75,6 @@ subscription cannot replace a newer active subscription. Failed application roll
 
 Migration `0006_payments` installs [the payment schema](../contracts/payments-schema-request.md), following the
 owner's explicit authorization. See [payments-runtime.md](../onboarding/payments-runtime.md) for commands and
-[the Stripe/database validation trace](../traces/M-payments-stripe-validation.md) for actual evidence and limits.
+[the Stripe/database validation trace](../traces/M4-payments-stripe-sandbox.md) for actual evidence and limits.
 Sandbox transfer/reversal delivery, forwarded webhooks and fresh-checkout validation are recorded in that trace.
 Receiving-owner acceptance and deployment remain separate gates; use the handoff to record integration sign-off.

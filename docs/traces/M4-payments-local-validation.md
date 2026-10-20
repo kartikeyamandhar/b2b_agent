@@ -1,4 +1,4 @@
-# Payments local validation — 2026-10-20
+# Payments local validation: 2026-10-20
 
 Status: implementation and offline validation only. No real Stripe customer, subscription, Connect account,
 transfer, funding operation, or meter event was created. No migration was added or edited. No deployment or
@@ -58,7 +58,7 @@ That isolated API run passed all five tests in 1.68 seconds.
 
 ## Outstanding acceptance evidence
 
-Update: subsequent [Postgres setup and smoke checks](M-payments-postgres-setup.md) established local connectivity
+Update: subsequent [Postgres setup and smoke checks](M4-payments-postgres-setup.md) established local connectivity
 and existing firms isolation. The payment database test still stops on missing payment DDL. The paragraph below
 records the earlier implementation run, before that setup.
 

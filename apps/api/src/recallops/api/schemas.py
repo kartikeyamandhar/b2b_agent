@@ -46,7 +46,7 @@ class Problem(Schema):
             "examples": [
                 {
                     "type": "about:blank",
-                    "title": "Payment integration unavailable",
+                    "title": "Service Unavailable",
                     "status": 503,
                     "detail": "Stripe test prices are not configured.",
                     "instance": "/v1/billing/checkout",

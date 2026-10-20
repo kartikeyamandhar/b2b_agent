@@ -49,7 +49,9 @@ PHOTO_STORAGE_DOWN = "photo storage unavailable"
 
 firm = APIRouter(prefix="/v1", tags=["firm"], responses=AUTH)
 billing = APIRouter(
-    prefix="/v1/billing", tags=["billing (component 3)"], responses={**AUTH, **CONFLICT, 503: {"model": s.Problem}}
+    prefix="/v1/billing",
+    tags=["billing (component 3)"],
+    responses={**AUTH, **NOT_FOUND, **CONFLICT, 503: {"model": s.Problem}},
 )
 portal = APIRouter(prefix="/portal", tags=["portal"])
 internal = APIRouter(prefix="/internal", tags=["internal"])
@@ -110,7 +112,7 @@ def get_program(program_id: UUID, ctx: FirmDep, db: TenantDb) -> s.Program:
     "/programs",
     response_model=s.Program,
     status_code=201,
-    responses={**NOT_FOUND, **PAYMENT},
+    responses=NOT_FOUND,  # created as a draft: the plan is checked when it is opened (PATCH status=open)
     summary="Open a program from a recall; runs rule extraction and returns rules for review",
 )
 def create_program(body: s.ProgramCreate, ctx: AdminDep, db: TenantDb) -> s.Program:
@@ -632,7 +634,9 @@ def download_export(batch_id: UUID, ctx: AdminDep, db: TenantDb) -> Response:
 # Usage
 
 
-@firm.get("/usage", response_model=s.Usage, summary="Current period meters (read by the billing UI)")
+@firm.get(
+    "/usage", response_model=s.Usage, responses=NOT_FOUND, summary="Current period meters (read by the billing UI)"
+)
 def get_usage(ctx: FirmDep, db: TenantDb) -> s.Usage:
     period = datetime.now(UTC).date().replace(day=1)
     meter = UsageRepo(db, ctx).for_period(period)
@@ -781,7 +785,13 @@ def portal_answer(token: str, body: s.PortalAnswer, token_ctx: ClaimTokenDep) ->
 @portal.post(
     "/{token}/payout",
     response_model=s.PortalView,
-    responses={**NOT_FOUND, **PAYMENT, **CONFLICT, 503: {"model": s.Problem}},
+    responses={
+        **NOT_FOUND,
+        **PAYMENT,
+        **CONFLICT,
+        400: {"model": s.Problem, "description": "Stripe onboarding needs the claimant's email"},
+        503: {"model": s.Problem},
+    },
     summary="Payout destination (Connect onboarding handoff is component 3)",
 )
 def portal_payout(token: str, body: s.PortalPayout, token_ctx: ClaimTokenDep) -> s.PortalView:
@@ -837,7 +847,7 @@ def feeds_pull(x_internal_secret: Annotated[str | None, Header()] = None) -> dic
 
 @internal.post(
     "/stripe/webhook",
-    responses={400: {"model": s.Problem}, 503: {"model": s.Problem}},
+    responses={400: {"model": s.Problem}, 413: {"model": s.Problem}, 503: {"model": s.Problem}},
     summary="Signed Stripe test-mode webhook",
 )
 async def stripe_webhook(request: Request) -> dict[str, str]:

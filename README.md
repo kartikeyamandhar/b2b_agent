@@ -5,7 +5,7 @@
 <p align="center">
   <a href="https://github.com/kartikeyamandhar/b2b_agent/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/kartikeyamandhar/b2b_agent/ci.yml?branch=main&amp;label=CI" alt="CI status"></a>
   <a href="https://github.com/kartikeyamandhar/b2b_agent/actions/workflows/deploy.yml"><img src="https://img.shields.io/github/actions/workflow/status/kartikeyamandhar/b2b_agent/deploy.yml?branch=main&amp;label=eval%20gate" alt="Evaluation gate status"></a>
-  <img src="https://img.shields.io/badge/coverage-92%25-1baf7a" alt="Coverage 92 percent">
+  <img src="https://img.shields.io/badge/coverage-90%25-1baf7a" alt="Coverage 90 percent">
   <img src="https://img.shields.io/badge/python-3.13-2a78d6" alt="Python 3.13">
   <img src="https://img.shields.io/badge/FastAPI-0.143-2a78d6" alt="FastAPI 0.143">
   <img src="https://img.shields.io/badge/LangGraph-1.2-2a78d6" alt="LangGraph 1.2">
@@ -234,7 +234,7 @@ ADJUDICATOR=rules_only make worker
 
 `ADJUDICATOR=rules_only` runs offline at no cost. The agent itself (`ADJUDICATOR=agent LLM_MODE=live`, about 0.0016 USD per claim) needs an Anthropic key in `.env`, and every call goes through the cost meter.
 
-Other targets: `make check` runs lint, strict type checks, and the test suite (363 tests, 92 percent coverage). `make eval` reruns every evaluation from the recordings with no network. `make graph-sync` rebuilds the fraud graph from Postgres. `make help` lists everything.
+Other targets: `make check` runs lint, strict type checks, and the test suite (460 tests, 90 percent coverage). `make eval` reruns every evaluation from the recordings with no network. `make graph-sync` rebuilds the fraud graph from Postgres. `make help` lists everything.
 
 Nothing is deployed yet. `infra/render.yaml` deploys the API with `APP_ENV=prod`, where the header-based development sign-in refuses to load, so the API stays closed until the Clerk sign-in component lands.
 
@@ -324,7 +324,8 @@ The full contract is [docs/contracts/openapi.json](docs/contracts/openapi.json),
 | Retrieval | Postgres full-text search for notices, because model numbers are tokens, not meanings; pgvector over a deterministic local hashed n-gram embedder for policy prose (lexical, not neural, so it needs no extra provider) |
 | Photos | A storage seam: local disk in development, a private Supabase bucket in production, bytes proxied by the API |
 | Quality | ruff, mypy strict, pytest with coverage, replayable evaluations, GitHub Actions with real Postgres and Neo4j |
-| Product console and sign-in | UI/login owner integration remains: Next.js and React, Clerk organizations; Stripe test backend and development console are implemented |
+| Console and sign-in | Planned by their owners against the API contract, not built yet: Next.js and React, Clerk organizations |
+| Payments | Stripe in test mode: Billing and the Customer Portal for firms, Connect for claimant refunds |
 
 ## Repository map
 
@@ -353,7 +354,7 @@ RecallOps is a four-person team project for the UCLA MSBA program (fall 2026). E
 |---|---|---|
 | Backend: API, agent, ledger, report, fraud graph, evaluations | `apps/api`, `evals` | Complete and tested; what this page describes |
 | Firm console and claim portal | `apps/web` (not in the repository yet) | Not built yet; its owner codes against [the API contract](docs/contracts/openapi.json) and [the trace contract](docs/contracts/trace.md) |
-| Payments: Stripe Billing and Connect | `apps/api/src/recallops/billing`, `apps/api/src/recallops/payouts/stripe_connect.py` | Implemented API/jobs/dev console and migration; sandbox acceptance evidence and remaining owner gates are recorded in the runtime guide |
+| Payments: Stripe Billing and Connect | `apps/api/src/recallops/billing`, `apps/api/src/recallops/payouts/stripe_connect.py` | Built in test mode by its owner; adopted after a backend review that added regression tests for the payout and usage paths |
 | Sign-in: Clerk and signed claimant links | `apps/api/src/recallops/auth` | Not built yet; the sign-in seam and a development provider are in place for its owner |
 
 Each component's design is in [docs/components](docs/components), and each owner's starting point is in [docs/onboarding](docs/onboarding).
@@ -370,13 +371,6 @@ Each component's design is in [docs/components](docs/components), and each owner
 | [Contract changes](docs/contracts/CHANGES.md) | What changed in the API contract, grouped by the teammate it affects |
 
 
-### Stripe payments component
+### Payments, in Stripe test mode
 
-The API implements test-mode Checkout, Customer Portal, signed Billing/Connect webhooks, ledger-first Express
-onboarding/transfers, entitlement policy and payment jobs. Migration `0006_payments` installs the payment schema;
-Connect uses Accounts v2 recipients with an Express dashboard. Test billing, metering and onboarding have runtime
-evidence; **genuine sandbox Billing/Connect webhooks, a transfer and partial reversal have been observed**. The validation trace distinguishes completed checks from remaining gates.
-Start with [the payments integration handoff](docs/onboarding/payments.md) for UI/backend/login/operations responsibilities.
-Use [the schema contract](docs/contracts/payments-schema-request.md), [execution guide](docs/onboarding/payments-runtime.md)
-and [local validation evidence](docs/traces/M-payments-local-validation.md). The existing check export remains
-available after migration 0006 is applied; unknown Stripe outcomes are never exported.
+Built by the payments owner and adopted after a backend review: Checkout and the Customer Portal for a firm's subscription, signed Billing and Connect webhooks, plan limits and usage metering, and refunds to claimants through Connect (Accounts v2 recipients with an Express dashboard). Transfers keep the ledger-first rules above: a payout row before any Stripe call, the row id as the idempotency key, a hold that no transfer can pass, and an unknown Stripe outcome that stays open for reconciliation and is never turned into a check. Migration `0006_payments` adds the billing tables, with row-level security forced like every other tenant table. Everything runs offline in the test suite against a fake Stripe boundary; the payments owner's runs against a Stripe test account are recorded in [the sandbox trace](docs/traces/M4-payments-stripe-sandbox.md). Start with [the payments guide](docs/onboarding/payments.md) and [the runtime guide](docs/onboarding/payments-runtime.md).

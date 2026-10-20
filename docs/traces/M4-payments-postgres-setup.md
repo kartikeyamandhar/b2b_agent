@@ -1,6 +1,6 @@
-# Local Postgres setup and validation — 2026-10-20
+# Local Postgres setup and validation: 2026-10-20
 
-This supplements the earlier [offline validation](M-payments-local-validation.md). The user explicitly approved
+This supplements the earlier [offline validation](M4-payments-local-validation.md). The user explicitly approved
 Docker Desktop installation, the pinned Postgres image download, and local testing. No Stripe account calls,
 new payment migration, deployment, or restart of Windows occurred.
 

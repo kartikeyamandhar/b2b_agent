@@ -2256,7 +2256,7 @@
             "detail": "Stripe test prices are not configured.",
             "instance": "/v1/billing/checkout",
             "status": 503,
-            "title": "Payment integration unavailable",
+            "title": "Service Unavailable",
             "type": "about:blank"
           }
         ],
@@ -3444,6 +3444,16 @@
             },
             "description": "Bad Request"
           },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Content Too Large"
+          },
           "503": {
             "content": {
               "application/json": {
@@ -3619,6 +3629,16 @@
               }
             },
             "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Stripe onboarding needs the claimant's email"
           },
           "402": {
             "content": {
@@ -3897,6 +3917,16 @@
             },
             "description": "Forbidden"
           },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
           "409": {
             "content": {
               "application/json": {
@@ -3957,6 +3987,16 @@
               }
             },
             "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
           },
           "409": {
             "content": {
@@ -4570,16 +4610,6 @@
               }
             },
             "description": "Unauthorized"
-          },
-          "402": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "over the plan's limit (component 3 entitlement)"
           },
           "403": {
             "content": {
@@ -5923,6 +5953,16 @@
               }
             },
             "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
           }
         },
         "summary": "Current period meters (read by the billing UI)",

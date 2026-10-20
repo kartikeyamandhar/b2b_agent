@@ -109,7 +109,7 @@ traces for Checkout/replay, two failed collection attempts/recovery, 1,001 eligi
 program quantity convergence, Express onboarding/transfer, process interruption/reconciliation, held transfer,
 reversal alert, and check export. Include sanitized provider IDs, local payout/audit/event IDs, and row counts.
 
-Do not fabricate these traces from mocks. See [the current validation trace](../traces/M-payments-stripe-validation.md).
+Do not fabricate these traces from mocks. See [the current validation trace](../traces/M4-payments-stripe-sandbox.md).
 For explicitly approved read-only Stripe checks, from apps/api run:
 
 ```powershell

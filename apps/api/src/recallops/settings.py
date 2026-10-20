@@ -27,6 +27,9 @@ def is_local_uri(uri: str) -> bool:
     return (urlsplit(uri).hostname or "") in LOCAL_HOSTS
 
 
+PINNED_STRIPE_API_VERSION: Literal["2026-09-30.endive"] = "2026-09-30.endive"  # stripe 16.0.0
+
+
 class Settings(BaseSettings):
     # hide_input_in_errors: a validation error never echoes the inputs, which include keys and passwords.
     model_config = SettingsConfigDict(
@@ -69,7 +72,7 @@ class Settings(BaseSettings):
     stripe_connect_webhook_secret: SecretStr = Field(
         SecretStr("whsec_fake"), description="Accounts v2 thin-notification endpoint secret."
     )
-    stripe_api_version: Literal["2026-09-30.endive"] = "2026-09-30.endive"
+    stripe_api_version: Literal["2026-09-30.endive"] = PINNED_STRIPE_API_VERSION
     stripe_timeout_s: float = Field(15.0, gt=0, le=30)
     stripe_program_price_id: str = ""
     stripe_claim_price_id: str = ""
@@ -85,6 +88,18 @@ class Settings(BaseSettings):
     growth_program_price_cents: int = Field(19900, gt=0)
     growth_included_claims: int = Field(1000, ge=0)
     growth_claim_price_cents: int = Field(25, gt=0)
+
+    @field_validator("stripe_api_version", mode="before")
+    @classmethod
+    def _pinned_stripe_version(cls, value: object) -> object:
+        """The version is pinned in code. An empty value or the placeholder older .env.example files carried
+        ("2026-09-30.fake") means the pinned one, so an existing .env keeps working; any other value is refused with
+        a message naming the fix (backend review of PR 6)."""
+        if value in (None, "", "2026-09-30.fake"):
+            return PINNED_STRIPE_API_VERSION
+        if value != PINNED_STRIPE_API_VERSION:
+            raise ValueError(f"STRIPE_API_VERSION must be {PINNED_STRIPE_API_VERSION}; delete the line from .env")
+        return value
 
     @model_validator(mode="after")
     def _stripe_test_only(self) -> Settings:

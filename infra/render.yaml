@@ -55,6 +55,25 @@ services:
         sync: false
       - key: STRIPE_WEBHOOK_SECRET
         sync: false
+      # Payments (component 3): test-mode only. With STRIPE_SECRET_KEY set, prod settings refuse localhost or
+      # dev-console return URLs and empty price ids. The billing and Connect jobs (make billing-jobs, make
+      # connect-payouts) need a scheduled job placement that this free-tier blueprint does not define yet.
+      - key: STRIPE_PUBLISHABLE_KEY
+        sync: false
+      - key: STRIPE_CONNECT_WEBHOOK_SECRET
+        sync: false
+      - key: STRIPE_PROGRAM_PRICE_ID
+        sync: false
+      - key: STRIPE_CLAIM_PRICE_ID
+        sync: false
+      - key: STRIPE_PORTAL_CONFIGURATION_ID
+        sync: false
+      - key: BILLING_RETURN_URL
+        sync: false
+      - key: CONNECT_RETURN_URL
+        sync: false
+      - key: CONNECT_REFRESH_URL
+        sync: false
       - key: STORAGE_BACKEND
         value: supabase
       - key: SUPABASE_URL
