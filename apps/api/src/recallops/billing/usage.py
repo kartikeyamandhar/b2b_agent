@@ -32,19 +32,25 @@ def record_usage(session: Session, ctx: FirmContext, claim_id: UUID, run_id: UUI
     if prior_claim:
         at = prior_claim.counted_at.astimezone(UTC)
     period = prior_cost.period_start if prior_cost else at.date().replace(day=1)
-    inserted = session.execute(
-        insert(ClaimUsage)
-        .values(
-            firm_id=ctx.firm_id,
-            claim_id=claim_id,
-            run_id=run_id,
-            period_start=period,
-            counted_at=at,
-            growth_billable=effective_plan(session, firm) == "growth",
-        )
-        .on_conflict_do_nothing()
-        .returning(ClaimUsage.claim_id)
-    ).first()
+    # Whether the claim counts for the month is decided once per run, at its first record (prior_cost is None).
+    # A later record of the same run (a resume) adds only the cost delta to that run's month. Trying the insert again
+    # would build counted_at from the resume's clock against the first record's period, and Postgres checks the
+    # period CHECK before ON CONFLICT, so a resume in the next month would raise (backend review of PR 6).
+    inserted = None
+    if prior_cost is None:
+        inserted = session.execute(
+            insert(ClaimUsage)
+            .values(
+                firm_id=ctx.firm_id,
+                claim_id=claim_id,
+                run_id=run_id,
+                period_start=period,
+                counted_at=at,
+                growth_billable=effective_plan(session, firm) == "growth",
+            )
+            .on_conflict_do_nothing()
+            .returning(ClaimUsage.claim_id)
+        ).first()
     previous = prior_cost.recorded_cost if prior_cost else Decimal(0)
     delta = max(cost - previous, Decimal(0))
     if prior_cost:

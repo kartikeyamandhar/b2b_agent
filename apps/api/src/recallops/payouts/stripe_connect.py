@@ -17,7 +17,7 @@ from recallops.billing.policy import PlanBilling
 from recallops.db.session import tenant_session
 from recallops.logs import configure, get_logger, log_event
 from recallops.models import AuditLog, Claim, Payout, RecallProgram
-from recallops.payouts.db_ledger import DbPayoutLedger, NotPayable, lock_claim_and_payout
+from recallops.payouts.db_ledger import DbPayoutLedger, NotPayable, lock_claim_and_payout, lock_program_money
 from recallops.settings import Settings, get_settings
 from recallops.tenancy import FirmContext
 
@@ -287,36 +287,61 @@ def process_payout(engine: Engine, settings: Settings, ctx: FirmContext, payout_
                         "metadata": {"payout_id": str(p.id), "firm_id": str(ctx.firm_id)},
                     }
                     p.transfer_request = original
-                p.transfer_started_at = datetime.now(UTC)
+                # The first dispatch anchors the replay window. A retry after a 429 (which Stripe never executes)
+                # keeps it, so the window can only be shorter than the idempotency key's life, and the trigger's
+                # "an unknown transfer retains its first request time" rule holds (backend review of PR 6).
+                if p.transfer_started_at is None:
+                    p.transfer_started_at = datetime.now(UTC)
                 p.transfer_retry_at = None
         try:
             result = sdk.transfers.create(original, options={"idempotency_key": str(payout_id)})
         except stripe.StripeError as exc:
             http_status = getattr(exc, "http_status", None)
-            if (
-                isinstance(exc, (stripe.APIConnectionError, stripe.IdempotencyError))
-                or http_status is None
-                or http_status >= 500
-                or http_status == 409
-            ):
+            if not confirmed_rejection(exc):
+                # Unknown outcome (a network error, a 5xx, a 409, or a response the SDK could not read, which can
+                # carry any status, even 200): the transfer may exist. It stays transferring for reconciliation and
+                # never reaches a check export.
                 return note_unresolved(engine, ctx, payout_id)
             if http_status in (401, 403):
                 raise PaymentError("Stripe transfer credentials need operator attention") from exc
             with tenant_session(ctx, engine) as session:
+                # Program money lock first, then claim, then payout: the order the portal's check choice uses.
+                lock_program_money(session, program_id)
                 p, _ = lock_claim_and_payout(session, ctx, payout_id)
                 if p.status != "transferring":
                     return str(p.status)
                 code = str(getattr(exc, "code", None) or "stripe_rejected")
                 ledger.mark_failed(ctx, payout_id, code, session=session)
                 if p.status == "failed":
-                    if http_status == 429:
+                    if isinstance(exc, stripe.RateLimitError) or http_status == 429:
                         p.transfer_retry_at = datetime.now(UTC) + timedelta(minutes=1 if p.attempts == 1 else 5)
                     else:
                         ledger.to_export(ctx, payout_id, session=session)
+                if p.status == "pending_export":
+                    # The refund became a mailed check: the same shared-destination hold as a claimant's choice.
+                    from recallops.portal import hold_shared_destination
+
+                    claim_row = session.get(Claim, p.claim_id)
+                    if claim_row is not None and hold_shared_destination(
+                        session, ctx, claim_row.id, claim_row.program_id, dict(claim_row.claimant or {})
+                    ):
+                        session.refresh(p)
                 return str(p.status)
         with tenant_session(ctx, engine) as session:
             apply_transfer(session, ctx, result, reversed_event=True)
         return "transferred"
+
+
+def confirmed_rejection(exc: stripe.StripeError) -> bool:
+    """True only when Stripe answered with a parsed error object and a 4xx other than 409: the request was not
+    executed. Everything else is an unknown outcome: a connection or idempotency error, a 5xx, a 409, and an SDK
+    APIError for a body it could not read (stripe 16.0.0 raises that with the real status, 200 included)."""
+    if isinstance(exc, (stripe.APIConnectionError, stripe.IdempotencyError)):
+        return False
+    http_status = getattr(exc, "http_status", None)
+    if not isinstance(http_status, int) or not 400 <= http_status < 500 or http_status == 409:
+        return False
+    return getattr(exc, "error", None) is not None
 
 
 def tick(engine: Engine, settings: Settings) -> int:
@@ -334,7 +359,7 @@ def tick(engine: Engine, settings: Settings) -> int:
             result = process_payout(engine, settings, FirmContext(firm_id, "connect-job", "admin"), payout_id)
             if result in ("unresolved", "plan_restricted"):
                 attention += 1
-        except (PaymentError, stripe.StripeError, NotPayable) as exc:
+        except Exception as exc:  # noqa: BLE001 - one payout's failure must not stop every later payout of every firm
             attention += 1
             log_event(
                 log,

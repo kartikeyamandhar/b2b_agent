@@ -131,7 +131,7 @@ BEGIN
             OR NEW.connect_account_id IS DISTINCT FROM OLD.connect_account_id
             OR NEW.firm_id IS DISTINCT FROM OLD.firm_id OR NEW.claim_id IS DISTINCT FROM OLD.claim_id
             OR (NEW.method IS DISTINCT FROM OLD.method AND NOT (
-                OLD.status = 'failed' AND NEW.status = 'pending_export'
+                OLD.status IN ('pending', 'onboarding', 'failed') AND NEW.status = 'pending_export'
                 AND NEW.method = 'check_export' AND OLD.stripe_transfer_id IS NULL))) THEN
             RAISE EXCEPTION 'dispatched transfer identity and money fields are immutable';
         END IF;

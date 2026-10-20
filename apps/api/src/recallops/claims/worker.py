@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 import os
 import signal
 import socket
@@ -499,9 +500,21 @@ class Worker:
                     "WHERE r.cost_usd > u.recorded_cost"
                 )
             ).all()
+        recovered = 0
         for firm_id, claim_id, run_id, cost in rows:
-            self._record_usage(firm_id, claim_id, run_id, Decimal(cost))
-        return len(rows)
+            try:
+                self._record_usage(firm_id, claim_id, run_id, Decimal(cost))
+                recovered += 1
+            except Exception as exc:  # noqa: BLE001 - one run's usage row must not stop the worker
+                log_event(
+                    log,
+                    "usage_recovery_failed",
+                    level=logging.ERROR,
+                    firm_id=str(firm_id),
+                    run_id=str(run_id),
+                    error=type(exc).__name__,
+                )
+        return recovered
 
     def tick(self) -> bool:
         """One unit of work. True when something was done."""

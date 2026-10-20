@@ -237,8 +237,15 @@ class DbPayoutLedger:
             _audit(session, ctx, "payout_hold_cleared", row.id, {"hold_requested": True}, {"hold_requested": False})
             event = "payout_hold_cleared"
         elif row.status == "held" and row.stripe_transfer_id is None:
-            # A re-approval releases the hold; the row keeps its id (the idempotency key) and its method.
-            released = "pending_export" if row.method in EXPORT_METHODS else "pending"
+            # A re-approval releases the hold; the row keeps its id (the idempotency key) and its method. A Connect
+            # payout whose claimant already linked an account goes back to onboarding, where the Connect job picks
+            # it up; to pending it would wait for an onboarding that already happened (backend review of PR 6).
+            if row.method in EXPORT_METHODS:
+                released = "pending_export"
+            elif row.connect_account_id:
+                released = "onboarding"
+            else:
+                released = "pending"
             session.execute(
                 update(Payout)
                 .where(Payout.id == row.id)
