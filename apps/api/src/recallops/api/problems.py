@@ -18,14 +18,6 @@ log = get_logger("api")
 PROBLEM_JSON = "application/problem+json"
 
 
-class NotYetImplemented(Exception):
-    """A route whose contract is final but whose implementation arrives in a later milestone."""
-
-    def __init__(self, route: str, milestone: str, owner: str = "backend owner") -> None:
-        super().__init__(route)
-        self.detail = f"{route} arrives in {milestone} ({owner}); the contract in docs/contracts/openapi.json is final."
-
-
 class PaymentRequired(Exception):
     """The billing gate refused an action (03-payments.md section 2): the UI turns this into an upgrade prompt."""
 
@@ -58,7 +50,7 @@ TITLES = {
     422: "Unprocessable Entity",
     429: "Too Many Requests",
     500: "Internal Server Error",
-    501: "Not Implemented",
+    503: "Service Unavailable",
 }
 INTERNAL_DETAIL = "unexpected server error; nothing was saved. Quote the correlation_id when reporting it."
 
@@ -100,9 +92,27 @@ def install(app: FastAPI) -> None:
     async def validation_problem(request: Request, exc: RequestValidationError) -> JSONResponse:
         return problem(422, TITLES[422], validation_detail(exc.errors()), request)
 
-    @app.exception_handler(NotYetImplemented)
-    async def not_yet(request: Request, exc: NotYetImplemented) -> JSONResponse:
-        return problem(501, TITLES[501], exc.detail, request)
+    import stripe
+
+    from recallops.billing.client import PaymentError
+    from recallops.payouts.db_ledger import NotPayable
+
+    @app.exception_handler(PaymentError)
+    async def payment_problem(request: Request, exc: PaymentError) -> JSONResponse:
+        return problem(exc.status, TITLES.get(exc.status, "Payment integration unavailable"), exc.detail, request)
+
+    @app.exception_handler(NotPayable)
+    async def payout_problem(request: Request, exc: NotPayable) -> JSONResponse:
+        return problem(409, TITLES[409], str(exc), request)
+
+    @app.exception_handler(stripe.StripeError)
+    async def stripe_problem(request: Request, exc: stripe.StripeError) -> JSONResponse:
+        return problem(
+            503,
+            "Payment integration unavailable",
+            "Stripe test-mode request failed; retry or contact the operator",
+            request,
+        )
 
     @app.exception_handler(PaymentRequired)
     async def payment_required(request: Request, exc: PaymentRequired) -> JSONResponse:

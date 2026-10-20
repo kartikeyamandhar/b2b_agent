@@ -42,3 +42,52 @@ CLAUDE.md ("Working in a team") requires a decisions-log entry and a message to 
 17. **Breaking: `ClaimTokenVerifier`** returns `ClaimTokenContext(firm_id, claim_id)` from `verify`, and has `issue(firm_id, claim_id) -> str`. Your HMAC token must carry the firm id.
 18. `AUTH_PROVIDER=clerk` and `CLAIM_TOKEN_PROVIDER=hmac` must ship together: the dev claim-token verifier refuses to load when `AUTH_PROVIDER=clerk`, and the dev auth provider refuses `APP_ENV=prod`. infra/render.yaml deploys with `APP_ENV=prod`, so the API fails closed until both of yours are registered in `auth/deps.py`.
 19. The rate-limit table exists (`rate_limits`, migration 0003) with a fixed-window limiter in `api/guards.py`; you can replace the limiter, the table stays.
+
+
+## Proposed payments integration (2026-10-20; task-authorized, component review pending)
+
+20. The four payment 501 handlers are replaced. Checkout/Customer Portal retain bodyless requests and `{url}`
+    responses. Missing test configuration returns 503; unavailable Portal customer returns 409. Invalid webhook
+    signature, live-mode event, or mismatched API version returns 400. Snapshot events use 2026-09-30.endive.
+21. **Breaking for strict response consumers:** PortalView adds nullable `connect_onboarding_url` (only populated
+    by the Connect payout POST; never stored). Usage adds plan, effective_plan, subscription_status, limits,
+    invoices, billing_sync_error. PayoutView adds stripe_transfer_id and stripe_reversed_cents.
+22. **Ledger protocol:** transition methods accept caller-owned `session`; webhook event/state/audit/processed_at
+    now share that transaction. Payout states and lock ordering are preserved. Reversals are cumulative facts and
+    alerts, never a new payable state. A timeout is not a failure that permits export.
+23. **BillingGate:** `check_entitlement(ctx, action, claim_id=None)` may recognize an already-counted claim.
+    `record_usage(ctx, claim_id, run_id, model_cost_usd, *, session=None)` deduplicates claims/month and cost/run.
+    Runtime allow-all wiring is removed. Free exports refunds; the second unpaid invoice collection failure
+    applies free access. Commercial plan is separate from effective access and Stripe status.
+24. **Backend prerequisite, not a migration delivered by payments:** see payments-schema-request.md for five
+    tenant tables, payout recovery columns, uniqueness constraints and the narrow Connect account resolver.
+    Apply and verify this schema before running the new payment flows. Refund calculation remains backend-owned.
+25. UTC calendar months; one-program minimum; prorated initial month; only growth-time claim usage is billed.
+    Growth waits in onboarding; existing pending_export rows cannot become Connect on upgrade. Product UI and
+    reviewer-seat enforcement are explicit UI/login handoffs. Runtime verification remains pending; local checks
+    are recorded separately in docs/traces/M-payments-local-validation.md.
+
+26. **Task authorization (2026-10-20):** the user authorized writing/applying draft migration `0006_payments` locally.
+    It implements the five tenant tables, payout recovery facts, immutable provider requests, uniqueness and
+    restricted Connect resolver. Backend-owner adoption/review is required for delivery; this is a task-specific
+    exception to item 24's implementation restriction, not a reassignment of migration ownership. Historical usage and
+    correct upstream refund amounts remain explicit owner acceptance work.
+27. **Accounts v2 revision (owner-approved):** replace legacy Express creation/account.updated handling with
+    Accounts v2 recipient configuration, Express dashboard, application fee/loss responsibility, and claimant
+    contact email. Recipient Stripe transfer and payout capabilities must both be active. Thin account events
+    resolve their related account through the stored ID, then retrieve current capabilities. Their separate
+    endpoint secret is STRIPE_CONNECT_WEBHOOK_SECRET; Billing/transfer snapshot version/secret stay unchanged.
+    No alternate Stripe-managed-liability funds flow or legacy account path is added.
+
+28. **Sandbox acceptance (2026-10-20):** actual Billing/Accounts v2/transfer/reversal webhooks, hosted Checkout,
+    Portal, entitlement recovery, quantity prorations and crash reconciliation are recorded in
+    `docs/traces/M-payments-stripe-validation.md`. No additional public API change is introduced. Migration 0006's
+    unmerged immutability trigger permits confirmed failed → check-export routing while retaining the immutable
+    transfer request/money identity. Already-migrated local databases received the corrected function definition;
+    fresh databases receive it through Alembic. Runtime commands and receiving-owner acceptance gates are in
+    `docs/onboarding/payments-runtime.md`.
+
+29. **Ownership gate:** shared API/worker/ledger/schema/contracts remain backend-owned. The local tested migration
+    is a draft requiring backend adoption, and receiving-owner acceptance is pending. See
+    `payments-integration-review.md` for the exact current file inventory and coordinated merge prerequisites.
+    CODEOWNERS and public behavior are unchanged by this clarification.

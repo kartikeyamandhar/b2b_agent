@@ -22,6 +22,11 @@ from recallops.tenancy import FirmContext
 pytestmark = pytest.mark.db
 
 TENANT_TABLES = (
+    "billing_invoices",
+    "claim_usage",
+    "run_usage_costs",
+    "usage_reports",
+    "billing_accounts",
     "firm_members",
     "recall_programs",
     "documents",
@@ -78,6 +83,15 @@ def _seed_firm(conn: object, name: str) -> FirmRows:
         "VALUES (:f, :p, '2026-10-01', '2026-10-31', '{}', 'system')",
         "INSERT INTO audit_log (firm_id, actor, action, target_type, target_id) VALUES (:f, 'system', 'seed', 'claim', 'x')",
         "INSERT INTO usage_meters (firm_id, period_start) VALUES (:f, '2026-10-01')",
+        "INSERT INTO billing_accounts (firm_id) VALUES (:f)",
+        "INSERT INTO billing_invoices (id, firm_id, subscription_id, status, attempt_count, amount_due_cents, "
+        "amount_paid_cents, currency, created_at, period_start, period_end) "
+        "VALUES ('in_' || CAST(:f AS text), :f, 'sub_' || CAST(:f AS text), 'paid', 1, 19900, 19900, 'usd', "
+        "now(), '2026-10-01', '2026-11-01')",
+        "INSERT INTO claim_usage (firm_id, claim_id, run_id, period_start, counted_at, growth_billable) "
+        "VALUES (:f, :c, :r, '2026-10-01', '2026-10-20', false)",
+        "INSERT INTO run_usage_costs (firm_id, run_id, period_start) VALUES (:f, :r, '2026-10-01')",
+        "INSERT INTO usage_reports (firm_id, day, request) VALUES (:f, '2026-10-20', '{}')",
     ]
     for sql in statements:
         conn.execute(text(sql), ids)
@@ -152,11 +166,19 @@ def test_updates_and_deletes_of_firm_b_affect_zero_rows(
         for table in TENANT_TABLES:
             if table in APPEND_ONLY:
                 continue
-            updated = session.execute(
-                text(f"UPDATE {table} SET firm_id = firm_id WHERE firm_id = :b"), {"b": b.firm_id}
-            )
+            if table == "claim_usage":
+                with pytest.raises(ProgrammingError, match="permission denied"), session.begin_nested():
+                    session.execute(text(f"UPDATE {table} SET firm_id = firm_id WHERE firm_id = :b"), {"b": b.firm_id})
+            else:
+                updated = session.execute(
+                    text(f"UPDATE {table} SET firm_id = firm_id WHERE firm_id = :b"), {"b": b.firm_id}
+                )
+                assert updated.rowcount == 0, table  # type: ignore[attr-defined]
+            if table in {"billing_accounts", "billing_invoices", "claim_usage", "run_usage_costs", "usage_reports"}:
+                with pytest.raises(ProgrammingError, match="permission denied"), session.begin_nested():
+                    session.execute(text(f"DELETE FROM {table} WHERE firm_id = :b"), {"b": b.firm_id})
+                continue
             deleted = session.execute(text(f"DELETE FROM {table} WHERE firm_id = :b"), {"b": b.firm_id})
-            assert updated.rowcount == 0, table  # type: ignore[attr-defined]
             assert deleted.rowcount == 0, table  # type: ignore[attr-defined]
     with internal_engine_test.connect() as conn:
         for table in TENANT_TABLES:

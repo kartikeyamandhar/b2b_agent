@@ -12,8 +12,7 @@ from recallops.settings import get_settings
 DESCRIPTION = """RecallOps backend API (component 1). Contract for the UI (component 2), payments (component 3),
 and login (component 4) owners. In development, authenticate with X-Dev-Firm-Id and X-Dev-Role headers
 (AUTH_PROVIDER=dev); the login owner's Clerk provider replaces them with a bearer token. Errors are RFC 7807
-problem details with a correlation_id. Routes answering 501 belong to the payments owner (component 3) and keep their
-final contract."""
+problem details with a correlation_id. Stripe Billing and Connect run in test mode only."""
 
 
 def create_app() -> FastAPI:

@@ -1,44 +1,137 @@
-# Onboarding: payments owner (component 3, Stripe test mode only)
+# Payments handoff: integrating components 1, 2 and 4
 
-You own firm billing (Stripe Billing, Checkout, Customer Portal, webhooks, entitlements) and claimant payouts through Connect Express, per 03-payments.md. The backend owns the money tables, the ledger state machine, and the export fallback; you plug into two Python protocols and three routes. Read **docs/contracts/CHANGES.md** items 13 to 16 first: the ledger protocol changed.
+Use this guide when wiring product screens, auth, claim processing, schema or jobs to the payments build.
+Read `CLAUDE.md` first, then your receiving-owner section below. Follow only the linked operational material
+needed for that task. Payments runs in Stripe test mode for the life of this project.
 
-## What exists (backend M2 to M5)
+## Start here
 
-- **Tables** (only the backend owner adds migrations; request changes with a decisions-log note): `payouts` (status pending, pending_export, onboarding, transferring, transferred, failed, exported, held; `idempotency_key` is the row id; `connect_account_id`, `export_batch`, `hold_requested`), `export_batches` (the check/ACH batch CSV, stored in Postgres), `stripe_events` (event id is the primary key: your idempotency guard), `usage_meters`, and `firms.plan` / `firms.stripe_customer_id`.
-- **Ledger** (`payouts/ledger.py` protocol, `payouts/db_ledger.py` implementation, `payouts/fake.py` for unit tests):
-  - `create_pending(ctx, claim_id, amount_cents, method, session=None)`: the backend calls it inside the approval's transaction. A free plan's payouts start in `pending_export` (03-payments.md section 5).
-  - `claim_for_transfer(ctx, payout_id)`: call it immediately before `stripe.Transfer.create(idempotency_key=payout_id)`. It moves the row to `transferring` and raises `NotPayable` unless the claim is approved and the payout is pending, onboarding, or failed. This is what stops a held payout from being paid.
-  - `mark_onboarding(ctx, payout_id, connect_account_id)`, `mark_transferred(ctx, payout_id, transfer_id)` (from transferring; from held it is recorded as a late result with an alert, never refused; the claim becomes paid), `mark_failed(ctx, payout_id, error)` (one transaction; after 3 failures the row flips to pending_export; a hold requested during the transfer lands it in held), `to_export`, `mark_exported`.
-  - Every transition locks the claim row, then the payout row, and writes audit_log. Keep that order.
-- **Export fallback** (`payouts/export.py`, `make export-payouts`, and `POST /v1/payouts/exports` for an admin): one transaction per firm claims `pending_export` rows of approved claims with `FOR UPDATE SKIP LOCKED`, stores a formula-safe CSV in `export_batches`, marks the payouts exported and the claims paid.
-- **Billing seam** (`billing/interface.py`, yours): `BillingGate.check_entitlement(ctx, action)` for `open_program`, `adjudicate_claim`, `create_payout`, and `record_usage`. `billing/fake.py` (`AllowAllBilling`) allows everything. The worker skips an over-limit firm for one polling interval instead of blocking every firm.
-- **Routes still 501 for you**: `POST /internal/stripe/webhook`, `POST /v1/billing/checkout`, `POST /v1/billing/portal`, and `POST /portal/{token}/payout` with `method: stripe_connect` (the check path works). Contracts are in docs/contracts/openapi.json; replace the handlers in `api/routes.py` (the backend owner reviews that file).
-- `payouts/stripe_connect.py` is your placeholder: the only module allowed to import both `stripe` (pinned 16.0.0) and the ledger.
+1. Read [contract changes](../contracts/CHANGES.md), especially items 13–16 and 20–29. Use
+   [OpenAPI](../contracts/openapi.json) for exact request/response types; examples below explain their semantics.
+2. Confirm the target database has migration `0006_payments`. The [backend section](#backend-owner) explains the
+   already-migrated development database caveat. Use [runtime prerequisites](payments-runtime.md#prerequisites)
+   when configuring Stripe or starting payment processes.
+3. Implement your owner section and record its acceptance evidence. The final [acceptance record](#acceptance-record)
+   separates receiving-owner sign-off from the payments tests that already passed.
 
-## The seam, concretely
+The API, entitlement policy, signed webhooks, durable metering, payout processing, migration and development
+console are implemented. The [validation trace](../traces/M-payments-stripe-validation.md) records sandbox
+Checkout/worker resumption, Portal, delinquency/recovery, metering, quantity changes, transfers, crash recovery,
+reversal and exports. It also distinguishes provider checks, local tests and owner-confirmed settings.
+Product UI, login integration, upstream refund correctness and deployment require the receiving owners below.
+CODEOWNERS still contains placeholder handles; the team must name receiving people before merge.
+For folder boundaries, the tested migration draft and shared-file adoption, use the
+[ownership review map](../contracts/payments-integration-review.md). Shared changes await backend acceptance.
 
-1. Implement `BillingGate` (plan matrix in 03-payments.md section 2). Over-limit is a 402 problem detail; never block reads.
-2. Implement the webhook as `recallops_app` (the API never uses the internal role: `tests/api/test_security.py` fails if API code imports it). Verify the signature, then in one transaction: `SELECT recallops_record_stripe_event(id, type, payload)` (false means a replay: return 200 and change nothing), apply the state change through the ledger, `SELECT recallops_mark_stripe_event_processed(id)`. Resolve the firm with `recallops_firm_by_stripe_customer(customer)`, never from a header.
-3. Implement `stripe_connect.py`: `claim_for_transfer` first, then the transfer with `idempotency_key = payouts.id`, then `mark_transferred` or `mark_failed` from the webhook.
-4. Every money state change writes audit_log; amounts are integer cents.
+## UI owner
 
-## Run the backend locally
+Build in `apps/web`. Use `apiFetch` with the login owner's verified firm/role context. The existing
+[development console](../../apps/api/src/recallops/api/static/dev_console.html) demonstrates the calls and redirects.
+The browser uses the API; Stripe secret keys stay on the backend.
 
-```
-cp .env.example .env            # Stripe TEST keys in .env only, never in code or fixtures
-docker compose up -d && make setup && make seed
-make api                        # http://127.0.0.1:8000/docs
-stripe listen --forward-to localhost:8000/internal/stripe/webhook   # Stripe CLI, test mode
-```
+| User action / screen | Existing interface | Integration behavior |
+| --- | --- | --- |
+| Upgrade firm | Admin `POST /v1/billing/checkout`, no body → `{url}` | Navigate to the returned hosted Checkout URL. After return, refresh `GET /v1/usage`; only webhook-reconciled access enables Growth. |
+| Manage subscription | Admin `POST /v1/billing/portal`, no body → `{url}` | Navigate to Customer Portal for payment methods, invoices and cancellation. Program quantity remains controlled by RecallOps. |
+| Billing / limits / upgrade prompt | `GET /v1/usage` → `Usage` | Render `plan`, `effective_plan`, `subscription_status`, `limits`, `invoices`, `billing_sync_error` plus existing usage totals. Base access prompts on `effective_plan`; commercial plan and subscription status are separate. A null configured limit means unlimited. |
+| Claimant chooses Stripe | Single-claim token `POST /portal/{token}/payout`, body `{"method":"stripe_connect"}` → `PortalView` | Navigate to nullable `connect_onboarding_url` when returned. Preserve the original claim context across return/refresh. Request a fresh link with the same POST when necessary; reopening the return URL does not establish readiness or delivery. |
+| Claimant chooses check | Same payout POST, body `{"method":"check_export","mailing_address":"<synthetic address>"}` | Display the returned `payout_status`. The backend selects the existing check-export path. |
+| Refund progress / reversal | `GET /v1/claims/{id}` → nullable `payout: PayoutView` and audit entries | Render payout status, `stripe_transfer_id` and cumulative `stripe_reversed_cents`. Keep the original delivery visible after a reversal and surface its audit alert. |
+| Admin check export | `POST /v1/payouts/exports`, `GET /v1/payouts/exports`, `GET /v1/payouts/exports/{batch_id}.csv` | A creation result can be null when no payout is eligible. Download the stored batch; the backend owns claiming, amount totals and delivery transitions. |
 
-## Tests that must stay green
+Money fields are integer cents; `model_cost_usd` is a decimal string. A `transferred` refund proves a Connect
+transfer, not bank arrival. Treat `transferring` as unresolved/in flight and `held` as awaiting reviewer action;
+show the available status and audit information rather than offering another payment for that claim.
+Account Links are ephemeral bearer URLs: keep them out of persistent application records and analytics.
+Configure product return/refresh URLs through the settings listed in `.env.example`; dev-console defaults are
+reference behavior, not product routes the UI must adopt.
 
-`make check` (ruff, mypy strict, pytest with the 85 percent coverage gate in CI). In particular `tests/db/test_ledger_retrieval_worker.py` (state machine, holds, in-flight transfers), `tests/db/test_money_paths.py` (concurrent exports pay once, a flagged claim's payout is never exported, firm skipping), `tests/api/test_api.py::test_errors_are_problem_details_and_payments_stubs_stay_501` and the stripe_connect 501 in `tests/api/test_m2_flows.py` (update both when you replace a stub), and the tenancy suite.
+Errors use RFC 7807 with `detail` and `correlation_id`. Honor the actual endpoint response: 400/422 require
+correcting input, 401/403 require valid auth/role, 402 prompts for the required plan or supported check path,
+404 means inaccessible/missing resource, 409 requires refreshing state, and 503 requires a recoverable error
+screen with the correlation ID. Preserve operation/claim identity when recovering an uncertain request.
 
-## Three commands to verify your work
+**UI acceptance:** demonstrate upgrade → refreshed Growth access, Portal → refreshed billing state, Connect
+return/refresh → same claimant, check CSV download, and claim detail showing transfer/reversal information.
+Show one access-limit error and confirm that a redirect alone never marks a firm paid or a claimant delivered.
+Record the tested API revision and screenshots/trace; the receiving UI owner signs off on the product screens.
 
-```
-make check                                                    # lint, types, all tests
-stripe trigger checkout.session.completed                     # with stripe listen running: the webhook applies once
-stripe events resend <evt_id>                                 # the replay is a no-op (one stripe_events row)
-```
+## Backend owner
+
+1. Review/apply [migration 0006](../../apps/api/migrations/versions/0006_payments.py) against the
+   [schema contract](../contracts/payments-schema-request.md). ORM declarations alone do not install the forced
+   RLS, grants, immutable facts or identity resolvers. The API stays `recallops_app`; jobs use `recallops_internal`.
+   Local databases upgraded from an earlier copy of this unmerged revision need the reviewed corrected function
+   definition or rebuilding; Alembic will not rerun an already-recorded revision. The current local development/
+   test databases received the correction; another checkout must verify its own database.
+2. Keep the existing integration seams in `apps/api/src/recallops`:
+
+   | Caller | Existing seam | Required behavior |
+   | --- | --- | --- |
+   | Program open/close | `programs.py`, `billing.service.mark_quantity_dirty` | Keep limit checks and quantity-version changes in the program transaction. The billing job synchronizes Stripe after commit. |
+   | Claim worker/result effects | `claims/worker.py`, `claims/effects.py`, `BillingGate.record_usage(ctx, claim_id, run_id, model_cost_usd, session=...)` | Preserve claim/run identity, first-result accounting and all run-cost deltas. The backend deduplicates claims per UTC month. |
+   | Actions requiring paid access | `BillingGate.check_entitlement(ctx, action, claim_id=None)` | Use the existing actions `open_program`, `adjudicate_claim`, `create_payout`. Preserve runtime `PlanBilling` and explicit test doubles. |
+   | Approved refund / reviewer decision | `DbPayoutLedger.create_pending` and transition methods, optional caller-owned `session` | Commit approval and payout creation together. Pass the approved integer-cent amount and reviewer evidence. Keep claim-before-payout lock order; dispatch stays in the payment processor. |
+
+3. Accept upstream fixed/receipt-capped refund calculations and above-threshold reviewer evidence. Stripe sends
+   the approved ledger amount; payments does not evaluate notice prose. Decide historical usage reconciliation
+   from durable adjudication records; prior aggregate totals alone cannot establish billable eligibility.
+
+**Backend acceptance:** migration/constraints work under the app role; tenancy, money/export, usage and recovery
+regressions pass; approved amounts and reviewer evidence are independently validated. Record a decision for old
+usage (reconciled, or explicitly excluded with evidence). Preserve the existing delivery states and terminal
+reversal behavior while integrating changes from the main branch.
+
+## Login owner
+
+1. Keep billing Checkout, Portal and export management behind verified firm-admin authorization. `GET /v1/usage`
+   remains a firm read. Resolve the firm through the existing `AuthProvider`/`FirmContext` seam.
+2. Implement the existing single-claim verifier seam for `/portal/{token}/*`. The claimant needs no firm login;
+   its verified token supplies firm and claim identity. Retain stored-token-hash checks and portal rate limits.
+3. Enforce reviewer-seat admission using the effective limits exposed in `Usage`, coordinated with the UI owner.
+   Payment policy provides the limits; it does not implement membership admission.
+4. Leave webhook tenancy with its verified Stripe identity resolvers and signature verification. A webhook is a
+   provider request, not a logged-in firm's request. Preserve independent test-key enforcement in API and jobs.
+
+**Login acceptance:** reviewer users cannot manage billing/exports; a valid admin can; invalid/expired/cross-claim
+and cross-firm tokens fail; signed provider events still resolve their own firm; reviewer-seat limits follow
+current effective access. Run the existing auth/security/tenancy tests plus the login owner's provider tests.
+
+## Operations owner
+
+Use [runtime prerequisites and resource setup](payments-runtime.md#prerequisites), then
+[local processes](payments-runtime.md#local-processes-and-user-paths). Configure both snapshot and Accounts v2
+thin destinations with their own secrets, the pinned API version, test prices, Portal configuration and product
+return URLs. Select hosts for the adjudication worker, billing job and payout processor; no hosting was provisioned.
+
+Use [recovery rules](payments-runtime.md#recovery-rules) for unresolved transfers, reporting ambiguity, holds and
+reversals. Name an operator for these cases before unattended jobs run. Monitor stale `transferring` rows,
+`billing_sync_error`, webhook errors and audit alerts. The test-account 24-hour invoice grace setting was
+owner-confirmed; verify it separately in each target sandbox. Resource creation, funding, transfers, reversal
+and cleanup require the scope of approval documented in the runtime guide.
+
+**Operations acceptance:** record destination/job configuration and named reconciliation ownership; demonstrate
+an event reaching the intended receiver and jobs progressing after restart. Use the opt-in isolated acceptance
+harness only with approved sandbox operations. Retain its manifest until review; cleanup is restricted to its
+own validated resources. Deployment is a separate action.
+
+## Acceptance record
+
+Use the [validation trace](../traces/M-payments-stripe-validation.md) for completed checks, dates, fixture
+boundaries, skips and validation outputs. Prior payments verification is evidence for the build, not acceptance
+of another owner's integration.
+
+Receiving-owner acceptance remains open until each owner records:
+
+`Owner name | role | tested commit/diff | acceptance checks above | evidence link | open blockers | date`
+
+Use actual names when the team assigns them; role labels here do not imply another teammate has accepted.
+A consumer changes the API contract only through backend-owner coordination and an updated committed OpenAPI.
+Completion means every receiving role is accepted or has an explicit named blocker, not merely that payments
+unit tests pass.
+
+## Failure modes
+
+A redirect treated as payment success can grant access or claim delivery prematurely; refresh authoritative API state.
+Retrying/exporting an uncertain transfer can deliver twice; preserve its identity and follow reconciliation rules.
+Losing firm/claim context on onboarding return can target the wrong record; verify the original token and tenant.

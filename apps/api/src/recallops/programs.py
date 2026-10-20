@@ -24,7 +24,7 @@ from recallops.db.engine import app_engine
 from recallops.llm.client import LiveCallsDisabled, ModelCallFailed, ReplayMiss, build_client
 from recallops.llm.meter import BudgetExhausted
 from recallops.logs import get_logger, log_event
-from recallops.models import AuditLog, Claim, Recall, RecallProgram
+from recallops.models import AuditLog, Claim, Firm, Recall, RecallProgram
 from recallops.retrieval.documents import program_documents
 from recallops.retrieval.embed import build_embedder
 from recallops.retrieval.search import index_program
@@ -117,9 +117,6 @@ def create_program(
     manual: dict[str, Any] | None,
     value_threshold_cents: int | None,
 ) -> tuple[RecallProgram, str, str]:
-    entitlement = billing.check_entitlement(ctx, "open_program")
-    if not entitlement.allowed:
-        raise NotEntitled("open_program", entitlement.reason)
     if recall_id is not None:
         recall = session.get(Recall, recall_id)
         if recall is None:
@@ -201,6 +198,7 @@ def patch_program(
         if program.status == "closed":
             raise Conflict("a closed program cannot be reopened; open a new program")
         if status == "open":
+            session.execute(select(Firm.id).where(Firm.id == ctx.firm_id).with_for_update())
             entitlement = billing.check_entitlement(ctx, "open_program")
             if not entitlement.allowed:
                 raise NotEntitled("open_program", entitlement.reason)
@@ -208,6 +206,10 @@ def patch_program(
         if status == "closed":
             program.closed_at = datetime.now(UTC)
         program.status = status
+    if before["status"] != program.status:
+        from recallops.billing.service import mark_quantity_dirty
+
+        mark_quantity_dirty(session, ctx)
     session.flush()
     if rules_changed:
         title, source_text = program_source(session, program)

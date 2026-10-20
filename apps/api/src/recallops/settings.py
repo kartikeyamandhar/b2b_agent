@@ -66,7 +66,37 @@ class Settings(BaseSettings):
     stripe_secret_key: str = Field("sk_test_fake", description="Stripe test-mode secret key only.")
     stripe_publishable_key: str = Field("pk_test_fake")
     stripe_webhook_secret: str = Field("whsec_fake")
-    stripe_api_version: str = Field("2026-09-30.fake", description="Pinned Stripe API version.")
+    stripe_connect_webhook_secret: str = Field(
+        "whsec_fake", description="Accounts v2 thin-notification endpoint secret."
+    )
+    stripe_api_version: Literal["2026-09-30.endive"] = "2026-09-30.endive"
+    stripe_timeout_s: float = Field(15.0, gt=0, le=30)
+    stripe_program_price_id: str = ""
+    stripe_claim_price_id: str = ""
+    stripe_meter_event_name: str = "recallops_claims"
+    stripe_portal_configuration_id: str = ""
+    billing_return_url: str = "http://localhost:8000/dev/console#payouts"
+    connect_return_url: str = "http://localhost:8000/dev/console#connect-return"
+    connect_refresh_url: str = "http://localhost:8000/dev/console#connect-refresh"
+    payment_poll_s: float = Field(30.0, gt=0)
+    free_open_programs: int = Field(1, ge=1)
+    free_claims_per_month: int = Field(100, ge=1)
+    free_reviewer_seats: int = Field(1, ge=1)
+    growth_program_price_cents: int = Field(19900, gt=0)
+    growth_included_claims: int = Field(1000, ge=0)
+    growth_claim_price_cents: int = Field(25, gt=0)
+
+    @model_validator(mode="after")
+    def _stripe_test_only(self) -> Settings:
+        if not self.stripe_secret_key.startswith("sk_test_") or not self.stripe_publishable_key.startswith("pk_test_"):
+            raise ValueError("Stripe test-mode key prefixes are required in every environment")
+        for url in (self.billing_return_url, self.connect_return_url, self.connect_refresh_url):
+            parts = urlsplit(url)
+            if not parts.hostname or parts.username or parts.password or parts.query:
+                raise ValueError("payment return URLs need a host and must not contain credentials or query tokens")
+            if parts.scheme != "https" and not (parts.scheme == "http" and is_local_uri(url)):
+                raise ValueError("payment return URLs require HTTPS except on localhost")
+        return self
 
     internal_shared_secret: str = Field("internal-dev-only", description="Header secret for /internal/*.")
 

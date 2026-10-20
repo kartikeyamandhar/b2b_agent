@@ -21,6 +21,14 @@ from sqlalchemy.engine import make_url
 os.environ["LLM_MODE"] = "fake"
 os.environ.pop("ANTHROPIC_API_KEY", None)
 os.environ.setdefault("APP_ENV", "test")
+os.environ["STRIPE_SECRET_KEY"] = "sk_test_fake"
+os.environ["STRIPE_PUBLISHABLE_KEY"] = "pk_test_fake"
+os.environ["STRIPE_WEBHOOK_SECRET"] = "whsec_fake"
+os.environ["STRIPE_CONNECT_WEBHOOK_SECRET"] = "whsec_fake"
+os.environ["STRIPE_API_VERSION"] = "2026-09-30.endive"
+os.environ["STRIPE_PROGRAM_PRICE_ID"] = ""
+os.environ["STRIPE_CLAIM_PRICE_ID"] = ""
+os.environ["STRIPE_PORTAL_CONFIGURATION_ID"] = ""
 
 os.environ["NEO4J_URI"] = os.environ.get("NEO4J_TEST_URI", "bolt://localhost:57687")
 os.environ["NEO4J_NAMESPACE"] = os.environ.get("NEO4J_TEST_NAMESPACE", "test")
@@ -55,6 +63,11 @@ _point_settings_at_test_db()
 
 # Delete order respects foreign keys. Runs as recallops_internal (BYPASSRLS).
 CLEAN_ORDER = (
+    "billing_invoices",
+    "claim_usage",
+    "run_usage_costs",
+    "usage_reports",
+    "billing_accounts",
     "document_chunks",
     "agent_steps",
     "agent_runs",

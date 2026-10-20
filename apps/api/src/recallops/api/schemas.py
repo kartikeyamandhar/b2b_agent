@@ -46,10 +46,10 @@ class Problem(Schema):
             "examples": [
                 {
                     "type": "about:blank",
-                    "title": "Not Implemented",
-                    "status": 501,
-                    "detail": "POST /v1/programs arrives in M2 (backend owner); the contract is final.",
-                    "instance": "/v1/programs",
+                    "title": "Payment integration unavailable",
+                    "status": 503,
+                    "detail": "Stripe test prices are not configured.",
+                    "instance": "/v1/billing/checkout",
                     "correlation_id": "c0ffee00-0000-4000-8000-000000000001",
                 }
             ]
@@ -256,6 +256,8 @@ class PayoutView(Schema):
     currency: str
     method: Literal["stripe_connect", "check_export", "ach_export"]
     status: PayoutStatus
+    stripe_transfer_id: str | None = None
+    stripe_reversed_cents: int = 0
 
 
 class AuditEntry(Schema):
@@ -437,11 +439,26 @@ class MprReport(Schema):
     generated_at: datetime
 
 
+class BillingInvoiceSummary(Schema):
+    id: str
+    status: str
+    attempt_count: int
+    amount_due_cents: int
+    amount_paid_cents: int
+    currency: str
+
+
 class Usage(Schema):
     period_start: date
     claims_adjudicated: int
     model_cost_usd: str
     open_programs: int
+    plan: str
+    effective_plan: str
+    subscription_status: str | None
+    limits: dict[str, int | None]
+    invoices: list[BillingInvoiceSummary]
+    billing_sync_error: str | None
 
 
 class PortalProgram(Schema):
@@ -460,6 +477,7 @@ class PortalMessage(Schema):
 
 
 class PortalView(Schema):
+    connect_onboarding_url: str | None = None
     claim_id: UUID
     status: ClaimStatus
     program: PortalProgram

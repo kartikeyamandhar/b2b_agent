@@ -3,6 +3,9 @@ approved; component 3's stripe_connect.py claims a row with claim_for_transfer i
 calls the mark_* methods as Stripe events arrive. DbPayoutLedger (payouts/db_ledger.py) implements it on the payouts
 table with legal transitions only; FakeLedger (payouts/fake.py) keeps state in memory for unit tests.
 
+When session is supplied, the caller owns the commit. In particular, a claimed transfer must be committed
+before contacting Stripe; webhook result application instead shares the event guard's transaction.
+
 States (decisions log 2026-10-18): pending and pending_export wait for a payout path; onboarding waits for the
 claimant's Connect account; transferring is claimed by component 3 for one Stripe transfer; held means the claim left
 approved (reviewer override, a duplicate found later) before money moved; transferred and exported are terminal.
@@ -43,15 +46,19 @@ class PayoutLedger(Protocol):
         idempotency key. method check_export starts the row in pending_export (the export batch pays it)."""
         ...
 
-    def mark_onboarding(self, ctx: FirmContext, payout_id: UUID, connect_account_id: str) -> PayoutRef: ...
+    def mark_onboarding(
+        self, ctx: FirmContext, payout_id: UUID, connect_account_id: str, session: Any = None
+    ) -> PayoutRef: ...
 
-    def claim_for_transfer(self, ctx: FirmContext, payout_id: UUID) -> PayoutRef:
+    def claim_for_transfer(self, ctx: FirmContext, payout_id: UUID, session: Any = None) -> PayoutRef:
         """Component 3 calls this under the row lock immediately before stripe.Transfer.create. Refuses unless the
         claim is approved and the payout is pending, onboarding, or failed (never held)."""
         ...
 
-    def mark_transferred(self, ctx: FirmContext, payout_id: UUID, stripe_transfer_id: str) -> PayoutRef: ...
+    def mark_transferred(
+        self, ctx: FirmContext, payout_id: UUID, stripe_transfer_id: str, session: Any = None
+    ) -> PayoutRef: ...
 
-    def mark_failed(self, ctx: FirmContext, payout_id: UUID, error: str) -> PayoutRef: ...
+    def mark_failed(self, ctx: FirmContext, payout_id: UUID, error: str, session: Any = None) -> PayoutRef: ...
 
-    def mark_exported(self, ctx: FirmContext, payout_id: UUID, export_batch: str) -> PayoutRef: ...
+    def mark_exported(self, ctx: FirmContext, payout_id: UUID, export_batch: str, session: Any = None) -> PayoutRef: ...

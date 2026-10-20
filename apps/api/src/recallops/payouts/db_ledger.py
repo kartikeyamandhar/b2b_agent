@@ -17,8 +17,8 @@ Stripe. Only a re-approval of the claim releases a hold (create_pending), and ne
 
 from __future__ import annotations
 
-from collections.abc import Callable
-from contextlib import AbstractContextManager
+from collections.abc import Callable, Iterator
+from contextlib import AbstractContextManager, contextmanager
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from typing import Any
@@ -269,25 +269,43 @@ class DbPayoutLedger:
                 raise PayoutNotFound(str(payout_id))
             return PayoutRow(ref=_ref(p), method=p.method, attempts=p.attempts, last_error=p.last_error)
 
-    def _move(self, ctx: FirmContext, payout_id: UUID, to: PayoutStatus, **values: object) -> PayoutRef:
-        with self.session_for(ctx, self.engine) as session:
+    @contextmanager
+    def _session(self, ctx: FirmContext, session: Session | None) -> Iterator[Session]:
+        if session is not None:
+            yield session
+        else:
+            with self.session_for(ctx, self.engine) as own:
+                yield own
+
+    def _move(
+        self, ctx: FirmContext, payout_id: UUID, to: PayoutStatus, session: Session | None = None, **values: object
+    ) -> PayoutRef:
+        with self._session(ctx, session) as session:
             p, _ = lock_claim_and_payout(session, ctx, payout_id)
             return transition(session, ctx, p, to, **values)
 
-    def mark_onboarding(self, ctx: FirmContext, payout_id: UUID, connect_account_id: str) -> PayoutRef:
-        return self._move(ctx, payout_id, "onboarding", connect_account_id=connect_account_id, last_error=None)
+    def mark_onboarding(
+        self, ctx: FirmContext, payout_id: UUID, connect_account_id: str, session: Any = None
+    ) -> PayoutRef:
+        return self._move(
+            ctx, payout_id, "onboarding", session=session, connect_account_id=connect_account_id, last_error=None
+        )
 
-    def claim_for_transfer(self, ctx: FirmContext, payout_id: UUID) -> PayoutRef:
-        with self.session_for(ctx, self.engine) as session:
+    def claim_for_transfer(self, ctx: FirmContext, payout_id: UUID, session: Any = None) -> PayoutRef:
+        with self._session(ctx, session) as session:
             p, claim_status = lock_claim_and_payout(session, ctx, payout_id)
             if claim_status != "approved" or p.status not in TRANSFERABLE or p.hold_requested:
                 raise NotPayable(f"payout {payout_id} is {p.status}; claim is {claim_status}")
             return transition(session, ctx, p, "transferring")
 
-    def mark_transferred(self, ctx: FirmContext, payout_id: UUID, stripe_transfer_id: str) -> PayoutRef:
-        with self.session_for(ctx, self.engine) as session:
+    def mark_transferred(
+        self, ctx: FirmContext, payout_id: UUID, stripe_transfer_id: str, session: Any = None
+    ) -> PayoutRef:
+        with self._session(ctx, session) as session:
             p, _ = lock_claim_and_payout(session, ctx, payout_id)
             if p.status == "transferred":
+                if p.stripe_transfer_id != stripe_transfer_id:
+                    raise ValueError("a different transfer is already recorded for this payout")
                 return _ref(p)  # replayed event: no-op
             late = p.status == "held"
             despite_hold = p.status == "transferring" and p.hold_requested
@@ -305,11 +323,11 @@ class DbPayoutLedger:
             mark_claim_paid(session, ctx, p.claim_id)
             return ref
 
-    def mark_failed(self, ctx: FirmContext, payout_id: UUID, error: str) -> PayoutRef:
+    def mark_failed(self, ctx: FirmContext, payout_id: UUID, error: str, session: Any = None) -> PayoutRef:
         """One transaction. A failure on a held row is recorded and the row stays held. A failure with a hold
         requested lands in held. After MAX_TRANSFER_ATTEMPTS failures the row flips to pending_export (the export
         batch is the fallback)."""
-        with self.session_for(ctx, self.engine) as session:
+        with self._session(ctx, session) as session:
             p, claim_status = lock_claim_and_payout(session, ctx, payout_id)
             attempts = p.attempts + 1
             if p.status == "held":
@@ -326,8 +344,8 @@ class DbPayoutLedger:
                 return transition(session, ctx, p, "pending_export", method="check_export")
             return ref
 
-    def mark_exported(self, ctx: FirmContext, payout_id: UUID, export_batch: str) -> PayoutRef:
-        with self.session_for(ctx, self.engine) as session:
+    def mark_exported(self, ctx: FirmContext, payout_id: UUID, export_batch: str, session: Any = None) -> PayoutRef:
+        with self._session(ctx, session) as session:
             p, _ = lock_claim_and_payout(session, ctx, payout_id)
             if p.status == "exported":
                 return _ref(p)
@@ -335,9 +353,9 @@ class DbPayoutLedger:
             mark_claim_paid(session, ctx, p.claim_id)
             return ref
 
-    def to_export(self, ctx: FirmContext, payout_id: UUID) -> PayoutRef:
+    def to_export(self, ctx: FirmContext, payout_id: UUID, session: Any = None) -> PayoutRef:
         """Claimant chose a check (portal payout step) or Connect is unavailable: the export batch pays it."""
-        return self._move(ctx, payout_id, "pending_export", method="check_export")
+        return self._move(ctx, payout_id, "pending_export", session=session, method="check_export")
 
 
 def held_reason(session: Session, firm_id: UUID, claim_id: UUID) -> str | None:

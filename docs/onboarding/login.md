@@ -2,6 +2,10 @@
 
 You own Clerk sign-in and organizations in apps/web, Clerk token verification in the backend, firm resolution, roles, and the consumer claim tokens (04-login.md). Tenant scoping, row-level security, the Neo4j graph's structural tenancy, and the cross-tenant tests are the backend owner's and ship today. Read **docs/contracts/CHANGES.md** items 1, 17, and 18 first: the claim-token protocol changed.
 
+For billing-admin authorization, claimant payout tokens or reviewer-seat limits, follow the
+[payments handoff: login owner](payments.md#login-owner). It defines the payment integration checks your
+provider must preserve and separates logged-in user requests from signed Stripe webhooks.
+
 ## What exists (backend M2 to M5)
 
 - **The auth seam** in `apps/api/src/recallops/auth/` (your package, CODEOWNERS):

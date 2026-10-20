@@ -52,6 +52,45 @@
         "title": "AuditEntry",
         "type": "object"
       },
+      "BillingInvoiceSummary": {
+        "additionalProperties": false,
+        "properties": {
+          "amount_due_cents": {
+            "title": "Amount Due Cents",
+            "type": "integer"
+          },
+          "amount_paid_cents": {
+            "title": "Amount Paid Cents",
+            "type": "integer"
+          },
+          "attempt_count": {
+            "title": "Attempt Count",
+            "type": "integer"
+          },
+          "currency": {
+            "title": "Currency",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "attempt_count",
+          "amount_due_cents",
+          "amount_paid_cents",
+          "currency"
+        ],
+        "title": "BillingInvoiceSummary",
+        "type": "object"
+      },
       "Body_portal_photo_portal__token__photos_post": {
         "properties": {
           "file": {
@@ -1732,6 +1771,22 @@
             ],
             "title": "Status",
             "type": "string"
+          },
+          "stripe_reversed_cents": {
+            "default": 0,
+            "title": "Stripe Reversed Cents",
+            "type": "integer"
+          },
+          "stripe_transfer_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stripe Transfer Id"
           }
         },
         "required": [
@@ -2069,6 +2124,17 @@
             "title": "Claim Id",
             "type": "string"
           },
+          "connect_onboarding_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Connect Onboarding Url"
+          },
           "decision_reasons": {
             "description": "plain-language reasons once decided",
             "items": {
@@ -2187,10 +2253,10 @@
         "examples": [
           {
             "correlation_id": "c0ffee00-0000-4000-8000-000000000001",
-            "detail": "POST /v1/programs arrives in M2 (backend owner); the contract is final.",
-            "instance": "/v1/programs",
-            "status": 501,
-            "title": "Not Implemented",
+            "detail": "Stripe test prices are not configured.",
+            "instance": "/v1/billing/checkout",
+            "status": 503,
+            "title": "Payment integration unavailable",
             "type": "about:blank"
           }
         ],
@@ -3110,9 +3176,45 @@
       "Usage": {
         "additionalProperties": false,
         "properties": {
+          "billing_sync_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Billing Sync Error"
+          },
           "claims_adjudicated": {
             "title": "Claims Adjudicated",
             "type": "integer"
+          },
+          "effective_plan": {
+            "title": "Effective Plan",
+            "type": "string"
+          },
+          "invoices": {
+            "items": {
+              "$ref": "#/components/schemas/BillingInvoiceSummary"
+            },
+            "title": "Invoices",
+            "type": "array"
+          },
+          "limits": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "title": "Limits",
+            "type": "object"
           },
           "model_cost_usd": {
             "title": "Model Cost Usd",
@@ -3126,13 +3228,34 @@
             "format": "date",
             "title": "Period Start",
             "type": "string"
+          },
+          "plan": {
+            "title": "Plan",
+            "type": "string"
+          },
+          "subscription_status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subscription Status"
           }
         },
         "required": [
           "period_start",
           "claims_adjudicated",
           "model_cost_usd",
-          "open_programs"
+          "open_programs",
+          "plan",
+          "effective_plan",
+          "subscription_status",
+          "limits",
+          "invoices",
+          "billing_sync_error"
         ],
         "title": "Usage",
         "type": "object"
@@ -3205,7 +3328,7 @@
     }
   },
   "info": {
-    "description": "RecallOps backend API (component 1). Contract for the UI (component 2), payments (component 3),\nand login (component 4) owners. In development, authenticate with X-Dev-Firm-Id and X-Dev-Role headers\n(AUTH_PROVIDER=dev); the login owner's Clerk provider replaces them with a bearer token. Errors are RFC 7807\nproblem details with a correlation_id. Routes answering 501 belong to the payments owner (component 3) and keep their\nfinal contract.",
+    "description": "RecallOps backend API (component 1). Contract for the UI (component 2), payments (component 3),\nand login (component 4) owners. In development, authenticate with X-Dev-Firm-Id and X-Dev-Role headers\n(AUTH_PROVIDER=dev); the login owner's Clerk provider replaces them with a bearer token. Errors are RFC 7807\nproblem details with a correlation_id. Stripe Billing and Connect run in test mode only.",
     "title": "RecallOps API",
     "version": "0.5.0"
   },
@@ -3311,7 +3434,7 @@
             },
             "description": "Successful Response"
           },
-          "501": {
+          "400": {
             "content": {
               "application/json": {
                 "schema": {
@@ -3319,10 +3442,20 @@
                 }
               }
             },
-            "description": "contract final, implementation in a later milestone"
+            "description": "Bad Request"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Service Unavailable"
           }
         },
-        "summary": "Stripe webhook (component 3 replaces this stub)",
+        "summary": "Signed Stripe test-mode webhook",
         "tags": [
           "internal"
         ]
@@ -3454,7 +3587,6 @@
     },
     "/portal/{token}/payout": {
       "post": {
-        "description": "The claimant picks how an approved refund is paid. check_export moves the payout to the export batch (the\nledger's fallback); stripe_connect onboarding is the payments owner's (component 3) and answers 501 until then.",
         "operationId": "portal_payout_portal__token__payout_post",
         "parameters": [
           {
@@ -3488,6 +3620,16 @@
             },
             "description": "Successful Response"
           },
+          "402": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "over the plan's limit (component 3 entitlement)"
+          },
           "404": {
             "content": {
               "application/json": {
@@ -3518,7 +3660,7 @@
             },
             "description": "Validation Error"
           },
-          "501": {
+          "503": {
             "content": {
               "application/json": {
                 "schema": {
@@ -3526,7 +3668,7 @@
                 }
               }
             },
-            "description": "contract final, implementation in a later milestone"
+            "description": "Service Unavailable"
           }
         },
         "summary": "Payout destination (Connect onboarding handoff is component 3)",
@@ -3755,7 +3897,7 @@
             },
             "description": "Forbidden"
           },
-          "501": {
+          "409": {
             "content": {
               "application/json": {
                 "schema": {
@@ -3763,7 +3905,17 @@
                 }
               }
             },
-            "description": "contract final, implementation in a later milestone"
+            "description": "the resource is not in a state that allows this"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Service Unavailable"
           }
         },
         "summary": "Stripe Checkout session for the growth plan",
@@ -3806,7 +3958,7 @@
             },
             "description": "Forbidden"
           },
-          "501": {
+          "409": {
             "content": {
               "application/json": {
                 "schema": {
@@ -3814,7 +3966,17 @@
                 }
               }
             },
-            "description": "contract final, implementation in a later milestone"
+            "description": "the resource is not in a state that allows this"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Service Unavailable"
           }
         },
         "summary": "Stripe Customer Portal session",

@@ -49,8 +49,8 @@ from sqlalchemy import Engine, text
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 
-from recallops.billing.fake import AllowAllBilling
 from recallops.billing.interface import BillingGate
+from recallops.billing.policy import PlanBilling
 from recallops.claims.agent_tools import ToolContext
 from recallops.claims.context import LoadedClaim, load_claim, photo_reader, program_claims
 from recallops.claims.effects import POST_DECISION_HOLDS, DbEffects
@@ -63,7 +63,7 @@ from recallops.fraud.sync import check_epoch, resync_dirty, sync_claim
 from recallops.llm.client import LlmClient, build_client
 from recallops.llm.meter import BudgetExhausted
 from recallops.logs import configure, get_logger, log_event
-from recallops.models import UsageMeter, WorkerHeartbeat
+from recallops.models import WorkerHeartbeat
 from recallops.payouts.db_ledger import DbPayoutLedger
 from recallops.payouts.ledger import PayoutLedger
 from recallops.retrieval.embed import build_embedder
@@ -123,7 +123,7 @@ class Worker:
     ) -> None:
         self.settings = settings or get_settings()
         self.engine = engine or internal_engine()
-        self.billing = billing or AllowAllBilling()
+        self.billing = billing or PlanBilling(self.engine, self.settings)
         self.ledger = ledger or DbPayoutLedger(self.engine)
         self.worker_id = worker_id or f"{socket.gethostname()}:{os.getpid()}"
         self._llm = llm
@@ -204,15 +204,19 @@ class Worker:
             row = conn.execute(
                 text(
                     "UPDATE claims SET lease_owner = :me, lease_until = now() + make_interval(secs => :ttl), "
-                    "attempts = attempts + 1 WHERE id = (SELECT id FROM claims WHERE status = 'submitted' "
-                    "AND (lease_until IS NULL OR lease_until < now()) AND firm_id <> ALL(CAST(:blocked AS uuid[])) "
-                    "ORDER BY submitted_at NULLS LAST, id FOR UPDATE SKIP LOCKED LIMIT 1) "
+                    "attempts = attempts + 1 WHERE id = (SELECT c.id FROM claims c WHERE c.status = 'submitted' "
+                    "AND (c.lease_until IS NULL OR c.lease_until < now()) "
+                    "AND (c.firm_id <> ALL(CAST(:blocked AS uuid[])) "
+                    "OR EXISTS (SELECT 1 FROM claim_usage u WHERE u.firm_id = c.firm_id AND u.claim_id = c.id "
+                    "AND u.period_start = :period)) "
+                    "ORDER BY c.submitted_at NULLS LAST, c.id FOR UPDATE OF c SKIP LOCKED LIMIT 1) "
                     "RETURNING id, firm_id, attempts"
                 ),
                 {
                     "me": self.worker_id,
                     "ttl": self.settings.worker_lease_s,
                     "blocked": [str(f) for f in self.blocked_firms],
+                    "period": datetime.now(UTC).date().replace(day=1),
                 },
             ).first()
         return Leased(row.id, row.firm_id, row.attempts) if row else None
@@ -264,7 +268,7 @@ class Worker:
             phash_bits=self.settings.phash_duplicate_bits,
         )
 
-    def _effects(self, loaded: LoadedClaim, lease_owner: str | None) -> DbEffects:
+    def _effects(self, loaded: LoadedClaim, lease_owner: str | None, run_id: UUID | None = None) -> DbEffects:
         ctx = FirmContext(firm_id=loaded.firm_id, user_id="agent", role="admin")
         return DbEffects(
             self.engine,
@@ -275,6 +279,7 @@ class Worker:
             self.billing,
             lease_owner,
             self.settings.phash_duplicate_bits,
+            run_id=run_id,
         )
 
     def _existing_run(self, claim_id: UUID) -> UUID | None:
@@ -287,22 +292,8 @@ class Worker:
                 {"c": claim_id},
             ).scalar_one_or_none()
 
-    def _record_usage(self, firm_id: UUID, cost: Decimal) -> None:
-        period = datetime.now(UTC).date().replace(day=1)
-        with Session(self.engine) as session, session.begin():
-            stmt = insert(UsageMeter).values(
-                firm_id=firm_id, period_start=period, claims_adjudicated=1, model_cost_usd=cost
-            )
-            session.execute(
-                stmt.on_conflict_do_update(
-                    index_elements=["firm_id", "period_start"],
-                    set_={
-                        "claims_adjudicated": UsageMeter.claims_adjudicated + 1,
-                        "model_cost_usd": UsageMeter.model_cost_usd + cost,
-                    },
-                )
-            )
-        self.billing.record_usage(FirmContext(firm_id=firm_id, user_id="agent", role="admin"), 1, cost)
+    def _record_usage(self, firm_id: UUID, claim_id: UUID, run_id: UUID, cost: Decimal) -> None:
+        self.billing.record_usage(FirmContext(firm_id=firm_id, user_id="agent", role="admin"), claim_id, run_id, cost)
 
     def adjudicate(self, leased: Leased) -> str:
         with Session(self.engine) as session:
@@ -332,7 +323,7 @@ class Worker:
                 trace,
                 budget,
                 self.config,
-                self._effects(loaded, self.worker_id),
+                self._effects(loaded, self.worker_id, trace.run_id),
                 human_in_loop=True,
                 checkpointer=saver,
             )
@@ -355,7 +346,7 @@ class Worker:
         else:
             trace.finish("done", {"outcome": result.outcome, "routed_to_human": result.routed_to_human})
         self.release_claim(loaded.claim_id)
-        self._record_usage(loaded.firm_id, charged_cost(self.engine, trace.run_id))
+        self._record_usage(loaded.firm_id, loaded.claim_id, trace.run_id, charged_cost(self.engine, trace.run_id))
         return result.outcome or (result.held or {}).get("reason", "held")
 
     def _rules_only(self, loaded: LoadedClaim) -> str:
@@ -365,7 +356,7 @@ class Worker:
         result = rules_only_adjudicate(
             loaded.facts, loaded.rules, others, loaded.value_threshold_cents, trace, self.settings.phash_duplicate_bits
         )
-        effects = self._effects(loaded, self.worker_id)
+        effects = self._effects(loaded, self.worker_id, trace.run_id)
         decision = {
             "outcome": result.outcome,
             "reasons": result.reasons,
@@ -387,7 +378,7 @@ class Worker:
         else:
             effects.apply(decision)
         self.release_claim(loaded.claim_id)
-        self._record_usage(loaded.firm_id, Decimal(0))
+        self._record_usage(loaded.firm_id, loaded.claim_id, trace.run_id, Decimal(0))
         return result.outcome
 
     def resume(self, run_id: UUID, claim_id: UUID, payload: dict[str, Any]) -> str:
@@ -403,7 +394,7 @@ class Worker:
                 trace,
                 budget,
                 VARIANTS[self._run_variant(run_id)],
-                self._effects(loaded, None),
+                self._effects(loaded, None, trace.run_id),
                 human_in_loop=True,
                 checkpointer=saver,
             )
@@ -419,6 +410,7 @@ class Worker:
                 ),
                 {"r": run_id, "o": json.dumps({"outcome": result.outcome, "reviewed": True})},
             )
+        self._record_usage(loaded.firm_id, loaded.claim_id, run_id, charged_cost(self.engine, run_id))
         log_event(log, "worker_resume_done", run_id=str(run_id), claim_id=str(claim_id), outcome=result.outcome)
         return result.outcome or "reviewed"
 
@@ -498,6 +490,19 @@ class Worker:
             log_event(log, "worker_run_recovered", level=30, run_id=str(row.id), status=row.status)
         return len(rows)
 
+    def recover_usage_costs(self) -> int:
+        with self.engine.connect() as conn:
+            rows = conn.execute(
+                text(
+                    "SELECT r.firm_id, r.claim_id, r.id, r.cost_usd FROM agent_runs r "
+                    "JOIN run_usage_costs u ON u.run_id = r.id AND u.firm_id = r.firm_id "
+                    "WHERE r.cost_usd > u.recorded_cost"
+                )
+            ).all()
+        for firm_id, claim_id, run_id, cost in rows:
+            self._record_usage(firm_id, claim_id, run_id, Decimal(cost))
+        return len(rows)
+
     def tick(self) -> bool:
         """One unit of work. True when something was done."""
         resume = self.lease_resume()
@@ -518,7 +523,7 @@ class Worker:
             self.hold_exhausted(leased)
             return True
         ctx = FirmContext(firm_id=leased.firm_id, user_id="agent", role="admin")
-        if not self.billing.check_entitlement(ctx, "adjudicate_claim").allowed:
+        if not self.billing.check_entitlement(ctx, "adjudicate_claim", leased.claim_id).allowed:
             self.release_claim(leased.claim_id, undo_attempt=True)
             self.blocked_firms[leased.firm_id] = time.monotonic() + self.settings.worker_poll_s
             log_event(log, "worker_claim_not_entitled", claim_id=str(leased.claim_id), firm_id=str(leased.firm_id))
@@ -574,6 +579,7 @@ class Worker:
                 llm_mode=self.settings.llm_mode,
             )
             self.recover_orphans()
+            self.recover_usage_costs()
             self.graph_start()
             while not self.stopped:
                 self.heartbeat({"adjudicator": self.settings.adjudicator, "variant": self.config.variant})
@@ -583,7 +589,7 @@ class Worker:
                     log_event(log, "worker_budget_exhausted", level=40, error=str(exc))
                     return 3
                 idle = 0 if did else idle + 1
-                if not did and (self.recover_orphans() or self.graph_resync()):
+                if not did and (self.recover_orphans() or self.recover_usage_costs() or self.graph_resync()):
                     idle = 0
                 if max_idle_ticks is not None and idle >= max_idle_ticks:
                     return 0

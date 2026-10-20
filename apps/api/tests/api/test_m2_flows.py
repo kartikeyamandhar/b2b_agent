@@ -58,6 +58,9 @@ def env(internal_engine_test: Engine) -> Iterator[dict[str, Any]]:
         conn.execute(text("DELETE FROM langgraph.checkpoint_blobs"))
         conn.execute(text("DELETE FROM langgraph.checkpoints"))
     seeded = seed.run(internal_engine_test, n=6)
+    with internal_engine_test.begin() as conn:
+        # These backend workflow tests open several programs; billing limits have their own boundary tests.
+        conn.execute(text("UPDATE firms SET plan = 'enterprise' WHERE id = :f"), {"f": seed.DEMO_FIRM_ID})
     from recallops.api.app import create_app
 
     with TestClient(create_app()) as client:
@@ -303,7 +306,7 @@ def test_check_payout_export_and_a_reconciled_mpr(env: dict[str, Any], tmp_path:
     approved = client.get(f"/v1/claims/{link['claim_id']}", headers=ADMIN).json()
     assert approved["status"] == "approved", approved["decision"]
     stripe = client.post(f"/portal/{token}/payout", json={"method": "stripe_connect"})
-    assert stripe.status_code == 501 and "payments owner" in stripe.json()["detail"]
+    assert stripe.status_code == 503 and "credentials" in stripe.json()["detail"]
     chose = client.post(
         f"/portal/{token}/payout", json={"method": "check_export", "mailing_address": "77 Elm Rd, Peoria IL 61602"}
     )

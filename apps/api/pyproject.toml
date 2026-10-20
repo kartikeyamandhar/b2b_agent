@@ -82,6 +82,7 @@ markers = [
     "db: needs the docker compose Postgres (make db-up && make migrate)",
     "contract: API-shape probes for the pinned libraries",
     "graph: needs the docker compose Neo4j (make db-up)",
+    "stripe_test: manually approved Stripe TEST account integration; never part of offline CI",
 ]
 
 [tool.coverage.run]

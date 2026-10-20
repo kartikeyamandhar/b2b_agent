@@ -84,9 +84,9 @@ def test_three_transfer_failures_fall_back_to_the_export_batch(clean_db: Engine)
     ref = ledger.create_pending(ctx, claim, 4999)
     for _ in range(2):
         ledger.claim_for_transfer(ctx, ref.payout_id)
-        assert ledger.mark_failed(ctx, ref.payout_id, "timeout").status == "failed"
+        assert ledger.mark_failed(ctx, ref.payout_id, "rate_limit_before_execution").status == "failed"
     ledger.claim_for_transfer(ctx, ref.payout_id)
-    final = ledger.mark_failed(ctx, ref.payout_id, "timeout")
+    final = ledger.mark_failed(ctx, ref.payout_id, "rate_limit_before_execution")
     assert final.status == "pending_export"
     batch = str(uuid.uuid4())
     with clean_db.begin() as conn:  # mark_exported needs its batch row (export.py writes both in one transaction)
@@ -144,6 +144,38 @@ def test_a_transfer_in_flight_records_the_hold_and_the_real_result(clean_db: Eng
             {"p": str(ref2.payout_id)},
         ).scalar_one()
     assert alerts == 1 and _claim_status(clean_db, claim2) == "flagged"
+
+
+def test_webhook_guard_and_ledger_delivery_roll_back_and_commit_together(
+    clean_db: Engine,
+    app_engine_test: Engine,
+) -> None:
+    ctx, _, claim = _firm_program_claim(clean_db)
+    ledger = DbPayoutLedger(app_engine_test)
+    ref = ledger.create_pending(ctx, claim, 4999)
+    ledger.claim_for_transfer(ctx, ref.payout_id)
+    event = "evt_" + uuid.uuid4().hex
+    with pytest.raises(RuntimeError), tenant_session(ctx, app_engine_test) as session:
+        assert session.scalar(
+            text("SELECT recallops_record_stripe_event(:id, 'transfer.created', '{}'::jsonb)"), {"id": event}
+        )
+        ledger.mark_transferred(ctx, ref.payout_id, "tr_atomic", session=session)
+        raise RuntimeError("crash before webhook commit")
+    assert ledger.get(ctx, ref.payout_id).ref.status == "transferring"
+    with clean_db.connect() as conn:
+        assert conn.scalar(text("SELECT count(*) FROM stripe_events WHERE id = :id"), {"id": event}) == 0
+    with tenant_session(ctx, app_engine_test) as session:
+        assert session.scalar(
+            text("SELECT recallops_record_stripe_event(:id, 'transfer.created', '{}'::jsonb)"), {"id": event}
+        )
+        ledger.mark_transferred(ctx, ref.payout_id, "tr_atomic", session=session)
+        session.execute(text("SELECT recallops_mark_stripe_event_processed(:id)"), {"id": event})
+    with tenant_session(ctx, app_engine_test) as session:
+        assert not session.scalar(
+            text("SELECT recallops_record_stripe_event(:id, 'transfer.created', '{}'::jsonb)"), {"id": event}
+        )
+    assert ledger.get(ctx, ref.payout_id).ref.status == "transferred"
+    assert _claim_status(clean_db, claim) == "paid"
 
 
 def test_retrieval_keyword_vector_and_none(clean_db: Engine) -> None:

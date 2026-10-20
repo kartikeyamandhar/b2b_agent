@@ -57,6 +57,11 @@ OTHER_RECALL = "27025"
 FIXTURE = REPO_ROOT / "data" / "samples" / "cpsc_sample.json"
 STATUS = {"approve": "approved", "deny": "denied", "needs_info": "needs_info", "flag": "flagged"}
 TENANT_DELETE_ORDER = (
+    "billing_invoices",
+    "claim_usage",
+    "run_usage_costs",
+    "usage_reports",
+    "billing_accounts",
     "document_chunks",
     "agent_steps",
     "agent_runs",
