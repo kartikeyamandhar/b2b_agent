@@ -67,6 +67,24 @@ export function forwardResponseHeaders(upstream: Headers): Headers {
   return out;
 }
 
+/**
+ * Writes carry the server's identity, so a page on another site must not be able to trigger them through this
+ * proxy (CSRF). Browsers send Sec-Fetch-Site and Origin on cross-site requests; a request with neither is not a
+ * browser request and has no ambient identity to abuse.
+ */
+export function isSameOriginWrite(headers: Headers): boolean {
+  const site = headers.get("sec-fetch-site");
+  if (site !== null && site !== "same-origin" && site !== "none") return false;
+  const origin = headers.get("origin");
+  if (origin === null) return true;
+  const host = headers.get("host");
+  try {
+    return host !== null && new URL(origin).host === host;
+  } catch {
+    return false;
+  }
+}
+
 /** A problem detail produced by the web server itself (the API was never reached or refused the shape). */
 export function webProblem(status: number, title: string, detail: string, requestId: string): Response {
   return new Response(JSON.stringify({ type: "about:blank", title, status, detail, correlation_id: requestId }), {

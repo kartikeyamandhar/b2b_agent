@@ -95,3 +95,24 @@ describe("headers", () => {
     expect(isAllowedMethod("PUT")).toBe(false);
   });
 });
+
+import { isSameOriginWrite } from "@/lib/api/forward";
+
+describe("isSameOriginWrite (CSRF)", () => {
+  const h = (o: Record<string, string>) => new Headers({ host: "localhost:3000", ...o });
+
+  it("accepts same-origin browser writes and non-browser clients", () => {
+    expect(isSameOriginWrite(h({ origin: "http://localhost:3000", "sec-fetch-site": "same-origin" }))).toBe(true);
+    expect(isSameOriginWrite(h({}))).toBe(true);
+  });
+
+  it.each([
+    [{ origin: "https://evil.example", "sec-fetch-site": "cross-site" }],
+    [{ "sec-fetch-site": "same-site" }],
+    [{ origin: "https://evil.example" }],
+    [{ origin: "http://localhost:3001" }],
+    [{ origin: "null" }],
+  ])("refuses %j", (headers) => {
+    expect(isSameOriginWrite(h(headers))).toBe(false);
+  });
+});

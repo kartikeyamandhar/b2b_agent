@@ -4,14 +4,37 @@ import type { z } from "zod";
 
 import { ApiError, problemFrom } from "./problem";
 
-export async function fetchJson<S extends z.ZodType>(schema: S, path: string, search = "", signal?: AbortSignal): Promise<z.infer<S>> {
-  let res: Response;
+async function call(url: string, init: RequestInit): Promise<Response> {
   try {
-    res = await fetch(`/api${path}${search}`, { headers: { accept: "application/json" }, cache: "no-store", signal });
+    return await fetch(url, { cache: "no-store", ...init });
   } catch (err) {
     if (err instanceof DOMException && err.name === "AbortError") throw err;
     throw new ApiError({ status: 0, title: "Network Error", detail: null, correlationId: null, retryAfterSeconds: null });
   }
+}
+
+export async function fetchJson<S extends z.ZodType>(schema: S, path: string, search = "", signal?: AbortSignal): Promise<z.infer<S>> {
+  const res = await call(`/api${path}${search}`, { headers: { accept: "application/json" }, signal });
+  return read(schema, path, res);
+}
+
+/** POST or PATCH a JSON body (validated by the caller against the request schema) and parse the answer. */
+export async function sendJson<S extends z.ZodType>(schema: S, method: "POST" | "PATCH", path: string, body: unknown): Promise<z.infer<S>> {
+  const res = await call(`/api${path}`, {
+    method,
+    headers: { accept: "application/json", "content-type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  return read(schema, path, res);
+}
+
+/** POST multipart form data (photo uploads); the browser sets the boundary. */
+export async function sendForm<S extends z.ZodType>(schema: S, path: string, form: FormData, signal?: AbortSignal): Promise<z.infer<S>> {
+  const res = await call(`/api${path}`, { method: "POST", headers: { accept: "application/json" }, body: form, signal });
+  return read(schema, path, res);
+}
+
+async function read<S extends z.ZodType>(schema: S, path: string, res: Response): Promise<z.infer<S>> {
   const text = await res.text();
   let body: unknown = null;
   if (text) {

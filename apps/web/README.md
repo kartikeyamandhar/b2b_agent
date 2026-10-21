@@ -6,7 +6,8 @@ onboarding: docs/onboarding/ui.md.
 
 Status: **Phase 1B**: programs list (`/app/programs`), program overview (`/app/programs/[id]`), and the claims
 queue (`/app/programs/[id]/claims`, GET /v1/programs/{id}/claims with status filter, keyset cursor, and polling),
-on the Phase 0 scaffold (API client, proxy, shared components). Claim rows link to `/app/claims/[id]` (Phase 1C).
+claim detail (`/app/claims/[id]`) with reviewer actions, and the agent trace (`/app/claims/[id]/trace`), on the
+Phase 0 scaffold (API client, proxy, shared components).
 
 ## Run
 
@@ -39,11 +40,14 @@ src/lib/status.ts            labels for claim, run, payout, outcome, and program
 src/lib/programs.ts          figures derived from Program fields only (filed, awaiting review, corrected)
 src/lib/format.ts            counts, cents, UTC dates and times, percents
 src/lib/claims.ts            queue URL state, API path, review classification
+src/lib/claim-detail.ts      reviewer action rules (mirrors claims/review.py), photo readings and duplicate hits from
+                             the trace, citations, cap use, polling intervals
 src/lib/api/client.ts        browser fetch through /api, validated with zod
 src/lib/queries/             react-query options (queue polling)
 src/app/api/[...path]/       same-origin proxy for client components: /api/v1/* and /api/portal/* only
 src/components/              AppShell, StatusBadge, ProblemAlert, LoadingState, EmptyState, ProgramsTable, ProgramOverview,
-                             ClaimsQueue (client), ClaimsTable, QueueControls (filter, review summary, pager)
+                             ClaimsQueue (client), ClaimsTable, QueueControls (filter, review summary, pager),
+                             ClaimPanels, ReviewerActions (client), ClaimDetailLive (client), TraceView, TraceLive
 tests/                       vitest (node environment; components rendered with react-dom/server)
 ```
 
@@ -77,6 +81,16 @@ tests/                       vitest (node environment; components rendered with 
   call, with a note. Claims in `flagged`, `under_review`, or `capped` carry a marker and the text "Needs a
   reviewer", and their statuses lead the filter chips. The table shows "Created", not "Submitted": `ClaimSummary`
   has `created_at` and `decided_at` but no `submitted_at`.
+- **Claim detail and trace.** Photo bytes load through `/api` (the photo URL is an API path; anything else is not
+  rendered). Each photo's reading comes from the latest run's steps (`read_label_photo`, `check_destruction_photo` or
+  `check_destruction_presence`, `check_purchase`); duplicate hits from `check_duplicates` sit beside the Neo4j
+  clusters. Decision citations `T1`, `T2`, ... link to the cited trace steps. Reviewer actions follow
+  `claims/review.py`: approve, deny, request info, and mark fraud on flagged, under_review, capped, needs_info,
+  approved, and denied claims; mark delivered only on an approved repair or replacement; nothing while an agent run
+  is running. Each action has an inline confirmation (no browser dialogs). When the action resumes a paused run, the
+  page polls for up to 60 s until the worker applies it. The trace polls every 1.5 s while its run is running.
+- **CSRF.** The proxy refuses a `POST` or `PATCH` whose `Origin` or `Sec-Fetch-Site` says it came from another site,
+  because writes carry the server's identity.
 
 ## Notes for other owners
 
@@ -97,5 +111,9 @@ tests/                       vitest (node environment; components rendered with 
   are fixed.
 - `GET /v1/programs/{id}/claims` answers 400 "invalid cursor" for a cursor it cannot decode, but the contract lists
   only 401, 403, 404, and 422 for that route. The UI handles the 400; the contract could list it.
+- `Decision` in the API has six fields (`outcome`, `reasons`, `cited_rules`, `confidence`, `routed_to_human`,
+  `decided_by`) and forbids extras, so `hold_reason`, `reopened_from`, `duplicate_found_later`, `duplicates_ack`, and
+  `question_for_claimant` (CHANGES.md item 6) never reach the UI. The console keys reviewer actions on the claim
+  status as the contract says, but cannot show why an `under_review` claim is held or that a claim was reopened.
 - The packages listed above under "beyond the pin list" need a decisions-log entry if the pin list is meant to cover
   apps/web devDependencies.

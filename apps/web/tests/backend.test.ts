@@ -151,3 +151,18 @@ describe("/api/[...path] route", () => {
     expect(calls).toHaveLength(0);
   });
 });
+
+describe("/api proxy CSRF guard", () => {
+  it("refuses a cross-site POST without calling the API", async () => {
+    for (const [k, v] of Object.entries(ENV)) vi.stubEnv(k, v);
+    const calls = stubFetch(() => new Response("{}"));
+    const req = new Request("http://localhost:3000/api/v1/claims/c/actions", {
+      method: "POST",
+      headers: { origin: "https://evil.example", "sec-fetch-site": "cross-site", host: "localhost:3000", "content-type": "application/json" },
+      body: '{"action":"mark_fraud"}',
+    });
+    const res = await POST(req, { params: Promise.resolve({ path: ["v1", "claims", "c", "actions"] }) });
+    expect(res.status).toBe(403);
+    expect(calls).toHaveLength(0);
+  });
+});

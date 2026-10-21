@@ -1,6 +1,6 @@
 // Console reads for server components. Each returns a result instead of throwing for API and configuration
 // errors, so a page renders its error state (ProblemAlert with the correlation id) rather than a blank boundary.
-import { ClaimPage, Program, ProgramList } from "@/lib/api-types";
+import { ClaimDetail, ClaimPage, Program, ProgramList, Trace } from "@/lib/api-types";
 import { claimsApiPath, type QueueParams } from "@/lib/claims";
 
 import { apiJson } from "./backend";
@@ -46,4 +46,22 @@ export function loadClaims(programId: string, params: QueueParams, env: Env = pr
   if (!UUID.test(programId)) return Promise.resolve(PROGRAM_NOT_FOUND);
   const { path, search } = claimsApiPath(programId, params);
   return load(() => apiJson(ClaimPage, { surface: "console", path, search }, env));
+}
+
+const CLAIM_NOT_FOUND: Loaded<never> = {
+  ok: false,
+  problem: { status: 404, title: "Not Found", detail: "claim not found", correlationId: null, retryAfterSeconds: null },
+};
+
+export function loadClaim(id: string, env: Env = process.env): Promise<Loaded<ClaimDetail>> {
+  if (!UUID.test(id)) return Promise.resolve(CLAIM_NOT_FOUND);
+  return load(() => apiJson(ClaimDetail, { surface: "console", path: `/v1/claims/${id}` }, env));
+}
+
+/** The claim's latest run. A 404 for a claim that exists means no run yet (a submitted or draft claim): data null. */
+export async function loadTrace(id: string, env: Env = process.env): Promise<Loaded<Trace | null>> {
+  if (!UUID.test(id)) return CLAIM_NOT_FOUND;
+  const r = await load(() => apiJson(Trace, { surface: "console", path: `/v1/claims/${id}/trace` }, env));
+  if (!r.ok && r.problem.status === 404 && r.problem.detail === "no run for this claim") return { ok: true, data: null };
+  return r;
 }

@@ -6,6 +6,7 @@ import {
   MAX_BODY_BYTES,
   forwardResponseHeaders,
   isAllowedMethod,
+  isSameOriginWrite,
   resolveTarget,
   webProblem,
 } from "@/lib/api/forward";
@@ -22,6 +23,9 @@ async function handle(request: Request, context: Context): Promise<Response> {
   if (target === null) return webProblem(404, "Not Found", "no such API route", requestId);
   if (!isAllowedMethod(request.method)) {
     return webProblem(405, "Method Not Allowed", `${request.method} is not forwarded`, requestId);
+  }
+  if (request.method !== "GET" && !isSameOriginWrite(request.headers)) {
+    return webProblem(403, "Forbidden", "cross-site requests are refused", requestId);
   }
   const length = Number(request.headers.get("content-length") ?? "0");
   if (Number.isFinite(length) && length > MAX_BODY_BYTES) {
