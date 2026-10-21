@@ -1,0 +1,52 @@
+{
+  "items": [
+    {
+      "id": "0874f66f-bfb5-552b-bd93-6266f49c1d5a",
+      "recall_id": "2a3b4c5d-6e7f-4a8b-9c0d-1e2f3a4b5c6d",
+      "title": "Scotch Thermal Laminators",
+      "status": "open",
+      "units_affected": 53634,
+      "value_threshold_cents": 10000,
+      "claim_counts": { "draft": 3, "approved": 72, "denied": 94, "needs_info": 107, "flagged": 117, "paid": 110 },
+      "identification_rules": {
+        "models": ["TL1302Z", "TL901X"],
+        "model_label_location": "on the sticker on the bottom",
+        "sold_at": ["Amazon.com", "Walmart"],
+        "sold_from": "2024-06-01",
+        "sold_to": "2026-09-30",
+        "price_range_cents": { "min_cents": 4400, "max_cents": 5600 },
+        "serial_ranges": [],
+        "date_codes": [{ "raw": "2501 through 2534", "format": "YYWW", "start": "2501", "end": "2534" }],
+        "units_affected": 53634,
+        "evidence": []
+      },
+      "remedy_rules": {
+        "remedy_type": "refund",
+        "destruction_instruction": "Cut the power cord and write RECALLED on the laminator",
+        "registration_url": "www.example.com/recall",
+        "contact": "800-555-0100",
+        "options": [
+          { "type": "refund", "steps": ["Register online", "Upload a photo of the cut cord"], "proof_required": ["destruction_photo"], "payout": { "method": "check", "amount_rule": "purchase price" } }
+        ],
+        "evidence": []
+      },
+      "opened_at": "2026-10-16T22:40:00Z",
+      "closed_at": null,
+      "created_at": "2026-10-16T22:39:00Z"
+    },
+    {
+      "id": "6c1f2a8e-1b7d-4d1e-9a6f-2f6f5e0a9b11",
+      "recall_id": null,
+      "title": "Example Space Heaters <b>draft</b>",
+      "status": "draft",
+      "units_affected": null,
+      "value_threshold_cents": 25000,
+      "claim_counts": {},
+      "identification_rules": { "models": [], "sold_at": [], "serial_ranges": [], "date_codes": [], "evidence": [], "model_label_location": null, "price_range_cents": null, "sold_from": null, "sold_to": null, "units_affected": null },
+      "remedy_rules": { "remedy_type": null, "options": [], "evidence": [], "contact": null, "destruction_instruction": null, "registration_url": null },
+      "opened_at": null,
+      "closed_at": null,
+      "created_at": "2026-10-18T09:00:00Z"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 // A value the backend adds later renders as "In progress" instead of failing (CHANGES.md item 5).
 
 export type Tone = "neutral" | "progress" | "done" | "attention" | "negative";
-export type StatusKind = "claim" | "run" | "payout" | "outcome";
+export type StatusKind = "claim" | "run" | "payout" | "outcome" | "program";
 export type StatusLabel = { label: string; tone: Tone; known: boolean };
 
 const CLAIM: Record<string, Omit<StatusLabel, "known">> = {
@@ -44,11 +44,18 @@ const OUTCOME: Record<string, Omit<StatusLabel, "known">> = {
   flag: { label: "Flag", tone: "attention" },
 };
 
+const PROGRAM: Record<string, Omit<StatusLabel, "known">> = {
+  draft: { label: "Draft", tone: "neutral" },
+  open: { label: "Open", tone: "progress" },
+  closed: { label: "Closed", tone: "done" },
+};
+
 const TABLES: Record<StatusKind, Record<string, Omit<StatusLabel, "known">>> = {
   claim: CLAIM,
   run: RUN,
   payout: PAYOUT,
   outcome: OUTCOME,
+  program: PROGRAM,
 };
 
 export function statusLabel(kind: StatusKind, value: string | null | undefined): StatusLabel {

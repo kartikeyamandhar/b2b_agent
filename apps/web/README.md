@@ -4,7 +4,8 @@ Next.js 16 App Router, React 19, TypeScript strict, Tailwind 4. Talks only to th
 always from the server: the API has no CORS, and identity is attached server-side. Spec: docs/components/02-ui.md;
 onboarding: docs/onboarding/ui.md.
 
-Status: **Phase 0** (scaffold, API client, proxy, shared components, tests). No product screens yet.
+Status: **Phase 1A**: programs list (`/app/programs`, GET /v1/programs) and program overview
+(`/app/programs/[id]`, GET /v1/programs/{id}), on the Phase 0 scaffold (API client, proxy, shared components).
 
 ## Run
 
@@ -32,9 +33,12 @@ src/lib/api/auth-seam.ts     console identity: dev headers today, Clerk later (c
 src/lib/api/forward.ts       proxy rules: path allowlist, header allowlists (unit-tested)
 src/lib/api/backend.ts       server-side API calls with timeouts and typed errors; apiJson() parses with zod
 src/lib/api/problem.ts       RFC 7807 -> { status, title, detail, correlationId, retryAfterSeconds } + human sentence
-src/lib/status.ts            labels for claim, run, payout, and outcome statuses; unknown values -> "In progress"
+src/lib/api/queries.ts       page loaders returning { ok, data } or { ok: false, problem } (pages render the error state)
+src/lib/status.ts            labels for claim, run, payout, outcome, and program statuses; unknown -> "In progress"
+src/lib/programs.ts          figures derived from Program fields only (filed, awaiting review, corrected)
+src/lib/format.ts            counts, cents, UTC dates, percents
 src/app/api/[...path]/       same-origin proxy for client components: /api/v1/* and /api/portal/* only
-src/components/              AppShell, StatusBadge, ProblemAlert, LoadingState, EmptyState
+src/components/              AppShell, StatusBadge, ProblemAlert, LoadingState, EmptyState, ProgramsTable, ProgramOverview
 tests/                       vitest (node environment; components rendered with react-dom/server)
 ```
 
@@ -54,6 +58,11 @@ tests/                       vitest (node environment; components rendered with 
   `@types/node` 22.20.5 (matches Node 22), `vite` 8.3.4 (vitest 5's peer). Not installed yet: Clerk (component 4),
   Stripe and Supabase (no browser use in the current flows), Playwright (Phase 2).
 - **Toolchain:** the lockfile was written by npm 10.9.4 (the pin), and CI uses Node 22.22.0. Local verification ran on Node 24.15.0.
+
+- **Program figures come from the contract only.** "Claims filed" is every claim past `draft` (an issued link
+  not yet submitted); "Awaiting review" is `flagged + under_review + capped`; "Corrected" is `paid + closed` as a
+  share of `units_affected`, labelled as indicative because the MPR is the authoritative count. Next MPR due,
+  model spend per program, and charts are out of the MVP (no endpoint).
 
 ## Notes for other owners
 
