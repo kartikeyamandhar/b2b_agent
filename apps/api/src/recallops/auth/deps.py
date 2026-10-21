@@ -1,7 +1,7 @@
 """FastAPI dependencies: current_user, current_firm, require_role, and the portal claim token.
 
-The provider is chosen once from AUTH_PROVIDER. Component 4 adds its Clerk provider in build_provider; route
-code only ever sees FirmContext, so nothing else changes.
+The provider is chosen once from AUTH_PROVIDER: dev (X-Dev-* headers) or clerk (component 4, a verified Clerk
+session JWT). Route code only ever sees FirmContext, so nothing else changes.
 """
 
 from __future__ import annotations
@@ -12,10 +12,13 @@ from typing import Annotated
 
 from fastapi import Depends, HTTPException, Request, status
 
+from recallops.auth.clerk import ClerkAuthProvider
 from recallops.auth.dev import DevAuthProvider, DevClaimTokenVerifier
+from recallops.auth.hmac_tokens import HmacClaimTokenVerifier
 from recallops.auth.provider import (
     AuthError,
     AuthProvider,
+    AuthUnavailable,
     ClaimTokenContext,
     ClaimTokenVerifier,
     NoFirmError,
@@ -30,7 +33,7 @@ def build_provider() -> AuthProvider:
     settings = get_settings()
     if settings.auth_provider == "dev":
         return DevAuthProvider(settings)
-    raise NotImplementedError("AUTH_PROVIDER=clerk is supplied by the login owner (component 4)")
+    return ClerkAuthProvider(settings)
 
 
 @lru_cache(maxsize=1)
@@ -38,7 +41,7 @@ def build_claim_verifier() -> ClaimTokenVerifier:
     settings = get_settings()
     if settings.claim_token_provider == "dev":
         return DevClaimTokenVerifier(settings)
-    raise NotImplementedError("CLAIM_TOKEN_PROVIDER=hmac is supplied by the login owner (component 4)")
+    return HmacClaimTokenVerifier(settings)
 
 
 def current_user(request: Request) -> Principal:
@@ -46,6 +49,8 @@ def current_user(request: Request) -> Principal:
         return build_provider().authenticate(dict(request.headers))
     except AuthError as exc:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, str(exc)) from exc
+    except AuthUnavailable as exc:
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, "sign-in verification unavailable") from exc
 
 
 def current_firm(principal: Annotated[Principal, Depends(current_user)]) -> FirmContext:

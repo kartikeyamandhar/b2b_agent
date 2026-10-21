@@ -20,6 +20,11 @@ GRAPH_KEY_MIN_BYTES = 32
 # Photo storage values that must never reach production (the committed defaults and .env.example values).
 EXAMPLE_SUPABASE_URL = "https://example.supabase.co"
 EXAMPLE_SUPABASE_SERVICE_KEY = "fake-service-key"
+# Claim-link signing secret that must never sign real links (the committed default and .env.example value).
+EXAMPLE_CLAIM_TOKEN_SECRET = "ZmFrZS1jbGFpbS10b2tlbi1zZWNyZXQtMzItYnl0ZXM="
+# The JWKS URL older .env.example files carried; like an empty value it means "derive it from CLERK_ISSUER".
+EXAMPLE_CLERK_JWKS_URL = "https://example.clerk.accounts.dev/.well-known/jwks.json"
+EXAMPLE_CLERK_HOST = "example.clerk.accounts.dev"
 LOCAL_HOSTS = frozenset({"localhost", "127.0.0.1", "::1"})
 
 
@@ -56,13 +61,26 @@ class Settings(BaseSettings):
 
     # Auth seam (component 4 replaces the provider).
     auth_provider: Literal["dev", "clerk"] = Field("dev", description="dev reads X-Dev-* headers.")
-    clerk_secret_key: str = Field("sk_test_fake", description="Clerk secret key (login owner).")
+    clerk_secret_key: SecretStr = Field(SecretStr("sk_test_fake"), description="Clerk secret key (login owner).")
     clerk_publishable_key: str = Field("pk_test_fake", description="Clerk publishable key.")
-    clerk_jwks_url: str = Field("https://example.clerk.accounts.dev/.well-known/jwks.json")
+    clerk_jwks_url: str = Field(
+        "", description="Empty: derived from CLERK_ISSUER (<issuer>/.well-known/jwks.json). Set only to override."
+    )
     clerk_allowed_origins: str = Field("http://localhost:3000", description="Comma-separated azp values.")
-    claim_token_secret: str = Field("ZmFrZS1jbGFpbS10b2tlbi1zZWNyZXQtMzItYnl0ZXM=")
+    clerk_issuer: str = Field(
+        "", description="Clerk Frontend API URL, the session token's iss (for example https://x.clerk.accounts.dev)."
+    )
+    claim_token_secret: SecretStr = Field(
+        SecretStr(EXAMPLE_CLAIM_TOKEN_SECRET),
+        description="Base64 of at least 32 random bytes; signs claim links (hmac).",
+    )
     claim_token_provider: Literal["dev", "hmac"] = Field(
         "dev", description="dev: dev.<firm>.<claim> links (development only); hmac: the login owner's signed links."
+    )
+    claim_token_ttl_days: int = Field(90, ge=1, le=90, description="Claim link lifetime (invariant 10: 90 days).")
+    seed_clerk_org_id: str = Field(
+        "",
+        description="make seed binds the demo firm to this Clerk organization id, so AUTH_PROVIDER=clerk reaches it.",
     )
 
     # Payments seam (component 3).
@@ -232,6 +250,42 @@ class Settings(BaseSettings):
     # Campaigns (M5): owner registration uploads.
     registrations_max_bytes: int = Field(5_000_000, description="Largest registrations CSV accepted.")
     registrations_max_rows: int = Field(50_000, description="Rows per registrations CSV.")
+
+    def clerk_keys_url(self) -> str:
+        """The JWKS URL the Clerk provider trusts: CLERK_JWKS_URL when set, else <issuer>/.well-known/jwks.json."""
+        if self.clerk_jwks_url and self.clerk_jwks_url != EXAMPLE_CLERK_JWKS_URL:
+            return self.clerk_jwks_url
+        return f"{self.clerk_issuer.rstrip('/')}/.well-known/jwks.json"
+
+    @model_validator(mode="after")
+    def _login_guards(self) -> Settings:
+        """Claim links are bearer credentials and the JWKS URL is the root of trust for every session, so both are
+        checked like the graph and storage settings (backend review of PR 8). Messages name the variable only."""
+        portal = urlsplit(self.portal_base_url)
+        if not portal.hostname or portal.scheme not in ("http", "https"):
+            raise ValueError("PORTAL_BASE_URL must be an http(s) URL with a host")
+        if portal.username or portal.password or portal.query or portal.fragment:
+            raise ValueError("PORTAL_BASE_URL must not carry credentials, a query, or a fragment (the token follows)")
+        if self.app_env == "prod" and (portal.scheme != "https" or is_local_uri(self.portal_base_url)):
+            raise ValueError("PORTAL_BASE_URL must be the deployed https site in prod")
+        if self.auth_provider != "clerk" or not self.clerk_issuer:
+            return self  # ClerkAuthProvider itself refuses an empty CLERK_ISSUER
+        issuer, keys = urlsplit(self.clerk_issuer), urlsplit(self.clerk_keys_url())
+        for name, part, raw in (
+            ("CLERK_ISSUER", issuer, self.clerk_issuer),
+            ("CLERK_JWKS_URL", keys, self.clerk_keys_url()),
+        ):
+            if not part.hostname or not (part.scheme == "https" or (part.scheme == "http" and is_local_uri(raw))):
+                raise ValueError(f"{name} must be an https URL (http only on localhost)")
+        if keys.hostname != issuer.hostname:
+            raise ValueError("CLERK_JWKS_URL must be on the CLERK_ISSUER host; leave it empty to derive it")
+        if self.app_env == "prod":
+            if issuer.scheme != "https" or is_local_uri(self.clerk_issuer) or issuer.hostname == EXAMPLE_CLERK_HOST:
+                raise ValueError("CLERK_ISSUER must be the real Clerk instance's https Frontend API URL in prod")
+            origins = [o.strip() for o in self.clerk_allowed_origins.split(",") if o.strip()]
+            if not origins or any(urlsplit(o).scheme != "https" or is_local_uri(o) for o in origins):
+                raise ValueError("CLERK_ALLOWED_ORIGINS must list the deployed https origins in prod")
+        return self
 
     @model_validator(mode="after")
     def _graph_guards(self) -> Settings:

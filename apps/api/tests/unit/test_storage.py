@@ -319,6 +319,7 @@ def prod(**values: object) -> Settings:
         "_env_file": None,
         "app_env": "prod",
         "neo4j_uri": "",  # the graph guard is tested elsewhere
+        "portal_base_url": "https://recallops.example/claim",  # so is the portal guard
         "storage_backend": "supabase",
         "supabase_url": URL,
         "supabase_service_key": KEY,

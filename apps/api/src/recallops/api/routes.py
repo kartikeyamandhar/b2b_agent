@@ -209,6 +209,22 @@ def issue_links(program_id: UUID, body: s.IssueRequest, ctx: AdminDep, db: Tenan
     return s.IssueResponse(links=[s.IssuedLink(claim_id=c, url=u) for c, u in links])
 
 
+@firm.post(
+    "/claims/{claim_id}/link",
+    response_model=s.IssuedLink,
+    responses={**NOT_FOUND, **CONFLICT},
+    summary="Reissue one claim's portal link; the previous link stops working (admin)",
+)
+def reissue_link(claim_id: UUID, ctx: AdminDep, db: TenantDb) -> s.IssuedLink:
+    try:
+        url = program_service.reissue_link(db, ctx, get_settings(), build_claim_verifier(), claim_id)
+    except LookupError as exc:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "claim not found") from exc
+    except program_service.Conflict as exc:
+        raise HTTPException(status.HTTP_409_CONFLICT, str(exc)) from exc
+    return s.IssuedLink(claim_id=claim_id, url=url)
+
+
 # Claims
 
 

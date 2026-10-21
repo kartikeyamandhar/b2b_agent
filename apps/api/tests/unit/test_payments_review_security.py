@@ -73,7 +73,9 @@ def test_stripe_secrets_are_masked_and_still_scanned_for_live_keys() -> None:
 
 
 def _prod(**values: Any) -> Settings:
-    return Settings.model_validate({"app_env": "prod", "neo4j_uri": "", **values})
+    return Settings.model_validate(
+        {"app_env": "prod", "neo4j_uri": "", "portal_base_url": "https://recallops.example/claim", **values}
+    )
 
 
 def test_prod_payments_need_deployed_return_urls_and_prices() -> None:

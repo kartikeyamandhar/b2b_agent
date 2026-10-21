@@ -19,8 +19,9 @@ Read CLAUDE.md first. Invariants 2 and 10 govern this component.
 
 ## 3. Backend verification (apps/api)
 
-- Dependency `current_user` verifies the Clerk session JWT: fetch JWKS from the Clerk instance (cached 1 hour, refresh on kid miss), verify RS256 signature, exp, nbf, azp against allowed origins, and iss. Reject anything else with 401.
-- Dependency `current_firm`: reads org id and org role from the token claims (o.id and o.rol in Clerk's current token shape; confirm the claim names against the pinned @clerk/backend version at phase 0 and record them in the decisions log). Resolves firms by clerk_org_id (creating on first sight). Returns a FirmContext {firm_id, user_id, role}. No organization in the token -> 403 with a problem detail that the UI turns into the create-organization flow.
+- Dependency `current_user` verifies the Clerk session JWT: fetch JWKS from the Clerk instance (cached 1 hour, refresh on kid miss), verify RS256 signature, exp, nbf, azp against allowed origins (when the token carries azp), and iss. Reject anything else with 401. When the keys cannot be fetched (Clerk unreachable), answer 503 "sign-in verification unavailable", never 401, so the UI retries instead of signing the user out. The keys URL is `<CLERK_ISSUER>/.well-known/jwks.json` unless CLERK_JWKS_URL names another path on the same host.
+- Dependency `current_firm`: reads org id and org role from the token claims (o.id and o.rol in Clerk's current token shape; confirm the claim names against the pinned @clerk/backend version at phase 0 and record them in the decisions log). Resolves firms by clerk_org_id (creating on first sight). Returns a FirmContext {firm_id, user_id, role}. No organization in the token -> 403 with a problem detail that the UI turns into the create-organization flow. A role other than admin or reviewer (Clerk's default org:member) -> 403 "your organization role has no access: ask an admin for org:admin or org:reviewer", and no firm is created.
+  Confirmed 2026-10-20: session token v2 carries `o: {id, rol, slg}` with `rol` unprefixed (`admin`); v1 carried `org_id`, `org_role` (`org:admin`) and `org_slug`. `auth/clerk.py` reads both shapes and strips `org:`. First-sight creation goes through the SECURITY DEFINER function `recallops_firm_for_clerk_org` (migration 0007), because the API role never bypasses RLS.
 - Role guard: `require_role("admin")` for billing, member, and program deletion routes.
 - Every repository method takes FirmContext, not a raw firm id, so a route cannot accidentally pass a body-supplied id.
 
@@ -34,8 +35,9 @@ Proof: tests/test_tenancy.py creates two firms, inserts rows for each, and asser
 
 ## 5. Consumer claim tokens (invariant 10)
 
-- Format: base64url of claim_id plus expiry plus HMAC-SHA256 over both with a server secret. Stored as token_hash (sha256) on the claim; the raw token appears only in the issued link.
-- Expiry 90 days from issue; a program close invalidates all its tokens (status check in the dependency).
+- Format (as built, 2026-10-20): 96 characters of unpadded base64url over firm id (16 bytes), claim id (16), expiry in Unix seconds (8), and HMAC-SHA256 over those 40 bytes (32) with CLAIM_TOKEN_SECRET. Stored as token_hash (sha256) on the claim; the raw token appears only in the issued link, `<PORTAL_BASE_URL>/<token>`.
+- Expiry 90 days from issue (CLAIM_TOKEN_TTL_DAYS, at most 90); a program close invalidates all its tokens (status check in the dependency).
+- Reissue: POST /v1/claims/{claim_id}/link (admin) returns a fresh link and rotates token_hash, so the previous link stops working. This is the answer to a lost, leaked, or expired link (a claim still open at day 90) and what a campaign sender calls at send time to fill a draft's {claim_link}. Refused with 409 on a closed program and on a paid or closed claim; audited as claim_link_reissued with `rotated`. A token is a function of firm, claim, and expiry second, so a reissue within the same second, or under the dev verifier, returns the same link (`rotated: false`).
 - Single claim per token. A token cannot be used to create a second claim.
 - Rate limits (in-process token bucket keyed by token and by IP, backed by a small table so limits survive restarts): 60 requests per hour per token, 10 photo uploads per hour per token, 300 requests per hour per IP on /portal/*. Over limit -> 429 with Retry-After.
 - Token in the URL path; never in a query string that could be logged by proxies; portal pages set Referrer-Policy: no-referrer.
@@ -48,7 +50,9 @@ Write audit_log for: program create, rules edit, program status change, reviewer
 ## 7. Secrets and configuration
 
 - CLERK_SECRET_KEY, CLERK_PUBLISHABLE_KEY, CLERK_JWKS_URL, CLERK_ALLOWED_ORIGINS, CLAIM_TOKEN_SECRET (32 random bytes, base64), DATABASE_URL (request role), DATABASE_URL_INTERNAL (bypass role), all documented in .env.example with fake values.
-- Startup refuses to boot if CLAIM_TOKEN_SECRET is the example value.
+- Startup refuses to boot if CLAIM_TOKEN_SECRET decodes to the example key (in any base64 spelling) or to fewer than 32 bytes.
+- CLERK_ISSUER (the Frontend API URL, equal to the token's iss), PORTAL_BASE_URL, and SEED_CLERK_ORG_ID (development: `make seed` binds the demo firm to that organization). In prod, settings refuse an http, localhost, or example CLERK_ISSUER, empty or non-https CLERK_ALLOWED_ORIGINS, and a non-https or localhost PORTAL_BASE_URL. CLERK_SECRET_KEY and CLAIM_TOKEN_SECRET are masked in logs and errors.
+- The API sends no CORS headers: the browser reaches it through the Next.js server, so CLERK_ALLOWED_ORIGINS is the azp allow-list, not a CORS list. Uvicorn's access log is off in deploy (`--no-access-log`), because a portal path is a bearer token; the API's own request log redacts it.
 
 ## 8. Tests
 

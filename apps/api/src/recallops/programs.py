@@ -229,6 +229,39 @@ def _rules_hash(program: RecallProgram) -> str:
     return hashlib.sha256(body.encode()).hexdigest()[:16]
 
 
+REISSUE_REFUSED = ("paid", "closed")
+
+
+def reissue_link(
+    session: Session, ctx: FirmContext, settings: Settings, verifier: ClaimTokenVerifier, claim_id: UUID
+) -> str:
+    """A fresh link for one existing claim; the old link stops working at once (claims.token_hash rotates).
+
+    Signed links expire after CLAIM_TOKEN_TTL_DAYS and are not stored, so this is how a firm reaches a claimant whose
+    link is lost, expired, or leaked (it doubles as revocation), and how a campaign sender gets the link for a
+    draft's {claim_link}. Refused on a closed program and on a paid or closed claim (backend review of PR 8).
+    A signed link is a function of the firm, the claim, and its expiry second, so a reissue within the second of
+    the last issue, or any reissue under the dev verifier, returns the same link; the audit row says which."""
+    claim = session.scalars(
+        select(Claim).where(Claim.firm_id == ctx.firm_id, Claim.id == claim_id).with_for_update()
+    ).first()
+    if claim is None:
+        raise LookupError("claim not found")
+    program = session.get(RecallProgram, claim.program_id)
+    if program is None or program.status == "closed":
+        raise Conflict("the program is closed: its claim links stay dead")
+    if claim.status in REISSUE_REFUSED:
+        raise Conflict(f"the claim is {claim.status}: there is nothing left for the claimant to do")
+    token = verifier.issue(ctx.firm_id, claim.id)
+    new_hash = verifier.token_hash(token)
+    rotated = new_hash != claim.token_hash
+    claim.token_hash = new_hash
+    session.flush()
+    _audit(session, ctx, "claim_link_reissued", str(claim.id), None, {"status": claim.status, "rotated": rotated})
+    log_event(log, "claim_link_reissued", firm_id=str(ctx.firm_id), claim_id=str(claim.id), rotated=rotated)
+    return f"{settings.portal_base_url.rstrip('/')}/{token}"
+
+
 def issue_links(
     session: Session, ctx: FirmContext, settings: Settings, verifier: ClaimTokenVerifier, program: RecallProgram, n: int
 ) -> list[tuple[UUID, str]]:
