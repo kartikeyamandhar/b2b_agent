@@ -96,9 +96,10 @@ class Settings(BaseSettings):
     stripe_claim_price_id: str = ""
     stripe_meter_event_name: str = "recallops_claims"
     stripe_portal_configuration_id: str = ""
-    billing_return_url: str = "http://localhost:8000/dev/console#payouts"
-    connect_return_url: str = "http://localhost:8000/dev/console#connect-return"
-    connect_refresh_url: str = "http://localhost:8000/dev/console#connect-refresh"
+    # The console and the portal in apps/web (PR 9); the dev console handles these routes no more.
+    billing_return_url: str = "http://localhost:3000/app/billing/return"
+    connect_return_url: str = "http://localhost:3000/claim/connect-return"
+    connect_refresh_url: str = "http://localhost:3000/claim/connect-refresh"
     payment_poll_s: float = Field(30.0, gt=0)
     free_open_programs: int = Field(1, ge=1)
     free_claims_per_month: int = Field(100, ge=1)
@@ -245,6 +246,12 @@ class Settings(BaseSettings):
         le=3,
         description="Proxies in front of the API that append to X-Forwarded-For (Render: 1). The client is the entry "
         "that many places from the right; 0 trusts no header and uses the socket peer.",
+    )
+    web_proxy_secret: SecretStr = Field(
+        SecretStr(""),
+        description="Shared with the web app (RECALLOPS_WEB_PROXY_SECRET). Every portal call reaches the API from the "
+        "web server, so the web server names the claimant's address in X-RecallOps-Client-IP; the API believes that "
+        "header only beside this secret. Empty: the header is ignored. Required in prod (the API refuses to start).",
     )
 
     # Campaigns (M5): owner registration uploads.

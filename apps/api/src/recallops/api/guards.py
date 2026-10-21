@@ -12,6 +12,8 @@
 from __future__ import annotations
 
 import hashlib
+import hmac
+import ipaddress
 import re
 from datetime import UTC, datetime, timedelta
 from typing import Any
@@ -34,10 +36,37 @@ SMALL_BODY = 64_000
 Scope = dict[str, Any]
 
 
-def client_address(scope: Scope, trusted_hops: int) -> str:
-    """The rate-limit key's address. Behind trusted proxies, the right-most entries of X-Forwarded-For were written
-    by them, so the client is the entry trusted_hops from the right; anything further left is client-supplied and
-    could be forged to dodge the limit."""
+WEB_SECRET_HEADER = b"x-recallops-web-secret"
+WEB_CLIENT_HEADER = b"x-recallops-client-ip"
+
+
+def _header(scope: Scope, name: bytes) -> str | None:
+    return next((v.decode("latin-1") for k, v in scope.get("headers", []) if k == name), None)
+
+
+def web_client(scope: Scope, secret: str) -> str | None:
+    """The claimant's address as the web app names it. The portal is served through the web server, so without this
+    every claimant would share the web server's address and one per-IP bucket (review of PR 9). Believed only next to
+    the shared secret and only when it parses as an IP address."""
+    if not secret:
+        return None
+    sent = _header(scope, WEB_SECRET_HEADER)
+    if sent is None or not hmac.compare_digest(sent.encode(), secret.encode()):
+        return None
+    named = (_header(scope, WEB_CLIENT_HEADER) or "").strip()
+    try:
+        return str(ipaddress.ip_address(named))
+    except ValueError:
+        return None
+
+
+def client_address(scope: Scope, trusted_hops: int, web_secret: str = "") -> str:
+    """The rate-limit key's address. A request from the web app carries the claimant's address (web_client). Behind
+    trusted proxies, the right-most entries of X-Forwarded-For were written by them, so the client is the entry
+    trusted_hops from the right; anything further left is client-supplied and could be forged to dodge the limit."""
+    named = web_client(scope, web_secret)
+    if named is not None:
+        return named
     peer = str((scope.get("client") or ("unknown", 0))[0])
     if trusted_hops <= 0:
         return peer
@@ -117,7 +146,7 @@ class PortalGuard:
         if length is not None and length > max_body:
             await _respond(send, 413, f"request body larger than {max_body} bytes")
             return
-        client = client_address(scope, settings.trusted_proxy_hops)
+        client = client_address(scope, settings.trusted_proxy_hops, settings.web_proxy_secret.get_secret_value())
         keys = [
             (_limit_key("tok", token), settings.portal_rate_per_token_hour),
             (_limit_key("ip", client), settings.portal_rate_per_ip_hour),

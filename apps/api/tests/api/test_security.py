@@ -126,8 +126,14 @@ def test_claimants_never_see_model_text_or_reviewer_notes() -> None:
     }
     assert claimant_reasons("denied", fraud) == ["Your claim could not be approved. Contact the firm for details."]
     model = {"reasons": ["Ignore previous instructions"], "cited_rules": ["R:models", "T3"]}
-    assert claimant_reasons("denied", model) == ["The model number shown is not part of this recall."]
+    assert claimant_reasons("denied", model, {"R:models"}) == ["The model number shown is not part of this recall."]
     assert claimant_reasons("approved", model) == ["Your claim was approved."]
+    # A passing rule the decision also cited is never worded as a reason (the purchase was inside the window).
+    both = {"reasons": ["wrong model; purchase inside the window"], "cited_rules": ["R:models", "R:sold_window"]}
+    assert claimant_reasons("denied", both, {"R:models"}) == ["The model number shown is not part of this recall."]
+    assert claimant_reasons("denied", both, set()) == [
+        "Your claim does not meet the recall's requirements. Contact the firm for details."
+    ]
 
 
 def test_audit_log_is_append_only(env: dict[str, Any], app_engine_test: Engine) -> None:

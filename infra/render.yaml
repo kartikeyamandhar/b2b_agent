@@ -55,6 +55,8 @@ services:
         sync: false
       - key: CLERK_PUBLISHABLE_KEY
         sync: false
+      - key: WEB_PROXY_SECRET   # the same value as the web app's RECALLOPS_WEB_PROXY_SECRET (32+ characters)
+        sync: false
       - key: PORTAL_BASE_URL   # the deployed site's claim page, for example https://<app>.vercel.app/claim
         sync: false
       - key: CLERK_JWKS_URL   # optional: leave unset to derive it from CLERK_ISSUER
@@ -133,4 +135,60 @@ services:
       - key: SUPABASE_SERVICE_KEY
         sync: false
       - key: PORTAL_BASE_URL   # the same value as the API's; prod settings refuse the localhost default
+        sync: false
+  # Scheduled jobs (decisions log: the billing and Connect jobs had no scheduled home). They use the BYPASSRLS
+  # role like the worker, so they run as their own services, never inside the web process. Render bills cron jobs by
+  # the minute on a paid plan; without them, usage is not reported to Stripe, Connect refunds are not sent, and
+  # check batches are made only when an admin presses "Create export batch" in the console.
+  - type: cron
+    name: recallops-payment-jobs
+    runtime: python
+    rootDir: apps/api
+    plan: starter
+    schedule: "*/10 * * * *"
+    buildCommand: pip install uv==0.11.21 && uv sync --frozen
+    startCommand: PYTHONPATH=src uv run --frozen python -m recallops.billing.jobs && PYTHONPATH=src uv run --frozen python -m recallops.payouts.stripe_connect
+    envVars:
+      - key: APP_ENV
+        value: prod
+      - key: PYTHON_VERSION
+        value: "3.13"
+      - key: DATABASE_URL_INTERNAL
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: PORTAL_BASE_URL
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_PUBLISHABLE_KEY
+        sync: false
+      - key: STRIPE_PROGRAM_PRICE_ID
+        sync: false
+      - key: STRIPE_CLAIM_PRICE_ID
+        sync: false
+      - key: BILLING_RETURN_URL
+        sync: false
+      - key: CONNECT_RETURN_URL
+        sync: false
+      - key: CONNECT_REFRESH_URL
+        sync: false
+  - type: cron
+    name: recallops-check-export
+    runtime: python
+    rootDir: apps/api
+    plan: starter
+    schedule: "30 6 * * *"
+    buildCommand: pip install uv==0.11.21 && uv sync --frozen
+    startCommand: PYTHONPATH=src uv run --frozen python -m recallops.payouts.export
+    envVars:
+      - key: APP_ENV
+        value: prod
+      - key: PYTHON_VERSION
+        value: "3.13"
+      - key: DATABASE_URL_INTERNAL
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: PORTAL_BASE_URL
         sync: false
