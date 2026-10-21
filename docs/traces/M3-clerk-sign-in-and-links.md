@@ -48,6 +48,8 @@ The request log writes `/portal/<token>` for every portal path. It never holds t
 
 A token is a function of firm, claim, and expiry second. A reissue in the same second therefore returns the link the caller already holds. The audit row records `rotated: false`, so revocation never silently claims success.
 
+The first CI run of this test (GitHub Actions, 2026-10-21 03:50 UTC) recorded `rotated: true` for both reissues: on the slower runner, the issue and the first reissue fell in different seconds. The test assumed they shared one, which was a timing bug in the test, not in the route. The test now drives the link verifier's clock (it holds still for the same-second case and moves 5 s for the rotation) instead of sleeping, so both outcomes are exercised on any machine.
+
 ## Close
 
 | t (ms) | event | answer |

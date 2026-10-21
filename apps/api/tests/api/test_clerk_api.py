@@ -20,6 +20,7 @@ from recallops import seed
 from recallops.auth import clerk as clerk_module
 from recallops.auth import deps
 from recallops.auth.clerk import ClerkAuthProvider, ClerkPrincipal
+from recallops.auth.hmac_tokens import HmacClaimTokenVerifier
 from recallops.settings import Settings, get_settings
 from tests.conftest import CLEAN_ORDER
 
@@ -30,6 +31,20 @@ ORIGIN = "http://localhost:3000"
 PORTAL = "http://localhost:3000/claim"
 KID = "ins_e2e"
 KEY = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+
+
+class Clock:
+    """The links' clock: a token's expiry is in whole seconds, so tests move time instead of sleeping (a slow CI
+    runner crossed a second boundary between an issue and a reissue that a sleep-free test assumed were together)."""
+
+    def __init__(self) -> None:
+        self.now = time.time()
+
+    def __call__(self) -> float:
+        return self.now
+
+
+CLOCK = Clock()
 
 
 class _SigningKey:
@@ -60,10 +75,13 @@ def _clear() -> None:
 
 @pytest.fixture(scope="module")
 def world(internal_engine_test: Engine, app_engine_test: Engine) -> Iterator[dict[str, Any]]:
-    real_init = ClerkAuthProvider.__init__
+    real_init, real_links = ClerkAuthProvider.__init__, HmacClaimTokenVerifier.__init__
 
     def stub_keys(self: ClerkAuthProvider, settings: Settings, jwks_client: Any = None, engine: Any = None) -> None:
         real_init(self, settings, jwks_client=StubJwks(), engine=engine)
+
+    def test_clock(self: HmacClaimTokenVerifier, settings: Settings, clock: Any = None) -> None:
+        real_links(self, settings, clock=CLOCK)
 
     with pytest.MonkeyPatch.context() as mp:
         for key, value in {
@@ -78,6 +96,7 @@ def world(internal_engine_test: Engine, app_engine_test: Engine) -> Iterator[dic
         }.items():
             mp.setenv(key, value)
         mp.setattr(clerk_module.ClerkAuthProvider, "__init__", stub_keys)
+        mp.setattr(HmacClaimTokenVerifier, "__init__", test_clock)
         _clear()
         try:
             with internal_engine_test.begin() as conn:
@@ -150,8 +169,8 @@ def test_a_reissued_link_replaces_the_old_one(world: dict[str, Any]) -> None:
     assert c.post(f"/v1/claims/{claim_id}/link", headers=session("org_demo", "reviewer")).status_code == 403
     assert c.post(f"/v1/claims/{claim_id}/link", headers=session("org_other")).status_code == 404
     assert c.post(f"/v1/claims/{uuid4()}/link", headers=session("org_demo")).status_code == 404
-    same = c.post(f"/v1/claims/{claim_id}/link", headers=session("org_demo"))  # within the issuing second
-    time.sleep(1.05)  # the expiry is in whole seconds
+    same = c.post(f"/v1/claims/{claim_id}/link", headers=session("org_demo"))  # the issuing second: same token
+    CLOCK.now += 5
     response = c.post(f"/v1/claims/{claim_id}/link", headers=session("org_demo"))
     assert same.status_code == response.status_code == 200 and response.json()["claim_id"] == claim_id
     new = response.json()["url"].removeprefix(PORTAL + "/")
