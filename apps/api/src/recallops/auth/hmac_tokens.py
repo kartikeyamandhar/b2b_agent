@@ -38,9 +38,11 @@ def _decode_secret(raw: str) -> bytes:
 
 class HmacClaimTokenVerifier:
     def __init__(self, settings: Settings, clock: Callable[[], float] = time.time) -> None:
-        if settings.claim_token_secret == EXAMPLE_CLAIM_TOKEN_SECRET:
+        secret = _decode_secret(settings.claim_token_secret.get_secret_value())
+        # Compare the key, not its spelling: base64 ignores the unused low bits of the last character, so several
+        # strings decode to the published example key (backend review of PR 8).
+        if hmac.compare_digest(secret, base64.b64decode(EXAMPLE_CLAIM_TOKEN_SECRET)):
             raise UnsafeClaimTokenSecret("CLAIM_TOKEN_SECRET is the example value; generate 32 random bytes")
-        secret = _decode_secret(settings.claim_token_secret)
         if len(secret) < MIN_SECRET_BYTES:
             raise UnsafeClaimTokenSecret(f"CLAIM_TOKEN_SECRET must decode to at least {MIN_SECRET_BYTES} bytes")
         self._secret = secret

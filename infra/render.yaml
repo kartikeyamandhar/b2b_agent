@@ -1,10 +1,12 @@
 # Render blueprint for the backend (CLAUDE.md layout: infra/ holds render.yaml only). Not applied by this repository:
 # deploying needs accounts and secrets only the owner creates (decisions log 2026-10-18).
 #
-# APP_ENV=prod on purpose: the dev auth provider and dev claim tokens refuse to load in prod, so the API fails closed
-# until the login owner's Clerk provider and HMAC claim tokens land (component 4). Never deploy with APP_ENV=dev: the
-# dev provider trusts request headers. The API uses only DATABASE_URL (recallops_app, RLS enforced); the worker is a
-# separate service holding DATABASE_URL_INTERNAL, so the web process never has the BYPASSRLS role (invariant 2).
+# APP_ENV=prod on purpose: the dev auth provider and dev claim tokens refuse to load in prod, so the API runs only with
+# the Clerk provider and HMAC claim links (component 4), and prod settings refuse example, localhost, or plain-http
+# Clerk, portal, and payment values (both services load them, so both need PORTAL_BASE_URL). Never deploy with
+# APP_ENV=dev: the dev provider trusts request headers. The API uses only DATABASE_URL (recallops_app, RLS enforced);
+# the worker is a separate service holding DATABASE_URL_INTERNAL, so the web process never has the BYPASSRLS role
+# (invariant 2).
 # Render's free tier has no background workers: the worker service needs a paid instance type, or run it elsewhere.
 # The health check is /healthz: /readyz reports a degraded graph or a stale worker but must not restart the API.
 services:
@@ -14,7 +16,9 @@ services:
     rootDir: apps/api
     plan: free
     buildCommand: pip install uv==0.11.21 && uv sync --frozen
-    startCommand: PYTHONPATH=src uv run --frozen uvicorn recallops.api.app:app --host 0.0.0.0 --port $PORT
+    # --no-access-log: a claim link's token is in the URL path, so uvicorn's access log would write every claimant's
+    # credential to the log stream (the app's own request log redacts it; backend review of PR 8).
+    startCommand: PYTHONPATH=src uv run --frozen uvicorn recallops.api.app:app --host 0.0.0.0 --port $PORT --no-access-log
     healthCheckPath: /healthz
     envVars:
       - key: APP_ENV
@@ -51,7 +55,9 @@ services:
         sync: false
       - key: CLERK_PUBLISHABLE_KEY
         sync: false
-      - key: CLERK_JWKS_URL
+      - key: PORTAL_BASE_URL   # the deployed site's claim page, for example https://<app>.vercel.app/claim
+        sync: false
+      - key: CLERK_JWKS_URL   # optional: leave unset to derive it from CLERK_ISSUER
         sync: false
       - key: CLERK_ISSUER
         sync: false
@@ -125,4 +131,6 @@ services:
       - key: SUPABASE_URL
         sync: false
       - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: PORTAL_BASE_URL   # the same value as the API's; prod settings refuse the localhost default
         sync: false

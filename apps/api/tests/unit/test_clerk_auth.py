@@ -60,7 +60,11 @@ class StubbedClerk(ClerkAuthProvider):
 
 def settings() -> Settings:
     return Settings(
-        auth_provider="clerk", claim_token_provider="hmac", clerk_issuer=ISSUER, clerk_allowed_origins=ORIGIN
+        auth_provider="clerk",
+        claim_token_provider="hmac",
+        clerk_issuer=ISSUER,
+        clerk_jwks_url="",  # derived from the issuer, whatever the local .env holds
+        clerk_allowed_origins=ORIGIN,
     )
 
 
@@ -206,3 +210,34 @@ def test_role_guard_matrix_over_http(client: TestClient) -> None:
     assert client.get("/any", headers=no_org).status_code == 403
     assert client.get("/any").status_code == 401
     assert client.get("/any", headers=bearer("not.a.jwt")).status_code == 401
+
+
+class DownJwks:
+    def get_signing_key_from_jwt(self, token: str) -> _SigningKey:
+        raise jwt.PyJWKClientConnectionError("Fail to fetch data from the url, err: timed out")
+
+
+def test_a_keys_outage_answers_503_not_401(monkeypatch: pytest.MonkeyPatch) -> None:
+    """A 401 tells the UI to sign the user out; a Clerk JWKS outage is ours to retry (backend review of PR 8)."""
+    down = ClerkAuthProvider(settings(), jwks_client=DownJwks())
+    monkeypatch.setattr(deps, "build_provider", lambda: down)
+    app = FastAPI()
+
+    @app.get("/any")
+    def any_member(ctx: deps.FirmDep) -> dict[str, str]:
+        return {"role": ctx.role}
+
+    response = TestClient(app).get("/any", headers=bearer(token()))
+    assert response.status_code == 503
+    assert response.json()["detail"] == "sign-in verification unavailable"
+    assert "timed out" not in response.text
+
+
+def test_a_member_role_is_told_why_and_never_resolves_a_firm(client: TestClient, provider: StubbedClerk) -> None:
+    member = bearer(token(claims(o={"id": "org_123", "rol": "org:member"})))
+    no_org = bearer(token(claims(o=None)))
+    member_answer, no_org_answer = client.get("/any", headers=member), client.get("/any", headers=no_org)
+    assert member_answer.status_code == no_org_answer.status_code == 403
+    assert "org:admin or org:reviewer" in member_answer.json()["detail"]
+    assert "no active organization" in no_org_answer.json()["detail"]
+    assert provider.resolved == []

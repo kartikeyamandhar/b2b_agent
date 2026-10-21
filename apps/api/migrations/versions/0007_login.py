@@ -15,16 +15,16 @@ depends_on = None
 
 UP = r"""
 CREATE FUNCTION recallops_firm_for_clerk_org(org_id text, org_name text) RETURNS uuid
-LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = pg_catalog AS $$
 DECLARE
     found_id uuid;
 BEGIN
     IF org_id IS NULL OR length(org_id) = 0 OR length(org_id) > 128 THEN
         RAISE EXCEPTION 'invalid Clerk organization id';
     END IF;
-    INSERT INTO firms (name, clerk_org_id) VALUES (left(coalesce(nullif(org_name, ''), org_id), 200), org_id)
+    INSERT INTO public.firms (name, clerk_org_id) VALUES (left(coalesce(nullif(org_name, ''), org_id), 200), org_id)
         ON CONFLICT (clerk_org_id) DO NOTHING;
-    SELECT id INTO found_id FROM firms WHERE clerk_org_id = org_id;
+    SELECT id INTO found_id FROM public.firms WHERE clerk_org_id = org_id;
     RETURN found_id;
 END $$;
 REVOKE ALL ON FUNCTION recallops_firm_for_clerk_org(text, text) FROM PUBLIC;

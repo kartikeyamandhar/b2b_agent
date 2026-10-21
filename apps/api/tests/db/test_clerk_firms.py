@@ -4,6 +4,9 @@ outside its context."""
 
 from __future__ import annotations
 
+import threading
+from uuid import UUID
+
 import pytest
 from sqlalchemy import Engine, text
 
@@ -15,7 +18,9 @@ pytestmark = pytest.mark.db
 
 
 def provider(engine: Engine) -> ClerkAuthProvider:
-    settings = Settings(auth_provider="clerk", clerk_issuer="https://test-instance.clerk.accounts.dev")
+    settings = Settings(
+        auth_provider="clerk", clerk_issuer="https://test-instance.clerk.accounts.dev", clerk_jwks_url=""
+    )
     return ClerkAuthProvider(settings, jwks_client=object(), engine=engine)
 
 
@@ -61,3 +66,33 @@ def test_the_app_role_sees_no_firm_without_context_and_the_function_is_not_publi
             text("SELECT has_function_privilege('public', 'recallops_firm_for_clerk_org(text, text)', 'EXECUTE')")
         ).scalar_one()
     assert public is False
+
+
+def test_concurrent_first_sign_ins_create_one_firm(clean_db: Engine, app_engine_test: Engine) -> None:
+    """Twelve processes see the organization for the first time at once (no shared cache): one firm, one member row
+    per user, no errors (ON CONFLICT in the resolver function; backend review of PR 8)."""
+    n = 12
+    barrier, lock = threading.Barrier(n), threading.Lock()
+    results: list[object] = []
+
+    def sign_in(i: int) -> None:
+        mine = provider(app_engine_test)
+        barrier.wait()
+        try:
+            out: object = mine.firm_context(principal("org_race", f"user_{i % 3}", "admin")).firm_id
+        except Exception as exc:  # noqa: BLE001 - every failure is collected and asserted below
+            out = exc
+        with lock:
+            results.append(out)
+
+    threads = [threading.Thread(target=sign_in, args=(i,)) for i in range(n)]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join(timeout=30)
+    assert [r for r in results if not isinstance(r, UUID)] == []
+    assert len(set(results)) == 1 and len(results) == n
+    with clean_db.connect() as conn:
+        assert conn.scalar(text("SELECT count(*) FROM firms WHERE clerk_org_id = 'org_race'")) == 1
+        members = conn.execute(text("SELECT clerk_user_id FROM firm_members ORDER BY 1")).scalars().all()
+    assert members == ["user_0", "user_1", "user_2"]

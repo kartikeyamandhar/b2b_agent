@@ -164,7 +164,8 @@ LINK_PLACEHOLDER = "{claim_link}"
 
 def render(recall: Recall | None, reg: Registration, channel: str, link: str = LINK_PLACEHOLDER) -> tuple[str, str]:
     """Stored drafts carry the placeholder, never the link: the link holds the claim token, which the system keeps
-    only as a hash (invariant 10). A real sender substitutes a link issued at send time."""
+    only as a hash (invariant 10). A real sender substitutes a link issued at send time with
+    POST /v1/claims/{claim_id}/link (programs.reissue_link), which also replaces the link discarded here."""
     title = recall.title if recall else "Product safety recall"
     hazard = _section(recall.source_text, "HAZARD") if recall else ""
     remedy = _section(recall.source_text, "REMEDY") if recall else ""

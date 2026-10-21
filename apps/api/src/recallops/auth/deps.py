@@ -18,6 +18,7 @@ from recallops.auth.hmac_tokens import HmacClaimTokenVerifier
 from recallops.auth.provider import (
     AuthError,
     AuthProvider,
+    AuthUnavailable,
     ClaimTokenContext,
     ClaimTokenVerifier,
     NoFirmError,
@@ -48,6 +49,8 @@ def current_user(request: Request) -> Principal:
         return build_provider().authenticate(dict(request.headers))
     except AuthError as exc:
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, str(exc)) from exc
+    except AuthUnavailable as exc:
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, "sign-in verification unavailable") from exc
 
 
 def current_firm(principal: Annotated[Principal, Depends(current_user)]) -> FirmContext:
