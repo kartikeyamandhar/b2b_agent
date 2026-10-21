@@ -1,0 +1,10 @@
+{
+  "items": [
+    { "id": "66dcc492-086f-5b59-b441-cbe001eb2e0b", "program_id": "0874f66f-bfb5-552b-bd93-6266f49c1d5a", "status": "flagged", "outcome": "flag", "routed_to_human": true, "model_claimed": "TL1302Z", "retailer_claimed": "Amazon.com", "purchase_date": "2026-03-01", "refund_cents": 5600, "created_at": "2026-10-16T22:40:04.120Z", "decided_at": "2026-10-16T22:40:04.135Z" },
+    { "id": "7a1e0c2d-3b4f-5a6b-8c9d-0e1f2a3b4c5d", "program_id": "0874f66f-bfb5-552b-bd93-6266f49c1d5a", "status": "approved", "outcome": "approve", "routed_to_human": true, "model_claimed": "TL1302Z", "retailer_claimed": "Walmart", "purchase_date": "2026-02-11", "refund_cents": 4400, "created_at": "2026-10-16T22:41:00.000Z", "decided_at": "2026-10-17T09:15:00.000Z" },
+    { "id": "8b2f1d3e-4c5a-6b7c-9d0e-1f2a3b4c5d6e", "program_id": "0874f66f-bfb5-552b-bd93-6266f49c1d5a", "status": "needs_info", "outcome": "needs_info", "routed_to_human": false, "model_claimed": null, "retailer_claimed": "<img src=x onerror=alert(1)>", "purchase_date": null, "refund_cents": null, "created_at": "2026-10-16T22:42:00.000Z", "decided_at": "2026-10-16T22:42:01.000Z" },
+    { "id": "9c3a2e4f-5d6b-7c8d-0e1f-2a3b4c5d6e7f", "program_id": "0874f66f-bfb5-552b-bd93-6266f49c1d5a", "status": "submitted", "outcome": null, "routed_to_human": false, "model_claimed": "TL901X", "retailer_claimed": null, "purchase_date": null, "refund_cents": 5600, "created_at": "2026-10-20T08:00:00.000Z", "decided_at": null },
+    { "id": "ad4b3f5a-6e7c-8d9e-1f2a-3b4c5d6e7f80", "program_id": "0874f66f-bfb5-552b-bd93-6266f49c1d5a", "status": "archived", "outcome": "escalate", "routed_to_human": false, "model_claimed": null, "retailer_claimed": null, "purchase_date": null, "refund_cents": null, "created_at": "2026-10-20T08:01:00.000Z", "decided_at": null }
+  ],
+  "next_cursor": "MjAyNi0xMC0yMFQwODowMTowMCswMDowMHxhZDRiM2Y1YS02ZTdjLThkOWUtMWYyYS0zYjRjNWQ2ZTdmODA="
+}

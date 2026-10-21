@@ -1,8 +1,11 @@
+import Link from "next/link";
 import type { ReactNode } from "react";
 
 import type { Program } from "@/lib/api-types";
 import { NOT_STATED, formatCents, formatCount, formatDate, formatPercent } from "@/lib/format";
+import { isClaimStatus, queueHref } from "@/lib/claims";
 import { programMetrics, remedyLabel, statusRows } from "@/lib/programs";
+import { statusLabel } from "@/lib/status";
 
 import { StatusBadge } from "./StatusBadge";
 
@@ -54,6 +57,12 @@ export function ProgramOverview({ program }: { program: Program }) {
       <div className="flex flex-wrap items-center gap-3">
         <h1 className="text-lg font-semibold">{program.title}</h1>
         <StatusBadge kind="program" value={program.status} />
+        <Link
+          href={queueHref(program.id, { status: null, cursor: null })}
+          className="ml-auto rounded border border-accent px-2 py-1 text-xs font-medium text-accent hover:bg-panel"
+        >
+          Open claims queue
+        </Link>
       </div>
 
       <dl className="mt-4 grid grid-cols-2 gap-4 rounded border border-line p-4 sm:grid-cols-3 lg:grid-cols-6">
@@ -88,7 +97,13 @@ export function ProgramOverview({ program }: { program: Program }) {
               {statusRows(program.claim_counts).map((r) => (
                 <tr key={r.status} className="border-b border-line last:border-b-0" data-status-row={r.status}>
                   <th scope="row" className="px-3 py-1.5 text-left font-normal">
-                    <StatusBadge kind="claim" value={r.status} />
+                    {isClaimStatus(r.status) ? (
+                      <Link href={queueHref(program.id, { status: r.status, cursor: null })} aria-label={`Show ${statusLabel("claim", r.status).label} claims`}>
+                        <StatusBadge kind="claim" value={r.status} />
+                      </Link>
+                    ) : (
+                      <StatusBadge kind="claim" value={r.status} />
+                    )}
                   </th>
                   <td className="px-3 py-1.5 text-right tabular-nums">{formatCount(r.count)}</td>
                   <td className="px-3 py-1.5 text-right tabular-nums text-ink-muted">{formatPercent(r.shareOfFiled)}</td>

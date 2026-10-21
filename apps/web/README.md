@@ -4,8 +4,9 @@ Next.js 16 App Router, React 19, TypeScript strict, Tailwind 4. Talks only to th
 always from the server: the API has no CORS, and identity is attached server-side. Spec: docs/components/02-ui.md;
 onboarding: docs/onboarding/ui.md.
 
-Status: **Phase 1A**: programs list (`/app/programs`, GET /v1/programs) and program overview
-(`/app/programs/[id]`, GET /v1/programs/{id}), on the Phase 0 scaffold (API client, proxy, shared components).
+Status: **Phase 1B**: programs list (`/app/programs`), program overview (`/app/programs/[id]`), and the claims
+queue (`/app/programs/[id]/claims`, GET /v1/programs/{id}/claims with status filter, keyset cursor, and polling),
+on the Phase 0 scaffold (API client, proxy, shared components). Claim rows link to `/app/claims/[id]` (Phase 1C).
 
 ## Run
 
@@ -36,9 +37,13 @@ src/lib/api/problem.ts       RFC 7807 -> { status, title, detail, correlationId,
 src/lib/api/queries.ts       page loaders returning { ok, data } or { ok: false, problem } (pages render the error state)
 src/lib/status.ts            labels for claim, run, payout, outcome, and program statuses; unknown -> "In progress"
 src/lib/programs.ts          figures derived from Program fields only (filed, awaiting review, corrected)
-src/lib/format.ts            counts, cents, UTC dates, percents
+src/lib/format.ts            counts, cents, UTC dates and times, percents
+src/lib/claims.ts            queue URL state, API path, review classification
+src/lib/api/client.ts        browser fetch through /api, validated with zod
+src/lib/queries/             react-query options (queue polling)
 src/app/api/[...path]/       same-origin proxy for client components: /api/v1/* and /api/portal/* only
-src/components/              AppShell, StatusBadge, ProblemAlert, LoadingState, EmptyState, ProgramsTable, ProgramOverview
+src/components/              AppShell, StatusBadge, ProblemAlert, LoadingState, EmptyState, ProgramsTable, ProgramOverview,
+                             ClaimsQueue (client), ClaimsTable, QueueControls (filter, review summary, pager)
 tests/                       vitest (node environment; components rendered with react-dom/server)
 ```
 
@@ -63,6 +68,15 @@ tests/                       vitest (node environment; components rendered with 
   not yet submitted); "Awaiting review" is `flagged + under_review + capped`; "Corrected" is `paid + closed` as a
   share of `units_affected`, labelled as indicative because the MPR is the authoritative count. Next MPR due,
   model spend per program, and charts are out of the MVP (no endpoint).
+- **Claims queue.** The server renders the first page (it works without JavaScript); in the browser, react-query
+  polls the page and the program's counts every 10 s through `/api`, skips ticks while the tab is hidden, refreshes
+  as soon as it is shown, and keeps the last good page on screen when a poll fails (no retry bursts; the next tick
+  retries). Filters and pages are URL state (`?status=&cursor=`); a filter change returns to page one. The cursor is
+  forward-only (keyset), so the pager offers "Next page" and "First page"; the browser's Back button returns to the
+  previous page. A `?status=` outside the contract or a cursor the API could not have issued is dropped before the
+  call, with a note. Claims in `flagged`, `under_review`, or `capped` carry a marker and the text "Needs a
+  reviewer", and their statuses lead the filter chips. The table shows "Created", not "Submitted": `ClaimSummary`
+  has `created_at` and `decided_at` but no `submitted_at`.
 
 ## Notes for other owners
 
@@ -81,5 +95,7 @@ tests/                       vitest (node environment; components rendered with 
   `closed_at`, and `Trace.steps[0]` has no `thought`. The API itself serializes nulls, so this does not affect
   runtime; `tests/api-types.test.ts` tolerates exactly these two gaps and asks for the entry to be removed when they
   are fixed.
+- `GET /v1/programs/{id}/claims` answers 400 "invalid cursor" for a cursor it cannot decode, but the contract lists
+  only 401, 403, 404, and 422 for that route. The UI handles the 400; the contract could list it.
 - The packages listed above under "beyond the pin list" need a decisions-log entry if the pin list is meant to cover
   apps/web devDependencies.

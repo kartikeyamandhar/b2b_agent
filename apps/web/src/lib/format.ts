@@ -26,3 +26,22 @@ export function formatDate(value: string | null | undefined): string {
 export function formatPercent(ratio: number | null): string {
   return ratio === null ? "—" : PERCENT.format(ratio);
 }
+
+const DATE_TIME = new Intl.DateTimeFormat("en-US", {
+  dateStyle: "medium",
+  timeStyle: "short",
+  hourCycle: "h23",
+  timeZone: "UTC",
+});
+const TIME = new Intl.DateTimeFormat("en-US", { timeStyle: "medium", hourCycle: "h23", timeZone: "UTC" });
+
+/** Queue ages matter, so timestamps keep the time; always UTC, labelled. */
+export function formatDateTime(value: string | null | undefined): string {
+  if (!value) return "—";
+  const d = new Date(value);
+  return Number.isNaN(d.getTime()) ? value : `${DATE_TIME.format(d)} UTC`;
+}
+
+export function formatClock(ms: number): string {
+  return `${TIME.format(new Date(ms))} UTC`;
+}
