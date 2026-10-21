@@ -1,5 +1,6 @@
 // Same-origin proxy to the API for client components (react-query polling, uploads, actions). The API has no
 // CORS, and identity must be attached on the server; see src/lib/api/forward.ts for the rules.
+import { NotSignedIn } from "@/lib/api/auth-seam";
 import { upstream } from "@/lib/api/backend";
 import { ConfigError } from "@/lib/api/config";
 import {
@@ -44,6 +45,9 @@ async function handle(request: Request, context: Context): Promise<Response> {
     if (err instanceof ApiError) {
       const p = err.problem;
       return webProblem(p.status, p.title, p.detail ?? "", p.correlationId ?? requestId);
+    }
+    if (err instanceof NotSignedIn) {
+      return webProblem(401, "Unauthorized", "sign in to continue", requestId);
     }
     if (err instanceof ConfigError) {
       console.error(JSON.stringify({ level: "error", event: "web_proxy_config_error", request_id: requestId, error: err.message }));

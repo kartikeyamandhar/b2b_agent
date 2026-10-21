@@ -4,6 +4,7 @@ import { ClaimDetail, ClaimPage, PortalView, Program, ProgramList, Trace } from 
 import { isPlausibleToken, portalPath } from "@/lib/portal";
 import { claimsApiPath, type QueueParams } from "@/lib/claims";
 
+import { NotSignedIn } from "./auth-seam";
 import { apiJson } from "./backend";
 import { ConfigError, type Env } from "./config";
 import { ApiError, type ApiProblem } from "./problem";
@@ -17,6 +18,9 @@ async function load<T>(run: () => Promise<T>): Promise<Loaded<T>> {
     return { ok: true, data: await run() };
   } catch (err) {
     if (err instanceof ApiError) return { ok: false, problem: err.problem };
+    if (err instanceof NotSignedIn) {
+      return { ok: false, problem: { status: 401, title: "Unauthorized", detail: err.message, correlationId: null, retryAfterSeconds: null } };
+    }
     if (err instanceof ConfigError) {
       return {
         ok: false,

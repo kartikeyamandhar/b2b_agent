@@ -32,7 +32,9 @@ npm run dev                     # http://localhost:3000 (the API's PORTAL_BASE_U
 scripts/gen-api.mjs          contract -> zod generator (no third-party codegen dependency)
 src/lib/api-types.ts         GENERATED zod schemas and types; never edit by hand
 src/lib/api/config.ts        server settings (RECALLOPS_API_URL, timeout)
-src/lib/api/auth-seam.ts     console identity: dev headers today, Clerk later (component 4 swaps this one function)
+src/lib/api/auth-seam.ts     console identity: the Clerk session token (clerk) or the dev headers (dev); else fail closed
+src/lib/auth/                Clerk mode rules (routes, matcher, roles, console access) and the server-side session lookup
+src/proxy.ts                 Next 16 proxy: clerkMiddleware on the console in Clerk mode; never on /claim or /api/portal
 src/lib/api/forward.ts       proxy rules: path allowlist, header allowlists (unit-tested)
 src/lib/api/backend.ts       server-side API calls with timeouts and typed errors; apiJson() parses with zod
 src/lib/api/problem.ts       RFC 7807 -> { status, title, detail, correlationId, retryAfterSeconds } + human sentence
@@ -65,6 +67,16 @@ tests/                       vitest (node environment; components rendered with 
   `x-request-id`, which the API uses as its `correlation_id`.
 - **Lenient responses, strict requests.** Generated response schemas keep unknown fields and accept unknown enum
   values (CHANGES.md item 5). Schemas used only in request bodies are strict and keep the contract's limits.
+- **Clerk sign-in (RECALLOPS_WEB_AUTH=clerk).** `src/proxy.ts` runs `clerkMiddleware` on everything except
+  `/claim/*`, `/api/portal/*`, and static files, and redirects a visitor without a session from `/app/*` and
+  `/organization` to `/sign-in`. Console API calls go through `/api/v1/*`, where `auth-seam.ts` reads the session on
+  the server and sends `Authorization: Bearer <session token>`; without a session the route answers 401 and never calls
+  the API, and the browser's own `Authorization` and `X-Dev-*` headers are always dropped. The console layout sends a
+  user with no organization to `/organization` (create or select one) and stops a role other than `org:admin` or
+  `org:reviewer` before any data loads, mirroring the backend's 403s. The organization switcher and user menu sit in
+  the shell header, and the console's query cache is keyed by organization. `ClerkProvider` wraps only the console,
+  sign-in, sign-up, and organization pages, so the claimant portal never loads Clerk. Keyless mode and telemetry are
+  off. The token never reaches browser JavaScript: every console call runs on the Next server.
 - **Dev auth fails closed.** The console gets an identity only with `RECALLOPS_WEB_AUTH=dev`, a UUID firm id, and an
   `admin` or `reviewer` role, and never when `VERCEL_ENV=production`. None of the settings is `NEXT_PUBLIC_`.
 - **Packages beyond the CLAUDE.md pin list**, pinned exactly because the pinned stack cannot build or test without
@@ -112,14 +124,10 @@ tests/                       vitest (node environment; components rendered with 
 ## Notes for other owners
 
 **Login owner (component 4)**
-- Next.js 16.4.2 deprecates `middleware.ts` in favour of **`proxy.ts`**. The installed build warns "The
-  "middleware" file convention is deprecated. Please use "proxy" instead" and refuses a project that has both.
-  `.github/CODEOWNERS` assigns `/apps/web/src/middleware.ts` to you; `/apps/web/src/proxy.ts` needs the same
-  entry, which is a backend-owned file. This component created neither file.
-- The console identity seam is `consoleAuthHeaders()` in `src/lib/api/auth-seam.ts` (it sits outside
-  `src/lib/auth/` so it does not touch your paths). Replace its body with the Clerk session token, or point it at
-  your `apiFetch` helper. Everything else in apps/web calls through it. `ClerkProvider` slots into
-  `src/app/layout.tsx` (marked), and `/claim/*` must stay outside Clerk.
+- The browser half of Clerk is built in apps/web by the UI owner (2026-10-21), against the backend half from PR #8.
+  `.github/CODEOWNERS` still routes `/apps/web/src/middleware.ts`, `src/lib/auth/`, and the sign-in and sign-up pages
+  to the login owner; Next 16 uses `src/proxy.ts` instead of `middleware.ts`, so that entry needs updating (a
+  backend-owned file).
 
 **Payments owner and whoever runs the backend (component 3, operations)**
 - Point the Connect return and refresh settings at the portal: `CONNECT_RETURN_URL=http://localhost:3000/claim/connect-return`
@@ -142,5 +150,8 @@ tests/                       vitest (node environment; components rendered with 
   `decided_by`) and forbids extras, so `hold_reason`, `reopened_from`, `duplicate_found_later`, `duplicates_ack`, and
   `question_for_claimant` (CHANGES.md item 6) never reach the UI. The console keys reviewer actions on the claim
   status as the contract says, but cannot show why an `under_review` claim is held or that a claim was reopened.
+- Clerk pins: `@clerk/nextjs` 7.9.17 (CLAUDE.md) resolved `@clerk/backend` 3.26.0, `@clerk/shared` 4.41.0, and
+  `@clerk/react` 6.18.0, all published 2026-10-20. package.json `overrides` hold them at 3.25.0 (the CLAUDE.md pin),
+  4.40.0, and 6.17.8, the releases current when 7.9.17 shipped.
 - The packages listed above under "beyond the pin list" need a decisions-log entry if the pin list is meant to cover
   apps/web devDependencies.

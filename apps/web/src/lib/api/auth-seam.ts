@@ -1,10 +1,11 @@
-// The single place console requests get their identity. Today: the backend's dev provider headers
-// (AUTH_PROVIDER=dev). The login owner (component 4) replaces consoleAuthHeaders with the Clerk session token;
-// nothing else in apps/web reads identity. This file is UI-owned scaffolding, deliberately outside
-// src/lib/auth/ (login-owned in CODEOWNERS).
-//
-// The firm and role come from server settings only, never from the browser: forward.ts drops any X-Dev-* or
-// Authorization header a client sends.
+// The single place console requests get their identity, on the server only.
+// - clerk: the signed-in user's Clerk session token as Authorization: Bearer (the organization and role travel inside
+//   the token, CHANGES.md 19a). No session means NotSignedIn: the request fails closed with a 401.
+// - dev: the backend's dev provider headers (AUTH_PROVIDER=dev), never in production.
+// - anything else: ConfigError. The browser never chooses an identity: forward.ts drops X-Dev-* and Authorization.
+import { clerkSessionToken } from "@/lib/auth/clerk-session";
+import { missingClerkSettings, webAuthMode } from "@/lib/auth/mode";
+
 import { ConfigError, type Env } from "./config";
 
 export type ConsoleRole = "admin" | "reviewer";
@@ -15,15 +16,20 @@ export type ConsoleIdentity = {
   userId: string;
 };
 
+/** No Clerk session on a console request. */
+export class NotSignedIn extends Error {
+  constructor() {
+    super("sign in to continue");
+    this.name = "NotSignedIn";
+  }
+}
+
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /** Fails closed: anything but an explicit, well-formed dev configuration throws. */
 export function devIdentity(env: Env = process.env): ConsoleIdentity {
-  const mode = env.RECALLOPS_WEB_AUTH;
-  if (mode !== "dev") {
-    throw new ConfigError(
-      "console auth is not configured: set RECALLOPS_WEB_AUTH=dev for local development (Clerk is component 4)",
-    );
+  if (webAuthMode(env) !== "dev") {
+    throw new ConfigError("console auth is not configured for development headers: set RECALLOPS_WEB_AUTH=dev or clerk");
   }
   if (env.VERCEL_ENV === "production") {
     throw new ConfigError("the dev auth seam refuses to run in a production deployment");
@@ -37,7 +43,23 @@ export function devIdentity(env: Env = process.env): ConsoleIdentity {
   return { firmId, role, userId };
 }
 
-export async function consoleAuthHeaders(env: Env = process.env): Promise<Record<string, string>> {
-  const id = devIdentity(env);
-  return { "X-Dev-Firm-Id": id.firmId, "X-Dev-Role": id.role, "X-Dev-User-Id": id.userId };
+export type SessionTokenSource = () => Promise<string | null>;
+
+export async function consoleAuthHeaders(
+  env: Env = process.env,
+  sessionToken: SessionTokenSource = clerkSessionToken,
+): Promise<Record<string, string>> {
+  const mode = webAuthMode(env);
+  if (mode === "clerk") {
+    const missing = missingClerkSettings(env);
+    if (missing.length) throw new ConfigError(`Clerk mode needs ${missing.join(" and ")}`);
+    const token = await sessionToken();
+    if (!token) throw new NotSignedIn();
+    return { Authorization: `Bearer ${token}` };
+  }
+  if (mode === "dev") {
+    const id = devIdentity(env);
+    return { "X-Dev-Firm-Id": id.firmId, "X-Dev-Role": id.role, "X-Dev-User-Id": id.userId };
+  }
+  throw new ConfigError("console auth is not configured: set RECALLOPS_WEB_AUTH=clerk (or dev for local development)");
 }

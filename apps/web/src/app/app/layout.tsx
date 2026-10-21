@@ -1,27 +1,38 @@
 import type { ReactNode } from "react";
 
 import { AppShell } from "@/components/AppShell";
+import { ClerkConsole } from "@/components/ClerkConsole";
 import { devIdentity } from "@/lib/api/auth-seam";
 import { ConfigError } from "@/lib/api/config";
+import { missingClerkSettings, webAuthMode } from "@/lib/auth/mode";
 
 import { Providers } from "./providers";
 
 export const dynamic = "force-dynamic";
 
-function identityNote(): string {
+/** Console gate. Clerk mode: a session (the proxy already redirects), an active organization, and a role the backend accepts. */
+export default async function ConsoleLayout({ children }: { children: ReactNode }) {
+  const mode = webAuthMode(process.env);
+
+  if (mode === "clerk") {
+    const missing = missingClerkSettings(process.env);
+    if (missing.length) {
+      return <AppShell identityNote={`Console auth not configured: Clerk mode needs ${missing.join(" and ")}`}>{null}</AppShell>;
+    }
+    return <ClerkConsole>{children}</ClerkConsole>;
+  }
+
+  let note: string;
   try {
     const id = devIdentity();
-    return `Development auth · firm ${id.firmId} · ${id.role}`;
+    note = `Development auth · firm ${id.firmId} · ${id.role}`;
   } catch (err) {
-    if (err instanceof ConfigError) return `Console auth not configured: ${err.message}`;
-    throw err;
+    if (!(err instanceof ConfigError)) throw err;
+    note = `Console auth not configured: ${err.message}`;
   }
-}
-
-export default function ConsoleLayout({ children }: { children: ReactNode }) {
   return (
     <Providers>
-      <AppShell identityNote={identityNote()}>{children}</AppShell>
+      <AppShell identityNote={note}>{children}</AppShell>
     </Providers>
   );
 }
