@@ -1,16 +1,19 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type Ref } from "react";
 
 import { ClaimDetail } from "@/lib/api-types";
 import { sendJson } from "@/lib/api/client";
 import { ApiError, type ApiProblem } from "@/lib/api/problem";
 import {
   ACTION_LABEL,
+  NOTE_LIMIT,
   actionAvailability,
+  actionProblemSentence,
   actionResultMessage,
   buildAction,
   isActionAvailable,
+  isReviewQueued,
   type ActionKind,
 } from "@/lib/claim-detail";
 
@@ -29,10 +32,49 @@ const CONFIRM_HINT: Record<ActionKind, string> = {
   mark_delivered: "Record that the repair or replacement reached the claimant. The claim closes.",
 };
 
+/** The note or question box, capped at what the backend keeps (NOTE_LIMIT) with a visible count. */
+export function ActionNote({ kind, message, onChange, ref }: { kind: ActionKind; message: string; onChange: (v: string) => void; ref?: Ref<HTMLTextAreaElement> }) {
+  const limit = NOTE_LIMIT[kind];
+  return (
+    <>
+      <label className="grid gap-1 text-xs">
+        {kind === "request_info" ? "Question for the claimant (required)" : "Note for the audit trail (optional)"}
+        <textarea
+          ref={ref}
+          value={message}
+          onChange={(e) => onChange(e.target.value)}
+          rows={2}
+          maxLength={limit}
+          required={kind === "request_info"}
+          aria-describedby="claim-action-note-count"
+          className="rounded border border-line bg-surface p-1 text-sm"
+        />
+      </label>
+      <p id="claim-action-note-count" className={`text-xs ${message.length > limit ? "text-danger-ink" : "text-ink-muted"}`} data-note-count>
+        {message.length} of {limit} characters{kind === "request_info" ? ". The claimant reads this on their claim page." : "."}
+      </p>
+    </>
+  );
+}
+
 export type ActionDone = { updated: ClaimDetail; message: string; appliedByWorker: boolean; before: string };
 
-/** Reviewer actions with an inline confirmation step (no browser dialogs). Availability follows review.py. */
-export function ReviewerActions({ claim, onDone }: { claim: ClaimDetail; onDone: (r: ActionDone) => void }) {
+/**
+ * Reviewer actions with an inline confirmation step (no browser dialogs). Availability follows review.py.
+ * `pending`: a review is queued for the worker, so every action and shortcut waits (the API would answer 409).
+ * `onAlreadyQueued`: the API said a review is already queued (another tab or reviewer), so the page can wait for it.
+ */
+export function ReviewerActions({
+  claim,
+  onDone,
+  pending = false,
+  onAlreadyQueued,
+}: {
+  claim: ClaimDetail;
+  onDone: (r: ActionDone) => void;
+  pending?: boolean;
+  onAlreadyQueued?: () => void;
+}) {
   const availability = actionAvailability(claim);
   const [kind, setKind] = useState<ActionKind | null>(null);
   const [message, setMessage] = useState("");
@@ -50,7 +92,7 @@ export function ReviewerActions({ claim, onDone }: { claim: ClaimDetail; onDone:
         return;
       }
       const k = actionForKey(shortcutKey(e));
-      if (!k || availability.blocked || !isActionAvailable(k, availability) || busy) return;
+      if (!k || pending || availability.blocked || !isActionAvailable(k, availability) || busy) return;
       e.preventDefault();
       setKind(k);
       setError(null);
@@ -58,14 +100,14 @@ export function ReviewerActions({ claim, onDone }: { claim: ClaimDetail; onDone:
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [availability, kind, busy]);
+  }, [availability, kind, busy, pending]);
 
   useEffect(() => {
     if (kind) noteRef.current?.focus();
   }, [kind]);
 
   async function confirm() {
-    if (!kind) return;
+    if (!kind || pending) return;
     const built = buildAction(kind, message);
     if (!built.ok) {
       setError(built.error);
@@ -85,7 +127,14 @@ export function ReviewerActions({ claim, onDone }: { claim: ClaimDetail; onDone:
       setKind(null);
       setMessage("");
     } catch (err) {
-      setProblem(err instanceof ApiError ? err.problem : { status: 500, title: "Error", detail: null, correlationId: null, retryAfterSeconds: null });
+      const p: ApiProblem = err instanceof ApiError ? err.problem : { status: 500, title: "Error", detail: null, correlationId: null, retryAfterSeconds: null };
+      if (isReviewQueued(p) && onAlreadyQueued) {
+        // The page waits for that review instead; the pending note below says so.
+        setKind(null);
+        onAlreadyQueued();
+      } else {
+        setProblem(p);
+      }
     } finally {
       setBusy(false);
     }
@@ -99,27 +148,33 @@ export function ReviewerActions({ claim, onDone }: { claim: ClaimDetail; onDone:
         </p>
       ) : (
         <>
+          {pending ? (
+            <p role="status" className="mb-2 text-sm text-ink-muted" data-review-pending>
+              A review is queued for this claim. Actions open again when the worker has applied it.
+            </p>
+          ) : null}
           <div className="flex flex-wrap gap-1.5" role="group" aria-label="Choose an action">
             {KINDS.filter((k) => isActionAvailable(k, availability)).map((k) => (
               <button
                 key={k}
                 type="button"
                 data-action={k}
+                disabled={pending}
                 aria-pressed={kind === k}
                 onClick={() => {
                   setKind(k);
                   setError(null);
                   setProblem(null);
                 }}
-                className={`rounded-md border px-3 py-1.5 text-sm font-medium focus-visible:outline-2 focus-visible:outline-copper ${
+                className={`rounded-md border px-3 py-1.5 text-sm font-medium focus-visible:outline-2 focus-visible:outline-brand ${
                   kind === k
-                    ? "border-copper bg-copper-soft text-ink ring-1 ring-copper"
+                    ? "border-brand bg-brand-soft text-ink ring-1 ring-brand"
                     : k === "approve"
                       ? "border-accent bg-accent text-bg hover:opacity-90"
                       : k === "mark_fraud" || k === "deny"
                         ? "border-danger/40 bg-surface text-danger-ink hover:bg-danger-soft"
                         : "border-line-strong bg-surface text-ink hover:border-ink"
-                } hover:opacity-90`}
+                } hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50`}
               >
                 {ACTION_LABEL[k]}
               </button>
@@ -131,7 +186,7 @@ export function ReviewerActions({ claim, onDone }: { claim: ClaimDetail; onDone:
           {availability.appliedByWorker ? (
             <p className="mt-2 text-xs text-ink-muted">The run is paused for review: the worker resumes it with your decision.</p>
           ) : null}
-          {kind ? (
+          {kind && !pending ? (
             <form
               className="mt-3 grid gap-2 rounded border border-line bg-panel p-2"
               onSubmit={(e) => {
@@ -140,18 +195,7 @@ export function ReviewerActions({ claim, onDone }: { claim: ClaimDetail; onDone:
               }}
             >
               <p className="text-sm">{CONFIRM_HINT[kind]}</p>
-              <label className="grid gap-1 text-xs">
-                {kind === "request_info" ? "Question for the claimant (required)" : "Note for the audit trail (optional)"}
-                <textarea
-                  ref={noteRef}
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  rows={2}
-                  maxLength={1000}
-                  required={kind === "request_info"}
-                  className="rounded border border-line bg-surface p-1 text-sm"
-                />
-              </label>
+              <ActionNote ref={noteRef} kind={kind} message={message} onChange={setMessage} />
               {error ? (
                 <p role="alert" className="text-xs text-warn-ink">
                   {error}
@@ -171,7 +215,7 @@ export function ReviewerActions({ claim, onDone }: { claim: ClaimDetail; onDone:
       )}
       {problem ? (
         <div className="mt-2">
-          <ProblemAlert problem={problem} />
+          <ProblemAlert problem={problem} sentence={actionProblemSentence(problem)} showDetail={actionProblemSentence(problem) === undefined} />
         </div>
       ) : null}
     </Panel>

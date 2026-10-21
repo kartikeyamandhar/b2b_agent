@@ -1,10 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
-// Self-hosted variable fonts (OFL-1.1, from npm): no request to a font CDN at build or run time.
-import "@fontsource-variable/dm-sans";
-import "@fontsource-variable/newsreader";
-
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -13,7 +9,8 @@ export const metadata: Metadata = {
 };
 export const viewport: Viewport = { width: "device-width", initialScale: 1 };
 
-// ClerkProvider wraps the console here once component 4 lands; the claim portal stays outside Clerk.
+// No ClerkProvider here: ClerkShell provides Clerk per section (the console through ClerkConsole, and the sign-in,
+// sign-up, and organization pages), and only in Clerk mode, so the claim portal never loads Clerk.
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">

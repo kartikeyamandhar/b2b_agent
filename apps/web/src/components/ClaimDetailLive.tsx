@@ -2,11 +2,25 @@
 
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import type { ClaimDetail, Trace } from "@/lib/api-types";
 import { ApiError } from "@/lib/api/problem";
-import { duplicateHits, needsReviewer, readingsByPhotoKind } from "@/lib/claim-detail";
+import {
+  FIRST_RUN_WATCH_MS,
+  REVIEW_STILL_WAITING,
+  REVIEW_WAIT_MS,
+  RUN_STILL_WAITING,
+  WAIT_POLL_MS,
+  duplicateHits,
+  needsReviewer,
+  pollDeadline,
+  readingsByPhotoKind,
+  reviewSettled,
+  startReviewWait,
+  waitsForWorker,
+  type ReviewWait,
+} from "@/lib/claim-detail";
 import { shortId } from "@/lib/claims";
 import { formatDateTime } from "@/lib/format";
 import { claimDetailQuery, traceQuery } from "@/lib/queries/claim";
@@ -17,8 +31,18 @@ import { ReissueLink } from "./ReissueLink";
 import { ReviewerActions, type ActionDone } from "./ReviewerActions";
 import { StatusBadge } from "./StatusBadge";
 
-/** How long the page keeps polling after an action the worker must apply. */
-const AWAIT_WORKER_MS = 60_000;
+const CHECK_AGAIN = "rounded-md border border-line-strong bg-surface px-2.5 py-1 text-xs font-medium text-ink hover:border-ink";
+
+/** Fires once at `until` (and again when `until` moves). */
+function useExpiry(until: number | null): boolean {
+  const [expiredAt, setExpiredAt] = useState<number | null>(null);
+  useEffect(() => {
+    if (until === null) return;
+    const t = setTimeout(() => setExpiredAt(until), Math.max(0, until - Date.now()));
+    return () => clearTimeout(t);
+  }, [until]);
+  return until !== null && expiredAt === until;
+}
 
 export function ClaimDetailLive({
   initialClaim,
@@ -35,37 +59,61 @@ export function ClaimDetailLive({
 }) {
   const id = initialClaim.id;
   const client = useQueryClient();
-  const awaitingUntil = useRef(0);
-  const [flash, setFlash] = useState<{ text: string; waitingFrom: string | null } | null>(null);
+  const [flash, setFlash] = useState<string | null>(null);
+  // A review queued for the worker: actions wait and the page polls until it is applied (or the window ends).
+  const [review, setReview] = useState<ReviewWait | null>(null);
+  // A claim with no decided run yet: the page checks for the worker's run for a while after it loads.
+  const [runWatchUntil, setRunWatchUntil] = useState(() => loadedAt + FIRST_RUN_WATCH_MS);
 
-  const claimQ = useQuery({ ...claimDetailQuery(id, () => awaitingUntil.current), initialData: initialClaim, initialDataUpdatedAt: loadedAt });
+  // The query callbacks read the claim and trace from the cache, so they see the response that just arrived.
+  const deadline = () =>
+    pollDeadline(review?.until ?? 0, runWatchUntil, client.getQueryData<ClaimDetail>(["claim", id]) ?? initialClaim, client.getQueryData<Trace | null>(["trace", id]));
+  const claimQ = useQuery({ ...claimDetailQuery(id, deadline), initialData: initialClaim, initialDataUpdatedAt: loadedAt });
   const traceQ = useQuery({
-    ...traceQuery(id, () => (Date.now() < awaitingUntil.current ? 2_000 : false)),
+    ...traceQuery(id, () => (Date.now() < deadline() ? WAIT_POLL_MS : false)),
     initialData: initialTrace,
     initialDataUpdatedAt: loadedAt,
   });
   const claim = claimQ.data;
   const trace = traceQ.data ?? null;
+  const reviewOver = useExpiry(review?.until ?? null);
+  const waitingForRun = waitsForWorker(claim, trace) && claim.run?.status !== "running";
+  const runWatchOver = useExpiry(waitingForRun ? runWatchUntil : null);
 
-  // The worker applied a queued review: the status moved away from the one the action saw.
+  // The worker dealt with the queued review: the status moved, or the paused run moved on.
   useEffect(() => {
-    if (flash?.waitingFrom && claim.status !== flash.waitingFrom) {
-      awaitingUntil.current = 0;
-      setFlash({ text: `The worker applied the review. The status went from ${flash.waitingFrom} to ${claim.status}.`, waitingFrom: null });
+    if (!review) return;
+    const settled = reviewSettled(review, claim);
+    if (settled) {
+      setReview(null);
+      setFlash(settled);
     }
-  }, [claim.status, flash]);
+  }, [claim, review]);
 
   const onDone = useCallback(
     (r: ActionDone) => {
       client.setQueryData(["claim", id], r.updated);
       const waiting = r.appliedByWorker && r.updated.status === r.before;
-      if (waiting) awaitingUntil.current = Date.now() + AWAIT_WORKER_MS;
-      setFlash({ text: r.message, waitingFrom: waiting ? r.before : null });
+      setReview(waiting ? startReviewWait(r.updated, Date.now()) : null);
+      setFlash(r.message);
       void client.invalidateQueries({ queryKey: ["claim", id] });
       void client.invalidateQueries({ queryKey: ["trace", id] });
     },
     [client, id],
   );
+
+  // Another tab or reviewer already queued a review: wait for it the same way.
+  const onAlreadyQueued = useCallback(() => {
+    setReview(startReviewWait(claim, Date.now()));
+    setFlash("A review is already queued for this claim. This page refreshes until the worker applies it.");
+  }, [claim]);
+
+  const checkAgain = (what: "review" | "run") => {
+    if (what === "review") setReview((w) => (w ? { ...w, until: Date.now() + REVIEW_WAIT_MS } : w));
+    else setRunWatchUntil(Date.now() + FIRST_RUN_WATCH_MS);
+    void claimQ.refetch();
+    void traceQ.refetch();
+  };
 
   const pollError = claimQ.error instanceof ApiError ? claimQ.error.problem : null;
 
@@ -98,9 +146,16 @@ export function ClaimDetailLive({
         </p>
       ) : null}
 
-      {flash ? (
-        <p role="status" className="rounded-lg border border-copper/40 border-l-4 border-l-copper bg-copper-soft px-4 py-3 text-sm" data-flash>
-          {flash.text}
+      {review && reviewOver ? (
+        <div role="status" className="flex flex-wrap items-center gap-3 rounded-lg border border-warn/40 border-l-4 border-l-warn bg-warn-soft px-4 py-3 text-sm text-warn-ink" data-review-waiting>
+          <p className="min-w-0 flex-1">{REVIEW_STILL_WAITING}</p>
+          <button type="button" onClick={() => checkAgain("review")} className={CHECK_AGAIN}>
+            Check again
+          </button>
+        </div>
+      ) : flash ? (
+        <p role="status" className="rounded-lg border border-brand/40 border-l-4 border-l-brand bg-brand-soft px-4 py-3 text-sm" data-flash>
+          {flash}
         </p>
       ) : null}
       {pollError ? (
@@ -119,7 +174,7 @@ export function ClaimDetailLive({
         </div>
         <div className="order-first grid min-w-0 grid-cols-1 content-start gap-4 lg:order-none">
           <DecisionPanel claimId={claim.id} decision={claim.decision} decidedAt={claim.decided_at} />
-          <ReviewerActions claim={claim} onDone={onDone} />
+          <ReviewerActions claim={claim} onDone={onDone} pending={review !== null} onAlreadyQueued={onAlreadyQueued} />
           <PayoutPanel payout={claim.payout} remedy={claim.remedy} />
           <FraudPanel claimId={claim.id} clusters={claim.clusters} hits={duplicateHits(trace)} programId={claim.program_id} />
           <ReissueLink claimId={claim.id} status={claim.status} canAdmin={canAdmin} programStatus={programStatus} onDone={() => void claimQ.refetch()} />
@@ -134,6 +189,22 @@ export function ClaimDetailLive({
             ) : (
               <p className="text-sm text-ink-muted">Not adjudicated yet.</p>
             )}
+            {waitingForRun ? (
+              runWatchOver ? (
+                <div className="mt-2 grid gap-2 text-xs text-warn-ink" data-run-watch="stopped">
+                  <p>{RUN_STILL_WAITING}</p>
+                  <div>
+                    <button type="button" onClick={() => checkAgain("run")} className={CHECK_AGAIN}>
+                      Check again
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <p className="mt-2 text-xs text-ink-muted" data-run-watch="polling">
+                  Waiting for the worker. This page checks every few seconds.
+                </p>
+              )
+            ) : null}
           </Panel>
         </div>
       </div>

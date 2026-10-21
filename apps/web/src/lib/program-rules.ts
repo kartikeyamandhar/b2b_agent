@@ -1,7 +1,9 @@
 // Program settings (PATCH /v1/programs/{id}): the rule editor's form model, its conversion back to the contract's
 // rule shapes, and which lifecycle moves the backend allows (programs.py patch_program). Pure functions, so the
 // rules are unit-tested; the API still validates every field (rules/schemas.py, extra="forbid").
-import { ProgramPatch, type IdentificationRules, type Program, type RemedyRules } from "@/lib/api-types";
+import { ProgramPatch, type IdentificationRules, type Program, type RemedyOption, type RemedyRules } from "@/lib/api-types";
+import { countOf } from "@/lib/format";
+import { remedyLabel } from "@/lib/programs";
 
 export type SerialRow = { raw: string; prefix: string; start: string; end: string };
 export type DateCodeRow = { raw: string; format: string; start: string; end: string };
@@ -85,10 +87,53 @@ const orNull = (v: string): string | null => (v.trim() ? v.trim() : null);
 export type FieldErrors = Partial<Record<keyof RulesDraft, string>>;
 export type RulesResult = { ok: true; patch: ProgramPatch } | { ok: false; errors: FieldErrors };
 
+const SINGLE_REMEDIES: readonly string[] = ["refund", "repair", "replacement"];
+
+export type RemedyOptionsResult =
+  | { ok: true; changed: boolean; options: RemedyOption[] }
+  | { ok: false; error: string };
+
 /**
- * The draft as a PATCH body. Fields the editor does not show (evidence spans, remedy options, units affected, and
- * any field a newer contract adds) are carried over from the program unchanged, because PATCH replaces each rules
- * object whole.
+ * The remedy options to save with a remedy chosen in the editor. The backend takes a claim's remedy from the first
+ * option and asks for a destruction photo or a receipt when any option lists one (portal.py submit,
+ * claims/tools/checks.py), so options left as extracted would quietly override a new remedy.
+ *
+ * - The remedy is unchanged: the options stay as extracted.
+ * - A single remedy: one option of that type (the extracted one of that type when there is one), with every proof
+ *   the extracted options asked for, so no requirement is dropped. No extracted options: none are added.
+ * - More than one remedy: kept only when the extracted options already offer two or more remedies. Otherwise the
+ *   editor cannot say which remedies a claimant gets, so the save is refused.
+ * - Not stated: refused while options name a remedy, because claims would keep using it.
+ */
+export function remedyOptionsFor(remedyType: string, original: Pick<Program, "remedy_rules">): RemedyOptionsResult {
+  const options = original.remedy_rules.options ?? [];
+  if (remedyType === (original.remedy_rules.remedy_type ?? "")) return { ok: true, changed: false, options };
+  const kinds = [...new Set(options.map((o) => o.type))];
+  if (!remedyType) {
+    if (!options.length) return { ok: true, changed: false, options };
+    return { ok: false, error: "Choose a remedy. The remedy options below still name one, and claims would keep using it." };
+  }
+  if (remedyType === "multiple") {
+    if (kinds.length >= 2) return { ok: true, changed: false, options };
+    return { ok: false, error: "Choose a single remedy. More than one remedy needs the notice to list two or more remedy options, and this one does not." };
+  }
+  if (!SINGLE_REMEDIES.includes(remedyType)) return { ok: false, error: "Choose a remedy." };
+  if (!options.length) return { ok: true, changed: false, options };
+  const proofs = [...new Set(options.flatMap((o) => o.proof_required ?? []))];
+  const same = options.find((o) => o.type === remedyType);
+  const base: RemedyOption = same ?? { type: remedyType, steps: [], payout: { method: null, amount_rule: null } };
+  return { ok: true, changed: true, options: [{ ...base, type: remedyType, proof_required: proofs }] };
+}
+
+/** True when a remedy option asks for a destruction photo: the photo stays required even with no instruction. */
+export function optionsRequireDestructionPhoto(options: readonly Pick<RemedyOption, "proof_required">[]): boolean {
+  return options.some((o) => (o.proof_required ?? []).includes("destruction_photo"));
+}
+
+/**
+ * The draft as a PATCH body. Fields the editor does not show (evidence spans, units affected, and any field a newer
+ * contract adds) are carried over from the program unchanged, because PATCH replaces each rules object whole.
+ * Remedy options follow the remedy (remedyOptionsFor).
  */
 export function rulesPatch(draft: RulesDraft, original: Pick<Program, "identification_rules" | "remedy_rules">): RulesResult {
   const errors: FieldErrors = {};
@@ -121,11 +166,13 @@ export function rulesPatch(draft: RulesDraft, original: Pick<Program, "identific
   if (threshold === null) errors.threshold = "Enter a dollar amount, for example 100.00.";
 
   if (draft.remedyType && !(REMEDY_TYPES as readonly string[]).includes(draft.remedyType)) errors.remedyType = "Choose a remedy.";
+  const options = remedyOptionsFor(draft.remedyType, original);
+  if (!options.ok && !errors.remedyType) errors.remedyType = options.error;
 
   const url = draft.registrationUrl.trim();
   if (url && /^(javascript|data|vbscript):/i.test(url)) errors.registrationUrl = "Enter a web address.";
 
-  if (Object.keys(errors).length) return { ok: false, errors };
+  if (Object.keys(errors).length || !options.ok) return { ok: false, errors };
 
   const identification: IdentificationRules = {
     ...original.identification_rules,
@@ -141,6 +188,7 @@ export function rulesPatch(draft: RulesDraft, original: Pick<Program, "identific
   const remedy: RemedyRules = {
     ...original.remedy_rules,
     remedy_type: (draft.remedyType || null) as RemedyRules["remedy_type"],
+    ...(options.changed ? { options: options.options } : {}),
     destruction_instruction: orNull(draft.destructionInstruction),
     registration_url: orNull(url),
     contact: orNull(draft.contact),
@@ -167,6 +215,32 @@ export function lifecycle(status: string): Lifecycle {
   if (status === "draft") return { next: "open", editable: true };
   if (status === "open") return { next: "closed", editable: true };
   return { next: null, editable: false };
+}
+
+/** Why the lifecycle move is blocked right now, or null. Closing makes the rules read-only, so unsaved edits would be stranded. */
+export function lifecycleBlock(next: Lifecycle["next"], dirty: boolean): string | null {
+  return next === "closed" && dirty ? "Save or discard your rule changes first. A closed program cannot be edited." : null;
+}
+
+const CLOSE_IMPACT: readonly [status: string, describe: (n: number) => string][] = [
+  ["submitted", (n) => `${countOf(n, "claim")} submitted and not decided yet`],
+  ["needs_info", (n) => `${countOf(n, "claim")} waiting for the claimant to answer a question`],
+  ["flagged", (n) => `${countOf(n, "claim")} flagged for a reviewer`],
+  ["under_review", (n) => `${countOf(n, "claim")} held for a reviewer before any money moves`],
+  ["capped", (n) => `${countOf(n, "claim")} stopped at a checker limit and waiting for a reviewer`],
+  ["approved", (n) => `${countOf(n, "approved claim")} whose ${n === 1 ? "claimant" : "claimants"} may still need to choose how a refund is paid`],
+  ["draft", (n) => `${countOf(n, "claim link")} issued and never used`],
+];
+
+/**
+ * The claims a close would cut off, from Program.claim_counts. Closing kills every claim link at once (portal.py
+ * answers 404 for a closed program), while the worker and reviewers can still decide these claims.
+ */
+export function closeImpact(counts: Readonly<Record<string, number>>): string[] {
+  return CLOSE_IMPACT.flatMap(([status, describe]) => {
+    const n = counts[status] ?? 0;
+    return n > 0 ? [describe(n)] : [];
+  });
 }
 
 /** What a reader should know about a program with no identifiers: the adjudicator can confirm nothing. */

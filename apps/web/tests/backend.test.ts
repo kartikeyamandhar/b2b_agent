@@ -6,7 +6,7 @@ import { apiJson, upstream } from "@/lib/api/backend";
 import { ApiError } from "@/lib/api/problem";
 
 const ENV = {
-  RECALLOPS_API_URL: "http://api.test",
+  RECALLOPS_API_URL: "http://127.0.0.1:8000",
   RECALLOPS_WEB_AUTH: "dev",
   RECALLOPS_DEV_FIRM_ID: "00000000-0000-4000-8000-00000000d001",
   RECALLOPS_DEV_ROLE: "admin",
@@ -35,7 +35,7 @@ describe("upstream", () => {
     await upstream("console", "/v1/programs", "?limit=5", { method: "GET" }, ENV);
     await upstream("portal", "/portal/tok", "", { method: "GET" }, ENV);
     const [consoleCall, portalCall] = calls.map((c) => new Headers(c.init.headers));
-    expect(calls[0]!.url).toBe("http://api.test/v1/programs?limit=5");
+    expect(calls[0]!.url).toBe("http://127.0.0.1:8000/v1/programs?limit=5");
     expect(consoleCall!.get("x-dev-firm-id")).toBe(ENV.RECALLOPS_DEV_FIRM_ID);
     expect(portalCall!.get("x-dev-firm-id")).toBeNull();
     expect(consoleCall!.get("x-request-id")).toMatch(/^[0-9a-f-]{36}$/);
@@ -57,7 +57,7 @@ describe("upstream", () => {
 
   it("refuses to call the console without configured auth", async () => {
     stubFetch(() => new Response("{}"));
-    await expect(upstream("console", "/v1/programs", "", { method: "GET" }, { RECALLOPS_API_URL: "http://api.test" })).rejects.toThrow(/not configured/);
+    await expect(upstream("console", "/v1/programs", "", { method: "GET" }, { RECALLOPS_API_URL: "http://127.0.0.1:8000" })).rejects.toThrow(/not configured/);
   });
 });
 
@@ -117,7 +117,7 @@ describe("/api/[...path] route", () => {
     expect(await res.text()).toBe("id,amount\n");
     expect(res.headers.get("set-cookie")).toBeNull();
     const sent = new Headers(calls[0]!.init.headers);
-    expect(calls[0]!.url).toBe("http://api.test/v1/payouts/exports/b1.csv");
+    expect(calls[0]!.url).toBe("http://127.0.0.1:8000/v1/payouts/exports/b1.csv");
     expect(sent.get("x-dev-firm-id")).toBe(ENV.RECALLOPS_DEV_FIRM_ID);
     expect(sent.get("authorization")).toBeNull();
   });
@@ -135,7 +135,7 @@ describe("/api/[...path] route", () => {
   });
 
   it("answers 503 when console auth is not configured", async () => {
-    vi.stubEnv("RECALLOPS_API_URL", "http://api.test");
+    vi.stubEnv("RECALLOPS_API_URL", "http://127.0.0.1:8000");
     vi.stubEnv("RECALLOPS_WEB_AUTH", "");
     stubFetch(() => new Response("{}"));
     const res = await GET(new Request("http://web.test/api/v1/programs"), ctx(["v1", "programs"]));

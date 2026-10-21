@@ -87,7 +87,7 @@ describe("MprReportView", () => {
 
   it("flags discrepancies and an unexpected payload", () => {
     const bad = renderToStaticMarkup(<MprReportView programId={P} report={{ ...report, reconciled: false, payload: { ...report.payload, reconciliation: { discrepancies: [{ box: "cumulative_corrections", report: 110, recount: 109 }] } } }} />);
-    expect(bad).toContain("Not reconciled: 1 discrepancies");
+    expect(bad).toContain("Not reconciled: 1 discrepancy");
     expect(bad).toContain("Recount discrepancies");
     const odd = renderToStaticMarkup(<MprReportView programId={P} report={{ ...report, payload: { boxes: "nope" } }} />);
     expect(odd).toContain("did not have the expected shape");
@@ -107,7 +107,7 @@ describe("/app/programs/[id]/reports", () => {
   let urls: string[];
   beforeEach(() => {
     urls = [];
-    vi.stubEnv("RECALLOPS_API_URL", "http://api.test");
+    vi.stubEnv("RECALLOPS_API_URL", "http://127.0.0.1:8000");
     vi.stubEnv("RECALLOPS_WEB_AUTH", "dev");
     vi.stubEnv("RECALLOPS_DEV_FIRM_ID", "00000000-0000-4000-8000-00000000d001");
   });
@@ -121,7 +121,7 @@ describe("/app/programs/[id]/reports", () => {
   it("loads the requested period's report", async () => {
     serve(() => Response.json(report));
     const out = await page({ period: "2026-10" });
-    expect(urls).toContain(`http://api.test/v1/programs/${P}/mpr?period=2026-10`);
+    expect(urls).toContain(`http://127.0.0.1:8000/v1/programs/${P}/mpr?period=2026-10`);
     expect(out).toContain("Report for October 2026");
     expect(out).toContain('aria-current="page"');
   });

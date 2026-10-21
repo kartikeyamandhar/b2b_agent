@@ -6,7 +6,7 @@
 import { clerkSessionToken } from "@/lib/auth/clerk-session";
 import { missingClerkSettings, webAuthMode } from "@/lib/auth/mode";
 
-import { ConfigError, type Env } from "./config";
+import { apiConfig, ConfigError, isLoopbackHost, type Env } from "./config";
 
 export type ConsoleRole = "admin" | "reviewer";
 
@@ -31,8 +31,12 @@ export function devIdentity(env: Env = process.env): ConsoleIdentity {
   if (webAuthMode(env) !== "dev") {
     throw new ConfigError("console auth is not configured for development headers: set RECALLOPS_WEB_AUTH=dev or clerk");
   }
-  if (env.VERCEL_ENV === "production") {
-    throw new ConfigError("the dev auth seam refuses to run in a production deployment");
+  // Any deployment (preview included), or an API on another machine, means real users could reach this identity.
+  if (env.VERCEL_ENV) {
+    throw new ConfigError("the dev auth seam refuses to run in a deployment");
+  }
+  if (!isLoopbackHost(new URL(apiConfig(env).baseUrl).hostname)) {
+    throw new ConfigError("the dev auth seam only talks to an API on this machine");
   }
   const firmId = env.RECALLOPS_DEV_FIRM_ID ?? "";
   if (!UUID.test(firmId)) throw new ConfigError("RECALLOPS_DEV_FIRM_ID must be a UUID");

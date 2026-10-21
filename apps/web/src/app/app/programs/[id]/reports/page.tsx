@@ -61,7 +61,8 @@ export default async function ReportsPage({ params, searchParams }: Props) {
       ) : (
         <EmptyState title={`No report for ${periodLabel(period)} yet`}>Generate it below. Generating again later adds a newer version.</EmptyState>
       )}
-      <MprGenerate programId={id} period={period} canGenerate={role === "admin"} hasReport={report.ok && !!report.data} />
+      {/* Keyed by period: the boxes the firm types belong to one month and never carry over to the next. */}
+      <MprGenerate key={period} programId={id} period={period} canGenerate={role === "admin"} hasReport={report.ok && !!report.data} />
     </div>
   );
 }

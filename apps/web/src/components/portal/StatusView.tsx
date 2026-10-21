@@ -20,7 +20,7 @@ export function StatusView({ token, view }: { token: string; view: PortalView })
   return (
     <div className="grid gap-5">
       <section aria-labelledby="status-title" className={`rounded-xl border p-5 ${TONE[plain.tone]}`}>
-        <h2 id="status-title" className="font-serif text-2xl font-medium tracking-tight">
+        <h2 id="status-title" className="display-title text-2xl">
           {plain.title}
         </h2>
         <p className="mt-1 text-base">{plain.body}</p>

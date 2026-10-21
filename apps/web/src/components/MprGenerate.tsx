@@ -34,7 +34,10 @@ export function manualBody(m: Manual): { ok: true; body: MprManual } | { ok: fal
   return parsed.success ? { ok: true, body: parsed.data } : { ok: false, error: "Some boxes are not valid for the report." };
 }
 
-/** Generate (or regenerate) the MPR for a period (POST .../mpr/generate, admin). */
+/**
+ * Generate (or regenerate) the MPR for a period (POST .../mpr/generate, admin). Render it with `key={period}`: the
+ * boxes typed here are that month's, and a new key starts the next month empty.
+ */
 export function MprGenerate({ programId, period, canGenerate, hasReport }: { programId: string; period: string; canGenerate: boolean; hasReport: boolean }) {
   const router = useRouter();
   const [manual, setManual] = useState<Manual>(EMPTY);

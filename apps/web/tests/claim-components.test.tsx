@@ -71,6 +71,19 @@ describe("DecisionPanel", () => {
   it("says when there is no decision", () => {
     expect(renderToStaticMarkup(<DecisionPanel claimId="x" decision={null} decidedAt={null} />)).toContain("No decision yet");
   });
+
+  it("says why a claim waits for a person and which later claim reopened it", () => {
+    const held = { ...flagged.decision!, outcome: "approve" as const, hold_reason: "payout_held_needs_review", reopened_from: "approved", duplicate_found_later: ["768dc2db-e31c-5ee6-8062-665cf67dfdd1"] };
+    const out = renderToStaticMarkup(<DecisionPanel claimId="x" decision={held} decidedAt={null} />);
+    expect(out).toContain("data-hold-reason");
+    expect(out).toContain("A held payout needs a person&#x27;s approval before money moves.");
+    expect(out).toContain("Reopened from approved");
+    expect(out).toContain('href="/app/claims/768dc2db-e31c-5ee6-8062-665cf67dfdd1"');
+    const unknown = renderToStaticMarkup(<DecisionPanel claimId="x" decision={{ ...held, hold_reason: "some_new_reason", reopened_from: null }} decidedAt={null} />);
+    expect(unknown).toContain("some new reason");
+    expect(unknown).not.toContain("data-reopened");
+    expect(renderToStaticMarkup(<DecisionPanel claimId="x" decision={flagged.decision} decidedAt={null} />)).not.toContain("data-hold-reason");
+  });
 });
 
 describe("PayoutPanel", () => {

@@ -20,7 +20,7 @@ let calls: { url: string; method: string }[];
 beforeEach(() => {
   calls = [];
   programStatus = "open";
-  vi.stubEnv("RECALLOPS_API_URL", "http://api.test");
+  vi.stubEnv("RECALLOPS_API_URL", "http://127.0.0.1:8000");
   vi.stubEnv("RECALLOPS_WEB_AUTH", "dev");
   vi.stubEnv("RECALLOPS_DEV_FIRM_ID", "00000000-0000-4000-8000-00000000d001");
   vi.stubEnv("RECALLOPS_DEV_ROLE", "admin");

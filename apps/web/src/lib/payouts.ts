@@ -28,3 +28,7 @@ export type ExportTotals = { batches: number; rows: number; cents: number };
 export function exportTotals(items: readonly Pick<ExportBatchSummary, "row_count" | "total_cents">[]): ExportTotals {
   return items.reduce((t, b) => ({ batches: t.batches + 1, rows: t.rows + b.row_count, cents: t.cents + b.total_cents }), { batches: 0, rows: 0, cents: 0 });
 }
+
+/** How many export batches the payouts page lists (GET /v1/payouts/exports?limit=...). Shared by the server loader
+ *  and the client summary, which labels its totals as "these batches" when the list is full. */
+export const EXPORT_LIST_LIMIT = 100;

@@ -41,7 +41,7 @@ export function RecallOption({
   const href = noticeHref(recall.url);
   return (
     <li
-      className={`rounded-lg border bg-surface p-3 ${selected ? "border-copper ring-1 ring-copper" : "border-line"}`}
+      className={`rounded-lg border bg-surface p-3 ${selected ? "border-brand ring-1 ring-brand" : "border-line"}`}
       data-recall={recall.id}
       data-selected={selected || undefined}
     >

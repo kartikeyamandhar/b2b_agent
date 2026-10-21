@@ -29,7 +29,7 @@ function serve(respond: (url: string) => Response) {
 
 beforeEach(() => {
   calls = [];
-  vi.stubEnv("RECALLOPS_API_URL", "http://api.test");
+  vi.stubEnv("RECALLOPS_API_URL", "http://127.0.0.1:8000");
   vi.stubEnv("RECALLOPS_WEB_AUTH", "dev");
   vi.stubEnv("RECALLOPS_DEV_FIRM_ID", "00000000-0000-4000-8000-00000000d001");
   vi.stubEnv("RECALLOPS_DEV_ROLE", "admin");
@@ -82,7 +82,7 @@ describe("/app/payouts", () => {
   it("reads the history as an admin and never creates a batch on load", async () => {
     serve(() => Response.json(list));
     const html = renderToStaticMarkup(await PayoutsPage());
-    expect(calls).toEqual([{ url: "http://api.test/v1/payouts/exports?limit=100", method: "GET" }]);
+    expect(calls).toEqual([{ url: "http://127.0.0.1:8000/v1/payouts/exports?limit=100", method: "GET" }]);
     expect(html).toContain("Batch history");
     expect(html).toContain("$2,891.59");
   });

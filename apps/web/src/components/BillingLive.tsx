@@ -52,7 +52,7 @@ export function BillingLive({ initialUsage, canManage, returned, loadedAt }: { i
   return (
     <div className="grid gap-4">
       {returned ? (
-        <p role="status" className="rounded-lg border border-copper/40 border-l-4 border-l-copper bg-copper-soft px-4 py-3 text-sm" data-stripe-returned>
+        <p role="status" className="rounded-lg border border-brand/40 border-l-4 border-l-brand bg-brand-soft px-4 py-3 text-sm" data-stripe-returned>
           Back from Stripe. The plan below changes only after Stripe confirms the payment to RecallOps
           {polling ? "; this page checks again every few seconds for a minute." : ". Refresh the page to check again."}
         </p>

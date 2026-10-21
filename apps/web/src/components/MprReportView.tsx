@@ -20,7 +20,7 @@ export function MprReportView({ programId, report }: { programId: string; report
           data-reconciled={report.reconciled}
           className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${report.reconciled ? "border-success/30 bg-success-soft text-success-ink" : "border-warn/40 bg-warn-soft text-warn-ink"}`}
         >
-          {report.reconciled ? "Reconciled: the independent recount agrees" : `Not reconciled: ${discrepancies.length} discrepancies`}
+          {report.reconciled ? "Reconciled: the independent recount agrees" : `Not reconciled: ${discrepancies.length} ${discrepancies.length === 1 ? "discrepancy" : "discrepancies"}`}
         </span>
         <span className="text-xs text-ink-muted">generated {formatDateTime(report.generated_at)}</span>
         <a

@@ -175,7 +175,7 @@ describe("usage polling after a Stripe return", () => {
 
 describe("/app/billing page", () => {
   beforeEach(() => {
-    vi.stubEnv("RECALLOPS_API_URL", "http://api.test");
+    vi.stubEnv("RECALLOPS_API_URL", "http://127.0.0.1:8000");
     vi.stubEnv("RECALLOPS_WEB_AUTH", "dev");
     vi.stubEnv("RECALLOPS_DEV_FIRM_ID", "00000000-0000-4000-8000-00000000d002");
   });
@@ -188,7 +188,7 @@ describe("/app/billing page", () => {
     const urls: string[] = [];
     vi.stubGlobal("fetch", async (url: string) => (urls.push(url), Response.json(free)));
     const out = await page();
-    expect(urls).toEqual(["http://api.test/v1/usage"]);
+    expect(urls).toEqual(["http://127.0.0.1:8000/v1/usage"]);
     expect(out).toContain("Billing and usage");
     expect(out).toContain("data-billing-checkout");
   });

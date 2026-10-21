@@ -66,7 +66,7 @@ export function BillingView({ usage }: { usage: Usage }) {
                 </div>
                 {ratio !== null ? (
                   <div className="mt-1 h-1.5 rounded bg-line" role="meter" aria-label={`${m.label} used`} aria-valuemin={0} aria-valuemax={1} aria-valuenow={ratio}>
-                    <div className={`h-1.5 rounded ${ratio >= 1 ? "bg-warn" : "bg-copper"}`} style={{ width: `${Math.round(ratio * 100)}%` }} />
+                    <div className={`h-1.5 rounded ${ratio >= 1 ? "bg-warn" : "bg-brand"}`} style={{ width: `${Math.round(ratio * 100)}%` }} />
                   </div>
                 ) : null}
               </div>

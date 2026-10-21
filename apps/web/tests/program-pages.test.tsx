@@ -29,7 +29,7 @@ const problem = (status: number, detail: string, id = "corr-1") =>
 
 beforeEach(() => {
   calls = [];
-  vi.stubEnv("RECALLOPS_API_URL", "http://api.test");
+  vi.stubEnv("RECALLOPS_API_URL", "http://127.0.0.1:8000");
   vi.stubEnv("RECALLOPS_WEB_AUTH", "dev");
   vi.stubEnv("RECALLOPS_DEV_FIRM_ID", "00000000-0000-4000-8000-00000000d001");
   vi.stubEnv("RECALLOPS_DEV_ROLE", "reviewer");
@@ -47,7 +47,7 @@ describe("/app/programs", () => {
     serve(() => Response.json(programs));
     const html = await render(ProgramsPage());
     expect(calls).toHaveLength(1);
-    expect(calls[0]).toMatchObject({ url: "http://api.test/v1/programs", method: "GET" });
+    expect(calls[0]).toMatchObject({ url: "http://127.0.0.1:8000/v1/programs", method: "GET" });
     expect(calls[0]!.headers.get("x-dev-firm-id")).toBe("00000000-0000-4000-8000-00000000d001");
     expect(calls[0]!.headers.get("x-dev-role")).toBe("reviewer");
     expect(html).toContain("Scotch Thermal Laminators");
@@ -104,7 +104,7 @@ describe("/app/programs/[id]", () => {
   it("calls GET /v1/programs/{id} and renders the overview", async () => {
     serve(() => Response.json(programs.items[0]));
     const html = await render(ProgramPage({ params: Promise.resolve({ id: DEMO }) }));
-    expect(calls[0]!.url).toBe(`http://api.test/v1/programs/${DEMO}`);
+    expect(calls[0]!.url).toBe(`http://127.0.0.1:8000/v1/programs/${DEMO}`);
     expect(html).toContain("Scotch Thermal Laminators");
     expect(html).toContain("Claims by status");
     expect(html).toContain('href="/app/programs"');

@@ -132,6 +132,17 @@ export function PhotoEvidence({
   );
 }
 
+/** Why a claim waits for a person (decision.hold_reason, the backend's fixed vocabulary). */
+const HOLD_REASON: Record<string, string> = {
+  flagged: "Flagged as a possible duplicate or fraud.",
+  over_value_threshold: "The refund is above this program's review threshold.",
+  model_disagrees_with_rules: "The AI would be more lenient than the rules checklist, so a person decides.",
+  capped: "The automated run hit its step, cost, or time limit.",
+  failed: "The automated run failed.",
+  payout_held_needs_review: "A held payout needs a person's approval before money moves.",
+  shared_mailing_address: "The check would go to an address another claim also uses.",
+};
+
 export function DecisionPanel({ claimId, decision, decidedAt }: { claimId: string; decision: Decision | null; decidedAt: string | null }) {
   if (!decision) {
     return (
@@ -151,6 +162,26 @@ export function DecisionPanel({ claimId, decision, decidedAt }: { claimId: strin
           {decision.routed_to_human ? " · routed to a person" : ""}
         </span>
       </div>
+      {decision.hold_reason ? (
+        <p className="mt-2 rounded-md border border-warn/40 bg-warn-soft px-3 py-2 text-sm text-warn-ink" data-hold-reason>
+          <span className="font-medium">Waiting for a person: </span>
+          {HOLD_REASON[decision.hold_reason] ?? decision.hold_reason.replaceAll("_", " ")}
+        </p>
+      ) : null}
+      {decision.reopened_from ? (
+        <p className="mt-2 rounded-md border border-line bg-panel px-3 py-2 text-sm" data-reopened>
+          Reopened from {decision.reopened_from.replaceAll("_", " ")} when a later claim matched it
+          {(decision.duplicate_found_later ?? []).length ? ": " : "."}
+          {(decision.duplicate_found_later ?? []).map((id, i) => (
+            <span key={id}>
+              {i ? ", " : ""}
+              <Link href={`/app/claims/${id}`} className="font-mono text-accent underline" title={id}>
+                {shortId(id)}
+              </Link>
+            </span>
+          ))}
+        </p>
+      ) : null}
       {decision.reasons.length ? (
         <ul className="mt-2 list-disc pl-5 text-sm">
           {decision.reasons.map((r, i) => (
@@ -179,7 +210,7 @@ export function DecisionPanel({ claimId, decision, decidedAt }: { claimId: strin
             ))}
             {results.map((t) => (
               <li key={t}>
-                <Link href={`/app/claims/${claimId}/trace#result-${t}`} className="rounded border border-copper/60 bg-copper-soft px-1 font-mono text-accent">
+                <Link href={`/app/claims/${claimId}/trace#result-${t}`} className="rounded border border-brand/60 bg-brand-soft px-1 font-mono text-accent">
                   {t}
                 </Link>
               </li>

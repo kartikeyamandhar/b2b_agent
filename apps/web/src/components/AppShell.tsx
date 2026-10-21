@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import { BrandMark } from "./BrandMark";
 import { NavLinks } from "./NavLinks";
 
 export type NavItem = { href: string; label: string; group: string; adminOnly?: boolean };
@@ -12,12 +13,12 @@ export const CONSOLE_NAV: readonly NavItem[] = [
   { href: "/app/billing", label: "Billing", group: "Account" },
 ];
 
-/** The RecallOps wordmark: Newsreader with a copper mark. */
+/** The RecallOps wordmark, as in the README banner: the shield mark and the name in the system sans. */
 export function Wordmark() {
   return (
-    <span className="flex items-center gap-2">
-      <span aria-hidden="true" className="inline-block h-2.5 w-2.5 rotate-45 bg-copper" />
-      <span className="font-serif text-xl font-medium tracking-tight text-ink">RecallOps</span>
+    <span className="flex items-center gap-2.5">
+      <BrandMark size={30} />
+      <span className="text-xl font-semibold tracking-tight text-ink">RecallOps</span>
     </span>
   );
 }
@@ -70,10 +71,10 @@ export function AppShell({
   const nav = CONSOLE_NAV.filter((i) => !i.adminOnly || role === "admin");
   return (
     <div className="flex min-h-dvh flex-col bg-paper md:flex-row">
-      <nav aria-label="Console" className="border-b border-line bg-paper md:sticky md:top-0 md:flex md:h-dvh md:w-64 md:shrink-0 md:flex-col md:border-r md:border-b-0">
+      <nav aria-label="Console" className="border-b border-line bg-panel md:sticky md:top-0 md:flex md:h-dvh md:w-64 md:shrink-0 md:flex-col md:border-r md:border-b-0">
         <Link href="/app/programs" className="block px-6 pt-5 pb-4 md:pt-8 md:pb-7" aria-label="RecallOps, programs">
           <Wordmark />
-          <span className="mt-1 hidden pl-[1.125rem] text-xs text-ink-muted md:block">Recall operations</span>
+          <span className="mt-1.5 hidden pl-10 text-xs text-ink-muted md:block">Recall operations</span>
         </Link>
         <NavLinks items={nav} />
         <div className="hidden md:mt-auto md:block">

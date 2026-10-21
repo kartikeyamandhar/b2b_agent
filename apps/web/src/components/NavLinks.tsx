@@ -8,7 +8,7 @@ import type { NavItem } from "./AppShell";
 /** Claims belong to programs, so a claim page marks Programs. */
 const ALSO: Record<string, readonly string[]> = { "/app/programs": ["/app/claims"] };
 
-/** Console navigation, grouped on desktop, with the current section marked (aria-current and a copper rule). */
+/** Console navigation, grouped on desktop, with the current section marked (aria-current and a brand rule). */
 export function NavLinks({ items }: { items: readonly NavItem[] }) {
   const path = usePathname() ?? "";
   const groups = [...new Set(items.map((i) => i.group))];
@@ -29,7 +29,7 @@ export function NavLinks({ items }: { items: readonly NavItem[] }) {
                       href={item.href}
                       aria-current={current ? "page" : undefined}
                       className={`flex items-center rounded-md px-3 py-2 text-sm transition-colors md:rounded-l-none md:border-l-2 ${
-                        current ? "bg-surface font-medium text-ink md:border-l-copper" : "text-ink-muted hover:bg-surface hover:text-ink md:border-l-transparent"
+                        current ? "bg-surface font-medium text-ink md:border-l-brand" : "text-ink-muted hover:bg-surface hover:text-ink md:border-l-transparent"
                       }`}
                     >
                       {item.label}

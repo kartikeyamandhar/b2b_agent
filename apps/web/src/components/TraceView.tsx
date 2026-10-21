@@ -32,7 +32,7 @@ function CapsBar({ trace }: { trace: Trace }) {
             aria-valuemax={1}
             aria-valuenow={c.ratio ?? 0}
           >
-            <div className={`h-1.5 rounded ${c.ratio !== null && c.ratio >= 1 ? "bg-warn" : "bg-copper"}`} style={{ width: `${Math.round((c.ratio ?? 0) * 100)}%` }} />
+            <div className={`h-1.5 rounded ${c.ratio !== null && c.ratio >= 1 ? "bg-warn" : "bg-brand"}`} style={{ width: `${Math.round((c.ratio ?? 0) * 100)}%` }} />
           </div>
         </div>
       ))}
@@ -95,7 +95,7 @@ function Step({ step, cited }: { step: TraceStep; cited: ReadonlySet<string> }) 
       id={`step-${step.idx}`}
       data-step={step.idx}
       data-cited={isCited || undefined}
-      className={`scroll-mt-4 rounded-lg border bg-surface px-4 py-3 ${failed ? "border-danger/30 border-l-4 border-l-danger bg-danger-soft" : isCited ? "border-copper/50 border-l-4 border-l-copper" : "border-line"}`}
+      className={`scroll-mt-4 rounded-lg border bg-surface px-4 py-3 ${failed ? "border-danger/30 border-l-4 border-l-danger bg-danger-soft" : isCited ? "border-brand/50 border-l-4 border-l-brand" : "border-line"}`}
     >
       {rid ? <span id={`result-${rid}`} className="block scroll-mt-4" /> : null}
       <div className="flex flex-wrap items-center gap-2 text-xs">
@@ -103,7 +103,7 @@ function Step({ step, cited }: { step: TraceStep; cited: ReadonlySet<string> }) 
         <span className="font-medium">{step.node}</span>
         {step.tool && step.tool !== step.node ? <span className="rounded border border-line bg-surface px-1 font-mono">{step.tool}</span> : null}
         {rid ? <span className="font-mono text-ink-muted">{rid}</span> : null}
-        {isCited ? <span className="rounded-full border border-copper/60 bg-copper-soft px-2 text-ink">cited by the decision</span> : null}
+        {isCited ? <span className="rounded-full border border-brand/60 bg-brand-soft px-2 text-ink">cited by the decision</span> : null}
         {step.counted ? <span className="rounded border border-line bg-surface px-1 text-ink-muted">counts toward the step cap</span> : null}
         <span className="ml-auto tabular-nums text-ink-muted">
           {isPureCode(step) ? (

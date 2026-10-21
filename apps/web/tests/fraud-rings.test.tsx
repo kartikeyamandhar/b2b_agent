@@ -35,7 +35,7 @@ const graph = FraudGraphView.parse({
 const program = (JSON.parse(readFileSync(new URL("./fixtures/programs.json", import.meta.url), "utf8")) as { items: unknown[] }).items[0];
 
 beforeEach(() => {
-  vi.stubEnv("RECALLOPS_API_URL", "http://api.test");
+  vi.stubEnv("RECALLOPS_API_URL", "http://127.0.0.1:8000");
   vi.stubEnv("RECALLOPS_WEB_AUTH", "dev");
   vi.stubEnv("RECALLOPS_DEV_FIRM_ID", "00000000-0000-4000-8000-00000000d001");
   vi.stubEnv("RECALLOPS_DEV_ROLE", "reviewer");
@@ -117,7 +117,7 @@ describe("/app/programs/[id]/fraud", () => {
       return url.includes("/fraud-graph") ? Response.json(graph) : Response.json(program);
     });
     const html = renderToStaticMarkup(await FraudRingsPage({ params: Promise.resolve({ id: P }) }));
-    expect(urls).toContain(`http://api.test/v1/programs/${P}/fraud-graph?limit=500`);
+    expect(urls).toContain(`http://127.0.0.1:8000/v1/programs/${P}/fraud-graph?limit=500`);
     expect(html).toContain("Fraud rings");
     expect(html).toContain('data-ring="0"');
   });

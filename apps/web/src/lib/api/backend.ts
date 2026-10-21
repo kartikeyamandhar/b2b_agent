@@ -4,7 +4,7 @@ import type { z } from "zod";
 
 import { consoleAuthHeaders } from "./auth-seam";
 import { apiConfig, type Env } from "./config";
-import { forwardRequestHeaders, type Surface } from "./forward";
+import { clientAddress, forwardRequestHeaders, portalClientHeaders, type Surface } from "./forward";
 import { ApiError, problemFrom } from "./problem";
 
 export type UpstreamInit = {
@@ -14,12 +14,27 @@ export type UpstreamInit = {
   requestId?: string;
 };
 
+/** The claimant's address for a portal call: the proxied request's headers, or the server component's request. */
+async function portalClientIp(incoming: Headers | undefined): Promise<string | null> {
+  if (incoming) return clientAddress(incoming);
+  try {
+    const { headers } = await import("next/headers");
+    return clientAddress(new Headers(await headers()));
+  } catch {
+    return null; // outside a request (tests, scripts): the API keys on this server's address as before
+  }
+}
+
 /** Raw upstream call. Network failures and timeouts become ApiError with status 502 or 504. */
 export async function upstream(surface: Surface, path: string, search: string, init: UpstreamInit, env: Env = process.env): Promise<Response> {
   const { baseUrl, timeoutMs } = apiConfig(env);
   const requestId = init.requestId ?? crypto.randomUUID();
   const identity = surface === "console" ? await consoleAuthHeaders(env) : null;
   const headers = forwardRequestHeaders(init.headers ?? new Headers(), identity, requestId);
+  if (surface === "portal") {
+    const named = portalClientHeaders(await portalClientIp(init.headers), env.RECALLOPS_WEB_PROXY_SECRET);
+    for (const [k, v] of Object.entries(named)) headers.set(k, v);
+  }
   const body = init.body ?? null;
   try {
     return await fetch(`${baseUrl}${path}${search}`, {

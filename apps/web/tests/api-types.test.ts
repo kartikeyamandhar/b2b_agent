@@ -19,13 +19,9 @@ describe("generated api-types.ts", () => {
     expect(() => execFileSync(process.execPath, ["scripts/gen-api.mjs", "--check"], { cwd: root, stdio: "pipe" })).not.toThrow();
   });
 
-  // Two documentation examples omit required nullable fields. The API itself always serializes nulls (no
-  // exclude_none on any response), so the schemas stay strict and only these exact gaps are tolerated; reported
-  // to the backend owner in apps/web/README.md. When the contract fixes them, this test asks to drop the entry.
-  const INCOMPLETE_EXAMPLES: Record<string, string[]> = {
-    Program: ["closed_at"],
-    Trace: ["steps.0.thought"],
-  };
+  // Every example must parse with its strict schema. The contract used to drop null fields from examples
+  // (Program.closed_at, Trace.steps[0].thought); the backend now keeps them, so no gap is tolerated.
+  const INCOMPLETE_EXAMPLES: Record<string, string[]> = {};
 
   it("parses every example the contract documents", () => {
     const withExamples = Object.entries(contract.components.schemas).filter(([, s]) => s.examples?.length);

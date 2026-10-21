@@ -32,6 +32,13 @@ describe("StatusView", () => {
     expect(out).toContain("Stripe");
   });
 
+  it("offers only the address update, not Stripe, once a check is scheduled", () => {
+    const out = status({ status: "approved", payout_status: "pending_export" });
+    expect(out).toContain("A check will be mailed to you");
+    expect(out).toContain("Update mailing address");
+    expect(out).not.toContain("Stripe");
+  });
+
   it("shows progress, not a choice, once money is moving or held", () => {
     for (const [p, text] of [["transferring", "on its way"], ["held", "on hold while a person reviews"], ["exported", "check was issued"]] as const) {
       const out = status({ status: p === "held" ? "under_review" : "approved", payout_status: p });

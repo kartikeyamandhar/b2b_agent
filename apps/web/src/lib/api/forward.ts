@@ -56,6 +56,27 @@ export function forwardRequestHeaders(
   return out;
 }
 
+const IP_TEXT = /^[0-9A-Fa-f:.]{2,45}$/;
+
+/**
+ * The claimant's address as the hosting edge reports it (Vercel overwrites x-real-ip and x-forwarded-for, so a
+ * browser cannot choose them there). Portal calls pass it to the API with the shared secret, because every portal
+ * request reaches the API from this server and would otherwise share one per-IP rate-limit bucket (review of PR 9).
+ * Only an IP-shaped value is used; the API parses it again before believing it.
+ */
+export function clientAddress(incoming: Headers): string | null {
+  const real = incoming.get("x-real-ip")?.trim();
+  const first = incoming.get("x-forwarded-for")?.split(",")[0]?.trim();
+  const ip = real || first || "";
+  return IP_TEXT.test(ip) ? ip : null;
+}
+
+/** Headers naming the claimant to the API; nothing unless both the secret and an address are known. */
+export function portalClientHeaders(ip: string | null, secret: string | undefined): Record<string, string> {
+  if (!ip || !secret) return {};
+  return { "x-recallops-client-ip": ip, "x-recallops-web-secret": secret };
+}
+
 export function forwardResponseHeaders(upstream: Headers): Headers {
   const out = new Headers();
   for (const name of RESPONSE_HEADERS) {

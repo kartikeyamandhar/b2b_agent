@@ -6,16 +6,43 @@ import { Photo } from "@/lib/api-types";
 import { sendForm } from "@/lib/api/client";
 import { ApiError, type ApiProblem } from "@/lib/api/problem";
 import { PhotoError, compressPhoto } from "@/lib/image";
-import { photoKindLabel, portalPath } from "@/lib/portal";
+import { photoKindLabel, portalPath, type PhotoPhase } from "@/lib/portal";
 import { portalSentence } from "@/lib/portal-copy";
 
 import { ProblemAlert } from "../ProblemAlert";
 
-type Phase = "idle" | "preparing" | "uploading" | "done" | "error";
+/** A stalled upload is stopped after this long so the claimant gets Try again instead of a spinner forever. */
+export const PHOTO_UPLOAD_TIMEOUT_MS = 45_000;
+
+/**
+ * One upload attempt. A timeout (or any abort) becomes a status 0 problem, so the caller lands in the error phase
+ * with the prepared bytes still in memory for Try again.
+ */
+export async function uploadPhoto(token: string, kind: string, blob: Blob, timeoutMs = PHOTO_UPLOAD_TIMEOUT_MS): Promise<void> {
+  const form = new FormData();
+  form.set("kind", kind);
+  form.set("file", blob, blob.type === "image/png" ? `${kind}.png` : `${kind}.jpg`);
+  const signal = AbortSignal.timeout(timeoutMs);
+  try {
+    await sendForm(Photo, portalPath(token, "photos"), form, signal);
+  } catch (err) {
+    if (signal.aborted) {
+      throw new ApiError({
+        status: 0,
+        title: "Upload Timeout",
+        detail: "The upload took too long and was stopped. Your photo is still on this page, so you can try again.",
+        correlationId: null,
+        retryAfterSeconds: null,
+      });
+    }
+    throw err;
+  }
+}
 
 /**
  * Camera-first photo input (02-ui.md component 10). The prepared photo stays in memory until the upload succeeds,
  * so a dropped connection loses nothing: "Try again" resends the same bytes. Uploading the same kind replaces it.
+ * onPhaseChange reports every transition so the form around it can wait while a photo is on its way.
  */
 export function PhotoCapture({
   token,
@@ -23,15 +50,17 @@ export function PhotoCapture({
   hint,
   alreadyUploaded,
   onUploaded,
+  onPhaseChange,
 }: {
   token: string;
   kind: string;
   hint: string;
   alreadyUploaded: boolean;
   onUploaded: (kind: string) => void;
+  onPhaseChange?: (phase: PhotoPhase) => void;
 }) {
   const inputId = useId();
-  const [phase, setPhase] = useState<Phase>(alreadyUploaded ? "done" : "idle");
+  const [phase, setPhaseState] = useState<PhotoPhase>(alreadyUploaded ? "done" : "idle");
   const [preview, setPreview] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [problem, setProblem] = useState<ApiProblem | null>(null);
@@ -42,16 +71,18 @@ export function PhotoCapture({
     if (preview) URL.revokeObjectURL(preview);
   }, [preview]);
 
+  function setPhase(next: PhotoPhase) {
+    setPhaseState(next);
+    onPhaseChange?.(next);
+  }
+
   async function upload() {
     if (!blob.current) return;
     setPhase("uploading");
     setProblem(null);
     setMessage(null);
-    const form = new FormData();
-    form.set("kind", kind);
-    form.set("file", blob.current, blob.current.type === "image/png" ? `${kind}.png` : `${kind}.jpg`);
     try {
-      await sendForm(Photo, portalPath(token, "photos"), form);
+      await uploadPhoto(token, kind, blob.current);
       setPhase("done");
       onUploaded(kind);
     } catch (err) {
@@ -62,6 +93,10 @@ export function PhotoCapture({
 
   async function onFile(file: File | undefined) {
     if (!file) return;
+    // A new choice replaces the old one first, so a photo that fails to prepare can never make Try again resend
+    // the previous photo (review of PR 9).
+    blob.current = null;
+    setPreview(null);
     setPhase("preparing");
     setProblem(null);
     setMessage(null);

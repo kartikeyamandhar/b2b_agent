@@ -44,7 +44,7 @@ function serve(respond: (url: string, method: string) => Response) {
 
 beforeEach(() => {
   calls = [];
-  vi.stubEnv("RECALLOPS_API_URL", "http://api.test");
+  vi.stubEnv("RECALLOPS_API_URL", "http://127.0.0.1:8000");
   vi.stubEnv("RECALLOPS_WEB_AUTH", "dev");
   vi.stubEnv("RECALLOPS_DEV_FIRM_ID", "00000000-0000-4000-8000-00000000d001");
   vi.stubEnv("RECALLOPS_DEV_ROLE", "admin");
@@ -86,8 +86,10 @@ describe("rule editor model", () => {
   });
 
   it("turns empty fields into nulls and empty lists, never empty strings", () => {
-    const d = { ...draftFromProgram(open), modelLabelLocation: "  ", priceMin: "", priceMax: "", soldFrom: "", soldTo: "", remedyType: "", contact: "", serialRanges: [{ raw: "", prefix: "", start: "", end: "" }] };
-    const r = rulesPatch(d, open);
+    // No remedy options: with options naming a remedy, an unset remedy is refused (claims would keep using theirs).
+    const noOptions = { ...open, remedy_rules: { ...open.remedy_rules, options: [] } };
+    const d = { ...draftFromProgram(noOptions), modelLabelLocation: "  ", priceMin: "", priceMax: "", soldFrom: "", soldTo: "", remedyType: "", contact: "", serialRanges: [{ raw: "", prefix: "", start: "", end: "" }] };
+    const r = rulesPatch(d, noOptions);
     expect(r.ok).toBe(true);
     if (!r.ok) return;
     expect(r.patch.identification_rules).toMatchObject({ model_label_location: null, price_range_cents: null, sold_from: null, serial_ranges: [] });
@@ -264,7 +266,7 @@ describe("pages", () => {
   it("loads settings for the program and marks a just-created draft", async () => {
     serve(() => Response.json(fixture.items[1]));
     const html = renderToStaticMarkup(await ProgramSettingsPage({ params: Promise.resolve({ id: draft.id }), searchParams: Promise.resolve({ created: "1" }) }));
-    expect(calls[0]).toMatchObject({ url: `http://api.test/v1/programs/${draft.id}`, method: "GET" });
+    expect(calls[0]).toMatchObject({ url: `http://127.0.0.1:8000/v1/programs/${draft.id}`, method: "GET" });
     expect(html).toContain("Rules and settings");
     expect(html).toContain("Draft program created");
     expect(html).not.toContain("<b>draft</b>");

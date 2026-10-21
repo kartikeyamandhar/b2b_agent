@@ -4,11 +4,19 @@ Next.js 16 App Router, React 19, TypeScript strict, Tailwind 4. Talks only to th
 always from the server: the API has no CORS, and identity is attached server-side. Spec: docs/components/02-ui.md;
 onboarding: docs/onboarding/ui.md.
 
-Status: **Phase 1B**: programs list (`/app/programs`), program overview (`/app/programs/[id]`), and the claims
-queue (`/app/programs/[id]/claims`, GET /v1/programs/{id}/claims with status filter, keyset cursor, and polling),
-claim detail (`/app/claims/[id]`) with reviewer actions, the agent trace (`/app/claims/[id]/trace`), and the
-claimant portal (`/claim/[token]`, `/claim/[token]/status`, `/claim/connect-return`, `/claim/connect-refresh`), on
-the Phase 0 scaffold (API client, proxy, shared components).
+Status: **every console screen and the claimant portal are built** on the API contract.
+
+- Console (`/app`, dev auth or Clerk): programs with a portfolio summary (`/app/programs`), new program from a CPSC
+  recall or a typed notice (`/app/programs/new`), program overview with claim link issuing (`/app/programs/[id]`),
+  claims queue with filters, keyset paging, polling, and `j`/`k` keys (`/app/programs/[id]/claims`), rules editor,
+  review threshold, and lifecycle (`/app/programs/[id]/settings`), monthly progress reports with the PDF
+  (`/app/programs/[id]/reports`), fraud rings (`/app/programs/[id]/fraud`), owner notice campaigns
+  (`/app/programs/[id]/campaign`), claim detail with reviewer actions and link reissue (`/app/claims/[id]`), the
+  agent trace (`/app/claims/[id]/trace`), payout export batches (`/app/payouts`), and billing and usage with the
+  Stripe return page (`/app/billing`, `/app/billing/return`).
+- Sign-in (Clerk mode): `/sign-in`, `/sign-up`, and `/organization`.
+- Claimant portal (public, no Clerk): `/claim/[token]`, `/claim/[token]/status`, `/claim/connect-return`, and
+  `/claim/connect-refresh`.
 
 ## Run
 
@@ -30,55 +38,86 @@ npm run dev                     # http://localhost:3000 (the API's PORTAL_BASE_U
 
 ```
 scripts/gen-api.mjs          contract -> zod generator (no third-party codegen dependency)
+src/proxy.ts                 Next 16 proxy: clerkMiddleware on the console in Clerk mode; never on /claim or /api/portal
+
+src/app/layout.tsx           root layout (no Clerk: ClerkShell provides it per section)
+src/app/app/                 console: layout (auth gate, AppShell, react-query Providers), error boundary, and the
+                             programs, programs/new, programs/[id] (overview, claims, settings, reports, fraud,
+                             campaign), claims/[id] (detail, trace), payouts, and billing (with return) pages
+src/app/claim/               claimant portal: [token] (stepper), [token]/status, connect-return, connect-refresh
+src/app/sign-in/ sign-up/    Clerk sign-in and sign-up (Clerk mode)
+src/app/organization/        create or select an organization (Clerk mode)
+src/app/api/[...path]/       same-origin proxy for client components: /api/v1/* and /api/portal/* only
+
 src/lib/api-types.ts         GENERATED zod schemas and types; never edit by hand
 src/lib/api/config.ts        server settings (RECALLOPS_API_URL, timeout)
 src/lib/api/auth-seam.ts     console identity: the Clerk session token (clerk) or the dev headers (dev); else fail closed
-src/lib/auth/                Clerk mode rules (routes, matcher, roles, console access) and the server-side session lookup
-src/proxy.ts                 Next 16 proxy: clerkMiddleware on the console in Clerk mode; never on /claim or /api/portal
 src/lib/api/forward.ts       proxy rules: path allowlist, header allowlists (unit-tested)
 src/lib/api/backend.ts       server-side API calls with timeouts and typed errors; apiJson() parses with zod
 src/lib/api/problem.ts       RFC 7807 -> { status, title, detail, correlationId, retryAfterSeconds } + human sentence
 src/lib/api/queries.ts       page loaders returning { ok, data } or { ok: false, problem } (pages render the error state)
-src/lib/status.ts            labels for claim, run, payout, outcome, and program statuses; unknown -> "In progress"
-src/lib/programs.ts          figures derived from Program fields only (filed, awaiting review, corrected)
-src/lib/format.ts            counts, cents, UTC dates and times, percents
-src/lib/claims.ts            queue URL state, API path, review classification
-src/lib/claim-detail.ts      reviewer action rules (mirrors claims/review.py), photo readings and duplicate hits from
-                             the trace, citations, cap use, polling intervals
 src/lib/api/client.ts        browser fetch through /api, validated with zod
+src/lib/auth/                Clerk mode rules (routes, matcher, roles, console access), the server-side session
+                             lookup, and the current console role
 src/lib/queries/             react-query options (queue, claim, and trace polling)
+src/lib/status.ts            labels for claim, run, payout, outcome, and program statuses; unknown -> "In progress"
+src/lib/format.ts            counts, cents, UTC dates and times, percents
+src/lib/programs.ts          figures derived from Program fields only (filed, awaiting review, corrected)
+src/lib/program-create.ts    new program: recall search, notice links, the create body
+src/lib/program-rules.ts     rules editor model, remedy options that follow the remedy, lifecycle moves, close impact
+src/lib/claims.ts            queue URL state, API path, review classification
+src/lib/claim-detail.ts      reviewer action rules (mirrors claims/review.py), note limits, photo readings and duplicate
+                             hits from the trace, citations, cap use, polling and worker waits
+src/lib/claim-link.ts        claim link reissue rules
+src/lib/shortcuts.ts         console keyboard shortcuts (queue and claim)
+src/lib/mpr.ts               monthly progress report periods, boxes, and sources
+src/lib/fraud.ts             fraud graph to rings
+src/lib/campaign.ts          owner notice campaigns: registration CSV checks, matching, drafts, simulated send
+src/lib/payouts.ts           export batch downloads, file names, authors, totals
+src/lib/billing.ts           billing page rules over GET /v1/usage
+src/lib/billing-actions.ts   Stripe Checkout and Customer Portal handoff
+src/lib/stripe-url.ts        only Stripe-hosted URLs are followed
 src/lib/portal.ts            portal steps, validation, resumable drafts, plain status, payout choice, Stripe handoff
+src/lib/portal-copy.ts       plain sentences for portal errors
 src/lib/image.ts             on-device photo compression (under 1.5 MB, longest edge 2000 px)
+
+src/components/              shell and shared: AppShell, NavLinks, BrandMark, AccountControls, ClerkShell,
+                             ClerkConsole, AuthOff, StatusBadge, ProblemAlert, States (LoadingState, EmptyState)
+                             programs: ProgramsTable, ProgramPortfolio, ProgramOverview, NewProgram, ProgramSettings,
+                             IssueLinks
+                             claims: ClaimsQueue (client), ClaimsTable, QueueControls, ClaimDetailLive (client),
+                             ClaimPanels, ReviewerActions (client), ReissueLink, TraceView, TraceLive
+                             reports, fraud, campaign: MprGenerate, MprReportView, FraudRings, Campaign
+                             money: PayoutExports, BillingScreen, BillingView, BillingLive
 src/components/portal/       ClaimStepper, PhotoCapture, StatusView, NeedsInfoReply, PayoutChoice, AutoRefresh,
                              ConnectReturn
-src/app/api/[...path]/       same-origin proxy for client components: /api/v1/* and /api/portal/* only
-src/components/              AppShell, StatusBadge, ProblemAlert, LoadingState, EmptyState, ProgramsTable, ProgramOverview,
-                             ClaimsQueue (client), ClaimsTable, QueueControls (filter, review summary, pager),
-                             ClaimPanels, ReviewerActions (client), ClaimDetailLive (client), TraceView, TraceLive
 tests/                       vitest (node environment; components rendered with react-dom/server)
 ```
 
-## Design system: Ink & Paper (baseline for every screen)
+## Design system (baseline for every screen)
 
-Approved by the UI owner on 2026-10-21. New screens use these tokens and classes; do not add one-off colors or fonts.
+Restyled at merge (2026-10-21) to match the README graphics in `docs/assets`, at the backend owner's request; the
+layouts, components, and accessibility rules come from the UI owner's Ink & Paper system. New screens use these
+tokens and classes; do not add one-off colors or fonts.
 
-- **Tokens** live only in `src/app/globals.css`: paper `#F8F7F4` (page), white surfaces (cards, tables, inputs), ink
-  `#222222` (text, primary buttons), secondary ink `#56554F`, warm border `#E4E1DB`, copper `#A56D45`. Keep the page
-  about 80% neutral, 15% ink, 5% copper.
-- **Copper** marks selection, progress, link underlines, and focus only. It is about 4.2:1 on white, so never use it
-  for small text.
+- **Tokens** live only in `src/app/globals.css`: a white page and surfaces, panel `#F6F6F3` (sidebar, table headers),
+  ink `#161616`, secondary ink `#52514E`, warm border `#E1E0D9`, input border `#8A8881` (3.5:1), and one blue,
+  `brand` and `accent`: `#2672CF` in light mode (4.8:1 on white, so it can be text and sits behind white button text)
+  and the README's `#3987E5` in dark mode. The README's `#2A78D6` is 4.4:1, just under AA for body text.
+- **Blue** marks actions, selection, progress, link underlines, and focus. It is never a status.
 - **Status colors are separate from the brand:** green for approved, completed, paid; amber for flagged, pending
   review, warnings; red for denied, errors, destructive actions (`success`, `warn`, `danger` tokens and
   `StatusBadge` tones).
-- **Type:** DM Sans for everything operational (navigation, buttons, forms, tables, KPI values); Newsreader only for
-  page headings (`page-title`, 30 px, 26 px on phones), portal recall titles, status headlines, and empty states.
-  Section headings use `section-title` (18 px), headline figures `kpi-value` (28 px), small labels `eyebrow`.
-  Both fonts are self-hosted from npm (Fontsource variable, OFL-1.1, pinned 5.3.0): no font CDN at build or run time.
-- **Components:** cards are `rounded-lg border border-line bg-surface`; primary buttons solid ink (`bg-accent
+- **Type:** the system sans everywhere (the README graphics' stack), so no font is downloaded. Hierarchy comes from
+  size and weight: `page-title` (30 px, 26 px on phones), `display-title` (portal recall titles, status headlines,
+  empty states), `section-title` (18 px), `kpi-value` (28 px), `eyebrow`.
+- **Brand mark:** `components/BrandMark.tsx`, the shield and check from the README banner, used by the sidebar
+  wordmark and the portal header.
+- **Components:** cards are `rounded-lg border border-line bg-surface`; primary buttons solid blue (`bg-accent
   text-bg`), secondary buttons white with `border-line-strong`; destructive actions red outline. No gradients, glass,
   heavy shadows, neon, or decorative oversize elements.
-- **Checks for any new screen:** usable at 390 px with no sideways scroll, WCAG AA contrast (the console's lowest
-  text contrast is 6.4:1), labels on every control, a page title, visible keyboard focus.
+- **Checks for any new screen:** usable at 390 px with no sideways scroll, WCAG AA contrast, labels on every control,
+  a page title, visible keyboard focus. Dark mode follows the system and uses the README's dark values.
 
 ## Decisions in this component
 
@@ -131,7 +170,8 @@ Approved by the UI owner on 2026-10-21. New screens use these tokens and classes
 - **Program lifecycle.** `/app/programs/new` (admin) searches `GET /v1/recalls` or takes a notice typed in, and
   `POST /v1/programs` returns a draft with extracted rules (the regex extractor first; the model only as a fallback,
   which replay mode answers at no cost). `/app/programs/[id]/settings` edits the rules and the review threshold
-  (`PATCH` replaces each rules object whole, so evidence, remedy options, and unknown keys are carried over), shows
+  (`PATCH` replaces each rules object whole, so evidence and unknown keys are carried over; remedy options are rebuilt
+  to match a changed remedy, keeping every proof the options asked for), shows
   each value's notice quote with a verbatim mark, and moves the program draft to open to closed, each confirmed
   inline. Closing cannot be undone; a 402 on opening links to Billing. Reviewers see the page read-only.
 - **Payouts** (`/app/payouts`, admin; hidden from reviewers in the sidebar): export batch history, a confirmed
@@ -167,9 +207,8 @@ Approved by the UI owner on 2026-10-21. New screens use these tokens and classes
 
 **Login owner (component 4)**
 - The browser half of Clerk is built in apps/web by the UI owner (2026-10-21), against the backend half from PR #8.
-  `.github/CODEOWNERS` still routes `/apps/web/src/middleware.ts`, `src/lib/auth/`, and the sign-in and sign-up pages
-  to the login owner; Next 16 uses `src/proxy.ts` instead of `middleware.ts`, so that entry needs updating (a
-  backend-owned file).
+  `.github/CODEOWNERS` routes `src/proxy.ts`, `src/lib/auth/`, and the sign-in and sign-up pages to the login owner
+  (fixed at merge: it named `middleware.ts`).
 
 **Payments owner and whoever runs the backend (component 3, operations)**
 - Point the Connect return and refresh settings at the portal: `CONNECT_RETURN_URL=http://localhost:3000/claim/connect-return`
@@ -177,32 +216,19 @@ Approved by the UI owner on 2026-10-21. New screens use these tokens and classes
   fixed URL for every claim, so before leaving for Stripe the tab stores the claim token in `sessionStorage`; the
   landing page reads it once, deletes it, and opens that claim's status page, which re-reads the API. Only an
   `https` URL on `stripe.com` is followed. Without these settings Stripe returns the claimant to `/dev/console`.
-- Point `BILLING_RETURN_URL` at the console's billing page: `http://localhost:3000/app/billing?stripe=return`
-  (production: the web origin). The page polls usage for 60 s after a Stripe return.
+- `BILLING_RETURN_URL` defaults to `http://localhost:3000/app/billing/return` (production: the web origin). The API
+  refuses query strings in return URLs, so the return is its own page; `?stripe=return` still works. The page polls
+  usage every 3 s for 60 s. The Connect URLs above are now the API's defaults too (CHANGES item 47).
 
 **Backend owner (component 1)**
-- `reissue_link` writes its `claim_link_reissued` audit row with `target_type="program"` and the claim's id as
-  `target_id` (`programs._audit` hardcodes the type), so the claim's own audit trail never shows a reissue.
-- A program created from a typed notice is titled "Manual recall" in every view: `ManualRecall.title` is not kept on
-  the program. The new-program page says so.
-- 02-ui.md's `/app/settings` asks for a firm-wide default threshold and a notification email; the contract has no
-  route for either, so the console offers per-program thresholds and Clerk's organization page only.
-- A local API started before PR 8 was merged lacks `POST /v1/claims/{id}/link` (32 of 33 routes); restart it after
-  pulling. No migration is needed for that route.
-- `PortalView.status` answers `flagged` or `capped` to anyone holding the claim link. The portal pages show those as
-  "a person is reviewing" and never echo the raw value, but the API itself discloses it.
-- Two documentation examples in `docs/contracts/openapi.json` omit required nullable fields: `Program` has no
-  `closed_at`, and `Trace.steps[0]` has no `thought`. The API itself serializes nulls, so this does not affect
-  runtime; `tests/api-types.test.ts` tolerates exactly these two gaps and asks for the entry to be removed when they
-  are fixed.
-- `GET /v1/programs/{id}/claims` answers 400 "invalid cursor" for a cursor it cannot decode, but the contract lists
-  only 401, 403, 404, and 422 for that route. The UI handles the 400; the contract could list it.
-- `Decision` in the API has six fields (`outcome`, `reasons`, `cited_rules`, `confidence`, `routed_to_human`,
-  `decided_by`) and forbids extras, so `hold_reason`, `reopened_from`, `duplicate_found_later`, `duplicates_ack`, and
-  `question_for_claimant` (CHANGES.md item 6) never reach the UI. The console keys reviewer actions on the claim
-  status as the contract says, but cannot show why an `under_review` claim is held or that a claim was reopened.
+- Closed at merge (CHANGES items 41 to 46): the reissue audit row is filed under the claim; a typed notice keeps its
+  title; the API itself answers `under_review` to the claimant for `flagged` and `capped`; contract examples keep
+  their nulls (`tests/api-types.test.ts` no longer tolerates gaps); the claims list declares its 400; `Decision`
+  carries `hold_reason`, `reopened_from`, `duplicate_found_later`, `duplicates_ack`, and `question_for_claimant`, and
+  claim detail shows why a claim waits and which claim reopened it.
+- Still open: 02-ui.md's `/app/settings` (a firm-wide default threshold and a notification email) has no route, so
+  the console offers per-program thresholds and Clerk's organization page only.
 - Clerk pins: `@clerk/nextjs` 7.9.17 (CLAUDE.md) resolved `@clerk/backend` 3.26.0, `@clerk/shared` 4.41.0, and
   `@clerk/react` 6.18.0, all published 2026-10-20. package.json `overrides` hold them at 3.25.0 (the CLAUDE.md pin),
   4.40.0, and 6.17.8, the releases current when 7.9.17 shipped.
-- The packages listed above under "beyond the pin list" need a decisions-log entry if the pin list is meant to cover
-  apps/web devDependencies.
+- The web pins and the packages beyond the pin list are recorded in CLAUDE.md (Stack, 2026-10-21).

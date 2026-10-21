@@ -15,7 +15,7 @@ export default async function ClaimFormPage({ params }: { params: Promise<{ toke
   if (view.data.status !== "draft") redirect(`/claim/${encodeURIComponent(token)}/status`);
   return (
     <div>
-      <h1 className="mb-6 font-serif text-[1.375rem] leading-snug font-medium tracking-tight text-ink sm:text-[1.75rem]">{view.data.program.title}</h1>
+      <h1 className="display-title mb-6 text-[1.375rem] leading-snug sm:text-[1.75rem]">{view.data.program.title}</h1>
       <ClaimStepper token={token} view={view.data} />
     </div>
   );

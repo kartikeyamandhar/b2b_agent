@@ -23,7 +23,7 @@ const params = (token: string) => ({ params: Promise.resolve({ token }) });
 
 beforeEach(() => {
   calls = [];
-  vi.stubEnv("RECALLOPS_API_URL", "http://api.test");
+  vi.stubEnv("RECALLOPS_API_URL", "http://127.0.0.1:8000");
   vi.stubEnv("RECALLOPS_WEB_AUTH", "dev");
   vi.stubEnv("RECALLOPS_DEV_FIRM_ID", "00000000-0000-4000-8000-00000000d001");
 });
@@ -36,7 +36,7 @@ describe("/claim/[token]", () => {
   it("reads the claim with the token only and starts the form", async () => {
     serve(() => Response.json(view));
     const out = renderToStaticMarkup(await ClaimFormPage(params(T)));
-    expect(calls[0]!.url).toBe(`http://api.test/portal/${T}`);
+    expect(calls[0]!.url).toBe(`http://127.0.0.1:8000/portal/${T}`);
     expect(calls[0]!.headers.get("x-dev-firm-id")).toBeNull();
     expect(out).toContain("Example Thermal Laminators");
     expect(out).toContain("Step 1 of 6");
@@ -85,7 +85,7 @@ describe("/claim/[token]/status", () => {
 
 describe("portal photo upload through the proxy", () => {
   it("streams the multipart body to the API with no identity", async () => {
-    vi.stubEnv("RECALLOPS_API_URL", "http://api.test");
+    vi.stubEnv("RECALLOPS_API_URL", "http://127.0.0.1:8000");
     let received: { url: string; headers: Headers; text: string } | null = null;
     vi.stubGlobal("fetch", async (url: string, init: RequestInit) => {
       received = { url, headers: new Headers(init.headers), text: await new Response(init.body as BodyInit).text() };
@@ -97,7 +97,7 @@ describe("portal photo upload through the proxy", () => {
     const req = new Request(`http://localhost:3000/api/portal/${T}/photos`, { method: "POST", body: form, headers: { origin: "http://localhost:3000", host: "localhost:3000" } });
     const res = await POST(req, { params: Promise.resolve({ path: ["portal", T, "photos"] }) });
     expect(res.status).toBe(200);
-    expect(received!.url).toBe(`http://api.test/portal/${T}/photos`);
+    expect(received!.url).toBe(`http://127.0.0.1:8000/portal/${T}/photos`);
     expect(received!.headers.get("content-type")).toMatch(/^multipart\/form-data; boundary=/);
     expect(received!.headers.get("x-dev-firm-id")).toBeNull();
     expect(received!.text).toContain('name="kind"');

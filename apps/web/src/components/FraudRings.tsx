@@ -131,7 +131,7 @@ export function FraudRings({ graph }: { graph: FraudGraphView }) {
 
       {rings.length === 0 ? (
         <div className="rounded-lg border border-dashed border-line-strong/60 bg-surface p-8 text-sm" data-no-rings>
-          <p className="font-serif text-xl text-ink">No fraud rings</p>
+          <p className="display-title text-xl">No fraud rings</p>
           <p className="mt-2 text-ink-muted">No two claims in this program share a photo, address, serial number, or payout destination.</p>
         </div>
       ) : (

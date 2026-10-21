@@ -3,6 +3,7 @@
 import { CampaignSummary, ClaimDetail, ClaimPage, ExportBatchList, FraudGraphView, MprReport, PortalView, Program, ProgramList, Trace, Usage } from "@/lib/api-types";
 import { isPlausibleToken, portalPath } from "@/lib/portal";
 import { claimsApiPath, type QueueParams } from "@/lib/claims";
+import { EXPORT_LIST_LIMIT } from "@/lib/payouts";
 
 import { NotSignedIn } from "./auth-seam";
 import { apiJson } from "./backend";
@@ -96,7 +97,7 @@ export async function loadMpr(programId: string, period: string, env: Env = proc
 }
 
 export function loadExports(env: Env = process.env): Promise<Loaded<ExportBatchList>> {
-  return load(() => apiJson(ExportBatchList, { surface: "console", path: "/v1/payouts/exports", search: "?limit=100" }, env));
+  return load(() => apiJson(ExportBatchList, { surface: "console", path: "/v1/payouts/exports", search: `?limit=${EXPORT_LIST_LIMIT}` }, env));
 }
 
 export function loadFraudGraph(programId: string, limit = 500, env: Env = process.env): Promise<Loaded<FraudGraphView>> {

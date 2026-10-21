@@ -10,10 +10,14 @@ import { formatCents } from "@/lib/format";
 import {
   DATE_CODE_FORMATS,
   REMEDY_TYPES,
+  closeImpact,
   draftChanged,
   draftFromProgram,
   evidenceByField,
   lifecycle,
+  lifecycleBlock,
+  optionsRequireDestructionPhoto,
+  remedyOptionsFor,
   rulesPatch,
   rulesWarnings,
   type DateCodeRow,
@@ -157,13 +161,16 @@ const LIFECYCLE_COPY = {
   },
   closed: {
     title: "Close the program",
-    body: "Closing is permanent: a closed program cannot be reopened. Every claim link stops working, and no new claims can be filed. Decisions and payouts already made stay as they are.",
+    body: "Closing is permanent: a closed program cannot be reopened. Every claim link stops working at once, so claimants can no longer file, answer a question, add a photo, see a decision, or choose how a refund is paid. You can still decide claims here.",
     confirm: "Close program permanently",
   },
 } as const;
 
-/** Lifecycle control: one move at a time, confirmed inline (draft → open → closed). */
-export function LifecycleControl({ program, onChanged }: { program: Program; onChanged: (p: Program) => void }) {
+/**
+ * Lifecycle control: one move at a time, confirmed inline (draft → open → closed). `blocked` says why the move
+ * cannot start yet (unsaved rule edits before a close).
+ */
+export function LifecycleControl({ program, onChanged, blocked = null }: { program: Program; onChanged: (p: Program) => void; blocked?: string | null }) {
   const { next } = lifecycle(program.status);
   const [confirming, setConfirming] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -173,9 +180,10 @@ export function LifecycleControl({ program, onChanged }: { program: Program; onC
     return <p className="text-sm text-ink-muted">This program is closed. Its records stay available for reports; open a new program for further work.</p>;
   }
   const copy = LIFECYCLE_COPY[next];
+  const impact = next === "closed" ? closeImpact(program.claim_counts) : [];
 
   async function move() {
-    if (next === null) return;
+    if (next === null || blocked) return;
     setBusy(true);
     setProblem(null);
     try {
@@ -192,9 +200,24 @@ export function LifecycleControl({ program, onChanged }: { program: Program; onC
   return (
     <div className="grid gap-3" data-lifecycle={next}>
       <p className="text-sm text-ink-muted">{copy.body}</p>
+      {impact.length ? (
+        <div className="rounded-md border border-warn/40 bg-warn-soft p-3 text-sm text-warn-ink" data-close-impact>
+          <p className="font-medium">These claims lose their claim link when you close:</p>
+          <ul className="mt-1 list-disc pl-5">
+            {impact.map((line) => (
+              <li key={line}>{line}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+      {blocked ? (
+        <p role="status" className="text-sm text-warn-ink" data-lifecycle-blocked>
+          {blocked}
+        </p>
+      ) : null}
       {!confirming ? (
         <div>
-          <button type="button" onClick={() => setConfirming(true)} className={next === "closed" ? SECONDARY : PRIMARY} data-lifecycle-start>
+          <button type="button" onClick={() => setConfirming(true)} disabled={!!blocked} className={next === "closed" ? SECONDARY : PRIMARY} data-lifecycle-start>
             {copy.title}
           </button>
         </div>
@@ -202,7 +225,7 @@ export function LifecycleControl({ program, onChanged }: { program: Program; onC
         <div role="group" aria-label={copy.title} className={`grid gap-2 rounded-md border p-3 ${next === "closed" ? "border-danger/40 bg-danger-soft" : "border-line bg-panel"}`}>
           <p className="text-sm font-medium">{next === "closed" ? "Close this program? This cannot be undone." : "Open this program now?"}</p>
           <div className="flex flex-wrap gap-2">
-            <button type="button" onClick={() => void move()} disabled={busy} className={next === "closed" ? DANGER : PRIMARY} data-lifecycle-confirm>
+            <button type="button" onClick={() => void move()} disabled={busy || !!blocked} className={next === "closed" ? DANGER : PRIMARY} data-lifecycle-confirm>
               {busy ? "Saving…" : copy.confirm}
             </button>
             <button type="button" onClick={() => setConfirming(false)} disabled={busy} className={SECONDARY}>
@@ -246,6 +269,10 @@ export function ProgramSettings({ program: initial, canAdmin, created = false }:
   const dirty = draftChanged(draft, saved);
   const warnings = rulesWarnings(program);
   const evidence = evidenceByField(program);
+  const remedyChanged = draft.remedyType !== saved.remedyType;
+  const planned = remedyOptionsFor(draft.remedyType, program);
+  const options = planned.ok ? planned.options : (program.remedy_rules.options ?? []);
+  const destructionByOption = optionsRequireDestructionPhoto(options);
   const ev = (...keys: (keyof RulesDraft)[]) => <Evidence quotes={evidence[keys[0]!]} edited={keys.some((k) => JSON.stringify(draft[k]) !== JSON.stringify(saved[k]))} />;
 
   useEffect(() => {
@@ -393,16 +420,22 @@ export function ProgramSettings({ program: initial, canAdmin, created = false }:
               ))}
             </select>
           </Field>
-          {area("destructionInstruction", "Destruction instruction", "Shown to claimants on the photo step, and checked against their destruction photo.")}
+          {area(
+            "destructionInstruction",
+            "Destruction instruction",
+            destructionByOption
+              ? "Shown to claimants on the photo step, and checked against their destruction photo. A destruction photo stays required while a remedy option below lists it, even if you clear this field."
+              : "Shown to claimants on the photo step, and checked against their destruction photo.",
+          )}
           <div className="grid gap-4 lg:grid-cols-2">
             {text("registrationUrl", "Registration address")}
             {text("contact", "Contact")}
           </div>
-          {(program.remedy_rules.options ?? []).length ? (
+          {options.length ? (
             <div className="text-xs text-ink-muted" data-remedy-options>
-              <p className="font-medium text-ink">Remedy options from the notice</p>
+              <p className="font-medium text-ink">{remedyChanged && planned.ok && planned.changed ? "Remedy options after you save" : "Remedy options from the notice"}</p>
               <ul className="mt-1 list-disc pl-5">
-                {(program.remedy_rules.options ?? []).map((o, i) => (
+                {options.map((o, i) => (
                   <li key={`${o.type}-${i}`}>
                     {remedyLabel(o.type)}
                     {(o.proof_required ?? []).length ? ` · proof: ${(o.proof_required ?? []).join(", ").replace(/_/g, " ")}` : ""}
@@ -410,7 +443,10 @@ export function ProgramSettings({ program: initial, canAdmin, created = false }:
                   </li>
                 ))}
               </ul>
-              <p className="mt-1">Options and the notice quotes behind each rule are kept as extracted.</p>
+              <p className="mt-1">
+                Claims take their remedy from the first option. Changing the remedy rebuilds the options for it and keeps
+                every proof they ask for. The notice quotes behind each rule are kept as extracted.
+              </p>
             </div>
           ) : null}
         </Card>
@@ -441,6 +477,7 @@ export function ProgramSettings({ program: initial, canAdmin, created = false }:
         <Card id="lifecycle" title="Status">
           <LifecycleControl
             program={program}
+            blocked={lifecycleBlock(lifecycle(program.status).next, dirty)}
             onChanged={(p) => {
               // A status change leaves the rules alone, so unsaved edits in the form are kept.
               setProgram(p);

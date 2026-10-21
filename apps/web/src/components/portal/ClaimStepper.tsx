@@ -8,20 +8,25 @@ import { sendJson } from "@/lib/api/client";
 import { ApiError, type ApiProblem } from "@/lib/api/problem";
 import {
   EMPTY_DRAFT,
+  PHOTOS_BUSY_REASON,
   STEPS,
+  anyPhotoBusy,
   clearDraft,
   fieldLabel,
   loadDraft,
   missingPhotos,
+  modelRequired,
   photoHint,
   photoKindLabel,
   portalPath,
   remedyPromise,
   saveDraft,
+  sessionStore,
   submitBody,
   validateStep,
   type DraftFields,
   type FieldErrors,
+  type PhotoPhase,
 } from "@/lib/portal";
 import { formatDate } from "@/lib/format";
 import { portalSentence } from "@/lib/portal-copy";
@@ -29,14 +34,6 @@ import { portalSentence } from "@/lib/portal-copy";
 import { ProblemAlert } from "../ProblemAlert";
 
 import { PhotoCapture } from "./PhotoCapture";
-
-function session(): Storage | null {
-  try {
-    return window.sessionStorage;
-  } catch {
-    return null;
-  }
-}
 
 const today = () => new Date().toISOString().slice(0, 10);
 
@@ -111,6 +108,68 @@ function Summary({ rows }: { rows: Array<[string, ReactNode]> }) {
   );
 }
 
+/**
+ * Back, Continue, and Submit. While a photo is still preparing or uploading all three wait: moving on would submit
+ * without it, and going back would unmount the capture that holds the bytes for Try again.
+ */
+export function StepNav({
+  showBack,
+  isReview,
+  submitting,
+  photosBusy,
+  onBack,
+  onContinue,
+  onSubmit,
+}: {
+  showBack: boolean;
+  isReview: boolean;
+  submitting: boolean;
+  photosBusy: boolean;
+  onBack: () => void;
+  onContinue: () => void;
+  onSubmit: () => void;
+}) {
+  return (
+    <div className="grid gap-2">
+      {photosBusy ? (
+        <p id="step-nav-wait" aria-live="polite" className="text-sm text-ink-muted" data-photos-busy>
+          {PHOTOS_BUSY_REASON}
+        </p>
+      ) : null}
+      <div className="flex gap-3">
+        {showBack ? (
+          <button type="button" onClick={onBack} disabled={photosBusy} className="min-h-12 flex-1 rounded-md border border-line-strong bg-surface px-4 text-base hover:border-ink disabled:opacity-60" data-back>
+            Back
+          </button>
+        ) : null}
+        {isReview ? (
+          <button
+            type="button"
+            onClick={onSubmit}
+            disabled={submitting || photosBusy}
+            aria-describedby={photosBusy ? "step-nav-wait" : undefined}
+            className="min-h-12 flex-[2] rounded-md bg-accent px-4 text-base font-semibold text-bg hover:opacity-90 disabled:opacity-60"
+            data-submit
+          >
+            {submitting ? "Submitting…" : "Submit claim"}
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={onContinue}
+            disabled={photosBusy}
+            aria-describedby={photosBusy ? "step-nav-wait" : undefined}
+            className="min-h-12 flex-[2] rounded-md bg-accent px-4 text-base font-semibold text-bg hover:opacity-90 disabled:opacity-60"
+            data-continue
+          >
+            Continue
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 /** The six-step claim form (02-ui.md /claim/[token]). Fields resume from this tab's session; photos from the API. */
 export function ClaimStepper({ token, view }: { token: string; view: PortalView }) {
   const router = useRouter();
@@ -122,17 +181,20 @@ export function ClaimStepper({ token, view }: { token: string; view: PortalView 
   const [problem, setProblem] = useState<ApiProblem | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [restored, setRestored] = useState(false);
+  const [photoPhases, setPhotoPhases] = useState<Record<string, PhotoPhase>>({});
   const heading = useRef<HTMLHeadingElement>(null);
+  const photosBusy = anyPhotoBusy(photoPhases);
+  const requireModel = modelRequired(program);
 
   useEffect(() => {
-    const d = loadDraft(session(), view.claim_id);
+    const d = loadDraft(sessionStore(), view.claim_id);
     setFields(d.fields);
     setStep(d.step);
     setRestored(true);
   }, [view.claim_id]);
 
   useEffect(() => {
-    if (restored) saveDraft(session(), view.claim_id, fields, step);
+    if (restored) saveDraft(sessionStore(), view.claim_id, fields, step);
   }, [fields, step, restored, view.claim_id]);
 
   const missing = missingPhotos(program.required_photos, uploaded);
@@ -140,6 +202,7 @@ export function ClaimStepper({ token, view }: { token: string; view: PortalView 
   const set = (k: keyof DraftFields) => (v: string) => setFields((f) => ({ ...f, [k]: v }));
 
   function go(next: number) {
+    if (photosBusy) return;
     setErrors({});
     setProblem(null);
     setStep(next);
@@ -147,7 +210,8 @@ export function ClaimStepper({ token, view }: { token: string; view: PortalView 
   }
 
   function onContinue() {
-    const e = validateStep(current.id, fields, missing, today());
+    if (photosBusy) return;
+    const e = validateStep(current.id, fields, missing, today(), { requireModel });
     setErrors(e);
     if (Object.keys(e).length) {
       requestAnimationFrame(() => document.querySelector<HTMLElement>("[aria-invalid='true'], [data-step-error]")?.focus());
@@ -157,14 +221,15 @@ export function ClaimStepper({ token, view }: { token: string; view: PortalView 
   }
 
   async function onSubmit() {
-    const e = validateStep("review", fields, missing, today());
+    if (photosBusy) return;
+    const e = validateStep("review", fields, missing, today(), { requireModel });
     setErrors(e);
     if (Object.keys(e).length) return;
     setSubmitting(true);
     setProblem(null);
     try {
       await sendJson(PortalView, "POST", portalPath(token, "submit"), submitBody(fields));
-      clearDraft(session(), view.claim_id);
+      clearDraft(sessionStore(), view.claim_id);
       router.push(`/claim/${encodeURIComponent(token)}/status`);
     } catch (err) {
       setProblem(err instanceof ApiError ? err.problem : { status: 0, title: "Error", detail: null, correlationId: null, retryAfterSeconds: null });
@@ -182,7 +247,7 @@ export function ClaimStepper({ token, view }: { token: string; view: PortalView 
         </p>
         <ol className="mt-1 grid grid-cols-6 gap-1" aria-hidden="true">
           {STEPS.map((s, i) => (
-            <li key={s.id} className={`h-1.5 rounded ${i <= step ? "bg-copper" : "bg-line"}`} />
+            <li key={s.id} className={`h-1.5 rounded ${i <= step ? "bg-brand" : "bg-line"}`} />
           ))}
         </ol>
       </nav>
@@ -213,7 +278,16 @@ export function ClaimStepper({ token, view }: { token: string; view: PortalView 
 
       {current.id === "details" ? (
         <div className="grid gap-4">
-          <Field name="model_claimed" value={fields.model_claimed} error={err("model_claimed")} onChange={set("model_claimed")} list="recall-models" hint="Type it exactly as printed on the label." autoComplete="off" />
+          <Field
+            name="model_claimed"
+            value={fields.model_claimed}
+            error={err("model_claimed")}
+            onChange={set("model_claimed")}
+            list="recall-models"
+            hint={requireModel ? "Type it exactly as printed on the label." : "If your product's label shows a model number, type it exactly as printed."}
+            autoComplete="off"
+            optional={!requireModel}
+          />
           <datalist id="recall-models">
             {program.models.map((m) => (
               <option key={m} value={m} />
@@ -235,6 +309,7 @@ export function ClaimStepper({ token, view }: { token: string; view: PortalView 
               hint={photoHint(kind, program)}
               alreadyUploaded={uploaded.includes(kind)}
               onUploaded={(k) => setUploaded((u) => (u.includes(k) ? u : [...u, k]))}
+              onPhaseChange={(phase) => setPhotoPhases((p) => ({ ...p, [kind]: phase }))}
             />
           ))}
           {errors.photos ? (
@@ -293,22 +368,15 @@ export function ClaimStepper({ token, view }: { token: string; view: PortalView 
 
       {problem ? <ProblemAlert problem={problem} sentence={portalSentence(problem.status)} /> : null}
 
-      <div className="flex gap-3">
-        {step > 0 ? (
-          <button type="button" onClick={() => go(step - 1)} className="min-h-12 flex-1 rounded-md border border-line-strong bg-surface px-4 text-base hover:border-ink">
-            Back
-          </button>
-        ) : null}
-        {current.id === "review" ? (
-          <button type="button" onClick={() => void onSubmit()} disabled={submitting} className="min-h-12 flex-[2] rounded-md bg-accent px-4 text-base font-semibold text-bg hover:opacity-90 disabled:opacity-60" data-submit>
-            {submitting ? "Submitting…" : "Submit claim"}
-          </button>
-        ) : (
-          <button type="button" onClick={onContinue} className="min-h-12 flex-[2] rounded-md bg-accent px-4 text-base font-semibold text-bg hover:opacity-90" data-continue>
-            Continue
-          </button>
-        )}
-      </div>
+      <StepNav
+        showBack={step > 0}
+        isReview={current.id === "review"}
+        submitting={submitting}
+        photosBusy={photosBusy}
+        onBack={() => go(step - 1)}
+        onContinue={onContinue}
+        onSubmit={() => void onSubmit()}
+      />
     </div>
   );
 }

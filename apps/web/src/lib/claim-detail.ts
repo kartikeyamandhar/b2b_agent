@@ -2,6 +2,7 @@
 // cites. The action rules mirror apps/api claims/review.py and the dev console's guidance; the API stays the
 // authority (a 409 explains a refusal).
 import { ClaimAction, type ClaimDetail, type Trace, type TraceStep } from "@/lib/api-types";
+import type { ApiProblem } from "@/lib/api/problem";
 
 /** review.py REVIEWABLE + DIRECT_REVIEWABLE: override, request info, and mark fraud apply here. */
 export const ACTIONABLE_STATUSES = ["flagged", "under_review", "capped", "needs_info", "approved", "denied"] as const;
@@ -189,7 +190,7 @@ export function photoSrc(url: string, claimId: string): string | null {
   return url.startsWith(`/v1/claims/${claimId}/photos/`) && !url.includes("..") ? `/api${url}` : null;
 }
 
-/** Poll the claim while its run is in progress, or for a while after an action the worker must apply. */
+/** Poll the claim while its run is in progress, or until `awaitingWorkerUntil` (a queued review, or a first run). */
 export function claimPollMs(c: Pick<ClaimDetail, "run"> | undefined, awaitingWorkerUntil: number, now: number): number | false {
   if (c?.run?.status === "running") return 2_000;
   return now < awaitingWorkerUntil ? 2_000 : false;
@@ -198,6 +199,69 @@ export function claimPollMs(c: Pick<ClaimDetail, "run"> | undefined, awaitingWor
 /** trace.md: poll every 1 to 2 s while the run is running, then stop. */
 export function tracePollMs(t: Pick<Trace, "run"> | undefined | null): number | false {
   return t?.run.status === "running" ? 1_500 : false;
+}
+
+/** How long the claim page keeps polling after a review the worker must apply. */
+export const REVIEW_WAIT_MS = 60_000;
+/** How long the claim and trace pages keep checking for the worker's run on a claim that has none yet. */
+export const FIRST_RUN_WATCH_MS = 120_000;
+/** The interval of both waits (2 to 3 s). */
+export const WAIT_POLL_MS = 2_000;
+
+/**
+ * The claim waits for the worker: submitted (no decision yet, including a claim reopened after its decision), a run
+ * in progress, or no run or trace loaded yet. A draft waits for the claimant, not the worker. Once a run exists and
+ * is not running, and the claim is past submitted, there is nothing left to wait for.
+ */
+export function waitsForWorker(c: Pick<ClaimDetail, "status" | "run">, trace: Pick<Trace, "run"> | null | undefined): boolean {
+  if (c.status === "draft") return false;
+  if (c.status === "submitted" || c.run?.status === "running") return true;
+  return !c.run || !trace;
+}
+
+/** The time the claim and trace queries poll until: a queued review's window, or the first-run watch while it applies. */
+export function pollDeadline(reviewUntil: number, runWatchUntil: number, c: Pick<ClaimDetail, "status" | "run">, trace: Pick<Trace, "run"> | null | undefined): number {
+  return Math.max(reviewUntil, waitsForWorker(c, trace) ? runWatchUntil : 0);
+}
+
+/** The trace page knows only the trace: check for a first run until `watchUntil`, and stop once a run exists. */
+export function traceWatchPollMs(t: Pick<Trace, "run"> | null | undefined, watchUntil: number, now: number): number | false {
+  if (t) return t.run.status === "running" ? 1_500 : false;
+  return now < watchUntil ? WAIT_POLL_MS : false;
+}
+
+/** A queued review: the status and run it was queued against, and when the page stops polling for it. */
+export type ReviewWait = { from: string; run: string | null; until: number };
+
+const runKey = (c: Pick<ClaimDetail, "run">): string | null => (c.run ? `${c.run.run_id}:${c.run.status}` : null);
+
+export function startReviewWait(c: Pick<ClaimDetail, "status" | "run">, now: number): ReviewWait {
+  return { from: c.status, run: runKey(c), until: now + REVIEW_WAIT_MS };
+}
+
+/**
+ * The flash once the worker has dealt with a queued review, or null while it has not: the status moved, or the
+ * paused run moved on and is no longer running (a review can leave the status where it was).
+ */
+export function reviewSettled(w: ReviewWait, c: Pick<ClaimDetail, "status" | "run">): string | null {
+  if (c.status !== w.from) return `The worker applied the review. The status went from ${w.from} to ${c.status}.`;
+  if (runKey(c) !== w.run && c.run?.status !== "running") return `The worker finished with the review. The status is still ${c.status}; the trace shows what happened.`;
+  return null;
+}
+
+export const REVIEW_STILL_WAITING = "The worker has not applied the review yet. It may be busy or stopped. Check again in a moment.";
+export const RUN_STILL_WAITING = "The worker has not decided this claim yet. It may be busy or stopped. Check again in a moment.";
+
+/** review.py answers 409 "a review is already pending for this claim" while an earlier review waits for the worker. */
+export function isReviewQueued(p: Pick<ApiProblem, "status" | "detail">): boolean {
+  return p.status === 409 && /already pending/i.test(p.detail ?? "");
+}
+
+/** A plain sentence for the reviewer-action conflicts review.py raises; undefined keeps the generic one. */
+export function actionProblemSentence(p: Pick<ApiProblem, "status" | "detail">): string | undefined {
+  if (isReviewQueued(p)) return "A review is already queued for this claim. The worker applies it in a moment; this page updates when it has.";
+  if (p.status === 409 && /being adjudicated/i.test(p.detail ?? "")) return "The claim is being adjudicated right now. Try again when the run finishes.";
+  return undefined;
 }
 
 export type CapUse = { label: string; used: string; max: string; ratio: number | null };
@@ -231,10 +295,26 @@ export const ACTION_LABEL: Record<ActionKind, string> = {
   mark_delivered: "Mark delivered",
 };
 
+/**
+ * How much of each note the backend keeps: a request-info question reaches the claimant cut at 500 characters
+ * (portal.py _safe_question), and a delivery note is stored cut at 300 (review.py _mark_delivered). The other notes
+ * have no backend cut; 1,000 keeps the audit trail readable.
+ */
+export const NOTE_LIMIT: Record<ActionKind, number> = {
+  approve: 1_000,
+  deny: 1_000,
+  request_info: 500,
+  mark_fraud: 1_000,
+  mark_delivered: 300,
+};
+
 /** The ClaimAction body for a reviewer's choice, validated against the contract before it is sent. */
 export function buildAction(kind: ActionKind, message: string): { ok: true; body: ClaimAction } | { ok: false; error: string } {
   const note = message.trim();
   if (kind === "request_info" && !note) return { ok: false, error: "Write the question the claimant should answer." };
+  if (note.length > NOTE_LIMIT[kind]) {
+    return { ok: false, error: kind === "request_info" ? `Keep the question to ${NOTE_LIMIT[kind]} characters: the claimant sees no more than that.` : `Keep the note to ${NOTE_LIMIT[kind]} characters.` };
+  }
   const raw =
     kind === "approve" || kind === "deny"
       ? { action: "resume_override", outcome: kind, message: note || null }

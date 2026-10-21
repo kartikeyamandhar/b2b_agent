@@ -25,7 +25,7 @@ const drafted = CampaignSummary.parse({
 const program = (JSON.parse(readFileSync(new URL("./fixtures/programs.json", import.meta.url), "utf8")) as { items: unknown[] }).items[0];
 
 beforeEach(() => {
-  vi.stubEnv("RECALLOPS_API_URL", "http://api.test");
+  vi.stubEnv("RECALLOPS_API_URL", "http://127.0.0.1:8000");
   vi.stubEnv("RECALLOPS_WEB_AUTH", "dev");
   vi.stubEnv("RECALLOPS_DEV_FIRM_ID", "00000000-0000-4000-8000-00000000d001");
   vi.stubEnv("RECALLOPS_DEV_ROLE", "admin");
@@ -136,7 +136,7 @@ describe("/app/programs/[id]/campaign", () => {
       return url.endsWith("/campaign") ? Response.json(empty) : Response.json(program);
     });
     const html = renderToStaticMarkup(await CampaignPage({ params: Promise.resolve({ id: P }) }));
-    expect(calls.map((c) => c.url).sort()).toEqual([`http://api.test/v1/programs/${P}`, `http://api.test/v1/programs/${P}/campaign`]);
+    expect(calls.map((c) => c.url).sort()).toEqual([`http://127.0.0.1:8000/v1/programs/${P}`, `http://127.0.0.1:8000/v1/programs/${P}/campaign`]);
     expect(calls.every((c) => c.method === "GET")).toBe(true);
     expect(html).toContain("Owner notices");
     expect(html).toMatch(/data-step="upload"[^>]*data-current="true"/);

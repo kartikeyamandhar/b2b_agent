@@ -1,6 +1,7 @@
 // Claim portal rules (02-ui.md /claim/[token]): steps, validation, resumable drafts, plain-language status, and the
 // post-approval payout choice. Pure, so it is unit-tested. The backend stays the authority on every rule here.
 import { PortalSubmit, type PortalView } from "@/lib/api-types";
+import { portalSentence } from "@/lib/portal-copy";
 import { isStripeHostedUrl } from "@/lib/stripe-url";
 
 /** Claim links are opaque bearer tokens (dev.<firm>.<claim> today, HMAC from component 4 later). */
@@ -109,11 +110,23 @@ const STEP_FIELDS: Record<StepId, ReadonlyArray<keyof DraftFields>> = {
   review: [],
 };
 
-export function validateStep(step: StepId, f: DraftFields, missingPhotos: readonly string[], today: string): FieldErrors {
+/**
+ * The model number is required only when the notice lists models to match it against; the API accepts a claim
+ * without one (PortalSubmit.model_claimed is optional), and a recall with no listed models gives nothing to type.
+ */
+export function modelRequired(program: Pick<PortalView["program"], "models">): boolean {
+  return program.models.length > 0;
+}
+
+export type ValidateOptions = { requireModel?: boolean };
+
+export function validateStep(step: StepId, f: DraftFields, missingPhotos: readonly string[], today: string, opts: ValidateOptions = {}): FieldErrors {
   const errors: FieldErrors = {};
+  const requireModel = opts.requireModel ?? true;
+  const required = (REQUIRED_BY_STEP[step] ?? []).filter((k) => requireModel || k !== "model_claimed");
   for (const k of STEP_FIELDS[step]) {
     const v = f[k].trim();
-    if ((REQUIRED_BY_STEP[step] ?? []).includes(k) && !v) errors[k] = `${LABEL[k]} is required.`;
+    if (required.includes(k) && !v) errors[k] = `${LABEL[k]} is required.`;
     else if (v.length > MAX[k]) errors[k] = `${LABEL[k]} must be at most ${MAX[k]} characters.`;
   }
   if (step === "details") {
@@ -134,7 +147,7 @@ export function validateStep(step: StepId, f: DraftFields, missingPhotos: readon
     errors.photos = `Upload the ${listJoin(missingPhotos.map(photoKindLabel))} photo${missingPhotos.length > 1 ? "s" : ""} to continue.`;
   }
   if (step === "review") {
-    for (const s of ["details", "photos", "purchase", "contact"] as const) Object.assign(errors, validateStep(s, f, missingPhotos, today));
+    for (const s of ["details", "photos", "purchase", "contact"] as const) Object.assign(errors, validateStep(s, f, missingPhotos, today, opts));
   }
   return errors;
 }
@@ -172,6 +185,39 @@ export function missingPhotos(required: readonly string[], uploaded: readonly st
 const PHOTO_LABEL: Record<string, string> = { label: "label", destruction: "destruction", receipt: "receipt", other: "extra" };
 export function photoKindLabel(kind: string): string {
   return Object.hasOwn(PHOTO_LABEL, kind) ? PHOTO_LABEL[kind]! : kind;
+}
+
+// ---- Photo uploads ----
+
+/** One PhotoCapture's state; preparing and uploading mean the photo is not on the server yet. */
+export type PhotoPhase = "idle" | "preparing" | "uploading" | "done" | "error";
+
+export function isPhotoBusy(phase: PhotoPhase | null | undefined): boolean {
+  return phase === "preparing" || phase === "uploading";
+}
+
+/** True while any photo on the page is still being prepared or uploaded, so nothing may move on without it. */
+export function anyPhotoBusy(phases: Readonly<Record<string, PhotoPhase>>): boolean {
+  return Object.values(phases).some(isPhotoBusy);
+}
+
+export const PHOTOS_BUSY_REASON = "Wait for the photo to finish uploading.";
+
+export type AnswerGate = { canSend: boolean; reason: string | null; offerWithoutPhoto: boolean };
+
+/**
+ * Whether a needs_info answer may be sent given the reply photo's state. The answer starts a new check of the
+ * claim, so a photo still on its way would arrive after that check began or not at all; a photo that failed needs
+ * Try again or an explicit choice to send without it.
+ */
+export function answerGate(photo: PhotoPhase | null, sendWithoutPhoto = false): AnswerGate {
+  if (isPhotoBusy(photo)) {
+    return { canSend: false, reason: "Wait for the photo to finish uploading, then send your answer.", offerWithoutPhoto: false };
+  }
+  if (photo === "error" && !sendWithoutPhoto) {
+    return { canSend: false, reason: "Your photo did not upload. Use Try again on the photo, or send your answer without it.", offerWithoutPhoto: true };
+  }
+  return { canSend: true, reason: null, offerWithoutPhoto: false };
 }
 
 export function photoHint(kind: string, program: PortalView["program"]): string {
@@ -311,6 +357,20 @@ export function payoutProgress(status: string | null | undefined): string | null
   }
 }
 
+/** Payout states from which Stripe Connect onboarding may start (stripe_connect.py onboarding); pending_export is not one. */
+export const CONNECT_CHOOSABLE = ["pending", "onboarding", "failed"] as const;
+
+/** A scheduled check (pending_export) can only be exported or held, so a bank transfer is offered only before that. */
+export function offersBankTransfer(current: string | null | undefined): boolean {
+  return !!current && (CONNECT_CHOOSABLE as readonly string[]).includes(current);
+}
+
+/** A 409 from the payout call means the refund moved on while the page was open; say that, not "your claim changed". */
+export function payoutSentence(status: number): string {
+  if (status === 409) return "Your refund can no longer be changed this way. Refresh the page to see how it will be paid.";
+  return portalSentence(status);
+}
+
 /** After a payout error: 402 means the firm's plan pays refunds by mailed check only, so the form switches to it. */
 export function methodAfterPayoutError(status: number, method: "check_export" | "stripe_connect"): "check_export" | "stripe_connect" {
   return status === 402 ? "check_export" : method;
@@ -319,6 +379,15 @@ export function methodAfterPayoutError(status: number, method: "check_export" | 
 /** Only a Stripe-hosted https page may receive the claimant (Account Links are ephemeral bearer URLs). */
 export function isStripeOnboardingUrl(url: string | null | undefined): url is string {
   return isStripeHostedUrl(url);
+}
+
+/** This tab's sessionStorage, or null when the browser blocks site data (reading the property itself can throw). */
+export function sessionStore(): DraftStore | null {
+  try {
+    return typeof window === "undefined" ? null : window.sessionStorage;
+  } catch {
+    return null;
+  }
 }
 
 /** The Connect return URL is one fixed setting, so the tab remembers which claim went to Stripe. */
@@ -330,6 +399,15 @@ export function rememberConnectClaim(store: DraftStore | null, token: string): v
   } catch {
     // without storage the claimant reopens their link
   }
+}
+
+/**
+ * Sends the claimant to Stripe's onboarding page. Remembering the claim is best effort: with site data blocked the
+ * claimant still reaches Stripe and reopens their link afterwards.
+ */
+export function handOffToStripe(url: string, token: string, assign: (url: string) => void): void {
+  rememberConnectClaim(sessionStore(), token);
+  assign(url);
 }
 
 export function takeConnectClaim(store: DraftStore | null): string | null {

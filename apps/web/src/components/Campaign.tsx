@@ -36,7 +36,7 @@ function Step({ n, id, title, current, children }: { n: number; id: Stage; title
   return (
     <section
       aria-labelledby={`campaign-${id}`}
-      className={`min-w-0 rounded-lg border bg-surface p-4 sm:p-5 ${current === id ? "border-copper border-l-4" : "border-line"}`}
+      className={`min-w-0 rounded-lg border bg-surface p-4 sm:p-5 ${current === id ? "border-brand border-l-4" : "border-line"}`}
       data-step={id}
       data-current={current === id || undefined}
     >
@@ -119,7 +119,7 @@ export function SampleNotices({ sample }: { sample: CampaignSummary["sample"] })
             <p className="mt-2 max-h-56 overflow-auto whitespace-pre-wrap text-ink-muted [overflow-wrap:anywhere]">
               {splitPlaceholder(d.body).map((p, j) =>
                 p.link ? (
-                  <span key={j} className="rounded border border-copper/50 bg-copper-soft px-1 font-mono text-xs text-ink" data-link-placeholder>
+                  <span key={j} className="rounded border border-brand/50 bg-brand-soft px-1 font-mono text-xs text-ink" data-link-placeholder>
                     claim link
                   </span>
                 ) : (

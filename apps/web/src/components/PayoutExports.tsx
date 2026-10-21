@@ -8,7 +8,7 @@ import { ExportBatchSummary } from "@/lib/api-types";
 import { sendJson } from "@/lib/api/client";
 import { ApiError, type ApiProblem } from "@/lib/api/problem";
 import { countOf, formatCents, formatCount, formatDateTime } from "@/lib/format";
-import { batchAuthor, exportCsvHref, exportFilename, exportTotals } from "@/lib/payouts";
+import { EXPORT_LIST_LIMIT, batchAuthor, exportCsvHref, exportFilename, exportTotals } from "@/lib/payouts";
 
 import { ProblemAlert } from "./ProblemAlert";
 import { EmptyState } from "./States";
@@ -169,22 +169,36 @@ export function CreateExport() {
   );
 }
 
-export function ExportSummary({ items }: { items: readonly ExportBatchSummary[] }) {
+export { EXPORT_LIST_LIMIT };
+
+/**
+ * Totals of the listed batches. They are all-time only while the list is shorter than its limit; at the limit,
+ * older batches exist that the list does not include, so the labels say the totals cover the batches shown.
+ */
+export function ExportSummary({ items, limit = EXPORT_LIST_LIMIT }: { items: readonly ExportBatchSummary[]; limit?: number }) {
   const t = exportTotals(items);
+  const partial = items.length >= limit;
   return (
-    <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-      {(
-        [
-          ["Batches", formatCount(t.batches)],
-          ["Payouts exported", formatCount(t.rows)],
-          ["Total exported", formatCents(t.cents)],
-        ] as const
-      ).map(([label, value]) => (
-        <div key={label} className="min-w-0 rounded-lg border border-line bg-surface px-4 py-4">
-          <dt className="eyebrow">{label}</dt>
-          <dd className="kpi-value mt-2 [overflow-wrap:anywhere]">{value}</dd>
-        </div>
-      ))}
-    </dl>
+    <div className="grid gap-2" data-export-summary={partial ? "shown" : "all"}>
+      <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        {(
+          [
+            [partial ? "Batches shown" : "Batches", formatCount(t.batches)],
+            [partial ? "Payouts in these batches" : "Payouts exported", formatCount(t.rows)],
+            [partial ? "Total in these batches" : "Total exported", formatCents(t.cents)],
+          ] as const
+        ).map(([label, value]) => (
+          <div key={label} className="min-w-0 rounded-lg border border-line bg-surface px-4 py-4">
+            <dt className="eyebrow">{label}</dt>
+            <dd className="kpi-value mt-2 [overflow-wrap:anywhere]">{value}</dd>
+          </div>
+        ))}
+      </dl>
+      {partial ? (
+        <p className="text-xs text-ink-muted">
+          These totals cover the {formatCount(items.length)} newest batches. Older batches are not counted.
+        </p>
+      ) : null}
+    </div>
   );
 }

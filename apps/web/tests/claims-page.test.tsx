@@ -34,7 +34,7 @@ async function render(id: string, search: Record<string, string> = {}) {
 
 beforeEach(() => {
   calls = [];
-  vi.stubEnv("RECALLOPS_API_URL", "http://api.test");
+  vi.stubEnv("RECALLOPS_API_URL", "http://127.0.0.1:8000");
   vi.stubEnv("RECALLOPS_WEB_AUTH", "dev");
   vi.stubEnv("RECALLOPS_DEV_FIRM_ID", "00000000-0000-4000-8000-00000000d001");
 });
@@ -48,7 +48,7 @@ describe("/app/programs/[id]/claims", () => {
   it("loads the program and the first page of claims", async () => {
     serve();
     const html = await render(P);
-    expect(calls.sort()).toEqual([`http://api.test/v1/programs/${P}`, `http://api.test/v1/programs/${P}/claims?limit=50`]);
+    expect(calls.sort()).toEqual([`http://127.0.0.1:8000/v1/programs/${P}`, `http://127.0.0.1:8000/v1/programs/${P}/claims?limit=50`]);
     expect(html).toContain("Claims queue");
     expect(html).toContain("Scotch Thermal Laminators");
     expect(html).toContain('href="/app/claims/66dcc492-086f-5b59-b441-cbe001eb2e0b"');
@@ -57,13 +57,13 @@ describe("/app/programs/[id]/claims", () => {
   it("sends the status filter and cursor to the API", async () => {
     serve();
     await render(P, { status: "flagged", cursor: "YWJj" });
-    expect(calls).toContain(`http://api.test/v1/programs/${P}/claims?status=flagged&cursor=YWJj&limit=50`);
+    expect(calls).toContain(`http://127.0.0.1:8000/v1/programs/${P}/claims?status=flagged&cursor=YWJj&limit=50`);
   });
 
   it("drops an unknown status and a malformed cursor before calling, and says so", async () => {
     serve();
     const html = await render(P, { status: "archived", cursor: "not a cursor" });
-    expect(calls).toContain(`http://api.test/v1/programs/${P}/claims?limit=50`);
+    expect(calls).toContain(`http://127.0.0.1:8000/v1/programs/${P}/claims?limit=50`);
     expect(html).toContain("&quot;archived&quot; is not a claim status");
     expect(html).toContain("The page link was not valid");
   });

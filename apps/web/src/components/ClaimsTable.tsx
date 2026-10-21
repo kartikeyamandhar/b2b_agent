@@ -41,7 +41,7 @@ export function ClaimsTable({ claims, selectedId = null }: { claims: readonly Cl
                 data-review={review}
                 data-selected={selectedId === c.id || undefined}
                 aria-current={selectedId === c.id ? "true" : undefined}
-                className={`border-b border-line last:border-b-0 hover:bg-panel ${selectedId === c.id ? "bg-copper-soft outline-2 -outline-offset-2 outline-copper" : ""}`}
+                className={`border-b border-line last:border-b-0 hover:bg-panel ${selectedId === c.id ? "bg-brand-soft outline-2 -outline-offset-2 outline-brand" : ""}`}
               >
                 <th
                   scope="row"

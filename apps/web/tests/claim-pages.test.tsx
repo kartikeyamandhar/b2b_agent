@@ -30,7 +30,7 @@ const params = (id: string) => ({ params: Promise.resolve({ id }) });
 
 beforeEach(() => {
   calls = [];
-  vi.stubEnv("RECALLOPS_API_URL", "http://api.test");
+  vi.stubEnv("RECALLOPS_API_URL", "http://127.0.0.1:8000");
   vi.stubEnv("RECALLOPS_WEB_AUTH", "dev");
   vi.stubEnv("RECALLOPS_DEV_FIRM_ID", "00000000-0000-4000-8000-00000000d001");
 });
@@ -44,7 +44,7 @@ describe("/app/claims/[id]", () => {
     serve();
     const out = await render(ClaimPage(params(C)));
     // An admin's page also reads the claim's program, to know whether its link can be reissued.
-    expect(calls.sort()).toEqual([`http://api.test/v1/claims/${C}`, `http://api.test/v1/claims/${C}/trace`, "http://api.test/v1/programs/0874f66f-bfb5-552b-bd93-6266f49c1d5a"]);
+    expect(calls.sort()).toEqual([`http://127.0.0.1:8000/v1/claims/${C}`, `http://127.0.0.1:8000/v1/claims/${C}/trace`, "http://127.0.0.1:8000/v1/programs/0874f66f-bfb5-552b-bd93-6266f49c1d5a"]);
     expect(out).toContain("Claimant and claim");
     expect(out).toContain("Test Claimant");
     expect(out).toContain(`href="/app/programs/0874f66f-bfb5-552b-bd93-6266f49c1d5a/claims"`);

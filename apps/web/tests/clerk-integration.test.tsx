@@ -43,7 +43,7 @@ import { PROXY_MATCHER } from "@/lib/auth/mode";
 import proxy, { config } from "@/proxy";
 
 const ENV = {
-  RECALLOPS_API_URL: "http://api.test",
+  RECALLOPS_API_URL: "http://127.0.0.1:8000",
   RECALLOPS_WEB_AUTH: "clerk",
   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_placeholder",
   CLERK_SECRET_KEY: "sk_test_placeholder",
@@ -179,7 +179,7 @@ describe("console gate", () => {
 });
 
 describe("proxy.ts", () => {
-  const req = (path: string) => ({ nextUrl: { pathname: path } }) as never;
+  const req = (path: string, host = "localhost:3000") => ({ nextUrl: { pathname: path }, headers: new Headers({ host }) }) as never;
 
   it("uses the same matcher the tests check", () => {
     expect(config.matcher).toEqual([PROXY_MATCHER]);
@@ -193,6 +193,16 @@ describe("proxy.ts", () => {
     vi.stubEnv("RECALLOPS_WEB_AUTH", "clerk");
     proxy(req("/app/programs"), {} as never);
     expect(clerk.middlewareCalls).toBe(1);
+  });
+
+  it("answers dev mode only on this machine (no LAN, no DNS rebinding)", () => {
+    vi.stubEnv("RECALLOPS_WEB_AUTH", "dev");
+    for (const host of ["localhost:3000", "127.0.0.1:3000", "[::1]:3000"]) {
+      expect((proxy(req("/app/programs", host), {} as never) as Response).status, host).not.toBe(403);
+    }
+    for (const host of ["192.168.1.20:3000", "attacker.example:3000", "localhost.attacker.example"]) {
+      expect((proxy(req("/api/v1/programs", host), {} as never) as Response).status, host).toBe(403);
+    }
   });
 
   it("protects console pages and leaves the API route and sign-in to answer for themselves", async () => {
