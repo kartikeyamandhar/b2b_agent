@@ -33,7 +33,7 @@ export async function ClerkConsole({ children, context = clerkContext }: { child
       ) : (
         // A new QueryClient per organization: switching organizations never shows another firm's cached data.
         <Providers key={access.orgId}>
-          <AppShell identityNote={ROLE_LABEL[access.role]} controls={<AccountControls />}>
+          <AppShell identityNote={ROLE_LABEL[access.role]} controls={<AccountControls />} role={access.role}>
             {children}
           </AppShell>
         </Providers>

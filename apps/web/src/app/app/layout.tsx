@@ -24,8 +24,10 @@ export default async function ConsoleLayout({ children }: { children: ReactNode 
 
   let note: string;
   let org: { name: string; detail: string } | undefined;
+  let role: "admin" | "reviewer" | undefined;
   try {
     const id = devIdentity();
+    role = id.role;
     note = `Development auth · firm ${id.firmId} · ${id.role}`;
     org = { name: "Development firm", detail: `…${id.firmId.slice(-6)} · ${id.role === "admin" ? "Admin" : "Reviewer"} · dev auth` };
   } catch (err) {
@@ -34,7 +36,7 @@ export default async function ConsoleLayout({ children }: { children: ReactNode 
   }
   return (
     <Providers>
-      <AppShell identityNote={note} org={org}>
+      <AppShell identityNote={note} org={org} role={role}>
         {children}
       </AppShell>
     </Providers>

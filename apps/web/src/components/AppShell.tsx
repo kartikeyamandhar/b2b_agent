@@ -3,11 +3,12 @@ import type { ReactNode } from "react";
 
 import { NavLinks } from "./NavLinks";
 
-export type NavItem = { href: string; label: string; group: string };
+export type NavItem = { href: string; label: string; group: string; adminOnly?: boolean };
 
 // Only built pages are linked. Groups give the sidebar its hierarchy.
 export const CONSOLE_NAV: readonly NavItem[] = [
   { href: "/app/programs", label: "Programs", group: "Operations" },
+  { href: "/app/payouts", label: "Payouts", group: "Operations", adminOnly: true },
   { href: "/app/billing", label: "Billing", group: "Account" },
 ];
 
@@ -57,12 +58,16 @@ export function AppShell({
   identityNote,
   controls,
   org,
+  role,
 }: {
   children: ReactNode;
   identityNote: string;
   controls?: ReactNode;
   org?: OrgIdentity;
+  /** Hides admin-only sections from reviewers; the API still enforces every role. */
+  role?: "admin" | "reviewer";
 }) {
+  const nav = CONSOLE_NAV.filter((i) => !i.adminOnly || role === "admin");
   return (
     <div className="flex min-h-dvh flex-col bg-paper md:flex-row">
       <nav aria-label="Console" className="border-b border-line bg-paper md:sticky md:top-0 md:flex md:h-dvh md:w-64 md:shrink-0 md:flex-col md:border-r md:border-b-0">
@@ -70,7 +75,7 @@ export function AppShell({
           <Wordmark />
           <span className="mt-1 hidden pl-[1.125rem] text-xs text-ink-muted md:block">Recall operations</span>
         </Link>
-        <NavLinks items={CONSOLE_NAV} />
+        <NavLinks items={nav} />
         <div className="hidden md:mt-auto md:block">
           <OrgBlock org={org} identityNote={identityNote} controls={controls} />
         </div>
