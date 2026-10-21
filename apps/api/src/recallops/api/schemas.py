@@ -183,6 +183,15 @@ class Decision(Schema):
     confidence: float | None = None
     routed_to_human: bool
     decided_by: str | None = Field(None, description="agent | rules_only | a user id")
+    hold_reason: str | None = Field(
+        None,
+        description="why the claim waits for a person: flagged, over_value_threshold, model_disagrees_with_rules, "
+        "capped, failed, payout_held_needs_review, shared_mailing_address (CHANGES item 6)",
+    )
+    reopened_from: str | None = Field(None, description="the status a later duplicate reopened this claim from")
+    duplicate_found_later: list[str] = Field(default_factory=list, description="claim ids that reopened this claim")
+    duplicates_ack: list[str] = Field(default_factory=list, description="duplicates a reviewer saw when deciding")
+    question_for_claimant: str | None = Field(None, description="the needs_info question sent to the claimant")
 
 
 class ClaimSummary(Schema):

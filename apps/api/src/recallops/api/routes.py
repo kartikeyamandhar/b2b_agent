@@ -90,9 +90,9 @@ def search_recalls(
 def _program_view(db: Session, ctx: FirmContext, p: RecallProgram) -> s.Program:
     recall = db.get(Recall, p.recall_id) if p.recall_id else None
     counts = ProgramsRepo(db, ctx).claim_status_counts(p.id)
-    return views.program(
-        p, recall.title if recall else "Manual recall", recall.units_affected if recall else None, counts
-    )
+    # A typed notice keeps its title in the program's notice document (it read "Manual recall" everywhere).
+    title = recall.title if recall else program_service.program_source(db, p)[0]
+    return views.program(p, title, recall.units_affected if recall else None, counts)
 
 
 @firm.get("/programs", response_model=s.ProgramList, summary="List the firm's recall programs")
@@ -172,7 +172,7 @@ def _encode_cursor(c: Claim) -> str:
 @firm.get(
     "/programs/{program_id}/claims",
     response_model=s.ClaimPage,
-    responses=NOT_FOUND,
+    responses={**NOT_FOUND, 400: {"model": s.Problem, "description": "the cursor is not one this API issued"}},
     summary="Claims queue, oldest first, with a status filter and keyset cursor",
 )
 def list_claims(

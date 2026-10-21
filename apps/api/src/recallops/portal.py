@@ -21,7 +21,7 @@ from sqlalchemy.orm import Session
 from recallops.auth.provider import ClaimTokenVerifier
 from recallops.claims.tools.checks import destruction_required, receipt_required
 from recallops.logs import get_logger, log_event
-from recallops.models import AuditLog, Claim, ClaimPhoto, Recall, RecallProgram
+from recallops.models import AgentRun, AgentStep, AuditLog, Claim, ClaimPhoto, Recall, RecallProgram
 from recallops.photos import InvalidPhoto, inspect
 from recallops.rules.schemas import IdentificationRules, RemedyRules
 from recallops.storage import Storage
@@ -99,7 +99,7 @@ def view(session: Session, pc: PortalClaim) -> dict[str, Any]:
     )
     return {
         "claim_id": claim.id,
-        "status": claim.status,
+        "status": claimant_status(claim.status),
         "program": {
             "title": pc.title,
             "models": ident.models,
@@ -111,7 +111,7 @@ def view(session: Session, pc: PortalClaim) -> dict[str, Any]:
         "pending_question": _safe_question(decision.get("question_for_claimant"))
         if claim.status == "needs_info"
         else None,
-        "decision_reasons": claimant_reasons(claim.status, decision),
+        "decision_reasons": claimant_reasons(claim.status, decision, failed_rules(session, claim)),
         "photos_uploaded": kinds,
         "messages": messages,
         "payout_status": payout_status,
@@ -124,12 +124,51 @@ CLAIMANT_REASON = {
     "R:date_codes": "The date code is outside the recalled range.",
     "R:sold_window": "The purchase date is before the recalled products were sold.",
 }
+# A person is deciding: the claimant never learns whether that is a fraud flag, a cap, or a money threshold
+# (UI owner's note on PR 9: flagged and capped reached anyone holding the link).
+HELD_FOR_PERSON = frozenset({"flagged", "capped", "under_review"})
+DENY_CHECKS = ("check_model", "check_serial", "check_date_code", "check_purchase")
+
+
+def claimant_status(status: str) -> str:
+    return "under_review" if status in HELD_FOR_PERSON else status
+
+
+def failed_rules(session: Session, claim: Claim) -> set[str]:
+    """The deny rules the claim's latest run actually failed, read from its recorded check results. The decision's
+    cited_rules list every rule a reason touched, passing ones included, so they cannot word a denial alone."""
+    run_id = session.scalar(
+        select(AgentRun.id)
+        .where(AgentRun.claim_id == claim.id, AgentRun.firm_id == claim.firm_id)
+        .order_by(AgentRun.started_at.desc())
+        .limit(1)
+    )
+    if run_id is None:
+        return set()
+    failed: set[str] = set()
+    rows = session.execute(
+        select(AgentStep.tool, AgentStep.result).where(AgentStep.run_id == run_id, AgentStep.tool.in_(DENY_CHECKS))
+    )
+    for tool, result in rows:
+        r = result if isinstance(result, dict) else {}
+        if tool == "check_model" and r.get("verdict") == "mismatch":
+            failed.add("R:models")
+        elif tool == "check_serial" and r.get("verdict") == "out_of_range":
+            failed.add("R:serials")
+        elif tool == "check_date_code" and r.get("verdict") == "out_of_range":
+            failed.add("R:date_codes")
+        elif tool == "check_purchase" and r.get("window") == "before":
+            failed.add("R:sold_window")
+    return failed
+
+
 _UUID = re.compile(r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")
 
 
-def claimant_reasons(status: str, decision: dict[str, Any]) -> list[str]:
-    """A fixed, claimant-safe wording from the outcome and the cited rule ids: never model prose, reviewer notes,
-    or anything about other claims (red-team finding, decisions log 2026-10-18)."""
+def claimant_reasons(status: str, decision: dict[str, Any], failed: set[str] | None = None) -> list[str]:
+    """A fixed, claimant-safe wording from the outcome and the rules the run failed: never model prose, reviewer
+    notes, or anything about other claims (red-team finding, decisions log 2026-10-18). When the decision cites rule
+    ids (agent runs), a failed rule is worded only if the decision cited it too."""
     if status == "approved":
         return ["Your claim was approved."]
     if status == "needs_info":
@@ -137,8 +176,9 @@ def claimant_reasons(status: str, decision: dict[str, Any]) -> list[str]:
     if status == "denied":
         if decision.get("review_action") == "mark_fraud":
             return ["Your claim could not be approved. Contact the firm for details."]
-        mapped = [CLAIMANT_REASON[c] for c in decision.get("cited_rules", []) if c in CLAIMANT_REASON]
-        return sorted(set(mapped)) or [
+        cited = {c for c in decision.get("cited_rules", []) if c in CLAIMANT_REASON}
+        shown = (failed or set()) & cited if cited else (failed or set())
+        return sorted({CLAIMANT_REASON[c] for c in shown}) or [
             "Your claim does not meet the recall's requirements. Contact the firm for details."
         ]
     return []

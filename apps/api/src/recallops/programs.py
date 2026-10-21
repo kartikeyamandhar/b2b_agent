@@ -82,13 +82,21 @@ def manual_source_text(title: str, description: str) -> str:
     return f"TITLE:\n{clean(title)}\n\nDESCRIPTION:\n{clean(description)}"
 
 
-def _audit(session: Session, ctx: FirmContext, action: str, target: str, before: Any, after: Any) -> None:
+def _audit(
+    session: Session,
+    ctx: FirmContext,
+    action: str,
+    target: str,
+    before: Any,
+    after: Any,
+    target_type: str = "program",
+) -> None:
     session.add(
         AuditLog(
             firm_id=ctx.firm_id,
             actor=ctx.user_id,
             action=action,
-            target_type="program",
+            target_type=target_type,
             target_id=target,
             before=before,
             after=after,
@@ -257,7 +265,9 @@ def reissue_link(
     rotated = new_hash != claim.token_hash
     claim.token_hash = new_hash
     session.flush()
-    _audit(session, ctx, "claim_link_reissued", str(claim.id), None, {"status": claim.status, "rotated": rotated})
+    # Filed under the claim, so the claim's own audit trail shows the reissue (UI owner's note on PR 9).
+    after = {"status": claim.status, "rotated": rotated}
+    _audit(session, ctx, "claim_link_reissued", str(claim.id), None, after, target_type="claim")
     log_event(log, "claim_link_reissued", firm_id=str(ctx.firm_id), claim_id=str(claim.id), rotated=rotated)
     return f"{settings.portal_base_url.rstrip('/')}/{token}"
 

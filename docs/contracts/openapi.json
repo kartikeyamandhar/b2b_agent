@@ -942,6 +942,34 @@
             "description": "agent | rules_only | a user id",
             "title": "Decided By"
           },
+          "duplicate_found_later": {
+            "description": "claim ids that reopened this claim",
+            "items": {
+              "type": "string"
+            },
+            "title": "Duplicate Found Later",
+            "type": "array"
+          },
+          "duplicates_ack": {
+            "description": "duplicates a reviewer saw when deciding",
+            "items": {
+              "type": "string"
+            },
+            "title": "Duplicates Ack",
+            "type": "array"
+          },
+          "hold_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "why the claim waits for a person: flagged, over_value_threshold, model_disagrees_with_rules, capped, failed, payout_held_needs_review, shared_mailing_address (CHANGES item 6)",
+            "title": "Hold Reason"
+          },
           "outcome": {
             "enum": [
               "approve",
@@ -952,12 +980,36 @@
             "title": "Outcome",
             "type": "string"
           },
+          "question_for_claimant": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "the needs_info question sent to the claimant",
+            "title": "Question For Claimant"
+          },
           "reasons": {
             "items": {
               "type": "string"
             },
             "title": "Reasons",
             "type": "array"
+          },
+          "reopened_from": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "the status a later duplicate reopened this claim from",
+            "title": "Reopened From"
           },
           "routed_to_human": {
             "title": "Routed To Human",
@@ -2325,6 +2377,7 @@
               "flagged": 77,
               "needs_info": 52
             },
+            "closed_at": null,
             "created_at": "2026-10-16T22:40:00Z",
             "id": "6c1f2a8e-1b7d-4d1e-9a6f-2f6f5e0a9b11",
             "identification_rules": {
@@ -2350,8 +2403,10 @@
             "recall_id": "2a3b4c5d-6e7f-4a8b-9c0d-1e2f3a4b5c6d",
             "remedy_rules": {
               "contact": "800-772-4337",
+              "destruction_instruction": null,
               "evidence": [],
               "options": [],
+              "registration_url": null,
               "remedy_type": "refund"
             },
             "status": "open",
@@ -3026,6 +3081,7 @@
                   "cited_rule": "TL1302Z",
                   "verdict": "match"
                 },
+                "thought": null,
                 "tokens_in": 0,
                 "tokens_out": 0,
                 "tool": "check_model"
@@ -5308,6 +5364,16 @@
               }
             },
             "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "the cursor is not one this API issued"
           },
           "401": {
             "content": {

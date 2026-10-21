@@ -138,3 +138,15 @@ def test_the_api_will_not_start_with_the_example_link_secret(monkeypatch: pytest
         monkeypatch.undo()
         for cache in caches:
             cache.cache_clear()
+
+
+def test_the_prod_api_needs_the_web_proxy_secret() -> None:
+    """Without it, every claimant reaches the API as the web server and shares one rate-limit bucket (PR 9)."""
+    from recallops.api.app import require_web_proxy_secret
+
+    with pytest.raises(RuntimeError, match="WEB_PROXY_SECRET"):
+        require_web_proxy_secret(Settings())
+    with pytest.raises(RuntimeError, match="WEB_PROXY_SECRET"):
+        require_web_proxy_secret(Settings(web_proxy_secret=SecretStr("short")))
+    require_web_proxy_secret(Settings(web_proxy_secret=SecretStr("x" * 32)))
+    assert "x" * 32 not in repr(Settings(web_proxy_secret=SecretStr("x" * 32)))

@@ -12,6 +12,7 @@
   <img src="https://img.shields.io/badge/Postgres%2016-pgvector-2a78d6" alt="Postgres 16 with pgvector">
   <img src="https://img.shields.io/badge/Neo4j-2026.09-2a78d6" alt="Neo4j 2026.09">
   <img src="https://img.shields.io/badge/Claude-Haiku-2a78d6" alt="Claude Haiku">
+  <img src="https://img.shields.io/badge/Next.js-16-2a78d6" alt="Next.js 16">
 </p>
 
 When a company recalls a consumer product in the United States, the press release is the easy part. The Consumer Product Safety Commission (CPSC) expects the firm to reach the owners, check every refund or repair claim, deliver the remedy, and file a **monthly progress report (MPR)** until the recall is complete. Most recalling firms are importers and mid-size brands, and they run all of this on a hotline, a spreadsheet, and a law firm.
@@ -25,6 +26,7 @@ When a company recalls a consumer product in the United States, the press releas
 <details>
 <summary><b>Contents</b></summary>
 
+- [See it](#see-it)
 - [How it works](#how-it-works)
 - [The claims agent](#the-claims-agent)
 - [Catching fraud rings](#catching-fraud-rings)
@@ -41,10 +43,45 @@ When a company recalls a consumer product in the United States, the press releas
 
 </details>
 
+## See it
+
+The firm's console, here on a real run: the agent read the claimant's label photo as model TL9000Q, checked it against the recall's only model, TL1302Z, and denied the claim with every reason tied to a rule or a check it ran.
+
+<p align="center">
+  <img src="docs/assets/img/ui-claim-deny.png" alt="Claim detail in the RecallOps console: the claimant's details, three photos each with the tool's reading (the label read as model TL9000Q with confidence 97 percent, the cut power cord, the receipt), the agent's decision Deny with five cited reasons and the rules and tool results they cite, reviewer actions, and the payout panel." width="100%">
+</p>
+
+<table>
+<tr>
+<td width="50%"><img src="docs/assets/img/ui-trace-deny.png" alt="The agent trace for the same claim: every step with its thought, tool, latency, tokens, and cost, against the run caps of 8 steps, 0.02 USD, and 60 seconds; the run used 5 steps, 0.0017 USD, and 9.1 seconds." width="100%"></td>
+<td width="50%"><img src="docs/assets/img/ui-queue.png" alt="The claims queue for the laminator recall: 117 claims flagged for a reviewer, status filters with counts, and each claim's status, outcome, model, retailer, refund, and dates; it refreshes every 10 seconds." width="100%"></td>
+</tr>
+<tr>
+<td valign="top"><sub><b>The trace.</b> Every step the agent took, with its cost and time against the run's caps, and the steps its decision cites.</sub></td>
+<td valign="top"><sub><b>The queue.</b> The 500 seeded claims; the 117 that need a person are marked and counted at the top.</sub></td>
+</tr>
+<tr>
+<td width="50%"><img src="docs/assets/img/ui-fraud.png" alt="Fraud rings: 58 rings covering 117 claims, each drawn as a small diagram whose line style shows what the claims share: a photo, a home address, a serial number, or a payout destination." width="100%"></td>
+<td width="50%"><img src="docs/assets/img/ui-overview.png" alt="The program overview: 53,634 units affected, 500 claims filed, 117 awaiting review, 107 waiting on the claimant, 110 corrected, a review threshold of 100 dollars, claim link issuing, and claims by status." width="100%"></td>
+</tr>
+<tr>
+<td valign="top"><sub><b>Fraud rings.</b> Claims that share a photo, an address, a serial number, or a payout account, drawn from the Neo4j graph.</sub></td>
+<td valign="top"><sub><b>The program.</b> One recall's working file: units, claims by status, corrections, claim links, and the rules taken from the notice.</sub></td>
+</tr>
+</table>
+
+<table>
+<tr>
+<td width="24%"><img src="docs/assets/img/ui-portal-form.png" alt="The claimant portal on a phone, step 1 of 6: confirm your product, model TL1302Z, a refund if approved." width="100%"></td>
+<td width="24%"><img src="docs/assets/img/ui-portal-status.png" alt="The claimant's status page on a phone: your claim was approved, choose a mailed check or a bank transfer set up on Stripe's page." width="100%"></td>
+<td valign="middle"><b>The claimant's side.</b> A claimant gets one link to one claim, with no account and no password, and files it in six short steps on a phone: confirm the product, take the three photos, say where it was bought, and submit. The same link then shows the decision in plain words, asks any follow-up question, and offers a mailed check or a Stripe bank transfer once the refund is approved. A person deciding the claim reads as "under review": the claimant never sees words like flagged.<br><br><sub>Everything on this page is synthetic data on the project's real recall; screenshots of the website in <code>apps/web</code>, built by the UI owner, in light mode (it follows the system's dark mode too).</sub></td>
+</tr>
+</table>
+
 ## How it works
 
 <p align="center">
-  <img src="docs/assets/architecture.svg" alt="Architecture. Inputs (the CPSC recall API, owner registrations, the claim portal) feed the backend modules (rule extraction, the cost meter, campaigns, the MPR generator, the claims agent, the payouts ledger), which sit over photo storage, Postgres 16 with pgvector, and a Neo4j fraud graph. The HTTP API is the contract that the teammates' firm console, Clerk sign-in, and Stripe test-mode components will use (product UI and login integration remain with their owners), and the backend produces the monthly progress report PDF." width="100%">
+  <img src="docs/assets/architecture.svg" alt="Architecture. Inputs (the CPSC recall API, owner registrations, the claim portal) feed the backend modules (rule extraction, the cost meter, campaigns, the MPR generator, the claims agent, the payouts ledger), which sit over photo storage, Postgres 16 with pgvector, and a Neo4j fraud graph. The HTTP API is the contract the teammates' components are built on: the console and claim portal in apps/web, Clerk sign-in, and Stripe in test mode. The backend produces the monthly progress report PDF." width="100%">
 </p>
 
 1. **Load the recall.** The API pulls the CPSC recall API in 30-day windows. A nightly GitHub Actions job is wired to trigger the pull and skips until the API is deployed; locally, `make seed` loads a fixture of 51 real records. Each notice becomes identification rules (model numbers, serial and date-code ranges, retailers, the sale window) and remedy rules (refund, repair, or replacement, and what the claimant must show). The regex extractor takes every value straight from the notice text, and the model-based fallback has any value it cannot quote verbatim from the notice dropped.
@@ -62,7 +99,7 @@ Each firm's data is isolated by Postgres row-level security, forced on every ten
   <img src="docs/assets/agent-loop.svg" alt="The claims agent. load_context leads to the agent node, which loops with the tools node: vision tools read_label_photo and check_destruction_photo; pure-code tools check_model, check_serial, check_date_code, check_purchase, check_duplicates; and retrieve_policy. The agent ends by calling decide, whose reasons must cite rules or tool results. route then applies approve, deny, or needs_info, or holds the claim for human_review, which resumes the same run. Run caps: 8 steps, 0.02 USD, 60 seconds." width="100%">
 </p>
 
-The agent is a LangGraph loop with a Postgres checkpointer. It picks which checks to run, reads the photos with a vision model, and has to justify its decision: every reason cites a rule from the notice (`R:models`) or the result of a tool it ran (`T5`). A reason with no citation is rejected and the model gets one retry. Every step is written to one trace table, which the API serves at `GET /v1/claims/{id}/trace` for the console's trace viewer (a teammate's component, not built yet).
+The agent is a LangGraph loop with a Postgres checkpointer. It picks which checks to run, reads the photos with a vision model, and has to justify its decision: every reason cites a rule from the notice (`R:models`) or the result of a tool it ran (`T5`). A reason with no citation is rejected and the model gets one retry. Every step is written to one trace table, which the API serves at `GET /v1/claims/{id}/trace` for the console's trace viewer (pictured above).
 
 Here is a real run, recorded live, for a claim whose label shows a model the recall does not cover:
 
@@ -209,22 +246,23 @@ The label reader holds up on real labels. The weak link is one step later, match
 
 ## Run it locally
 
-You need Docker, [uv](https://docs.astral.sh/uv/) 0.11.21, Python 3.13, and make. A machine without the images pulls them once: `docker pull pgvector/pgvector:0.8.6-pg16 && docker pull neo4j:2026.09.0-community`.
+You need Docker, [uv](https://docs.astral.sh/uv/) 0.11.21, Python 3.13, Node 22, and make. A machine without the images pulls them once: `docker pull pgvector/pgvector:0.8.6-pg16 && docker pull neo4j:2026.09.0-community`.
 
 ```bash
 git clone https://github.com/kartikeyamandhar/b2b_agent.git recallops && cd recallops
 cp .env.example .env
 docker compose up -d      # Postgres 16 + pgvector and Neo4j, bound to 127.0.0.1
-make setup                # pinned dependencies, database roles, migrations
+make setup                # pinned dependencies for the API and the website, database roles, migrations
 make seed                 # a real recall, 500 synthetic claims decided, payouts, fraud clusters (about 50 s)
 make dev                  # the API on http://127.0.0.1:8000, interactive docs at /docs
+make web                  # in a second terminal: the console at http://localhost:3000/app/programs
 ```
 
 `make seed` loads a fixture of 51 real CPSC records, opens a program for the Scotch thermal laminator recall (CPSC 27024) under a demo firm, and generates 500 claims and decides them with the rules-only adjudicator (no model calls). It then moves the approved refunds through the ledger and builds the fraud graph. The ids are deterministic.
 
-To click through everything the backend does without the product UI, open the **test console** at http://127.0.0.1:8000/dev/console while `make dev` runs. It covers the claims queue, each claim's photos, decision, and step-by-step agent trace, reviewer actions, a claimant portal simulator that files a real claim with photos, fraud rings, payout export batches, the monthly report and its PDF, campaigns, and recall search. It exists only with the development sign-in, so it is never served in production; the product UI is the UI owner's `apps/web`.
+Open **http://localhost:3000/app/programs**. Locally the console signs you in as the demo firm's admin (set `RECALLOPS_DEV_ROLE=reviewer` in `apps/web/.env.local` to see the reviewer's view). Open a claim to see its photos, decision, and trace; issue a claim link on the program page and open it to file a claim as an owner, from a phone-sized window if you like. The backend also serves a single-file **test console** at http://127.0.0.1:8000/dev/console that calls every route with the development sign-in; it is never served in production.
 
-Then watch new claims get decided, in a second terminal:
+Then watch new claims get decided, in a third terminal:
 
 ```bash
 P=0874f66f-bfb5-552b-bd93-6266f49c1d5a
@@ -234,9 +272,9 @@ ADJUDICATOR=rules_only make worker
 
 `ADJUDICATOR=rules_only` runs offline at no cost. The agent itself (`ADJUDICATOR=agent LLM_MODE=live`, about 0.0016 USD per claim) needs an Anthropic key in `.env`, and every call goes through the cost meter.
 
-Other targets: `make check` runs lint, strict type checks, and the test suite (460 tests, 90 percent coverage). `make eval` reruns every evaluation from the recordings with no network. `make graph-sync` rebuilds the fraud graph from Postgres. `make help` lists everything.
+Other targets: `make check` runs lint, strict type checks, and the backend test suite (522 tests, 90 percent coverage), and `make web-check` runs the website's type check and tests (548 tests). `make eval` reruns every evaluation from the recordings with no network. `make graph-sync` rebuilds the fraud graph from Postgres. `make help` lists everything.
 
-Nothing is deployed yet. `infra/render.yaml` deploys the API with `APP_ENV=prod`, where the header-based development sign-in refuses to load: the deployed API accepts only Clerk session tokens and signed claim links, and it refuses to start on example, localhost, or plain-http Clerk and portal settings.
+Nothing is deployed yet, but everything is ready to be: [docs/DEPLOY.md](docs/DEPLOY.md) is the click-by-click guide to one public link (the website on Vercel, the API, worker, and scheduled jobs on Render from `infra/render.yaml`). The API runs with `APP_ENV=prod`, where the header-based development sign-in refuses to load: the deployed API accepts only Clerk session tokens and signed claim links, and it refuses to start on example, localhost, or plain-http Clerk and portal settings.
 
 ## API tour
 
@@ -325,12 +363,13 @@ The full contract is [docs/contracts/openapi.json](docs/contracts/openapi.json),
 | Photos | A storage seam: local disk in development, a private Supabase bucket in production, bytes proxied by the API |
 | Quality | ruff, mypy strict, pytest with coverage, replayable evaluations, GitHub Actions with real Postgres and Neo4j |
 | Sign-in | Clerk organizations: session tokens verified against the instance's public keys, a firm per organization, admin and reviewer roles |
-| Console | Planned by its owner against the API contract, not built yet: Next.js and React |
+| Console and claim portal | Next.js 16, React 19, TypeScript, Tailwind 4; types generated from the API contract; every API call goes through the website's server |
 | Payments | Stripe in test mode: Billing and the Customer Portal for firms, Connect for claimant refunds |
 
 ## Repository map
 
 ```
+apps/web/            the console and claim portal (Next.js), talking only to the API through its own server
 apps/api/            the backend: API, claims agent and worker, rule extraction, ingestion,
                      payouts ledger, monthly report, campaigns, fraud graph, evaluations
   migrations/        schema, forced row-level security, grants, triggers
@@ -354,7 +393,7 @@ RecallOps is a four-person team project for the UCLA MSBA program (fall 2026). E
 | Component | Lives in | Status |
 |---|---|---|
 | Backend: API, agent, ledger, report, fraud graph, evaluations | `apps/api`, `evals` | Complete and tested; what this page describes |
-| Firm console and claim portal | `apps/web` (not in the repository yet) | Not built yet; its owner codes against [the API contract](docs/contracts/openapi.json) and [the trace contract](docs/contracts/trace.md) |
+| Firm console and claim portal | `apps/web` | Built by its owner against [the API contract](docs/contracts/openapi.json) and [the trace contract](docs/contracts/trace.md); adopted after a backend review that restyled it to match this page, fixed the portal's rate limit and other security findings, and closed the backend gaps its owner found |
 | Payments: Stripe Billing and Connect | `apps/api/src/recallops/billing`, `apps/api/src/recallops/payouts/stripe_connect.py` | Built in test mode by its owner; adopted after a backend review that added regression tests for the payout and usage paths |
 | Sign-in: Clerk and signed claimant links | `apps/api/src/recallops/auth` | Built by its owner (session verification, a firm created on first sign-in, 90-day signed links); adopted after a backend review that added a link-reissue route, production setting checks, and end-to-end tests |
 
@@ -370,6 +409,7 @@ Each component's design is in [docs/components](docs/components), and each owner
 | [Results tables](evals/results) | Extraction, adjudication, the ablation, the report reconciliation, and the vision tools on real CPSC photos, regenerated by `make eval` |
 | [Runtime traces](docs/traces) | Real runs: claims through every adjudication path, payouts, the report, the fraud graph, a clean-clone setup |
 | [Contract changes](docs/contracts/CHANGES.md) | What changed in the API contract, grouped by the teammate it affects |
+| [Going live](docs/DEPLOY.md) | Every hosted service, setting, and secret, step by step, for one public link |
 
 
 ### Payments, in Stripe test mode

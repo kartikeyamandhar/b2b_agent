@@ -1,0 +1,12 @@
+{
+  "period_start": "2026-10-01",
+  "claims_adjudicated": 37,
+  "model_cost_usd": "0.012340",
+  "open_programs": 1,
+  "plan": "free",
+  "effective_plan": "free",
+  "subscription_status": null,
+  "billing_sync_error": null,
+  "limits": { "open_programs": 1, "claims_per_month": 50, "reviewer_seats": 2 },
+  "invoices": []
+}

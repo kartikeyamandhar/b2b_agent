@@ -61,6 +61,11 @@ def decision(c: Claim) -> s.Decision | None:
         confidence=d.get("confidence"),
         routed_to_human=bool(d.get("routed_to_human")),
         decided_by=c.decided_by,
+        hold_reason=d.get("hold_reason"),
+        reopened_from=d.get("reopened_from"),
+        duplicate_found_later=[str(x) for x in d.get("duplicate_found_later") or []],
+        duplicates_ack=[str(x) for x in d.get("duplicates_ack") or []],
+        question_for_claimant=d.get("question_for_claimant"),
     )
 
 

@@ -1,0 +1,154 @@
+@import "tailwindcss";
+
+/* RecallOps visual system, matched to the README graphics (docs/assets): a white ground, warm neutral grays,
+   near-black ink, one blue, and the system sans. Brand blue is never used for status: green, amber, and red
+   carry meaning on their own. The blue is #2672cf in light mode (4.8:1 on white, so it can be text and a button
+   behind white text; the README's #2a78d6 is 4.4:1) and #3987e5 in dark mode, the README's own dark value.
+   Token names are shared by every component; change a value here, not in a component. */
+:root {
+  --paper: #ffffff; /* page ground */
+  --surface: #ffffff; /* cards, tables, inputs */
+  --panel: #f6f6f3; /* sidebar, table headers, quiet fills */
+  --ink: #161616; /* headings, primary text */
+  --ink-muted: #52514e; /* supporting text (about 8:1 on white) */
+  --line: #e1e0d9; /* dividers, card borders */
+  --line-strong: #8a8881; /* input borders: 3.5:1 against white for form controls */
+  --accent: #2672cf; /* actions: primary buttons, selected chips, links */
+  --brand: #2672cf; /* brand marks: selection markers, progress, underlines, focus */
+  --brand-soft: #eaf2fc;
+
+  --success: #2e7d4f;
+  --success-soft: #eaf4ee;
+  --success-ink: #1f5a39;
+  --warn: #b7791f;
+  --warn-soft: #fbf3e2;
+  --warn-ink: #7a4f0e;
+  --danger: #b4423a;
+  --danger-soft: #fbecea;
+  --danger-ink: #8a2c25;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #111110;
+    --surface: #1a1a19;
+    --panel: #161615;
+    --ink: #f0efec;
+    --ink-muted: #c3c2b7;
+    --line: #2c2c2a;
+    --line-strong: #6f6e68;
+    --accent: #3987e5;
+    --brand: #3987e5;
+    --brand-soft: #152a44;
+
+    --success: #5fb07f;
+    --success-soft: #1d2e24;
+    --success-ink: #9bd3b0;
+    --warn: #e0a54a;
+    --warn-soft: #33281a;
+    --warn-ink: #f1c98c;
+    --danger: #e07a70;
+    --danger-soft: #36201e;
+    --danger-ink: #f3b0a9;
+  }
+}
+
+@theme inline {
+  /* "bg" stays the page ground so existing bg-bg / text-bg classes keep working (text-bg on bg-accent is
+     white on blue in light mode and near-black on blue in dark mode, 4.8:1 and 5.2:1). */
+  --color-bg: var(--paper);
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-panel: var(--panel);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-brand: var(--brand);
+  --color-brand-soft: var(--brand-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-success-ink: var(--success-ink);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-warn-ink: var(--warn-ink);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-ink: var(--danger-ink);
+  /* The README graphics' font stack: the platform's own UI face, so nothing is downloaded. */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+/* Focus: a blue ring everywhere (3:1 or better on white and on the panel). */
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+/* Text links read as ink with a quiet blue underline; button-like links (bordered) are excluded. */
+main a:not([class*="border"]):not([class*="bg-"]) {
+  text-decoration-line: underline;
+  text-decoration-color: color-mix(in srgb, var(--brand) 55%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+main a:not([class*="border"]):not([class*="bg-"]):hover {
+  text-decoration-color: var(--brand);
+}
+
+/* Type scale: one sans family; hierarchy comes from size and weight, as in the README graphics. */
+@utility page-title {
+  font-family: var(--font-sans);
+  font-size: 1.625rem; /* 26px on phones */
+  line-height: 1.15;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  @media (width >= 40rem) {
+    font-size: 1.875rem; /* 30px */
+  }
+}
+
+@utility display-title {
+  font-family: var(--font-sans);
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+
+@utility section-title {
+  font-family: var(--font-sans);
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+}
+
+@utility kpi-value {
+  font-family: var(--font-sans);
+  font-size: 1.75rem; /* 28px */
+  line-height: 1.1;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+
+@utility eyebrow {
+  font-size: 0.75rem;
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}

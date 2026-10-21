@@ -94,10 +94,18 @@ jobs:
           cache-dependency-path: apps/web/package-lock.json
       - if: steps.detect.outputs.present == 'true'
         working-directory: apps/web
-        run: npm ci
+        run: npm ci --ignore-scripts --no-audit --no-fund
       - if: steps.detect.outputs.present == 'true'
         working-directory: apps/web
         run: npx tsc --noEmit
       - if: steps.detect.outputs.present == 'true'
         working-directory: apps/web
         run: npx vitest run
+      - if: steps.detect.outputs.present == 'true'
+        name: Generated API types match docs/contracts/openapi.json
+        working-directory: apps/web
+        run: node scripts/gen-api.mjs --check
+      - if: steps.detect.outputs.present == 'true'
+        name: Production build (page exports, server and client boundaries)
+        working-directory: apps/web
+        run: npm run build
