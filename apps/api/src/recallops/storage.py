@@ -12,6 +12,8 @@ exception type. It never carries the service key or a response body, so it is sa
 from __future__ import annotations
 
 import re
+import time
+from collections.abc import Callable
 from pathlib import Path
 from typing import Literal, Protocol
 from urllib.parse import urlsplit
@@ -24,6 +26,11 @@ from recallops.settings import Settings
 KEY_CHARS = re.compile(r"[A-Za-z0-9._/-]+")
 BUCKET_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]{0,62}")
 MAX_KEY_LENGTH = 1024
+# Supabase answers 429 above its request rate (the first production seed hit it with 3,000 calls in a burst). A 429
+# was not processed, so the same request is sent again: at most RATE_LIMIT_RETRIES times, waiting the advised
+# Retry-After or 0.5, 1, 2 s, never more than RATE_LIMIT_MAX_WAIT_S per wait, so a portal upload never stalls long.
+RATE_LIMIT_RETRIES = 3
+RATE_LIMIT_MAX_WAIT_S = 5.0
 
 
 class StorageError(Exception):
@@ -129,6 +136,16 @@ def _not_found(response: httpx.Response) -> NotFound | None:
     return None
 
 
+def _rate_limit_wait(response: httpx.Response, attempt: int) -> float:
+    """The advised Retry-After in seconds when it is a number, else 0.5, 1, 2 s by attempt; capped either way."""
+    try:
+        advised = float(response.headers.get("retry-after", ""))
+    except ValueError:
+        advised = -1.0
+    wait = advised if advised >= 0 else 0.5 * 2**attempt
+    return min(wait, RATE_LIMIT_MAX_WAIT_S)
+
+
 class SupabaseStorage:
     """The Supabase Storage REST API with the service role key (server side only). One pooled httpx client."""
 
@@ -139,6 +156,7 @@ class SupabaseStorage:
         bucket: str,
         timeout_s: float,
         transport: httpx.BaseTransport | None = None,
+        sleep: Callable[[float], None] = time.sleep,
     ) -> None:
         parts = urlsplit(url)
         if parts.scheme not in ("http", "https") or not parts.hostname:
@@ -150,6 +168,7 @@ class SupabaseStorage:
             raise ValueError("SUPABASE_SERVICE_KEY is empty")
         self.base = url.rstrip("/") + "/storage/v1/object"
         self.bucket = bucket
+        self._sleep = sleep
         self._client = httpx.Client(
             headers={"Authorization": f"Bearer {key}", "apikey": key},
             timeout=httpx.Timeout(timeout_s),
@@ -174,12 +193,17 @@ class SupabaseStorage:
         headers: dict[str, str] | None = None,
         json_body: object = None,
     ) -> httpx.Response:
-        try:
-            return self._client.request(method, url, content=content, headers=headers, json=json_body)
-        except httpx.TimeoutException as exc:
-            raise StorageError(f"{op} {key} timed out ({type(exc).__name__})") from exc
-        except httpx.HTTPError as exc:
-            raise StorageError(f"{op} {key} failed: {type(exc).__name__}") from exc
+        for attempt in range(RATE_LIMIT_RETRIES + 1):
+            try:
+                response = self._client.request(method, url, content=content, headers=headers, json=json_body)
+            except httpx.TimeoutException as exc:
+                raise StorageError(f"{op} {key} timed out ({type(exc).__name__})") from exc
+            except httpx.HTTPError as exc:
+                raise StorageError(f"{op} {key} failed: {type(exc).__name__}") from exc
+            if response.status_code != 429 or attempt == RATE_LIMIT_RETRIES:
+                return response
+            self._sleep(_rate_limit_wait(response, attempt))
+        raise AssertionError("unreachable")  # the loop always returns on its last attempt
 
     def put(self, relative: str, data: bytes, content_type: str) -> None:
         key = validate_key(relative)

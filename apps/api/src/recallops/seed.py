@@ -15,7 +15,7 @@ import json
 import time
 import uuid
 from collections import Counter
-from datetime import UTC, date, datetime
+from datetime import UTC, date, datetime, timedelta
 from typing import Any
 
 from sqlalchemy import Engine, text, update
@@ -39,10 +39,10 @@ from recallops.models import (
 )
 from recallops.payouts.db_ledger import DbPayoutLedger
 from recallops.payouts.export import export_firm
-from recallops.photos import store
+from recallops.photos import PhotoFacts, store
 from recallops.rules import baseline
 from recallops.settings import REPO_ROOT, get_settings
-from recallops.storage import Storage, build_storage
+from recallops.storage import Storage, StorageError, build_storage
 from recallops.synth.generate import SynthClaim, generate_program, load_yaml
 from recallops.tenancy import FirmContext
 from recallops.tracing.writer import DbTrace
@@ -79,6 +79,28 @@ TENANT_DELETE_ORDER = (
     "usage_meters",
     "firm_members",
 )
+
+
+# Seeded claims are leased to the seed until it decides them (insert_claims).
+SEED_LEASE_OWNER = "seed"
+SEED_LEASE = timedelta(hours=1)
+# A seed over the network makes about 3,000 storage calls; one may fail transiently (store_seed_photo).
+SEED_PHOTO_ATTEMPTS = 3
+
+
+def store_seed_photo(storage: Storage, relative: str, data: bytes) -> PhotoFacts:
+    """Delete, then store. The seed owns its deterministic keys, so after any storage failure (a timed-out put may
+    still have stored the object) the pair is safe to repeat; the first production seed met a 429 and then a read
+    timeout (2026-10-21). A failure that persists for SEED_PHOTO_ATTEMPTS tries stops the seed."""
+    for attempt in range(1, SEED_PHOTO_ATTEMPTS + 1):
+        try:
+            storage.delete(relative)
+            return store(storage, relative, data, "image/jpeg")
+        except StorageError:
+            if attempt == SEED_PHOTO_ATTEMPTS:
+                raise
+            time.sleep(float(attempt))
+    raise AssertionError("unreachable")  # the last attempt returns or raises
 
 
 def program_id_for(firm_id: uuid.UUID, recall: str) -> uuid.UUID:
@@ -124,7 +146,9 @@ def insert_claims(
 ) -> None:
     """Submitted claims with their rendered photos stored like portal uploads (dev tokens dev.<firm>.<claim>). Seed
     keys are deterministic, so each object is deleted before its put: a reseed works on a bucket that refuses
-    overwrites (Supabase, x-upsert: false) exactly as on local disk."""
+    overwrites (Supabase, x-upsert: false) exactly as on local disk. Each claim carries the seed's lease until the
+    seed records its decision, so a worker running at the same time never adjudicates demo data (an agent worker
+    would spend model money on it; first deploy, 2026-10-21). A seed that dies leaves the lease to expire."""
     storage = storage or build_storage(get_settings())
     now = datetime.now(UTC)
     with Session(engine) as session, session.begin():
@@ -137,6 +161,8 @@ def insert_claims(
                     program_id=program_id,
                     token_hash=hashlib.sha256(token.encode()).hexdigest(),
                     status="submitted",
+                    lease_owner=SEED_LEASE_OWNER,
+                    lease_until=now + SEED_LEASE,
                     claimant=c.claimant,
                     model_claimed=c.model_claimed,
                     serial_claimed=c.serial_claimed,
@@ -153,8 +179,7 @@ def insert_claims(
         for c in claims:
             for p in c.photos:
                 relative = f"{firm_id}/{c.claim_id}/{p.kind}.jpg"
-                storage.delete(relative)
-                stored = store(storage, relative, p.data, "image/jpeg")
+                stored = store_seed_photo(storage, relative, p.data)
                 session.add(
                     ClaimPhoto(
                         firm_id=firm_id,
@@ -275,7 +300,14 @@ def seed_program(engine: Engine, firm_id: uuid.UUID, recall_source_id: str, n: i
             session.execute(
                 update(Claim)
                 .where(Claim.id == c.claim_id)
-                .values(status=status, decision=decision, decided_at=datetime.now(UTC), decided_by="rules_only")
+                .values(
+                    status=status,
+                    decision=decision,
+                    decided_at=datetime.now(UTC),
+                    decided_by="rules_only",
+                    lease_owner=None,
+                    lease_until=None,
+                )
             )
             session.add(
                 AuditLog(
