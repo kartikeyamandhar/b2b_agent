@@ -103,8 +103,8 @@ Approved by the UI owner on 2026-10-21. New screens use these tokens and classes
   `admin` or `reviewer` role, and never when `VERCEL_ENV=production`. None of the settings is `NEXT_PUBLIC_`.
 - **Packages beyond the CLAUDE.md pin list**, pinned exactly because the pinned stack cannot build or test without
   them: `@tailwindcss/postcss` 4.3.3 (Tailwind 4's PostCSS plugin), `@types/react` and `@types/react-dom` 19.3.0,
-  `@types/node` 22.20.5 (matches Node 22), `vite` 8.3.4 (vitest 5's peer). Not installed yet: Clerk (component 4),
-  Stripe and Supabase (no browser use in the current flows), Playwright (Phase 2).
+  `@types/node` 22.20.5 (matches Node 22), `vite` 8.3.4 (vitest 5's peer). Not installed yet: Stripe and Supabase
+  (no browser use in the current flows) and Playwright.
 - **Toolchain:** the lockfile was written by npm 10.9.4 (the pin), and CI uses Node 22.22.0. Local verification ran on Node 24.15.0.
 
 - **Program figures come from the contract only.** "Claims filed" is every claim past `draft` (an issued link
@@ -128,6 +128,26 @@ Approved by the UI owner on 2026-10-21. New screens use these tokens and classes
   approved, and denied claims; mark delivered only on an approved repair or replacement; nothing while an agent run
   is running. Each action has an inline confirmation (no browser dialogs). When the action resumes a paused run, the
   page polls for up to 60 s until the worker applies it. The trace polls every 1.5 s while its run is running.
+- **Program lifecycle.** `/app/programs/new` (admin) searches `GET /v1/recalls` or takes a notice typed in, and
+  `POST /v1/programs` returns a draft with extracted rules (the regex extractor first; the model only as a fallback,
+  which replay mode answers at no cost). `/app/programs/[id]/settings` edits the rules and the review threshold
+  (`PATCH` replaces each rules object whole, so evidence, remedy options, and unknown keys are carried over), shows
+  each value's notice quote with a verbatim mark, and moves the program draft to open to closed, each confirmed
+  inline. Closing cannot be undone; a 402 on opening links to Billing. Reviewers see the page read-only.
+- **Payouts** (`/app/payouts`, admin; hidden from reviewers in the sidebar): export batch history, a confirmed
+  "Create export batch" (it marks payouts exported and claims paid; `null` reads as "nothing to export"), and CSV
+  downloads through `/api`, whose sha256 matches the listed fingerprint.
+- **Claim links.** Claim detail offers admins a confirmed reissue (`POST /v1/claims/{id}/link`); the new link is shown
+  once, held only in memory, and never put in a URL or storage. Paid and closed claims explain why they cannot.
+- **Fraud rings** (`/app/programs/[id]/fraud`): rings from `GET .../fraud-graph?limit=500`, largest first, with a small
+  diagram whose line style (not colour) names what the claims share, filters by kind and by open review, and a 503
+  that says duplicate checks still protect every decision.
+- **Owner notices** (`/app/programs/[id]/campaign`, admin; read-only for reviewers): synthetic registration CSV upload
+  (checked for size and type first; rejected rows listed with reasons; a template download), match, draft by channel,
+  and a confirmed simulated send. Sample notices show a marker where `{claim_link}` stands, never a link.
+- **Keyboard.** In the queue, `j` and `k` move and `Enter` opens the selected claim; on a claim, `a`, `d`, and `i` open
+  the approve, deny, and request-info confirmation and `Esc` closes it. Keys are ignored while typing or with a
+  modifier, and nothing is sent without Confirm.
 - **CSRF.** The proxy refuses a `POST` or `PATCH` whose `Origin` or `Sec-Fetch-Site` says it came from another site,
   because writes carry the server's identity.
 - **Claim portal.** Public and mobile-first, outside Clerk, with `referrer: no-referrer` and `noindex` because the
@@ -157,9 +177,18 @@ Approved by the UI owner on 2026-10-21. New screens use these tokens and classes
   fixed URL for every claim, so before leaving for Stripe the tab stores the claim token in `sessionStorage`; the
   landing page reads it once, deletes it, and opens that claim's status page, which re-reads the API. Only an
   `https` URL on `stripe.com` is followed. Without these settings Stripe returns the claimant to `/dev/console`.
-- `BILLING_RETURN_URL` still points at `/dev/console#payouts`; the billing page is not built yet.
+- Point `BILLING_RETURN_URL` at the console's billing page: `http://localhost:3000/app/billing?stripe=return`
+  (production: the web origin). The page polls usage for 60 s after a Stripe return.
 
 **Backend owner (component 1)**
+- `reissue_link` writes its `claim_link_reissued` audit row with `target_type="program"` and the claim's id as
+  `target_id` (`programs._audit` hardcodes the type), so the claim's own audit trail never shows a reissue.
+- A program created from a typed notice is titled "Manual recall" in every view: `ManualRecall.title` is not kept on
+  the program. The new-program page says so.
+- 02-ui.md's `/app/settings` asks for a firm-wide default threshold and a notification email; the contract has no
+  route for either, so the console offers per-program thresholds and Clerk's organization page only.
+- A local API started before PR 8 was merged lacks `POST /v1/claims/{id}/link` (32 of 33 routes); restart it after
+  pulling. No migration is needed for that route.
 - `PortalView.status` answers `flagged` or `capped` to anyone holding the claim link. The portal pages show those as
   "a person is reviewing" and never echo the raw value, but the API itself discloses it.
 - Two documentation examples in `docs/contracts/openapi.json` omit required nullable fields: `Program` has no
