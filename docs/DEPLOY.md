@@ -67,7 +67,7 @@ Untested here: the script gives `recallops_internal` the BYPASSRLS attribute, an
 | `STRIPE_*` | Step 5 (test-mode keys only; live keys are refused) |
 | `ANTHROPIC_API_KEY` (worker only) | Your Anthropic key. The cost meter stops all model calls at the ledger's limit |
 
-3. When the API is up, `https://<api>.onrender.com/healthz` answers with `"status":"ok"` and `"database":true`. `/readyz` answers 503 until the worker has sent a heartbeat, which is how you know the worker is running.
+3. When the API is up, `https://<api>.onrender.com/healthz` answers with `"status":"ok"`. It is a cheap liveness check that never contacts the graph, so its `"graph":"disabled"` means "not checked here". `/readyz` answers 503 until the worker has sent a heartbeat (which is how you know the worker is running), and then reports the graph's real status.
 
 The free web service sleeps after 15 minutes without traffic, so the first click after a quiet spell takes about a minute. The worker cannot be free on Render. If you skip it, claims wait in "submitted" until a worker runs somewhere: a laptop running `ADJUDICATOR=agent LLM_MODE=live make worker` with the production `DATABASE_URL_INTERNAL` works for a demo.
 
