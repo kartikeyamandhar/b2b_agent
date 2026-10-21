@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { ClaimDetail } from "@/lib/api-types";
 import { sendJson } from "@/lib/api/client";
@@ -13,6 +13,8 @@ import {
   isActionAvailable,
   type ActionKind,
 } from "@/lib/claim-detail";
+
+import { actionForKey, shortcutKey } from "@/lib/shortcuts";
 
 import { Panel } from "./ClaimPanels";
 import { ProblemAlert } from "./ProblemAlert";
@@ -37,6 +39,30 @@ export function ReviewerActions({ claim, onDone }: { claim: ClaimDetail; onDone:
   const [error, setError] = useState<string | null>(null);
   const [problem, setProblem] = useState<ApiProblem | null>(null);
   const [busy, setBusy] = useState(false);
+  const noteRef = useRef<HTMLTextAreaElement>(null);
+
+  // a, d, i open the matching confirmation (02-ui.md section 6); Escape closes it. Nothing is sent without Confirm.
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      // Escape cancels even from the note box: it never types anything, so it cannot steal text.
+      if (e.key === "Escape" && kind && !busy) {
+        setKind(null);
+        return;
+      }
+      const k = actionForKey(shortcutKey(e));
+      if (!k || availability.blocked || !isActionAvailable(k, availability) || busy) return;
+      e.preventDefault();
+      setKind(k);
+      setError(null);
+      setProblem(null);
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [availability, kind, busy]);
+
+  useEffect(() => {
+    if (kind) noteRef.current?.focus();
+  }, [kind]);
 
   async function confirm() {
     if (!kind) return;
@@ -99,6 +125,9 @@ export function ReviewerActions({ claim, onDone }: { claim: ClaimDetail; onDone:
               </button>
             ))}
           </div>
+          <p className="mt-2 hidden text-xs text-ink-muted md:block" data-shortcut-hint>
+            Keyboard: <kbd className="font-mono">a</kbd> approve · <kbd className="font-mono">d</kbd> deny · <kbd className="font-mono">i</kbd> request info · <kbd className="font-mono">Esc</kbd> cancel. Each still asks you to confirm.
+          </p>
           {availability.appliedByWorker ? (
             <p className="mt-2 text-xs text-ink-muted">The run is paused for review: the worker resumes it with your decision.</p>
           ) : null}
@@ -114,6 +143,7 @@ export function ReviewerActions({ claim, onDone }: { claim: ClaimDetail; onDone:
               <label className="grid gap-1 text-xs">
                 {kind === "request_info" ? "Question for the claimant (required)" : "Note for the audit trail (optional)"}
                 <textarea
+                  ref={noteRef}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   rows={2}

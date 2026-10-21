@@ -12,6 +12,7 @@ import {
   REMEDY_TYPES,
   draftChanged,
   draftFromProgram,
+  evidenceByField,
   lifecycle,
   rulesPatch,
   rulesWarnings,
@@ -32,7 +33,30 @@ const DANGER = "rounded-md border border-danger bg-danger px-3 py-1.5 text-sm fo
 const asProblem = (err: unknown): ApiProblem =>
   err instanceof ApiError ? err.problem : { status: 0, title: "Error", detail: null, correlationId: null, retryAfterSeconds: null };
 
-function Field({ label, hint, error, children }: { label: string; hint?: string; error?: string; children: ReactNode }) {
+const QUOTE_MAX = 160;
+const clip = (q: string) => (q.length > QUOTE_MAX ? `${q.slice(0, QUOTE_MAX - 1)}…` : q);
+
+/** The notice quotes behind an extracted value, with a "verbatim in notice" mark; an edit says the quote is stale. */
+export function Evidence({ quotes, edited }: { quotes?: readonly string[]; edited: boolean }) {
+  if (!quotes?.length) return null;
+  return (
+    <div className="grid gap-0.5 text-xs" data-evidence>
+      {edited ? (
+        <p className="text-warn-ink" data-evidence-edited>
+          Edited: the notice quote below backed the saved value, not this one.
+        </p>
+      ) : null}
+      {quotes.slice(0, 3).map((q) => (
+        <p key={q} className={edited ? "text-ink-muted" : "text-success-ink"}>
+          <span aria-hidden="true">{edited ? "○" : "✓"}</span> <span className="sr-only">{edited ? "Previously" : "Verbatim"} in the notice:</span>
+          <span aria-hidden="true">In the notice:</span> “{clip(q)}”
+        </p>
+      ))}
+    </div>
+  );
+}
+
+function Field({ label, hint, error, children, evidence }: { label: string; hint?: string; error?: string; children: ReactNode; evidence?: ReactNode }) {
   return (
     <div className="grid min-w-0 gap-1">
       <label className="grid gap-1 text-xs">
@@ -40,6 +64,7 @@ function Field({ label, hint, error, children }: { label: string; hint?: string;
         {children}
       </label>
       {hint ? <p className="text-xs text-ink-muted">{hint}</p> : null}
+      {evidence}
       {error ? (
         <p role="alert" className="text-xs text-danger-ink">
           {error}
@@ -74,6 +99,7 @@ function Rows<T extends Record<string, string>>({
   onChange,
   error,
   list,
+  evidence,
 }: {
   label: string;
   rows: T[];
@@ -83,11 +109,13 @@ function Rows<T extends Record<string, string>>({
   onChange: (rows: T[]) => void;
   error?: string;
   list?: string;
+  evidence?: ReactNode;
 }) {
   return (
     <fieldset className="grid gap-2" data-rows={label}>
       <legend className="text-xs font-medium text-ink">{label}</legend>
       {rows.length === 0 ? <p className="text-xs text-ink-muted">None.</p> : null}
+      {evidence}
       {rows.map((row, i) => (
         <div key={i} className="grid gap-2 rounded-md border border-line p-2 sm:grid-cols-[2fr_1fr_1fr_1fr_auto] sm:items-end">
           {columns.map((c) => (
@@ -217,6 +245,8 @@ export function ProgramSettings({ program: initial, canAdmin, created = false }:
   const disabled = !canAdmin || !editable || busy;
   const dirty = draftChanged(draft, saved);
   const warnings = rulesWarnings(program);
+  const evidence = evidenceByField(program);
+  const ev = (...keys: (keyof RulesDraft)[]) => <Evidence quotes={evidence[keys[0]!]} edited={keys.some((k) => JSON.stringify(draft[k]) !== JSON.stringify(saved[k]))} />;
 
   useEffect(() => {
     if (!dirty) return;
@@ -259,12 +289,12 @@ export function ProgramSettings({ program: initial, canAdmin, created = false }:
   }
 
   const text = (key: keyof RulesDraft, label: string, hint?: string, mono = false) => (
-    <Field label={label} hint={hint} error={errors[key]}>
+    <Field label={label} hint={hint} error={errors[key]} evidence={key === "priceMax" ? null : key === "priceMin" ? ev("priceMin", "priceMax") : ev(key)}>
       <input value={draft[key] as string} disabled={disabled} onChange={(e) => set(key, e.target.value as never)} className={`${INPUT} ${mono ? "font-mono" : ""}`} aria-invalid={errors[key] ? true : undefined} />
     </Field>
   );
   const area = (key: keyof RulesDraft, label: string, hint?: string, mono = false, rows = 3) => (
-    <Field label={label} hint={hint} error={errors[key]}>
+    <Field label={label} hint={hint} error={errors[key]} evidence={ev(key)}>
       <textarea value={draft[key] as string} rows={rows} disabled={disabled} onChange={(e) => set(key, e.target.value as never)} className={`${INPUT} ${mono ? "font-mono" : ""}`} aria-invalid={errors[key] ? true : undefined} />
     </Field>
   );
@@ -305,7 +335,7 @@ export function ProgramSettings({ program: initial, canAdmin, created = false }:
           </div>
           {text("modelLabelLocation", "Where the label is")}
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <Field label="Sold from" error={errors.soldFrom}>
+            <Field label="Sold from" error={errors.soldFrom} evidence={ev("soldFrom", "soldTo")}>
               <input type="date" value={draft.soldFrom} disabled={disabled} onChange={(e) => set("soldFrom", e.target.value)} className={INPUT} />
             </Field>
             <Field label="Sold to" error={errors.soldTo}>
@@ -321,6 +351,7 @@ export function ProgramSettings({ program: initial, canAdmin, created = false }:
             disabled={disabled}
             error={errors.serialRanges}
             onChange={(rows) => set("serialRanges", rows)}
+            evidence={ev("serialRanges")}
             columns={[
               { key: "raw", label: "As the notice states it" },
               { key: "prefix", label: "Prefix", mono: true },
@@ -335,6 +366,7 @@ export function ProgramSettings({ program: initial, canAdmin, created = false }:
             disabled={disabled}
             error={errors.dateCodes}
             onChange={(rows) => set("dateCodes", rows)}
+            evidence={ev("dateCodes")}
             list="date-code-formats"
             columns={[
               { key: "raw", label: "As the notice states it" },
@@ -351,7 +383,7 @@ export function ProgramSettings({ program: initial, canAdmin, created = false }:
         </Card>
 
         <Card id="remedy-rules" title="Remedy">
-          <Field label="Remedy" error={errors.remedyType}>
+          <Field label="Remedy" error={errors.remedyType} evidence={ev("remedyType")}>
             <select value={draft.remedyType} disabled={disabled} onChange={(e) => set("remedyType", e.target.value)} className={`${INPUT} sm:w-64`}>
               <option value="">Not stated in the notice</option>
               {REMEDY_TYPES.map((t) => (

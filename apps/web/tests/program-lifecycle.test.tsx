@@ -277,3 +277,47 @@ describe("pages", () => {
     expect(html).toContain(`href="/app/programs/${draft.id}/settings"`);
   });
 });
+
+describe("rules evidence (02-ui.md RulesEditor: quotes beside each value, verbatim mark)", () => {
+  const withEvidence = Program.parse({
+    ...(fixture.items[0] as object),
+    identification_rules: {
+      ...open.identification_rules,
+      evidence: [
+        { field: "sold_at", quote: "Walmart", start: 90, end: 97 },
+        { field: "identification.models", quote: "TL1302Z", start: 10, end: 17 },
+        { field: "sold_at", quote: "Amazon.com", start: 50, end: 60 },
+        { field: "sold_at", quote: "Amazon.com", start: 120, end: 130 },
+        { field: "sold_to", quote: "through September 2026", start: 200, end: 222 },
+      ],
+    },
+    remedy_rules: { ...open.remedy_rules, evidence: [{ field: "contact", quote: "800-555-0100", start: 300, end: 312 }] },
+  });
+
+  it("groups quotes by editor field in notice order, accepting path-qualified names", async () => {
+    const { evidenceByField } = await import("@/lib/program-rules");
+    expect(evidenceByField(withEvidence)).toEqual({
+      models: ["TL1302Z"],
+      soldAt: ["Amazon.com", "Walmart"],
+      soldFrom: ["through September 2026"],
+      contact: ["800-555-0100"],
+    });
+    expect(evidenceByField(draft)).toEqual({});
+  });
+
+  it("shows a verbatim mark beside values backed by the notice", () => {
+    const html = renderToStaticMarkup(<ProgramSettings program={withEvidence} canAdmin />);
+    expect(html.match(/data-evidence=/g)?.length).toBe(4);
+    expect(html).toContain("Verbatim in the notice:");
+    expect(html).toContain("“TL1302Z”");
+    expect(html).not.toContain("data-evidence-edited");
+  });
+
+  it("says when an edit leaves the quote behind", async () => {
+    const { Evidence } = await import("@/components/ProgramSettings");
+    const html = renderToStaticMarkup(<Evidence quotes={["TL1302Z"]} edited />);
+    expect(html).toContain("data-evidence-edited");
+    expect(html).toContain("Previously in the notice:");
+    expect(renderToStaticMarkup(<Evidence quotes={[]} edited={false} />)).toBe("");
+  });
+});

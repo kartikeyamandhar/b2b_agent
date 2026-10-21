@@ -10,10 +10,10 @@ const th = "px-3 py-2 text-left text-xs font-medium text-ink-muted";
 const muted = <span className="text-ink-muted">—</span>;
 
 /** The queue table (02-ui.md component 2). Claims that need a reviewer carry a marker and a text label. */
-export function ClaimsTable({ claims }: { claims: readonly ClaimSummary[] }) {
+export function ClaimsTable({ claims, selectedId = null }: { claims: readonly ClaimSummary[]; selectedId?: string | null }) {
   return (
     <>
-      <ClaimCards claims={claims} />
+      <ClaimCards claims={claims} selectedId={selectedId} />
       <div className="hidden overflow-x-auto rounded-lg border border-line bg-surface md:block">
       <table className="w-full border-collapse text-sm">
         <caption className="sr-only">Claims, oldest first</caption>
@@ -39,7 +39,9 @@ export function ClaimsTable({ claims }: { claims: readonly ClaimSummary[] }) {
                 key={c.id}
                 data-claim-id={c.id}
                 data-review={review}
-                className="border-b border-line last:border-b-0 hover:bg-panel"
+                data-selected={selectedId === c.id || undefined}
+                aria-current={selectedId === c.id ? "true" : undefined}
+                className={`border-b border-line last:border-b-0 hover:bg-panel ${selectedId === c.id ? "bg-copper-soft outline-2 -outline-offset-2 outline-copper" : ""}`}
               >
                 <th
                   scope="row"
@@ -81,14 +83,14 @@ export function ClaimsTable({ claims }: { claims: readonly ClaimSummary[] }) {
 }
 
 /** Phones: one card per claim, every field visible without sideways scrolling. */
-function ClaimCards({ claims }: { claims: readonly ClaimSummary[] }) {
+function ClaimCards({ claims, selectedId }: { claims: readonly ClaimSummary[]; selectedId: string | null }) {
   return (
     <ul className="grid gap-2 md:hidden" aria-label="Claims, oldest first">
       {claims.map((c) => {
         const review = reviewState(c);
         const needsReviewer = review === "needs_reviewer";
         return (
-          <li key={c.id} data-card-claim-id={c.id}>
+          <li key={c.id} data-card-claim-id={c.id} data-selected={selectedId === c.id || undefined} aria-current={selectedId === c.id ? "true" : undefined}>
             <Link
               href={`/app/claims/${c.id}`}
               className={`block rounded border border-l-4 p-3 text-sm focus-visible:outline-2 focus-visible:outline-accent ${

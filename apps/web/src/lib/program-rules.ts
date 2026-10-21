@@ -179,3 +179,29 @@ export function rulesWarnings(p: Pick<Program, "identification_rules" | "remedy_
   if (!p.remedy_rules.remedy_type) out.push("The remedy is not set.");
   return out;
 }
+
+/** Which evidence fields back each editor field (rules/verify.py stores bare or path-qualified names). */
+export const EVIDENCE_FIELDS: Partial<Record<keyof RulesDraft, readonly string[]>> = {
+  models: ["models"],
+  modelLabelLocation: ["model_label_location"],
+  soldAt: ["sold_at"],
+  soldFrom: ["sold_from", "sold_to"],
+  priceMin: ["price_range_cents"],
+  serialRanges: ["serial_ranges"],
+  dateCodes: ["date_codes"],
+  remedyType: ["remedy_type"],
+  destructionInstruction: ["destruction_instruction"],
+  registrationUrl: ["registration_url"],
+  contact: ["contact"],
+};
+
+/** Notice quotes per editor field, de-duplicated, in notice order. A quote means the value was found verbatim. */
+export function evidenceByField(p: Pick<Program, "identification_rules" | "remedy_rules">): Partial<Record<keyof RulesDraft, string[]>> {
+  const spans = [...(p.identification_rules.evidence ?? []), ...(p.remedy_rules.evidence ?? [])].slice().sort((a, b) => a.start - b.start);
+  const out: Partial<Record<keyof RulesDraft, string[]>> = {};
+  for (const [key, fields] of Object.entries(EVIDENCE_FIELDS) as [keyof RulesDraft, readonly string[]][]) {
+    const quotes = spans.filter((s) => fields.includes(s.field.split(".").pop() ?? s.field)).map((s) => s.quote.trim()).filter(Boolean);
+    if (quotes.length) out[key] = [...new Set(quotes)];
+  }
+  return out;
+}
