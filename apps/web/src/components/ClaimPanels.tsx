@@ -230,7 +230,17 @@ export function PayoutPanel({ payout, remedy }: { payout: PayoutView | null; rem
   );
 }
 
-export function FraudPanel({ claimId, clusters, hits: allHits }: { claimId: string; clusters: readonly Cluster[]; hits: readonly DuplicateHit[] }) {
+export function FraudPanel({
+  claimId,
+  clusters,
+  hits: allHits,
+  programId,
+}: {
+  claimId: string;
+  clusters: readonly Cluster[];
+  hits: readonly DuplicateHit[];
+  programId?: string;
+}) {
   // A duplicate-check hit already shown as a cluster member is the same finding: list it once.
   const hits = newHits(allHits, clusters);
   const any = clusters.length > 0 || hits.length > 0;
@@ -261,6 +271,11 @@ export function FraudPanel({ claimId, clusters, hits: allHits }: { claimId: stri
           ))}
         </ul>
       )}
+      {any && programId ? (
+        <p className="mt-3 text-xs">
+          <Link href={`/app/programs/${programId}/fraud`}>See every fraud ring in this program</Link>
+        </p>
+      ) : null}
     </Panel>
   );
 }

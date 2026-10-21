@@ -119,7 +119,7 @@ export function ClaimDetailLive({
           <DecisionPanel claimId={claim.id} decision={claim.decision} decidedAt={claim.decided_at} />
           <ReviewerActions claim={claim} onDone={onDone} />
           <PayoutPanel payout={claim.payout} remedy={claim.remedy} />
-          <FraudPanel claimId={claim.id} clusters={claim.clusters} hits={duplicateHits(trace)} />
+          <FraudPanel claimId={claim.id} clusters={claim.clusters} hits={duplicateHits(trace)} programId={claim.program_id} />
           <ReissueLink claimId={claim.id} status={claim.status} canAdmin={canAdmin} onDone={() => void claimQ.refetch()} />
           <Panel id="claim-run" title="Latest run">
             {claim.run ? (

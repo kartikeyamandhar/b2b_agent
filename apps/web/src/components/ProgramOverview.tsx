@@ -79,6 +79,12 @@ export function ProgramOverview({ program, canAdmin = false }: { program: Progra
             Rules and settings
           </Link>
           <Link
+            href={`/app/programs/${program.id}/fraud`}
+            className="rounded border border-line px-2 py-1 text-xs font-medium hover:bg-panel"
+          >
+            Fraud rings
+          </Link>
+          <Link
             href={`/app/programs/${program.id}/reports`}
             className="rounded border border-line px-2 py-1 text-xs font-medium hover:bg-panel"
           >
