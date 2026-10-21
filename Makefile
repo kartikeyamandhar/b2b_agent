@@ -1,8 +1,9 @@
-# RecallOps backend tasks. Run from the repository root.
+# RecallOps tasks (backend in apps/api, console and claim portal in apps/web). Run from the repository root.
 SHELL := /bin/bash
 .DEFAULT_GOAL := help
 
 API := apps/api
+WEB := apps/web
 # Only the values make itself needs are read from .env, and an environment variable always wins (?=), so
 # `ADJUDICATOR=rules_only make worker` reaches the process. Python reads .env itself (pydantic-settings), where
 # environment variables also win. Including the whole .env would turn every line into a make assignment that
@@ -23,16 +24,27 @@ PY := $(RUN) python
 PSQL := docker compose exec -T db psql -U postgres -v ON_ERROR_STOP=1 -q
 DATABASES := recallops recallops_test
 
-.PHONY: billing-bootstrap billing-jobs connect-payouts
+.PHONY: billing-bootstrap billing-jobs connect-payouts web-setup web web-check
 .PHONY: help setup db-up db-bootstrap migrate downgrade api dev worker export-payouts graph-sync seed test lint format typecheck check eval ingest label profile openapi readme-assets
 
 help: ## List targets
 	@grep -hE '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-14s %s\n", $$1, $$2}'
 
-setup: ## Install pinned deps, start Postgres, create roles and databases, run migrations
+setup: ## Install pinned deps (API and web), start Postgres and Neo4j, create roles and databases, run migrations
 	uv sync --project $(API) --frozen
 	docker compose up -d --wait --pull never
 	$(MAKE) db-bootstrap migrate
+	$(MAKE) web-setup
+
+web-setup: ## Install the web app's locked deps (no install scripts) and create apps/web/.env.local once
+	cd $(WEB) && npm ci --ignore-scripts --no-audit --no-fund
+	test -f $(WEB)/.env.local || cp $(WEB)/.env.example $(WEB)/.env.local
+
+web: ## Run the console and claim portal on http://localhost:3000 (needs the API: make dev)
+	cd $(WEB) && npm run dev
+
+web-check: ## What CI runs for the web app: types, tests, and the generated API types against the contract
+	cd $(WEB) && npm run -s typecheck && npx vitest run && node scripts/gen-api.mjs --check
 
 db-up: ## Start Postgres and wait until healthy
 	docker compose up -d --wait --pull never

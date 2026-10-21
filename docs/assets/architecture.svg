@@ -54,7 +54,7 @@
   <rect class="card" x="0.5" y="0.5" width="1199" height="723" rx="16"/>
 
   <text class="ink" x="40" y="50" font-size="26" font-weight="600">Architecture</text>
-  <text class="ink2" x="40" y="77" font-size="15">One FastAPI service and a polling worker over Postgres. The console, payments, and sign-in plug in through the API contract.</text>
+  <text class="ink2" x="40" y="77" font-size="15">One FastAPI service and a polling worker over Postgres. The console, payments, and sign-in are built on the API contract.</text>
 
   <!-- column headers -->
   <text class="mut" x="40" y="116" font-size="12" font-weight="600" letter-spacing="1">INPUTS</text>
@@ -157,7 +157,7 @@
 
   <!-- team components -->
   <rect class="grp" x="936" y="140" width="224" height="378" rx="12"/>
-  <text class="ink2" x="952" y="164" font-size="13" font-weight="600">To be built by teammates</text>
+  <text class="ink2" x="952" y="164" font-size="13" font-weight="600">Built by teammates</text>
   <text class="ink2" x="952" y="181" font-size="13">against the API contract</text>
 
   <rect class="t-tm" x="948" y="194" width="200" height="94" rx="10"/>
@@ -167,10 +167,10 @@
   <text class="ink2" x="962" y="273" font-size="13">The token sets the firm</text>
 
   <rect class="t-tm" x="948" y="302" width="200" height="94" rx="10"/>
-  <text class="ink" x="962" y="326" font-size="15" font-weight="600">Firm console</text>
-  <text class="mut" x="962" y="344" font-size="12">console component, Next.js</text>
+  <text class="ink" x="962" y="326" font-size="15" font-weight="600">Console and claim portal</text>
+  <text class="mut" x="962" y="344" font-size="12">apps/web, Next.js</text>
   <text class="ink2" x="962" y="364" font-size="13">Claims queue, trace viewer,</text>
-  <text class="ink2" x="962" y="381" font-size="13">reviewer actions</text>
+  <text class="ink2" x="962" y="381" font-size="13">reviews, the claimant form</text>
 
   <rect class="t-tm" x="948" y="410" width="200" height="94" rx="10"/>
   <text class="ink" x="962" y="434" font-size="15" font-weight="600">Stripe, test mode</text>
