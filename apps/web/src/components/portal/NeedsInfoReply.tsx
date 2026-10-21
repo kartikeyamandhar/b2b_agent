@@ -61,7 +61,7 @@ export function NeedsInfoReply({ token, program }: { token: string; program: Por
         maxLength={2000}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? "reply-error" : undefined}
-        className="rounded border border-line-strong bg-bg p-3 text-base"
+        className="rounded border border-line-strong bg-surface p-3 text-base"
       />
       {error ? (
         <p id="reply-error" role="alert" className="text-sm text-warn-ink">
@@ -77,7 +77,7 @@ export function NeedsInfoReply({ token, program }: { token: string; program: Por
               type="button"
               aria-pressed={photoKind === k}
               onClick={() => setPhotoKind(photoKind === k ? null : k)}
-              className={`min-h-12 rounded border px-3 text-base ${photoKind === k ? "border-accent bg-accent text-bg" : "border-line-strong"}`}
+              className={`min-h-12 rounded-md border px-3 text-base ${photoKind === k ? "border-accent bg-accent text-bg" : "border-line-strong"} hover:opacity-90`}
             >
               {photoKindLabel(k)[0]!.toUpperCase() + photoKindLabel(k).slice(1)}
             </button>
@@ -95,7 +95,7 @@ export function NeedsInfoReply({ token, program }: { token: string; program: Por
         ) : null}
       </fieldset>
       {problem ? <ProblemAlert problem={problem} sentence={portalSentence(problem.status)} /> : null}
-      <button type="submit" disabled={busy} className="min-h-12 rounded bg-accent px-4 text-base font-semibold text-bg disabled:opacity-60">
+      <button type="submit" disabled={busy} className="min-h-12 rounded-md bg-accent px-4 text-base font-semibold text-bg hover:opacity-90 disabled:opacity-60">
         {busy ? "Sending…" : "Send answer"}
       </button>
     </form>

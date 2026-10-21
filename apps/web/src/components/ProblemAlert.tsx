@@ -13,7 +13,7 @@ export function ProblemAlert({
   showDetail?: boolean;
 }) {
   return (
-    <div role="alert" className="rounded border border-warn/50 bg-warn-soft p-3 text-sm text-warn-ink">
+    <div role="alert" className="rounded-lg border border-danger/30 bg-danger-soft p-4 text-sm text-danger-ink">
       <p className="font-medium">{sentence ?? humanSentence(problem.status)}</p>
       {showDetail && problem.detail ? <p className="mt-1">{problem.detail}</p> : null}
       {problem.retryAfterSeconds !== null ? (
@@ -29,7 +29,7 @@ export function ProblemAlert({
         ) : null}
       </p>
       {onRetry ? (
-        <button type="button" onClick={onRetry} className="mt-2 rounded border border-warn/60 px-2 py-1 text-xs font-medium">
+        <button type="button" onClick={onRetry} className="mt-3 rounded-md border border-danger/40 bg-surface px-3 py-1.5 text-xs font-medium">
           Try again
         </button>
       ) : null}

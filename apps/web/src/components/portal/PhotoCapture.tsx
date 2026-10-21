@@ -86,12 +86,12 @@ export function PhotoCapture({
   }[phase];
 
   return (
-    <fieldset className="grid gap-2 rounded border border-line p-3" data-photo-kind={kind}>
+    <fieldset className="grid gap-2 rounded-lg border border-line bg-surface p-3" data-photo-kind={kind}>
       <legend className="px-1 text-base font-semibold">{label[0]!.toUpperCase() + label.slice(1)} photo</legend>
       <p className="text-sm">{hint}</p>
       {preview ? (
         // eslint-disable-next-line @next/next/no-img-element -- local object URL preview
-        <img src={preview} alt={`Preview of your ${label} photo`} className="max-h-60 w-full rounded border border-line object-contain" />
+        <img src={preview} alt={`Preview of your ${label} photo`} className="max-h-60 w-full rounded-lg border border-line bg-surface object-contain" />
       ) : null}
       <p aria-live="polite" className="text-sm font-medium" data-photo-phase={phase}>
         {statusText}
@@ -105,7 +105,7 @@ export function PhotoCapture({
       <div className="flex flex-wrap gap-2">
         <label
           htmlFor={inputId}
-          className="inline-flex min-h-12 cursor-pointer items-center rounded border border-accent px-4 text-base font-medium text-accent focus-within:outline-2 focus-within:outline-accent"
+          className="inline-flex min-h-12 cursor-pointer items-center rounded-md border border-line-strong bg-surface px-4 text-base font-medium text-ink focus-within:outline-2 focus-within:outline-accent hover:border-ink"
         >
           {phase === "done" || preview ? "Retake photo" : "Take or choose a photo"}
           <input
@@ -123,7 +123,7 @@ export function PhotoCapture({
           />
         </label>
         {phase === "error" && blob.current ? (
-          <button type="button" onClick={() => void upload()} className="min-h-12 rounded border border-line px-4 text-base">
+          <button type="button" onClick={() => void upload()} className="min-h-12 rounded-lg border border-line bg-surface px-4 text-base">
             Try again
           </button>
         ) : null}

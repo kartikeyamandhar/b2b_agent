@@ -1,6 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
+// Self-hosted variable fonts (OFL-1.1, from npm): no request to a font CDN at build or run time.
+import "@fontsource-variable/dm-sans";
+import "@fontsource-variable/newsreader";
+
 import "./globals.css";
 
 export const metadata: Metadata = {

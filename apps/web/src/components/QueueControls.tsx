@@ -53,13 +53,13 @@ export function StatusFilter({
                 href={queueHref(programId, { status: c.status, cursor: null })}
                 aria-current={isActive ? "page" : undefined}
                 data-filter={c.status ?? "all"}
-                className={`inline-flex items-center gap-1 rounded border px-2 py-1 text-xs focus-visible:outline-2 focus-visible:outline-accent ${
+                className={`inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs focus-visible:outline-2 focus-visible:outline-accent ${
                   isActive
                     ? "border-accent bg-accent text-bg"
                     : review
                       ? "border-warn/60 text-warn-ink hover:bg-warn-soft"
                       : "border-line text-ink hover:bg-panel"
-                }`}
+                } hover:opacity-90`}
               >
                 {c.label}
                 {c.n !== null ? <span className="tabular-nums opacity-80">{formatCount(c.n)}</span> : null}

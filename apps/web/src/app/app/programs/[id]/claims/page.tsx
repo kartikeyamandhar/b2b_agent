@@ -36,7 +36,7 @@ export default async function ClaimsQueuePage({ params, searchParams }: Props) {
           </>
         ) : null}
       </nav>
-      <h1 className="mb-3 text-lg font-semibold">Claims queue</h1>
+      <h1 className="page-title mb-6">Claims queue</h1>
 
       {parsed.ignoredStatus || parsed.ignoredCursor ? (
         <p role="status" className="mb-3 text-xs text-warn-ink" data-ignored-params>

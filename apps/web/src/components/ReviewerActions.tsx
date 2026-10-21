@@ -85,9 +85,15 @@ export function ReviewerActions({ claim, onDone }: { claim: ClaimDetail; onDone:
                   setError(null);
                   setProblem(null);
                 }}
-                className={`rounded border px-2 py-1 text-xs font-medium focus-visible:outline-2 focus-visible:outline-accent ${
-                  kind === k ? "border-accent bg-accent text-bg" : k === "mark_fraud" || k === "deny" ? "border-warn/60 text-warn-ink" : "border-line"
-                }`}
+                className={`rounded-md border px-3 py-1.5 text-sm font-medium focus-visible:outline-2 focus-visible:outline-copper ${
+                  kind === k
+                    ? "border-copper bg-copper-soft text-ink ring-1 ring-copper"
+                    : k === "approve"
+                      ? "border-accent bg-accent text-bg hover:opacity-90"
+                      : k === "mark_fraud" || k === "deny"
+                        ? "border-danger/40 bg-surface text-danger-ink hover:bg-danger-soft"
+                        : "border-line-strong bg-surface text-ink hover:border-ink"
+                } hover:opacity-90`}
               >
                 {ACTION_LABEL[k]}
               </button>
@@ -113,7 +119,7 @@ export function ReviewerActions({ claim, onDone }: { claim: ClaimDetail; onDone:
                   rows={2}
                   maxLength={1000}
                   required={kind === "request_info"}
-                  className="rounded border border-line bg-bg p-1 text-sm"
+                  className="rounded border border-line bg-surface p-1 text-sm"
                 />
               </label>
               {error ? (
@@ -122,10 +128,10 @@ export function ReviewerActions({ claim, onDone }: { claim: ClaimDetail; onDone:
                 </p>
               ) : null}
               <div className="flex gap-2">
-                <button type="submit" disabled={busy} className="rounded border border-accent bg-accent px-2 py-1 text-xs font-medium text-bg disabled:opacity-60">
+                <button type="submit" disabled={busy} className="rounded-md border border-accent bg-accent px-2 py-1 text-xs font-medium text-bg disabled:opacity-60 hover:opacity-90">
                   {busy ? "Sending…" : `Confirm ${ACTION_LABEL[kind].toLowerCase()}`}
                 </button>
-                <button type="button" onClick={() => setKind(null)} className="rounded border border-line px-2 py-1 text-xs">
+                <button type="button" onClick={() => setKind(null)} className="rounded-lg border border-line bg-surface px-2 py-1 text-xs">
                   Cancel
                 </button>
               </div>

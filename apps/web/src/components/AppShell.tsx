@@ -1,36 +1,87 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-export type NavItem = { href: string; label: string };
+import { NavLinks } from "./NavLinks";
 
-// Only built pages are linked.
+export type NavItem = { href: string; label: string; group: string };
+
+// Only built pages are linked. Groups give the sidebar its hierarchy.
 export const CONSOLE_NAV: readonly NavItem[] = [
-  { href: "/app/programs", label: "Programs" },
-  { href: "/app/billing", label: "Billing" },
+  { href: "/app/programs", label: "Programs", group: "Operations" },
+  { href: "/app/billing", label: "Billing", group: "Account" },
 ];
 
-/** Console frame (02-ui.md component 1). In Clerk mode the controls slot holds the organization switcher and user menu. */
-export function AppShell({ children, identityNote, controls }: { children: ReactNode; identityNote: string; controls?: ReactNode }) {
+/** The RecallOps wordmark: Newsreader with a copper mark. */
+export function Wordmark() {
   return (
-    <div className="flex min-h-dvh flex-col md:flex-row">
-      <nav aria-label="Console" className="border-b border-line bg-panel md:w-52 md:shrink-0 md:border-r md:border-b-0">
-        <div className="px-4 py-3 text-sm font-semibold text-ink">RecallOps</div>
-        <ul className="flex gap-1 px-2 pb-2 md:flex-col">
-          {CONSOLE_NAV.map((item) => (
-            <li key={item.href}>
-              <Link href={item.href} className="block rounded px-2 py-1.5 text-sm text-ink hover:bg-line/50 focus-visible:outline-2 focus-visible:outline-accent">
-                {item.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
+    <span className="flex items-center gap-2">
+      <span aria-hidden="true" className="inline-block h-2.5 w-2.5 rotate-45 bg-copper" />
+      <span className="font-serif text-xl font-medium tracking-tight text-ink">RecallOps</span>
+    </span>
+  );
+}
+
+export type OrgIdentity = { name: string; detail: string };
+
+function initials(name: string): string {
+  const words = name.split(/\s+/).filter(Boolean);
+  return (words.length > 1 ? words[0]![0]! + words[1]![0]! : name.slice(0, 2)).toUpperCase();
+}
+
+/** Who is signed in to which organization, at the foot of the sidebar. Clerk mode adds its switcher and user menu. */
+function OrgBlock({ org, identityNote, controls }: { org?: OrgIdentity; identityNote: string; controls?: ReactNode }) {
+  return (
+    <div className="border-t border-line px-4 py-4" data-org-block>
+      <p className="eyebrow mb-2 px-2">Organization</p>
+      {org ? (
+        <div className="flex items-center gap-3 rounded-lg px-2 py-1.5">
+          <span aria-hidden="true" className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-accent text-xs font-semibold tracking-wide text-bg">
+            {initials(org.name)}
+          </span>
+          <span className="min-w-0">
+            <span className="block truncate text-sm font-medium text-ink">{org.name}</span>
+            <span className="block truncate text-xs text-ink-muted">{org.detail}</span>
+          </span>
+        </div>
+      ) : (
+        <p className="px-2 text-xs text-ink-muted [overflow-wrap:anywhere]">{identityNote}</p>
+      )}
+      {controls ? <div className="mt-3 px-2">{controls}</div> : null}
+    </div>
+  );
+}
+
+/** Console frame (02-ui.md component 1). Desktop: a full-height sidebar with brand, grouped navigation, and organization. */
+export function AppShell({
+  children,
+  identityNote,
+  controls,
+  org,
+}: {
+  children: ReactNode;
+  identityNote: string;
+  controls?: ReactNode;
+  org?: OrgIdentity;
+}) {
+  return (
+    <div className="flex min-h-dvh flex-col bg-paper md:flex-row">
+      <nav aria-label="Console" className="border-b border-line bg-paper md:sticky md:top-0 md:flex md:h-dvh md:w-64 md:shrink-0 md:flex-col md:border-r md:border-b-0">
+        <Link href="/app/programs" className="block px-6 pt-5 pb-4 md:pt-8 md:pb-7" aria-label="RecallOps, programs">
+          <Wordmark />
+          <span className="mt-1 hidden pl-[1.125rem] text-xs text-ink-muted md:block">Recall operations</span>
+        </Link>
+        <NavLinks items={CONSOLE_NAV} />
+        <div className="hidden md:mt-auto md:block">
+          <OrgBlock org={org} identityNote={identityNote} controls={controls} />
+        </div>
       </nav>
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex items-center justify-between gap-4 border-b border-line px-4 py-2 text-xs text-ink-muted">
-          <span>{identityNote}</span>
+        {/* Phones: the identity and Clerk controls sit in a slim bar; desktop shows them in the sidebar. */}
+        <header className="flex min-h-12 items-center justify-between gap-4 border-b border-line bg-surface px-4 py-2 text-xs text-ink-muted md:hidden">
+          <span className="min-w-0 [overflow-wrap:anywhere]">{org ? `${org.name} · ${org.detail}` : identityNote}</span>
           {controls}
         </header>
-        <main className="min-w-0 flex-1 p-4">{children}</main>
+        <main className="mx-auto w-full max-w-6xl min-w-0 flex-1 px-4 py-6 md:px-10 md:py-12">{children}</main>
       </div>
     </div>
   );

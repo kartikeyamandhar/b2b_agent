@@ -65,7 +65,7 @@ export function MprGenerate({ programId, period, canGenerate, hasReport }: { pro
 
   return (
     <form
-      className="grid gap-3 rounded border border-line p-3"
+      className="grid gap-3 rounded-lg border border-line bg-surface p-3"
       onSubmit={(e) => {
         e.preventDefault();
         void generate();
@@ -82,7 +82,7 @@ export function MprGenerate({ programId, period, canGenerate, hasReport }: { pro
                 inputMode="numeric"
                 value={manual[k]}
                 onChange={(e) => setManual((m) => ({ ...m, [k]: e.target.value }))}
-                className="rounded border border-line-strong bg-bg px-2 py-1 text-sm"
+                className="rounded border border-line-strong bg-surface px-2 py-1 text-sm"
               />
             </label>
           ))}
@@ -91,7 +91,7 @@ export function MprGenerate({ programId, period, canGenerate, hasReport }: { pro
             <select
               value={manual.homepage_posting}
               onChange={(e) => setManual((m) => ({ ...m, homepage_posting: e.target.value as Manual["homepage_posting"] }))}
-              className="rounded border border-line-strong bg-bg px-2 py-1 text-sm"
+              className="rounded border border-line-strong bg-surface px-2 py-1 text-sm"
             >
               <option value="">Default</option>
               <option value="yes">Yes</option>
@@ -103,7 +103,7 @@ export function MprGenerate({ programId, period, canGenerate, hasReport }: { pro
             <input
               value={manual.homepage_posting_explanation}
               onChange={(e) => setManual((m) => ({ ...m, homepage_posting_explanation: e.target.value }))}
-              className="rounded border border-line-strong bg-bg px-2 py-1 text-sm"
+              className="rounded border border-line-strong bg-surface px-2 py-1 text-sm"
             />
           </label>
         </div>
@@ -115,7 +115,7 @@ export function MprGenerate({ programId, period, canGenerate, hasReport }: { pro
       ) : null}
       {problem ? <ProblemAlert problem={problem} /> : null}
       <div>
-        <button type="submit" disabled={busy} className="rounded border border-accent bg-accent px-3 py-1.5 text-sm font-medium text-bg disabled:opacity-60" data-mpr-generate>
+        <button type="submit" disabled={busy} className="rounded-md border border-accent bg-accent px-3 py-1.5 text-sm font-medium text-bg disabled:opacity-60 hover:opacity-90" data-mpr-generate>
           {busy ? "Generating…" : `${hasReport ? "Regenerate" : "Generate"} the ${periodLabel(period)} report`}
         </button>
       </div>

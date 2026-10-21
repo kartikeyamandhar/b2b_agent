@@ -15,9 +15,9 @@ export function Panel({ id, title, children, tone }: { id: string; title: string
   return (
     <section
       aria-labelledby={id}
-      className={`min-w-0 rounded border p-3 ${tone === "attention" ? "border-warn/50 border-l-4 border-l-warn" : "border-line"}`}
+      className={`min-w-0 rounded-lg border bg-surface p-5 ${tone === "attention" ? "border-warn/40 border-l-4 border-l-warn" : "border-line"}`}
     >
-      <h2 id={id} className="mb-2 text-sm font-semibold">
+      <h2 id={id} className="section-title mb-3">
         {title}
       </h2>
       {children}
@@ -45,7 +45,7 @@ export function ClaimFacts({ claim }: { claim: ClaimDetail }) {
       <dl>
         <Row label="Name">
           {val(p.name)}
-          {p.synthetic ? <span className="ml-2 rounded border border-line px-1 text-xs text-ink-muted">synthetic</span> : null}
+          {p.synthetic ? <span className="ml-2 rounded border border-line bg-surface px-1 text-xs text-ink-muted">synthetic</span> : null}
         </Row>
         <Row label="Email">{val(p.email)}</Row>
         <Row label="Phone">{val(p.phone)}</Row>
@@ -173,13 +173,13 @@ export function DecisionPanel({ claimId, decision, decidedAt }: { claimId: strin
           <span className="text-ink-muted">Cites </span>
           <ul className="inline-flex flex-wrap gap-1 align-middle">
             {rules.map((r) => (
-              <li key={r} className="rounded border border-line px-1 font-mono">
+              <li key={r} className="rounded border border-line bg-surface px-1 font-mono">
                 {r}
               </li>
             ))}
             {results.map((t) => (
               <li key={t}>
-                <Link href={`/app/claims/${claimId}/trace#result-${t}`} className="rounded border border-accent/50 px-1 font-mono text-accent">
+                <Link href={`/app/claims/${claimId}/trace#result-${t}`} className="rounded border border-copper/60 bg-copper-soft px-1 font-mono text-accent">
                   {t}
                 </Link>
               </li>

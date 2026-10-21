@@ -54,7 +54,7 @@ export function PayoutChoice({ token, current }: { token: string; current: strin
 
   return (
     <form
-      className="grid gap-3 rounded border border-line p-3"
+      className="grid gap-3 rounded-lg border border-line bg-surface p-3"
       onSubmit={(e) => {
         e.preventDefault();
         void choose();
@@ -79,13 +79,13 @@ export function PayoutChoice({ token, current }: { token: string; current: strin
           <p id="mailing-hint" className="text-sm text-ink-muted">
             Leave this empty to mail the check to the home address on your claim.
           </p>
-          <textarea id="mailing" aria-describedby="mailing-hint" value={address} onChange={(e) => setAddress(e.target.value)} rows={3} maxLength={300} className="rounded border border-line-strong bg-bg p-3 text-base" />
+          <textarea id="mailing" aria-describedby="mailing-hint" value={address} onChange={(e) => setAddress(e.target.value)} rows={3} maxLength={300} className="rounded border border-line-strong bg-surface p-3 text-base" />
         </div>
       ) : (
         <p className="text-sm text-ink-muted">You leave this site to finish on Stripe, then come back here.</p>
       )}
       {problem ? <ProblemAlert problem={problem} sentence={portalSentence(problem.status)} /> : null}
-      <button type="submit" disabled={busy} className="min-h-12 rounded bg-accent px-4 text-base font-semibold text-bg disabled:opacity-60" data-payout-submit>
+      <button type="submit" disabled={busy} className="min-h-12 rounded-md bg-accent px-4 text-base font-semibold text-bg hover:opacity-90 disabled:opacity-60" data-payout-submit>
         {busy ? "Saving…" : method === "stripe_connect" ? (current === "onboarding" ? "Continue on Stripe" : "Set up on Stripe") : current === "pending_export" ? "Update mailing address" : "Choose a mailed check"}
       </button>
     </form>

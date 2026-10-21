@@ -19,10 +19,23 @@ function Fact({ label, children }: { label: string; children: ReactNode }) {
   );
 }
 
+/** A headline figure: label above, a large tabular value, an optional note. */
+function Kpi({ label, value, note, tone }: { label: string; value: string; note?: string; tone?: "attention" }) {
+  return (
+    <div className={`min-w-0 rounded-lg border bg-surface px-4 py-4 ${tone === "attention" ? "border-warn/40 border-t-2 border-t-warn" : "border-line"}`} data-kpi={label}>
+      <dt className="eyebrow">{label}</dt>
+      <dd className="kpi-value mt-2 [overflow-wrap:anywhere]">
+        {value}
+        {note ? <span className="ml-1.5 align-middle text-sm font-normal text-ink-muted">{note}</span> : null}
+      </dd>
+    </div>
+  );
+}
+
 function Section({ id, title, children }: { id: string; title: string; children: ReactNode }) {
   return (
-    <section aria-labelledby={id} className="mt-6">
-      <h2 id={id} className="mb-2 text-sm font-semibold">
+    <section aria-labelledby={id} className="mt-10">
+      <h2 id={id} className="section-title mb-3">
         {title}
       </h2>
       {children}
@@ -35,7 +48,7 @@ function List({ items, mono = false }: { items: readonly string[]; mono?: boolea
   return (
     <ul className="flex flex-wrap gap-1.5">
       {items.map((v) => (
-        <li key={v} className={`rounded border border-line px-1.5 py-0.5 ${mono ? "font-mono text-xs" : ""}`}>
+        <li key={v} className={`rounded border border-line bg-surface px-1.5 py-0.5 ${mono ? "font-mono text-xs" : ""}`}>
           {v}
         </li>
       ))}
@@ -56,7 +69,7 @@ export function ProgramOverview({ program, canAdmin = false }: { program: Progra
   return (
     <article>
       <div className="flex flex-wrap items-center gap-3">
-        <h1 className="text-lg font-semibold">{program.title}</h1>
+        <h1 className="page-title">{program.title}</h1>
         <StatusBadge kind="program" value={program.status} />
         <span className="ml-auto flex flex-wrap gap-2">
           <Link
@@ -67,22 +80,20 @@ export function ProgramOverview({ program, canAdmin = false }: { program: Progra
           </Link>
           <Link
             href={queueHref(program.id, { status: null, cursor: null })}
-            className="rounded border border-accent px-2 py-1 text-xs font-medium text-accent hover:bg-panel"
+            className="rounded-md border border-line-strong bg-surface px-2 py-1 text-xs font-medium text-ink hover:bg-panel"
           >
             Open claims queue
           </Link>
         </span>
       </div>
 
-      <dl className="mt-4 grid grid-cols-2 gap-4 rounded border border-line p-4 sm:grid-cols-3 lg:grid-cols-6">
-        <Fact label="Units affected">{formatCount(program.units_affected)}</Fact>
-        <Fact label="Claims filed">{formatCount(m.filed)}</Fact>
-        <Fact label="Awaiting review">{formatCount(m.awaitingReview)}</Fact>
-        <Fact label="Waiting on claimant">{formatCount(m.needsInfo)}</Fact>
-        <Fact label="Corrected">
-          {formatCount(m.corrected)} <span className="text-xs text-ink-muted">({formatPercent(m.correctionRate)})</span>
-        </Fact>
-        <Fact label="Review above">{formatCents(program.value_threshold_cents)}</Fact>
+      <dl className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+        <Kpi label="Units affected" value={formatCount(program.units_affected)} />
+        <Kpi label="Claims filed" value={formatCount(m.filed)} />
+        <Kpi label="Awaiting review" value={formatCount(m.awaitingReview)} tone={m.awaitingReview > 0 ? "attention" : undefined} />
+        <Kpi label="Waiting on claimant" value={formatCount(m.needsInfo)} />
+        <Kpi label="Corrected" value={formatCount(m.corrected)} note={formatPercent(m.correctionRate)} />
+        <Kpi label="Review above" value={formatCents(program.value_threshold_cents)} />
       </dl>
       <p className="mt-2 text-xs text-ink-muted">
         Corrected counts refunds paid and repairs or replacements delivered, as a share of units affected. The monthly
@@ -96,7 +107,7 @@ export function ProgramOverview({ program, canAdmin = false }: { program: Progra
       </Section>
 
       <Section id="claims-by-status" title="Claims by status">
-        <div className="overflow-x-auto rounded border border-line">
+        <div className="overflow-x-auto rounded-lg border border-line bg-surface">
           <table className="w-full border-collapse text-sm">
             <caption className="sr-only">Claims by status</caption>
             <thead className="border-b border-line bg-panel">
@@ -155,7 +166,7 @@ export function ProgramOverview({ program, canAdmin = false }: { program: Progra
               <Fact label="Options">
                 <ul className="grid gap-2">
                   {(remedy.options ?? []).map((o, i) => (
-                    <li key={`${o.type}-${i}`} className="rounded border border-line p-2">
+                    <li key={`${o.type}-${i}`} className="rounded-lg border border-line bg-surface p-2">
                       <p className="font-medium">{remedyLabel(o.type)}</p>
                       {(o.steps ?? []).length > 0 ? (
                         <ol className="mt-1 list-decimal pl-5 text-ink-muted">

@@ -7,9 +7,9 @@ import { NeedsInfoReply } from "./NeedsInfoReply";
 import { PayoutChoice } from "./PayoutChoice";
 
 const TONE = {
-  neutral: "border-line",
-  good: "border-accent/50 border-l-4 border-l-accent",
-  attention: "border-warn/50 border-l-4 border-l-warn bg-warn-soft text-warn-ink",
+  neutral: "border-line bg-surface",
+  good: "border-success/30 border-l-4 border-l-success bg-success-soft text-success-ink",
+  attention: "border-warn/40 border-l-4 border-l-warn bg-warn-soft text-warn-ink",
 } as const;
 
 /** The claim status page (02-ui.md /claim/[token]/status). Server-rendered, so reading it needs no JavaScript. */
@@ -19,8 +19,8 @@ export function StatusView({ token, view }: { token: string; view: PortalView })
   const messages = view.messages ?? [];
   return (
     <div className="grid gap-5">
-      <section aria-labelledby="status-title" className={`rounded border p-4 ${TONE[plain.tone]}`}>
-        <h2 id="status-title" className="text-xl font-semibold">
+      <section aria-labelledby="status-title" className={`rounded-xl border p-5 ${TONE[plain.tone]}`}>
+        <h2 id="status-title" className="font-serif text-2xl font-medium tracking-tight">
           {plain.title}
         </h2>
         <p className="mt-1 text-base">{plain.body}</p>

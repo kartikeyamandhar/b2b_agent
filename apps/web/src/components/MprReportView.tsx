@@ -13,12 +13,12 @@ export function MprReportView({ programId, report }: { programId: string; report
   return (
     <section aria-labelledby="mpr-title" className="grid gap-3">
       <div className="flex flex-wrap items-center gap-2">
-        <h2 id="mpr-title" className="text-sm font-semibold">
+        <h2 id="mpr-title" className="section-title">
           Report for {periodLabel(period)}
         </h2>
         <span
           data-reconciled={report.reconciled}
-          className={`rounded border px-1.5 py-0.5 text-xs font-medium ${report.reconciled ? "border-accent/50 text-accent" : "border-warn/50 bg-warn-soft text-warn-ink"}`}
+          className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${report.reconciled ? "border-success/30 bg-success-soft text-success-ink" : "border-warn/40 bg-warn-soft text-warn-ink"}`}
         >
           {report.reconciled ? "Reconciled: the independent recount agrees" : `Not reconciled: ${discrepancies.length} discrepancies`}
         </span>
@@ -26,7 +26,7 @@ export function MprReportView({ programId, report }: { programId: string; report
         <a
           href={`/api/v1/programs/${programId}/mpr/${report.id}.pdf`}
           download={`mpr-${period}.pdf`}
-          className="ml-auto rounded border border-accent px-2 py-1 text-xs font-medium text-accent"
+          className="ml-auto rounded-md border border-line-strong bg-surface px-2 py-1 text-xs font-medium text-ink hover:border-ink"
           data-mpr-pdf
         >
           Download PDF
@@ -43,7 +43,7 @@ export function MprReportView({ programId, report }: { programId: string; report
           <pre className="mt-1 whitespace-pre-wrap font-mono">{JSON.stringify(discrepancies, null, 2)}</pre>
         </details>
       ) : null}
-      <div className="overflow-x-auto rounded border border-line">
+      <div className="overflow-x-auto rounded-lg border border-line bg-surface">
         <table className="w-full border-collapse text-sm">
           <caption className="sr-only">MPR boxes in CPSC form order</caption>
           <thead className="border-b border-line bg-panel text-left text-xs text-ink-muted">

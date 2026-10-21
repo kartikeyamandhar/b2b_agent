@@ -58,6 +58,28 @@ src/components/              AppShell, StatusBadge, ProblemAlert, LoadingState, 
 tests/                       vitest (node environment; components rendered with react-dom/server)
 ```
 
+## Design system: Ink & Paper (baseline for every screen)
+
+Approved by the UI owner on 2026-10-21. New screens use these tokens and classes; do not add one-off colors or fonts.
+
+- **Tokens** live only in `src/app/globals.css`: paper `#F8F7F4` (page), white surfaces (cards, tables, inputs), ink
+  `#222222` (text, primary buttons), secondary ink `#56554F`, warm border `#E4E1DB`, copper `#A56D45`. Keep the page
+  about 80% neutral, 15% ink, 5% copper.
+- **Copper** marks selection, progress, link underlines, and focus only. It is about 4.2:1 on white, so never use it
+  for small text.
+- **Status colors are separate from the brand:** green for approved, completed, paid; amber for flagged, pending
+  review, warnings; red for denied, errors, destructive actions (`success`, `warn`, `danger` tokens and
+  `StatusBadge` tones).
+- **Type:** DM Sans for everything operational (navigation, buttons, forms, tables, KPI values); Newsreader only for
+  page headings (`page-title`, 30 px, 26 px on phones), portal recall titles, status headlines, and empty states.
+  Section headings use `section-title` (18 px), headline figures `kpi-value` (28 px), small labels `eyebrow`.
+  Both fonts are self-hosted from npm (Fontsource variable, OFL-1.1, pinned 5.3.0): no font CDN at build or run time.
+- **Components:** cards are `rounded-lg border border-line bg-surface`; primary buttons solid ink (`bg-accent
+  text-bg`), secondary buttons white with `border-line-strong`; destructive actions red outline. No gradients, glass,
+  heavy shadows, neon, or decorative oversize elements.
+- **Checks for any new screen:** usable at 390 px with no sideways scroll, WCAG AA contrast (the console's lowest
+  text contrast is 6.4:1), labels on every control, a page title, visible keyboard focus.
+
 ## Decisions in this component
 
 - **All API traffic goes through the Next server.** Server components call `apiJson()`. Client components call

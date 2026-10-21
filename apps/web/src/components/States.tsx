@@ -10,9 +10,9 @@ export function LoadingState({ label = "Loading" }: { label?: string }) {
 
 export function EmptyState({ title, children }: { title: string; children?: ReactNode }) {
   return (
-    <div className="rounded border border-dashed border-line p-6 text-sm">
-      <p className="font-medium text-ink">{title}</p>
-      {children ? <div className="mt-1 text-ink-muted">{children}</div> : null}
+    <div className="rounded-lg border border-dashed border-line-strong/60 bg-surface p-8 text-sm">
+      <p className="font-serif text-xl text-ink">{title}</p>
+      {children ? <div className="mt-2 text-ink-muted">{children}</div> : null}
     </div>
   );
 }

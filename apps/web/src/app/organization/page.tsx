@@ -15,7 +15,7 @@ export default function OrganizationPage() {
     <ClerkShell>
       <main className="mx-auto grid min-h-dvh max-w-xl place-items-center p-4">
         <div className="grid gap-3">
-          <h1 className="text-lg font-semibold">Choose your organization</h1>
+          <h1 className="page-title">Choose your organization</h1>
           <p className="text-sm text-ink-muted">RecallOps works inside an organization. Create one, or pick one you belong to.</p>
           <OrganizationList hidePersonal afterSelectOrganizationUrl="/app/programs" afterCreateOrganizationUrl="/app/programs" />
         </div>

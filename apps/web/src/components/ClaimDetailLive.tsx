@@ -59,16 +59,16 @@ export function ClaimDetailLive({ initialClaim, initialTrace, loadedAt }: { init
   return (
     <div className="grid grid-cols-1 gap-4">
       <div className="flex flex-wrap items-center gap-2">
-        <h1 className="text-lg font-semibold">
+        <h1 className="page-title">
           Claim <span className="font-mono">{shortId(claim.id)}</span>
         </h1>
         <StatusBadge kind="claim" value={claim.status} />
         <span className="text-xs text-ink-muted">created {formatDateTime(claim.created_at)}</span>
         <span className="ml-auto flex gap-2 text-xs">
-          <Link href={`/app/claims/${claim.id}/trace`} className="rounded border border-accent px-2 py-1 font-medium text-accent">
+          <Link href={`/app/claims/${claim.id}/trace`} className="rounded-md border border-line-strong bg-surface px-2 py-1 font-medium text-ink hover:border-ink">
             Open trace
           </Link>
-          <Link href={`/app/programs/${claim.program_id}/claims`} className="rounded border border-line px-2 py-1">
+          <Link href={`/app/programs/${claim.program_id}/claims`} className="rounded-lg border border-line bg-surface px-2 py-1">
             Claims queue
           </Link>
         </span>
@@ -86,7 +86,7 @@ export function ClaimDetailLive({ initialClaim, initialTrace, loadedAt }: { init
       ) : null}
 
       {flash ? (
-        <p role="status" className="rounded border border-accent/50 px-3 py-2 text-sm" data-flash>
+        <p role="status" className="rounded-lg border border-copper/40 border-l-4 border-l-copper bg-copper-soft px-4 py-3 text-sm" data-flash>
           {flash.text}
         </p>
       ) : null}

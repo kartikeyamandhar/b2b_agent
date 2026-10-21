@@ -87,7 +87,7 @@ function Field({
         inputMode={inputMode}
         aria-invalid={error ? true : undefined}
         aria-describedby={describedBy}
-        className={`min-h-12 rounded border bg-bg px-3 text-base ${error ? "border-warn" : "border-line-strong"}`}
+        className={`min-h-12 rounded border bg-surface px-3 text-base ${error ? "border-warn" : "border-line-strong"}`}
       />
       {error ? (
         <p id={`${id}-error`} className="text-sm text-warn-ink">
@@ -175,14 +175,14 @@ export function ClaimStepper({ token, view }: { token: string; view: PortalView 
   const err = (k: keyof DraftFields) => errors[k];
 
   return (
-    <div className="grid min-w-0 grid-cols-1 gap-5">
+    <div className="grid min-w-0 grid-cols-1 gap-6 rounded-xl border border-line bg-surface p-5 sm:p-7">
       <nav aria-label="Claim steps">
         <p className="text-sm text-ink-muted">
           Step {step + 1} of {STEPS.length}
         </p>
         <ol className="mt-1 grid grid-cols-6 gap-1" aria-hidden="true">
           {STEPS.map((s, i) => (
-            <li key={s.id} className={`h-1.5 rounded ${i <= step ? "bg-accent" : "bg-line"}`} />
+            <li key={s.id} className={`h-1.5 rounded ${i <= step ? "bg-copper" : "bg-line"}`} />
           ))}
         </ol>
       </nav>
@@ -295,16 +295,16 @@ export function ClaimStepper({ token, view }: { token: string; view: PortalView 
 
       <div className="flex gap-3">
         {step > 0 ? (
-          <button type="button" onClick={() => go(step - 1)} className="min-h-12 flex-1 rounded border border-line-strong px-4 text-base">
+          <button type="button" onClick={() => go(step - 1)} className="min-h-12 flex-1 rounded-md border border-line-strong bg-surface px-4 text-base hover:border-ink">
             Back
           </button>
         ) : null}
         {current.id === "review" ? (
-          <button type="button" onClick={() => void onSubmit()} disabled={submitting} className="min-h-12 flex-[2] rounded bg-accent px-4 text-base font-semibold text-bg disabled:opacity-60" data-submit>
+          <button type="button" onClick={() => void onSubmit()} disabled={submitting} className="min-h-12 flex-[2] rounded-md bg-accent px-4 text-base font-semibold text-bg hover:opacity-90 disabled:opacity-60" data-submit>
             {submitting ? "Submitting…" : "Submit claim"}
           </button>
         ) : (
-          <button type="button" onClick={onContinue} className="min-h-12 flex-[2] rounded bg-accent px-4 text-base font-semibold text-bg" data-continue>
+          <button type="button" onClick={onContinue} className="min-h-12 flex-[2] rounded-md bg-accent px-4 text-base font-semibold text-bg hover:opacity-90" data-continue>
             Continue
           </button>
         )}

@@ -52,7 +52,7 @@ export function BillingLive({ initialUsage, canManage, returned, loadedAt }: { i
   return (
     <div className="grid gap-4">
       {returned ? (
-        <p role="status" className="rounded border border-accent/50 px-3 py-2 text-sm" data-stripe-returned>
+        <p role="status" className="rounded-lg border border-copper/40 border-l-4 border-l-copper bg-copper-soft px-4 py-3 text-sm" data-stripe-returned>
           Back from Stripe. The plan below changes only after Stripe confirms the payment to RecallOps
           {polling ? "; this page checks again every few seconds for a minute." : ". Refresh the page to check again."}
         </p>
@@ -69,12 +69,12 @@ export function BillingLive({ initialUsage, canManage, returned, loadedAt }: { i
           <div className="grid gap-2">
             <div className="flex flex-wrap gap-2">
               {actions.checkout ? (
-                <button type="button" onClick={() => void go("checkout")} disabled={busy !== null} className="rounded border border-accent bg-accent px-3 py-1.5 text-sm font-medium text-bg disabled:opacity-60" data-billing-checkout>
+                <button type="button" onClick={() => void go("checkout")} disabled={busy !== null} className="rounded-md border border-accent bg-accent px-3 py-1.5 text-sm font-medium text-bg disabled:opacity-60 hover:opacity-90" data-billing-checkout>
                   {busy === "checkout" ? "Opening Stripe…" : "Upgrade to Growth"}
                 </button>
               ) : null}
               {actions.portal ? (
-                <button type="button" onClick={() => void go("portal")} disabled={busy !== null} className="rounded border border-accent px-3 py-1.5 text-sm font-medium text-accent disabled:opacity-60" data-billing-portal>
+                <button type="button" onClick={() => void go("portal")} disabled={busy !== null} className="rounded-md border border-line-strong bg-surface px-3 py-1.5 text-sm font-medium text-ink disabled:opacity-60 hover:border-ink" data-billing-portal>
                   {busy === "portal" ? "Opening Stripe…" : "Manage subscription"}
                 </button>
               ) : null}

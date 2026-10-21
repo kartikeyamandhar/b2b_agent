@@ -13,7 +13,7 @@ export default async function ClaimStatusPage({ params }: { params: Promise<{ to
   if (!view.ok) return <ProblemAlert problem={view.problem} sentence={portalSentence(view.problem.status)} showDetail={false} />;
   return (
     <div>
-      <h1 className="mb-4 text-lg font-semibold leading-snug sm:text-2xl">{view.data.program.title}</h1>
+      <h1 className="mb-6 font-serif text-[1.375rem] leading-snug font-medium tracking-tight text-ink sm:text-[1.75rem]">{view.data.program.title}</h1>
       {view.data.status === "draft" ? (
         <p className="text-base">
           Your claim is not submitted yet.{" "}

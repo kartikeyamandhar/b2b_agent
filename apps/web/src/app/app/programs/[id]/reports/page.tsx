@@ -35,7 +35,7 @@ export default async function ReportsPage({ params, searchParams }: Props) {
           {program.data.title}
         </Link>
       </nav>
-      <h1 className="text-lg font-semibold">Monthly progress reports</h1>
+      <h1 className="page-title">Monthly progress reports</h1>
       <p className="text-sm text-ink-muted">
         The CPSC monthly progress report, counted from this program&apos;s claims and checked by an independent recount.
       </p>
@@ -46,7 +46,7 @@ export default async function ReportsPage({ params, searchParams }: Props) {
               <Link
                 href={`/app/programs/${id}/reports?period=${p}`}
                 aria-current={p === period ? "page" : undefined}
-                className={`inline-block rounded border px-2 py-1 text-xs ${p === period ? "border-accent bg-accent text-bg" : "border-line hover:bg-panel"}`}
+                className={`inline-block rounded-md border px-2 py-1 text-xs ${p === period ? "border-accent bg-accent text-bg" : "border-line hover:bg-panel"} hover:opacity-90`}
               >
                 {periodLabel(p)}
               </Link>

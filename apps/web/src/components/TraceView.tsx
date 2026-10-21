@@ -32,7 +32,7 @@ function CapsBar({ trace }: { trace: Trace }) {
             aria-valuemax={1}
             aria-valuenow={c.ratio ?? 0}
           >
-            <div className={`h-1.5 rounded ${c.ratio !== null && c.ratio >= 1 ? "bg-warn" : "bg-accent"}`} style={{ width: `${Math.round((c.ratio ?? 0) * 100)}%` }} />
+            <div className={`h-1.5 rounded ${c.ratio !== null && c.ratio >= 1 ? "bg-warn" : "bg-copper"}`} style={{ width: `${Math.round((c.ratio ?? 0) * 100)}%` }} />
           </div>
         </div>
       ))}
@@ -95,16 +95,16 @@ function Step({ step, cited }: { step: TraceStep; cited: ReadonlySet<string> }) 
       id={`step-${step.idx}`}
       data-step={step.idx}
       data-cited={isCited || undefined}
-      className={`scroll-mt-4 rounded border p-2 ${failed ? "border-warn/50 bg-warn-soft" : isCited ? "border-accent/50" : "border-line"}`}
+      className={`scroll-mt-4 rounded-lg border bg-surface px-4 py-3 ${failed ? "border-danger/30 border-l-4 border-l-danger bg-danger-soft" : isCited ? "border-copper/50 border-l-4 border-l-copper" : "border-line"}`}
     >
       {rid ? <span id={`result-${rid}`} className="block scroll-mt-4" /> : null}
       <div className="flex flex-wrap items-center gap-2 text-xs">
         <span className="font-mono text-ink-muted">#{step.idx}</span>
         <span className="font-medium">{step.node}</span>
-        {step.tool && step.tool !== step.node ? <span className="rounded border border-line px-1 font-mono">{step.tool}</span> : null}
+        {step.tool && step.tool !== step.node ? <span className="rounded border border-line bg-surface px-1 font-mono">{step.tool}</span> : null}
         {rid ? <span className="font-mono text-ink-muted">{rid}</span> : null}
-        {isCited ? <span className="rounded border border-accent px-1 text-accent">cited by the decision</span> : null}
-        {step.counted ? <span className="rounded border border-line px-1 text-ink-muted">counts toward the step cap</span> : null}
+        {isCited ? <span className="rounded-full border border-copper/60 bg-copper-soft px-2 text-ink">cited by the decision</span> : null}
+        {step.counted ? <span className="rounded border border-line bg-surface px-1 text-ink-muted">counts toward the step cap</span> : null}
         <span className="ml-auto tabular-nums text-ink-muted">
           {isPureCode(step) ? (
             <>pure code{step.latency_ms > 0 ? ` · ${step.latency_ms} ms` : ""}</>
@@ -150,7 +150,7 @@ export function TraceView({ trace, claimId, cited }: { trace: Trace; claimId: st
       {steps.length === 0 ? (
         <p className="text-sm text-ink-muted">The run has not written any steps yet.</p>
       ) : (
-        <ol className="grid gap-2" aria-label="Run steps">
+        <ol className="grid gap-3" aria-label="Run steps">
           {steps.map((s) => (
             <Step key={s.idx} step={s} cited={citedResults} />
           ))}

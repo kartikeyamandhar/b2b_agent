@@ -14,7 +14,7 @@ export function ClaimsTable({ claims }: { claims: readonly ClaimSummary[] }) {
   return (
     <>
       <ClaimCards claims={claims} />
-      <div className="hidden overflow-x-auto rounded border border-line md:block">
+      <div className="hidden overflow-x-auto rounded-lg border border-line bg-surface md:block">
       <table className="w-full border-collapse text-sm">
         <caption className="sr-only">Claims, oldest first</caption>
         <thead className="border-b border-line bg-panel">
@@ -39,7 +39,7 @@ export function ClaimsTable({ claims }: { claims: readonly ClaimSummary[] }) {
                 key={c.id}
                 data-claim-id={c.id}
                 data-review={review}
-                className={`border-b border-line last:border-b-0 ${needsReviewer ? "bg-warn-soft" : "hover:bg-panel"}`}
+                className="border-b border-line last:border-b-0 hover:bg-panel"
               >
                 <th
                   scope="row"
@@ -92,7 +92,7 @@ function ClaimCards({ claims }: { claims: readonly ClaimSummary[] }) {
             <Link
               href={`/app/claims/${c.id}`}
               className={`block rounded border border-l-4 p-3 text-sm focus-visible:outline-2 focus-visible:outline-accent ${
-                needsReviewer ? "border-warn/50 border-l-warn bg-warn-soft" : "border-line border-l-line"
+                needsReviewer ? "border-line border-l-warn bg-surface" : "border-line border-l-line bg-surface"
               }`}
             >
               <span className="flex flex-wrap items-center gap-2">

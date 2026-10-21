@@ -14,7 +14,7 @@ export default async function BillingPage({ searchParams }: { searchParams: Prom
   const [usage, role] = await Promise.all([loadUsage(), currentConsoleRole()]);
   return (
     <div className="grid gap-4">
-      <h1 className="text-lg font-semibold">Billing and usage</h1>
+      <h1 className="page-title">Billing and usage</h1>
       {usage.ok ? (
         <BillingLive initialUsage={usage.data} canManage={role === "admin"} returned={sp.stripe === "return"} loadedAt={Date.now()} />
       ) : (

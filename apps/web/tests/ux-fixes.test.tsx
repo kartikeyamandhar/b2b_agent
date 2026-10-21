@@ -27,7 +27,7 @@ describe("phone cards", () => {
     const out = renderToStaticMarkup(<ClaimsTable claims={page.items} />);
     expect(out.match(/data-card-claim-id=/g)).toHaveLength(page.items.length);
     expect(out).toContain("md:hidden");
-    expect(out).toContain("hidden overflow-x-auto rounded border border-line md:block");
+    expect(out).toMatch(/class="hidden [^"]*\bmd:block\b[^"]*"/);
     const card = out.split("<li").find((l) => l.includes('data-card-claim-id="66dcc492'))!;
     expect(card).toContain("border-l-warn");
     expect(card).toContain("Needs a reviewer");

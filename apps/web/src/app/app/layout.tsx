@@ -23,16 +23,20 @@ export default async function ConsoleLayout({ children }: { children: ReactNode 
   }
 
   let note: string;
+  let org: { name: string; detail: string } | undefined;
   try {
     const id = devIdentity();
     note = `Development auth · firm ${id.firmId} · ${id.role}`;
+    org = { name: "Development firm", detail: `…${id.firmId.slice(-6)} · ${id.role === "admin" ? "Admin" : "Reviewer"} · dev auth` };
   } catch (err) {
     if (!(err instanceof ConfigError)) throw err;
     note = `Console auth not configured: ${err.message}`;
   }
   return (
     <Providers>
-      <AppShell identityNote={note}>{children}</AppShell>
+      <AppShell identityNote={note} org={org}>
+        {children}
+      </AppShell>
     </Providers>
   );
 }

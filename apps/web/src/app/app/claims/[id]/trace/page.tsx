@@ -20,7 +20,7 @@ export default async function TracePage({ params }: { params: Promise<{ id: stri
           ← Claim {claim.ok ? shortId(claim.data.id) : ""}
         </Link>
       </nav>
-      <h1 className="mb-3 text-lg font-semibold">Agent trace</h1>
+      <h1 className="page-title mb-6">Agent trace</h1>
       {!claim.ok ? (
         <ProblemAlert problem={claim.problem} />
       ) : !trace.ok ? (

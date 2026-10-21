@@ -96,10 +96,10 @@ export function IssueLinks({ programId, open, canIssue }: { programId: string; o
             value={n}
             onChange={(e) => setN(e.target.value)}
             aria-invalid={error ? true : undefined}
-            className="w-28 rounded border border-line-strong bg-bg px-2 py-1 text-sm"
+            className="w-28 rounded border border-line-strong bg-surface px-2 py-1 text-sm"
           />
         </label>
-        <button type="submit" disabled={busy} className="rounded border border-accent bg-accent px-3 py-1.5 text-sm font-medium text-bg disabled:opacity-60" data-issue-links>
+        <button type="submit" disabled={busy} className="rounded-md border border-accent bg-accent px-3 py-1.5 text-sm font-medium text-bg disabled:opacity-60 hover:opacity-90" data-issue-links>
           {busy ? "Issuing…" : "Issue claim links"}
         </button>
       </form>
@@ -113,7 +113,7 @@ export function IssueLinks({ programId, open, canIssue }: { programId: string; o
         <div className="grid gap-2" data-issued-links>
           <div className="flex flex-wrap items-center gap-2">
             <p className="text-sm font-medium">{links.length} links issued</p>
-            <button type="button" onClick={download} className="rounded border border-line px-2 py-1 text-xs">
+            <button type="button" onClick={download} className="rounded-lg border border-line bg-surface px-2 py-1 text-xs">
               Download CSV
             </button>
           </div>
@@ -121,14 +121,14 @@ export function IssueLinks({ programId, open, canIssue }: { programId: string; o
             Each link opens one claim and works like a password. They are shown only now: download or copy them before
             leaving this page. A lost link can be reissued from the claim later.
           </p>
-          <ul className="max-h-64 overflow-auto rounded border border-line text-xs">
+          <ul className="max-h-64 overflow-auto rounded-lg border border-line bg-surface text-xs">
             {links.map((l) => (
               <li key={l.claim_id} className="flex items-center gap-2 border-b border-line px-2 py-1 last:border-b-0">
                 <span className="font-mono">{shortId(l.claim_id)}</span>
                 <span className="min-w-0 flex-1 truncate font-mono text-ink-muted" title={l.url}>
                   {l.url}
                 </span>
-                <button type="button" onClick={() => void copy(l)} className="rounded border border-line px-1.5 py-0.5">
+                <button type="button" onClick={() => void copy(l)} className="rounded border border-line bg-surface px-1.5 py-0.5">
                   {copied === l.claim_id ? "Copied" : "Copy"}
                 </button>
               </li>

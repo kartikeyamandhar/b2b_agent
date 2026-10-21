@@ -17,7 +17,7 @@ export function ProgramsTable({ programs }: { programs: readonly Program[] }) {
           const m = programMetrics(p);
           return (
             <li key={p.id}>
-              <Link href={`/app/programs/${p.id}`} className="block rounded border border-line p-3 text-sm focus-visible:outline-2 focus-visible:outline-accent">
+              <Link href={`/app/programs/${p.id}`} className="block rounded-lg border border-line bg-surface p-3 text-sm focus-visible:outline-2 focus-visible:outline-accent">
                 <span className="flex items-start justify-between gap-2">
                   <span className="font-medium text-accent">{p.title}</span>
                   <StatusBadge kind="program" value={p.status} />
@@ -39,7 +39,7 @@ export function ProgramsTable({ programs }: { programs: readonly Program[] }) {
           );
         })}
       </ul>
-      <div className="hidden overflow-x-auto rounded border border-line md:block">
+      <div className="hidden overflow-x-auto rounded-lg border border-line bg-surface md:block">
       <table className="w-full min-w-[720px] border-collapse text-sm">
         <caption className="sr-only">Recall programs</caption>
         <thead className="border-b border-line bg-panel">
