@@ -48,7 +48,7 @@ When a company recalls a consumer product in the United States, the press releas
 </p>
 
 1. **Load the recall.** The API pulls the CPSC recall API in 30-day windows. A nightly GitHub Actions job is wired to trigger the pull and skips until the API is deployed; locally, `make seed` loads a fixture of 51 real records. Each notice becomes identification rules (model numbers, serial and date-code ranges, retailers, the sale window) and remedy rules (refund, repair, or replacement, and what the claimant must show). The regex extractor takes every value straight from the notice text, and the model-based fallback has any value it cannot quote verbatim from the notice dropped.
-2. **Take claims.** Each claimant gets a link to exactly one claim, with no account or password, and uploads a label photo, a photo of the destroyed product, and a receipt. In development the link carries a plain `dev.<firm>.<claim>` token; signed, expiring tokens come with the sign-in component, which is not built yet.
+2. **Take claims.** Each claimant gets a link to exactly one claim, with no account or password, and uploads a label photo, a photo of the destroyed product, and a receipt. In development the link carries a plain `dev.<firm>.<claim>` token; with Clerk sign-in on, links are signed with HMAC-SHA256, expire after 90 days, and an admin can replace a lost one, which stops the old link.
 3. **Decide each claim.** A polling worker runs the claims agent on every submitted claim, inside hard caps on steps, cost, and time. The model may be stricter than the rules table (the outcome the pure-code checks and the run's own photo readings give under the same policy), and a more lenient decision never takes effect on its own. A flagged claim, an approval over the program's money threshold, a run that hits a cap or fails, and a decision more lenient than the rules all stop and wait for a person.
 4. **Catch fraud.** Reused photos, addresses, serial numbers, and payout destinations are caught when each claim is decided. A Neo4j graph then links them into clusters and rings for review.
 5. **Pay.** An approved refund creates its payout row in the same transaction as the approval. Money can leave only through the ledger, as a check batch or a Stripe Connect transfer, never both and never twice. The Stripe calls belong to the payments component, implemented here in test mode; the development console and payment jobs drive the same ledger calls.
@@ -236,7 +236,7 @@ ADJUDICATOR=rules_only make worker
 
 Other targets: `make check` runs lint, strict type checks, and the test suite (460 tests, 90 percent coverage). `make eval` reruns every evaluation from the recordings with no network. `make graph-sync` rebuilds the fraud graph from Postgres. `make help` lists everything.
 
-Nothing is deployed yet. `infra/render.yaml` deploys the API with `APP_ENV=prod`, where the header-based development sign-in refuses to load, so the API stays closed until the Clerk sign-in component lands.
+Nothing is deployed yet. `infra/render.yaml` deploys the API with `APP_ENV=prod`, where the header-based development sign-in refuses to load: the deployed API accepts only Clerk session tokens and signed claim links, and it refuses to start on example, localhost, or plain-http Clerk and portal settings.
 
 ## API tour
 
@@ -324,7 +324,8 @@ The full contract is [docs/contracts/openapi.json](docs/contracts/openapi.json),
 | Retrieval | Postgres full-text search for notices, because model numbers are tokens, not meanings; pgvector over a deterministic local hashed n-gram embedder for policy prose (lexical, not neural, so it needs no extra provider) |
 | Photos | A storage seam: local disk in development, a private Supabase bucket in production, bytes proxied by the API |
 | Quality | ruff, mypy strict, pytest with coverage, replayable evaluations, GitHub Actions with real Postgres and Neo4j |
-| Console and sign-in | Planned by their owners against the API contract, not built yet: Next.js and React, Clerk organizations |
+| Sign-in | Clerk organizations: session tokens verified against the instance's public keys, a firm per organization, admin and reviewer roles |
+| Console | Planned by its owner against the API contract, not built yet: Next.js and React |
 | Payments | Stripe in test mode: Billing and the Customer Portal for firms, Connect for claimant refunds |
 
 ## Repository map
@@ -355,7 +356,7 @@ RecallOps is a four-person team project for the UCLA MSBA program (fall 2026). E
 | Backend: API, agent, ledger, report, fraud graph, evaluations | `apps/api`, `evals` | Complete and tested; what this page describes |
 | Firm console and claim portal | `apps/web` (not in the repository yet) | Not built yet; its owner codes against [the API contract](docs/contracts/openapi.json) and [the trace contract](docs/contracts/trace.md) |
 | Payments: Stripe Billing and Connect | `apps/api/src/recallops/billing`, `apps/api/src/recallops/payouts/stripe_connect.py` | Built in test mode by its owner; adopted after a backend review that added regression tests for the payout and usage paths |
-| Sign-in: Clerk and signed claimant links | `apps/api/src/recallops/auth` | Not built yet; the sign-in seam and a development provider are in place for its owner |
+| Sign-in: Clerk and signed claimant links | `apps/api/src/recallops/auth` | Built by its owner (session verification, a firm created on first sign-in, 90-day signed links); adopted after a backend review that added a link-reissue route, production setting checks, and end-to-end tests |
 
 Each component's design is in [docs/components](docs/components), and each owner's starting point is in [docs/onboarding](docs/onboarding).
 

@@ -19,7 +19,7 @@ dependencies = [
     "pydantic==2.14.1",
     "pydantic-settings==2.16.0",
     "httpx==0.28.1",
-    "pyjwt==2.15.1",
+    "pyjwt[crypto]==2.15.1",
     "python-multipart==0.0.32",
     "stripe==16.0.0",
     "anthropic==1.15.0",

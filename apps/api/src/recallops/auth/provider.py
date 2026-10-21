@@ -18,6 +18,11 @@ class NoFirmError(Exception):
     """Authenticated user without an organization: the API answers 403 (the UI shows the create-org flow)."""
 
 
+class AuthUnavailable(Exception):
+    """The identity provider could not be reached (for example Clerk's JWKS): the API answers 503, never 401, so a
+    signed-in user is not sent back to sign-in during an outage."""
+
+
 @dataclass(frozen=True, slots=True)
 class Principal:
     user_id: str

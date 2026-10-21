@@ -109,7 +109,7 @@ def test_decompression_bombs_are_refused() -> None:
 
 def test_dev_claim_tokens_refuse_prod_and_clerk() -> None:
     with pytest.raises(UnsafeDevAuth):
-        DevClaimTokenVerifier(Settings(app_env="prod", neo4j_uri=""))
+        DevClaimTokenVerifier(Settings(app_env="prod", neo4j_uri="", portal_base_url="https://recallops.example/claim"))
     with pytest.raises(UnsafeDevAuth):
         DevClaimTokenVerifier(Settings(auth_provider="clerk"))
     firm, claim = uuid.uuid4(), uuid.uuid4()
