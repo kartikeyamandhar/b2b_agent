@@ -25,7 +25,7 @@ export async function requestLinks(programId: string, n: number): Promise<Issued
  * Issue single-claim portal links (POST /v1/programs/{id}/claims/issue, admin). Each link is a bearer secret for one
  * claim: it is shown once, here, and never stored by the console.
  */
-export function IssueLinks({ programId, open, canIssue }: { programId: string; open: boolean; canIssue: boolean }) {
+export function IssueLinks({ programId, open, canIssue, closed = false }: { programId: string; open: boolean; canIssue: boolean; closed?: boolean }) {
   const router = useRouter();
   const [n, setN] = useState("10");
   const [links, setLinks] = useState<IssuedLink[]>([]);
@@ -36,6 +36,9 @@ export function IssueLinks({ programId, open, canIssue }: { programId: string; o
 
   if (!canIssue) {
     return <p className="text-sm text-ink-muted">Only an admin can issue claim links.</p>;
+  }
+  if (closed) {
+    return <p className="text-sm text-ink-muted">The program is closed: its claim links no longer work.</p>;
   }
   if (!open) {
     return <p className="text-sm text-ink-muted">Open the program before issuing claim links.</p>;

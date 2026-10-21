@@ -73,6 +73,12 @@ export function ProgramOverview({ program, canAdmin = false }: { program: Progra
         <StatusBadge kind="program" value={program.status} />
         <span className="ml-auto flex flex-wrap gap-2">
           <Link
+            href={`/app/programs/${program.id}/settings`}
+            className="rounded border border-line px-2 py-1 text-xs font-medium hover:bg-panel"
+          >
+            Rules and settings
+          </Link>
+          <Link
             href={`/app/programs/${program.id}/reports`}
             className="rounded border border-line px-2 py-1 text-xs font-medium hover:bg-panel"
           >
@@ -86,6 +92,20 @@ export function ProgramOverview({ program, canAdmin = false }: { program: Progra
           </Link>
         </span>
       </div>
+
+      {program.status === "draft" ? (
+        <div className="mt-5 rounded-lg border border-warn/40 bg-warn-soft p-4 text-sm text-warn-ink" data-draft-banner>
+          <p className="font-medium">This program is a draft.</p>
+          <p className="mt-1">
+            Claim links cannot be issued and no claims are decided until the program is opened.{" "}
+            {canAdmin ? (
+              <Link href={`/app/programs/${program.id}/settings`}>Review the rules and open it</Link>
+            ) : (
+              "An admin reviews the rules and opens it."
+            )}
+          </p>
+        </div>
+      ) : null}
 
       <dl className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
         <Kpi label="Units affected" value={formatCount(program.units_affected)} />
@@ -103,7 +123,7 @@ export function ProgramOverview({ program, canAdmin = false }: { program: Progra
       </p>
 
       <Section id="claim-links" title="Claim links">
-        <IssueLinks programId={program.id} open={program.status === "open"} canIssue={canAdmin} />
+        <IssueLinks programId={program.id} open={program.status === "open"} closed={program.status === "closed"} canIssue={canAdmin} />
       </Section>
 
       <Section id="claims-by-status" title="Claims by status">
