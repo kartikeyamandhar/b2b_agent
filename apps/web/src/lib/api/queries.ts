@@ -1,6 +1,6 @@
 // Console reads for server components. Each returns a result instead of throwing for API and configuration
 // errors, so a page renders its error state (ProblemAlert with the correlation id) rather than a blank boundary.
-import { ClaimDetail, ClaimPage, ExportBatchList, FraudGraphView, MprReport, PortalView, Program, ProgramList, Trace, Usage } from "@/lib/api-types";
+import { CampaignSummary, ClaimDetail, ClaimPage, ExportBatchList, FraudGraphView, MprReport, PortalView, Program, ProgramList, Trace, Usage } from "@/lib/api-types";
 import { isPlausibleToken, portalPath } from "@/lib/portal";
 import { claimsApiPath, type QueueParams } from "@/lib/claims";
 
@@ -102,4 +102,9 @@ export function loadExports(env: Env = process.env): Promise<Loaded<ExportBatchL
 export function loadFraudGraph(programId: string, limit = 500, env: Env = process.env): Promise<Loaded<FraudGraphView>> {
   if (!UUID.test(programId)) return Promise.resolve(PROGRAM_NOT_FOUND);
   return load(() => apiJson(FraudGraphView, { surface: "console", path: `/v1/programs/${programId}/fraud-graph`, search: `?limit=${limit}` }, env));
+}
+
+export function loadCampaign(programId: string, env: Env = process.env): Promise<Loaded<CampaignSummary>> {
+  if (!UUID.test(programId)) return Promise.resolve(PROGRAM_NOT_FOUND);
+  return load(() => apiJson(CampaignSummary, { surface: "console", path: `/v1/programs/${programId}/campaign` }, env));
 }
