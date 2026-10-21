@@ -6,8 +6,9 @@ onboarding: docs/onboarding/ui.md.
 
 Status: **Phase 1B**: programs list (`/app/programs`), program overview (`/app/programs/[id]`), and the claims
 queue (`/app/programs/[id]/claims`, GET /v1/programs/{id}/claims with status filter, keyset cursor, and polling),
-claim detail (`/app/claims/[id]`) with reviewer actions, and the agent trace (`/app/claims/[id]/trace`), on the
-Phase 0 scaffold (API client, proxy, shared components).
+claim detail (`/app/claims/[id]`) with reviewer actions, the agent trace (`/app/claims/[id]/trace`), and the
+claimant portal (`/claim/[token]`, `/claim/[token]/status`, `/claim/connect-return`, `/claim/connect-refresh`), on
+the Phase 0 scaffold (API client, proxy, shared components).
 
 ## Run
 
@@ -43,7 +44,11 @@ src/lib/claims.ts            queue URL state, API path, review classification
 src/lib/claim-detail.ts      reviewer action rules (mirrors claims/review.py), photo readings and duplicate hits from
                              the trace, citations, cap use, polling intervals
 src/lib/api/client.ts        browser fetch through /api, validated with zod
-src/lib/queries/             react-query options (queue polling)
+src/lib/queries/             react-query options (queue, claim, and trace polling)
+src/lib/portal.ts            portal steps, validation, resumable drafts, plain status, payout choice, Stripe handoff
+src/lib/image.ts             on-device photo compression (under 1.5 MB, longest edge 2000 px)
+src/components/portal/       ClaimStepper, PhotoCapture, StatusView, NeedsInfoReply, PayoutChoice, AutoRefresh,
+                             ConnectReturn
 src/app/api/[...path]/       same-origin proxy for client components: /api/v1/* and /api/portal/* only
 src/components/              AppShell, StatusBadge, ProblemAlert, LoadingState, EmptyState, ProgramsTable, ProgramOverview,
                              ClaimsQueue (client), ClaimsTable, QueueControls (filter, review summary, pager),
@@ -91,6 +96,18 @@ tests/                       vitest (node environment; components rendered with 
   page polls for up to 60 s until the worker applies it. The trace polls every 1.5 s while its run is running.
 - **CSRF.** The proxy refuses a `POST` or `PATCH` whose `Origin` or `Sec-Fetch-Site` says it came from another site,
   because writes carry the server's identity.
+- **Claim portal.** Public and mobile-first, outside Clerk, with `referrer: no-referrer` and `noindex` because the
+  claim token is in the URL. Six steps: confirm the product (models, where the label is, and the remedy as a
+  statement, never a choice: the backend assigns it), model and codes, photos (each required kind; compressed on the
+  device, previewed, uploaded at once, kept in memory for "Try again", "Retake" replaces), purchase (free-text
+  retailer: `PortalProgram` has no sold-at list), your details, and review and submit. Fields resume from this tab's
+  `sessionStorage` until submit; photos resume from `photos_uploaded`. A submitted claim goes to its status page,
+  which is server-rendered (reading needs no JavaScript; replying does): plain-language status (a flagged or capped
+  claim reads as "a person is reviewing"), denial reasons, the needs-info question with a reply and optional photo,
+  the message thread, and the refund section. The payout choice (mailed check with optional mailing address, or
+  Stripe onboarding) appears only when the claim is `approved` and the payout is `pending`, `onboarding`, `failed`, or
+  `pending_export`; otherwise the page shows progress. A submitted claim's page refreshes every 15 s at most 8
+  times, inside the link's 60 requests per hour.
 
 ## Notes for other owners
 
@@ -104,7 +121,17 @@ tests/                       vitest (node environment; components rendered with 
   your `apiFetch` helper. Everything else in apps/web calls through it. `ClerkProvider` slots into
   `src/app/layout.tsx` (marked), and `/claim/*` must stay outside Clerk.
 
+**Payments owner and whoever runs the backend (component 3, operations)**
+- Point the Connect return and refresh settings at the portal: `CONNECT_RETURN_URL=http://localhost:3000/claim/connect-return`
+  and `CONNECT_REFRESH_URL=http://localhost:3000/claim/connect-refresh` (production: the web origin). They are one
+  fixed URL for every claim, so before leaving for Stripe the tab stores the claim token in `sessionStorage`; the
+  landing page reads it once, deletes it, and opens that claim's status page, which re-reads the API. Only an
+  `https` URL on `stripe.com` is followed. Without these settings Stripe returns the claimant to `/dev/console`.
+- `BILLING_RETURN_URL` still points at `/dev/console#payouts`; the billing page is not built yet.
+
 **Backend owner (component 1)**
+- `PortalView.status` answers `flagged` or `capped` to anyone holding the claim link. The portal pages show those as
+  "a person is reviewing" and never echo the raw value, but the API itself discloses it.
 - Two documentation examples in `docs/contracts/openapi.json` omit required nullable fields: `Program` has no
   `closed_at`, and `Trace.steps[0]` has no `thought`. The API itself serializes nulls, so this does not affect
   runtime; `tests/api-types.test.ts` tolerates exactly these two gaps and asks for the entry to be removed when they

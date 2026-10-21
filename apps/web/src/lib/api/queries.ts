@@ -1,6 +1,7 @@
 // Console reads for server components. Each returns a result instead of throwing for API and configuration
 // errors, so a page renders its error state (ProblemAlert with the correlation id) rather than a blank boundary.
-import { ClaimDetail, ClaimPage, Program, ProgramList, Trace } from "@/lib/api-types";
+import { ClaimDetail, ClaimPage, PortalView, Program, ProgramList, Trace } from "@/lib/api-types";
+import { isPlausibleToken, portalPath } from "@/lib/portal";
 import { claimsApiPath, type QueueParams } from "@/lib/claims";
 
 import { apiJson } from "./backend";
@@ -64,4 +65,15 @@ export async function loadTrace(id: string, env: Env = process.env): Promise<Loa
   const r = await load(() => apiJson(Trace, { surface: "console", path: `/v1/claims/${id}/trace` }, env));
   if (!r.ok && r.problem.status === 404 && r.problem.detail === "no run for this claim") return { ok: true, data: null };
   return r;
+}
+
+const LINK_NOT_FOUND: Loaded<never> = {
+  ok: false,
+  problem: { status: 404, title: "Not Found", detail: null, correlationId: null, retryAfterSeconds: null },
+};
+
+/** The claim portal view, read with the claim token only (no console identity). */
+export function loadPortal(token: string, env: Env = process.env): Promise<Loaded<PortalView>> {
+  if (!isPlausibleToken(token)) return Promise.resolve(LINK_NOT_FOUND);
+  return load(() => apiJson(PortalView, { surface: "portal", path: portalPath(token) }, env));
 }
