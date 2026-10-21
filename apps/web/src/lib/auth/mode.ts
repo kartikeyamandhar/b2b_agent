@@ -37,11 +37,11 @@ export function routeKind(pathname: string): RouteKind {
 }
 
 /**
- * Paths the Next proxy (src/proxy.ts) runs on. The portal (/claim, /api/portal) and static assets are excluded, so
- * the claimant never touches Clerk at all. Kept here so a test can check it; proxy.ts must repeat it literally,
- * because Next reads the matcher statically.
+ * Paths the Next proxy (src/proxy.ts) runs on. The homepage (/), the portal (/claim, /api/portal), and static assets
+ * are excluded, so neither a first-time visitor nor a claimant touches Clerk at all. Kept here so a test can check it;
+ * proxy.ts must repeat it literally, because Next reads the matcher statically.
  */
-export const PROXY_MATCHER = "/((?!_next/|claim(?:/|$)|api/portal(?:/|$)|favicon\\.ico$).*)";
+export const PROXY_MATCHER = "/((?!$|_next/|claim(?:/|$)|api/portal(?:/|$)|favicon\\.ico$).*)";
 
 export type ConsoleRole = "admin" | "reviewer";
 

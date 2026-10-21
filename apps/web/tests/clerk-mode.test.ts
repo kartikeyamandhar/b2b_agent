@@ -52,13 +52,15 @@ describe("routes", () => {
   const matcher = new RegExp(`^${PROXY_MATCHER}$`);
 
   it("runs the proxy on the console, the API proxy, and sign-in", () => {
-    for (const p of ["/", "/app/programs", "/api/v1/programs", "/sign-in", "/sign-up/verify", "/organization", "/app/claims/c/trace"]) {
+    for (const p of ["/app", "/app/programs", "/api/v1/programs", "/sign-in", "/sign-up/verify", "/organization", "/app/claims/c/trace"]) {
       expect(matcher.test(p), p).toBe(true);
     }
   });
 
-  it("never runs it on the claimant portal or static files", () => {
-    for (const p of ["/claim", "/claim/tok", "/claim/tok/status", "/claim/connect-return", "/api/portal/tok", "/api/portal/tok/photos", "/_next/static/chunks/a.js", "/favicon.ico"]) {
+  it("never runs it on the homepage, the claimant portal, or static files", () => {
+    // The homepage loads no Clerk script; under the proxy, Clerk's development instance bounced every first visit
+    // through a handshake redirect, so link previews and crawlers saw a 307 instead of the page (first deploy).
+    for (const p of ["/", "/claim", "/claim/tok", "/claim/tok/status", "/claim/connect-return", "/api/portal/tok", "/api/portal/tok/photos", "/_next/static/chunks/a.js", "/favicon.ico"]) {
       expect(matcher.test(p), p).toBe(false);
     }
   });
