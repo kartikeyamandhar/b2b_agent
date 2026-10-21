@@ -1,0 +1,18 @@
+{
+  "claim_id": "66dcc492-086f-5b59-b441-cbe001eb2e0b",
+  "status": "draft",
+  "program": {
+    "title": "Example Thermal Laminators Recalled Due to Fire Hazard",
+    "models": ["TL1302Z"],
+    "model_label_location": "on the bottom of the laminator",
+    "remedy_type": "refund",
+    "destruction_instruction": "cut the power cord",
+    "required_photos": ["label", "destruction"]
+  },
+  "pending_question": null,
+  "decision_reasons": [],
+  "photos_uploaded": [],
+  "messages": [],
+  "payout_status": null,
+  "connect_onboarding_url": null
+}

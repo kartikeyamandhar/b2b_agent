@@ -1,0 +1,25 @@
+{
+  "id": "66dcc492-086f-5b59-b441-cbe001eb2e0b",
+  "program_id": "0874f66f-bfb5-552b-bd93-6266f49c1d5a",
+  "status": "approved",
+  "claimant": { "name": "Test Claimant", "email": "claimant@example.com", "phone": "555-0100", "address_line1": "1 Example St", "city": "Springfield", "state": "IL", "zip": "62701", "synthetic": true },
+  "model_claimed": "TL1302Z",
+  "serial_claimed": null,
+  "date_code_claimed": null,
+  "retailer_claimed": "Example Store",
+  "purchase_date": "2026-03-01",
+  "quantity": 1,
+  "remedy": "refund",
+  "refund_cents": 2999,
+  "created_at": "2026-10-16T22:40:04.120Z",
+  "submitted_at": "2026-10-16T22:40:04.120Z",
+  "decided_at": "2026-10-16T22:40:04.135Z",
+  "photos": [
+    { "id": "8a1d0d5e-7c3b-4c1e-9a52-1f0f2b6a9a01", "kind": "label", "phash": "f0e1d2c3b4a59687", "sha256": "0000000000000000000000000000000000000000000000000000000000000000", "uploaded_at": "2026-10-16T22:40:03.000Z", "url": "/v1/claims/66dcc492-086f-5b59-b441-cbe001eb2e0b/photos/8a1d0d5e-7c3b-4c1e-9a52-1f0f2b6a9a01" }
+  ],
+  "decision": { "outcome": "approve", "reasons": ["model TL1302Z is listed"], "cited_rules": ["TL1302Z"], "routed_to_human": false, "confidence": null, "decided_by": "rules_only" },
+  "run": { "run_id": "1b4e28ba-2fa1-41d2-883f-0016d3cca427", "graph": "rules_only", "status": "done", "steps": 7, "cost_usd": "0.000000", "started_at": "2026-10-16T22:40:04.120Z", "finished_at": "2026-10-16T22:40:04.135Z" },
+  "clusters": [],
+  "payout": { "id": "3f1c9b7e-2d4a-4e8b-9c1f-6a7b8c9d0e1f", "amount_cents": 2999, "currency": "usd", "method": "check_export", "status": "pending_export", "stripe_transfer_id": null, "stripe_reversed_cents": 0 },
+  "audit": [ { "action": "claim_submitted", "actor": "claimant", "at": "2026-10-16T22:40:04.120Z", "before": { "status": "draft" }, "after": { "status": "submitted" } } ]
+}

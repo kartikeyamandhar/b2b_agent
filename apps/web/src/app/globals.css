@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+/* Calm, government-adjacent palette (02-ui.md section 1): neutral surfaces, one accent for actions, one for
+   warnings. Light and dark share token names. */
+:root {
+  --bg: #ffffff;
+  --panel: #f6f7f8;
+  --ink: #1b1f24;
+  --ink-muted: #59616b;
+  --line: #d9dde2;
+  --line-strong: #9aa2ab;
+  --accent: #1f5fae;
+  --warn: #a35a00;
+  --warn-soft: #fff6e8;
+  --warn-ink: #6b3b00;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14171b;
+    --panel: #1b1f24;
+    --ink: #e7eaee;
+    --ink-muted: #a3abb5;
+    --line: #2f353d;
+    --line-strong: #5d6672;
+    --accent: #7fb0f0;
+    --warn: #f0a94a;
+    --warn-soft: #2b2112;
+    --warn-ink: #f6c98a;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-panel: var(--panel);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-warn-ink: var(--warn-ink);
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
