@@ -1,6 +1,6 @@
 # Going live: one link for the whole project
 
-Nothing here has been run yet. RecallOps is deploy-ready, not deployed: every service, setting, and secret is listed below and in `infra/render.yaml`, and the code refuses to start in production with example, localhost, or plain-http values. Two of the hosted pieces were smoke-tested on 2026-10-19: Neo4j AuraDB passed 10 of 10 checks and the Supabase photo bucket passed 6 of 6. The rest is untested until the first deploy. Budget about two hours for the first run, and expect one or two settings to need a second try.
+RecallOps has been live since 2026-10-21. The one link is **https://recallops-five.vercel.app**; the API answers at https://recallops-api-750b.onrender.com (`/healthz`, `/readyz`). This page is how it was deployed and how to deploy it again. The steps below are the ones that worked; [What the first deploy found](#what-the-first-deploy-found) lists where the first attempt differed from the plan. The code refuses to start in production with example, localhost, or plain-http values, so a missing setting stops a service at startup rather than running it half-configured.
 
 ## What runs where
 
@@ -33,25 +33,20 @@ python3 -c "import secrets;print(secrets.token_urlsafe(24))"                    
 
 ## 1. Database (Supabase)
 
-1. In the Supabase project (already created), open **Project Settings, Database** and copy the direct connection string for the `postgres` user. Call it `SUPABASE_ADMIN_URL`.
-2. Create the three roles and the `recallops` database, then run the migrations, from the repository root:
+The project runs Postgres 17. Its direct host (`db.<ref>.supabase.co`) answers on IPv6 only, and neither Render nor most home networks reach it, so every connection goes through Supabase's **session pooler** on port 5432 (for this project `aws-0-us-east-1.pooler.supabase.com`; the other regional host answers "tenant not found"). Through the pooler a role logs in as `<role>.<project ref>`, and the pooler honours the database name, so the app keeps its own `recallops` database, out of reach of Supabase's public Data API.
 
-```bash
-psql "$SUPABASE_ADMIN_URL" -v ON_ERROR_STOP=1 \
-  -v owner_password="$OWNER_PW" -v app_password="$APP_PW" -v internal_password="$INTERNAL_PW" -v dbname=recallops \
-  -f apps/api/sql/bootstrap_roles.sql
-cd apps/api && PYTHONPATH=src uv run --frozen alembic \
-  -x dburl="postgresql://recallops_owner:$OWNER_PW@<supabase-host>:5432/recallops" upgrade head
-```
-
-3. Build the three connection strings for Render: `recallops_app` becomes `DATABASE_URL` and `recallops_internal` becomes `DATABASE_URL_INTERNAL`. The owner role is used only for migrations, never by a running service.
-
-Untested here: the script gives `recallops_internal` the BYPASSRLS attribute, and Postgres lets only a role that has BYPASSRLS itself grant it. If Supabase's `postgres` user refuses, run that one `ALTER ROLE` from the Supabase SQL editor, which runs with more privilege. The pgvector extension is called `vector` on Supabase too.
+1. In the Supabase SQL editor (it runs as `postgres`: no superuser, but CREATEROLE, CREATEDB, and BYPASSRLS), create the three roles with the attributes in `apps/api/sql/bootstrap_roles.sql`. The first deploy passed each password as a SCRAM-SHA-256 verifier computed locally, so no plaintext password went through the editor. Granting BYPASSRLS to `recallops_internal` works there.
+2. Still in the editor: `GRANT recallops_owner TO postgres WITH INHERIT FALSE, SET TRUE;` (Postgres requires it before `postgres` may create a database owned by another role), then `CREATE DATABASE recallops OWNER recallops_owner` on its own (it cannot run inside a transaction).
+3. As `recallops_owner` through the pooler, run the rest of the bootstrap inside the new database: revoke it from PUBLIC, grant CONNECT to the three roles, `REVOKE CREATE ON SCHEMA public FROM PUBLIC`, `GRANT USAGE ON SCHEMA public TO recallops_app, recallops_internal`, and `CREATE EXTENSION vector`. Supabase lets a database owner create `vector` (it is a privileged extension there), so the `postgres` password is never needed. Grants made by `postgres` on the database have no effect, because it holds the owner role without inheriting it.
+4. Run the migrations as the owner: `cd apps/api && DATABASE_URL_OWNER='postgresql://recallops_owner.<ref>:<password>@<pooler-host>:5432/recallops?sslmode=require' PYTHONPATH=src uv run --frozen alembic upgrade head`. Expect head `0007_login`, 29 tables plus the 4 checkpointer tables, and row-level security forced on the 22 tenant tables.
+5. Build the connection strings for Render the same way: `recallops_app` becomes `DATABASE_URL` and `recallops_internal` becomes `DATABASE_URL_INTERNAL`. The owner role is used only for migrations, never by a running service.
 
 ## 2. API, worker, and jobs (Render)
 
-1. In Render choose **New, Blueprint**, and point it at this repository. It reads `infra/render.yaml` and proposes four services.
-2. Fill in every value marked `sync: false`. The table below says where each one comes from. The website's address is not known yet, so the first deploy of the API will refuse to start: that is expected. Come back after step 3 and fill in the website values.
+1. Add a payment card in Render (**Billing**) first: the worker and the two cron jobs are paid, and Render refuses to create them without one (HTTP 402).
+2. In Render choose **New, Blueprint**, and point it at this repository. It reads `infra/render.yaml` and proposes four services in Virginia. The first deploy created the same four services through Render's API from the same file instead, with each secret read from the owner's machine; either way the services match the blueprint.
+3. Fill in every value marked `sync: false`. The table below says where each one comes from. Create the Vercel project first (step 3 below, without deploying) so its address is known; otherwise the API refuses to start until the website values are filled in.
+4. Auto-deploy on push needs Render's GitHub app to have access to this repository. Services created from the public repository URL build it, but a push to `main` does not redeploy them: deploy by hand (Render's **Manual Deploy**, or `POST /v1/services/<id>/deploys`) until the app is granted access.
 
 | Setting | Where it comes from |
 |---|---|
@@ -73,7 +68,7 @@ The free web service sleeps after 15 minutes without traffic, so the first click
 
 ## 3. Website (Vercel)
 
-1. In Vercel choose **Add New, Project**, import this repository, and set **Root Directory** to `apps/web`. Vercel detects Next.js; Node 22 is the default.
+1. Give Vercel's GitHub app access to this repository (GitHub **Settings, Applications, Vercel, Configure**); Vercel cannot link the project without it. Then choose **Add New, Project**, import this repository, set **Root Directory** to `apps/web` and Node to 22.x. With the link in place, every push to `main` deploys the site and every pull request gets a preview.
 2. Set these environment variables (Production):
 
 | Variable | Value |
@@ -81,6 +76,7 @@ The free web service sleeps after 15 minutes without traffic, so the first click
 | `RECALLOPS_API_URL` | `https://<api>.onrender.com` (https is required for anything that is not this machine) |
 | `RECALLOPS_WEB_AUTH` | `clerk` (the dev headers refuse to run on any Vercel deployment) |
 | `RECALLOPS_WEB_PROXY_SECRET` | The same value as the API's `WEB_PROXY_SECRET` |
+| `RECALLOPS_API_TIMEOUT_MS` | `55000`: the free API sleeps after 15 idle minutes and takes about a minute to wake |
 | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY` | Step 4 |
 | `NEXT_PUBLIC_CLERK_SIGN_IN_URL`, `NEXT_PUBLIC_CLERK_SIGN_UP_URL` | `/sign-in`, `/sign-up` |
 | `NEXT_PUBLIC_CLERK_KEYLESS_DISABLED`, `NEXT_PUBLIC_CLERK_TELEMETRY_DISABLED` | `true`, `true` |
@@ -91,7 +87,7 @@ Why the proxy secret matters: every claim page reaches the API from Vercel's ser
 
 ## 4. Sign-in (Clerk)
 
-1. Use the Clerk application from `docs/onboarding/login.md`: email and password, an emailed code at sign-up, and Organizations enabled with the roles `org:admin` and `org:reviewer` (make `org:reviewer` the default).
+1. Use the Clerk application from `docs/onboarding/login.md`: email and password, an emailed code at sign-up, and Organizations enabled with the roles `org:admin` and `org:reviewer` (make `org:reviewer` the default). Organizations are off in a new Clerk application; turning them on also turns on "force organization selection", which suits RecallOps because every user works inside a firm. The live instance requires passwords of at least 15 characters.
 2. Under **Domains** or **Allowed origins**, add `https://<your-site>.vercel.app`.
 3. Copy the publishable key, the secret key, and the Frontend API URL (which is `CLERK_ISSUER`). A development instance is fine for the class; it shows a small "development mode" badge.
 
@@ -104,15 +100,39 @@ Why the proxy secret matters: every claim page reaches the API from Vercel's ser
 
 In the repository's **Settings, Secrets and variables, Actions**, add `RECALLOPS_API_URL` (the Render API address) and `INTERNAL_SHARED_SECRET`. The `feeds` workflow then pulls new recalls every night at 07:17 UTC; until both exist it skips with a notice.
 
-## 7. Check it end to end
+## 7. Demo data (optional)
 
-1. Open the website, sign up, and create an organization. Your first sign-in creates the company's private space.
+The demo is the laminator recall with 500 decided claims, bound to one Clerk organization. Sign up on the live site and create the organization first, read its id (`org_...`) from the Clerk dashboard, then run the seed as a one-off job on the worker service, which already holds every production setting:
+
+```bash
+# Render dashboard: recallops-worker, Jobs, Run job (or POST /v1/services/<worker id>/jobs)
+PYTHONPATH=src SEED_CLERK_ORG_ID=org_your_organization_id uv run --frozen python -m recallops.seed
+```
+
+Run it next to the database, not from a laptop: it makes about 3,000 storage calls and several thousand queries, and the first attempts from a home connection met Supabase's rate limit, a timeout, and connections that took up to 68 s to open. On Render it took 14 minutes. The live worker can keep running: seeded claims carry the seed's lease until their decision is recorded, so the agent never spends model money on them. Rerunning the seed replaces the demo firms' data; the empty firm your first sign-in created stays, unbound.
+
+## 8. Check it end to end
+
+1. Open the website, sign up, and create an organization. Your first sign-in creates the company's private space (or, after step 7, opens the demo firm).
 2. **New program**: search the CPSC archive (for example "laminator"), create the program, review the rules, and open it.
 3. **Issue claim links**, open one in a private window on a phone, and file a claim with three photos.
 4. Within a minute the worker decides it. Open the claim in the console and read its trace.
 5. Generate the monthly report and download its PDF.
 
 If anything fails, Render's logs are JSON lines with an `event` field: start with `http_request`, `worker_claim_done`, and any `level: error`.
+
+## What the first deploy found
+
+The first deploy (2026-10-21, observed timeline in `docs/traces/M6-deploy.md`) differed from the plan in these places. Each is fixed in the code or the steps above:
+
+- **Both cron jobs would have crashed on every run.** They carried no graph settings, so they loaded the development Neo4j defaults, which production refuses. A local preflight of each service's real environment caught it before they ran; `render.yaml` now disables the graph for them.
+- **The seed and a live agent worker raced.** The seed commits claims before deciding them, so the worker could have run the paid agent on demo data. The worker was paused by hand at the time; seeded claims now carry the seed's lease.
+- **Storage rate limits.** Supabase answered 429 to a burst of storage calls. The adapter now resends a 429 up to three times; the seed also repeats its own delete-then-put after a timeout.
+- **Supabase's direct host is IPv6-only.** Everything connects through the session pooler (step 1).
+- **Render needs a payment card** before it creates paid services, and **auto-deploy needs Render's GitHub app**; until then, deploy by hand after a merge.
+- **Vercel needs its GitHub app** to see the repository before it can link the project.
+- **Clerk's development handshake redirected the homepage.** The homepage loads no Clerk script, so the proxy now skips `/`.
+- **Clerk's widgets were unreadable in dark mode** (near-black text on the dark sidebar); they now take the dark palette.
 
 ## Costs
 
