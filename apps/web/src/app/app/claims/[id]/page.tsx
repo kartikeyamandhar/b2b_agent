@@ -4,13 +4,14 @@ import Link from "next/link";
 import { ClaimDetailLive } from "@/components/ClaimDetailLive";
 import { ProblemAlert } from "@/components/ProblemAlert";
 import { loadClaim, loadTrace } from "@/lib/api/queries";
+import { currentConsoleRole } from "@/lib/auth/current-role";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Claim" };
 
 export default async function ClaimPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const [claim, trace] = await Promise.all([loadClaim(id), loadTrace(id)]);
+  const [claim, trace, role] = await Promise.all([loadClaim(id), loadTrace(id), currentConsoleRole()]);
   const loadedAt = Date.now();
   return (
     <div>
@@ -27,7 +28,7 @@ export default async function ClaimPage({ params }: { params: Promise<{ id: stri
               <ProblemAlert problem={trace.problem} />
             </div>
           ) : null}
-          <ClaimDetailLive initialClaim={claim.data} initialTrace={trace.ok ? trace.data : null} loadedAt={loadedAt} />
+          <ClaimDetailLive initialClaim={claim.data} initialTrace={trace.ok ? trace.data : null} loadedAt={loadedAt} canAdmin={role === "admin"} />
         </>
       ) : (
         <ProblemAlert problem={claim.problem} />

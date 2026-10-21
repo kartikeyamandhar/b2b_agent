@@ -13,13 +13,24 @@ import { claimDetailQuery, traceQuery } from "@/lib/queries/claim";
 
 import { AuditTrail, ClaimFacts, DecisionPanel, FraudPanel, Panel, PayoutPanel, PhotoEvidence } from "./ClaimPanels";
 import { ProblemAlert } from "./ProblemAlert";
+import { ReissueLink } from "./ReissueLink";
 import { ReviewerActions, type ActionDone } from "./ReviewerActions";
 import { StatusBadge } from "./StatusBadge";
 
 /** How long the page keeps polling after an action the worker must apply. */
 const AWAIT_WORKER_MS = 60_000;
 
-export function ClaimDetailLive({ initialClaim, initialTrace, loadedAt }: { initialClaim: ClaimDetail; initialTrace: Trace | null; loadedAt: number }) {
+export function ClaimDetailLive({
+  initialClaim,
+  initialTrace,
+  loadedAt,
+  canAdmin = false,
+}: {
+  initialClaim: ClaimDetail;
+  initialTrace: Trace | null;
+  loadedAt: number;
+  canAdmin?: boolean;
+}) {
   const id = initialClaim.id;
   const client = useQueryClient();
   const awaitingUntil = useRef(0);
@@ -109,6 +120,7 @@ export function ClaimDetailLive({ initialClaim, initialTrace, loadedAt }: { init
           <ReviewerActions claim={claim} onDone={onDone} />
           <PayoutPanel payout={claim.payout} remedy={claim.remedy} />
           <FraudPanel claimId={claim.id} clusters={claim.clusters} hits={duplicateHits(trace)} />
+          <ReissueLink claimId={claim.id} status={claim.status} canAdmin={canAdmin} onDone={() => void claimQ.refetch()} />
           <Panel id="claim-run" title="Latest run">
             {claim.run ? (
               <p className="flex flex-wrap items-center gap-2 text-sm">
