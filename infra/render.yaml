@@ -1,5 +1,6 @@
-# Render blueprint for the backend (CLAUDE.md layout: infra/ holds render.yaml only). Not applied by this repository:
-# deploying needs accounts and secrets only the owner creates (decisions log 2026-10-18).
+# Render blueprint for the backend (CLAUDE.md layout: infra/ holds render.yaml only). The live services were created
+# from this file on 2026-10-21 through Render's API, with secrets supplied from the owner's machine, never this
+# repository (docs/DEPLOY.md). Keep it in step with the live services: a change here does not change them by itself.
 #
 # APP_ENV=prod on purpose: the dev auth provider and dev claim tokens refuse to load in prod, so the API runs only with
 # the Clerk provider and HMAC claim links (component 4), and prod settings refuse example, localhost, or plain-http
@@ -9,9 +10,11 @@
 # (invariant 2).
 # Render's free tier has no background workers: the worker service needs a paid instance type, or run it elsewhere.
 # The health check is /healthz: /readyz reports a degraded graph or a stale worker but must not restart the API.
+# Region virginia: next to the Supabase database (us-east-1); Oregon adds about 70 ms to every query.
 services:
   - type: web
     name: recallops-api
+    region: virginia
     runtime: python
     rootDir: apps/api
     plan: free
@@ -96,6 +99,7 @@ services:
         sync: false
   - type: worker
     name: recallops-worker
+    region: virginia
     runtime: python
     rootDir: apps/api
     plan: starter
@@ -110,6 +114,10 @@ services:
         value: agent
       - key: LLM_MODE
         value: live
+      # The meter's ledger is this database's agent_steps plus this carried amount: the 1.630266 USD spent in
+      # development, rounded up, so the 4.00 USD stop stays cumulative across both databases.
+      - key: LLM_SPEND_CARRIED_USD
+        value: "1.64"
       - key: DATABASE_URL_INTERNAL
         sync: false
       - key: DATABASE_URL
@@ -142,6 +150,7 @@ services:
   # check batches are made only when an admin presses "Create export batch" in the console.
   - type: cron
     name: recallops-payment-jobs
+    region: virginia
     runtime: python
     rootDir: apps/api
     plan: starter
@@ -151,6 +160,8 @@ services:
     envVars:
       - key: APP_ENV
         value: prod
+      - key: NEO4J_URI   # empty: the graph is disabled here; prod refuses the development graph defaults
+        value: ""
       - key: PYTHON_VERSION
         value: "3.13"
       - key: DATABASE_URL_INTERNAL
@@ -175,6 +186,7 @@ services:
         sync: false
   - type: cron
     name: recallops-check-export
+    region: virginia
     runtime: python
     rootDir: apps/api
     plan: starter
@@ -184,6 +196,8 @@ services:
     envVars:
       - key: APP_ENV
         value: prod
+      - key: NEO4J_URI   # empty: the graph is disabled here; prod refuses the development graph defaults
+        value: ""
       - key: PYTHON_VERSION
         value: "3.13"
       - key: DATABASE_URL_INTERNAL

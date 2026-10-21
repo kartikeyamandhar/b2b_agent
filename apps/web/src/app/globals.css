@@ -80,6 +80,11 @@
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+/* Native scrollbars and form controls follow the page's light or dark palette. */
+:root {
+  color-scheme: light dark;
+}
+
 body {
   background: var(--paper);
   color: var(--ink);
@@ -103,6 +108,42 @@ main a:not([class*="border"]):not([class*="bg-"]) {
 }
 main a:not([class*="border"]):not([class*="bg-"]):hover {
   text-decoration-color: var(--brand);
+}
+
+/* Homepage notice (components/home/NoticeFigure.tsx): each phrase a rule was taken from is underlined in brand blue
+   and keyed to its rule; pointing at a rule or a phrase tints both. Pure CSS, so it needs no client script. */
+.notice-mark {
+  background: transparent;
+  color: inherit;
+  border-radius: 3px;
+  text-decoration-line: underline;
+  text-decoration-color: var(--brand);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  transition: background-color 120ms ease;
+}
+.notice-mark sup {
+  display: inline-block; /* keeps the phrase's underline off the key */
+  margin-left: 2px;
+  color: var(--brand);
+  font-size: 0.68em;
+  font-weight: 650;
+}
+.notice-rules [data-rule] {
+  transition: background-color 120ms ease;
+}
+.notice-rules:has([data-rule="1"]:hover) [data-rule="1"],
+.notice-rules:has([data-rule="2"]:hover) [data-rule="2"],
+.notice-rules:has([data-rule="3"]:hover) [data-rule="3"],
+.notice-rules:has([data-rule="4"]:hover) [data-rule="4"],
+.notice-rules:has([data-rule="5"]:hover) [data-rule="5"] {
+  background: var(--brand-soft);
+}
+@media (prefers-reduced-motion: reduce) {
+  .notice-mark,
+  .notice-rules [data-rule] {
+    transition: none;
+  }
 }
 
 /* Type scale: one sans family; hierarchy comes from size and weight, as in the README graphics. */

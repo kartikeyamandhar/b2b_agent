@@ -4,8 +4,11 @@ Next.js 16 App Router, React 19, TypeScript strict, Tailwind 4. Talks only to th
 always from the server: the API has no CORS, and identity is attached server-side. Spec: docs/components/02-ui.md;
 onboarding: docs/onboarding/ui.md.
 
-Status: **every console screen and the claimant portal are built** on the API contract.
+Status: **every console screen and the claimant portal are built** on the API contract, and the site is live at
+https://recallops-five.vercel.app (2026-10-21).
 
+- Homepage (`/`, public, no Clerk script): what RecallOps does, built on the real notice of CPSC recall 27024 with each
+  phrase keyed to the rule taken from it, the steps of a recall, the measured results, and what is synthetic.
 - Console (`/app`, dev auth or Clerk): programs with a portfolio summary (`/app/programs`), new program from a CPSC
   recall or a typed notice (`/app/programs/new`), program overview with claim link issuing (`/app/programs/[id]`),
   claims queue with filters, keyset paging, polling, and `j`/`k` keys (`/app/programs/[id]/claims`), rules editor,
@@ -41,6 +44,7 @@ scripts/gen-api.mjs          contract -> zod generator (no third-party codegen d
 src/proxy.ts                 Next 16 proxy: clerkMiddleware on the console in Clerk mode; never on /claim or /api/portal
 
 src/app/layout.tsx           root layout (no Clerk: ClerkShell provides it per section)
+src/app/page.tsx             public homepage; its content is src/lib/home-content.ts
 src/app/app/                 console: layout (auth gate, AppShell, react-query Providers), error boundary, and the
                              programs, programs/new, programs/[id] (overview, claims, settings, reports, fraud,
                              campaign), claims/[id] (detail, trace), payouts, and billing (with return) pages
@@ -80,6 +84,8 @@ src/lib/stripe-url.ts        only Stripe-hosted URLs are followed
 src/lib/portal.ts            portal steps, validation, resumable drafts, plain status, payout choice, Stripe handoff
 src/lib/portal-copy.ts       plain sentences for portal errors
 src/lib/image.ts             on-device photo compression (under 1.5 MB, longest edge 2000 px)
+src/lib/home-content.ts      homepage copy: the recall 27024 quote (tested word for word), rules, steps, results
+src/lib/clerk-appearance.ts  dark-mode palette for Clerk's switcher and user menu (Clerk's own palette is light)
 
 src/components/              shell and shared: AppShell, NavLinks, BrandMark, AccountControls, ClerkShell,
                              ClerkConsole, AuthOff, StatusBadge, ProblemAlert, States (LoadingState, EmptyState)
@@ -89,6 +95,7 @@ src/components/              shell and shared: AppShell, NavLinks, BrandMark, Ac
                              ClaimPanels, ReviewerActions (client), ReissueLink, TraceView, TraceLive
                              reports, fraud, campaign: MprGenerate, MprReportView, FraudRings, Campaign
                              money: PayoutExports, BillingScreen, BillingView, BillingLive
+                             homepage (home/): NoticeFigure
 src/components/portal/       ClaimStepper, PhotoCapture, StatusView, NeedsInfoReply, PayoutChoice, AutoRefresh,
                              ConnectReturn
 tests/                       vitest (node environment; components rendered with react-dom/server)

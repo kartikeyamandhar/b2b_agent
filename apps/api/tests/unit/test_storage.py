@@ -74,6 +74,43 @@ def test_put_posts_the_bytes_without_upsert_and_with_both_auth_headers() -> None
     assert request.content == b"\xff\xd8jpeg-bytes"
 
 
+def test_a_rate_limited_request_is_retried_after_the_advised_wait() -> None:
+    """Supabase answers 429 when requests arrive faster than its limit (first production seed, 2026-10-21: 3,000
+    storage calls in a burst). A 429 means the request was not processed, so the same request is sent again."""
+    answers = [
+        httpx.Response(429, headers={"retry-after": "2"}),
+        httpx.Response(429),
+        httpx.Response(200, json={}),
+    ]
+    seen: list[httpx.Request] = []
+    waits: list[float] = []
+
+    def record(request: httpx.Request) -> httpx.Response:
+        seen.append(request)
+        return answers.pop(0)
+
+    store = SupabaseStorage(URL, KEY, BUCKET, 5.0, transport=httpx.MockTransport(record), sleep=waits.append)
+    store.put(OBJECT, b"jpeg", "image/jpeg")
+    assert len(seen) == 3
+    assert waits == [2.0, 1.0]  # the advised Retry-After first, then the backoff schedule
+
+
+def test_a_rate_limit_that_persists_is_a_storage_error_with_bounded_waits() -> None:
+    waits: list[float] = []
+    seen: list[httpx.Request] = []
+
+    def limited(request: httpx.Request) -> httpx.Response:
+        seen.append(request)
+        return httpx.Response(429, headers={"retry-after": "600"})
+
+    store = SupabaseStorage(URL, KEY, BUCKET, 5.0, transport=httpx.MockTransport(limited), sleep=waits.append)
+    with pytest.raises(StorageError, match=r"delete .* failed: HTTP 429") as caught:
+        store.delete(OBJECT)
+    assert KEY not in str(caught.value)
+    assert len(seen) == 4  # the request and three retries
+    assert waits and max(waits) <= 5.0  # a long Retry-After is capped so a request never stalls for minutes
+
+
 def test_get_reads_the_authenticated_path() -> None:
     seen: list[httpx.Request] = []
     store = supabase(lambda r: httpx.Response(200, content=b"png-bytes"), seen)
