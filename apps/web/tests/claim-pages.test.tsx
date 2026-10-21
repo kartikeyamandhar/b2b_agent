@@ -43,7 +43,8 @@ describe("/app/claims/[id]", () => {
   it("loads the claim and its trace", async () => {
     serve();
     const out = await render(ClaimPage(params(C)));
-    expect(calls.sort()).toEqual([`http://api.test/v1/claims/${C}`, `http://api.test/v1/claims/${C}/trace`]);
+    // An admin's page also reads the claim's program, to know whether its link can be reissued.
+    expect(calls.sort()).toEqual([`http://api.test/v1/claims/${C}`, `http://api.test/v1/claims/${C}/trace`, "http://api.test/v1/programs/0874f66f-bfb5-552b-bd93-6266f49c1d5a"]);
     expect(out).toContain("Claimant and claim");
     expect(out).toContain("Test Claimant");
     expect(out).toContain(`href="/app/programs/0874f66f-bfb5-552b-bd93-6266f49c1d5a/claims"`);

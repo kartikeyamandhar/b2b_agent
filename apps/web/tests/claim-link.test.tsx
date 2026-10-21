@@ -13,10 +13,13 @@ import { reissueAvailability, reissuePath } from "@/lib/claim-link";
 
 const claim = JSON.parse(readFileSync(new URL("./fixtures/claim-detail.json", import.meta.url), "utf8")) as Record<string, unknown>;
 const C = claim.id as string;
+const programFixture = (JSON.parse(readFileSync(new URL("./fixtures/programs.json", import.meta.url), "utf8")) as { items: Record<string, unknown>[] }).items[0]!;
+let programStatus = "open";
 
 let calls: { url: string; method: string }[];
 beforeEach(() => {
   calls = [];
+  programStatus = "open";
   vi.stubEnv("RECALLOPS_API_URL", "http://api.test");
   vi.stubEnv("RECALLOPS_WEB_AUTH", "dev");
   vi.stubEnv("RECALLOPS_DEV_FIRM_ID", "00000000-0000-4000-8000-00000000d001");
@@ -24,6 +27,7 @@ beforeEach(() => {
   vi.stubGlobal("fetch", async (url: string, init: RequestInit) => {
     calls.push({ url, method: init.method ?? "GET" });
     if (url.endsWith("/trace")) return Response.json({ title: "Not Found", status: 404, detail: "no run for this claim" }, { status: 404 });
+    if (url.includes("/v1/programs/")) return Response.json({ ...programFixture, id: claim.program_id, status: programStatus });
     return Response.json(claim);
   });
 });
@@ -35,6 +39,12 @@ afterEach(() => {
 describe("reissue rules", () => {
   it("lets an admin reissue any claim the backend accepts", () => {
     for (const s of ["draft", "submitted", "needs_info", "flagged", "approved", "denied", "under_review", "capped"]) expect(reissueAvailability(s, true)).toEqual({ allowed: true });
+  });
+
+  it("refuses every claim of a closed program, and leaves an unknown program to the API", () => {
+    expect(reissueAvailability("draft", true, "closed")).toMatchObject({ allowed: false, reason: expect.stringContaining("program is closed") });
+    expect(reissueAvailability("draft", true, null)).toEqual({ allowed: true });
+    expect(reissueAvailability("draft", true, "open")).toEqual({ allowed: true });
   });
 
   it("refuses paid and closed claims and reviewers, with a reason", () => {
@@ -72,6 +82,21 @@ describe("/app/claims/[id]", () => {
     expect(html).toContain('id="claim-link"');
     expect(calls.every((c) => c.method === "GET")).toBe(true);
     expect(calls.some((c) => c.url.endsWith("/link"))).toBe(false);
+  });
+
+  it("reads the claim's program and blocks the reissue when it is closed", async () => {
+    programStatus = "closed";
+    const html = await render();
+    expect(calls.some((c) => c.url.endsWith(`/v1/programs/${claim.program_id as string}`))).toBe(true);
+    expect(html).toContain("data-reissue-blocked");
+    expect(html).toContain("The program is closed");
+    expect(html).not.toContain("data-reissue-start");
+  });
+
+  it("does not read the program for a reviewer", async () => {
+    vi.stubEnv("RECALLOPS_DEV_ROLE", "reviewer");
+    await render();
+    expect(calls.some((c) => c.url.includes("/v1/programs/"))).toBe(false);
   });
 
   it("shows a reviewer why they cannot reissue", async () => {

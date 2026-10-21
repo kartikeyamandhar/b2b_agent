@@ -45,3 +45,8 @@ export function formatDateTime(value: string | null | undefined): string {
 export function formatClock(ms: number): string {
   return `${TIME.format(new Date(ms))} UTC`;
 }
+
+/** "1 payout", "2 payouts": a count with its noun, singular for exactly one. */
+export function countOf(n: number, singular: string, pluralForm = `${singular}s`): string {
+  return `${formatCount(n)} ${n === 1 ? singular : pluralForm}`;
+}

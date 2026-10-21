@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { ClaimDetailLive } from "@/components/ClaimDetailLive";
 import { ProblemAlert } from "@/components/ProblemAlert";
-import { loadClaim, loadTrace } from "@/lib/api/queries";
+import { loadClaim, loadProgram, loadTrace } from "@/lib/api/queries";
 import { currentConsoleRole } from "@/lib/auth/current-role";
 
 export const dynamic = "force-dynamic";
@@ -12,6 +12,8 @@ export const metadata: Metadata = { title: "Claim" };
 export default async function ClaimPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const [claim, trace, role] = await Promise.all([loadClaim(id), loadTrace(id), currentConsoleRole()]);
+  // The program's status decides whether a link can be reissued; if it cannot be read, the API still decides (409).
+  const program = claim.ok && role === "admin" ? await loadProgram(claim.data.program_id) : null;
   const loadedAt = Date.now();
   return (
     <div>
@@ -28,7 +30,7 @@ export default async function ClaimPage({ params }: { params: Promise<{ id: stri
               <ProblemAlert problem={trace.problem} />
             </div>
           ) : null}
-          <ClaimDetailLive initialClaim={claim.data} initialTrace={trace.ok ? trace.data : null} loadedAt={loadedAt} canAdmin={role === "admin"} />
+          <ClaimDetailLive initialClaim={claim.data} initialTrace={trace.ok ? trace.data : null} loadedAt={loadedAt} canAdmin={role === "admin"} programStatus={program?.ok ? program.data.status : null} />
         </>
       ) : (
         <ProblemAlert problem={claim.problem} />

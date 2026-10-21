@@ -7,8 +7,9 @@ export const REISSUE_REFUSED = ["paid", "closed"] as const;
 
 export type ReissueAvailability = { allowed: true } | { allowed: false; reason: string };
 
-export function reissueAvailability(status: string, canAdmin: boolean): ReissueAvailability {
+export function reissueAvailability(status: string, canAdmin: boolean, programStatus: string | null = null): ReissueAvailability {
   if (!canAdmin) return { allowed: false, reason: "Only an admin can issue a new claim link." };
+  if (programStatus === "closed") return { allowed: false, reason: "The program is closed: its claim links no longer work and none can be issued." };
   if ((REISSUE_REFUSED as readonly string[]).includes(status)) {
     return { allowed: false, reason: `The claim is ${status === "paid" ? "paid" : "closed"}: the claimant has nothing left to do, so no new link is needed.` };
   }

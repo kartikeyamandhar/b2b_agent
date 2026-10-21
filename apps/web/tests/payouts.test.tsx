@@ -112,3 +112,13 @@ describe("navigation", () => {
     expect(admin).toContain('aria-current="page"');
   });
 });
+
+describe("counts in sentences", () => {
+  it("says 1 payout and 1 link, not 1 payouts", async () => {
+    const { countOf } = await import("@/lib/format");
+    expect([countOf(1, "payout"), countOf(2, "payout"), countOf(0, "link"), countOf(1200, "notice")]).toEqual(["1 payout", "2 payouts", "0 links", "1,200 notices"]);
+    const html = renderToStaticMarkup(<ExportBatchTable items={[{ ...list.items[1]!, row_count: 1 }]} />);
+    expect(html).toContain("1 payout ·");
+    expect(html).not.toContain("1 payouts");
+  });
+});

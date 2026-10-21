@@ -25,11 +25,13 @@ export function ClaimDetailLive({
   initialTrace,
   loadedAt,
   canAdmin = false,
+  programStatus = null,
 }: {
   initialClaim: ClaimDetail;
   initialTrace: Trace | null;
   loadedAt: number;
   canAdmin?: boolean;
+  programStatus?: string | null;
 }) {
   const id = initialClaim.id;
   const client = useQueryClient();
@@ -120,7 +122,7 @@ export function ClaimDetailLive({
           <ReviewerActions claim={claim} onDone={onDone} />
           <PayoutPanel payout={claim.payout} remedy={claim.remedy} />
           <FraudPanel claimId={claim.id} clusters={claim.clusters} hits={duplicateHits(trace)} programId={claim.program_id} />
-          <ReissueLink claimId={claim.id} status={claim.status} canAdmin={canAdmin} onDone={() => void claimQ.refetch()} />
+          <ReissueLink claimId={claim.id} status={claim.status} canAdmin={canAdmin} programStatus={programStatus} onDone={() => void claimQ.refetch()} />
           <Panel id="claim-run" title="Latest run">
             {claim.run ? (
               <p className="flex flex-wrap items-center gap-2 text-sm">

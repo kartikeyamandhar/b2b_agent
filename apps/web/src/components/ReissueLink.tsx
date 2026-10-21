@@ -17,13 +17,26 @@ const SECONDARY = "rounded-md border border-line-strong bg-surface px-3 py-1.5 t
  * Issue a fresh portal link for one claim, for a claimant whose link was lost, expired, or leaked. The link is a
  * bearer secret: it is shown once, here, held only in this component's memory, and never put in a URL or storage.
  */
-export function ReissueLink({ claimId, status, canAdmin, onDone }: { claimId: string; status: string; canAdmin: boolean; onDone?: () => void }) {
+export function ReissueLink({
+  claimId,
+  status,
+  canAdmin,
+  programStatus = null,
+  onDone,
+}: {
+  claimId: string;
+  status: string;
+  canAdmin: boolean;
+  /** Unknown (null) leaves the decision to the API, which answers 409 for a closed program. */
+  programStatus?: string | null;
+  onDone?: () => void;
+}) {
   const [confirming, setConfirming] = useState(false);
   const [busy, setBusy] = useState(false);
   const [link, setLink] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [problem, setProblem] = useState<ApiProblem | null>(null);
-  const availability = reissueAvailability(status, canAdmin);
+  const availability = reissueAvailability(status, canAdmin, programStatus);
   const path = reissuePath(claimId);
 
   async function reissue() {

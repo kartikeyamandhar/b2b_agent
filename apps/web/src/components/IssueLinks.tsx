@@ -7,6 +7,7 @@ import { IssueRequest, IssueResponse, type IssuedLink } from "@/lib/api-types";
 import { sendJson } from "@/lib/api/client";
 import { ApiError, type ApiProblem } from "@/lib/api/problem";
 import { shortId } from "@/lib/claims";
+import { countOf } from "@/lib/format";
 
 import { ProblemAlert } from "./ProblemAlert";
 
@@ -115,7 +116,7 @@ export function IssueLinks({ programId, open, canIssue, closed = false }: { prog
       {links.length ? (
         <div className="grid gap-2" data-issued-links>
           <div className="flex flex-wrap items-center gap-2">
-            <p className="text-sm font-medium">{links.length} links issued</p>
+            <p className="text-sm font-medium">{countOf(links.length, "link")} issued</p>
             <button type="button" onClick={download} className="rounded-lg border border-line bg-surface px-2 py-1 text-xs">
               Download CSV
             </button>

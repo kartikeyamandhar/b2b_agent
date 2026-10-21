@@ -7,7 +7,7 @@ import { z } from "zod";
 import { ExportBatchSummary } from "@/lib/api-types";
 import { sendJson } from "@/lib/api/client";
 import { ApiError, type ApiProblem } from "@/lib/api/problem";
-import { formatCents, formatCount, formatDateTime } from "@/lib/format";
+import { countOf, formatCents, formatCount, formatDateTime } from "@/lib/format";
 import { batchAuthor, exportCsvHref, exportFilename, exportTotals } from "@/lib/payouts";
 
 import { ProblemAlert } from "./ProblemAlert";
@@ -49,7 +49,7 @@ export function ExportBatchTable({ items }: { items: readonly ExportBatchSummary
               <div>
                 <p className="font-medium">{formatCents(b.total_cents)}</p>
                 <p className="text-xs text-ink-muted">
-                  {formatCount(b.row_count)} payouts · {formatDateTime(b.created_at)}
+                  {countOf(b.row_count, "payout")} · {formatDateTime(b.created_at)}
                 </p>
                 <p className="text-xs text-ink-muted">{batchAuthor(b.created_by)}</p>
               </div>
@@ -152,7 +152,7 @@ export function CreateExport() {
         result.batch ? (
           <div role="status" className="grid gap-2 rounded-md border border-success/40 bg-success-soft p-3 text-sm text-success-ink" data-export-created>
             <p className="font-medium">
-              Batch created: {formatCount(result.batch.row_count)} payouts, {formatCents(result.batch.total_cents)}.
+              Batch created: {countOf(result.batch.row_count, "payout")}, {formatCents(result.batch.total_cents)}.
             </p>
             <div>
               <Download batch={result.batch} />
