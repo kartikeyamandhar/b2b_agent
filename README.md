@@ -19,6 +19,8 @@ When a company recalls a consumer product in the United States, the press releas
 
 **RecallOps does that work.** It reads the recall from the public CPSC feed and turns the free-text notice into rules a machine can check. Claims come in through a link-only portal, and a tool-using agent decides each one after reading the claimant's photos. Fraud rings are found across claims. Refunds go out through a ledger that cannot pay twice, and the monthly report is written from the data and reconciled to the unit.
 
+**Try it live: [recallops-five.vercel.app](https://recallops-five.vercel.app).** Sign-up runs on a Clerk development instance, payments run in Stripe's test mode, and every claimant is synthetic. A new account starts with an empty workspace; ask the team to be invited to the demo firm with its 500 decided claims.
+
 <p align="center">
   <img src="docs/assets/results-at-a-glance.svg" alt="Results at a glance: fraud recall 1.000 on the synthetic claims for rules and agent both, 0.750 on the 40 agent-written claims; agent versus rules on those 40 claims 0.774 versus 0.583 macro F1; 0 discrepancies in the monthly report; 36 of 36 duplicate groups reproduced by the Neo4j graph; 1.63 USD of model spend for the whole project." width="100%">
 </p>
@@ -272,9 +274,9 @@ ADJUDICATOR=rules_only make worker
 
 `ADJUDICATOR=rules_only` runs offline at no cost. The agent itself (`ADJUDICATOR=agent LLM_MODE=live`, about 0.0016 USD per claim) needs an Anthropic key in `.env`, and every call goes through the cost meter.
 
-Other targets: `make check` runs lint, strict type checks, and the backend test suite (522 tests, 90 percent coverage), and `make web-check` runs the website's type check and tests (548 tests). `make eval` reruns every evaluation from the recordings with no network. `make graph-sync` rebuilds the fraud graph from Postgres. `make help` lists everything.
+Other targets: `make check` runs lint, strict type checks, and the backend test suite (527 tests, 90 percent coverage), and `make web-check` runs the website's type check and tests (556 tests). `make eval` reruns every evaluation from the recordings with no network. `make graph-sync` rebuilds the fraud graph from Postgres. `make help` lists everything.
 
-Nothing is deployed yet, but everything is ready to be: [docs/DEPLOY.md](docs/DEPLOY.md) is the click-by-click guide to one public link (the website on Vercel, the API, worker, and scheduled jobs on Render from `infra/render.yaml`). The API runs with `APP_ENV=prod`, where the header-based development sign-in refuses to load: the deployed API accepts only Clerk session tokens and signed claim links, and it refuses to start on example, localhost, or plain-http Clerk and portal settings.
+It is live at **https://recallops-five.vercel.app**: the website on Vercel, and the API, the agent worker, and two scheduled jobs on Render from `infra/render.yaml`. [docs/DEPLOY.md](docs/DEPLOY.md) is how it was deployed and how to deploy it again, including what the first deploy found. The API runs with `APP_ENV=prod`, where the header-based development sign-in refuses to load: the deployed API accepts only Clerk session tokens and signed claim links, and it refuses to start on example, localhost, or plain-http Clerk and portal settings.
 
 ## API tour
 
