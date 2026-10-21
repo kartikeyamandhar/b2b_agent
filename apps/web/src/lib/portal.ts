@@ -130,7 +130,7 @@ export function validateStep(step: StepId, f: DraftFields, missingPhotos: readon
     errors.email = "Enter an email address like name@example.com.";
   }
   if (step === "photos" && missingPhotos.length) {
-    errors.photos = `Upload the ${missingPhotos.map(photoKindLabel).join(" and ")} photo${missingPhotos.length > 1 ? "s" : ""} to continue.`;
+    errors.photos = `Upload the ${listJoin(missingPhotos.map(photoKindLabel))} photo${missingPhotos.length > 1 ? "s" : ""} to continue.`;
   }
   if (step === "review") {
     for (const s of ["details", "photos", "purchase", "contact"] as const) Object.assign(errors, validateStep(s, f, missingPhotos, today));
@@ -156,6 +156,12 @@ export function submitBody(f: DraftFields): PortalSubmit {
     purchase_date: opt(f.purchase_date),
     quantity: Number(f.quantity) || 1,
   });
+}
+
+/** "a", "a and b", "a, b, and c". */
+export function listJoin(items: readonly string[]): string {
+  if (items.length <= 2) return items.join(" and ");
+  return `${items.slice(0, -1).join(", ")}, and ${items.at(-1)}`;
 }
 
 export function missingPhotos(required: readonly string[], uploaded: readonly string[]): string[] {

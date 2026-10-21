@@ -192,7 +192,6 @@ export function ClaimStepper({ token, view }: { token: string; view: PortalView 
 
       {current.id === "product" ? (
         <div className="grid gap-3 text-base">
-          <p className="font-medium">{program.title}</p>
           <p>This claim is for these models:</p>
           <ul className="flex flex-wrap gap-2">
             {program.models.length ? (

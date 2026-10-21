@@ -15,7 +15,7 @@ export function Panel({ id, title, children, tone }: { id: string; title: string
   return (
     <section
       aria-labelledby={id}
-      className={`rounded border p-3 ${tone === "attention" ? "border-warn/50 border-l-4 border-l-warn" : "border-line"}`}
+      className={`min-w-0 rounded border p-3 ${tone === "attention" ? "border-warn/50 border-l-4 border-l-warn" : "border-line"}`}
     >
       <h2 id={id} className="mb-2 text-sm font-semibold">
         {title}
@@ -27,9 +27,9 @@ export function Panel({ id, title, children, tone }: { id: string; title: string
 
 function Row({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="grid grid-cols-[8rem_1fr] gap-2 py-0.5 text-sm">
+    <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-2 py-0.5 text-sm">
       <dt className="text-ink-muted">{label}</dt>
-      <dd className="min-w-0 break-words">{children}</dd>
+      <dd className="min-w-0 [overflow-wrap:anywhere]">{children}</dd>
     </div>
   );
 }

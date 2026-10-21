@@ -57,7 +57,7 @@ export function ClaimDetailLive({ initialClaim, initialTrace, loadedAt }: { init
   const pollError = claimQ.error instanceof ApiError ? claimQ.error.problem : null;
 
   return (
-    <div className="grid gap-4">
+    <div className="grid grid-cols-1 gap-4">
       <div className="flex flex-wrap items-center gap-2">
         <h1 className="text-lg font-semibold">
           Claim <span className="font-mono">{shortId(claim.id)}</span>
@@ -97,14 +97,14 @@ export function ClaimDetailLive({ initialClaim, initialTrace, loadedAt }: { init
         </div>
       ) : null}
 
-      <div className="grid gap-4 lg:grid-cols-3">
-        <div className="grid content-start gap-4">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div className="grid min-w-0 grid-cols-1 content-start gap-4">
           <ClaimFacts claim={claim} />
         </div>
-        <div className="grid content-start gap-4">
+        <div className="grid min-w-0 grid-cols-1 content-start gap-4">
           <PhotoEvidence claimId={claim.id} photos={claim.photos} readings={readingsByPhotoKind(trace)} />
         </div>
-        <div className="grid content-start gap-4">
+        <div className="grid min-w-0 grid-cols-1 content-start gap-4">
           <DecisionPanel claimId={claim.id} decision={claim.decision} decidedAt={claim.decided_at} />
           <ReviewerActions claim={claim} onDone={onDone} />
           <PayoutPanel payout={claim.payout} remedy={claim.remedy} />

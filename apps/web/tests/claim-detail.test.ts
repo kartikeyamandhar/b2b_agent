@@ -102,7 +102,7 @@ describe("trace readings", () => {
   it.each([
     ["read_label_photo", { legible: false }, "could not be read", true],
     ["read_label_photo", { error: "missing recording" }, "The check failed: missing recording", true],
-    ["check_destruction_presence", { verdict: "present", reason: "not the label photo" }, "not checked by the rules-only checker", false],
+    ["check_destruction_presence", { verdict: "present", reason: "destruction photo present (content not checked in M1)" }, "A destruction photo is present. The rules-only checker does not check what it shows.", false],
     ["check_destruction_presence", { verdict: "missing", reason: "no destruction photo" }, "No usable destruction photo: no destruction photo", true],
     ["check_destruction_photo", { verdict: "not_required" }, "does not require", false],
     ["check_destruction_photo", { verdict: "checked", complies: true, observed: "Cord cut.", confidence: 0.9 }, "is visible. Cord cut.", false],

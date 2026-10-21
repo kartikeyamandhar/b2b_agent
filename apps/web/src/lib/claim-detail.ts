@@ -86,7 +86,7 @@ export function describeResult(tool: string, r: Record<string, unknown> | null):
   if (tool === "check_destruction_photo" || tool === "check_destruction_presence") {
     if (r.verdict === "not_required") return { text: "This remedy does not require a destruction photo.", problem: false };
     if (r.verdict === "missing") return { text: `No usable destruction photo${str(r.reason) ? `: ${r.reason as string}` : "."}`, problem: true };
-    if (r.verdict === "present") return { text: `A destruction photo is present${str(r.reason) ? ` (${r.reason as string})` : ""}. Its content is not checked by the rules-only checker.`, problem: false };
+    if (r.verdict === "present") return { text: "A destruction photo is present. The rules-only checker does not check what it shows.", problem: false };
     if (r.verdict === "checked") {
       const conf = pct(r.confidence);
       const seen = str(r.observed) ? ` ${r.observed as string}` : "";

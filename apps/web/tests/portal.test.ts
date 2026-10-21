@@ -77,6 +77,7 @@ describe("validateStep", () => {
   it("blocks the photo step until every required photo is saved", () => {
     expect(validateStep("photos", full, ["destruction"], TODAY).photos).toBe("Upload the destruction photo to continue.");
     expect(validateStep("photos", full, ["label", "receipt"], TODAY).photos).toBe("Upload the label and receipt photos to continue.");
+    expect(validateStep("photos", full, ["label", "destruction", "receipt"], TODAY).photos).toBe("Upload the label, destruction, and receipt photos to continue.");
     expect(validateStep("photos", full, [], TODAY)).toEqual({});
   });
 

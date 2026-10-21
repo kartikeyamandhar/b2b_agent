@@ -101,7 +101,7 @@ function Step({ step, cited }: { step: TraceStep; cited: ReadonlySet<string> }) 
       <div className="flex flex-wrap items-center gap-2 text-xs">
         <span className="font-mono text-ink-muted">#{step.idx}</span>
         <span className="font-medium">{step.node}</span>
-        {step.tool ? <span className="rounded border border-line px-1 font-mono">{step.tool}</span> : null}
+        {step.tool && step.tool !== step.node ? <span className="rounded border border-line px-1 font-mono">{step.tool}</span> : null}
         {rid ? <span className="font-mono text-ink-muted">{rid}</span> : null}
         {isCited ? <span className="rounded border border-accent px-1 text-accent">cited by the decision</span> : null}
         {step.counted ? <span className="rounded border border-line px-1 text-ink-muted">counts toward the step cap</span> : null}
