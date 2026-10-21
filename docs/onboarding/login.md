@@ -11,7 +11,9 @@ provider must preserve and separates logged-in user requests from signed Stripe 
 - **The auth seam** in `apps/api/src/recallops/auth/` (your package, CODEOWNERS):
   - `provider.py`: `AuthProvider` (`authenticate(headers) -> Principal`, `firm_context(principal) -> FirmContext`), `ClaimTokenVerifier` (`verify(token) -> ClaimTokenContext(firm_id, claim_id)`, `token_hash(token)`, `issue(firm_id, claim_id) -> str`), and the errors `AuthError` (401) and `NoFirmError` (403).
   - `dev.py`: `DevAuthProvider` reads `X-Dev-Firm-Id`, `X-Dev-Role`, `X-Dev-User-Id`; it refuses `APP_ENV=prod` and any Stripe or Clerk key containing `_live_`. `DevClaimTokenVerifier` issues and accepts `dev.<firm uuid>.<claim uuid>`; it refuses `APP_ENV=prod` and `AUTH_PROVIDER=clerk`.
-  - `deps.py`: `current_user`, `current_firm`, `require_role("admin")`, `claim_token`, and `build_provider()` / `build_claim_verifier()`, which raise for `clerk` and `hmac` until you register yours.
+  - `deps.py`: `current_user`, `current_firm`, `require_role("admin")`, `claim_token`, and `build_provider()` / `build_claim_verifier()`, which build `ClerkAuthProvider` (`clerk.py`) and `HmacClaimTokenVerifier` (`hmac_tokens.py`) for `clerk` and `hmac` (2026-10-20).
+  - `clerk.py`: verifies the Clerk session JWT (RS256 against the instance JWKS, cached 1 hour and refetched on an unknown kid; exp, nbf, iat, iss, sub required; azp checked against `CLERK_ALLOWED_ORIGINS` when present). Org claims: `o.id` and `o.rol` (session token v2), falling back to `org_id` and `org_role` (v1); the `org:` prefix is stripped. `firm_context` calls `recallops_firm_for_clerk_org` (migration 0007, SECURITY DEFINER) and mirrors `firm_members` under the firm's RLS context, cached per org, user and role for 5 minutes.
+  - `hmac_tokens.py`: 96-character base64url links carrying firm id, claim id and expiry under HMAC-SHA256; refuses the example `CLAIM_TOKEN_SECRET` or one shorter than 32 bytes.
 - Every firm route depends on `current_firm`; portal routes on `claim_token`. Repositories take a `FirmContext`, and each request transaction sets `app.firm_id` with `set_config(..., true)` for RLS.
 - **Database roles**: the API connects only as `recallops_app` (no BYPASSRLS, owns nothing); jobs use `recallops_internal`; migrations use `recallops_owner`. Narrow SECURITY DEFINER functions (migration 0003) cover what the API needs across tenants.
 - **Rate limits**: the `rate_limits` table and a fixed-window limiter (`api/guards.py`) already guard `/portal/*` per token and per IP (04-login.md section 5). You can replace the limiter; the table stays.
@@ -23,6 +25,15 @@ provider must preserve and separates logged-in user requests from signed Stripe 
 2. Add an HMAC `ClaimTokenVerifier`: firm id, claim id, expiry, HMAC-SHA256 with `CLAIM_TOKEN_SECRET`, 90 days. `issue(firm_id, claim_id)` is what `POST /v1/programs/{id}/claims/issue` and the campaign drafts call. `claims.token_hash` stores sha256 of the raw token.
 3. Register both in `deps.py` together: `AUTH_PROVIDER=clerk` with `CLAIM_TOKEN_PROVIDER=hmac` (the dev verifier refuses to run beside Clerk). Nothing else in the backend should change; if it must, write a decisions-log note first.
 4. In apps/web: ClerkProvider, a middleware matcher that excludes `/claim/*`, and the `apiFetch` helper the UI owner uses (dev headers while `AUTH_PROVIDER=dev`, a bearer token after).
+
+## Clerk dashboard (test instance)
+
+Sign-up with email and the user's own password, with a verification code emailed at sign-up, is Clerk configuration; the backend sends no email.
+
+1. Create an application. **User & authentication → Email**: sign-up with email on, **Verify at sign-up** on, method **Email verification code**. **Password**: on.
+2. **Organizations**: enabled. Roles: keep `org:admin`; add `org:reviewer`. Members without one of these two roles get a 403.
+3. **API keys**: copy into `.env` only: `CLERK_SECRET_KEY`, `CLERK_PUBLISHABLE_KEY`, `CLERK_JWKS_URL` (`<Frontend API URL>/.well-known/jwks.json`), `CLERK_ISSUER` (the Frontend API URL), and `CLERK_ALLOWED_ORIGINS` (the web app's origin). Generate `CLAIM_TOKEN_SECRET` with the command in `.env.example`, and set `AUTH_PROVIDER=clerk` and `CLAIM_TOKEN_PROVIDER=hmac`.
+4. Until apps/web exists, sign up on Clerk's hosted Account Portal (`https://<instance>.accounts.dev/sign-up`), then create an organization there.
 
 ## Run the backend locally
 

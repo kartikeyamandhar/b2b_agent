@@ -21,6 +21,7 @@ Read CLAUDE.md first. Invariants 2 and 10 govern this component.
 
 - Dependency `current_user` verifies the Clerk session JWT: fetch JWKS from the Clerk instance (cached 1 hour, refresh on kid miss), verify RS256 signature, exp, nbf, azp against allowed origins, and iss. Reject anything else with 401.
 - Dependency `current_firm`: reads org id and org role from the token claims (o.id and o.rol in Clerk's current token shape; confirm the claim names against the pinned @clerk/backend version at phase 0 and record them in the decisions log). Resolves firms by clerk_org_id (creating on first sight). Returns a FirmContext {firm_id, user_id, role}. No organization in the token -> 403 with a problem detail that the UI turns into the create-organization flow.
+  Confirmed 2026-10-20: session token v2 carries `o: {id, rol, slg}` with `rol` unprefixed (`admin`); v1 carried `org_id`, `org_role` (`org:admin`) and `org_slug`. `auth/clerk.py` reads both shapes and strips `org:`. First-sight creation goes through the SECURITY DEFINER function `recallops_firm_for_clerk_org` (migration 0007), because the API role never bypasses RLS.
 - Role guard: `require_role("admin")` for billing, member, and program deletion routes.
 - Every repository method takes FirmContext, not a raw firm id, so a route cannot accidentally pass a body-supplied id.
 

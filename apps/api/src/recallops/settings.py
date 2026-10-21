@@ -20,6 +20,8 @@ GRAPH_KEY_MIN_BYTES = 32
 # Photo storage values that must never reach production (the committed defaults and .env.example values).
 EXAMPLE_SUPABASE_URL = "https://example.supabase.co"
 EXAMPLE_SUPABASE_SERVICE_KEY = "fake-service-key"
+# Claim-link signing secret that must never sign real links (the committed default and .env.example value).
+EXAMPLE_CLAIM_TOKEN_SECRET = "ZmFrZS1jbGFpbS10b2tlbi1zZWNyZXQtMzItYnl0ZXM="
 LOCAL_HOSTS = frozenset({"localhost", "127.0.0.1", "::1"})
 
 
@@ -60,10 +62,16 @@ class Settings(BaseSettings):
     clerk_publishable_key: str = Field("pk_test_fake", description="Clerk publishable key.")
     clerk_jwks_url: str = Field("https://example.clerk.accounts.dev/.well-known/jwks.json")
     clerk_allowed_origins: str = Field("http://localhost:3000", description="Comma-separated azp values.")
-    claim_token_secret: str = Field("ZmFrZS1jbGFpbS10b2tlbi1zZWNyZXQtMzItYnl0ZXM=")
+    clerk_issuer: str = Field(
+        "", description="Clerk Frontend API URL, the session token's iss (for example https://x.clerk.accounts.dev)."
+    )
+    claim_token_secret: str = Field(
+        EXAMPLE_CLAIM_TOKEN_SECRET, description="Base64 of at least 32 random bytes; signs claim links (hmac)."
+    )
     claim_token_provider: Literal["dev", "hmac"] = Field(
         "dev", description="dev: dev.<firm>.<claim> links (development only); hmac: the login owner's signed links."
     )
+    claim_token_ttl_days: int = Field(90, ge=1, le=366, description="Claim link lifetime (invariant 10).")
 
     # Payments seam (component 3).
     stripe_secret_key: SecretStr = Field(SecretStr("sk_test_fake"), description="Stripe test-mode secret key only.")
