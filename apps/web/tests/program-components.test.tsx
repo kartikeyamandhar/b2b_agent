@@ -1,11 +1,13 @@
 import { readFileSync } from "node:fs";
 
 import { renderToStaticMarkup } from "react-dom/server";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { ProgramOverview } from "@/components/ProgramOverview";
 import { ProgramsTable } from "@/components/ProgramsTable";
 import { ProgramList } from "@/lib/api-types";
+
+vi.mock("next/navigation", async (orig) => ({ ...(await orig<typeof import("next/navigation")>()), useRouter: () => ({ push: vi.fn(), refresh: vi.fn(), replace: vi.fn() }) }));
 
 const list = ProgramList.parse(JSON.parse(readFileSync(new URL("./fixtures/programs.json", import.meta.url), "utf8")));
 const [open, draft] = list.items as [(typeof list.items)[number], (typeof list.items)[number]];

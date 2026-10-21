@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 import type { Trace, TraceStep } from "@/lib/api-types";
-import { capUsage, describeResult, resultId, splitCitations, stopReason } from "@/lib/claim-detail";
+import { capUsage, describeResult, isPureCode, resultId, splitCitations, stopReason } from "@/lib/claim-detail";
 import { formatDateTime } from "@/lib/format";
 
 import { StatusBadge } from "./StatusBadge";
@@ -79,7 +79,7 @@ function Json({ label, value }: { label: string; value: unknown }) {
   return (
     <details className="text-xs">
       <summary className="cursor-pointer text-ink-muted">{label}</summary>
-      <pre className="mt-1 max-h-72 overflow-auto whitespace-pre-wrap break-words rounded bg-panel p-2 font-mono text-[11px]">{JSON.stringify(value, null, 2)}</pre>
+      <pre className="mt-1 max-h-72 overflow-auto whitespace-pre-wrap break-words rounded bg-panel p-2 font-mono text-xs">{JSON.stringify(value, null, 2)}</pre>
     </details>
   );
 }
@@ -106,8 +106,14 @@ function Step({ step, cited }: { step: TraceStep; cited: ReadonlySet<string> }) 
         {isCited ? <span className="rounded border border-accent px-1 text-accent">cited by the decision</span> : null}
         {step.counted ? <span className="rounded border border-line px-1 text-ink-muted">counts toward the step cap</span> : null}
         <span className="ml-auto tabular-nums text-ink-muted">
-          {step.latency_ms} ms · {step.tokens_in}/{step.tokens_out} tokens · ${step.cost_usd}
-          {step.nominal_cost_usd && step.nominal_cost_usd !== step.cost_usd ? ` (nominal $${step.nominal_cost_usd})` : ""}
+          {isPureCode(step) ? (
+            <>pure code{step.latency_ms > 0 ? ` · ${step.latency_ms} ms` : ""}</>
+          ) : (
+            <>
+              {step.latency_ms} ms · {step.tokens_in}/{step.tokens_out} tokens · ${step.cost_usd}
+              {step.nominal_cost_usd && step.nominal_cost_usd !== step.cost_usd ? ` (nominal $${step.nominal_cost_usd})` : ""}
+            </>
+          )}
         </span>
       </div>
       {step.thought ? <p className="mt-1 text-sm italic">{step.thought}</p> : null}
@@ -120,7 +126,7 @@ function Step({ step, cited }: { step: TraceStep; cited: ReadonlySet<string> }) 
         <Json label="Arguments" value={step.args} />
         <Json label="Result" value={step.result} />
       </div>
-      <p className="mt-1 text-[11px] text-ink-muted">{formatDateTime(step.created_at)}</p>
+      <p className="mt-1 text-xs text-ink-muted">{formatDateTime(step.created_at)}</p>
     </li>
   );
 }

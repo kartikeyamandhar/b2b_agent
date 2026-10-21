@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { ProblemAlert } from "@/components/ProblemAlert";
@@ -6,6 +7,7 @@ import { shortId } from "@/lib/claims";
 import { loadClaim, loadTrace } from "@/lib/api/queries";
 
 export const dynamic = "force-dynamic";
+export const metadata: Metadata = { title: "Agent trace" };
 
 export default async function TracePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

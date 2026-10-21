@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { ClaimDetailLive } from "@/components/ClaimDetailLive";
@@ -5,6 +6,7 @@ import { ProblemAlert } from "@/components/ProblemAlert";
 import { loadClaim, loadTrace } from "@/lib/api/queries";
 
 export const dynamic = "force-dynamic";
+export const metadata: Metadata = { title: "Claim" };
 
 export default async function ClaimPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

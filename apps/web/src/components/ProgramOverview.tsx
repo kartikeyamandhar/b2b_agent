@@ -7,6 +7,7 @@ import { isClaimStatus, queueHref } from "@/lib/claims";
 import { programMetrics, remedyLabel, statusRows } from "@/lib/programs";
 import { statusLabel } from "@/lib/status";
 
+import { IssueLinks } from "./IssueLinks";
 import { StatusBadge } from "./StatusBadge";
 
 function Fact({ label, children }: { label: string; children: ReactNode }) {
@@ -44,7 +45,7 @@ function List({ items, mono = false }: { items: readonly string[]; mono?: boolea
 
 const text = (v: string | null | undefined) => (v ? v : <span className="text-ink-muted">{NOT_STATED}</span>);
 
-export function ProgramOverview({ program }: { program: Program }) {
+export function ProgramOverview({ program, canAdmin = false }: { program: Program; canAdmin?: boolean }) {
   const m = programMetrics(program);
   const ident = program.identification_rules;
   const remedy = program.remedy_rules;
@@ -57,12 +58,20 @@ export function ProgramOverview({ program }: { program: Program }) {
       <div className="flex flex-wrap items-center gap-3">
         <h1 className="text-lg font-semibold">{program.title}</h1>
         <StatusBadge kind="program" value={program.status} />
-        <Link
-          href={queueHref(program.id, { status: null, cursor: null })}
-          className="ml-auto rounded border border-accent px-2 py-1 text-xs font-medium text-accent hover:bg-panel"
-        >
-          Open claims queue
-        </Link>
+        <span className="ml-auto flex flex-wrap gap-2">
+          <Link
+            href={`/app/programs/${program.id}/reports`}
+            className="rounded border border-line px-2 py-1 text-xs font-medium hover:bg-panel"
+          >
+            Monthly reports
+          </Link>
+          <Link
+            href={queueHref(program.id, { status: null, cursor: null })}
+            className="rounded border border-accent px-2 py-1 text-xs font-medium text-accent hover:bg-panel"
+          >
+            Open claims queue
+          </Link>
+        </span>
       </div>
 
       <dl className="mt-4 grid grid-cols-2 gap-4 rounded border border-line p-4 sm:grid-cols-3 lg:grid-cols-6">
@@ -81,6 +90,10 @@ export function ProgramOverview({ program }: { program: Program }) {
         {program.opened_at ? ` · opened ${formatDate(program.opened_at)}` : " · not opened"}
         {program.closed_at ? ` · closed ${formatDate(program.closed_at)}` : ""}.
       </p>
+
+      <Section id="claim-links" title="Claim links">
+        <IssueLinks programId={program.id} open={program.status === "open"} canIssue={canAdmin} />
+      </Section>
 
       <Section id="claims-by-status" title="Claims by status">
         <div className="overflow-x-auto rounded border border-line">

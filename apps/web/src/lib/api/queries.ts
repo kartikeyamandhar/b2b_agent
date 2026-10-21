@@ -1,6 +1,6 @@
 // Console reads for server components. Each returns a result instead of throwing for API and configuration
 // errors, so a page renders its error state (ProblemAlert with the correlation id) rather than a blank boundary.
-import { ClaimDetail, ClaimPage, PortalView, Program, ProgramList, Trace } from "@/lib/api-types";
+import { ClaimDetail, ClaimPage, MprReport, PortalView, Program, ProgramList, Trace, Usage } from "@/lib/api-types";
 import { isPlausibleToken, portalPath } from "@/lib/portal";
 import { claimsApiPath, type QueueParams } from "@/lib/claims";
 
@@ -80,4 +80,17 @@ const LINK_NOT_FOUND: Loaded<never> = {
 export function loadPortal(token: string, env: Env = process.env): Promise<Loaded<PortalView>> {
   if (!isPlausibleToken(token)) return Promise.resolve(LINK_NOT_FOUND);
   return load(() => apiJson(PortalView, { surface: "portal", path: portalPath(token) }, env));
+}
+
+export function loadUsage(env: Env = process.env): Promise<Loaded<Usage>> {
+  return load(() => apiJson(Usage, { surface: "console", path: "/v1/usage" }, env));
+}
+
+/** The latest report for a period; "no report for that period" is data (null), not an error. */
+export async function loadMpr(programId: string, period: string, env: Env = process.env): Promise<Loaded<MprReport | null>> {
+  if (!UUID.test(programId)) return PROGRAM_NOT_FOUND;
+  const r = await load(() => apiJson(MprReport, { surface: "console", path: `/v1/programs/${programId}/mpr`, search: `?period=${encodeURIComponent(period)}` }, env));
+  if (!r.ok && r.problem.status === 404 && (r.problem.detail ?? "").startsWith("no report for that period")) return { ok: true, data: null };
+
+  return r;
 }

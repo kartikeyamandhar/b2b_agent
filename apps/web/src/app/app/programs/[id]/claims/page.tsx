@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { ClaimsQueue } from "@/components/ClaimsQueue";
@@ -6,6 +7,7 @@ import { loadClaims, loadProgram } from "@/lib/api/queries";
 import { parseQueueParams } from "@/lib/claims";
 
 export const dynamic = "force-dynamic";
+export const metadata: Metadata = { title: "Claims queue" };
 
 type Props = {
   params: Promise<{ id: string }>;

@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 
 // The claim link is a bearer token in the URL: never send it as a referrer, never index it. No Clerk here.
 export const metadata: Metadata = {
-  title: "Product recall claim",
+  title: { absolute: "Product recall claim" },
   referrer: "no-referrer",
   robots: { index: false, follow: false },
 };

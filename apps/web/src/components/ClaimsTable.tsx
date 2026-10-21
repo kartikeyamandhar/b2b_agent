@@ -12,7 +12,9 @@ const muted = <span className="text-ink-muted">—</span>;
 /** The queue table (02-ui.md component 2). Claims that need a reviewer carry a marker and a text label. */
 export function ClaimsTable({ claims }: { claims: readonly ClaimSummary[] }) {
   return (
-    <div className="overflow-x-auto rounded border border-line">
+    <>
+      <ClaimCards claims={claims} />
+      <div className="hidden overflow-x-auto rounded border border-line md:block">
       <table className="w-full border-collapse text-sm">
         <caption className="sr-only">Claims, oldest first</caption>
         <thead className="border-b border-line bg-panel">
@@ -73,6 +75,43 @@ export function ClaimsTable({ claims }: { claims: readonly ClaimSummary[] }) {
           })}
         </tbody>
       </table>
-    </div>
+      </div>
+    </>
   );
 }
+
+/** Phones: one card per claim, every field visible without sideways scrolling. */
+function ClaimCards({ claims }: { claims: readonly ClaimSummary[] }) {
+  return (
+    <ul className="grid gap-2 md:hidden" aria-label="Claims, oldest first">
+      {claims.map((c) => {
+        const review = reviewState(c);
+        const needsReviewer = review === "needs_reviewer";
+        return (
+          <li key={c.id} data-card-claim-id={c.id}>
+            <Link
+              href={`/app/claims/${c.id}`}
+              className={`block rounded border border-l-4 p-3 text-sm focus-visible:outline-2 focus-visible:outline-accent ${
+                needsReviewer ? "border-warn/50 border-l-warn bg-warn-soft" : "border-line border-l-line"
+              }`}
+            >
+              <span className="flex flex-wrap items-center gap-2">
+                <span className="font-mono text-xs text-accent">{shortId(c.id)}</span>
+                <StatusBadge kind="claim" value={c.status} />
+                {c.outcome ? <StatusBadge kind="outcome" value={c.outcome} /> : null}
+                <span className="ml-auto tabular-nums">{c.refund_cents === null ? "" : formatCents(c.refund_cents)}</span>
+              </span>
+              {REVIEW_LABEL[review] ? (
+                <span className={`mt-1 block ${needsReviewer ? "font-medium text-warn-ink" : "text-ink-muted"}`}>{REVIEW_LABEL[review]}</span>
+              ) : null}
+              <span className="mt-1 block text-xs text-ink-muted">
+                {[c.model_claimed, c.retailer_claimed].filter(Boolean).join(" · ") || "No model or retailer"} · created {formatDateTime(c.created_at)}
+              </span>
+            </Link>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+

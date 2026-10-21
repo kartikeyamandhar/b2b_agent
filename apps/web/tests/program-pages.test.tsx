@@ -7,6 +7,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import ProgramPage from "@/app/app/programs/[id]/page";
 import ProgramsPage from "@/app/app/programs/page";
 
+vi.mock("next/navigation", async (orig) => ({ ...(await orig<typeof import("next/navigation")>()), useRouter: () => ({ push: vi.fn(), refresh: vi.fn(), replace: vi.fn() }) }));
+
 const programs = JSON.parse(readFileSync(new URL("./fixtures/programs.json", import.meta.url), "utf8")) as {
   items: Array<Record<string, unknown>>;
 };

@@ -26,10 +26,10 @@ export function StatusView({ token, view }: { token: string; view: PortalView })
         <p className="mt-1 text-base">{plain.body}</p>
       </section>
 
-      {view.decision_reasons.length ? (
+      {view.status === "denied" && view.decision_reasons.length ? (
         <section aria-labelledby="reasons-title">
           <h3 id="reasons-title" className="text-base font-semibold">
-            {view.status === "denied" ? "Why" : "Details"}
+            Why
           </h3>
           <ul className="mt-1 list-disc pl-5 text-base">
             {view.decision_reasons.map((r) => (
@@ -56,7 +56,7 @@ export function StatusView({ token, view }: { token: string; view: PortalView })
           <h3 id="payout-title" className="text-base font-semibold">
             Your refund
           </h3>
-          {progress ? (
+          {progress && !(canChoosePayout(view) && view.payout_status === "pending") ? (
             <p className="text-base" data-payout-progress={view.payout_status}>
               {progress}
             </p>

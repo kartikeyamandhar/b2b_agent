@@ -6,7 +6,7 @@ import { useState } from "react";
 import { PortalPayout, PortalView } from "@/lib/api-types";
 import { sendJson } from "@/lib/api/client";
 import { ApiError, type ApiProblem } from "@/lib/api/problem";
-import { isStripeOnboardingUrl, portalPath, rememberConnectClaim } from "@/lib/portal";
+import { isStripeOnboardingUrl, methodAfterPayoutError, portalPath, rememberConnectClaim } from "@/lib/portal";
 import { portalSentence } from "@/lib/portal-copy";
 
 import { ProblemAlert } from "../ProblemAlert";
@@ -43,7 +43,10 @@ export function PayoutChoice({ token, current }: { token: string; current: strin
       }
       router.refresh();
     } catch (err) {
-      setProblem(err instanceof ApiError ? err.problem : { status: 0, title: "Error", detail: null, correlationId: null, retryAfterSeconds: null });
+      const p = err instanceof ApiError ? err.problem : { status: 0, title: "Error", detail: null, correlationId: null, retryAfterSeconds: null };
+      // 402: this firm's plan pays refunds by mailed check only (portal.py), so offer the check instead.
+      setMethod((m) => methodAfterPayoutError(p.status, m));
+      setProblem(p);
     } finally {
       setBusy(false);
     }

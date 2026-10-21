@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import type { AuditEntry, ClaimDetail, Cluster, Decision, PayoutView, Photo } from "@/lib/api-types";
-import { clusterLabel, photoSrc, splitCitations, type DuplicateHit, type Reading } from "@/lib/claim-detail";
+import { clusterLabel, newHits, orderPhotos, photoSrc, reasonParts, splitCitations, type DuplicateHit, type Reading } from "@/lib/claim-detail";
 import { shortId } from "@/lib/claims";
 import { formatCents, formatDate, formatDateTime } from "@/lib/format";
 import { remedyLabel } from "@/lib/programs";
@@ -83,7 +83,7 @@ export function PhotoEvidence({
         <p className="text-sm text-ink-muted">No photos were uploaded with this claim.</p>
       ) : (
         <ul className="grid gap-3">
-          {photos.map((ph) => {
+          {orderPhotos(photos).map((ph) => {
             const src = photoSrc(ph.url, claimId);
             const label = Object.hasOwn(PHOTO_LABEL, ph.kind) ? PHOTO_LABEL[ph.kind] : ph.kind;
             const reading = Object.hasOwn(readings, ph.kind) ? readings[ph.kind] : undefined;
@@ -154,7 +154,17 @@ export function DecisionPanel({ claimId, decision, decidedAt }: { claimId: strin
       {decision.reasons.length ? (
         <ul className="mt-2 list-disc pl-5 text-sm">
           {decision.reasons.map((r, i) => (
-            <li key={`${i}-${r}`}>{r}</li>
+            <li key={`${i}-${r}`}>
+              {reasonParts(r).map((p, j) =>
+                "claimId" in p ? (
+                  <Link key={j} href={`/app/claims/${p.claimId}`} className="font-mono text-accent underline" title={p.claimId}>
+                    {shortId(p.claimId)}
+                  </Link>
+                ) : (
+                  <span key={j}>{p.text}</span>
+                ),
+              )}
+            </li>
           ))}
         </ul>
       ) : null}
@@ -220,7 +230,9 @@ export function PayoutPanel({ payout, remedy }: { payout: PayoutView | null; rem
   );
 }
 
-export function FraudPanel({ claimId, clusters, hits }: { claimId: string; clusters: readonly Cluster[]; hits: readonly DuplicateHit[] }) {
+export function FraudPanel({ claimId, clusters, hits: allHits }: { claimId: string; clusters: readonly Cluster[]; hits: readonly DuplicateHit[] }) {
+  // A duplicate-check hit already shown as a cluster member is the same finding: list it once.
+  const hits = newHits(allHits, clusters);
   const any = clusters.length > 0 || hits.length > 0;
   return (
     <Panel id="claim-fraud" title="Duplicate and fraud indicators" tone={any ? "attention" : undefined}>
@@ -305,7 +317,7 @@ export function AuditTrail({ entries }: { entries: readonly AuditEntry[] }) {
                     {e.after && Object.keys(e.after).some((k) => k !== "status") ? (
                       <details className="mt-0.5">
                         <summary className="cursor-pointer text-ink-muted">details</summary>
-                        <pre className="mt-1 max-w-md overflow-x-auto whitespace-pre-wrap rounded bg-panel p-1 font-mono text-[11px]">
+                        <pre className="mt-1 max-w-md overflow-x-auto whitespace-pre-wrap rounded bg-panel p-1 font-mono text-xs">
                           {JSON.stringify(e.after, null, 2)}
                         </pre>
                       </details>

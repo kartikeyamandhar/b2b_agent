@@ -61,6 +61,9 @@ describe("DecisionPanel", () => {
     expect(out).toContain("destruction not visible");
     expect(out).toContain("R:destruction");
     expect(out).toContain(`href="/app/claims/${flagged.id}/trace#result-T3"`);
+    const withId = renderToStaticMarkup(<DecisionPanel claimId="x" decision={{ ...flagged.decision!, reasons: ["duplicate same_payout with claim 768dc2db-e31c-5ee6-8062-665cf67dfdd1"] }} decidedAt={null} />);
+    expect(withId).toContain('href="/app/claims/768dc2db-e31c-5ee6-8062-665cf67dfdd1"');
+    expect(withId).toContain(">768dc2db<");
     expect(out).toContain("confidence 70%");
     expect(out).toContain("routed to a person");
   });
@@ -95,15 +98,23 @@ describe("PayoutPanel", () => {
 });
 
 describe("FraudPanel", () => {
-  it("lists cluster members other than this claim, and duplicate hits", () => {
+  it("lists cluster members other than this claim, once even when the duplicate check found the same link", () => {
     const out = renderToStaticMarkup(
       <FraudPanel claimId={flagged.id} clusters={flagged.clusters} hits={[{ kind: "same_photo", otherClaimId: "7a1e0c2d-3b4f-5a6b-8c9d-0e1f2a3b4c5d", detail: "pHash within 4 bits" }]} />,
     );
     expect(out).toContain("Same photo as another claim");
     expect(out).toContain("1 other claim in this group");
-    expect(out).toContain('href="/app/claims/7a1e0c2d-3b4f-5a6b-8c9d-0e1f2a3b4c5d"');
+    expect(out.match(/href="\/app\/claims\/7a1e0c2d-3b4f-5a6b-8c9d-0e1f2a3b4c5d"/g)).toHaveLength(1);
     expect(out).not.toContain(`href="/app/claims/${flagged.id}"`);
-    expect(out).toContain("pHash within 4 bits");
+    expect(out).not.toContain("Duplicate check:");
+  });
+
+  it("shows a duplicate-check hit the clusters do not cover", () => {
+    const out = renderToStaticMarkup(
+      <FraudPanel claimId={flagged.id} clusters={flagged.clusters} hits={[{ kind: "same_serial", otherClaimId: "9c3a2e4f-5d6b-7c8d-0e1f-2a3b4c5d6e7f", detail: "serial SN1 repeated" }]} />,
+    );
+    expect(out).toContain("Duplicate check: Same serial number as another claim");
+    expect(out).toContain("serial SN1 repeated");
   });
 
   it("says when there are no indicators", () => {
@@ -130,9 +141,11 @@ describe("ReviewerActions", () => {
     expect(out).toContain("the worker resumes it with your decision");
   });
 
-  it("offers mark delivered on an approved replacement", () => {
+  it("offers mark delivered on an approved replacement, and no second approval", () => {
     const out = html(<ReviewerActions claim={{ ...approved, remedy: "replacement", payout: null }} onDone={() => {}} />);
     expect(out).toContain('data-action="mark_delivered"');
+    expect(out).not.toContain('data-action="approve"');
+    expect(out).toContain('data-action="deny"');
   });
 
   it("offers nothing on a paid claim and explains why", () => {
@@ -169,6 +182,9 @@ describe("TraceView", () => {
   it("shows a rejected tool call and the cap-counting steps", () => {
     expect(out).toContain("The check failed: serial: Input should be a valid string");
     expect(out.match(/counts toward the step cap/g)).toHaveLength(4);
+    expect(out).toContain("Model is part of the recall (R:model).");
+    expect(out).toContain("pure code");
+    expect(out).not.toContain("text-[11px]");
   });
 
   it.each([

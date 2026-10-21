@@ -5,6 +5,10 @@ import { describe, expect, it } from "vitest";
 import * as api from "@/lib/api-types";
 import {
   actionAvailability,
+  isPureCode,
+  newHits,
+  orderPhotos,
+  reasonParts,
   actionResultMessage,
   buildAction,
   capUsage,
@@ -24,14 +28,22 @@ const run = (graph: string, status: string) => ({ run_id: "r", graph, status, st
 const C = "66dcc492-086f-5b59-b441-cbe001eb2e0b";
 
 describe("actionAvailability (review.py)", () => {
-  it.each(["flagged", "under_review", "capped", "needs_info", "approved", "denied"])("offers override, info and fraud on %s", (status) => {
+  it.each(["flagged", "under_review", "capped", "needs_info", "approved", "denied"])("offers info and fraud on %s", (status) => {
     const a = actionAvailability({ status, remedy: "refund", run: null });
-    expect(a).toMatchObject({ override: true, requestInfo: true, markFraud: true, markDelivered: false, blocked: null });
+    expect(a).toMatchObject({ requestInfo: true, markFraud: true, markDelivered: false, blocked: null });
+  });
+
+  it("does not offer the decision a claim already holds", () => {
+    expect(actionAvailability({ status: "approved", remedy: "refund", run: null })).toMatchObject({ approve: false, deny: true });
+    expect(actionAvailability({ status: "denied", remedy: "refund", run: null })).toMatchObject({ approve: true, deny: false });
+    for (const s of ["flagged", "under_review", "capped", "needs_info"]) {
+      expect(actionAvailability({ status: s, remedy: "refund", run: null })).toMatchObject({ approve: true, deny: true });
+    }
   });
 
   it.each(["draft", "submitted", "paid", "closed", "archived"])("offers nothing on %s and says why", (status) => {
     const a = actionAvailability({ status, remedy: "refund", run: null });
-    expect(a.override || a.requestInfo || a.markFraud || a.markDelivered).toBe(false);
+    expect(a.approve || a.deny || a.requestInfo || a.markFraud || a.markDelivered).toBe(false);
     expect(a.blocked).toBeTruthy();
   });
 
@@ -49,7 +61,7 @@ describe("actionAvailability (review.py)", () => {
   it("blocks every action while an agent run is running (409 otherwise)", () => {
     const a = actionAvailability({ status: "flagged", remedy: "refund", run: run("adjudicate", "running") as never });
     expect(a.blocked).toMatch(/being adjudicated/);
-    expect(a.override).toBe(false);
+    expect(a.approve || a.deny).toBe(false);
   });
 
   it("knows when the worker applies the action to a paused run", () => {
@@ -108,7 +120,15 @@ describe("trace readings", () => {
     ["check_destruction_photo", { verdict: "checked", complies: true, observed: "Cord cut.", confidence: 0.9 }, "is visible. Cord cut.", false],
     ["check_purchase", { receipt: "missing", retailer: "listed", window: "inside" }, "Receipt missing; retailer is on the sold-at list; bought inside the recall window.", true],
     ["check_model", { capped: "steps" }, "stopped at a cap (steps)", true],
-    ["retrieve_policy", { hits: [] }, "See the trace", false],
+    ["retrieve_policy", { hits: [] }, "0 policy passages retrieved.", false],
+    ["check_model", { verdict: "match", cited_rule: "TL1302Z" }, "Model is part of the recall (TL1302Z).", false],
+    ["check_model", { verdict: "mismatch" }, "Model is not part of the recall.", true],
+    ["check_serial", { verdict: "skipped", cited_rule: null }, "Not checked: the recall lists no serial number rule.", false],
+    ["check_date_code", { verdict: "out_of_range" }, "Date code is outside the recalled range.", true],
+    ["check_duplicates", { hits: [{}, {}] }, "2 possible duplicates found.", true],
+    ["check_duplicates", { hits: [] }, "No duplicates found.", false],
+    ["decide", { accepted: false, error: "outcome: invalid" }, "The check failed: outcome: invalid", true],
+    ["route", { interrupt: "human_review" }, "See the trace", false],
   ] as const)("describes %s %j", (tool, result, text, problem) => {
     const d = describeResult(tool, result as Record<string, unknown>);
     expect(d.text).toContain(text);
@@ -158,5 +178,31 @@ describe("photos, clusters and polling", () => {
     expect(tracePollMs({ run: run("adjudicate", "running") as never })).toBe(1500);
     expect(tracePollMs({ run: run("adjudicate", "done") as never })).toBe(false);
     expect(tracePollMs(null)).toBe(false);
+  });
+});
+
+describe("reviewer readability helpers", () => {
+  it("orders photos label, destruction, receipt, then anything else", () => {
+    const p = (kind: string, t: string) => ({ kind, uploaded_at: t });
+    expect(orderPhotos([p("receipt", "1"), p("other", "0"), p("destruction", "2"), p("label", "3")]).map((x) => x.kind)).toEqual(["label", "destruction", "receipt", "other"]);
+  });
+
+  it("turns claim ids in a reason into link parts", () => {
+    expect(reasonParts("duplicate same_payout with claim 768DC2DB-e31c-5ee6-8062-665cf67dfdd1 (payout destination)")).toEqual([
+      { text: "duplicate same_payout with claim " },
+      { claimId: "768dc2db-e31c-5ee6-8062-665cf67dfdd1" },
+      { text: " (payout destination)" },
+    ]);
+    expect(reasonParts("every check passed")).toEqual([{ text: "every check passed" }]);
+  });
+
+  it("drops duplicate-check hits a cluster already shows", () => {
+    const hits = [{ kind: "same_photo", otherClaimId: "a", detail: "" }, { kind: "same_address", otherClaimId: "a", detail: "" }];
+    expect(newHits(hits, [{ kind: "same_photo", member_claim_ids: ["me", "a"] }])).toEqual([hits[1]]);
+  });
+
+  it("knows a pure-code step from a model step", () => {
+    expect(isPureCode(trace.steps[3]!)).toBe(true);
+    expect(isPureCode(trace.steps[1]!)).toBe(false);
   });
 });

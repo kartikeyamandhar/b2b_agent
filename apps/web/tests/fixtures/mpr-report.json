@@ -1,0 +1,16 @@
+{
+  "id": "5b1f2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d",
+  "program_id": "0874f66f-bfb5-552b-bd93-6266f49c1d5a",
+  "period_start": "2026-10-01",
+  "period_end": "2026-10-31",
+  "generated_at": "2026-10-21T06:00:00Z",
+  "reconciled": true,
+  "payload": {
+    "period": "2026-10",
+    "boxes": { "total_units_affected": 53634, "corrections_this_period": 110, "cumulative_corrections": 110, "units_with_manufacturer": 0, "incidents_before": 3, "homepage_posting": true, "social_posts": { "posts": 0, "reach": 0 }, "brand_new_box": "x" },
+    "computed": { "total_units_affected": 53634, "corrections_this_period": 110, "cumulative_corrections": 110 },
+    "manual": { "incidents_before": 3 },
+    "notes": ["Corrections count each refund payout that reached transferred or exported."],
+    "reconciliation": { "discrepancies": [] }
+  }
+}

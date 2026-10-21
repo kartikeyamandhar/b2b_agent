@@ -1,9 +1,11 @@
+import type { Metadata } from "next";
 import { ProblemAlert } from "@/components/ProblemAlert";
 import { ProgramsTable } from "@/components/ProgramsTable";
 import { EmptyState } from "@/components/States";
 import { loadPrograms } from "@/lib/api/queries";
 
 export const dynamic = "force-dynamic";
+export const metadata: Metadata = { title: "Programs" };
 
 export default async function ProgramsPage() {
   const result = await loadPrograms();

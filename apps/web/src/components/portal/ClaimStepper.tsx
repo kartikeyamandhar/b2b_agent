@@ -23,6 +23,7 @@ import {
   type DraftFields,
   type FieldErrors,
 } from "@/lib/portal";
+import { formatDate } from "@/lib/format";
 import { portalSentence } from "@/lib/portal-copy";
 
 import { ProblemAlert } from "../ProblemAlert";
@@ -101,9 +102,9 @@ function Summary({ rows }: { rows: Array<[string, ReactNode]> }) {
   return (
     <dl className="grid gap-1 text-base">
       {rows.map(([k, v]) => (
-        <div key={k} className="grid grid-cols-[9rem_1fr] gap-2">
+        <div key={k} className="grid grid-cols-[7.5rem_minmax(0,1fr)] gap-2">
           <dt className="text-ink-muted">{k}</dt>
-          <dd className="break-words">{v || <span className="text-ink-muted">Not given</span>}</dd>
+          <dd className="min-w-0 [overflow-wrap:anywhere]">{v || <span className="text-ink-muted">Not given</span>}</dd>
         </div>
       ))}
     </dl>
@@ -174,7 +175,7 @@ export function ClaimStepper({ token, view }: { token: string; view: PortalView 
   const err = (k: keyof DraftFields) => errors[k];
 
   return (
-    <div className="grid gap-5">
+    <div className="grid min-w-0 grid-cols-1 gap-5">
       <nav aria-label="Claim steps">
         <p className="text-sm text-ink-muted">
           Step {step + 1} of {STEPS.length}
@@ -273,7 +274,7 @@ export function ClaimStepper({ token, view }: { token: string; view: PortalView 
               ["Quantity", fields.quantity],
               ["Photos", program.required_photos.map((k) => `${photoKindLabel(k)}${uploaded.includes(k) ? " ✓" : " (missing)"}`).join(", ")],
               ["Bought at", fields.retailer_claimed],
-              ["Bought on", fields.purchase_date],
+              ["Bought on", fields.purchase_date ? formatDate(fields.purchase_date) : ""],
               ["Name", fields.name],
               ["Email", fields.email],
               ["Phone", fields.phone],

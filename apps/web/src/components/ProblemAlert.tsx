@@ -1,11 +1,21 @@
 import { humanSentence, type ApiProblem } from "@/lib/api/problem";
 
 /** Every API error renders a human sentence plus the correlation id (02-ui.md section 6). */
-export function ProblemAlert({ problem, onRetry, sentence }: { problem: ApiProblem; onRetry?: () => void; sentence?: string }) {
+export function ProblemAlert({
+  problem,
+  onRetry,
+  sentence,
+  showDetail = true,
+}: {
+  problem: ApiProblem;
+  onRetry?: () => void;
+  sentence?: string;
+  showDetail?: boolean;
+}) {
   return (
     <div role="alert" className="rounded border border-warn/50 bg-warn-soft p-3 text-sm text-warn-ink">
       <p className="font-medium">{sentence ?? humanSentence(problem.status)}</p>
-      {problem.detail ? <p className="mt-1">{problem.detail}</p> : null}
+      {showDetail && problem.detail ? <p className="mt-1">{problem.detail}</p> : null}
       {problem.retryAfterSeconds !== null ? (
         <p className="mt-1">You can try again in {problem.retryAfterSeconds} seconds.</p>
       ) : null}

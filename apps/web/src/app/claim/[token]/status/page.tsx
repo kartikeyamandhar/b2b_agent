@@ -10,10 +10,10 @@ export const dynamic = "force-dynamic";
 export default async function ClaimStatusPage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
   const view = await loadPortal(token);
-  if (!view.ok) return <ProblemAlert problem={view.problem} sentence={portalSentence(view.problem.status)} />;
+  if (!view.ok) return <ProblemAlert problem={view.problem} sentence={portalSentence(view.problem.status)} showDetail={false} />;
   return (
     <div>
-      <h1 className="mb-4 text-2xl font-semibold">{view.data.program.title}</h1>
+      <h1 className="mb-4 text-lg font-semibold leading-snug sm:text-2xl">{view.data.program.title}</h1>
       {view.data.status === "draft" ? (
         <p className="text-base">
           Your claim is not submitted yet.{" "}

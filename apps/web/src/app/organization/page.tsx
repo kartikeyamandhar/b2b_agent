@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { OrganizationList } from "@clerk/nextjs";
 
 import { AuthOff } from "@/components/AuthOff";
@@ -5,6 +6,7 @@ import { ClerkShell } from "@/components/ClerkShell";
 import { clerkEnabled } from "@/lib/auth/mode";
 
 export const dynamic = "force-dynamic";
+export const metadata: Metadata = { title: "Organization" };
 
 // 04-login.md: a user without an organization creates or selects one before anything else.
 export default function OrganizationPage() {

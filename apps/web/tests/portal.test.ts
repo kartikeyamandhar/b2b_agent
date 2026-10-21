@@ -220,3 +220,11 @@ describe("image sizing", () => {
     expect(isAcceptedType("image/heic")).toBe(false);
   });
 });
+
+describe("review step on phones", () => {
+  it("lets the value column shrink below a long email", async () => {
+    const src = (await import("node:fs")).readFileSync(new URL("../src/components/portal/ClaimStepper.tsx", import.meta.url), "utf8");
+    expect(src).toContain("grid-cols-[7.5rem_minmax(0,1fr)]");
+    expect(src).toContain("[overflow-wrap:anywhere]");
+  });
+});

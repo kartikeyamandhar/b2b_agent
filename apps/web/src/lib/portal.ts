@@ -1,6 +1,7 @@
 // Claim portal rules (02-ui.md /claim/[token]): steps, validation, resumable drafts, plain-language status, and the
 // post-approval payout choice. Pure, so it is unit-tested. The backend stays the authority on every rule here.
 import { PortalSubmit, type PortalView } from "@/lib/api-types";
+import { isStripeHostedUrl } from "@/lib/stripe-url";
 
 /** Claim links are opaque bearer tokens (dev.<firm>.<claim> today, HMAC from component 4 later). */
 const TOKEN = /^[A-Za-z0-9._~-]{8,512}$/;
@@ -310,15 +311,14 @@ export function payoutProgress(status: string | null | undefined): string | null
   }
 }
 
+/** After a payout error: 402 means the firm's plan pays refunds by mailed check only, so the form switches to it. */
+export function methodAfterPayoutError(status: number, method: "check_export" | "stripe_connect"): "check_export" | "stripe_connect" {
+  return status === 402 ? "check_export" : method;
+}
+
 /** Only a Stripe-hosted https page may receive the claimant (Account Links are ephemeral bearer URLs). */
 export function isStripeOnboardingUrl(url: string | null | undefined): url is string {
-  if (!url) return false;
-  try {
-    const u = new URL(url);
-    return u.protocol === "https:" && (u.hostname === "stripe.com" || u.hostname.endsWith(".stripe.com"));
-  } catch {
-    return false;
-  }
+  return isStripeHostedUrl(url);
 }
 
 /** The Connect return URL is one fixed setting, so the tab remembers which claim went to Stripe. */

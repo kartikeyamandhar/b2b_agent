@@ -104,7 +104,7 @@ export function ClaimDetailLive({ initialClaim, initialTrace, loadedAt }: { init
         <div className="grid min-w-0 grid-cols-1 content-start gap-4">
           <PhotoEvidence claimId={claim.id} photos={claim.photos} readings={readingsByPhotoKind(trace)} />
         </div>
-        <div className="grid min-w-0 grid-cols-1 content-start gap-4">
+        <div className="order-first grid min-w-0 grid-cols-1 content-start gap-4 lg:order-none">
           <DecisionPanel claimId={claim.id} decision={claim.decision} decidedAt={claim.decided_at} />
           <ReviewerActions claim={claim} onDone={onDone} />
           <PayoutPanel payout={claim.payout} remedy={claim.remedy} />

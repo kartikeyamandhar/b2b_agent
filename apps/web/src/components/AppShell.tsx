@@ -3,8 +3,11 @@ import type { ReactNode } from "react";
 
 export type NavItem = { href: string; label: string };
 
-// Billing and settings join in later phases; only built pages are linked.
-export const CONSOLE_NAV: readonly NavItem[] = [{ href: "/app/programs", label: "Programs" }];
+// Only built pages are linked.
+export const CONSOLE_NAV: readonly NavItem[] = [
+  { href: "/app/programs", label: "Programs" },
+  { href: "/app/billing", label: "Billing" },
+];
 
 /** Console frame (02-ui.md component 1). In Clerk mode the controls slot holds the organization switcher and user menu. */
 export function AppShell({ children, identityNote, controls }: { children: ReactNode; identityNote: string; controls?: ReactNode }) {

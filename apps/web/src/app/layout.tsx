@@ -3,7 +3,10 @@ import type { ReactNode } from "react";
 
 import "./globals.css";
 
-export const metadata: Metadata = { title: "RecallOps", description: "Recall operations console and claim portal" };
+export const metadata: Metadata = {
+  title: { default: "RecallOps", template: "%s · RecallOps" },
+  description: "Recall operations console and claim portal",
+};
 export const viewport: Viewport = { width: "device-width", initialScale: 1 };
 
 // ClerkProvider wraps the console here once component 4 lands; the claim portal stays outside Clerk.

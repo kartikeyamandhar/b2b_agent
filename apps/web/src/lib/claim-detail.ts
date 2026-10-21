@@ -10,7 +10,10 @@ export const NEEDS_REVIEWER = ["flagged", "under_review", "capped"] as const;
 const WAITING_RUN = ["waiting_human", "capped", "failed"];
 
 export type ActionAvailability = {
-  override: boolean;
+  /** resume_override approve; not offered when the claim already holds that decision. */
+  approve: boolean;
+  /** resume_override deny; not offered on a claim that is already denied. */
+  deny: boolean;
   requestInfo: boolean;
   markFraud: boolean;
   markDelivered: boolean;
@@ -23,7 +26,7 @@ export type ActionAvailability = {
 const includes = (list: readonly string[], v: string) => list.includes(v);
 
 export function actionAvailability(c: Pick<ClaimDetail, "status" | "remedy" | "run">): ActionAvailability {
-  const none = { override: false, requestInfo: false, markFraud: false, markDelivered: false, appliedByWorker: false };
+  const none = { approve: false, deny: false, requestInfo: false, markFraud: false, markDelivered: false, appliedByWorker: false };
   if (c.run && c.run.graph === "adjudicate" && c.run.status === "running") {
     return { ...none, blocked: "The claim is being adjudicated. Actions open when the run finishes." };
   }
@@ -39,7 +42,15 @@ export function actionAvailability(c: Pick<ClaimDetail, "status" | "remedy" | "r
   const deliverable = c.status === "approved" && (c.remedy === "repair" || c.remedy === "replacement");
   const appliedByWorker =
     !!c.run && c.run.graph === "adjudicate" && WAITING_RUN.includes(c.run.status) && includes(NEEDS_REVIEWER, c.status);
-  return { override: true, requestInfo: true, markFraud: true, markDelivered: deliverable, blocked: null, appliedByWorker };
+  return {
+    approve: c.status !== "approved",
+    deny: c.status !== "denied",
+    requestInfo: true,
+    markFraud: true,
+    markDelivered: deliverable,
+    blocked: null,
+    appliedByWorker,
+  };
 }
 
 export function needsReviewer(status: string): boolean {
@@ -94,6 +105,34 @@ export function describeResult(tool: string, r: Record<string, unknown> | null):
         ? { text: `The instructed destruction is visible.${seen}${conf ? ` (confidence ${conf})` : ""}`, problem: false }
         : { text: `The instructed destruction is not visible.${seen}${conf ? ` (confidence ${conf})` : ""}`, problem: true };
     }
+  }
+  if (tool === "check_model" || tool === "check_serial" || tool === "check_date_code") {
+    const what = { check_model: "Model", check_serial: "Serial number", check_date_code: "Date code" }[tool];
+    const rule = str(r.cited_rule) ? ` (${r.cited_rule as string})` : "";
+    const verdict: Record<string, [string, boolean]> = {
+      match: [`${what} is part of the recall${rule}.`, false],
+      in_range: [`${what} is inside the recalled range${rule}.`, false],
+      mismatch: [`${what} is not part of the recall.`, true],
+      out_of_range: [`${what} is outside the recalled range.`, true],
+      ambiguous: [`${what} could match more than one rule.`, true],
+      not_provided: [`No ${what.toLowerCase()} was given.`, true],
+      unparsed: [`${what} could not be read.`, true],
+      skipped: [`Not checked: the recall lists no ${what.toLowerCase()} rule.`, false],
+    };
+    const v = verdict[String(r.verdict)];
+    if (v) return { text: v[0], problem: v[1] };
+  }
+  if (tool === "check_duplicates") {
+    const n = Array.isArray(r.hits) ? r.hits.length : 0;
+    return n ? { text: `${n} possible duplicate${n === 1 ? "" : "s"} found.`, problem: true } : { text: "No duplicates found.", problem: false };
+  }
+  if (tool === "retrieve_policy") {
+    const n = Array.isArray(r.hits) ? r.hits.length : 0;
+    return { text: `${n} policy passage${n === 1 ? "" : "s"} retrieved.`, problem: false };
+  }
+  if (tool === "decide" || tool === "decide_once") {
+    if (r.accepted === true) return { text: "Decision accepted.", problem: false };
+    if (r.accepted === false) return { text: "Decision rejected by validation.", problem: true };
   }
   if (tool === "check_purchase") {
     const receipt = { present: "receipt present", missing: "receipt missing", not_required: "no receipt required" }[String(r.receipt)];
@@ -205,7 +244,8 @@ export function buildAction(kind: ActionKind, message: string): { ok: true; body
 }
 
 export function isActionAvailable(kind: ActionKind, a: ActionAvailability): boolean {
-  if (kind === "approve" || kind === "deny") return a.override;
+  if (kind === "approve") return a.approve;
+  if (kind === "deny") return a.deny;
   if (kind === "request_info") return a.requestInfo;
   if (kind === "mark_fraud") return a.markFraud;
   return a.markDelivered;
@@ -218,4 +258,39 @@ export function actionResultMessage(kind: ActionKind, before: string, after: str
   return appliedByWorker
     ? `${label}: recorded. The worker resumes the paused run and applies it; this page refreshes until the status changes.`
     : `${label}: recorded. The status is still ${after}.`;
+}
+
+const PHOTO_ORDER = ["label", "destruction", "receipt", "other"];
+
+/** Label first, then destruction, receipt, and anything else: the order a reviewer checks them. */
+export function orderPhotos<T extends { kind: string; uploaded_at: string }>(photos: readonly T[]): T[] {
+  const rank = (k: string) => (PHOTO_ORDER.includes(k) ? PHOTO_ORDER.indexOf(k) : PHOTO_ORDER.length);
+  return [...photos].sort((a, b) => rank(a.kind) - rank(b.kind) || a.uploaded_at.localeCompare(b.uploaded_at));
+}
+
+export type ReasonPart = { text: string } | { claimId: string };
+
+const CLAIM_ID = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi;
+
+/** Split a decision reason so claim ids render as short links instead of 36-character strings. */
+export function reasonParts(reason: string): ReasonPart[] {
+  const parts: ReasonPart[] = [];
+  let last = 0;
+  for (const m of reason.matchAll(CLAIM_ID)) {
+    if (m.index > last) parts.push({ text: reason.slice(last, m.index) });
+    parts.push({ claimId: m[0].toLowerCase() });
+    last = m.index + m[0].length;
+  }
+  if (last < reason.length) parts.push({ text: reason.slice(last) });
+  return parts;
+}
+
+/** Duplicate-check hits that the Neo4j clusters do not already show (same kind and same other claim). */
+export function newHits(hits: readonly DuplicateHit[], clusters: ReadonlyArray<{ kind: string; member_claim_ids: readonly string[] }>): DuplicateHit[] {
+  return hits.filter((h) => !clusters.some((c) => c.kind === h.kind && c.member_claim_ids.includes(h.otherClaimId)));
+}
+
+/** A step that ran no model: pure code, with no tokens and no cost worth a column. */
+export function isPureCode(step: Pick<TraceStep, "tokens_in" | "tokens_out" | "cost_usd" | "nominal_cost_usd">): boolean {
+  return step.tokens_in === 0 && step.tokens_out === 0 && Number(step.cost_usd) === 0 && Number(step.nominal_cost_usd ?? 0) === 0;
 }
