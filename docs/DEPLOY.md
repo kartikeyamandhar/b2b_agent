@@ -96,7 +96,8 @@ Why the proxy secret matters: every claim page reaches the API from Vercel's ser
 ## 5. Payments (Stripe test mode)
 
 1. Follow `docs/onboarding/payments-runtime.md` to create the test-mode prices (or run `make billing-bootstrap` with your approval) and set the account's API version to `2026-09-30.endive`.
-2. In the Stripe dashboard, add two webhook destinations pointing at `https://<api>.onrender.com/internal/stripe/webhook`: one for Billing and transfer events (snapshot, API version `2026-09-30.endive`), whose signing secret is `STRIPE_WEBHOOK_SECRET`, and one for Accounts v2 thin events, whose secret is `STRIPE_CONNECT_WEBHOOK_SECRET`.
+2. Onboard the sandbox as a Connect platform (dashboard.stripe.com/connect) and turn on Accounts v2 (Settings, early access). Claimants' bank-transfer refunds create Accounts v2 recipients; without this step Stripe refuses with `non_connect_platform_accounts_v2_access_blocked` and the claimant's bank choice answers 503 (a mailed check still works).
+3. In the Stripe dashboard, add two webhook destinations pointing at `https://<api>.onrender.com/internal/stripe/webhook`: one for Billing and transfer events (snapshot, API version `2026-09-30.endive`), whose signing secret is `STRIPE_WEBHOOK_SECRET`, and one for Accounts v2 thin events, whose secret is `STRIPE_CONNECT_WEBHOOK_SECRET`.
 
 ## 6. The nightly CPSC pull (GitHub Actions)
 

@@ -77,7 +77,48 @@ Each of these ran against the test database (`apps/api/tests`):
 - **The draft sweep** (`test_the_sweeper_skips_a_draft_someone_holds`): a draft whose row another transaction holds
   (a submit in progress) is skipped with its photo. Without the row lock the sweep blocked on that row.
 
-## 3. Not observed yet
+## 3. The live site after the rollout (2026-10-22)
 
-The same flows on the live site, with Clerk sign-in, a Stripe bank transfer, and Growth Checkout: added after the
-rollout below.
+Rollout: the worker and both scheduled jobs suspended (the worker stopped beating about 3 minutes after the suspend
+call, so the first wipe pass found a fresh heartbeat and stopped; a second pass finished), production wiped except the
+recall archive (51 recalls) and the operator's Clerk account, migration 0009 applied, PR 16 merged (`1da17b5`), the
+API deployed, the worker and jobs resumed and deployed, Clerk organizations turned off. Then a test company
+(`kettle.works.demo+clerk_test@example.com`, created through Clerk's Backend API) and the operator drove the live API
+with real Clerk session tokens; the claimant used the public routes. Times are the client's clock (UTC) unless
+marked as an API log line.
+
+| time | what happened | answer |
+|---|---|---|
+| 07:36:28.283 | the company's first `GET /v1/me` creates its company (not set up, Free) | 200 |
+| 07:36:28.584 | `POST /v1/onboarding` on Free | 200 |
+| 07:36:28.971 | `GET /v1/recalls?q=27024` finds the recall by its number | 200 |
+| 07:36:29.314 | `POST /v1/access` for 27024 | 201, requested |
+| 07:36:34.591 | the operator's `GET /v1/me`: operator, no company | 200 |
+| 07:36:34.742 | the operator's list: Kettle Works Demo, Free, 0 products, a test address, verified | 200 |
+| 07:36:35.376 | the operator approves: the product opens with its claim link | 200, product open |
+| 07:37:12.828 | the claimant reads the product's public link | 200 |
+| 07:37:13.055 | the claimant starts a claim | 201 |
+| 07:37:13.876 to 07:37:14.693 | label, destruction, and receipt photos | 200 each |
+| 07:37:14.927 | submit | 200, submitted |
+| 07:37:15.551 | (agent run) the live worker starts the AI agent's run | |
+| 07:37:29.383 | (agent run) the agent approves: 11 steps, 3 model calls, 2 photo reads, 0.001687 USD | |
+| 07:37:37.664 | the claimant's page: approved, refund pending, choose by 2026-11-05 | 200 |
+| 07:38:02.415 | the claimant chooses a bank transfer | 503 (see below) |
+| 07:38:30.424 | the claimant chooses a mailed check | 200, pending_export |
+| 07:38:42.656 | a second recall request on Free | 402, "Free covers one product. Upgrade to Growth to add another." |
+| 07:40:31.930 | (API log) `POST /v1/billing/checkout` | 200 |
+| 07:40:41.743 to 07:40:42.782 | (API log) Stripe delivers `invoice.paid` (200), `checkout.session.completed` and `customer.subscription.created` (503 each: the firm lock was busy with the first event) | |
+| 07:41:03.449 | (API log) Stripe redelivers `checkout.session.completed` | 200 |
+| 07:41:03.554 | the company: Growth, active, no product limit | 200 |
+| 07:41:04.041 | the second recall request again, on Growth | 201 |
+| 07:41:04.279 | the claim: paid, its payout exported (the check-export job, started by hand right after the check choice) | 200 |
+
+The Growth Checkout was paid in headless Chrome on Stripe's hosted page with the test card 4242 4242 4242 4242 ($62.15
+prorated to the end of October, then $199.00 a month).
+
+**Not working yet: bank transfers.** Choosing a bank transfer answered 503 because Stripe refused to create the
+claimant's account: `non_connect_platform_accounts_v2_access_blocked`. The Stripe sandbox has not been onboarded as a
+Connect platform with Accounts v2. That is a dashboard step for the account owner (Connect onboarding at
+dashboard.stripe.com/connect, and Accounts v2 under Settings, early access), not a code change. Before plan v3 the
+free plan never offered bank transfers, so this had never run on the live site. The claimant's page keeps the mailed
+check, which worked end to end.
