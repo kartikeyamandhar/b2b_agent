@@ -103,10 +103,91 @@ class ProgramCreate(Schema):
     recall_id: UUID | None = Field(None, description="A recall from GET /v1/recalls; or give manual")
     manual: ManualRecall | None = None
     value_threshold_cents: int | None = Field(None, ge=0)
+    access_id: UUID | None = Field(
+        None, description="with manual: the operator-approved typed-notice request the program comes from"
+    )
 
     model_config = ConfigDict(
         json_schema_extra={"examples": [{"recall_id": RECALL_ID, "value_threshold_cents": 10000}]}
     )
+
+
+_CONTROL = re.compile(r"[\x00-\x1f\x7f]")
+
+
+def clean_text(value: Any) -> Any:
+    """Claimant text: control characters (newlines included) become spaces, runs of spaces collapse, the ends are
+    stripped, and a value with no letter or digit left becomes None. A serial of "-" or an address of " " is then no
+    value at all, so it can never match every other claim's missing value (red team, decisions log 2026-10-18)."""
+    if not isinstance(value, str):
+        return value
+    cleaned = " ".join(_CONTROL.sub(" ", value).split())
+    return cleaned if any(ch.isalnum() for ch in cleaned) else None
+
+
+AccessStatusValue = Literal["requested", "approved", "rejected", "revoked"]
+
+
+class TypedNotice(Schema):
+    title: str = Field(min_length=1, max_length=300)
+    company: str = Field(min_length=1, max_length=200, description="the recalling company, as the notice names it")
+    notice: str = Field(min_length=1, max_length=20000)
+
+    _clean = field_validator("title", "company", mode="before")(clean_text)
+
+
+class AccessRequestCreate(Schema):
+    recall_id: UUID | None = Field(None, description="a recall from GET /v1/recalls; or give typed")
+    typed: TypedNotice | None = Field(None, description="a recall not in the CPSC archive yet")
+
+
+class AccessRequest(Schema):
+    id: UUID
+    recall_id: UUID | None
+    title: str = Field(description="the recall's title, or the typed notice's")
+    typed: bool
+    typed_company: str | None = None
+    typed_notice: str | None = Field(None, description="the typed notice's text, as this organization sent it")
+    program_id: UUID | None = Field(None, description="a typed notice's program, once created from this request")
+    status: AccessStatusValue
+    note: str | None = Field(None, description="the operator's note on the decision")
+    created_at: datetime
+    decided_at: datetime | None
+
+
+class AccessStatus(Schema):
+    required: bool = Field(description="false only in tests (ACCESS_APPROVAL=off)")
+    approved: bool = Field(description="the organization holds at least one approved recall: the console is open")
+    operator: bool = Field(description="the caller may approve organizations")
+    requests: list[AccessRequest]
+
+
+class OperatorAccessRequest(Schema):
+    id: UUID
+    firm_id: UUID
+    firm_name: str
+    recall_id: UUID | None
+    recall_number: str | None
+    title: str
+    typed: bool
+    typed_company: str | None
+    typed_notice: str | None = Field(None, description="the typed notice's text, first 4,000 characters")
+    status: AccessStatusValue
+    requested_by: str
+    requester_domain: str | None = Field(None, description="the requester's work-email domain, from Clerk (a hint)")
+    notice_company: str | None = Field(None, description="the company the notice names")
+    notice_sites: list[str] = Field(default_factory=list, description="websites the notice names")
+    domain_matches: bool = Field(description="a hint: the email domain matches the notice's company or a website")
+    approved_elsewhere: str | None = Field(None, description="another organization already approved for the recall")
+    decided_by: str | None
+    decided_at: datetime | None
+    note: str | None
+    created_at: datetime
+
+
+class AccessDecision(Schema):
+    decision: Literal["approved", "rejected", "revoked"]
+    note: str | None = Field(None, max_length=500)
 
 
 class ProgramPatch(Schema):
@@ -512,19 +593,6 @@ class PortalView(Schema):
     answer_photos: list[Literal["label", "destruction", "receipt"]] = Field(
         default_factory=list, description="while needs_info: the photos the reply form asks for"
     )
-
-
-_CONTROL = re.compile(r"[\x00-\x1f\x7f]")
-
-
-def clean_text(value: Any) -> Any:
-    """Claimant text: control characters (newlines included) become spaces, runs of spaces collapse, the ends are
-    stripped, and a value with no letter or digit left becomes None. A serial of "-" or an address of " " is then no
-    value at all, so it can never match every other claim's missing value (red team, decisions log 2026-10-18)."""
-    if not isinstance(value, str):
-        return value
-    cleaned = " ".join(_CONTROL.sub(" ", value).split())
-    return cleaned if any(ch.isalnum() for ch in cleaned) else None
 
 
 class PortalSubmit(Schema):

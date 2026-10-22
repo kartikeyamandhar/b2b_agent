@@ -1,7 +1,8 @@
 // Console reads for server components. Each returns a result instead of throwing for API and configuration
 // errors, so a page renders its error state (ProblemAlert with the correlation id) rather than a blank boundary.
-import { CampaignSummary, ClaimDetail, ClaimPage, ExportBatchList, FraudGraphView, MprReport, PortalView, Program, ProgramList, Trace, Usage } from "@/lib/api-types";
+import { AccessStatus, CampaignSummary, ClaimDetail, ClaimPage, ExportBatchList, FraudGraphView, MprReport, OperatorAccessRequest, PortalView, Program, ProgramList, Trace, Usage } from "@/lib/api-types";
 import { isPlausibleToken, portalPath } from "@/lib/portal";
+import { z } from "zod";
 import { claimsApiPath, type QueueParams } from "@/lib/claims";
 import { EXPORT_LIST_LIMIT } from "@/lib/payouts";
 
@@ -108,4 +109,12 @@ export function loadFraudGraph(programId: string, limit = 500, env: Env = proces
 export function loadCampaign(programId: string, env: Env = process.env): Promise<Loaded<CampaignSummary>> {
   if (!UUID.test(programId)) return Promise.resolve(PROGRAM_NOT_FOUND);
   return load(() => apiJson(CampaignSummary, { surface: "console", path: `/v1/programs/${programId}/campaign` }, env));
+}
+
+export function loadAccess(env: Env = process.env): Promise<Loaded<AccessStatus>> {
+  return load(() => apiJson(AccessStatus, { surface: "console", path: "/v1/access" }, env));
+}
+
+export function loadOperatorAccess(env: Env = process.env): Promise<Loaded<OperatorAccessRequest[]>> {
+  return load(() => apiJson(z.array(OperatorAccessRequest), { surface: "console", path: "/v1/operator/access" }, env));
 }

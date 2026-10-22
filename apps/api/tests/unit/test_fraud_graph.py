@@ -308,12 +308,13 @@ def test_every_tenant_statement_binds_the_scope_and_each_kind_uses_only_its_type
 
 def test_prod_settings_refuse_development_graph_values() -> None:
     with pytest.raises(ValidationError) as err:
-        Settings(app_env="prod", portal_base_url="https://recallops.example/claim")
+        Settings(app_env="prod", access_approval="required", portal_base_url="https://recallops.example/claim")
     message = str(err.value)
     for needle in ("NEO4J_NAMESPACE must be prod", "example value", "development password"):
         assert needle in message
     good: dict[str, Any] = {
         "app_env": "prod",
+        "access_approval": "required",
         "portal_base_url": "https://recallops.example/claim",
         "neo4j_namespace": "prod",
         "neo4j_uri": "neo4j+s://abc123.databases.neo4j.io",
@@ -328,7 +329,10 @@ def test_prod_settings_refuse_development_graph_values() -> None:
     with pytest.raises(ValidationError, match="reserved for APP_ENV=prod"):
         Settings(app_env="dev", neo4j_namespace="prod")
     assert (
-        Settings(app_env="prod", neo4j_uri="", portal_base_url="https://recallops.example/claim").neo4j_uri == ""
+        Settings(
+            app_env="prod", access_approval="required", neo4j_uri="", portal_base_url="https://recallops.example/claim"
+        ).neo4j_uri
+        == ""
     )  # a disabled graph needs no graph values
     assert Settings(app_env="test").graph_key_secret.get_secret_value() == EXAMPLE_GRAPH_KEY_SECRET
     assert "graph-dev-only" not in repr(Settings(app_env="test"))

@@ -78,7 +78,7 @@ describe("portal copy", () => {
 
 describe("navigation and titles", () => {
   it("links Billing from the console navigation", () => {
-    expect(CONSOLE_NAV.map((n) => n.href)).toEqual(["/app/programs", "/app/payouts", "/app/billing"]);
+    expect(CONSOLE_NAV.map((n) => n.href)).toEqual(["/app/programs", "/app/payouts", "/app/billing", "/app/access"]);
   });
 
   it("gives each page its own title under the RecallOps template", () => {

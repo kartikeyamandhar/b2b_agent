@@ -106,6 +106,13 @@ def install(app: FastAPI) -> None:
     async def payout_problem(request: Request, exc: NotPayable) -> JSONResponse:
         return problem(409, TITLES[409], str(exc), request)
 
+    from recallops.access import AccessDenied
+
+    @app.exception_handler(AccessDenied)
+    async def access_problem(request: Request, exc: AccessDenied) -> JSONResponse:
+        """Company verification (decisions log 2026-10-22): the firm is not approved for this recall."""
+        return problem(403, TITLES.get(403, "Forbidden"), str(exc), request)
+
     @app.exception_handler(stripe.StripeError)
     async def stripe_problem(request: Request, exc: stripe.StripeError) -> JSONResponse:
         """Never Stripe's message (it can carry request data). A configuration error (bad key or permission, an

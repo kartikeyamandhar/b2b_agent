@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import { gateConsole } from "@/components/AccessGate";
 import { AppShell } from "@/components/AppShell";
 import { ClerkConsole } from "@/components/ClerkConsole";
 import { devIdentity } from "@/lib/api/auth-seam";
@@ -37,7 +38,7 @@ export default async function ConsoleLayout({ children }: { children: ReactNode 
   return (
     <Providers>
       <AppShell identityNote={note} org={org} role={role}>
-        {children}
+        {await gateConsole(children)}
       </AppShell>
     </Providers>
   );

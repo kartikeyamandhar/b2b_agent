@@ -149,6 +149,26 @@ class RecallProgram(Base):
     opened_at: Mapped[datetime | None]
     closed_at: Mapped[datetime | None]
     created_at: Mapped[datetime] = _now()
+    access_id: Mapped[UUID | None] = mapped_column(ForeignKey("recall_access.id"))
+
+
+class RecallAccess(Base):
+    """A firm's request to run one recall (or one typed notice), decided by the platform operator (migration 0008)."""
+
+    __tablename__ = "recall_access"
+    id: Mapped[UUID] = _pk()
+    firm_id: Mapped[UUID] = mapped_column(ForeignKey("firms.id"))
+    recall_id: Mapped[UUID | None] = mapped_column(ForeignKey("recalls.id"))
+    typed_title: Mapped[str | None]
+    typed_company: Mapped[str | None]
+    typed_notice: Mapped[str | None]
+    status: Mapped[str] = mapped_column(server_default="requested")
+    requested_by: Mapped[str]
+    requester_domain: Mapped[str | None]
+    decided_by: Mapped[str | None]
+    decided_at: Mapped[datetime | None]
+    note: Mapped[str | None]
+    created_at: Mapped[datetime] = _now()
 
 
 class Document(Base):

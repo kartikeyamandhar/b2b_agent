@@ -39,6 +39,9 @@ import ProgramsPage from "@/app/app/programs/page";
 import ClaimStatusPage from "@/app/claim/[token]/status/page";
 import { Providers } from "@/app/app/providers";
 import { ClerkConsole } from "@/components/ClerkConsole";
+
+// The organization is approved to run a recall (company verification), so the console renders its children.
+const APPROVED = async () => ({ ok: true as const, data: { required: true, approved: true, operator: false, requests: [] } });
 import { PROXY_MATCHER } from "@/lib/auth/mode";
 import proxy, { config } from "@/proxy";
 
@@ -140,7 +143,7 @@ describe("pages in Clerk mode", () => {
 
 describe("console gate", () => {
   const render = async (s: { userId: string | null; orgId: string | null; orgRole: string | null }) =>
-    renderToStaticMarkup(await ClerkConsole({ children: <p data-console-child>queue</p>, context: async () => s }));
+    renderToStaticMarkup(await ClerkConsole({ children: <p data-console-child>queue</p>, context: async () => s, recallAccess: APPROVED }));
 
   it("sends a user without an organization to the organization page", async () => {
     const err = await render({ userId: "u", orgId: null, orgRole: null }).catch((e: unknown) => e);
@@ -160,7 +163,7 @@ describe("console gate", () => {
   });
 
   it("gives each organization its own query cache, so switching never shows another firm's data", async () => {
-    const tree = (await ClerkConsole({ children: <p />, context: async () => ({ userId: "u", orgId: "org_42", orgRole: "org:admin" }) })) as {
+    const tree = (await ClerkConsole({ children: <p />, context: async () => ({ userId: "u", orgId: "org_42", orgRole: "org:admin" }), recallAccess: APPROVED })) as {
       props: { children: { key: string | null; type: unknown } };
     };
     const providers = tree.props.children;

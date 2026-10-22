@@ -63,7 +63,15 @@ def create_app() -> FastAPI:
     _keep_null_examples(app)
     problems.install(app)
     install_guards(app)
-    for router in (routes.firm, routes.billing, routes.portal, routes.internal, routes.health):
+    for router in (
+        routes.access,
+        routes.operator,
+        routes.firm,
+        routes.billing,
+        routes.portal,
+        routes.internal,
+        routes.health,
+    ):
         app.include_router(router)
     from recallops.api import dev_console
 

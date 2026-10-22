@@ -82,6 +82,15 @@ class Settings(BaseSettings):
         "",
         description="make seed binds the demo firm to this Clerk organization id, so AUTH_PROVIDER=clerk reaches it.",
     )
+    # Company verification (migration 0008): a firm runs a recall only after the platform operator approves it.
+    access_approval: Literal["required", "off"] = Field(
+        "required",
+        description="required: firms need an operator-approved recall (always in prod). off: tests only.",
+    )
+    platform_operator_user_ids: str = Field(
+        "",
+        description="Comma-separated user ids (Clerk user_..., or the dev provider's user id) who approve firms.",
+    )
 
     # Payments seam (component 3).
     stripe_secret_key: SecretStr = Field(SecretStr("sk_test_fake"), description="Stripe test-mode secret key only.")
@@ -263,6 +272,16 @@ class Settings(BaseSettings):
         if self.clerk_jwks_url and self.clerk_jwks_url != EXAMPLE_CLERK_JWKS_URL:
             return self.clerk_jwks_url
         return f"{self.clerk_issuer.rstrip('/')}/.well-known/jwks.json"
+
+    @model_validator(mode="after")
+    def _access_guard(self) -> Settings:
+        """Production never runs without company verification (decisions log 2026-10-22)."""
+        if self.app_env == "prod" and self.access_approval != "required":
+            raise ValueError("ACCESS_APPROVAL must be required in prod")
+        return self
+
+    def operator_ids(self) -> frozenset[str]:
+        return frozenset(u.strip() for u in self.platform_operator_user_ids.split(",") if u.strip())
 
     @model_validator(mode="after")
     def _login_guards(self) -> Settings:

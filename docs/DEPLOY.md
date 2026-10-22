@@ -56,6 +56,7 @@ The project runs Postgres 17. Its direct host (`db.<ref>.supabase.co`) answers o
 | `WEB_PROXY_SECRET`, `INTERNAL_SHARED_SECRET`, `CLAIM_TOKEN_SECRET` | Generated above |
 | `CLERK_SECRET_KEY`, `CLERK_PUBLISHABLE_KEY`, `CLERK_ISSUER` | Step 4 (leave `CLERK_JWKS_URL` empty: it is derived from the issuer) |
 | `CLERK_ALLOWED_ORIGINS` | `https://<your-site>.vercel.app` |
+| `PLATFORM_OPERATOR_USER_IDS` | Your Clerk user id (`user_...`): who approves organizations (step 7) |
 | `PORTAL_BASE_URL` (every service) | `https://<your-site>.vercel.app/claim` |
 | `BILLING_RETURN_URL` | `https://<your-site>.vercel.app/app/billing/return` |
 | `CONNECT_RETURN_URL`, `CONNECT_REFRESH_URL` | `https://<your-site>.vercel.app/claim/connect-return` and `.../claim/connect-refresh` |
@@ -100,7 +101,13 @@ Why the proxy secret matters: every claim page reaches the API from Vercel's ser
 
 In the repository's **Settings, Secrets and variables, Actions**, add `RECALLOPS_API_URL` (the Render API address) and `INTERNAL_SHARED_SECRET`. The `feeds` workflow then pulls new recalls every night at 07:17 UTC; until both exist it skips with a notice.
 
-## 7. Demo data (optional)
+## 7. Company verification: you are the operator
+
+An organization runs a recall only after the platform operator approves it. Put your Clerk user id (`user_...`, Clerk dashboard, Users) in `PLATFORM_OPERATOR_USER_IDS` on the API service; several ids are separated by commas. Production refuses to start with `ACCESS_APPROVAL=off`.
+
+New organizations see only **Recall access** until you approve them. Review requests at `/app/operator`: each shows the requester's work-email domain and the company and websites the notice names. Approve when the email domain matches the company, or after calling the contact number in the notice. One organization at most runs each recall, and revoking stops its console, claim links, and refunds. Programs that existed before this check arrived as pending requests from `migration`.
+
+## 8. Demo data (optional)
 
 The demo is the laminator recall with 500 decided claims, bound to one Clerk organization. Sign up on the live site and create the organization first, read its id (`org_...`) from the Clerk dashboard, then run the seed as a one-off job on the worker service, which already holds every production setting:
 
@@ -111,9 +118,9 @@ PYTHONPATH=src SEED_CLERK_ORG_ID=org_your_organization_id uv run --frozen python
 
 Run it next to the database, not from a laptop: it makes about 3,000 storage calls and several thousand queries, and the first attempts from a home connection met Supabase's rate limit, a timeout, and connections that took up to 68 s to open. On Render it took 14 minutes. The live worker can keep running: seeded claims carry the seed's lease until their decision is recorded, so the agent never spends model money on them. Rerunning the seed replaces the demo firms' data; the empty firm your first sign-in created stays, unbound.
 
-## 8. Check it end to end
+## 9. Check it end to end
 
-1. Open the website, sign up, and create an organization. Your first sign-in creates the company's private space (or, after step 7, opens the demo firm).
+1. Open the website, sign up, and create an organization. Your first sign-in creates the company's private space (or, after step 8, opens the demo firm).
 2. **New program**: search the CPSC archive (for example "laminator"), create the program, review the rules, and open it.
 3. **Issue claim links**, open one in a private window on a phone, and file a claim with three photos.
 4. Within a minute the worker decides it. Open the claim in the console and read its trace.
@@ -133,6 +140,8 @@ The first deploy (2026-10-21, observed timeline in `docs/traces/M6-deploy.md`) d
 - **Vercel needs its GitHub app** to see the repository before it can link the project.
 - **Clerk's development handshake redirected the homepage.** The homepage loads no Clerk script, so the proxy now skips `/`.
 - **Clerk's widgets were unreadable in dark mode** (near-black text on the dark sidebar); they now take the dark palette.
+- **The first live claim looped.** The agent never reads a claimant's text reply, so a reply re-ran the same facts and asked the same question again. Replies now correct the details asked about; a note alone goes to a person; a repeated question goes to a person.
+- **Anyone could run anyone's recall.** An organization calling itself 3M opened the Primark recall. Organizations now need the operator's approval (step 7).
 
 ## Costs
 

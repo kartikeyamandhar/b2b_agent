@@ -24,7 +24,9 @@ def _clerk(**values: Any) -> Settings:
 
 
 def _prod(**values: Any) -> Settings:
-    return Settings.model_validate({"app_env": "prod", "neo4j_uri": "", **DEPLOYED, **values})
+    return Settings.model_validate(
+        {"app_env": "prod", "access_approval": "required", "neo4j_uri": "", **DEPLOYED, **values}
+    )
 
 
 @pytest.mark.parametrize(

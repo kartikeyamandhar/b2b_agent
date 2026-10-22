@@ -12,6 +12,7 @@ import stripe
 from sqlalchemy import Engine, select, text
 from sqlalchemy.orm import Session
 
+from recallops import access
 from recallops.billing.client import PaymentError, client, connect_client, data, firm_lock, object_id, test_object
 from recallops.billing.policy import PlanBilling
 from recallops.db.session import tenant_session
@@ -349,9 +350,14 @@ def tick(engine: Engine, settings: Settings) -> int:
     with engine.connect() as conn:
         rows = conn.execute(
             text(
-                "SELECT firm_id, id FROM payouts WHERE method = 'stripe_connect' "
-                "AND status IN ('onboarding', 'failed', 'transferring') ORDER BY created_at"
-            )
+                "SELECT po.firm_id, po.id FROM payouts po JOIN claims c ON c.id = po.claim_id "
+                "JOIN recall_programs pr ON pr.id = c.program_id WHERE po.method = 'stripe_connect' "
+                "AND po.status IN ('onboarding', 'failed', 'transferring') "
+                # An in-flight transfer is always reconciled; a firm no longer approved starts no new transfer.
+                "AND (po.status = 'transferring' OR CAST(:access_off AS boolean) OR "
+                f"{access.approved_program_sql('pr')}) ORDER BY po.created_at"
+            ),
+            {"access_off": not access.required(settings)},
         ).all()
     attention = 0
     for firm_id, payout_id in rows:
