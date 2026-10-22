@@ -15,12 +15,13 @@ const T = "dev.00000000-0000-4000-8000-00000000d001.66dcc492-086f-5b59-b441-cbe0
 const status = (over: Partial<PortalView>) => renderToStaticMarkup(<StatusView token={T} view={{ ...base, ...over }} />);
 
 describe("StatusView", () => {
-  it("asks the needs_info question with a reply form and an optional photo", () => {
+  it("asks the needs_info question with a reply form, a photo choice, and what sending will do", () => {
     const out = status({ status: "needs_info", pending_question: "Please photograph the label again.", decision_reasons: ["More information is needed to finish your claim."] });
     expect(out).toContain("We need more information");
     expect(out).toContain("Please photograph the label again.");
     expect(out).toContain('<label for="reply"');
-    expect(out).toContain("Add a photo (optional)");
+    expect(out).toContain("Add a photo");
+    expect(out).toContain("data-answer-outcome");
     expect(out).not.toContain("How do you want to receive your refund?");
   });
 

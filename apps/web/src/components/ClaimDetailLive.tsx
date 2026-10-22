@@ -25,7 +25,7 @@ import { shortId } from "@/lib/claims";
 import { formatDateTime } from "@/lib/format";
 import { claimDetailQuery, traceQuery } from "@/lib/queries/claim";
 
-import { AuditTrail, ClaimFacts, DecisionPanel, FraudPanel, Panel, PayoutPanel, PhotoEvidence } from "./ClaimPanels";
+import { AuditTrail, ClaimFacts, DecisionPanel, FraudPanel, MessagesPanel, Panel, PayoutPanel, PhotoEvidence } from "./ClaimPanels";
 import { ProblemAlert } from "./ProblemAlert";
 import { ReissueLink } from "./ReissueLink";
 import { ReviewerActions, type ActionDone } from "./ReviewerActions";
@@ -174,6 +174,7 @@ export function ClaimDetailLive({
         </div>
         <div className="order-first grid min-w-0 grid-cols-1 content-start gap-4 lg:order-none">
           <DecisionPanel claimId={claim.id} decision={claim.decision} decidedAt={claim.decided_at} />
+          <MessagesPanel messages={claim.messages} />
           <ReviewerActions claim={claim} onDone={onDone} pending={review !== null} onAlreadyQueued={onAlreadyQueued} />
           <PayoutPanel payout={claim.payout} remedy={claim.remedy} />
           <FraudPanel claimId={claim.id} clusters={claim.clusters} hits={duplicateHits(trace)} programId={claim.program_id} />
