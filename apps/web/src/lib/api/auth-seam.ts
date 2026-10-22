@@ -1,7 +1,8 @@
 // The single place console requests get their identity, on the server only.
-// - clerk: the signed-in user's Clerk session token as Authorization: Bearer (the organization and role travel inside
-//   the token, CHANGES.md 19a). No session means NotSignedIn: the request fails closed with a 401.
-// - dev: the backend's dev provider headers (AUTH_PROVIDER=dev), never in production.
+// - clerk: the signed-in user's Clerk session token as Authorization: Bearer. The API finds the account's company
+//   from the user (plan v3: one account is one company). No session means NotSignedIn: the request fails closed with
+//   a 401.
+// - dev: the backend's dev provider headers (AUTH_PROVIDER=dev), never in production. The role defaults to admin.
 // - anything else: ConfigError. The browser never chooses an identity: forward.ts drops X-Dev-* and Authorization.
 import { clerkSessionToken } from "@/lib/auth/clerk-session";
 import { missingClerkSettings, webAuthMode } from "@/lib/auth/mode";

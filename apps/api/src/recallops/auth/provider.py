@@ -15,7 +15,12 @@ class AuthError(Exception):
 
 
 class NoFirmError(Exception):
-    """Authenticated user without an organization: the API answers 403 (the UI shows the create-org flow)."""
+    """Authenticated, but no company to act for: the API answers 403."""
+
+
+class OperatorHasNoFirm(NoFirmError):
+    """The platform operator signed in: the operator approves companies and never acts as one (owner decision
+    2026-10-22). The website sends the operator to the operator window."""
 
 
 class AuthUnavailable(Exception):

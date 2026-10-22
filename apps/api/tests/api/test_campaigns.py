@@ -63,10 +63,16 @@ def test_a_campaign_from_registrations_to_the_mpr(env: dict[str, Any]) -> None:
     again = client.post(f"/v1/programs/{pid}/campaign/drafts", headers=ADMIN, json={"channels": ["email"]})
     assert again.json()["counts"] == {"email": 0}  # idempotent per owner and channel
     summary = client.get(f"/v1/programs/{pid}/campaign", headers=REVIEWER).json()
-    assert summary["claim_links"] == 3 and summary["notifications"]["email:draft"] == 3 and summary["simulated"]
+    assert summary["notifications"]["email:draft"] == 3 and summary["simulated"]
+    link = summary["claim_link"]  # every owner gets the product's one claim link (plan v3)
+    assert link and "/file/" in link
     email = next(s for s in summary["sample"] if s["channel"] == "email")
-    assert "Hazard (from the recall notice):" in email["body"] and "{claim_link}" in email["body"]
-    assert "dev." not in email["body"]  # the claim token is never stored in a draft (invariant 10)
+    assert "Hazard (from the recall notice):" in email["body"] and link in email["body"]
+    with env["engine"].connect() as conn:  # stored drafts keep the placeholder, so replacing the link never leaves
+        stored = conn.execute(  # a notice pointing at a dead one
+            text("SELECT body FROM notifications WHERE program_id = :p AND channel = 'email' LIMIT 1"), {"p": pid}
+        ).scalar_one()
+    assert "{claim_link}" in stored and link not in stored
 
     sent = client.post(f"/v1/programs/{pid}/campaign/send", headers=ADMIN, json={"channel": "email"}).json()["counts"]
     assert sent == {"email": 3}

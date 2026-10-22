@@ -1,25 +1,4 @@
-# One owner per component (CLAUDE.md, Working in a team): backend kartikeyamandhar, UI ChristinaJSYu,
-# payments pkatole24, login jacinta-escaffi (the authors of PRs 6 to 9).
-# Later rules win, so the specific paths come after the general ones.
+# The owner builds every component alone since 2026-10-22 (CLAUDE.md, Working alone). PRs 6 to 9 were written by
+# ChristinaJSYu (website), pkatole24 (payments), and jacinta-escaffi (login), whose history the git log keeps.
 
 *                                                   @kartikeyamandhar
-
-# Backend (component 1)
-/apps/api/                                          @kartikeyamandhar
-/evals/                                             @kartikeyamandhar
-/docs/contracts/                                    @kartikeyamandhar
-/apps/api/migrations/                               @kartikeyamandhar
-
-# UI (component 2)
-/apps/web/                                          @ChristinaJSYu
-
-# Payments (component 3)
-/apps/api/src/recallops/billing/                    @pkatole24
-/apps/api/src/recallops/payouts/stripe_connect.py   @pkatole24
-
-# Login (component 4)
-/apps/api/src/recallops/auth/                       @jacinta-escaffi
-/apps/web/src/proxy.ts                              @jacinta-escaffi
-/apps/web/src/lib/auth/                             @jacinta-escaffi
-/apps/web/src/app/sign-in/                          @jacinta-escaffi
-/apps/web/src/app/sign-up/                          @jacinta-escaffi

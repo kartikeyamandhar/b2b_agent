@@ -3,11 +3,12 @@ import Link from "next/link";
 import type { Program } from "@/lib/api-types";
 import { queueHref } from "@/lib/claims";
 import { formatCount, formatDate, formatPercent } from "@/lib/format";
+import { productNote } from "@/lib/products";
 import { programMetrics, remedyLabel } from "@/lib/programs";
 
 import { StatusBadge } from "./StatusBadge";
 
-/** Up to this many programs read better as cards than as a table row each. */
+/** Up to this many products read better as cards than as a table row each. */
 export const CARD_LIMIT = 4;
 
 export type Portfolio = {
@@ -20,7 +21,7 @@ export type Portfolio = {
   correctionRate: number | null;
 };
 
-/** Totals across the firm's programs, from GET /v1/programs fields only. */
+/** Totals across the company's products, from GET /v1/programs fields only. */
 export function portfolio(programs: readonly Program[]): Portfolio {
   let units = 0;
   let unitsKnown = false;
@@ -48,7 +49,7 @@ export function portfolio(programs: readonly Program[]): Portfolio {
   };
 }
 
-/** A tile like the program page's KPIs: the value at the foot, and an attention accent that adds no height. */
+/** A tile like the product page's KPIs: the value at the foot, and an attention accent that adds no height. */
 function Stat({ label, value, note, tone, className = "" }: { label: string; value: string; note?: string; tone?: "attention"; className?: string }) {
   return (
     <div
@@ -69,8 +70,8 @@ export function PortfolioSummary({ programs }: { programs: readonly Program[] })
   return (
     // Five tiles in two columns would leave the last one alone: below xl the first spans the row and the other four
     // pair up under it. Five across waits for xl, where a fifth of the column still fits a six-digit value.
-    <dl className="grid grid-cols-2 gap-3 xl:grid-cols-5" aria-label="All programs">
-      <Stat label="Open programs" value={formatCount(t.open)} note={`of ${formatCount(t.total)}`} className="col-span-2 xl:col-span-1" />
+    <dl className="grid grid-cols-2 gap-3 xl:grid-cols-5" aria-label="All products">
+      <Stat label="Open products" value={formatCount(t.open)} note={`of ${formatCount(t.total)}`} className="col-span-2 xl:col-span-1" />
       <Stat label="Units affected" value={formatCount(t.units)} />
       <Stat label="Claims filed" value={formatCount(t.filed)} />
       <Stat label="Awaiting review" value={formatCount(t.awaitingReview)} tone={t.awaitingReview > 0 ? "attention" : undefined} />
@@ -88,10 +89,10 @@ function Figure({ label, value, tone }: { label: string; value: string; tone?: "
   );
 }
 
-/** One card per program: what it is, where it stands, and where to go next. */
+/** One card per product: what it is, where it stands, and where to go next. */
 export function ProgramCards({ programs }: { programs: readonly Program[] }) {
   return (
-    <ul className="grid gap-4" aria-label="Recall programs">
+    <ul className="grid gap-4" aria-label="Products">
       {programs.map((p) => {
         const m = programMetrics(p);
         const models = p.identification_rules.models ?? [];
@@ -102,6 +103,11 @@ export function ProgramCards({ programs }: { programs: readonly Program[] }) {
                 <div className="flex flex-wrap items-center gap-2">
                   <StatusBadge kind="program" value={p.status} />
                   <span className="text-xs text-ink-muted">{p.opened_at ? `Opened ${formatDate(p.opened_at)}` : "Not opened"}</span>
+                  {productNote(p) ? (
+                    <span className="text-xs font-medium text-warn-ink" data-product-note>
+                      {productNote(p)}
+                    </span>
+                  ) : null}
                 </div>
                 <h2 className="mt-2 text-lg leading-snug font-semibold">
                   <Link href={`/app/programs/${p.id}`} className="text-ink">

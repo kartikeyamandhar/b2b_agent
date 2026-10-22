@@ -163,9 +163,9 @@ LINK_PLACEHOLDER = "{claim_link}"
 
 
 def render(recall: Recall | None, reg: Registration, channel: str, link: str = LINK_PLACEHOLDER) -> tuple[str, str]:
-    """Stored drafts carry the placeholder, never the link: the link holds the claim token, which the system keeps
-    only as a hash (invariant 10). A real sender substitutes a link issued at send time with
-    POST /v1/claims/{claim_id}/link (programs.reissue_link), which also replaces the link discarded here."""
+    """Stored drafts carry the placeholder, not the link: every owner gets the product's one claim link (plan v3),
+    filled in when a draft is shown (summary) or sent, so replacing the link never leaves notices pointing at a dead
+    one."""
     title = recall.title if recall else "Product safety recall"
     hazard = _section(recall.source_text, "HAZARD") if recall else ""
     remedy = _section(recall.source_text, "REMEDY") if recall else ""
@@ -183,18 +183,16 @@ def render(recall: Recall | None, reg: Registration, channel: str, link: str = L
             f"Our records show you registered {reg.model or 'a product'} covered by this recall: {title}.",
             f"Hazard (from the recall notice): {hazard}" if hazard else "",
             f"Remedy (from the recall notice): {remedy}" if remedy else "",
-            f"File your claim at {link}. The link is yours alone; it needs no account.",
+            f"File your claim at {link}. It needs no account; filing gives you your own private link to follow it.",
         )
         if part
     )
     return f"Safety recall: {title}"[:200], body
 
 
-def draft(
-    session: Session, ctx: FirmContext, program: RecallProgram, channels: list[str], issue: Any
-) -> dict[str, int]:
-    """issue(n) -> [(claim_id, url)] issues portal links (programs.issue_links). Idempotent per registration and
-    channel: an existing draft or sent notice is kept."""
+def draft(session: Session, ctx: FirmContext, program: RecallProgram, channels: list[str]) -> dict[str, int]:
+    """One notice per matched owner and channel, with the product's claim link as a placeholder. Idempotent per
+    registration and channel: an existing draft or sent notice is kept."""
     recall = session.get(Recall, program.recall_id) if program.recall_id else None
     regs = session.scalars(
         select(Registration)
@@ -203,9 +201,6 @@ def draft(
         )
         .order_by(Registration.external_ref)
     ).all()
-    needing = [r for r in regs if r.claim_id is None]
-    for r, (claim_id, _url) in zip(needing, issue(len(needing)) if needing else [], strict=True):
-        r.claim_id = claim_id  # the claim exists with its token hash; the raw link is not kept
     counts = dict.fromkeys(channels, 0)
     for r in regs:
         for channel in channels:
@@ -249,11 +244,12 @@ def send(session: Session, ctx: FirmContext, program_id: UUID, channel: str | No
     return counts
 
 
-def summary(session: Session, ctx: FirmContext, program_id: UUID) -> dict[str, Any]:
+def summary(session: Session, ctx: FirmContext, program_id: UUID, link: str | None) -> dict[str, Any]:
+    """link: the product's current claim link (None while it takes no new claims), filled into the sample drafts."""
     regs = session.execute(
         text(
             "SELECT count(*) AS total, count(*) FILTER (WHERE matched) AS matched, "
-            "count(*) FILTER (WHERE matched IS FALSE) AS unmatched, count(claim_id) AS links "
+            "count(*) FILTER (WHERE matched IS FALSE) AS unmatched "
             "FROM registrations WHERE firm_id = :f AND program_id = :p"
         ),
         {"f": ctx.firm_id, "p": program_id},
@@ -275,7 +271,15 @@ def summary(session: Session, ctx: FirmContext, program_id: UUID) -> dict[str, A
         "registrations": int(regs.total),
         "matched": int(regs.matched),
         "unmatched": int(regs.unmatched),
-        "claim_links": int(regs.links),
+        "claim_link": link,
         "notifications": {f"{c}:{s}": int(n) for c, s, n in by},
-        "sample": [{"channel": n.channel, "status": n.status, "subject": n.subject, "body": n.body} for n in sample],
+        "sample": [
+            {
+                "channel": n.channel,
+                "status": n.status,
+                "subject": n.subject,
+                "body": n.body.replace(LINK_PLACEHOLDER, link) if link else n.body,
+            }
+            for n in sample
+        ],
     }

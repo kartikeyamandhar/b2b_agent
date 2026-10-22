@@ -73,7 +73,7 @@ jobs:
   # hashFiles() is not allowed in a job-level if, so the job detects the lockfile in its first step.
   # ---------------------------------------------------------------------------------------------
   web:
-    name: web (tsc, vitest) - owned by the UI owner
+    name: web (tsc, vitest, build)
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4

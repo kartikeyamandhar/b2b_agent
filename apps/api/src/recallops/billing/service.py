@@ -4,14 +4,14 @@ from datetime import UTC, datetime, timedelta
 from typing import Any
 from uuid import uuid4
 
-from sqlalchemy import Engine, func, select, update
+from sqlalchemy import Engine, select, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 
 from recallops.billing.client import PaymentError, client, data, firm_lock, object_id, test_object
 from recallops.billing.models import BillingAccount, BillingInvoice
 from recallops.db.session import tenant_session
-from recallops.models import AuditLog, Firm, RecallProgram
+from recallops.models import AuditLog, Firm
 from recallops.settings import Settings
 from recallops.tenancy import FirmContext
 
@@ -40,15 +40,10 @@ def account_for(session: Session, ctx: FirmContext) -> BillingAccount:
 
 
 def quantity(session: Session, ctx: FirmContext) -> int:
-    n = (
-        session.scalar(
-            select(func.count())
-            .select_from(RecallProgram)
-            .where(RecallProgram.firm_id == ctx.firm_id, RecallProgram.status == "open")
-        )
-        or 0
-    )
-    return max(1, n)
+    """Growth bills each open product the operator still approves (a revoked product is not billed), at least one."""
+    from recallops.billing.policy import active_products
+
+    return max(1, active_products(session, ctx.firm_id, ("open",)))
 
 
 def mark_quantity_dirty(session: Session, ctx: FirmContext) -> None:
@@ -225,11 +220,7 @@ def billing_summary(session: Session, ctx: FirmContext, settings: Settings) -> d
         "effective_plan": plan,
         "subscription_status": account.subscription_status if account else None,
         "billing_sync_error": account.last_sync_error if account else None,
-        "limits": {
-            "open_programs": settings.free_open_programs if plan == "free" else None,
-            "claims_per_month": settings.free_claims_per_month if plan == "free" else None,
-            "reviewer_seats": settings.free_reviewer_seats if plan == "free" else None,
-        },
+        "limits": {"active_products": settings.free_active_products if plan == "free" else None},
         "invoices": [
             {
                 "id": i.id,

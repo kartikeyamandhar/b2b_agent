@@ -147,8 +147,11 @@ class AccessRequest(Schema):
     title: str = Field(description="the recall's title, or the typed notice's")
     typed: bool
     typed_company: str | None = None
-    typed_notice: str | None = Field(None, description="the typed notice's text, as this organization sent it")
-    program_id: UUID | None = Field(None, description="a typed notice's program, once created from this request")
+    typed_notice: str | None = Field(None, description="the typed notice's text, as this company sent it")
+    program_id: UUID | None = Field(None, description="the product made from this request (opened on approval)")
+    program_status: Literal["draft", "open", "closed"] | None = Field(
+        None, description="that product's status; draft means it still needs something (a plan, a refund amount)"
+    )
     status: AccessStatusValue
     note: str | None = Field(None, description="the operator's note on the decision")
     created_at: datetime
@@ -157,14 +160,17 @@ class AccessRequest(Schema):
 
 class AccessStatus(Schema):
     required: bool = Field(description="false only in tests (ACCESS_APPROVAL=off)")
-    approved: bool = Field(
-        description="the organization holds at least one approved recall: the console is open (for the operator too)"
-    )
-    operator: bool = Field(
-        description="the caller is the platform operator: approves organizations, passes the console gate, and the "
-        "organization they act in is approved for a recall the moment they ask (unless another organization holds it)"
-    )
+    approved: bool = Field(description="the company holds at least one approved recall: the console is open")
+    operator: bool = Field(description="always false for a company (the operator has none; read GET /v1/me)")
     requests: list[AccessRequest]
+
+
+class ProductOutcome(Schema):
+    id: UUID | None
+    status: Literal["draft", "open", "closed"] | None
+    error: Literal["over_plan", "missing_refund_amount", "conflict", "not_approved", "failed"] | None = Field(
+        description="why the product is not open: over the company's plan, no refund amount in its rules, or other"
+    )
 
 
 class OperatorAccessRequest(Schema):
@@ -183,11 +189,17 @@ class OperatorAccessRequest(Schema):
     notice_company: str | None = Field(None, description="the company the notice names")
     notice_sites: list[str] = Field(default_factory=list, description="websites the notice names")
     domain_matches: bool = Field(description="a hint: the email domain matches the notice's company or a website")
-    approved_elsewhere: str | None = Field(None, description="another organization already approved for the recall")
+    approved_elsewhere: str | None = Field(None, description="another company already approved for the recall")
+    requester_email: str | None = Field(None, description="the requester's email, from Clerk, when they asked")
+    requester_email_verified: bool | None = Field(None, description="whether Clerk had verified that email")
+    requester_test_address: bool = Field(False, description="a +clerk_test address: proves nothing about a company")
+    firm_plan: str | None = Field(None, description="the company's plan")
+    firm_active_products: int = Field(0, description="the company's products that are not closed")
     decided_by: str | None
     decided_at: datetime | None
     note: str | None
     created_at: datetime
+    product: ProductOutcome | None = Field(None, description="after approve or revoke: what happened to the product")
 
 
 class AccessDecision(Schema):
@@ -217,6 +229,9 @@ class Program(Schema):
     opened_at: datetime | None
     closed_at: datetime | None
     created_at: datetime
+    intake_url: str | None = Field(None, description="the product's one claim link, while it takes new claims")
+    takes_new_claims: bool = Field(False, description="open, approved, and within the plan: the claim link works")
+    needs_refund_amount: bool = Field(False, description="refunds with no price in the rules: set one to open")
 
     model_config = ConfigDict(
         json_schema_extra={
@@ -273,7 +288,7 @@ class Decision(Schema):
         None,
         description="why the claim waits for a person: flagged, over_value_threshold, model_disagrees_with_rules, "
         "capped, failed, payout_held_needs_review, shared_mailing_address (CHANGES item 6), claimant_reply, "
-        "repeated_question (CHANGES item 53)",
+        "repeated_question (CHANGES item 53), agent_unavailable (CHANGES item 57)",
     )
     reopened_from: str | None = Field(None, description="the status a later duplicate reopened this claim from")
     duplicate_found_later: list[str] = Field(default_factory=list, description="claim ids that reopened this claim")
@@ -558,6 +573,7 @@ class Usage(Schema):
     claims_adjudicated: int
     model_cost_usd: str
     open_programs: int
+    active_products: int = Field(0, description="products that count toward the plan (not closed, approved)")
     plan: str
     effective_plan: str
     subscription_status: str | None
@@ -567,6 +583,8 @@ class Usage(Schema):
 
 
 class PortalProgram(Schema):
+    company_name: str | None = Field(None, description="the company running the recall")
+    contact: str | None = Field(None, description="how to reach the company, from the notice")
     title: str
     models: list[str]
     model_label_location: str | None
@@ -589,6 +607,11 @@ class PortalView(Schema):
     decision_reasons: list[str] = Field(description="plain-language reasons once decided")
     photos_uploaded: list[Literal["label", "destruction", "receipt", "other"]] = Field(default_factory=list)
     payout_status: PayoutStatus | None = None
+    payout_choice_due: date | None = Field(
+        None,
+        description="the day a bank-transfer refund still waiting on the claimant becomes a mailed check to the "
+        "claimant's address; null when nothing is waiting",
+    )
     messages: list[PortalMessage] = Field(default_factory=list, description="needs_info questions and replies")
     answer_fields: list[PortalAnswerField] = Field(
         default_factory=list,
@@ -713,7 +736,74 @@ class CampaignSummary(Schema):
     registrations: int
     matched: int
     unmatched: int
-    claim_links: int
+    claim_link: str | None = Field(None, description="the product's claim link every notice carries")
     notifications: dict[str, int] = Field(description="channel:status -> count")
     sample: list[dict[str, Any]]
     simulated: bool = Field(True, description="sending is simulated: no message leaves the system")
+
+
+# The signed-in account and onboarding (plan v3: one account is one company)
+
+
+class MeFirm(Schema):
+    id: UUID
+    name: str
+    onboarded: bool = Field(description="the company named itself and chose a plan")
+    plan: str
+    effective_plan: str = Field(description="free until a Growth Checkout is paid")
+    subscription_status: str | None
+    approved: bool = Field(description="the operator approved at least one recall for the company")
+    active_products: int
+    product_limit: int | None = Field(description="products the plan allows; none means no limit")
+
+
+class Me(Schema):
+    operator: bool = Field(description="the platform operator: approves companies, has no company")
+    email: str | None
+    firm: MeFirm | None
+
+
+class OnboardingRequest(Schema):
+    name: str = Field(min_length=1, max_length=200)
+    plan: Literal["free", "growth"]
+
+
+class OnboardingResult(Schema):
+    firm: MeFirm
+    checkout_url: str | None = Field(description="Stripe Checkout for Growth (test mode); none for Free")
+
+
+class FirmPatch(Schema):
+    name: str = Field(min_length=1, max_length=200)
+
+
+class PlanInfo(Schema):
+    id: Literal["free", "growth"]
+    product_limit: int | None
+    program_price_cents: int | None
+    included_claims: int | None
+    claim_price_cents: int | None
+    currency: str
+    refund_options: list[Literal["stripe_connect", "check_export"]]
+
+
+# One claim link per product (invariant 10 amended)
+
+
+class IntakeView(Schema):
+    company_name: str
+    title: str
+    recall_number: str | None
+    models: list[str]
+    model_label_location: str | None
+    sold_at: list[str]
+    remedy_type: str | None
+    destruction_instruction: str | None
+    required_photos: list[Literal["label", "destruction", "receipt"]]
+    contact: str | None
+
+
+class IntakeStarted(Schema):
+    claim_id: UUID
+    claim_token: str = Field(description="the claimant's private claim link token: keep it, it is the only way back")
+    claim_url: str

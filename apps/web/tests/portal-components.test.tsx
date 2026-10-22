@@ -79,7 +79,8 @@ describe("StatusView", () => {
 
   it("shows the message thread, escaped", () => {
     const out = status({ status: "submitted", messages: [{ sender: "firm", text: "<b>Hi</b>", at: "2026-10-20T08:00:00Z" }, { sender: "claimant", text: "Here it is", at: "2026-10-20T08:05:00Z" }] });
-    expect(out).toContain("The firm");
+    // The fixture's program names no company, so the company's messages read "The company".
+    expect(out).toContain("The company ·");
     expect(out).toContain("You ·");
     expect(out).not.toContain("<b>Hi</b>");
   });

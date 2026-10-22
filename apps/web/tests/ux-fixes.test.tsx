@@ -17,7 +17,6 @@ import { ProgramsTable } from "@/components/ProgramsTable";
 import { StatusView } from "@/components/portal/StatusView";
 import { CONSOLE_NAV } from "@/components/AppShell";
 import { ClaimDetail, ClaimPage, PortalView, ProgramList } from "@/lib/api-types";
-import { methodAfterPayoutError } from "@/lib/portal";
 
 const read = (f: string): unknown => JSON.parse(readFileSync(new URL(`./fixtures/${f}`, import.meta.url), "utf8"));
 
@@ -34,9 +33,9 @@ describe("phone cards", () => {
     expect(card).toContain("Needs a reviewer");
   });
 
-  it("shows program figures as cards", () => {
+  it("shows product figures as cards", () => {
     const out = renderToStaticMarkup(<ProgramsTable programs={ProgramList.parse(read("programs.json")).items} />);
-    expect(out).toContain('aria-label="Recall programs"');
+    expect(out).toContain('aria-label="Products"');
     expect(out).toContain("Awaiting review");
   });
 });
@@ -69,22 +68,17 @@ describe("portal copy", () => {
     expect(out).not.toContain("claim link not found or expired");
     expect(out).toContain("c-1");
   });
-
-  it("switches the payout form to a mailed check when the plan pays by check (402)", () => {
-    expect(methodAfterPayoutError(402, "stripe_connect")).toBe("check_export");
-    expect(methodAfterPayoutError(400, "stripe_connect")).toBe("stripe_connect");
-    expect(methodAfterPayoutError(503, "check_export")).toBe("check_export");
-  });
 });
 
 describe("navigation and titles", () => {
   it("links Billing from the console navigation", () => {
-    expect(CONSOLE_NAV.map((n) => n.href)).toEqual(["/app/programs", "/app/payouts", "/app/billing", "/app/access", "/operator"]);
+    // Plan v3: the operator has their own window and no company console, so the company's nav does not link it.
+    expect(CONSOLE_NAV.map((n) => n.href)).toEqual(["/app/programs", "/app/payouts", "/app/billing", "/app/access"]);
   });
 
   it("gives each page its own title under the RecallOps template", () => {
     expect(rootMetadata.title).toEqual({ default: "RecallOps", template: "%s · RecallOps" });
-    expect(ProgramsRoute.metadata).toEqual({ title: "Programs" });
+    expect(ProgramsRoute.metadata).toEqual({ title: "Products" });
     expect(ClaimRoute.metadata).toEqual({ title: "Claim" });
     expect(BillingRoute.metadata).toEqual({ title: "Billing" });
   });

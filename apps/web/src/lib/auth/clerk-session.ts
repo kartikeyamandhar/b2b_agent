@@ -13,8 +13,9 @@ export async function clerkSessionToken(): Promise<string | null> {
   return (await a.getToken()) ?? null;
 }
 
+/** Who is signed in. Plan v3 reads no organization: one account is one company. */
 export async function clerkContext(): Promise<ClerkContext> {
   const { auth } = await loadClerkServer();
   const a = await auth();
-  return { userId: a.userId ?? null, orgId: a.orgId ?? null, orgRole: a.orgRole ?? null };
+  return { userId: a.userId ?? null };
 }

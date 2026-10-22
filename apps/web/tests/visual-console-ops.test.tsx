@@ -73,7 +73,7 @@ describe("KPI tiles keep words and numbers whole and their values level", () => 
     ],
     rings: [[id(1), id(2), id(3)]],
   });
-  const campaign = CampaignSummary.parse({ registrations: 3, matched: 2, unmatched: 1, claim_links: 2, notifications: {}, sample: [], simulated: true });
+  const campaign = CampaignSummary.parse({ registrations: 3, matched: 2, unmatched: 1, claim_link: "https://recallops.example/intake/abc", notifications: {}, sample: [], simulated: true });
   const batches = ExportBatchList.parse({
     items: [{ id: id(9), created_at: "2026-10-21T05:45:13Z", created_by: "seed", row_count: 56, total_cents: 279259, sha256: "a".repeat(64) }],
   }).items;
@@ -130,7 +130,7 @@ describe("the payouts table never widens the page", () => {
 
 describe("rules and settings: fields stay level in their row", () => {
   it("puts every field's input at the top of its cell, so a neighbour's notice quote cannot push it down", () => {
-    const html = renderToStaticMarkup(<ProgramSettings program={program} canAdmin created={false} />);
+    const html = renderToStaticMarkup(<ProgramSettings program={program} canAdmin />);
     for (const label of ["Sold from", "Sold to", "Lowest price (USD)", "Highest price (USD)"]) {
       expect(html).toContain(`<div class="grid min-w-0 content-start gap-1" data-field="true"><label class="grid content-start gap-1 text-xs"><span class="font-medium text-ink">${label}</span>`);
     }
@@ -160,10 +160,10 @@ describe("billing", () => {
   });
 });
 
-describe("program pages share one frame, also for a missing or foreign program", () => {
+describe("product pages share one frame, also for a missing or foreign product", () => {
   const pages = {
     reports: () => ReportsPage({ params: Promise.resolve({ id: P }), searchParams: Promise.resolve({}) }),
-    settings: () => ProgramSettingsPage({ params: Promise.resolve({ id: P }), searchParams: Promise.resolve({}) }),
+    settings: () => ProgramSettingsPage({ params: Promise.resolve({ id: P }) }),
     fraud: () => FraudRingsPage({ params: Promise.resolve({ id: P }) }),
     campaign: () => CampaignPage({ params: Promise.resolve({ id: P }) }),
   } as const;
@@ -172,7 +172,7 @@ describe("program pages share one frame, also for a missing or foreign program",
   it.each(Object.keys(pages) as (keyof typeof pages)[])("%s: breadcrumb, then heading, then the alert", async (name) => {
     serve(notFound);
     const html = renderToStaticMarkup(await pages[name]());
-    const crumb = html.indexOf("← Programs");
+    const crumb = html.indexOf("← Products");
     const heading = html.indexOf(`<h1 class="page-title">${headings[name]}</h1>`);
     const alert = html.indexOf('role="alert"');
     expect(crumb).toBeGreaterThan(-1);
@@ -282,22 +282,36 @@ describe("recall access at phone width", () => {
   });
 });
 
-describe("the gated console offers only Recall access", () => {
+describe("the gated console offers only Recall access and Billing", () => {
   const child = <p data-console-child>queue</p>;
   const as = (s: AccessStatus) => async () => ({ ok: true as const, data: s });
+  // GET /v1/me for an onboarded company (plan v3): the layout routes on it before the approval gate.
+  const me = (approved: boolean) => ({
+    operator: false,
+    email: "owner@example.com",
+    firm: { id: "00000000-0000-4000-8000-00000000d001", name: "Acme", onboarded: true, plan: "free", effective_plan: "free", subscription_status: null, approved, active_products: approved ? 1 : 0, product_limit: 1 },
+  });
+  const layoutFor = (approved: boolean) =>
+    serve((url) => {
+      const path = new URL(url).pathname;
+      if (path === "/v1/me") return Response.json(me(approved));
+      if (path === "/v1/access") return Response.json(status(approved ? { approved: true } : { requests: [REQ] }));
+      return notFound();
+    });
 
-  it("marks the gate and narrows the sidebar while the organization is not approved", async () => {
+  it("marks the gate and narrows the sidebar while the company is not approved", async () => {
     const gated = await gateConsole(child, as(status({ requests: [REQ] })));
     expect(gated.gated).toBe(true);
     expect(gateNav(gated)).toBe(GATED_NAV);
-    expect(GATED_NAV.map((i) => i.href)).toEqual(["/app/access"]);
+    expect(GATED_NAV.map((i) => i.href)).toEqual(["/app/billing", "/app/access"]);
     const html = renderToStaticMarkup(<AppShell identityNote="n" role="admin" items={gateNav(gated)}>{gated.body}</AppShell>);
     expect(html).toContain(">Recall access<");
-    for (const label of ["Programs", "Payouts", "Billing", "Operator queue"]) expect(html).not.toContain(`>${label}<`);
+    expect(html).toContain(">Billing<");
+    for (const label of ["Products", "Payouts", "Operator queue"]) expect(html).not.toContain(`>${label}<`);
   });
 
-  it("keeps the whole console for an approved organization, the operator, and an unreadable status", async () => {
-    for (const s of [status({ approved: true }), status({ operator: true }), status({ required: false })]) {
+  it("keeps the whole console for an approved company and an unreadable status", async () => {
+    for (const s of [status({ approved: true }), status({ required: false })]) {
       const gate = await gateConsole(child, as(s));
       expect(gate.gated).toBe(false);
       expect(gateNav(gate)).toBe(CONSOLE_NAV);
@@ -307,19 +321,20 @@ describe("the gated console offers only Recall access", () => {
     expect(gateNav(null)).toBe(CONSOLE_NAV);
   });
 
-  it("dev-mode layout: an unapproved organization's sidebar has only Recall access", async () => {
-    serve((url) => (new URL(url).pathname === "/v1/access" ? Response.json(status({ requests: [REQ] })) : notFound()));
+  it("dev-mode layout: an unapproved company's sidebar has only Billing and Recall access", async () => {
+    layoutFor(false);
     const html = renderToStaticMarkup(await ConsoleLayout({ children: child }));
     expect(html).not.toContain("data-console-child");
     expect(html).toContain(">Recall access<");
-    for (const label of ["Programs", "Payouts", "Billing"]) expect(html).not.toContain(`>${label}<`);
+    expect(html).toContain(">Billing<");
+    for (const label of ["Products", "Payouts"]) expect(html).not.toContain(`>${label}<`);
   });
 
-  it("dev-mode layout: an approved organization keeps Programs, Payouts, and Billing", async () => {
-    serve((url) => (new URL(url).pathname === "/v1/access" ? Response.json(status({ approved: true })) : notFound()));
+  it("dev-mode layout: an approved company keeps Products, Payouts, and Billing", async () => {
+    layoutFor(true);
     const html = renderToStaticMarkup(await ConsoleLayout({ children: child }));
     expect(html).toContain("data-console-child");
-    for (const label of ["Programs", "Payouts", "Billing", "Recall access"]) expect(html).toContain(`>${label}<`);
+    for (const label of ["Products", "Payouts", "Billing", "Recall access"]) expect(html).toContain(`>${label}<`);
   });
 });
 

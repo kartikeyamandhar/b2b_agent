@@ -13,7 +13,16 @@ from sqlalchemy import Engine, select, text
 from sqlalchemy.orm import Session
 
 from recallops import access
-from recallops.billing.client import PaymentError, client, connect_client, data, firm_lock, object_id, test_object
+from recallops.billing.client import (
+    PaymentError,
+    claim_lock,
+    client,
+    connect_client,
+    data,
+    firm_lock,
+    object_id,
+    test_object,
+)
 from recallops.billing.policy import PlanBilling
 from recallops.db.session import tenant_session
 from recallops.logs import configure, get_logger, log_event
@@ -49,8 +58,10 @@ def ready(account: Any) -> bool:
 
 
 def onboarding(engine: Engine, settings: Settings, ctx: FirmContext, claim_id: UUID) -> str:
+    """Bank setup for one claim's refund. Locked per claim, not per firm (plan v3): with one public link per product,
+    two claimants setting up at once, or one while the payment job runs, would otherwise see 'Unavailable'."""
     ledger = DbPayoutLedger(engine)
-    with firm_lock(engine, ctx.firm_id):
+    with claim_lock(engine, claim_id):
         with tenant_session(ctx, engine) as session:
             row = session.scalar(select(Payout).where(Payout.firm_id == ctx.firm_id, Payout.claim_id == claim_id))
             if row is None:
@@ -62,8 +73,6 @@ def onboarding(engine: Engine, settings: Settings, ctx: FirmContext, claim_id: U
             email = (claim.claimant or {}).get("email")
             if not isinstance(email, str) or not email.strip():
                 raise PaymentError("claimant email is required for Stripe onboarding", 400)
-            if not PlanBilling(engine, settings, session).check_entitlement(ctx, "create_payout").allowed:
-                raise PaymentError("the current plan pays this refund by check export", 402)
             sdk = connect_client(settings)
             payout_id, account_id = payout.id, payout.connect_account_id
             started = payout.connect_started_at
@@ -314,6 +323,11 @@ def process_payout(engine: Engine, settings: Settings, ctx: FirmContext, payout_
                 code = str(getattr(exc, "code", None) or "stripe_rejected")
                 ledger.mark_failed(ctx, payout_id, code, session=session)
                 if p.status == "failed":
+                    if code == "balance_insufficient":
+                        # The platform's balance could not cover it (refunds are paid from it). A retry under the
+                        # same idempotency key would get Stripe's stored error back, so it is not retried: it becomes
+                        # a check like any confirmed rejection, and the alert says to fund the balance.
+                        log_event(log, "connect_balance_insufficient", level=40, firm_id=str(ctx.firm_id))
                     if isinstance(exc, stripe.RateLimitError) or http_status == 429:
                         p.transfer_retry_at = datetime.now(UTC) + timedelta(minutes=1 if p.attempts == 1 else 5)
                     else:
@@ -345,8 +359,53 @@ def confirmed_rejection(exc: stripe.StripeError) -> bool:
     return getattr(exc, "error", None) is not None
 
 
+def expire_choices(engine: Engine, settings: Settings) -> int:
+    """A refund nobody chose a way to receive within PAYOUT_CHOICE_DAYS, or whose bank setup was not finished within
+    PAYOUT_ONBOARDING_DAYS, becomes a mailed check to the claimant's address (plan v3: free companies' refunds no
+    longer start as checks, and a claimant who never comes back must still be paid). The window runs from when the
+    refund last became the claimant's to choose (choice_opened_at), so a hold a person releases late does not expire
+    at once; db_ledger.choice_deadline is re-checked under the lock. The same shared-address hold as a claimant's own
+    check choice applies."""
+    from recallops.payouts.db_ledger import choice_deadline, lock_program_money
+    from recallops.portal import hold_shared_destination
+
+    with engine.connect() as conn:
+        rows = conn.execute(
+            text(
+                "SELECT po.firm_id, po.id, c.program_id FROM payouts po JOIN claims c ON c.id = po.claim_id "
+                "WHERE po.method = 'stripe_connect' AND ("
+                "(po.status = 'pending' AND coalesce(po.choice_opened_at, po.created_at) "
+                "< now() - make_interval(days => :choice)) OR "
+                "(po.status = 'onboarding' AND greatest(coalesce(po.connect_started_at, po.created_at), "
+                "coalesce(po.choice_opened_at, po.created_at)) < now() - make_interval(days => :setup))) "
+                "ORDER BY po.created_at"
+            ),
+            {"choice": settings.payout_choice_days, "setup": settings.payout_onboarding_days},
+        ).all()
+    ledger = DbPayoutLedger(engine)
+    moved = 0
+    for firm_id, payout_id, program_id in rows:
+        ctx = FirmContext(firm_id, "connect-job", "admin")
+        try:
+            with tenant_session(ctx, engine) as session:
+                lock_program_money(session, program_id)
+                p, _ = lock_claim_and_payout(session, ctx, payout_id)
+                claim = session.get(Claim, p.claim_id)
+                due = choice_deadline(p, settings.payout_choice_days, settings.payout_onboarding_days)
+                if claim is None or due is None or due > datetime.now(UTC):
+                    continue  # chosen, released, or held meanwhile
+                ledger.to_export(ctx, payout_id, session=session)
+                hold_shared_destination(session, ctx, claim.id, claim.program_id, dict(claim.claimant or {}))
+                moved += 1
+                log_event(log, "payout_choice_expired", firm_id=str(firm_id), payout_id=str(payout_id))
+        except Exception as exc:  # noqa: BLE001 - one payout must not stop the others
+            log_event(log, "payout_choice_expiry_failed", level=30, payout_id=str(payout_id), error=type(exc).__name__)
+    return moved
+
+
 def tick(engine: Engine, settings: Settings) -> int:
     # Tenant enumeration belongs to this standalone job, never an API request path.
+    expire_choices(engine, settings)
     with engine.connect() as conn:
         rows = conn.execute(
             text(

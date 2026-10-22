@@ -68,9 +68,9 @@ services:
         sync: false
       - key: CLERK_ALLOWED_ORIGINS
         sync: false
-      - key: PLATFORM_OPERATOR_EMAILS   # the operator's address: any account with it verified approves organizations
+      - key: PLATFORM_OPERATOR_EMAILS   # the operator's address: the account with it verified approves companies
         sync: false
-      - key: PLATFORM_OPERATOR_USER_IDS   # optional: Clerk user ids that are also operators
+      - key: PLATFORM_OPERATOR_USER_IDS   # the operator's Clerk user id too: checked locally, no Clerk lookup
         sync: false
       - key: STRIPE_SECRET_KEY
         sync: false
@@ -160,7 +160,8 @@ services:
     plan: starter
     schedule: "*/10 * * * *"
     buildCommand: pip install uv==0.11.21 && uv sync --frozen
-    startCommand: PYTHONPATH=src uv run --frozen python -m recallops.billing.jobs && PYTHONPATH=src uv run --frozen python -m recallops.payouts.stripe_connect
+    # Both jobs run every time (a failing billing job must not stop refunds), and the run fails if either failed.
+    startCommand: PYTHONPATH=src uv run --frozen python -m recallops.billing.jobs; a=$?; PYTHONPATH=src uv run --frozen python -m recallops.payouts.stripe_connect || exit $?; exit $a
     envVars:
       - key: APP_ENV
         value: prod

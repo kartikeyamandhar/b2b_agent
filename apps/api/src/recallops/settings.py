@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Literal
 from urllib.parse import urlsplit
 
-from pydantic import Field, SecretStr, field_validator, model_validator
+from pydantic import AliasChoices, Field, SecretStr, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
@@ -97,9 +97,9 @@ class Settings(BaseSettings):
         "dev", description="dev: dev.<firm>.<claim> links (development only); hmac: the login owner's signed links."
     )
     claim_token_ttl_days: int = Field(90, ge=1, le=90, description="Claim link lifetime (invariant 10: 90 days).")
-    seed_clerk_org_id: str = Field(
+    seed_clerk_user_id: str = Field(
         "",
-        description="make seed binds the demo firm to this Clerk organization id, so AUTH_PROVIDER=clerk reaches it.",
+        description="make seed binds the demo firm to this Clerk user id (development only).",
     )
     # Company verification (migration 0008): a firm runs a recall only after the platform operator approves it.
     access_approval: Literal["required", "off"] = Field(
@@ -135,9 +135,11 @@ class Settings(BaseSettings):
     connect_return_url: str = "http://localhost:3000/claim/connect-return"
     connect_refresh_url: str = "http://localhost:3000/claim/connect-refresh"
     payment_poll_s: float = Field(30.0, gt=0)
-    free_open_programs: int = Field(1, ge=1)
-    free_claims_per_month: int = Field(100, ge=1)
-    free_reviewer_seats: int = Field(1, ge=1)
+    # Free covers one product (owner decision 2026-10-22): unlimited claims, both refund options. FREE_OPEN_PROGRAMS
+    # is the old name of the same setting and is still read.
+    free_active_products: int = Field(
+        1, ge=1, validation_alias=AliasChoices("free_active_products", "free_open_programs")
+    )
     growth_program_price_cents: int = Field(19900, gt=0)
     growth_included_claims: int = Field(1000, ge=0)
     growth_claim_price_cents: int = Field(25, gt=0)
@@ -269,6 +271,32 @@ class Settings(BaseSettings):
 
     # Portal (component 4 owns the token format; the backend owns the routes).
     portal_base_url: str = Field("http://localhost:3000/claim", description="Base of issued claim links.")
+    # One public claim link per product (owner decision 2026-10-22; invariant 10 amended). The limits below are
+    # platform safety, the same on every plan: a public link must not be able to spend the model budget or the photo
+    # bucket for every company.
+    intake_base_url: str = Field(
+        "", description="Base of each product's public claim link; empty: PORTAL_BASE_URL's site with /file."
+    )
+    intake_rate_per_ip_hour: int = Field(10, ge=1, description="New claims a client address may start an hour.")
+    intake_rate_per_program_hour: int = Field(60, ge=1, description="New claims one product's link may start an hour.")
+    intake_rate_per_network_hour: int = Field(
+        30,
+        ge=1,
+        description="New claims one IPv6 /48 may start an hour, across its /64s (the per-address limit is /64).",
+    )
+    billing_rate_per_firm_hour: int = Field(
+        20, ge=1, description="Stripe Checkout and Customer Portal sessions one company may start an hour."
+    )
+    intake_agent_claims_per_program_day: int = Field(
+        100, ge=0, description="Claims a day per product decided by the AI agent; later ones use the rules checker."
+    )
+    intake_photo_max_pixels: int = Field(2_000_000, ge=100_000, description="Larger photos are scaled down to this.")
+    intake_photo_max_bytes: int = Field(
+        1_000_000, ge=100_000, description="Claimant photos larger than this are stored re-encoded as JPEG."
+    )
+    draft_ttl_hours: int = Field(48, ge=1, description="Claims started but never submitted are deleted after this.")
+    payout_choice_days: int = Field(14, ge=1, description="Days a claimant has to choose; then a check is mailed.")
+    payout_onboarding_days: int = Field(30, ge=1, description="Days to finish Stripe bank setup; then a check.")
     max_photo_bytes: int = Field(8_000_000, description="Largest accepted upload.")
     max_photo_pixels: int = Field(40_000_000, description="Larger images are refused (decompression bombs).")
     portal_rate_per_token_hour: int = Field(60, description="Portal requests per claim link per hour (04-login.md).")
@@ -319,6 +347,14 @@ class Settings(BaseSettings):
             raise ValueError("PLATFORM_OPERATOR_EMAILS needs AUTH_PROVIDER=clerk and a real CLERK_SECRET_KEY in prod")
         return self
 
+    def intake_base(self) -> str:
+        """Where a product's claim link lives: INTAKE_BASE_URL, or the site of PORTAL_BASE_URL with /file (both are
+        pages of the one website, and PORTAL_BASE_URL is already checked for prod)."""
+        if self.intake_base_url:
+            return self.intake_base_url.rstrip("/")
+        portal = urlsplit(self.portal_base_url)
+        return f"{portal.scheme}://{portal.netloc}/file"
+
     def operator_ids(self) -> frozenset[str]:
         return frozenset(u.strip() for u in self.platform_operator_user_ids.split(",") if u.strip())
 
@@ -336,6 +372,14 @@ class Settings(BaseSettings):
             raise ValueError("PORTAL_BASE_URL must not carry credentials, a query, or a fragment (the token follows)")
         if self.app_env == "prod" and (portal.scheme != "https" or is_local_uri(self.portal_base_url)):
             raise ValueError("PORTAL_BASE_URL must be the deployed https site in prod")
+        if self.intake_base_url:
+            intake = urlsplit(self.intake_base_url)
+            if not intake.hostname or intake.scheme not in ("http", "https"):
+                raise ValueError("INTAKE_BASE_URL must be an http(s) URL with a host")
+            if intake.username or intake.password or intake.query or intake.fragment:
+                raise ValueError("INTAKE_BASE_URL must not carry credentials, a query, or a fragment")
+            if self.app_env == "prod" and (intake.scheme != "https" or is_local_uri(self.intake_base_url)):
+                raise ValueError("INTAKE_BASE_URL must be the deployed https site in prod")
         if self.auth_provider != "clerk" or not self.clerk_issuer:
             return self  # ClerkAuthProvider itself refuses an empty CLERK_ISSUER
         issuer, keys = urlsplit(self.clerk_issuer), urlsplit(self.clerk_keys_url())

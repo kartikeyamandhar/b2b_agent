@@ -54,9 +54,9 @@ export default function Home() {
               Run a product recall from the CPSC notice to the monthly report.
             </h1>
             <p className="mt-6 max-w-[34rem] text-pretty text-[1.0625rem] leading-[1.65] text-ink-muted">
-              RecallOps reads the recall notice and turns it into rules. An AI agent checks each claim&rsquo;s photos
-              and receipt against them, and a person decides anything unclear. Approved refunds are paid once, and the
-              monthly report to CPSC is written from the claims.
+              RecallOps reads the recall notice and turns it into rules. An AI agent checks claim photos and receipts
+              against them, up to a daily limit per product, and a person decides anything unclear. Approved refunds
+              are paid once, and the monthly report to CPSC is written from the claims.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
@@ -73,7 +73,8 @@ export default function Home() {
               </Link>
             </div>
             <p className="mt-4 max-w-[34rem] text-sm leading-relaxed text-ink-muted">
-              A new account gets its own empty workspace. Start a program from any recall in the CPSC archive.
+              A new account names its company and picks a plan. Ask for your recall from the CPSC archive, and it opens once
+              the operator confirms your company issued it.
             </p>
           </div>
           <NoticeFigure />
@@ -166,8 +167,8 @@ export default function Home() {
 
       <footer className="border-t border-line">
         <div className={`${WRAP} grid gap-3 py-8 text-sm text-ink-muted md:grid-cols-[1fr_auto] md:gap-x-10`}>
-          <p>RecallOps is a class project by a team of four in the UCLA MSBA program, fall 2026.</p>
-          <p>Owners filing a claim: use the link you were sent. No account is needed.</p>
+          <p>RecallOps is a class project in the UCLA MSBA program, fall 2026.</p>
+          <p>Owners filing a claim: open the product&rsquo;s claim link. No account is needed.</p>
           {/* Last in reading order, so phones show both notes together; placed beside them from md up. */}
           <a
             href={REPO_URL}

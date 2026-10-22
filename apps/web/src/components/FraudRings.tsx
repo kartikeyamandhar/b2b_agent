@@ -126,7 +126,7 @@ export function FraudRings({ graph }: { graph: FraudGraphView }) {
 
       {graph.truncated ? (
         <p className="rounded-lg border border-warn/40 bg-warn-soft p-3 text-sm text-warn-ink" data-truncated>
-          This program has more linked claims than one page of the graph holds; the largest rings are shown. Every
+          This product has more linked claims than one page of the graph holds; the largest rings are shown. Every
           claim’s own page still lists its duplicates.
         </p>
       ) : null}
@@ -134,7 +134,7 @@ export function FraudRings({ graph }: { graph: FraudGraphView }) {
       {rings.length === 0 ? (
         <div className="rounded-lg border border-dashed border-line-strong/60 bg-surface p-8 text-sm" data-no-rings>
           <p className="display-title text-xl">No fraud rings</p>
-          <p className="mt-2 text-ink-muted">No two claims in this program share a photo, address, serial number, or payout destination.</p>
+          <p className="mt-2 text-ink-muted">No two claims in this product share a photo, address, serial number, or payout destination.</p>
         </div>
       ) : (
         <>

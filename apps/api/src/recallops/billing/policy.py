@@ -4,18 +4,37 @@ from decimal import Decimal
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import Engine, func, select
+from sqlalchemy import Engine, select, text
 from sqlalchemy.orm import Session
 
 from recallops.billing.interface import Action, Entitlement
-from recallops.billing.models import BillingAccount, BillingInvoice, ClaimUsage
+from recallops.billing.models import BillingAccount, BillingInvoice
 from recallops.db.session import tenant_session
 from recallops.logs import get_logger, log_event
-from recallops.models import Firm, RecallProgram, UsageMeter
+from recallops.models import Firm
 from recallops.settings import Settings
 from recallops.tenancy import FirmContext
 
 log = get_logger("billing.policy")
+
+FREE_PRODUCT_LIMIT = "Free covers one product. Upgrade to Growth to add another."
+
+
+def active_products(session: Session, firm_id: UUID, statuses: tuple[str, ...] = ("draft", "open")) -> int:
+    """The firm's products that count toward its plan: in one of `statuses` and still approved by the operator
+    (a revoked product neither counts nor bills)."""
+    from recallops.access import approved_program_sql
+
+    return int(
+        session.scalar(
+            text(
+                f"SELECT count(*) FROM recall_programs pr WHERE pr.firm_id = :f AND pr.status = ANY(:s) "
+                f"AND {approved_program_sql('pr')}"
+            ),
+            {"f": firm_id, "s": list(statuses)},
+        )
+        or 0
+    )
 
 
 def effective_plan(session: Session, firm: Firm) -> str:
@@ -63,39 +82,21 @@ class PlanBilling:
         return result
 
     def _check(self, session: Session, ctx: FirmContext, action: Action, claim_id: UUID | None) -> Entitlement:
-        from datetime import UTC, datetime
-
         firm = session.get(Firm, ctx.firm_id)
         if firm is None:
             return Entitlement(False, "firm not found")
         plan = effective_plan(session, firm)
         if plan != "free":
             return Entitlement(True, plan=plan)
-        if action == "create_payout":
-            return Entitlement(False, "the free plan pays by export", plan)
-        if action == "open_program":
-            # The calling program transaction takes this lock before reading the quota and writing its result.
-            session.execute(select(Firm.id).where(Firm.id == ctx.firm_id).with_for_update())
-            n = (
-                session.scalar(
-                    select(func.count())
-                    .select_from(RecallProgram)
-                    .where(RecallProgram.firm_id == ctx.firm_id, RecallProgram.status == "open")
-                )
-                or 0
-            )
-            allowed = n < self.settings.free_open_programs
-        else:
-            if claim_id and session.get(ClaimUsage, (ctx.firm_id, claim_id, datetime.now(UTC).date().replace(day=1))):
-                return Entitlement(True, plan=plan)
-            meter = session.scalar(
-                select(UsageMeter).where(
-                    UsageMeter.firm_id == ctx.firm_id,
-                    UsageMeter.period_start == datetime.now(UTC).date().replace(day=1),
-                )
-            )
-            allowed = (meter.claims_adjudicated if meter else 0) < self.settings.free_claims_per_month
-        return Entitlement(allowed, None if allowed else "free plan limit reached", plan)
+        # Free (owner decision 2026-10-22): unlimited claims and both refund options; one product at a time.
+        if action in ("adjudicate_claim", "create_payout"):
+            return Entitlement(True, plan=plan)
+        # The calling program transaction takes this lock before reading the quota and writing its result.
+        session.execute(select(Firm.id).where(Firm.id == ctx.firm_id).with_for_update())
+        statuses = ("open",) if action == "open_program" else ("draft", "open")
+        n = active_products(session, ctx.firm_id, statuses)
+        allowed = n < self.settings.free_active_products
+        return Entitlement(allowed, None if allowed else FREE_PRODUCT_LIMIT, plan)
 
     def record_usage(
         self,

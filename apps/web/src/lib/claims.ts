@@ -55,7 +55,8 @@ export function queueHref(programId: string, p: QueueParams): string {
   return `/app/programs/${programId}/claims${query(p)}`;
 }
 
-/** API path and query for GET /v1/programs/{id}/claims. */
+/** API path and query for GET /v1/programs/{id}/claims. Drafts (claims started and not submitted) come back only with
+ *  status=draft; the unfiltered queue leaves them out. */
 export function claimsApiPath(programId: string, p: QueueParams): { path: string; search: string } {
   return { path: `/v1/programs/${programId}/claims`, search: query(p, { limit: String(QUEUE_PAGE_SIZE) }) };
 }

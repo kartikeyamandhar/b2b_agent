@@ -108,7 +108,7 @@ describe("remedy awareness", () => {
     expect(remedyPromise("refund")).toMatch(/refund/);
     expect(remedyPromise("repair")).toMatch(/repairs your product/);
     expect(remedyPromise("replacement")).toMatch(/replaces your product/);
-    expect(remedyPromise("multiple")).toBe("If your claim is approved, the firm tells you which remedy applies to you.");
+    expect(remedyPromise("multiple")).toBe("If your claim is approved, the company tells you which remedy applies to you.");
     expect(remedyPromise(null)).toBe(remedyPromise("multiple"));
   });
 
@@ -159,7 +159,7 @@ describe("status page", () => {
     expect(plainStatus(view("approved", "pending")).body).toMatch(/Choose how you want to receive your refund/);
     expect(plainStatus(view("approved", null, "repair")).body).toMatch(/free repair/);
     expect(plainStatus(view("approved", null, "replacement")).body).toMatch(/free replacement/);
-    expect(plainStatus(view("approved", null, "multiple")).body).toBe("The firm will contact you about your remedy.");
+    expect(plainStatus(view("approved", null, "multiple")).body).toBe("The company will contact you about your remedy.");
   });
 
   it("offers the payout choice only after approval and only while it can change", () => {

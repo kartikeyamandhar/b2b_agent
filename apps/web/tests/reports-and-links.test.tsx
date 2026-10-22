@@ -6,7 +6,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 vi.mock("next/navigation", async (orig) => ({ ...(await orig<typeof import("next/navigation")>()), useRouter: () => ({ push: vi.fn(), refresh: vi.fn(), replace: vi.fn() }) }));
 
 import ReportsPage from "@/app/app/programs/[id]/reports/page";
-import { IssueLinks, linksCsv, requestLinks } from "@/components/IssueLinks";
 import { MprGenerate, manualBody } from "@/components/MprGenerate";
 import { MprReportView } from "@/components/MprReportView";
 import { MprReport } from "@/lib/api-types";
@@ -95,11 +94,11 @@ describe("MprReportView", () => {
 });
 
 describe("MprGenerate", () => {
-  it("is for admins only", () => {
-    expect(renderToStaticMarkup(<MprGenerate programId={P} period="2026-10" canGenerate={false} hasReport={false} />)).toContain("Only an admin");
+  it("generates for an admin and says plainly when the account cannot", () => {
+    expect(renderToStaticMarkup(<MprGenerate programId={P} period="2026-10" canGenerate={false} hasReport={false} />)).toContain("This account can read reports but not generate them.");
     const admin = renderToStaticMarkup(<MprGenerate programId={P} period="2026-10" canGenerate hasReport />);
     expect(admin).toContain("Regenerate the October 2026 report");
-    expect(admin).toContain("Boxes the firm fills in");
+    expect(admin).toContain("Boxes your company fills in");
   });
 });
 
@@ -139,30 +138,6 @@ describe("/app/programs/[id]/reports", () => {
     serve(() => Response.json(report));
     const out = await page({ period: "2026-13" });
     expect(urls.some((u) => u.includes("period=2026-13"))).toBe(false);
-    expect(out).toContain("Only an admin can generate reports.");
-  });
-});
-
-describe("Issue claim links", () => {
-  it("posts the count and returns the links (mocked API)", async () => {
-    const seen: Array<{ url: string; body: unknown }> = [];
-    vi.stubGlobal("fetch", async (url: string, init: RequestInit) => {
-      seen.push({ url, body: JSON.parse(String(init.body)) });
-      return Response.json({ links: [{ claim_id: "c1", url: "http://localhost:3000/claim/tok1" }] });
-    });
-    expect(await requestLinks(P, 3)).toEqual([{ claim_id: "c1", url: "http://localhost:3000/claim/tok1" }]);
-    expect(seen[0]).toEqual({ url: `/api/v1/programs/${P}/claims/issue`, body: { n: 3 } });
-    await expect(requestLinks(P, 0)).rejects.toThrow();
-    await expect(requestLinks(P, 10001)).rejects.toThrow();
-  });
-
-  it("writes a CSV with quoted fields", () => {
-    expect(linksCsv([{ claim_id: "c1", url: 'http://x/claim/a"b' }])).toBe('claim_id,url\n"c1","http://x/claim/a""b"\n');
-  });
-
-  it("is offered to admins on open programs only", () => {
-    expect(renderToStaticMarkup(<IssueLinks programId={P} open canIssue={false} />)).toContain("Only an admin can issue claim links.");
-    expect(renderToStaticMarkup(<IssueLinks programId={P} open={false} canIssue />)).toContain("Open the program before issuing");
-    expect(renderToStaticMarkup(<IssueLinks programId={P} open canIssue />)).toContain("data-issue-links");
+    expect(out).toContain("This account can read reports but not generate them.");
   });
 });

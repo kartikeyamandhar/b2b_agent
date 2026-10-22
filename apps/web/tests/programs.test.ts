@@ -9,7 +9,7 @@ describe("programMetrics", () => {
 
   it("splits issued links from filed claims and counts review and corrections", () => {
     expect(programMetrics({ claim_counts: counts, units_affected: 1000 })).toEqual({
-      linksOpen: 3,
+      notSubmitted: 3,
       filed: 512,
       awaitingReview: 123,
       needsInfo: 107,
@@ -20,7 +20,7 @@ describe("programMetrics", () => {
 
   it("treats missing statuses as zero and unknown units as no rate", () => {
     expect(programMetrics({ claim_counts: {}, units_affected: null })).toEqual({
-      linksOpen: 0,
+      notSubmitted: 0,
       filed: 0,
       awaitingReview: 0,
       needsInfo: 0,

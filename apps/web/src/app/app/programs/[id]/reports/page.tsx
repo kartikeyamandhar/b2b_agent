@@ -24,7 +24,7 @@ export default async function ReportsPage({ params, searchParams }: Props) {
     <div className="grid grid-cols-1 gap-6">
       <nav aria-label="Breadcrumb" className="text-xs">
         <Link href="/app/programs" className="text-accent hover:underline">
-          ← Programs
+          ← Products
         </Link>
         {program.ok ? (
           <>
@@ -38,7 +38,7 @@ export default async function ReportsPage({ params, searchParams }: Props) {
       <header>
         <h1 className="page-title">Monthly progress reports</h1>
         <p className="mt-2 max-w-2xl text-ink-muted">
-          The CPSC monthly progress report, counted from this program&apos;s claims and checked by an independent recount.
+          The CPSC monthly progress report, counted from this product&apos;s claims and checked by an independent recount.
         </p>
       </header>
       {body}

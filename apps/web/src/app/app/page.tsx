@@ -1,6 +1,12 @@
 import { redirect } from "next/navigation";
 
-// 02-ui.md: /app shows an org switcher for users in several firms (component 4), otherwise the programs list.
-export default function ConsoleHome(): never {
-  redirect("/app/programs");
+import { consoleStart, meOnce } from "@/lib/me";
+
+export const dynamic = "force-dynamic";
+
+/** /app (where sign-in and sign-up land): setup until the company is set up, Recall access until the operator
+ *  approves it, then its products. When GET /v1/me cannot be read, the layout shows why. */
+export default async function ConsoleHome(): Promise<never> {
+  const me = await meOnce();
+  redirect(me.ok ? consoleStart(me.data) : "/app/programs");
 }

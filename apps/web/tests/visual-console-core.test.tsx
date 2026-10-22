@@ -13,12 +13,11 @@ vi.mock("next/navigation", async (orig) => ({
   useRouter: () => ({ push: vi.fn(), refresh: vi.fn(), replace: vi.fn() }),
 }));
 
-import { AppShell, CONSOLE_NAV, OPERATOR_NAV } from "@/components/AppShell";
+import { AppShell, CONSOLE_NAV } from "@/components/AppShell";
 import { ClaimDetailLive } from "@/components/ClaimDetailLive";
 import { AuditTrail, ClaimFacts, DecisionPanel, PhotoEvidence } from "@/components/ClaimPanels";
 import { ClaimsQueue, emptyQueueTitle } from "@/components/ClaimsQueue";
 import { ClaimsTable } from "@/components/ClaimsTable";
-import { NewProgram } from "@/components/NewProgram";
 import { ProgramOverview, instructionLooksCut, registrationHref } from "@/components/ProgramOverview";
 import { PortfolioSummary } from "@/components/ProgramPortfolio";
 import { TraceLive } from "@/components/TraceLive";
@@ -38,23 +37,18 @@ const OTHER = "8e223bc0-1111-4222-8333-444455556666";
 
 describe("console navigation", () => {
   it("wraps the phone row instead of widening the page, and never splits a label", () => {
-    const html = renderToStaticMarkup(<AppShell identityNote="n" role="admin" operator>x</AppShell>);
+    const html = renderToStaticMarkup(<AppShell identityNote="n" role="admin">x</AppShell>);
     expect(html).toMatch(/class="flex flex-wrap gap-1 [^"]*md:block/);
     const navLinks = (html.match(/<a [^>]*>/g) ?? []).filter((l) => l.includes("rounded-md px-3 py-2"));
-    expect(navLinks).toHaveLength(5);
+    expect(navLinks).toHaveLength(4);
     for (const l of navLinks) expect(l).toContain("whitespace-nowrap");
   });
 
-  it("gives the operator queue its own Platform group, shown to the operator only", () => {
-    expect(CONSOLE_NAV.find((i) => i.href === "/operator")).toMatchObject({ group: "Platform", operatorOnly: true });
-    expect(OPERATOR_NAV.map((i) => i.group)).toEqual(["Platform"]);
-    const operator = renderToStaticMarkup(<AppShell identityNote="n" role="admin" operator>x</AppShell>);
-    expect(operator).toContain(">Platform<");
-    expect(operator.indexOf(">Platform<")).toBeGreaterThan(operator.indexOf(">Recall access<"));
-    expect(operator).toMatch(/aria-current="page"[^>]*href="\/operator"|href="\/operator"[^>]*aria-current="page"/);
-    const firm = renderToStaticMarkup(<AppShell identityNote="n" role="admin">x</AppShell>);
-    expect(firm).not.toContain(">Platform<");
-    expect(firm).not.toContain('href="/operator"');
+  it("has no Platform group or operator item: the operator has a window of their own (plan v3)", () => {
+    expect(CONSOLE_NAV.some((i) => i.href === "/operator")).toBe(false);
+    const html = renderToStaticMarkup(<AppShell identityNote="n" role="admin">x</AppShell>);
+    expect(html).not.toContain(">Platform<");
+    expect(html).not.toContain('href="/operator"');
   });
 });
 
@@ -208,7 +202,7 @@ describe("KPI tiles", () => {
     const html = renderToStaticMarkup(<PortfolioSummary programs={programs} />);
     expect(html).not.toContain("border-t-2");
     expect(html.match(/kpi-value mt-auto pt-2/g)).toHaveLength(5);
-    expect(html).toMatch(/class="[^"]*col-span-2 xl:col-span-1[^"]*" data-portfolio-stat="Open programs"/);
+    expect(html).toMatch(/class="[^"]*col-span-2 xl:col-span-1[^"]*" data-portfolio-stat="Open products"/);
     expect(html).toContain("xl:grid-cols-5");
   });
 });
@@ -316,13 +310,13 @@ describe("sentence case", () => {
   it("titles a filtered empty queue in sentence case and points back to All", () => {
     expect(emptyQueueTitle("capped")).toBe("No capped claims");
     expect(emptyQueueTitle("needs_info")).toBe("No claims waiting on the claimant");
-    expect(emptyQueueTitle("draft")).toBe("No unused claim links");
+    expect(emptyQueueTitle("draft")).toBe("No unsubmitted claims");
     expect(emptyQueueTitle(null)).toBe("No claims yet");
     const html = withQuery(
       <ClaimsQueue programId={open.id} params={{ status: "capped", cursor: null }} initialPage={{ ok: true, data: { items: [], next_cursor: null } }} initialProgram={open} loadedAt={Date.now()} />,
     );
     expect(html).toContain("No capped claims");
-    expect(html).toContain("Choose All to see every claim.");
+    expect(html).toContain("Choose All to see every submitted claim.");
     expect(html).not.toContain("with status Capped");
   });
 
@@ -337,19 +331,3 @@ describe("sentence case", () => {
   });
 });
 
-describe("new program on phones", () => {
-  it("splits the source toggle into two halves with short phone labels that never wrap", () => {
-    const html = renderToStaticMarkup(<NewProgram existingRecallIds={[]} />);
-    expect(html).toMatch(/role="radiogroup"[^>]*class="[^"]*grid w-full grid-cols-2[^"]*sm:inline-flex sm:w-auto/);
-    expect(html.match(/role="radio"[^>]*class="[^"]*whitespace-nowrap/g)).toHaveLength(2);
-    expect(html).toContain('<span class="sm:hidden">Search CPSC</span><span class="hidden sm:inline">Search the CPSC archive</span>');
-    expect(html).toContain('<span class="sm:hidden">Enter by hand</span><span class="hidden sm:inline">Enter the notice by hand</span>');
-    expect(html).toContain('<p class="text-xs text-ink-muted">Search the public CPSC recalls');
-  });
-
-  it("keeps the link to Recall access, and no toggle, when company verification is on", () => {
-    const html = renderToStaticMarkup(<NewProgram existingRecallIds={[]} typedNeedsApproval />);
-    expect(html).toContain("data-typed-via-access");
-    expect(html).not.toContain('role="radiogroup"');
-  });
-});

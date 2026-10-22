@@ -18,7 +18,7 @@ import { EmptyState, LoadingState } from "./States";
 
 /** A filtered view's empty title, in sentence case ("No capped claims", not "No claims with status Capped"). */
 const EMPTY_TITLE: Record<string, string> = {
-  draft: "No unused claim links",
+  draft: "No unsubmitted claims",
   submitted: "No submitted claims",
   needs_info: "No claims waiting on the claimant",
   under_review: "No claims under review",
@@ -116,9 +116,11 @@ export function ClaimsQueue({ programId, params, initialPage, initialProgram, lo
           <EmptyState title={emptyQueueTitle(params.status)}>
             {params.cursor
               ? "There are no more claims after the previous page."
-              : params.status
-                ? "Choose All to see every claim."
-                : "Claims appear here as claimants submit them through the portal."}
+              : params.status === "draft"
+                ? "Claims started from the product’s claim link wait here until the claimant submits them."
+                : params.status
+                  ? "Choose All to see every submitted claim."
+                  : "Claims appear here as claimants submit them through the product’s claim link."}
           </EmptyState>
         ) : (
           <>

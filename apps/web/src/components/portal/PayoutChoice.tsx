@@ -6,17 +6,19 @@ import { useState } from "react";
 import { PortalPayout, PortalView } from "@/lib/api-types";
 import { sendJson } from "@/lib/api/client";
 import { ApiError, type ApiProblem } from "@/lib/api/problem";
-import { handOffToStripe, isStripeOnboardingUrl, methodAfterPayoutError, offersBankTransfer, payoutSentence, portalPath } from "@/lib/portal";
+import { handOffToStripe, isStripeOnboardingUrl, offersBankTransfer, payoutDueSentence, payoutSentence, portalPath } from "@/lib/portal";
 
 import { ProblemAlert } from "../ProblemAlert";
 
 /**
- * The refund destination, offered only after approval while the payout can still change (portal.py CHOOSABLE).
- * Stripe onboarding happens on Stripe's own page; a redirect back never means the money arrived, so the status
- * page always re-reads the API. A scheduled check (pending_export) can only change its mailing address: the API
- * refuses Stripe onboarding from that state, so the bank transfer is not offered there.
+ * The refund destination, offered only after approval while the payout can still change (portal.py CHOOSABLE). Both
+ * ways are offered on every plan (plan v3): a bank transfer through Stripe or a mailed check. Stripe onboarding
+ * happens on Stripe's own page; a redirect back never means the money arrived, so the status page always re-reads
+ * the API. A scheduled check (pending_export) can only change its mailing address: the API refuses Stripe onboarding
+ * from that state, so the bank transfer is not offered there. `due` is the day a bank transfer nobody finished
+ * choosing becomes a mailed check.
  */
-export function PayoutChoice({ token, current }: { token: string; current: string | null }) {
+export function PayoutChoice({ token, current, due = null }: { token: string; current: string | null; due?: string | null }) {
   const router = useRouter();
   const bankTransfer = offersBankTransfer(current);
   const [method, setMethod] = useState<"check_export" | "stripe_connect">(bankTransfer && current === "onboarding" ? "stripe_connect" : "check_export");
@@ -24,6 +26,7 @@ export function PayoutChoice({ token, current }: { token: string; current: strin
   const [problem, setProblem] = useState<ApiProblem | null>(null);
   const [busy, setBusy] = useState(false);
   const checkScheduled = current === "pending_export";
+  const deadline = payoutDueSentence(current, due);
 
   async function choose() {
     // A scheduled check with no new address would change nothing, so the button waits for one.
@@ -46,10 +49,7 @@ export function PayoutChoice({ token, current }: { token: string; current: strin
       }
       router.refresh();
     } catch (err) {
-      const p = err instanceof ApiError ? err.problem : { status: 0, title: "Error", detail: null, correlationId: null, retryAfterSeconds: null };
-      // 402: this firm's plan pays refunds by mailed check only (portal.py), so offer the check instead.
-      setMethod((m) => methodAfterPayoutError(p.status, m));
-      setProblem(p);
+      setProblem(err instanceof ApiError ? err.problem : { status: 0, title: "Error", detail: null, correlationId: null, retryAfterSeconds: null });
     } finally {
       setBusy(false);
     }
@@ -99,6 +99,11 @@ export function PayoutChoice({ token, current }: { token: string; current: strin
       ) : (
         <p className="text-sm text-ink-muted">You leave this site to finish on Stripe, then come back here.</p>
       )}
+      {deadline ? (
+        <p className="rounded border border-line bg-panel p-3 text-base" data-payout-due>
+          {deadline}
+        </p>
+      ) : null}
       {problem ? <ProblemAlert problem={problem} sentence={payoutSentence(problem.status)} audience="claimant" /> : null}
       <button type="submit" disabled={busy || (checkScheduled && !address.trim())} className="min-h-12 rounded-md bg-accent px-4 text-base font-semibold text-bg hover:opacity-90 disabled:opacity-60" data-payout-submit>
         {busy ? "Saving…" : method === "stripe_connect" ? (current === "onboarding" ? "Continue on Stripe" : "Set up on Stripe") : current === "pending_export" ? "Update mailing address" : "Choose a mailed check"}

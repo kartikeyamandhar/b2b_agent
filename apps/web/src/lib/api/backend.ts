@@ -16,9 +16,12 @@ export type UpstreamInit = {
   timeoutMs?: number;
 };
 
-/** The claimant's address for a portal call: the proxied request's headers, or the server component's request. */
+/** The claimant's address for a portal call: the proxied request's headers when they name one, else the page request's.
+ *  A server component's own read (apiJson) passes only accept and content-type, so without the fallback every
+ *  claimant page would reach the API as this server and share its one rate-limit bucket. */
 async function portalClientIp(incoming: Headers | undefined): Promise<string | null> {
-  if (incoming) return clientAddress(incoming);
+  const forwarded = incoming ? clientAddress(incoming) : null;
+  if (forwarded) return forwarded;
   try {
     const { headers } = await import("next/headers");
     return clientAddress(new Headers(await headers()));

@@ -100,7 +100,7 @@ describe("1. remedy options follow the remedy chosen in the rules editor", () =>
   });
 });
 
-describe("2. closing a program warns with the claims it cuts off", () => {
+describe("2. closing a product warns with the claims it cuts off", () => {
   it("counts each open status and the approved claims from claim_counts", () => {
     expect(closeImpact({ submitted: 1, needs_info: 2, flagged: 3, under_review: 4, capped: 5, approved: 1, draft: 2, denied: 9, paid: 9, closed: 9 })).toEqual([
       "1 claim submitted and not decided yet",
@@ -109,7 +109,7 @@ describe("2. closing a program warns with the claims it cuts off", () => {
       "4 claims held for a reviewer before any money moves",
       "5 claims stopped at a checker limit and waiting for a reviewer",
       "1 approved claim whose claimant may still need to choose how a refund is paid",
-      "2 claim links issued and never used",
+      "2 claims started and not submitted yet",
     ]);
     expect(closeImpact({ denied: 4, paid: 2 })).toEqual([]);
   });
@@ -127,7 +127,7 @@ describe("2. closing a program warns with the claims it cuts off", () => {
 
 describe("3. closing waits for unsaved rule edits", () => {
   it("blocks only a close, and only while the draft is dirty", () => {
-    expect(lifecycleBlock("closed", true)).toBe("Save or discard your rule changes first. A closed program cannot be edited.");
+    expect(lifecycleBlock("closed", true)).toBe("Save or discard your rule changes first. A closed product cannot be edited.");
     expect(lifecycleBlock("closed", false)).toBeNull();
     expect(lifecycleBlock("open", true)).toBeNull();
   });

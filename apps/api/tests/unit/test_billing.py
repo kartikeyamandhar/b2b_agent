@@ -17,8 +17,8 @@ from pydantic import ValidationError
 from recallops.billing import jobs, policy, service, webhooks
 from recallops.billing.client import PaymentError, client
 from recallops.billing.client import test_object as require_test_object
-from recallops.billing.models import BillingAccount, ClaimUsage, UsageReport
-from recallops.models import Claim, Firm, Payout, RecallProgram, UsageMeter
+from recallops.billing.models import BillingAccount, UsageReport
+from recallops.models import Claim, Firm, Payout, RecallProgram
 from recallops.payouts import stripe_connect as connect
 from recallops.settings import Settings
 from recallops.tenancy import FirmContext
@@ -411,15 +411,24 @@ def test_unknown_meter_submission_is_not_reissued_after_retry_window(monkeypatch
     sdk.billing.meter_events.create.assert_not_called()
 
 
-def test_free_limit_allows_reprocessing_a_counted_claim_but_not_a_new_claim() -> None:
+def test_free_decides_unlimited_claims_and_pays_both_ways_but_runs_one_product(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Owner decision 2026-10-22: free = any number of claims, bank transfer or check, one product at a time."""
     ctx = FirmContext(uuid4(), "test", "admin")
-    counted = uuid4()
     session = session_mock()
     firm = Firm(id=ctx.firm_id, name="Synthetic", plan="free")
-    session.get.side_effect = lambda model, key: (
-        firm if model is Firm else (object() if model is ClaimUsage and key[1] == counted else None)
-    )
-    session.scalar.return_value = UsageMeter(claims_adjudicated=100)
+    session.get.side_effect = lambda model, key: firm if model is Firm else None
+    counts: dict[tuple[str, ...], int] = {("open",): 0, ("draft", "open"): 0}
+    monkeypatch.setattr(policy, "active_products", lambda _s, _f, statuses=("draft", "open"): counts[tuple(statuses)])
     gate = policy.PlanBilling(MagicMock(), Settings(), session)
-    assert gate.check_entitlement(ctx, "adjudicate_claim", counted).allowed
-    assert not gate.check_entitlement(ctx, "adjudicate_claim", uuid4()).allowed
+    for _ in range(3):
+        assert gate.check_entitlement(ctx, "adjudicate_claim", uuid4()).allowed
+    assert gate.check_entitlement(ctx, "create_payout").allowed
+    assert gate.check_entitlement(ctx, "create_program").allowed
+    counts[("draft", "open")] = 1
+    second = gate.check_entitlement(ctx, "create_program")
+    assert not second.allowed and second.reason == policy.FREE_PRODUCT_LIMIT
+    assert gate.check_entitlement(ctx, "open_program").allowed  # opening the one product (it is not open yet)
+    counts[("open",)] = 1
+    assert not gate.check_entitlement(ctx, "open_program").allowed  # a second open product

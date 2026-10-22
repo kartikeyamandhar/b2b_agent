@@ -38,6 +38,6 @@ CI's `web` job runs `npm ci`, `tsc --noEmit`, `vitest run`, the generated-types 
 ## Open items for the website
 
 - Component tests render static markup; no test drives a click or an effect in a real DOM (jsdom). The review fixes were tested through pure functions and rendered states.
-- Firm-wide settings (02-ui.md `/app/settings`: a default threshold and a notification email) have no API route; the console offers per-program thresholds and Clerk's organization page.
+- Firm-wide settings (02-ui.md `/app/settings`: a default threshold and a notification email) have no API route; the console offers per-product thresholds and the company name under Billing (plan v3 has no organizations).
 - Playwright end-to-end tests are not written.
 - The site is live at https://recallops-five.vercel.app (Vercel project `recallops`, root directory `apps/web`): every push to `main` deploys it and every pull request gets a preview. The public homepage at `/` was added at deploy time (`src/app/page.tsx`, content in `src/lib/home-content.ts`); `docs/DEPLOY.md` covers the rest.

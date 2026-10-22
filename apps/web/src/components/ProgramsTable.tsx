@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import type { Program } from "@/lib/api-types";
 import { formatCount, formatDate, formatPercent } from "@/lib/format";
+import { productNote } from "@/lib/products";
 import { programMetrics } from "@/lib/programs";
 
 import { StatusBadge } from "./StatusBadge";
@@ -12,7 +13,7 @@ const num = "px-3 py-2 text-right tabular-nums";
 export function ProgramsTable({ programs }: { programs: readonly Program[] }) {
   return (
     <>
-      <ul className="grid gap-2 md:hidden" aria-label="Recall programs">
+      <ul className="grid gap-2 md:hidden" aria-label="Products">
         {programs.map((p) => {
           const m = programMetrics(p);
           return (
@@ -22,6 +23,7 @@ export function ProgramsTable({ programs }: { programs: readonly Program[] }) {
                   <span className="font-medium text-accent">{p.title}</span>
                   <StatusBadge kind="program" value={p.status} />
                 </span>
+                {productNote(p) ? <span className="mt-1 block text-xs font-medium text-warn-ink">{productNote(p)}</span> : null}
                 <span className="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 text-xs">
                   <span className="text-ink-muted">Units affected</span>
                   <span className="text-right tabular-nums">{formatCount(p.units_affected)}</span>
@@ -41,10 +43,10 @@ export function ProgramsTable({ programs }: { programs: readonly Program[] }) {
       </ul>
       <div className="hidden overflow-x-auto rounded-lg border border-line bg-surface md:block">
       <table className="w-full min-w-[720px] border-collapse text-sm">
-        <caption className="sr-only">Recall programs</caption>
+        <caption className="sr-only">Products</caption>
         <thead className="border-b border-line bg-panel">
           <tr>
-            <th scope="col" className={th}>Program</th>
+            <th scope="col" className={th}>Product</th>
             <th scope="col" className={th}>Status</th>
             <th scope="col" className={`${th} text-right`}>Units affected</th>
             <th scope="col" className={`${th} text-right`}>Claims filed</th>
@@ -65,6 +67,7 @@ export function ProgramsTable({ programs }: { programs: readonly Program[] }) {
                 </th>
                 <td className="px-3 py-2">
                   <StatusBadge kind="program" value={p.status} />
+                  {productNote(p) ? <span className="mt-1 block text-xs font-medium text-warn-ink">{productNote(p)}</span> : null}
                 </td>
                 <td className={num}>{formatCount(p.units_affected)}</td>
                 <td className={num}>{formatCount(m.filed)}</td>

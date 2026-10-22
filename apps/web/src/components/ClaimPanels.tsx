@@ -141,7 +141,7 @@ export function PhotoEvidence({
 /** Why a claim waits for a person (decision.hold_reason, the backend's fixed vocabulary). */
 const HOLD_REASON: Record<string, string> = {
   flagged: "Flagged as a possible duplicate or fraud.",
-  over_value_threshold: "The refund is above this program's review threshold.",
+  over_value_threshold: "The refund is above this product's review threshold.",
   model_disagrees_with_rules: "The AI would be more lenient than the rules checklist, so a person decides.",
   capped: "The automated run hit its step, cost, or time limit.",
   failed: "The automated run failed.",
@@ -149,6 +149,8 @@ const HOLD_REASON: Record<string, string> = {
   shared_mailing_address: "The check would go to an address another claim also uses.",
   claimant_reply: "The claimant replied with a note but changed no detail or photo. Read the note and decide.",
   repeated_question: "The AI would have asked the claimant again. Read the thread and decide, or ask your own question.",
+  agent_unavailable:
+    "The AI agent was not available (this product's daily limit, or the model budget), so the rules checklist approved without reading the photos. Check the photos and decide.",
 };
 
 export function DecisionPanel({ claimId, decision, decidedAt }: { claimId: string; decision: Decision | null; decidedAt: string | null }) {
@@ -232,7 +234,14 @@ export function DecisionPanel({ claimId, decision, decidedAt }: { claimId: strin
   );
 }
 
-const METHOD_LABEL: Record<string, string> = { stripe_connect: "Stripe transfer", check_export: "Mailed check", ach_export: "ACH export" };
+const METHOD_LABEL: Record<string, string> = { stripe_connect: "Bank transfer (Stripe)", check_export: "Mailed check", ach_export: "ACH export" };
+
+/** What a refund waits for while the claimant decides (plan v3: every plan offers both ways, and a refund nobody
+ *  finishes choosing becomes a mailed check after a deadline). */
+const PAYOUT_WAITING: Record<string, string> = {
+  pending: "Waiting for the claimant to choose a bank transfer or a mailed check. With no choice by the deadline, a check is mailed.",
+  onboarding: "Waiting for the claimant to finish setting up the bank transfer. If they do not finish by the deadline, a check is mailed.",
+};
 
 export function PayoutPanel({ payout, remedy }: { payout: PayoutView | null; remedy: string | null }) {
   if (!payout) {
@@ -266,6 +275,11 @@ export function PayoutPanel({ payout, remedy }: { payout: PayoutView | null; rem
       </dl>
       {payout.status === "transferred" ? (
         <p className="mt-1 text-xs text-ink-muted">Transferred means Stripe accepted the transfer, not that the bank received it.</p>
+      ) : null}
+      {Object.hasOwn(PAYOUT_WAITING, payout.status) ? (
+        <p className="mt-1 text-xs text-ink-muted" data-payout-waiting>
+          {PAYOUT_WAITING[payout.status]}
+        </p>
       ) : null}
     </Panel>
   );
@@ -314,7 +328,7 @@ export function FraudPanel({
       )}
       {any && programId ? (
         <p className="mt-3 text-xs">
-          <Link href={`/app/programs/${programId}/fraud`}>See every fraud ring in this program</Link>
+          <Link href={`/app/programs/${programId}/fraud`}>See every fraud ring in this product</Link>
         </p>
       ) : null}
     </Panel>

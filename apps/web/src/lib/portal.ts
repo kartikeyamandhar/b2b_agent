@@ -1,10 +1,12 @@
-// Claim portal rules (02-ui.md /claim/[token]): steps, validation, resumable drafts, plain-language status, and the
-// post-approval payout choice. Pure, so it is unit-tested. The backend stays the authority on every rule here.
+// Claim portal rules (02-ui.md /claim/[token]): steps, validation, resumable drafts, plain-language status, the
+// post-approval payout choice, and what this device remembers about the claims it started. Pure, so it is
+// unit-tested, and safe for client components (no server imports). The backend stays the authority on every rule.
 import { PortalSubmit, type PortalAnswer, type PortalAnswerField, type PortalView } from "@/lib/api-types";
+import type { ApiProblem } from "@/lib/api/problem";
 import { portalSentence } from "@/lib/portal-copy";
 import { isStripeHostedUrl } from "@/lib/stripe-url";
 
-/** Claim links are opaque bearer tokens (dev.<firm>.<claim> today, HMAC from component 4 later). */
+/** Claim links are opaque bearer tokens (dev.<firm>.<claim> in development, 96 characters of HMAC otherwise). */
 const TOKEN = /^[A-Za-z0-9._~-]{8,512}$/;
 
 export function isPlausibleToken(token: string): boolean {
@@ -13,6 +15,20 @@ export function isPlausibleToken(token: string): boolean {
 
 export function portalPath(token: string, action = ""): string {
   return `/portal/${encodeURIComponent(token)}${action ? `/${action}` : ""}`;
+}
+
+/** The claimant's private claim page, and its full address for copying, sharing, and the QR code. */
+export function claimPagePath(token: string): string {
+  return `/claim/${encodeURIComponent(token)}`;
+}
+
+export function claimUrl(origin: string, token: string): string {
+  return `${origin.replace(/\/+$/, "")}${claimPagePath(token)}`;
+}
+
+/** The API route behind a product's public claim link (plan v3): GET shows the product, POST starts a claim. */
+export function intakePath(token: string): string {
+  return `/portal/intake/${encodeURIComponent(token)}`;
 }
 
 export const STEPS = [
@@ -182,6 +198,30 @@ export function missingPhotos(required: readonly string[], uploaded: readonly st
   return required.filter((k) => !uploaded.includes(k));
 }
 
+/** The photos a claim form asks for: the program's, with the label photo always first, because the API refuses to
+ *  submit any claim without one (plan v3). */
+export function claimPhotoKinds(required: readonly string[]): string[] {
+  return ["label", ...required.filter((k) => k !== "label")];
+}
+
+export const LABEL_PHOTO_REASON = "Add a photo of the product's label before you submit.";
+
+/** Why Submit is disabled, or null when it may be pressed: the label photo must be on the server first. */
+export function submitBlockedReason(uploaded: readonly string[]): string | null {
+  return uploaded.includes("label") ? null : LABEL_PHOTO_REASON;
+}
+
+/** A failed submit in words. The API answers 409 only while the label photo is missing, and its own sentence says so
+ *  ("add a photo of the product's label before submitting"); anything else gets the portal sentence. */
+export function submitSentence(problem: Pick<ApiProblem, "status" | "detail">): string {
+  const detail = problem.detail?.trim();
+  if (problem.status === 409 && detail && /label/i.test(detail)) {
+    const s = capitalize(detail);
+    return /[.!?]$/.test(s) ? s : `${s}.`;
+  }
+  return portalSentence(problem.status);
+}
+
 const PHOTO_LABEL: Record<string, string> = { label: "label", destruction: "destruction", receipt: "receipt", other: "additional" };
 export function photoKindLabel(kind: string): string {
   return Object.hasOwn(PHOTO_LABEL, kind) ? PHOTO_LABEL[kind]! : kind;
@@ -257,7 +297,7 @@ export function instructionReadsAsSentence(text: string): boolean {
   return straight % 2 === 0 && opening === closing;
 }
 
-export function photoHint(kind: string, program: PortalView["program"]): string {
+export function photoHint(kind: string, program: Pick<PortalView["program"], "model_label_location" | "destruction_instruction">): string {
   if (kind === "label") {
     return program.model_label_location
       ? `Photograph the label with the model number. It is ${program.model_label_location}.`
@@ -282,13 +322,16 @@ export function remedyPromise(remedyType: string | null | undefined): string {
     case "refund":
       return "If your claim is approved, you receive a refund.";
     case "repair":
-      return "If your claim is approved, the firm repairs your product for free.";
+      return "If your claim is approved, the company repairs your product for free.";
     case "replacement":
-      return "If your claim is approved, the firm replaces your product for free.";
+      return "If your claim is approved, the company replaces your product for free.";
     default:
-      return "If your claim is approved, the firm tells you which remedy applies to you.";
+      return "If your claim is approved, the company tells you which remedy applies to you.";
   }
 }
+
+/** How an approved refund reaches the claimant: always their choice, on every plan (plan v3). */
+export const REFUND_CHOICE = "After approval you choose how to receive it: a bank transfer or a mailed check.";
 
 // ---- Resumable drafts (fields only; photos are saved server-side as soon as they upload) ----
 
@@ -348,7 +391,7 @@ export function plainStatus(view: Pick<PortalView, "status" | "program" | "payou
     case "approved":
       return { title: "Your claim was approved", body: approvedNextStep(view.program.remedy_type, view.payout_status), tone: "good" };
     case "denied":
-      return { title: "Your claim was not approved", body: "The reasons are below. If you think this is wrong, contact the firm that sent you this link.", tone: "attention" };
+      return { title: "Your claim was not approved", body: "The reasons are below. If you think this is wrong, contact the company running this recall.", tone: "attention" };
     case "paid":
       return { title: "Your refund was sent", body: "Your claim is complete.", tone: "good" };
     case "closed":
@@ -379,9 +422,15 @@ export function localDateTime(value: string, opts: { locale?: string; timeZone?:
 
 function approvedNextStep(remedyType: string | null | undefined, payoutStatus: string | null | undefined): string {
   if (payoutStatus) return "Choose how you want to receive your refund, or check its progress below.";
-  if (remedyType === "repair") return "The firm will contact you to arrange your free repair.";
-  if (remedyType === "replacement") return "The firm will contact you to arrange your free replacement.";
-  return "The firm will contact you about your remedy.";
+  if (remedyType === "repair") return "The company will contact you to arrange your free repair.";
+  if (remedyType === "replacement") return "The company will contact you to arrange your free replacement.";
+  return "The company will contact you about your remedy.";
+}
+
+/** Who wrote a message in the claim's thread, as the claimant reads it. */
+export function senderName(sender: string, companyName: string | null | undefined): string {
+  if (sender === "claimant") return "You";
+  return companyName?.trim() || "The company";
 }
 
 /** Payout states in which the claimant may still choose or change the destination (portal.py CHOOSABLE). */
@@ -431,9 +480,24 @@ export function payoutSentence(status: number): string {
   return portalSentence(status);
 }
 
-/** After a payout error: 402 means the firm's plan pays refunds by mailed check only, so the form switches to it. */
-export function methodAfterPayoutError(status: number, method: "check_export" | "stripe_connect"): "check_export" | "stripe_connect" {
-  return status === 402 ? "check_export" : method;
+const LONG_DATE = new Intl.DateTimeFormat("en-US", { dateStyle: "long", timeZone: "UTC" });
+
+/** A deadline for people ("November 4, 2026"): one fixed en-US form, the same in the server HTML and the browser. A
+ *  YYYY-MM-DD date is read as that calendar day, never shifted by a time zone. */
+export function longDate(value: string): string {
+  const d = new Date(/^\d{4}-\d{2}-\d{2}$/.test(value) ? `${value}T00:00:00Z` : value);
+  return Number.isNaN(d.getTime()) ? value : LONG_DATE.format(d);
+}
+
+/**
+ * The day a bank-transfer refund still waiting on the claimant becomes a mailed check (PortalView.payout_choice_due,
+ * set only while the refund is pending or in Stripe setup). Null when there is no deadline to show.
+ */
+export function payoutDueSentence(status: string | null | undefined, due: string | null | undefined): string | null {
+  if (!due) return null;
+  const when = longDate(due);
+  if (status === "onboarding") return `Finish your bank setup by ${when}. After that we mail a check to your address.`;
+  return `Choose by ${when}. After that we mail a check to your address.`;
 }
 
 /** Only a Stripe-hosted https page may receive the claimant (Account Links are ephemeral bearer URLs). */
@@ -470,6 +534,9 @@ export function handOffToStripe(url: string, token: string, assign: (url: string
   assign(url);
 }
 
+/** The claim a Stripe return or refresh belongs to: only the one this tab sent to Stripe, read once. Stripe coming back
+ *  in another tab finds none, and the claimant opens their private link; no claim this device remembers stands in,
+ *  because on a shared device it could be someone else's (review F2). */
 export function takeConnectClaim(store: DraftStore | null): string | null {
   try {
     const t = store?.getItem(RETURN_KEY) ?? null;
@@ -478,6 +545,129 @@ export function takeConnectClaim(store: DraftStore | null): string | null {
   } catch {
     return null;
   }
+}
+
+// ---- What this device remembers (plan v3). A claim's private link is the only way back to it, so each product link
+// remembers the claim this device started there, for a short time. Nothing else is kept across tabs: on a shared
+// device the next person must never reach the previous claimant's claim (review F2). Best effort: with site data
+// blocked or cleared the claimant uses the link they saved, and every page works without it.
+
+/** localStorage as this module uses it: read and write one key, or list them all to forget a claim. */
+export type DeviceStore = DraftStore & Pick<Storage, "length" | "key">;
+
+/** This browser's localStorage, or null when site data is blocked (reading the property itself can throw). */
+export function localStore(): DeviceStore | null {
+  try {
+    return typeof window === "undefined" ? null : window.localStorage;
+  } catch {
+    return null;
+  }
+}
+
+/** A product link remembers the claim it started for 48 hours: long enough to come back and finish it (unsubmitted
+ *  drafts are deleted after 48 hours anyway), short enough that a shared device soon stops offering it. */
+export const DEVICE_MEMORY_MS = 48 * 60 * 60 * 1000;
+
+const DEVICE_PREFIX = "recallops.";
+const startedKey = (intakeToken: string) => `recallops.intake.${intakeToken}`;
+
+type Remembered = { claim_token: string; at: number };
+
+function readRemembered(store: DraftStore | null, key: string, now: number): string | null {
+  try {
+    const raw = store?.getItem(key);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as Partial<Remembered> | null;
+    const token = parsed?.claim_token;
+    const at = parsed?.at;
+    if (typeof token !== "string" || !isPlausibleToken(token) || typeof at !== "number" || !Number.isFinite(at)) return null;
+    return now - at <= DEVICE_MEMORY_MS ? token : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeRemembered(store: DraftStore | null, key: string, claimToken: string, now: number): void {
+  if (!isPlausibleToken(claimToken)) return;
+  try {
+    store?.setItem(key, JSON.stringify({ claim_token: claimToken, at: now } satisfies Remembered));
+  } catch {
+    // private mode or a full store: the claimant keeps their link instead
+  }
+}
+
+/** Remembers the claim this device started from one product link, replacing an earlier one from the same link. */
+export function rememberStartedClaim(store: DraftStore | null, intakeToken: string, claimToken: string, now = Date.now()): void {
+  writeRemembered(store, startedKey(intakeToken), claimToken, now);
+}
+
+/** The claim this device started from this product link, if it is recent enough to still open. */
+export function startedClaim(store: DraftStore | null, intakeToken: string, now = Date.now()): string | null {
+  return readRemembered(store, startedKey(intakeToken), now);
+}
+
+function rememberedToken(raw: string | null): string | null {
+  if (!raw) return null;
+  try {
+    const token = (JSON.parse(raw) as Partial<Remembered> | null)?.claim_token;
+    return typeof token === "string" ? token : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * "Forget this claim on this device": removes every reference this browser keeps to one claim, so a shared device
+ * stops offering it. That is each product link's memory of it (whatever its age), this tab's Stripe return marker, and
+ * this tab's unsent form fields when the claim id is known. False when the browser refused, so the page can say so.
+ */
+export function forgetClaim(local: DeviceStore | null, session: DraftStore | null, claimToken: string, claimId: string | null = null): boolean {
+  let ok = true;
+  try {
+    if (local) {
+      const keys: string[] = [];
+      for (let i = 0; i < local.length; i += 1) {
+        const key = local.key(i);
+        if (key?.startsWith(DEVICE_PREFIX)) keys.push(key);
+      }
+      // Removed after the scan, because removing shifts the indexes key() reads.
+      for (const key of keys) if (rememberedToken(local.getItem(key)) === claimToken) local.removeItem(key);
+    }
+  } catch {
+    ok = false;
+  }
+  try {
+    if (session?.getItem(RETURN_KEY) === claimToken) session.removeItem(RETURN_KEY);
+    if (claimId) session?.removeItem(draftKey(claimId));
+  } catch {
+    ok = false;
+  }
+  return ok;
+}
+
+export const FORGET_LABEL = "Forget this claim on this device";
+export const FORGOT_TEXT = "This device no longer remembers this claim. Your private link still opens it.";
+export const FORGET_FAILED_TEXT = "This browser did not let the page clear what it stored. Clear this site's data in your browser settings instead.";
+
+// ---- Starting a claim from a product link
+
+/** "1 minute", "12 minutes", "2 hours": a Retry-After in seconds, rounded up, in words. */
+export function waitWords(seconds: number | null | undefined): string {
+  if (seconds === null || seconds === undefined || !Number.isFinite(seconds)) return "a few minutes";
+  const minutes = Math.max(1, Math.ceil(seconds / 60));
+  if (minutes < 60) return minutes === 1 ? "1 minute" : `${minutes} minutes`;
+  const hours = Math.ceil(minutes / 60);
+  return hours === 1 ? "1 hour" : `${hours} hours`;
+}
+
+/** A 429 from starting a claim: the API limits new claims per network and per product link each hour. */
+export function startLimitSentence(retryAfterSeconds: number | null | undefined): string {
+  return `Too many claims were started from this link or this network in a short time. Try again in ${waitWords(retryAfterSeconds)}.`;
+}
+
+/** A failed start in words (a 404 is not here: the page shows the link as not active instead). */
+export function startSentence(problem: Pick<ApiProblem, "status" | "retryAfterSeconds">): string {
+  return problem.status === 429 ? startLimitSentence(problem.retryAfterSeconds) : portalSentence(problem.status);
 }
 
 /** Polling budget for the status page: 60 portal requests per link per hour (guards.py), so at most 8 refreshes. */

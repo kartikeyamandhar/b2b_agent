@@ -60,11 +60,10 @@ class StubJwks:
         return _SigningKey(KEY.public_key())
 
 
-def session(org: str | None, role: str = "admin", user: str = "user_e2e") -> dict[str, str]:
+def session(user: str = "user_e2e") -> dict[str, str]:
+    """A Clerk session for one account, which is one company (plan v3: no organizations)."""
     now = int(time.time())
     claims: dict[str, Any] = {"sub": user, "iss": ISSUER, "azp": ORIGIN, "iat": now, "nbf": now - 5, "exp": now + 60}
-    if org is not None:
-        claims |= {"v": 2, "o": {"id": org, "rol": role, "slg": org}}
     return {"Authorization": "Bearer " + jwt.encode(claims, KEY, algorithm="RS256", headers={"kid": KID})}
 
 
@@ -93,7 +92,9 @@ def world(internal_engine_test: Engine, app_engine_test: Engine) -> Iterator[dic
             "CLERK_JWKS_URL": "",
             "CLERK_ALLOWED_ORIGINS": ORIGIN,
             "PORTAL_BASE_URL": PORTAL,
-            "SEED_CLERK_ORG_ID": "org_demo",
+            "SEED_CLERK_USER_ID": "user_e2e",
+            "PLATFORM_OPERATOR_USER_IDS": "",
+            "PLATFORM_OPERATOR_EMAILS": "",
         }.items():
             mp.setenv(key, value)
         mp.setattr(clerk_module.ClerkAuthProvider, "__init__", stub_keys)
@@ -104,14 +105,14 @@ def world(internal_engine_test: Engine, app_engine_test: Engine) -> Iterator[dic
                 conn.execute(text("SELECT set_config('app.audit_purge', 'on', true)"))
                 for table in CLEAN_ORDER:
                     conn.execute(text(f"DELETE FROM {table}"))
-            # The admin signs in before seeding, which creates an empty firm for the organization.
+            # The account signs in before seeding, which creates an empty company for it.
             early = ClerkAuthProvider(get_settings(), engine=app_engine_test).firm_context(
-                ClerkPrincipal(user_id="user_e2e", firm_id=None, role="admin", org_id="org_demo", org_slug="demo")
+                ClerkPrincipal(user_id="user_e2e", firm_id=None, role="admin")
             )
             seeded = seed.run(internal_engine_test, n=3)
             with internal_engine_test.begin() as conn:
                 conn.execute(
-                    text("UPDATE firms SET clerk_org_id = 'org_other' WHERE id = :f"), {"f": seed.OTHER_FIRM_ID}
+                    text("UPDATE firms SET clerk_user_id = 'user_other' WHERE id = :f"), {"f": seed.OTHER_FIRM_ID}
                 )
             from recallops.api.app import create_app
 
@@ -122,27 +123,25 @@ def world(internal_engine_test: Engine, app_engine_test: Engine) -> Iterator[dic
     _clear()
 
 
-def test_the_seed_takes_over_the_organization_from_an_earlier_sign_in(world: dict[str, Any]) -> None:
+def test_the_seed_takes_over_the_account_from_an_earlier_sign_in(world: dict[str, Any]) -> None:
     with world["db"].connect() as conn:
-        bound = dict(conn.execute(text("SELECT id, clerk_org_id FROM firms")).all())
-    assert bound[seed.DEMO_FIRM_ID] == "org_demo"
+        bound = dict(conn.execute(text("SELECT id, clerk_user_id FROM firms")).all())
+    assert bound[seed.DEMO_FIRM_ID] == "user_e2e"
     assert bound[world["early_firm"]] is None  # left unbound, never deleted
 
 
 def test_sessions_reach_only_their_own_firm(world: dict[str, Any]) -> None:
     c, claim = world["client"], world["seeded"]["demo"]["first_claim_id"]
-    assert c.get(f"/v1/claims/{claim}", headers=session("org_demo")).status_code == 200
-    assert c.get(f"/v1/claims/{claim}", headers=session("org_other")).status_code == 404
-    assert c.get(f"/v1/claims/{claim}", headers=session("org_new")).status_code == 404  # a brand-new firm
+    assert c.get(f"/v1/claims/{claim}", headers=session()).status_code == 200
+    assert c.get(f"/v1/claims/{claim}", headers=session("user_other")).status_code == 404
+    assert c.get(f"/v1/claims/{claim}", headers=session("user_new")).status_code == 404  # a brand-new firm
     assert c.get("/v1/programs").status_code == 401
     dev_headers = {"X-Dev-Firm-Id": str(seed.DEMO_FIRM_ID), "X-Dev-Role": "admin"}
     assert c.get("/v1/programs", headers=dev_headers).status_code == 401  # the dev seam is off
-    member = c.get("/v1/programs", headers=session("org_demo", "org:member"))
-    assert member.status_code == 403 and "org:admin or org:reviewer" in member.json()["detail"]
 
 
 def _issue(c: TestClient, program_id: str) -> tuple[str, str]:
-    response = c.post(f"/v1/programs/{program_id}/claims/issue", json={"n": 1}, headers=session("org_demo"))
+    response = c.post(f"/v1/programs/{program_id}/claims/issue", json={"n": 1}, headers=session())
     assert response.status_code == 200, response.text
     link = response.json()["links"][0]
     return link["claim_id"], link["url"]
@@ -150,9 +149,7 @@ def _issue(c: TestClient, program_id: str) -> tuple[str, str]:
 
 def test_signed_links_open_once_issued_and_refuse_tampering(world: dict[str, Any]) -> None:
     c, program_id = world["client"], world["seeded"]["demo"]["program_id"]
-    reviewer = session("org_demo", "reviewer", user="user_reviewer")
-    assert c.post(f"/v1/programs/{program_id}/claims/issue", json={"n": 1}, headers=reviewer).status_code == 403
-    other = session("org_other")
+    other = session("user_other")
     assert c.post(f"/v1/programs/{program_id}/claims/issue", json={"n": 1}, headers=other).status_code == 404
     _, url = _issue(c, program_id)
     assert url.startswith(PORTAL + "/")
@@ -167,12 +164,11 @@ def test_a_reissued_link_replaces_the_old_one(world: dict[str, Any]) -> None:
     c, program_id = world["client"], world["seeded"]["demo"]["program_id"]
     claim_id, first = _issue(c, program_id)
     old = first.removeprefix(PORTAL + "/")
-    assert c.post(f"/v1/claims/{claim_id}/link", headers=session("org_demo", "reviewer")).status_code == 403
-    assert c.post(f"/v1/claims/{claim_id}/link", headers=session("org_other")).status_code == 404
-    assert c.post(f"/v1/claims/{uuid4()}/link", headers=session("org_demo")).status_code == 404
-    same = c.post(f"/v1/claims/{claim_id}/link", headers=session("org_demo"))  # the issuing second: same token
+    assert c.post(f"/v1/claims/{claim_id}/link", headers=session("user_other")).status_code == 404
+    assert c.post(f"/v1/claims/{uuid4()}/link", headers=session()).status_code == 404
+    same = c.post(f"/v1/claims/{claim_id}/link", headers=session())  # the issuing second: same token
     CLOCK.now += 5
-    response = c.post(f"/v1/claims/{claim_id}/link", headers=session("org_demo"))
+    response = c.post(f"/v1/claims/{claim_id}/link", headers=session())
     assert same.status_code == response.status_code == 200 and response.json()["claim_id"] == claim_id
     new = response.json()["url"].removeprefix(PORTAL + "/")
     assert new != old
@@ -193,17 +189,17 @@ def test_closing_the_program_kills_links_and_refuses_reissue(world: dict[str, An
     """Runs last in this module: it closes the demo program."""
     c, program_id = world["client"], world["seeded"]["demo"]["program_id"]
     claim_id, url = _issue(c, program_id)
-    closed = c.patch(f"/v1/programs/{program_id}", json={"status": "closed"}, headers=session("org_demo"))
+    closed = c.patch(f"/v1/programs/{program_id}", json={"status": "closed"}, headers=session())
     assert closed.status_code == 200, closed.text
     assert c.get(url.replace(PORTAL, "/portal")).status_code == 404
-    refused = c.post(f"/v1/claims/{claim_id}/link", headers=session("org_demo"))
+    refused = c.post(f"/v1/claims/{claim_id}/link", headers=session())
     assert refused.status_code == 409 and "closed" in refused.json()["detail"]
 
 
-def test_the_operator_by_email_with_and_without_an_organization(world: dict[str, Any]) -> None:
-    """Owner decision 2026-10-22, end to end with Clerk session tokens: the account with the listed verified address is
-    the operator with no organization (the queue) and inside a new one (the console opens with no approval), while
-    any other account is gated as before; a Clerk outage fails closed with one lookup per account per window."""
+def test_the_operator_by_email_has_no_company_and_a_clerk_outage_creates_none(world: dict[str, Any]) -> None:
+    """Plan v3, end to end with Clerk session tokens: the account with the listed verified address is the operator and
+    never a company; any other new account becomes its own company, gated until approved; while Clerk cannot be asked,
+    a new account is answered 503 and nothing is created, and existing companies keep working without Clerk."""
     users = {"user_ops": "Kartikeya.Mandhar777@gmail.com", "user_e2e": "admin@demo.example"}
     calls: list[str] = []
     down = [False]
@@ -217,7 +213,7 @@ def test_the_operator_by_email_with_and_without_an_organization(world: dict[str,
         verified = {"id": "idn_1", "email_address": address, "verification": {"status": "verified"}}
         return httpx.Response(200, json={"primary_email_address_id": "idn_1", "email_addresses": [verified]})
 
-    c = world["client"]
+    c, db = world["client"], world["db"]
     with pytest.MonkeyPatch.context() as mp:
         mp.setenv("ACCESS_APPROVAL", "required")
         mp.setenv("PLATFORM_OPERATOR_EMAILS", "kartikeyamandhar777@gmail.com")
@@ -225,26 +221,33 @@ def test_the_operator_by_email_with_and_without_an_organization(world: dict[str,
         mp.setattr("recallops.access._clerk_http", httpx.Client(transport=httpx.MockTransport(clerk_users)))
         access._clerk_cache.clear()
         get_settings.cache_clear()
+        deps.build_provider.cache_clear()
         try:
-            assert c.get("/v1/operator/access", headers=session(None, user="user_ops")).status_code == 200
-            assert c.get("/v1/operator/access", headers=session(None, user="user_nobody")).status_code == 403
-            own = session("org_operator", user="user_ops")
-            status = c.get("/v1/access", headers=own).json()
-            assert status["operator"] is True and status["approved"] is False
-            assert c.get("/v1/programs", headers=own).status_code == 200  # the gate lets the operator through
-            stranger = session("org_stranger", user="user_stranger")
-            assert c.get("/v1/access", headers=stranger).json()["operator"] is False
-            assert c.get("/v1/programs", headers=stranger).status_code == 403
-            assert c.get("/v1/programs", headers=session("org_demo")).status_code == 200  # approved by the seed
-            assert len(calls) == len(set(calls))  # one lookup per account, then the cache
+            me = c.get("/v1/me", headers=session("user_ops")).json()
+            assert me["operator"] is True and me["firm"] is None
+            assert c.get("/v1/operator/access", headers=session("user_ops")).status_code == 200
+            console = c.get("/v1/programs", headers=session("user_ops"))
+            assert console.status_code == 403 and "operator" in console.json()["detail"]
+            assert c.get("/v1/operator/access", headers=session("user_nobody")).status_code == 403
+            stranger = c.get("/v1/me", headers=session("user_stranger")).json()
+            assert stranger["operator"] is False and stranger["firm"]["onboarded"] is False
+            assert stranger["firm"]["approved"] is False and stranger["firm"]["name"] == "New company"
+            assert c.get("/v1/programs", headers=session("user_stranger")).status_code == 403  # gated
+            assert c.get("/v1/programs", headers=session()).status_code == 200  # approved by the seed
 
             access._clerk_cache.clear()
+            deps.build_provider.cache_clear()
             down[0] = True
-            before = len(calls)
-            for _ in range(3):
-                assert c.get("/v1/operator/access", headers=session(None, user="user_ops")).status_code == 403
-                assert c.get("/v1/programs", headers=stranger).status_code == 403
-            assert len(calls) - before == 2  # one failed lookup per account, kept for the window
+            assert c.get("/v1/me", headers=session("user_fresh")).status_code == 503
+            assert c.get("/v1/programs", headers=session("user_fresh")).status_code == 503
+            assert c.get("/v1/operator/access", headers=session("user_ops")).status_code == 403  # fails closed
+            assert c.get("/v1/me", headers=session()).status_code == 200  # an existing company needs no Clerk
+            with db.connect() as conn:
+                created = conn.execute(
+                    text("SELECT count(*) FROM firms WHERE clerk_user_id IN ('user_ops', 'user_fresh')")
+                ).scalar_one()
+            assert created == 0
         finally:
             access._clerk_cache.clear()
     get_settings.cache_clear()
+    deps.build_provider.cache_clear()

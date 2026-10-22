@@ -37,7 +37,8 @@ export function ExportBatchTable({ items }: { items: readonly ExportBatchSummary
   if (items.length === 0) {
     return (
       <EmptyState title="No export batches yet">
-        When claimants choose a mailed check, their approved refunds wait here until you create a batch for your bank.
+        When a claimant chooses a mailed check, or does not finish a bank transfer by the deadline, their approved refund
+        waits for a batch you create here for your bank.
       </EmptyState>
     );
   }

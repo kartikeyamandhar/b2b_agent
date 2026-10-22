@@ -79,8 +79,25 @@
                 "type": "null"
               }
             ],
-            "description": "a typed notice's program, once created from this request",
+            "description": "the product made from this request (opened on approval)",
             "title": "Program Id"
+          },
+          "program_status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "draft",
+                  "open",
+                  "closed"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "that product's status; draft means it still needs something (a plan, a refund amount)",
+            "title": "Program Status"
           },
           "recall_id": {
             "anyOf": [
@@ -133,7 +150,7 @@
                 "type": "null"
               }
             ],
-            "description": "the typed notice's text, as this organization sent it",
+            "description": "the typed notice's text, as this company sent it",
             "title": "Typed Notice"
           }
         },
@@ -184,12 +201,12 @@
         "additionalProperties": false,
         "properties": {
           "approved": {
-            "description": "the organization holds at least one approved recall: the console is open (for the operator too)",
+            "description": "the company holds at least one approved recall: the console is open",
             "title": "Approved",
             "type": "boolean"
           },
           "operator": {
-            "description": "the caller is the platform operator: approves organizations, passes the console gate, and the organization they act in is approved for a recall the moment they ask (unless another organization holds it)",
+            "description": "always false for a company (the operator has none; read GET /v1/me)",
             "title": "Operator",
             "type": "boolean"
           },
@@ -407,9 +424,17 @@
       "CampaignSummary": {
         "additionalProperties": false,
         "properties": {
-          "claim_links": {
-            "title": "Claim Links",
-            "type": "integer"
+          "claim_link": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "the product's claim link every notice carries",
+            "title": "Claim Link"
           },
           "matched": {
             "title": "Matched",
@@ -450,7 +475,6 @@
           "registrations",
           "matched",
           "unmatched",
-          "claim_links",
           "notifications",
           "sample"
         ],
@@ -1189,7 +1213,7 @@
                 "type": "null"
               }
             ],
-            "description": "why the claim waits for a person: flagged, over_value_threshold, model_disagrees_with_rules, capped, failed, payout_held_needs_review, shared_mailing_address (CHANGES item 6), claimant_reply, repeated_question (CHANGES item 53)",
+            "description": "why the claim waits for a person: flagged, over_value_threshold, model_disagrees_with_rules, capped, failed, payout_held_needs_review, shared_mailing_address (CHANGES item 6), claimant_reply, repeated_question (CHANGES item 53), agent_unavailable (CHANGES item 57)",
             "title": "Hold Reason"
           },
           "outcome": {
@@ -1304,6 +1328,22 @@
           "sha256"
         ],
         "title": "ExportBatchSummary",
+        "type": "object"
+      },
+      "FirmPatch": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "FirmPatch",
         "type": "object"
       },
       "FraudGraphEdge": {
@@ -1579,37 +1619,138 @@
         "title": "IdentificationRules",
         "type": "object"
       },
-      "IssueRequest": {
+      "IntakeStarted": {
         "additionalProperties": false,
         "properties": {
-          "n": {
-            "maximum": 10000.0,
-            "minimum": 1.0,
-            "title": "N",
-            "type": "integer"
+          "claim_id": {
+            "format": "uuid",
+            "title": "Claim Id",
+            "type": "string"
+          },
+          "claim_token": {
+            "description": "the claimant's private claim link token: keep it, it is the only way back",
+            "title": "Claim Token",
+            "type": "string"
+          },
+          "claim_url": {
+            "title": "Claim Url",
+            "type": "string"
           }
         },
         "required": [
-          "n"
+          "claim_id",
+          "claim_token",
+          "claim_url"
         ],
-        "title": "IssueRequest",
+        "title": "IntakeStarted",
         "type": "object"
       },
-      "IssueResponse": {
+      "IntakeView": {
         "additionalProperties": false,
         "properties": {
-          "links": {
+          "company_name": {
+            "title": "Company Name",
+            "type": "string"
+          },
+          "contact": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contact"
+          },
+          "destruction_instruction": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Destruction Instruction"
+          },
+          "model_label_location": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Label Location"
+          },
+          "models": {
             "items": {
-              "$ref": "#/components/schemas/IssuedLink"
+              "type": "string"
             },
-            "title": "Links",
+            "title": "Models",
             "type": "array"
+          },
+          "recall_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recall Number"
+          },
+          "remedy_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Remedy Type"
+          },
+          "required_photos": {
+            "items": {
+              "enum": [
+                "label",
+                "destruction",
+                "receipt"
+              ],
+              "type": "string"
+            },
+            "title": "Required Photos",
+            "type": "array"
+          },
+          "sold_at": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Sold At",
+            "type": "array"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
           }
         },
         "required": [
-          "links"
+          "company_name",
+          "title",
+          "recall_number",
+          "models",
+          "model_label_location",
+          "sold_at",
+          "remedy_type",
+          "destruction_instruction",
+          "required_photos",
+          "contact"
         ],
-        "title": "IssueResponse",
+        "title": "IntakeView",
         "type": "object"
       },
       "IssuedLink": {
@@ -1661,6 +1802,117 @@
           "description"
         ],
         "title": "ManualRecall",
+        "type": "object"
+      },
+      "Me": {
+        "additionalProperties": false,
+        "properties": {
+          "email": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email"
+          },
+          "firm": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MeFirm"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "operator": {
+            "description": "the platform operator: approves companies, has no company",
+            "title": "Operator",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "operator",
+          "email",
+          "firm"
+        ],
+        "title": "Me",
+        "type": "object"
+      },
+      "MeFirm": {
+        "additionalProperties": false,
+        "properties": {
+          "active_products": {
+            "title": "Active Products",
+            "type": "integer"
+          },
+          "approved": {
+            "description": "the operator approved at least one recall for the company",
+            "title": "Approved",
+            "type": "boolean"
+          },
+          "effective_plan": {
+            "description": "free until a Growth Checkout is paid",
+            "title": "Effective Plan",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "onboarded": {
+            "description": "the company named itself and chose a plan",
+            "title": "Onboarded",
+            "type": "boolean"
+          },
+          "plan": {
+            "title": "Plan",
+            "type": "string"
+          },
+          "product_limit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "products the plan allows; none means no limit",
+            "title": "Product Limit"
+          },
+          "subscription_status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subscription Status"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "onboarded",
+          "plan",
+          "effective_plan",
+          "subscription_status",
+          "approved",
+          "active_products",
+          "product_limit"
+        ],
+        "title": "MeFirm",
         "type": "object"
       },
       "MprManual": {
@@ -1973,6 +2225,57 @@
         "title": "MprReport",
         "type": "object"
       },
+      "OnboardingRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "plan": {
+            "enum": [
+              "free",
+              "growth"
+            ],
+            "title": "Plan",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "plan"
+        ],
+        "title": "OnboardingRequest",
+        "type": "object"
+      },
+      "OnboardingResult": {
+        "additionalProperties": false,
+        "properties": {
+          "checkout_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Stripe Checkout for Growth (test mode); none for Free",
+            "title": "Checkout Url"
+          },
+          "firm": {
+            "$ref": "#/components/schemas/MeFirm"
+          }
+        },
+        "required": [
+          "firm",
+          "checkout_url"
+        ],
+        "title": "OnboardingResult",
+        "type": "object"
+      },
       "OperatorAccessRequest": {
         "additionalProperties": false,
         "properties": {
@@ -1985,7 +2288,7 @@
                 "type": "null"
               }
             ],
-            "description": "another organization already approved for the recall",
+            "description": "another company already approved for the recall",
             "title": "Approved Elsewhere"
           },
           "created_at": {
@@ -2021,6 +2324,12 @@
             "title": "Domain Matches",
             "type": "boolean"
           },
+          "firm_active_products": {
+            "default": 0,
+            "description": "the company's products that are not closed",
+            "title": "Firm Active Products",
+            "type": "integer"
+          },
           "firm_id": {
             "format": "uuid",
             "title": "Firm Id",
@@ -2029,6 +2338,18 @@
           "firm_name": {
             "title": "Firm Name",
             "type": "string"
+          },
+          "firm_plan": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "the company's plan",
+            "title": "Firm Plan"
           },
           "id": {
             "format": "uuid",
@@ -2065,6 +2386,17 @@
             },
             "title": "Notice Sites",
             "type": "array"
+          },
+          "product": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProductOutcome"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "after approve or revoke: what happened to the product"
           },
           "recall_id": {
             "anyOf": [
@@ -2104,6 +2436,36 @@
             ],
             "description": "the requester's work-email domain, from Clerk (a hint)",
             "title": "Requester Domain"
+          },
+          "requester_email": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "the requester's email, from Clerk, when they asked",
+            "title": "Requester Email"
+          },
+          "requester_email_verified": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "whether Clerk had verified that email",
+            "title": "Requester Email Verified"
+          },
+          "requester_test_address": {
+            "default": false,
+            "description": "a +clerk_test address: proves nothing about a company",
+            "title": "Requester Test Address",
+            "type": "boolean"
           },
           "status": {
             "enum": [
@@ -2315,6 +2677,89 @@
         "title": "Photo",
         "type": "object"
       },
+      "PlanInfo": {
+        "additionalProperties": false,
+        "properties": {
+          "claim_price_cents": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Claim Price Cents"
+          },
+          "currency": {
+            "title": "Currency",
+            "type": "string"
+          },
+          "id": {
+            "enum": [
+              "free",
+              "growth"
+            ],
+            "title": "Id",
+            "type": "string"
+          },
+          "included_claims": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Included Claims"
+          },
+          "product_limit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Product Limit"
+          },
+          "program_price_cents": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Program Price Cents"
+          },
+          "refund_options": {
+            "items": {
+              "enum": [
+                "stripe_connect",
+                "check_export"
+              ],
+              "type": "string"
+            },
+            "title": "Refund Options",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "product_limit",
+          "program_price_cents",
+          "included_claims",
+          "claim_price_cents",
+          "currency",
+          "refund_options"
+        ],
+        "title": "PlanInfo",
+        "type": "object"
+      },
       "PortalAnswer": {
         "additionalProperties": false,
         "properties": {
@@ -2485,6 +2930,30 @@
       "PortalProgram": {
         "additionalProperties": false,
         "properties": {
+          "company_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "the company running the recall",
+            "title": "Company Name"
+          },
+          "contact": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "how to reach the company, from the notice",
+            "title": "Contact"
+          },
           "destruction_instruction": {
             "anyOf": [
               {
@@ -2733,6 +3202,19 @@
             "title": "Messages",
             "type": "array"
           },
+          "payout_choice_due": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "the day a bank-transfer refund still waiting on the claimant becomes a mailed check to the claimant's address; null when nothing is waiting",
+            "title": "Payout Choice Due"
+          },
           "payout_status": {
             "anyOf": [
               {
@@ -2897,6 +3379,65 @@
         "title": "Problem",
         "type": "object"
       },
+      "ProductOutcome": {
+        "additionalProperties": false,
+        "properties": {
+          "error": {
+            "anyOf": [
+              {
+                "enum": [
+                  "over_plan",
+                  "missing_refund_amount",
+                  "conflict",
+                  "not_approved",
+                  "failed"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "why the product is not open: over the company's plan, no refund amount in its rules, or other",
+            "title": "Error"
+          },
+          "id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "draft",
+                  "open",
+                  "closed"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "error"
+        ],
+        "title": "ProductOutcome",
+        "type": "object"
+      },
       "Program": {
         "additionalProperties": false,
         "examples": [
@@ -2979,6 +3520,24 @@
           "identification_rules": {
             "$ref": "#/components/schemas/IdentificationRules"
           },
+          "intake_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "the product's one claim link, while it takes new claims",
+            "title": "Intake Url"
+          },
+          "needs_refund_amount": {
+            "default": false,
+            "description": "refunds with no price in the rules: set one to open",
+            "title": "Needs Refund Amount",
+            "type": "boolean"
+          },
           "opened_at": {
             "anyOf": [
               {
@@ -3014,6 +3573,12 @@
             ],
             "title": "Status",
             "type": "string"
+          },
+          "takes_new_claims": {
+            "default": false,
+            "description": "open, approved, and within the plan: the claim link works",
+            "title": "Takes New Claims",
+            "type": "boolean"
           },
           "title": {
             "title": "Title",
@@ -3806,6 +4371,12 @@
       "Usage": {
         "additionalProperties": false,
         "properties": {
+          "active_products": {
+            "default": 0,
+            "description": "products that count toward the plan (not closed, approved)",
+            "title": "Active Products",
+            "type": "integer"
+          },
           "billing_sync_error": {
             "anyOf": [
               {
@@ -4098,6 +4669,128 @@
         "summary": "Signed Stripe test-mode webhook",
         "tags": [
           "internal"
+        ]
+      }
+    },
+    "/portal/intake/{intake_token}": {
+      "get": {
+        "operationId": "intake_view_portal_intake__intake_token__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "intake_token",
+            "required": true,
+            "schema": {
+              "title": "Intake Token",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntakeView"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "A product's public claim link: the company, the product, and what a claim asks for",
+        "tags": [
+          "portal"
+        ]
+      },
+      "post": {
+        "operationId": "intake_start_portal_intake__intake_token__post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "intake_token",
+            "required": true,
+            "schema": {
+              "title": "Intake Token",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntakeStarted"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "415": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unsupported Media Type"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          }
+        },
+        "summary": "Start a claim from a product's link; returns the claimant's private claim link",
+        "tags": [
+          "portal"
         ]
       }
     },
@@ -4548,7 +5241,7 @@
             "description": "Forbidden"
           }
         },
-        "summary": "This organization's access: approved or not, and why",
+        "summary": "This company's access: approved or not, and why",
         "tags": [
           "access"
         ]
@@ -4585,6 +5278,16 @@
               }
             },
             "description": "Unauthorized"
+          },
+          "402": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "over the plan's limit (component 3 entitlement)"
           },
           "403": {
             "content": {
@@ -4687,6 +5390,16 @@
             },
             "description": "the resource is not in a state that allows this"
           },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
           "503": {
             "content": {
               "application/json": {
@@ -4700,7 +5413,7 @@
         },
         "summary": "Stripe Checkout session for the growth plan",
         "tags": [
-          "billing (component 3)"
+          "billing"
         ]
       }
     },
@@ -4758,6 +5471,16 @@
             },
             "description": "the resource is not in a state that allows this"
           },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
           "503": {
             "content": {
               "application/json": {
@@ -4771,7 +5494,7 @@
         },
         "summary": "Stripe Customer Portal session",
         "tags": [
-          "billing (component 3)"
+          "billing"
         ]
       }
     },
@@ -5187,6 +5910,210 @@
         ]
       }
     },
+    "/v1/firm": {
+      "patch": {
+        "operationId": "rename_firm_v1_firm_patch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FirmPatch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeFirm"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "the resource is not in a state that allows this"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Rename the company (before the operator approves it; after that, the operator renames it)",
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/v1/me": {
+      "get": {
+        "description": "Resolving the company first means an existing company never waits on Clerk (a Clerk outage only delays new\naccounts); only a new account is checked against the operator, and an unknown answer creates nothing (503).",
+        "operationId": "me_v1_me_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Me"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Who is signed in: the operator, or a company with its plan and setup state",
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/v1/onboarding": {
+      "post": {
+        "operationId": "onboarding_v1_onboarding_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnboardingRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnboardingResult"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "the resource is not in a state that allows this"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Name the company and choose a plan (Growth returns a Stripe Checkout link)",
+        "tags": [
+          "account"
+        ]
+      }
+    },
     "/v1/operator/access": {
       "get": {
         "operationId": "operator_requests_v1_operator_access_get",
@@ -5226,7 +6153,7 @@
             "description": "Forbidden"
           }
         },
-        "summary": "Every organization's requests",
+        "summary": "Every company's requests",
         "tags": [
           "operator"
         ]
@@ -5234,6 +6161,7 @@
     },
     "/v1/operator/access/{access_id}": {
       "post": {
+        "description": "One transaction (plan v3 red team): the decision, the audit row, and the company's product. The product step\nruns under the company's firm context in a savepoint, so it sees the approval and a product that cannot be made\nnever undoes the decision; the outcome is returned for the operator to see.",
         "operationId": "operator_decide_v1_operator_access__access_id__post",
         "parameters": [
           {
@@ -5319,7 +6247,7 @@
             "description": "Validation Error"
           }
         },
-        "summary": "Approve, reject, or revoke an organization's request",
+        "summary": "Approve (the product opens), reject, or revoke (the product closes) a company's request",
         "tags": [
           "operator"
         ]
@@ -5509,6 +6437,31 @@
         ]
       }
     },
+    "/v1/plans": {
+      "get": {
+        "operationId": "plans_v1_plans_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PlanInfo"
+                  },
+                  "title": "Response Plans V1 Plans Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "What each plan allows and costs (public)",
+        "tags": [
+          "public"
+        ]
+      }
+    },
     "/v1/programs": {
       "get": {
         "operationId": "list_programs_v1_programs_get",
@@ -5544,7 +6497,7 @@
             "description": "Forbidden"
           }
         },
-        "summary": "List the firm's recall programs",
+        "summary": "List the company's products",
         "tags": [
           "firm"
         ]
@@ -5581,6 +6534,16 @@
               }
             },
             "description": "Unauthorized"
+          },
+          "402": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "over the plan's limit (component 3 entitlement)"
           },
           "403": {
             "content": {
@@ -5623,7 +6586,7 @@
             "description": "Validation Error"
           }
         },
-        "summary": "Open a program from a recall; runs rule extraction and returns rules for review",
+        "summary": "Create the product for an approved recall (a draft; approval normally opens it automatically)",
         "tags": [
           "firm"
         ]
@@ -6258,100 +7221,7 @@
             "description": "Validation Error"
           }
         },
-        "summary": "Claims queue, oldest first, with a status filter and keyset cursor",
-        "tags": [
-          "firm"
-        ]
-      }
-    },
-    "/v1/programs/{program_id}/claims/issue": {
-      "post": {
-        "operationId": "issue_links_v1_programs__program_id__claims_issue_post",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "program_id",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "title": "Program Id",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/IssueRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/IssueResponse"
-                }
-              }
-            },
-            "description": "Successful Response"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "Unauthorized"
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "Forbidden"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "not found, or belongs to another firm"
-          },
-          "409": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Problem"
-                }
-              }
-            },
-            "description": "the resource is not in a state that allows this"
-          },
-          "422": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            },
-            "description": "Validation Error"
-          }
-        },
-        "summary": "Issue n single-claim portal links for distribution",
+        "summary": "Claims queue, oldest first, with a status filter and keyset cursor (drafts only with status=draft)",
         "tags": [
           "firm"
         ]
@@ -6448,6 +7318,89 @@
           }
         },
         "summary": "Fraud rings across every duplicate kind: claims, links, rings (statuses from Postgres)",
+        "tags": [
+          "firm"
+        ]
+      }
+    },
+    "/v1/programs/{program_id}/intake/replace": {
+      "post": {
+        "operationId": "replace_intake_link_v1_programs__program_id__intake_replace_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "program_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Program Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Program"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "the resource is not in a state that allows this"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Replace the product's claim link (the old link stops at once)",
         "tags": [
           "firm"
         ]
@@ -6958,7 +7911,7 @@
         },
         "summary": "Current period meters (read by the billing UI)",
         "tags": [
-          "firm"
+          "account"
         ]
       }
     }

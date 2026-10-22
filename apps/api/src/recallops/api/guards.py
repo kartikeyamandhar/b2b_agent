@@ -7,6 +7,10 @@
   replace this limiter; the table and the settings stay.
 - Portal responses carry Referrer-Policy: no-referrer and Cache-Control: no-store, so a token in the URL is not sent
   to third parties or kept in shared caches. Request logs redact the token (recallops.api.problems).
+- A product's public claim link (/portal/intake/<token>, plan v3) has its own limits on starting claims per client
+  address: an IPv6 client counts per /64 (which one household holds whole) and per /48 (which one site can rotate
+  through). The per-link limit is counted by the route, only for starts that pass every check, so refused or forged
+  requests cannot spend a product's budget (plan v3 review). Reading the link counts like any portal read.
 """
 
 from __future__ import annotations
@@ -28,6 +32,7 @@ from recallops.settings import get_settings
 
 log = get_logger("api.guards")
 
+INTAKE = re.compile(r"^/portal/intake/([^/]+)$")
 PORTAL = re.compile(r"^/portal/([^/]+)(/[a-z]+)?$")
 REGISTRATIONS = re.compile(r"^/v1/programs/[^/]+/registrations$")
 FORM_OVERHEAD = 64_000
@@ -75,6 +80,26 @@ def client_address(scope: Scope, trusted_hops: int, web_secret: str = "") -> str
     return hops[-trusted_hops] if len(hops) >= trusted_hops else peer
 
 
+def client_network(client: str) -> str:
+    """The rate-limit identity of an address: an IPv4 address itself, an IPv6 address by its /64."""
+    try:
+        ip = ipaddress.ip_address(client)
+    except ValueError:
+        return client
+    if ip.version == 6:
+        return str(ipaddress.ip_network(f"{ip}/64", strict=False))
+    return str(ip)
+
+
+def client_wide_network(client: str) -> str | None:
+    """The /48 an IPv6 address belongs to (one site's allocation), for a second, wider limit; None for IPv4."""
+    try:
+        ip = ipaddress.ip_address(client)
+    except ValueError:
+        return None
+    return str(ipaddress.ip_network(f"{ip}/48", strict=False)) if ip.version == 6 else None
+
+
 def _limit_key(kind: str, value: str) -> str:
     return f"{kind}:{hashlib.sha256(value.encode()).hexdigest()[:32]}"
 
@@ -96,6 +121,12 @@ def _bump(keys: list[tuple[str, int]]) -> int | None:
             if count > limit:
                 return int((window + timedelta(hours=1) - now).total_seconds()) + 1
     return None
+
+
+def limited(kind: str, value: Any, limit: int) -> int | None:
+    """An hourly limit a route counts itself, after its own checks (billing per company, starts per product link):
+    seconds to wait when over, else None. Same table and windows as the portal limits."""
+    return _bump([(_limit_key(kind, str(value)), limit)])
 
 
 async def _respond(send: Any, status: int, detail: str, headers: list[tuple[bytes, bytes]] | None = None) -> None:
@@ -134,25 +165,37 @@ class PortalGuard:
         if REGISTRATIONS.match(scope.get("path", "")):
             await self._bounded(scope, receive, send, get_settings().registrations_max_bytes + FORM_OVERHEAD)
             return
-        m = PORTAL.match(scope.get("path", ""))
-        if m is None:
+        path = scope.get("path", "")
+        intake = INTAKE.match(path)
+        m = None if intake else PORTAL.match(path)
+        if intake is None and m is None:
             await self.app(scope, receive, send)
             return
         settings = get_settings()
-        token, action = m.group(1), (m.group(2) or "")
-        upload = action == "/photos"
-        max_body = settings.max_photo_bytes + FORM_OVERHEAD if upload else SMALL_BODY
+        client = client_address(scope, settings.trusted_proxy_hops, settings.web_proxy_secret.get_secret_value())
+        if intake is not None:
+            token, action, max_body = intake.group(1), "/intake", SMALL_BODY
+            keys = [(_limit_key("ip", client_network(client)), settings.portal_rate_per_ip_hour)]
+            if scope.get("method") == "POST":
+                keys.append((_limit_key("intake-ip", client_network(client)), settings.intake_rate_per_ip_hour))
+                wide = client_wide_network(client)
+                if wide is not None:
+                    keys.append((_limit_key("intake-net", wide), settings.intake_rate_per_network_hour))
+        else:
+            assert m is not None
+            token, action = m.group(1), (m.group(2) or "")
+            upload = action == "/photos"
+            max_body = settings.max_photo_bytes + FORM_OVERHEAD if upload else SMALL_BODY
+            keys = [
+                (_limit_key("tok", token), settings.portal_rate_per_token_hour),
+                (_limit_key("ip", client_network(client)), settings.portal_rate_per_ip_hour),
+            ]
+            if upload and scope.get("method") == "POST":
+                keys.append((_limit_key("up", token), settings.portal_uploads_per_token_hour))
         length = next((int(v) for k, v in scope.get("headers", []) if k == b"content-length" and v.isdigit()), None)
         if length is not None and length > max_body:
             await _respond(send, 413, f"request body larger than {max_body} bytes")
             return
-        client = client_address(scope, settings.trusted_proxy_hops, settings.web_proxy_secret.get_secret_value())
-        keys = [
-            (_limit_key("tok", token), settings.portal_rate_per_token_hour),
-            (_limit_key("ip", client), settings.portal_rate_per_ip_hour),
-        ]
-        if upload and scope.get("method") == "POST":
-            keys.append((_limit_key("up", token), settings.portal_uploads_per_token_hour))
         retry = await anyio.to_thread.run_sync(_bump, keys)
         if retry is not None:
             log_event(log, "portal_rate_limited", action=action or "/", retry_after_s=retry)
@@ -211,6 +254,8 @@ class BodyTooLarge(Exception):
 
 
 def redact(path: str) -> str:
+    if INTAKE.match(path):
+        return "/portal/intake/<token>"
     m = PORTAL.match(path)
     return f"/portal/<token>{m.group(2) or ''}" if m else path
 

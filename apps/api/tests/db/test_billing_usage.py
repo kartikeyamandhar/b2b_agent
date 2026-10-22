@@ -143,19 +143,20 @@ def test_second_unpaid_attempt_restricts_and_settlement_restores_growth(clean_db
                 period_end=datetime.now(UTC) + timedelta(days=30),
             )
         )
+    # Every plan pays refunds both ways now (plan v3), so the restriction shows as the plan the check reports.
     billing = PlanBilling(clean_db, get_settings())
-    assert billing.check_entitlement(ctx, "create_payout").allowed
+    assert billing.check_entitlement(ctx, "create_payout").plan == "growth"
     with tenant_session(ctx, clean_db) as session:
         invoice = session.get(BillingInvoice, "in_synthetic")
         assert invoice is not None
         invoice.attempt_count = 2
-    assert not billing.check_entitlement(ctx, "create_payout").allowed
-    assert not billing.check_entitlement(ctx, "create_payout").allowed
+    assert billing.check_entitlement(ctx, "create_payout").plan == "free"
+    assert billing.check_entitlement(ctx, "create_payout").plan == "free"
     with tenant_session(ctx, clean_db) as session:
         invoice = session.get(BillingInvoice, "in_synthetic")
         assert invoice is not None
         invoice.status, invoice.amount_paid_cents = "paid", 19900
-    assert billing.check_entitlement(ctx, "create_payout").allowed
+    assert billing.check_entitlement(ctx, "create_payout").plan == "growth"
 
 
 def test_concurrent_program_changes_preserve_each_quantity_sync_request(

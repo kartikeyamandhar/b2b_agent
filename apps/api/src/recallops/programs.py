@@ -126,9 +126,12 @@ def create_program(
     manual: dict[str, Any] | None,
     value_threshold_cents: int | None,
     access_id: UUID | None = None,
+    baseline_only: bool = False,
 ) -> tuple[RecallProgram, str, str]:
     """A CPSC recall needs this firm's approved request for it; a typed notice needs the approved typed request it
-    names (access_id), used by one program only (company verification, decisions log 2026-10-22)."""
+    names (access_id), used by one program only (company verification, decisions log 2026-10-22). A company runs
+    one live product per recall, and on Free one product in all (plan v3). `baseline_only` reads the rules with the
+    regex extractor alone: the operator's approval never waits on, or pays for, a model call."""
     if recall_id is not None:
         recall = session.get(Recall, recall_id)
         if recall is None:
@@ -146,7 +149,16 @@ def create_program(
             raise access.AccessDenied("request access to this recall and wait for the operator's approval")
     if access_id is not None and session.scalar(select(RecallProgram.id).where(RecallProgram.access_id == access_id)):
         raise Conflict("a program already runs this typed notice")
-    extraction = extract_rules(source_text, settings, ctx)
+    if recall_id is not None and live_program_for(session, ctx, recall_id) is not None:
+        raise Conflict("this recall already has a product")
+    session.execute(select(Firm.id).where(Firm.id == ctx.firm_id).with_for_update())
+    entitlement = billing.check_entitlement(ctx, "create_program")
+    if not entitlement.allowed:
+        raise NotEntitled("create_program", entitlement.reason)
+    if baseline_only:
+        extraction = Extraction(baseline.extract(source_text), f"baseline {baseline.EXTRACTOR_VERSION}")
+    else:
+        extraction = extract_rules(source_text, settings, ctx)
     rules_json = json.loads(extraction.rules.model_dump_json())
     program = RecallProgram(
         id=uuid4(),
@@ -219,6 +231,8 @@ def patch_program(
             raise Conflict("a closed program cannot be reopened; open a new program")
         if status == "open":
             access.require_program(session, program, settings)
+            if needs_refund_amount(program):
+                raise Conflict(MISSING_REFUND_AMOUNT)
             session.execute(select(Firm.id).where(Firm.id == ctx.firm_id).with_for_update())
             entitlement = billing.check_entitlement(ctx, "open_program")
             if not entitlement.allowed:
@@ -284,6 +298,125 @@ def reissue_link(
     _audit(session, ctx, "claim_link_reissued", str(claim.id), None, after, target_type="claim")
     log_event(log, "claim_link_reissued", firm_id=str(ctx.firm_id), claim_id=str(claim.id), rotated=rotated)
     return f"{settings.portal_base_url.rstrip('/')}/{token}"
+
+
+MISSING_REFUND_AMOUNT = "set the refund amount (the highest price) in Rules and settings before opening"
+
+
+def needs_refund_amount(program: RecallProgram) -> bool:
+    """True when the product pays refunds but its rules carry no price, so an approved claim would have no amount to
+    pay (portal.submit takes the refund from the highest price)."""
+    ident = IdentificationRules.model_validate(program.identification_rules or {})
+    remedy = RemedyRules.model_validate(program.remedy_rules or {})
+    kind = remedy.options[0].type if remedy.options else remedy.remedy_type
+    refund = kind == "refund" or kind == "multiple"
+    return refund and ident.price_range_cents is None
+
+
+def live_program_for(session: Session, ctx: FirmContext, recall_id: UUID) -> RecallProgram | None:
+    return session.scalars(
+        select(RecallProgram)
+        .where(
+            RecallProgram.firm_id == ctx.firm_id,
+            RecallProgram.recall_id == recall_id,
+            RecallProgram.status != "closed",
+        )
+        .with_for_update()
+    ).first()
+
+
+def _program_for_access(session: Session, ctx: FirmContext, row: Any) -> RecallProgram | None:
+    if row.recall_id is not None:
+        return live_program_for(session, ctx, row.recall_id)
+    return session.scalars(
+        select(RecallProgram)
+        .where(
+            RecallProgram.firm_id == ctx.firm_id, RecallProgram.access_id == row.id, RecallProgram.status != "closed"
+        )
+        .with_for_update()
+    ).first()
+
+
+def start_product(
+    session: Session, ctx: FirmContext, settings: Settings, billing: BillingGate, access_id: UUID
+) -> dict[str, Any]:
+    """After the operator approves a request (owner decision 2026-10-22): the company's product is created and opened
+    at once. Runs in the decision's own transaction (under the company's firm context), so it sees the approval; the
+    caller wraps it in a savepoint, so a product that cannot be made never undoes the decision. Reuses the live
+    product for the recall when one exists (a revoke, then a new request). Returns the outcome for the operator."""
+    from recallops.models import RecallAccess
+
+    row = session.get(RecallAccess, access_id)
+    if row is None or row.firm_id != ctx.firm_id or row.status != "approved":
+        return {"id": None, "status": None, "error": "not_approved"}
+    program = _program_for_access(session, ctx, row)
+    if program is None:
+        manual = (
+            None
+            if row.recall_id is not None
+            else {"title": row.typed_title or "Typed notice", "description": row.typed_notice or row.typed_title or ""}
+        )
+        try:
+            program, _, _ = create_program(
+                session, ctx, settings, billing, row.recall_id, manual, None, access_id=row.id, baseline_only=True
+            )
+        except NotEntitled:
+            log_event(log, "product_not_created", firm_id=str(ctx.firm_id), reason="over_plan")
+            return {"id": None, "status": None, "error": "over_plan"}
+    elif program.status == "open":  # approved again after a revoke: the same product and link take claims again
+        from recallops.billing.service import mark_quantity_dirty
+
+        mark_quantity_dirty(session, ctx)
+    if program.status == "draft":
+        try:
+            program = patch_program(session, ctx, settings, billing, program, {"status": "open"})
+        except NotEntitled:
+            return {"id": program.id, "status": "draft", "error": "over_plan"}
+        except Conflict as exc:
+            error = "missing_refund_amount" if str(exc) == MISSING_REFUND_AMOUNT else "conflict"
+            return {"id": program.id, "status": "draft", "error": error}
+    log_event(log, "product_started", firm_id=str(ctx.firm_id), program_id=str(program.id), status=program.status)
+    return {"id": program.id, "status": program.status, "error": None}
+
+
+def stop_product(session: Session, ctx: FirmContext, settings: Settings, billing: BillingGate, access_id: UUID) -> None:
+    """The operator revoked a company's access. The product is left as it is: every consumer checks the approval (its
+    claim link and claimants' links answer 404, the worker and the payment jobs leave it alone, and it no longer
+    counts toward the plan or the bill), so only the billed quantity changes here. Closing it would be final, and a
+    re-approval would then make a second product with a new link and strand the first one's claimants (plan v3
+    review); instead start_product finds it again and its link works as before."""
+    from recallops.billing.service import mark_quantity_dirty
+    from recallops.models import RecallAccess
+
+    row = session.get(RecallAccess, access_id)
+    if row is None or row.firm_id != ctx.firm_id:
+        return
+    program = _program_for_access(session, ctx, row)
+    if program is not None:
+        mark_quantity_dirty(session, ctx)
+        log_event(log, "product_paused", firm_id=str(ctx.firm_id), program_id=str(program.id))
+
+
+def takes_new_claims(session: Session, program: RecallProgram, settings: Settings) -> bool:
+    """Whether the product's public claim link accepts new claims: open, approved by the operator, and within the
+    company's plan. A company that fell back to Free keeps only its oldest open product taking new claims; the others
+    pause (claims already filed carry on)."""
+    if program.status != "open" or not access.program_approved(session, program, settings):
+        return False
+    firm = session.get(Firm, program.firm_id)
+    if firm is None:
+        return False
+    from recallops.billing.policy import effective_plan
+
+    if effective_plan(session, firm) != "free":
+        return True
+    oldest = session.scalars(
+        select(RecallProgram.id)
+        .where(RecallProgram.firm_id == program.firm_id, RecallProgram.status == "open")
+        .order_by(RecallProgram.opened_at.asc().nulls_last(), RecallProgram.created_at.asc())
+        .limit(settings.free_active_products)
+    ).all()
+    return program.id in oldest
 
 
 def issue_links(

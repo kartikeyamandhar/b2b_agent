@@ -140,7 +140,7 @@ describe("AuditTrail", () => {
     const out = renderToStaticMarkup(
       <AuditTrail entries={[...approved.audit, { action: "review_submitted", actor: "dev-user", at: "2026-10-20T09:00:00Z", before: { status: "flagged" }, after: { review: { message: "<b>hi</b>" } } }]} />,
     );
-    expect(out).toContain("Link issued → Submitted"); // statuses as the badges word them (visual audit)
+    expect(out).toContain("Started, not submitted → Submitted"); // statuses as the badges word them (visual audit)
     expect(out).toContain("review_submitted");
     expect(out).not.toContain("<b>hi</b>");
   });

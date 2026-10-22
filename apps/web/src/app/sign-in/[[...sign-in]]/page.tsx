@@ -13,7 +13,7 @@ export default function SignInPage() {
   return (
     <ClerkShell>
       <AuthFrame>
-        <SignIn path="/sign-in" signUpUrl="/sign-up" fallbackRedirectUrl="/app/programs" />
+        <SignIn path="/sign-in" signUpUrl="/sign-up" fallbackRedirectUrl="/app" />
       </AuthFrame>
     </ClerkShell>
   );

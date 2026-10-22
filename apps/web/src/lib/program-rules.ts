@@ -1,7 +1,8 @@
-// Program settings (PATCH /v1/programs/{id}): the rule editor's form model, its conversion back to the contract's
+// Product settings (PATCH /v1/programs/{id}): the rule editor's form model, its conversion back to the contract's
 // rule shapes, and which lifecycle moves the backend allows (programs.py patch_program). Pure functions, so the
 // rules are unit-tested; the API still validates every field (rules/schemas.py, extra="forbid").
 import { ProgramPatch, type IdentificationRules, type Program, type RemedyOption, type RemedyRules } from "@/lib/api-types";
+import type { ApiProblem } from "@/lib/api/problem";
 import { countOf } from "@/lib/format";
 import { remedyLabel } from "@/lib/programs";
 
@@ -219,7 +220,19 @@ export function lifecycle(status: string): Lifecycle {
 
 /** Why the lifecycle move is blocked right now, or null. Closing makes the rules read-only, so unsaved edits would be stranded. */
 export function lifecycleBlock(next: Lifecycle["next"], dirty: boolean): string | null {
-  return next === "closed" && dirty ? "Save or discard your rule changes first. A closed program cannot be edited." : null;
+  return next === "closed" && dirty ? "Save or discard your rule changes first. A closed product cannot be edited." : null;
+}
+
+/** A refund product without a price cannot open (programs.py MISSING_REFUND_AMOUNT, 409). */
+export const MISSING_REFUND_AMOUNT_SENTENCE = "Set the refund amount (the price range) before opening.";
+/** Free runs one product at a time (billing/policy.py FREE_PRODUCT_LIMIT, 402). */
+export const PLAN_FULL_SENTENCE = "Free covers one product. Upgrade to Growth to add another.";
+
+/** The sentence for a refused lifecycle move the API explains, or undefined for the generic one. */
+export function lifecycleProblemSentence(problem: Pick<ApiProblem, "status" | "detail">): string | undefined {
+  if (problem.status === 402) return PLAN_FULL_SENTENCE;
+  if (problem.status === 409 && /refund amount/i.test(problem.detail ?? "")) return MISSING_REFUND_AMOUNT_SENTENCE;
+  return undefined;
 }
 
 const CLOSE_IMPACT: readonly [status: string, describe: (n: number) => string][] = [
@@ -229,12 +242,13 @@ const CLOSE_IMPACT: readonly [status: string, describe: (n: number) => string][]
   ["under_review", (n) => `${countOf(n, "claim")} held for a reviewer before any money moves`],
   ["capped", (n) => `${countOf(n, "claim")} stopped at a checker limit and waiting for a reviewer`],
   ["approved", (n) => `${countOf(n, "approved claim")} whose ${n === 1 ? "claimant" : "claimants"} may still need to choose how a refund is paid`],
-  ["draft", (n) => `${countOf(n, "claim link")} issued and never used`],
+  ["draft", (n) => `${countOf(n, "claim")} started and not submitted yet`],
 ];
 
 /**
- * The claims a close would cut off, from Program.claim_counts. Closing kills every claim link at once (portal.py
- * answers 404 for a closed program), while the worker and reviewers can still decide these claims.
+ * The claims a close would cut off, from Program.claim_counts. Closing stops the product's claim link and every
+ * claimant's private link at once (portal.py answers 404 for a closed program), while the worker and reviewers can
+ * still decide these claims.
  */
 export function closeImpact(counts: Readonly<Record<string, number>>): string[] {
   return CLOSE_IMPACT.flatMap(([status, describe]) => {
@@ -243,10 +257,14 @@ export function closeImpact(counts: Readonly<Record<string, number>>): string[] 
   });
 }
 
-/** What a reader should know about a program with no identifiers: the adjudicator can confirm nothing. */
-export function rulesWarnings(p: Pick<Program, "identification_rules" | "remedy_rules">): string[] {
+/** What a reader should know about a product with no identifiers (the adjudicator can confirm nothing), or a refund
+ *  product with no price (it cannot open). */
+export function rulesWarnings(p: Pick<Program, "identification_rules" | "remedy_rules" | "needs_refund_amount">): string[] {
   const i = p.identification_rules;
   const out: string[] = [];
+  if (p.needs_refund_amount) {
+    out.push("Set the refund amount: enter the lowest and highest price below. The product cannot take claims until the price range is set.");
+  }
   if ((i.models ?? []).length === 0 && (i.serial_ranges ?? []).length === 0 && (i.date_codes ?? []).length === 0) {
     out.push("No model numbers, serial ranges, or date codes were found. Claims cannot be matched to the recall until you add at least one.");
   }

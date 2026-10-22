@@ -27,8 +27,9 @@ export type RouteKind = "public" | "console-page" | "console-api";
 const startsWith = (p: string, prefix: string) => p === prefix || p.startsWith(`${prefix}/`);
 
 /**
- * The claimant portal and its API, the sign-in pages, and the root stay public. Console pages require a session
- * (the proxy redirects to sign-in); console API calls are checked by the /api route, which answers 401.
+ * The claimant portal and its API, the public product link pages, the sign-in pages, and the root stay public.
+ * Console pages (the operator window included) require a session (the proxy redirects to sign-in); console API calls
+ * are checked by the /api route, which answers 401.
  */
 export function routeKind(pathname: string): RouteKind {
   if (startsWith(pathname, "/api/v1")) return "console-api";
@@ -37,34 +38,22 @@ export function routeKind(pathname: string): RouteKind {
 }
 
 /**
- * Paths the Next proxy (src/proxy.ts) runs on. The homepage (/), the portal (/claim, /api/portal), and static assets
- * are excluded, so neither a first-time visitor nor a claimant touches Clerk at all. Kept here so a test can check it;
- * proxy.ts must repeat it literally, because Next reads the matcher statically.
+ * Paths the Next proxy (src/proxy.ts) runs on. The homepage (/), the portal (/claim, /api/portal), the public product
+ * link pages (/file), and static assets are excluded, so neither a first-time visitor nor a claimant touches Clerk at
+ * all. Kept here so a test can check it; proxy.ts must repeat it literally, because Next reads the matcher statically.
  */
-export const PROXY_MATCHER = "/((?!$|_next/|claim(?:/|$)|api/portal(?:/|$)|favicon\\.ico$|icon\\.svg$|apple-icon\\.png$).*)";
+export const PROXY_MATCHER = "/((?!$|_next/|claim(?:/|$)|file(?:/|$)|api/portal(?:/|$)|favicon\\.ico$|icon\\.svg$|apple-icon\\.png$).*)";
 
+/** Plan v3: one account is one company, so every signed-in company account is its admin (the API ignores
+ *  organization claims). The development seam may still send reviewer (auth-seam.ts). */
 export type ConsoleRole = "admin" | "reviewer";
 
-/** Clerk organization roles the backend accepts (auth/clerk.py strips the org: prefix). */
-export function consoleRole(orgRole: string | null | undefined): ConsoleRole | null {
-  const r = (orgRole ?? "").replace(/^org:/, "");
-  return r === "admin" || r === "reviewer" ? r : null;
-}
+export type ClerkContext = { userId: string | null };
 
-export type ClerkContext = { userId: string | null; orgId: string | null; orgRole: string | null };
+export type ConsoleAccess = { kind: "redirect"; to: string } | { kind: "ok"; userId: string };
 
-export type ConsoleAccess =
-  | { kind: "redirect"; to: string }
-  | { kind: "no-access"; reason: string }
-  | { kind: "ok"; role: ConsoleRole; orgId: string };
-
-/** What the console shows a signed-in user; mirrors the backend's 403 rules so the UI never calls with a bad token. */
+/** A session is all the console asks of Clerk; GET /v1/me then says whether this is the operator or which company. */
 export function consoleAccess(ctx: ClerkContext): ConsoleAccess {
   if (!ctx.userId) return { kind: "redirect", to: "/sign-in" };
-  if (!ctx.orgId) return { kind: "redirect", to: "/organization" };
-  const role = consoleRole(ctx.orgRole);
-  if (!role) {
-    return { kind: "no-access", reason: "Your organization role has no access. Ask an admin for the admin or reviewer role." };
-  }
-  return { kind: "ok", role, orgId: ctx.orgId };
+  return { kind: "ok", userId: ctx.userId };
 }

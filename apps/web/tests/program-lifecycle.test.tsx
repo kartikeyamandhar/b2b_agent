@@ -1,4 +1,6 @@
-// Phase A: creating a program, editing its rules and threshold, and its lifecycle (draft → open → closed).
+// Phase A, as of plan v3: editing a product's rules and threshold, and its lifecycle (draft → open → closed). Products
+// are no longer created in the console (the operator's approval creates and opens them); the recall search and the
+// create body stay as pure functions.
 import { readFileSync } from "node:fs";
 
 import { renderToStaticMarkup } from "react-dom/server";
@@ -10,10 +12,9 @@ import NewProgramPage from "@/app/app/programs/new/page";
 import ProgramSettingsPage from "@/app/app/programs/[id]/settings/page";
 import ProgramPage from "@/app/app/programs/[id]/page";
 import ProgramsPage from "@/app/app/programs/page";
-import { NewProgram, RecallOption } from "@/components/NewProgram";
 import { ProgramSettings } from "@/components/ProgramSettings";
 import { Program, ProgramPatch, RecallSummary } from "@/lib/api-types";
-import { createBody, noticeHref, programRecallIds, recallSearch } from "@/lib/program-create";
+import { recallSearch } from "@/lib/program-create";
 import { draftChanged, draftFromProgram, lifecycle, parseDollars, rulesPatch, rulesWarnings } from "@/lib/program-rules";
 
 const fixture = JSON.parse(readFileSync(new URL("./fixtures/programs.json", import.meta.url), "utf8")) as { items: unknown[] };
@@ -143,65 +144,21 @@ describe("rule editor model", () => {
   });
 });
 
-describe("program creation model", () => {
+describe("recall search", () => {
   it("builds the recall search query", () => {
     expect(recallSearch("  laminator ", "")).toBe("?q=laminator&limit=25");
     expect(recallSearch("", "2026-09-01", 500)).toBe("?since=2026-09-01&limit=100");
     expect(recallSearch("a&b=c", "not-a-date")).toBe("?q=a%26b%3Dc&limit=25");
   });
-
-  it("links only https CPSC notices", () => {
-    expect(noticeHref("https://www.cpsc.gov/Recalls/2027/x")).toBe("https://www.cpsc.gov/Recalls/2027/x");
-    expect(noticeHref("https://cpsc.gov/Recalls/x")).not.toBeNull();
-    for (const u of ["http://www.cpsc.gov/x", "https://cpsc.gov.evil.test/x", "javascript:alert(1)", "not a url"]) expect(noticeHref(u)).toBeNull();
-  });
-
-  it("creates from a recall or from a notice typed in", () => {
-    expect(createBody({ source: "recall", recallId: recall.id, threshold: "" })).toEqual({ ok: true, body: { recall_id: recall.id, value_threshold_cents: null } });
-    expect(createBody({ source: "recall", recallId: recall.id, threshold: "250" })).toMatchObject({ ok: true, body: { value_threshold_cents: 25000 } });
-    const manual = createBody({ source: "manual", title: " Space heaters ", description: "Model SH-100 heaters sold at Example Mart. Stop using and contact the firm for a refund.", recallDate: "", threshold: "" });
-    expect(manual).toMatchObject({ ok: true, body: { manual: { title: "Space heaters", recall_date: null } } });
-  });
-
-  it("explains what is missing before sending", () => {
-    expect(createBody({ source: "recall", recallId: "", threshold: "x" })).toMatchObject({ ok: false, errors: { recall: expect.any(String), threshold: expect.any(String) } });
-    expect(createBody({ source: "manual", title: "", description: "too short", recallDate: "10/01/2026", threshold: "" })).toMatchObject({
-      ok: false,
-      errors: { title: expect.any(String), description: expect.any(String), recallDate: expect.any(String) },
-    });
-  });
-
-  it("knows which recalls already have a program", () => {
-    expect([...programRecallIds([open, draft])]).toEqual([open.recall_id]);
-  });
-});
-
-describe("NewProgram", () => {
-  it("starts on the archive search and explains that a draft reaches no claimant", () => {
-    const html = renderToStaticMarkup(<NewProgram existingRecallIds={[]} />);
-    expect(html).toContain('role="search"');
-    expect(html).toContain('aria-checked="true"');
-    expect(html).toContain("Create draft program");
-    expect(html).toContain("nothing reaches claimants until you review the rules and open it");
-  });
-
-  it("shows a recall with its notice link and an existing-program warning", () => {
-    const html = renderToStaticMarkup(<RecallOption recall={recall} selected hasProgram onChoose={() => {}} />);
-    expect(html).toContain('href="https://www.cpsc.gov/Recalls/2027/Golden-Resale"');
-    expect(html).toContain('rel="noopener noreferrer"');
-    expect(html).toContain("already has a program");
-    expect(html).toContain('aria-pressed="true"');
-    const unsafe = renderToStaticMarkup(<RecallOption recall={{ ...recall, url: "javascript:alert(1)" }} selected={false} hasProgram={false} onChoose={() => {}} />);
-    expect(unsafe).not.toContain("javascript:");
-  });
 });
 
 describe("ProgramSettings", () => {
   it("lets an admin edit a draft and open it", () => {
-    const html = renderToStaticMarkup(<ProgramSettings program={draft} canAdmin created />);
-    expect(html).toContain("Draft program created");
+    const html = renderToStaticMarkup(<ProgramSettings program={draft} canAdmin />);
+    expect(html).not.toContain("data-created");
     expect(html).toContain('data-lifecycle="open"');
-    expect(html).toContain("Open the program");
+    expect(html).toContain("Open the product");
+    expect(html).toContain("Free covers one.");
     expect(html).toContain("data-save-rules");
     expect(html).toContain("No model numbers, serial ranges, or date codes were found");
     expect(html).not.toMatch(/<textarea[^>]*disabled=""/);
@@ -218,7 +175,8 @@ describe("ProgramSettings", () => {
 
   it("is read-only for a reviewer, with no lifecycle control", () => {
     const html = renderToStaticMarkup(<ProgramSettings program={open} canAdmin={false} />);
-    expect(html).toContain("Only an admin can change rules");
+    expect(html).toContain("This account can read these settings but not change them.");
+    expect(html).not.toMatch(/\b(admin|members?|team|seats?)\b/i);
     expect(html).not.toContain("data-save-rules");
     expect(html).not.toContain("data-lifecycle");
     expect(html).toMatch(/<textarea[^>]*disabled=""/);
@@ -227,7 +185,7 @@ describe("ProgramSettings", () => {
   it("freezes a closed program", () => {
     const html = renderToStaticMarkup(<ProgramSettings program={closed} canAdmin />);
     expect(html).not.toContain("data-save-rules");
-    expect(html).toContain("This program is closed");
+    expect(html).toContain("This product is closed");
     expect(html).toMatch(/<input[^>]*disabled=""/);
   });
 });
@@ -235,40 +193,38 @@ describe("ProgramSettings", () => {
 describe("pages", () => {
   const programs = () => Response.json(fixture);
 
-  it("offers New program to an admin only", async () => {
+  it("never offers to create a product, and points to Recall access for another recall", async () => {
     serve(programs);
-    expect(renderToStaticMarkup(await ProgramsPage())).toContain('href="/app/programs/new"');
-    vi.stubEnv("RECALLOPS_DEV_ROLE", "reviewer");
-    expect(renderToStaticMarkup(await ProgramsPage())).not.toContain('href="/app/programs/new"');
+    const html = renderToStaticMarkup(await ProgramsPage());
+    expect(html).not.toContain('href="/app/programs/new"');
+    expect(html).not.toContain("New program");
+    expect(html).toContain('href="/app/access"');
   });
 
-  it("links the first program from the empty state", async () => {
+  it("explains the empty list: ask under Recall access, and the operator's approval opens the product", async () => {
     serve(() => Response.json({ items: [] }));
     const html = renderToStaticMarkup(await ProgramsPage());
-    expect(html).toContain("Create the first program");
+    expect(html).toContain("No products yet");
+    expect(html).toContain('Ask for a recall under <a href="/app/access">Recall access</a>; when the operator approves it, your product opens here with its claim');
+    expect(html).not.toContain("Create the first program");
   });
 
-  it("refuses the new-program page to a reviewer", async () => {
-    vi.stubEnv("RECALLOPS_DEV_ROLE", "reviewer");
-    serve(programs);
-    const html = renderToStaticMarkup(await NewProgramPage());
-    expect(html).toContain("Only an admin can create a recall program");
-    expect(html).not.toContain("data-create-program");
+  it("sends the retired new-program page to Recall access", () => {
+    let thrown: unknown = null;
+    try {
+      NewProgramPage();
+    } catch (err) {
+      thrown = err;
+    }
+    expect(String((thrown as { digest?: unknown } | null)?.digest)).toContain("/app/access");
   });
 
-  it("renders the new-program page for an admin", async () => {
-    serve(programs);
-    const html = renderToStaticMarkup(await NewProgramPage());
-    expect(html).toContain("New recall program");
-    expect(html).toContain("data-create-program");
-  });
-
-  it("loads settings for the program and marks a just-created draft", async () => {
+  it("loads settings for the product", async () => {
     serve(() => Response.json(fixture.items[1]));
-    const html = renderToStaticMarkup(await ProgramSettingsPage({ params: Promise.resolve({ id: draft.id }), searchParams: Promise.resolve({ created: "1" }) }));
+    const html = renderToStaticMarkup(await ProgramSettingsPage({ params: Promise.resolve({ id: draft.id }) }));
     expect(calls[0]).toMatchObject({ url: `http://127.0.0.1:8000/v1/programs/${draft.id}`, method: "GET" });
     expect(html).toContain("Rules and settings");
-    expect(html).toContain("Draft program created");
+    expect(html).toContain("← Products");
     expect(html).not.toContain("<b>draft</b>");
   });
 

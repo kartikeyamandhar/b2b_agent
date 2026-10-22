@@ -5,7 +5,8 @@ import { formatCount } from "@/lib/format";
 import { AWAITING_REVIEW, programMetrics } from "@/lib/programs";
 import { statusLabel } from "@/lib/status";
 
-// Statuses that need a reviewer come first, then the claimant, then the rest of the lifecycle.
+// Statuses that need a reviewer come first, then the claimant, then the rest of the lifecycle. Claims started from the
+// claim link and not submitted (draft) come last: the API leaves them out of the unfiltered queue (plan v3).
 const FILTER_ORDER: readonly ClaimStatus[] = [
   "flagged",
   "under_review",
@@ -36,7 +37,8 @@ export function StatusFilter({
   active: ClaimStatus | null;
   counts: Record<string, number> | null;
 }) {
-  const total = counts ? Object.values(counts).reduce((s, n) => s + (n > 0 ? n : 0), 0) : null;
+  // "All" is the unfiltered queue, which leaves out claims nobody has submitted yet.
+  const total = counts ? Object.entries(counts).reduce((s, [status, n]) => s + (status !== "draft" && n > 0 ? n : 0), 0) : null;
   const chips: Array<{ status: ClaimStatus | null; label: string; n: number | null }> = [
     { status: null, label: "All", n: total },
     ...FILTER_ORDER.map((s) => ({ status: s, label: statusLabel("claim", s).label, n: count(counts, s) })),

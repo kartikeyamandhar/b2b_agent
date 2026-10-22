@@ -76,7 +76,7 @@ The firm's console, here on a real run: the agent read the claimant's label phot
 <tr>
 <td width="24%"><img src="docs/assets/img/ui-portal-form.png" alt="The claimant portal on a phone, step 1 of 6: confirm your product, model TL1302Z, a refund if approved." width="100%"></td>
 <td width="24%"><img src="docs/assets/img/ui-portal-status.png" alt="The claimant's status page on a phone: your claim was approved, choose a mailed check or a bank transfer set up on Stripe's page." width="100%"></td>
-<td valign="middle"><b>The claimant's side.</b> A claimant gets one link to one claim, with no account and no password, and files it in six short steps on a phone: confirm the product, take the three photos, say where it was bought, and submit. The same link then shows the decision in plain words, asks any follow-up question, and offers a mailed check or a Stripe bank transfer once the refund is approved. A person deciding the claim reads as "under review": the claimant never sees words like flagged.<br><br><sub>Everything on this page is synthetic data on the project's real recall; screenshots of the website in <code>apps/web</code>, built by the UI owner, in light mode (it follows the system's dark mode too).</sub></td>
+<td valign="middle"><b>The claimant's side.</b> A company shares one link and QR code for its product. A claimant who starts a claim from it gets a private link to that one claim, with no account and no password, and files it in six short steps on a phone: confirm the product, take the three photos, say where it was bought, and submit. The same link then shows the decision in plain words, asks any follow-up question, and offers a mailed check or a Stripe bank transfer once the refund is approved. A person deciding the claim reads as "under review": the claimant never sees words like flagged.<br><br><sub>Everything on this page is synthetic data on the project's real recall; screenshots of the website in <code>apps/web</code>, built by the UI owner, in light mode (it follows the system's dark mode too).</sub></td>
 </tr>
 </table>
 
@@ -87,7 +87,7 @@ The firm's console, here on a real run: the agent read the claimant's label phot
 </p>
 
 1. **Load the recall.** The API pulls the CPSC recall API in 30-day windows. A nightly GitHub Actions job is wired to trigger the pull and skips until the API is deployed; locally, `make seed` loads a fixture of 51 real records. Each notice becomes identification rules (model numbers, serial and date-code ranges, retailers, the sale window) and remedy rules (refund, repair, or replacement, and what the claimant must show). The regex extractor takes every value straight from the notice text, and the model-based fallback has any value it cannot quote verbatim from the notice dropped.
-2. **Take claims.** Each claimant gets a link to exactly one claim, with no account or password, and uploads a label photo, a photo of the destroyed product, and a receipt. In development the link carries a plain `dev.<firm>.<claim>` token; with Clerk sign-in on, links are signed with HMAC-SHA256, expire after 90 days, and an admin can replace a lost one, which stops the old link.
+2. **Take claims.** Each product has one public claim link and QR code, which shows only the product's public facts. Starting a claim from it gives the claimant a private link to exactly one claim, with no account or password, and the claimant uploads a label photo, a photo of the destroyed product, and a receipt. In development the links carry plain `intake.<firm>.<product>.<version>` and `dev.<firm>.<claim>` tokens; with Clerk sign-in on, both are signed with HMAC-SHA256 under separate keys, a claim's link expires after 90 days, and replacing either link stops the old one.
 3. **Decide each claim.** A polling worker runs the claims agent on every submitted claim, inside hard caps on steps, cost, and time. The model may be stricter than the rules table (the outcome the pure-code checks and the run's own photo readings give under the same policy), and a more lenient decision never takes effect on its own. A flagged claim, an approval over the program's money threshold, a run that hits a cap or fails, and a decision more lenient than the rules all stop and wait for a person.
 4. **Catch fraud.** Reused photos, addresses, serial numbers, and payout destinations are caught when each claim is decided. A Neo4j graph then links them into clusters and rings for review.
 5. **Pay.** An approved refund creates its payout row in the same transaction as the approval. Money can leave only through the ledger, as a check batch or a Stripe Connect transfer, never both and never twice. The Stripe calls belong to the payments component, implemented here in test mode; the development console and payment jobs drive the same ledger calls.
@@ -173,7 +173,7 @@ The graph is a read-side projection. No claim status or payout depends on it, so
 
 - **Ledger first.** A payout row exists before any Stripe call can be made, and its id is the idempotency key the payments component must send with the transfer.
 - **Claimed before it is sent.** A transfer is claimed under a row lock, and a held payout can never be claimed. A hold requested while a transfer is in flight is recorded and applied if the transfer fails. A result that arrives for a held payout is recorded with an alert, never refused, so the ledger always agrees with Stripe.
-- **Check batches in the database.** A payout waiting for a mailed check (the claimant chose one, three transfers failed, or billing allows no Connect payout) joins the next export batch, and the batch file is written in the same transaction that marks its payouts exported. A committed batch always has its file, and two export runs can never pay the same claim. Cells are escaped so a spreadsheet cannot run them as formulas.
+- **Check batches in the database.** A payout waiting for a mailed check (the claimant chose one, three transfers failed, or the claimant did not choose a way to be paid within 14 days) joins the next export batch, and the batch file is written in the same transaction that marks its payouts exported. A committed batch always has its file, and two export runs can never pay the same claim. Cells are escaped so a spreadsheet cannot run them as formulas.
 - **Redirects held.** A check sent to an address that another claim already uses goes to a person first.
 
 ## The monthly progress report, reconciled three ways
@@ -312,7 +312,11 @@ curl -s -X POST "${A[@]}" -H 'content-type: application/json' -d "{\"recall_id\"
 curl -s "${R[@]}" "$B/v1/programs/$P/claims?status=flagged&limit=5"
 curl -s "${R[@]}" $B/v1/claims/$C
 curl -s "${R[@]}" $B/v1/claims/$C/trace
-curl -s -X POST "${A[@]}" -H 'content-type: application/json' -d '{"n": 2}' $B/v1/programs/$P/claims/issue
+
+# The product's one public claim link: read it, then start a claim (each start returns the claim's own private link)
+I=$(curl -s "${A[@]}" $B/v1/programs/$P | python3 -c 'import json,sys; print(json.load(sys.stdin)["intake_url"].rsplit("/", 1)[1])')
+curl -s $B/portal/intake/$I
+curl -s -X POST -H 'content-type: application/json' -d '{}' $B/portal/intake/$I
 
 # Reviewer actions: resume_override, request_info, mark_fraud, mark_delivered
 curl -s -X POST "${R[@]}" -H 'content-type: application/json' \
@@ -338,7 +342,9 @@ curl -s -X POST "${A[@]}" -H 'content-type: application/json' -d '{"channels": [
 curl -s -X POST "${A[@]}" -H 'content-type: application/json' -d '{"channel": "email"}' $B/v1/programs/$P/campaign/send
 curl -s "${R[@]}" $B/v1/programs/$P/campaign
 
-# Usage and test-mode billing (requires the backend payment schema)
+# The signed-in account, the plans, usage, and test-mode billing
+curl -s "${A[@]}" $B/v1/me
+curl -s $B/v1/plans
 curl -s "${R[@]}" $B/v1/usage
 curl -s -X POST "${A[@]}" $B/v1/billing/checkout    # returns a Checkout URL after Stripe test configuration
 
@@ -364,7 +370,7 @@ The full contract is [docs/contracts/openapi.json](docs/contracts/openapi.json),
 | Retrieval | Postgres full-text search for notices, because model numbers are tokens, not meanings; pgvector over a deterministic local hashed n-gram embedder for policy prose (lexical, not neural, so it needs no extra provider) |
 | Photos | A storage seam: local disk in development, a private Supabase bucket in production, bytes proxied by the API |
 | Quality | ruff, mypy strict, pytest with coverage, replayable evaluations, GitHub Actions with real Postgres and Neo4j |
-| Sign-in | Clerk organizations: session tokens verified against the instance's public keys, a firm per organization, admin and reviewer roles |
+| Sign-in | Clerk: session tokens verified against the instance's public keys, one company per account, and the platform operator recognized by a verified email address |
 | Console and claim portal | Next.js 16, React 19, TypeScript, Tailwind 4; types generated from the API contract; every API call goes through the website's server |
 | Payments | Stripe in test mode: Billing and the Customer Portal for firms, Connect for claimant refunds |
 
@@ -380,7 +386,7 @@ apps/api/            the backend: API, claims agent and worker, rule extraction,
 evals/               golden sets, pre-registrations, recorded model calls, results tables
 docs/components/     the design of each component
 docs/contracts/      the API contract and the change notes the other components code against
-docs/onboarding/     where each teammate starts
+docs/onboarding/     where each component's owner started (history)
 docs/traces/         timelines recorded from real runs
 docs/assets/         the images on this page: the four diagrams are hand-written SVG; the three charts and the
                      sample photos are built by docs/assets/src (make readme-assets after make seed; the photos need ARGS=--photos)
@@ -390,16 +396,16 @@ data/samples/        the committed CPSC fixture; data/raw/SOURCES.md records whe
 
 ## Team
 
-RecallOps is a four-person team project for the UCLA MSBA program (fall 2026). Each component has one owner, and all four work in parallel against a shared API contract.
+RecallOps began as a four-person team project for the UCLA MSBA program (fall 2026), one owner per component, working in parallel against a shared API contract. Since October 22, 2026 the backend owner builds every component alone.
 
 | Component | Lives in | Status |
 |---|---|---|
 | Backend: API, agent, ledger, report, fraud graph, evaluations | `apps/api`, `evals` | Complete and tested; what this page describes |
 | Firm console and claim portal | `apps/web` | Built by its owner against [the API contract](docs/contracts/openapi.json) and [the trace contract](docs/contracts/trace.md); adopted after a backend review that restyled it to match this page, fixed the portal's rate limit and other security findings, and closed the backend gaps its owner found |
 | Payments: Stripe Billing and Connect | `apps/api/src/recallops/billing`, `apps/api/src/recallops/payouts/stripe_connect.py` | Built in test mode by its owner; adopted after a backend review that added regression tests for the payout and usage paths |
-| Sign-in: Clerk and signed claimant links | `apps/api/src/recallops/auth` | Built by its owner (session verification, a firm created on first sign-in, 90-day signed links); adopted after a backend review that added a link-reissue route, production setting checks, and end-to-end tests |
+| Sign-in: Clerk and signed claimant links | `apps/api/src/recallops/auth` | Built by its owner (session verification, a firm created on first sign-in, 90-day signed links; since plan v3 one account is one company, with no organizations); adopted after a backend review that added a link-reissue route, production setting checks, and end-to-end tests |
 
-Each component's design is in [docs/components](docs/components), and each owner's starting point is in [docs/onboarding](docs/onboarding).
+Each component's design is in [docs/components](docs/components); [docs/onboarding](docs/onboarding) keeps where each owner started.
 
 ## Further reading
 
@@ -410,7 +416,7 @@ Each component's design is in [docs/components](docs/components), and each owner
 | [Real-photo pre-registration](evals/cpsc_photos/PREREG.md) | The vision tools on 64 photos from CPSC's recall notices: selection, blind labels, and results |
 | [Results tables](evals/results) | Extraction, adjudication, the ablation, the report reconciliation, and the vision tools on real CPSC photos, regenerated by `make eval` |
 | [Runtime traces](docs/traces) | Real runs: claims through every adjudication path, payouts, the report, the fraud graph, a clean-clone setup |
-| [Contract changes](docs/contracts/CHANGES.md) | What changed in the API contract, grouped by the teammate it affects |
+| [Contract changes](docs/contracts/CHANGES.md) | What changed in the API contract, item by item |
 | [Going live](docs/DEPLOY.md) | Every hosted service, setting, and secret, step by step, for one public link |
 
 

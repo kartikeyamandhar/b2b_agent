@@ -4,9 +4,10 @@ import { useSyncExternalStore } from "react";
 
 import type { PortalView } from "@/lib/api-types";
 import { formatDate } from "@/lib/format";
-import { canChoosePayout, claimantQuestion, localDateTime, payoutProgress, plainStatus, shouldAutoRefresh } from "@/lib/portal";
+import { canChoosePayout, claimantQuestion, localDateTime, payoutProgress, plainStatus, senderName, shouldAutoRefresh } from "@/lib/portal";
 
 import { AutoRefresh } from "./AutoRefresh";
+import { ClaimLinkCard } from "./ClaimLinkCard";
 import { NeedsInfoReply } from "./NeedsInfoReply";
 import { PayoutChoice } from "./PayoutChoice";
 
@@ -75,7 +76,7 @@ export function StatusView({ token, view }: { token: string; view: PortalView })
               {progress}
             </p>
           ) : null}
-          {canChoosePayout(view) ? <PayoutChoice token={token} current={view.payout_status} /> : null}
+          {canChoosePayout(view) ? <PayoutChoice token={token} current={view.payout_status} due={view.payout_choice_due} /> : null}
         </section>
       ) : null}
 
@@ -88,9 +89,9 @@ export function StatusView({ token, view }: { token: string; view: PortalView })
             {messages.map((m, i) => (
               <li key={`${m.at}-${i}`} className={`rounded border p-2 text-base ${m.sender === "claimant" ? "border-line bg-panel" : "border-line-strong"}`}>
                 <p className="text-xs text-ink-muted">
-                  {m.sender === "claimant" ? "You" : "The firm"} · <MessageTime at={m.at} />
+                  {senderName(m.sender, view.program.company_name)} · <MessageTime at={m.at} />
                 </p>
-                {/* The claimant's own words stay as written; the firm's questions get the same guard as the box above. */}
+                {/* The claimant's own words stay as written; the company's questions get the same guard as the box above. */}
                 <p className="mt-0.5 whitespace-pre-wrap">{m.sender === "claimant" ? m.text : claimantQuestion(m.text)}</p>
               </li>
             ))}
@@ -105,6 +106,8 @@ export function StatusView({ token, view }: { token: string; view: PortalView })
         to see the latest status.
       </p>
       {shouldAutoRefresh(view.status, 0) ? <AutoRefresh status={view.status} /> : null}
+
+      <ClaimLinkCard token={token} claimId={view.claim_id} />
     </div>
   );
 }

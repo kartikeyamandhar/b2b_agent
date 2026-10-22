@@ -14,22 +14,34 @@ import { QrPanel } from "./QrCode";
 const PRIMARY = "rounded-md border border-accent bg-accent px-3 py-1.5 text-sm font-medium text-bg hover:opacity-90 disabled:opacity-60";
 const SECONDARY = "rounded-md border border-line-strong bg-surface px-3 py-1.5 text-sm font-medium text-ink hover:bg-panel disabled:opacity-60";
 
+/** Who may receive a reissued link: the email the claim carries, never whoever asks for it (anyone can start a claim
+ *  from the product's public link, so a request for "my link" proves nothing). */
+export function sendOnlyTo(email: string | null | undefined): string {
+  const e = email?.trim();
+  return e
+    ? `Send the new link only to the email on this claim, ${e}.`
+    : "This claim has no email yet, so there is no one to send a new link to. Someone who lost the link to an unsubmitted claim can start a new one from the product’s claim link.";
+}
+
 /**
- * Issue a fresh portal link for one claim, for a claimant whose link was lost, expired, or leaked. The link is a
- * bearer secret: it is shown once, here, held only in this component's memory, and never put in a URL or storage.
+ * Issue a fresh private portal link for one claim, for a claimant whose link was lost, expired, or leaked. The link is
+ * a bearer secret: it is shown once, here, held only in this component's memory, and never put in a URL or storage.
  */
 export function ReissueLink({
   claimId,
   status,
   canAdmin,
   programStatus = null,
+  email = null,
   onDone,
 }: {
   claimId: string;
   status: string;
   canAdmin: boolean;
-  /** Unknown (null) leaves the decision to the API, which answers 409 for a closed program. */
+  /** Unknown (null) leaves the decision to the API, which answers 409 for a closed product. */
   programStatus?: string | null;
+  /** The claimant's email on the claim, the only place a new link may go. */
+  email?: string | null;
   onDone?: () => void;
 }) {
   const [confirming, setConfirming] = useState(false);
@@ -75,7 +87,9 @@ export function ReissueLink({
         </p>
       ) : (
         <div className="grid gap-3" data-reissue>
-          <p className="text-sm text-ink-muted">If the claimant lost their link, or it expired or was shared, issue a new one. The old link stops working at once.</p>
+          <p className="text-sm text-ink-muted">
+            If the claimant lost their private link, or it expired or was shared, issue a new one. The old link stops working at once.
+          </p>
           {!confirming ? (
             <div>
               <button type="button" onClick={() => { setConfirming(true); setProblem(null); }} className={SECONDARY} data-reissue-start>
@@ -85,7 +99,7 @@ export function ReissueLink({
           ) : (
             <div role="group" aria-label="Confirm new claim link" className="grid gap-2 rounded-md border border-warn/40 bg-warn-soft p-3 text-sm text-warn-ink">
               <p className="font-medium">Replace this claim’s link?</p>
-              <p>The claimant’s current link will stop working. Send them the new one through your usual channel.</p>
+              <p>The claimant’s current link will stop working. {sendOnlyTo(email)}</p>
               <div className="flex flex-wrap gap-2">
                 <button type="button" onClick={() => void reissue()} disabled={busy} className={PRIMARY} data-reissue-confirm>
                   {busy ? "Issuing…" : "Issue new link"}
@@ -96,7 +110,7 @@ export function ReissueLink({
               </div>
             </div>
           )}
-          {link ? <ReissuedLink link={link} claimId={claimId} copied={copied} onCopy={() => void copy()} /> : null}
+          {link ? <ReissuedLink link={link} claimId={claimId} copied={copied} onCopy={() => void copy()} email={email} /> : null}
           {problem ? (
             <ProblemAlert
               problem={problem}
@@ -110,7 +124,19 @@ export function ReissueLink({
 }
 
 /** The new link, shown once, with its QR code for a printed letter. */
-export function ReissuedLink({ link, claimId, copied, onCopy }: { link: string; claimId: string; copied: boolean; onCopy: () => void }) {
+export function ReissuedLink({
+  link,
+  claimId,
+  copied,
+  onCopy,
+  email = null,
+}: {
+  link: string;
+  claimId: string;
+  copied: boolean;
+  onCopy: () => void;
+  email?: string | null;
+}) {
   return (
     <div className="grid gap-2 rounded-md border border-success/40 bg-success-soft p-3 text-sm text-success-ink" role="status" data-reissued>
       <p className="font-medium">New link issued. It is shown only now.</p>
@@ -123,7 +149,7 @@ export function ReissuedLink({ link, claimId, copied, onCopy }: { link: string; 
         </button>
       </div>
       <QrPanel url={link} claimId={claimId} />
-      <p className="text-xs">The link and its QR code work like a password for this one claim: send them only to the claimant.</p>
+      <p className="text-xs">The link and its QR code work like a password for this one claim. {sendOnlyTo(email)}</p>
     </div>
   );
 }

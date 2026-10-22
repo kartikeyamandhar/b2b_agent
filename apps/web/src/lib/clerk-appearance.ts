@@ -1,5 +1,5 @@
-// Clerk draws its widgets with its own palette, which is light: in dark mode the organization switcher in the sidebar
-// showed near-black text on the dark panel (seen on the first deploy, 2026-10-21). In dark mode the widgets get the
+// Clerk draws its widgets with its own palette, which is light: in dark mode the account widgets in the sidebar showed
+// near-black text on the dark panel (seen on the first deploy, 2026-10-21). In dark mode the widgets get the
 // dark tokens from globals.css as plain colors (the pinned Clerk types do not promise CSS-variable support). Keep
 // these in step with the dark block in globals.css.
 export const CLERK_DARK_VARIABLES = {
@@ -74,5 +74,4 @@ export const CLERK_LOCALIZATION = {
     },
     emailLink: { subtitle: "Use the link we sent to your email to continue to RecallOps." },
   },
-  organizationList: { subtitle: "Pick one to continue to RecallOps." },
 } as const;
