@@ -57,13 +57,13 @@ describe("/app/programs", () => {
   it("renders the empty state", async () => {
     serve(() => Response.json({ items: [] }));
     const html = await render(ProgramsPage());
-    expect(html).toContain("No recall programs yet");
+    expect(html).toContain("No products yet");
     expect(html).not.toContain("<table");
   });
 
   it.each([
     [401, "Your session has ended"],
-    [403, "Your role does not allow"],
+    [403, "This account cannot do this."],
     [500, "Something went wrong on our side"],
     [503, "temporarily unavailable"],
   ])("renders a %i as a problem with its correlation id", async (status, sentence) => {

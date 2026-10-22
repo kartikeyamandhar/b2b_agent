@@ -50,9 +50,25 @@ function Step({ n, id, title, current, children }: { n: number; id: Stage; title
   );
 }
 
+/** The product's claim link that every notice carries (plan v3), or why notices have none to carry. */
+export function CampaignLink({ link }: { link: string | null }) {
+  return link ? (
+    <p className="min-w-0 text-sm text-ink-muted" data-campaign-link>
+      Every notice carries the product’s claim link:{" "}
+      <code className="rounded border border-line bg-panel px-1.5 py-0.5 [overflow-wrap:anywhere] font-mono text-xs text-ink">{link}</code>
+    </p>
+  ) : (
+    <p className="rounded-lg border border-warn/40 bg-warn-soft p-3 text-sm text-warn-ink" data-campaign-no-link>
+      This product is not taking claims, so notices have no claim link to carry. Notices drafted now show a marker where
+      the link goes.
+    </p>
+  );
+}
+
 /** Counts and the channel table, readable by every role. */
 export function CampaignStatus({ summary }: { summary: CampaignSummary }) {
   const rows = notificationRows(summary.notifications);
+  const sent = rows.reduce((n, r) => n + r.sent, 0);
   return (
     <div className="grid grid-cols-1 gap-4">
       {/* Same tiles as the fraud and payout pages: four across from lg, values pinned to the bottom of each tile. */}
@@ -62,7 +78,7 @@ export function CampaignStatus({ summary }: { summary: CampaignSummary }) {
             ["Registrations", summary.registrations],
             ["Matched", summary.matched],
             ["Not matched", summary.unmatched],
-            ["Claim links", summary.claim_links],
+            ["Marked sent", sent],
           ] as const
         ).map(([label, value]) => (
           <div key={label} className="flex min-w-0 flex-col rounded-lg border border-line bg-surface px-4 py-4">
@@ -92,12 +108,17 @@ export function CampaignStatus({ summary }: { summary: CampaignSummary }) {
           </tbody>
         </table>
       </div>
+      <CampaignLink link={summary.claim_link ?? null} />
     </div>
   );
 }
 
-/** Up to three notices as drafted: the notice quotes the recall's hazard and remedy text verbatim. */
-export function SampleNotices({ sample }: { sample: CampaignSummary["sample"] }) {
+/**
+ * Up to three notices as drafted: the notice quotes the recall's hazard and remedy text verbatim. The API fills in
+ * the product's claim link; a {claim_link} still in a body (the product is not taking claims) is shown as a marker,
+ * and a link is always shown as text, never as something to click.
+ */
+export function SampleNotices({ sample, claimLink = null }: { sample: CampaignSummary["sample"]; claimLink?: string | null }) {
   const drafts = sampleDrafts(sample);
   if (!drafts.length) return null;
   return (
@@ -106,9 +127,8 @@ export function SampleNotices({ sample }: { sample: CampaignSummary["sample"] })
         Sample notices
       </h2>
       <p className="text-sm text-ink-muted">
-        Hazard and remedy text is quoted from the recall notice, unchanged. Notices keep a marker where each owner’s
-        claim link goes: links work like passwords, so RecallOps never stores them in a notice. A real sender would
-        issue each link at delivery time.
+        Hazard and remedy text is quoted from the recall notice, unchanged. Each notice carries the product’s claim link;
+        an owner who files from it gets their own private link to follow the claim.
       </p>
       <ul className="grid grid-cols-1 gap-3 lg:grid-cols-3">
         {drafts.map((d, i) => (
@@ -119,9 +139,13 @@ export function SampleNotices({ sample }: { sample: CampaignSummary["sample"] })
             <p className="mt-2 font-medium [overflow-wrap:anywhere]">{d.subject}</p>
             <p className="mt-2 max-h-56 overflow-auto whitespace-pre-wrap text-ink-muted [overflow-wrap:anywhere]">
               {splitPlaceholder(d.body).map((p, j) =>
-                p.link ? (
-                  <span key={j} className="rounded border border-brand/50 bg-brand-soft px-1 font-mono text-xs text-ink" data-link-placeholder>
-                    claim link
+                p.link && claimLink ? (
+                  <span key={j} className="font-mono text-xs text-ink" data-link-filled>
+                    {claimLink}
+                  </span>
+                ) : p.link ? (
+                  <span key={j} className="rounded border border-warn/50 bg-warn-soft px-1 font-mono text-xs text-warn-ink" data-link-placeholder>
+                    claim link (not taking claims)
                   </span>
                 ) : (
                   <span key={j}>{p.text}</span>
@@ -136,7 +160,7 @@ export function SampleNotices({ sample }: { sample: CampaignSummary["sample"] })
 }
 
 /**
- * The campaign workflow for one program (admin): upload, match, draft, simulated send. Each step reports exactly
+ * The campaign workflow for one product (admin): upload, match, draft, simulated send. Each step reports exactly
  * what the API answered; the summary is read again after every step.
  */
 export function Campaign({
@@ -206,7 +230,7 @@ export function Campaign({
         problem={problem.problem}
         sentence={
           problem.problem.status === 409 && step === "draft"
-            ? "Notices can be drafted only while the program is open, because each matched owner gets a claim link."
+            ? "Notices can be drafted only while the product is open, because each notice carries its claim link."
             : problem.problem.status === 422 && step === "upload"
               ? "The file could not be read as a registrations CSV."
               : undefined
@@ -217,9 +241,9 @@ export function Campaign({
   if (!canAdmin) {
     return (
       <div className="grid grid-cols-1 gap-6">
-        <p className="text-sm text-ink-muted">Only an admin can upload registrations, draft notices, or mark them sent.</p>
+        <p className="text-sm text-ink-muted">This account can read the campaign but not upload registrations, draft notices, or mark them sent.</p>
         <CampaignStatus summary={summary} />
-        <SampleNotices sample={summary.sample} />
+        <SampleNotices sample={summary.sample} claimLink={summary.claim_link ?? null} />
       </div>
     );
   }
@@ -314,7 +338,7 @@ export function Campaign({
 
       <Step n={2} id="match" title="Match owners to the recall" current={stage}>
         <p className="text-sm text-ink-muted">
-          Each registration is checked against this program’s identification rules (model, serial range, date code),
+          Each registration is checked against this product’s identification rules (model, serial range, date code),
           the same checks claims get. Run it again after you upload more owners or edit the rules.
         </p>
         <div>
@@ -338,11 +362,11 @@ export function Campaign({
 
       <Step n={3} id="draft" title="Draft notices" current={stage}>
         <p className="text-sm text-ink-muted">
-          One notice per matched owner and channel they can be reached on. Each matched owner also gets their own claim
-          link (a new claim in this program). Drafting again never duplicates a notice.
+          One notice per matched owner and channel they can be reached on. Each notice carries the product’s claim link,
+          where the owner files a claim. Drafting again never duplicates a notice.
         </p>
         {programStatus !== "open" ? (
-          <p className="text-sm text-warn-ink">Open the program before drafting notices.</p>
+          <p className="text-sm text-warn-ink">Open the product before drafting notices.</p>
         ) : null}
         <fieldset className="flex flex-wrap gap-3 text-sm">
           <legend className="sr-only">Channels</legend>
@@ -442,7 +466,7 @@ export function Campaign({
         {stepProblem("send")}
       </Step>
 
-      <SampleNotices sample={summary.sample} />
+      <SampleNotices sample={summary.sample} claimLink={summary.claim_link ?? null} />
     </div>
   );
 }

@@ -1,15 +1,13 @@
-// QR codes for claim links (owner decision 2026-10-22). A code holds exactly the link, so it opens that one claim with
-// the link's own expiry and stops working when the link is reissued; there is no separate public page. Codes are drawn
-// from the module matrix as vectors, always dark on white (scanners need the contrast, dark mode included), with the
-// standard four-module quiet zone, and at a whole number of pixels per module so no module renders soft or uneven.
+// QR codes for claim links (owner decision 2026-10-22). A code holds exactly the link: a product's public claim link
+// (plan v3: anyone can start a claim from it, and it stops when the link is replaced) or one claim's private link
+// (it stops when that link is reissued). Codes are drawn from the module matrix as vectors, always dark on white
+// (scanners need the contrast, dark mode included), with the standard four-module quiet zone, and at a whole number of
+// pixels per module so no module renders soft or uneven.
 import qrcode from "qrcode-generator";
 
 export const QUIET_ZONE = 4;
-/** Codes per printed sheet; more links come out as several sheets, so one window never holds thousands of codes. */
-export const QR_SHEET_MAX = 1000;
 
 export type QrMatrix = { size: number; dark: (row: number, col: number) => boolean };
-export type QrItem = { label: string; url: string };
 
 /** The module matrix for a link. Links are printable ASCII (an https URL with a base64url token); anything else is
  *  refused rather than encoded in a way a phone could read differently. Error correction M survives normal print wear. */
@@ -51,7 +49,7 @@ export function qrPixels(m: QrMatrix, target: number): number {
   return span * Math.max(2, Math.round(target / span));
 }
 
-/** A standalone SVG document of the code, for download and the printed sheet. */
+/** A standalone SVG document of the code, for download and the printed poster. */
 export function qrSvg(text: string, target = 512): string {
   const m = qrMatrix(text);
   const span = qrSpan(m);
@@ -75,37 +73,39 @@ export function qrRects(m: QrMatrix, scale: number): [x: number, y: number, w: n
 const ESCAPES: Record<string, string> = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
 const escapeHtml = (s: string) => s.replace(/[&<>"']/g, (c) => ESCAPES[c]!);
 
-/** The 1-based ranges of the sheets `count` links print as, QR_SHEET_MAX codes per sheet. */
-export function qrSheetRanges(count: number, max = QR_SHEET_MAX): [first: number, last: number][] {
-  const ranges: [number, number][] = [];
-  for (let first = 1; first <= count; first += max) ranges.push([first, Math.min(count, first + max - 1)]);
-  return ranges;
-}
+export type QrPosterFacts = { company: string | null; title: string; url: string; models: readonly string[]; moreModels: number };
 
-/** A self-contained, printable page of codes, three to a row on Letter or A4, each with its claim and its link spelled
- *  out for anyone who cannot scan. No scripts and nothing loaded from elsewhere. */
-export function qrSheetHtml(items: readonly QrItem[], heading: string): string {
-  const cards = items
-    .map(
-      (i) =>
-        `<figure class="card">${qrSvg(i.url, 320)}<figcaption><span class="id">${escapeHtml(i.label)}</span>` +
-        `<span class="how">Scan to file your recall claim</span><span class="url">${escapeHtml(i.url)}</span></figcaption></figure>`,
-    )
-    .join("");
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>${escapeHtml(heading)}</title><style>
-@page{size:auto;margin:0.5in}
+/** The two lines under the code: how to open it, and what the claim asks for first. */
+export const POSTER_INSTRUCTIONS = [
+  "Scan the code with your phone's camera, or type the address into a browser.",
+  "Have the product with you: the claim asks for a photo of its label. No account is needed.",
+] as const;
+
+/** One printable page for a product's public claim link: the company and product, "Scan to file a claim", the code,
+ *  the link spelled out, the models, and two lines of instruction. The note above the poster is for the screen only;
+ *  print styles hide it, so the page prints as the poster alone. No scripts and nothing loaded from elsewhere. */
+export function qrPosterHtml(p: QrPosterFacts): string {
+  const models = p.models.length
+    ? `<p class="models"><span class="label">${p.models.length + p.moreModels === 1 ? "Model" : "Models"}</span> ${p.models.map(escapeHtml).join(", ")}${
+        p.moreModels > 0 ? ` and ${p.moreModels} more` : ""
+      }</p>`
+    : "";
+  const company = p.company ? `<p class="company">${escapeHtml(p.company)}</p>` : "";
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Claim poster: ${escapeHtml(p.title)}</title><style>
+@page{size:auto;margin:0.6in}
 *{box-sizing:border-box}
-body{margin:0;padding:24px;background:#fff;color:#1f1d1a;font:12px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-header{max-width:7.5in;margin:0 auto 16px}
-h1{margin:0 0 4px;font-size:16px;font-weight:600}
-header p{margin:0;color:#5c5852}
-.sheet{display:grid;grid-template-columns:repeat(3,1fr);gap:0.2in;max-width:7.5in;margin:0 auto}
-.card{margin:0;padding:0.14in;border:1px solid #d9d5ce;border-radius:6px;break-inside:avoid;text-align:center}
-.card svg{display:block;width:1.6in;height:1.6in;margin:0 auto}
-figcaption{display:grid;gap:2px;margin-top:6px}
-.id{font-weight:600}
-.how{color:#5c5852}
-.url{font:7px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;color:#5c5852;overflow-wrap:anywhere}
-@media print{body{padding:0}header p{display:none}}
-</style></head><body><header><h1>${escapeHtml(heading)}</h1><p>Print this page or save it as a PDF. Each code opens one claim, like its link, and works like a password: send each one only to its claimant. A code stops working when its link expires or is reissued.</p></header><main class="sheet">${cards}</main></body></html>`;
+body{margin:0;padding:24px;background:#fff;color:#1f1d1a;font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.screen-note{max-width:6.5in;margin:0 auto 24px;padding:8px 12px;border:1px solid #d9d5ce;border-radius:6px;font-size:13px;color:#5c5852}
+.poster{max-width:6.5in;margin:0 auto;text-align:center;break-inside:avoid;page-break-inside:avoid}
+.company{margin:0;font-size:18px;color:#5c5852}
+h1{margin:4px 0 20px;font-size:26px;line-height:1.25;font-weight:600}
+.scan{margin:0 0 14px;font-size:30px;font-weight:700}
+.poster svg{display:block;width:3.4in;height:3.4in;margin:0 auto}
+.url{margin:14px auto 0;max-width:6in;font:12px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;color:#3a3732;overflow-wrap:anywhere}
+.models{margin:18px 0 0;font-size:15px}
+.label{font-weight:600}
+.how{margin:18px auto 0;max-width:5.5in;font-size:15px;color:#3a3732}
+.how span{display:block}
+@media print{body{padding:0}.screen-note{display:none}}
+</style></head><body><p class="screen-note">Print this page or save it as a PDF. It fits one sheet of Letter or A4. The code and the link stop working when the link is replaced.</p><main class="poster">${company}<h1>${escapeHtml(p.title)}</h1><p class="scan">Scan to file a claim</p>${qrSvg(p.url, 480)}<p class="url">${escapeHtml(p.url)}</p>${models}<p class="how">${POSTER_INSTRUCTIONS.map((l) => `<span>${escapeHtml(l)}</span>`).join("")}</p></main></body></html>`;
 }

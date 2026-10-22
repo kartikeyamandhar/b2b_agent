@@ -23,7 +23,8 @@ class PaymentRequired(Exception):
 
     def __init__(self, action: str, reason: str | None) -> None:
         super().__init__(action)
-        self.detail = f"{action} is not included in the current plan: {reason or 'upgrade to continue'}."
+        # The policy's reasons are sentences a company reads (billing/policy.py); the action name stays in the logs.
+        self.detail = reason or "This needs a paid plan. Upgrade under Billing."
 
 
 def problem(status: int, title: str, detail: str | None, request: Request) -> JSONResponse:
@@ -87,7 +88,10 @@ def install(app: FastAPI) -> None:
 
     @app.exception_handler(HTTPException)
     async def http_problem(request: Request, exc: HTTPException) -> JSONResponse:
-        return problem(exc.status_code, TITLES.get(exc.status_code, "Error"), str(exc.detail), request)
+        response = problem(exc.status_code, TITLES.get(exc.status_code, "Error"), str(exc.detail), request)
+        for name, value in (exc.headers or {}).items():  # Retry-After on a 429, for one
+            response.headers[name] = value
+        return response
 
     @app.exception_handler(RequestValidationError)
     async def validation_problem(request: Request, exc: RequestValidationError) -> JSONResponse:
@@ -140,6 +144,7 @@ def install(app: FastAPI) -> None:
 
     @app.exception_handler(PaymentRequired)
     async def payment_required(request: Request, exc: PaymentRequired) -> JSONResponse:
+        log_event(log, "payment_required", action=str(exc))
         return problem(402, TITLES[402], exc.detail, request)
 
     @app.exception_handler(Exception)

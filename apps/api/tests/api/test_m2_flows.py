@@ -68,8 +68,16 @@ def env(internal_engine_test: Engine) -> Iterator[dict[str, Any]]:
 
 
 def open_program(client: TestClient, engine: Engine) -> dict[str, Any]:
-    with engine.connect() as conn:
+    with engine.begin() as conn:
         recall_id = conn.execute(text("SELECT id FROM recalls WHERE source_id = '27024'")).scalar_one()
+        # One live product per recall (plan v3): each test starts its own, so the last one closes first.
+        conn.execute(
+            text(
+                "UPDATE recall_programs SET status = 'closed', closed_at = now() "
+                "WHERE firm_id = :f AND recall_id = :r AND status <> 'closed'"
+            ),
+            {"f": seed.DEMO_FIRM_ID, "r": recall_id},
+        )
     created = client.post("/v1/programs", headers=ADMIN, json={"recall_id": str(recall_id)})
     assert created.status_code == 201, created.text
     program = created.json()
@@ -293,11 +301,7 @@ def test_check_payout_export_and_a_reconciled_mpr(env: dict[str, Any], tmp_path:
     from recallops.payouts.export import export_pending
 
     client, engine = env["client"], env["engine"]
-    program_id = next(
-        p["id"]
-        for p in client.get("/v1/programs", headers=ADMIN).json()["items"]
-        if p["status"] == "open" and p["recall_id"] and p["id"] != env["seeded"]["demo"]["program_id"]
-    )
+    program_id = open_program(client, engine)["id"]
     link = client.post(f"/v1/programs/{program_id}/claims/issue", headers=ADMIN, json={"n": 1}).json()["links"][0]
     other_person = FIELDS | {"name": "Blake Other", "email": "blake@example.org", "address_line1": "9 Oak Ave"}
     token = file_claim(client, link["url"], 4242, other_person)
@@ -342,11 +346,11 @@ def test_a_mailing_address_shared_with_another_claim_holds_the_payout(env: dict[
     """The redirect pattern check_duplicates cannot see: an approved claimant asks for the check at an address another
     claim of the program uses. The claim goes to a person and its payout is held, in the same transaction."""
     client, engine = env["client"], env["engine"]
-    program_id = next(
-        p["id"]
-        for p in client.get("/v1/programs", headers=ADMIN).json()["items"]
-        if p["status"] == "open" and p["recall_id"] and p["id"] != env["seeded"]["demo"]["program_id"]
-    )
+    program_id = open_program(client, engine)["id"]
+    first = client.post(f"/v1/programs/{program_id}/claims/issue", headers=ADMIN, json={"n": 1}).json()["links"][0]
+    file_claim(client, first["url"], 9190)  # another claim of the product lives at the address asked for below
+    with engine.begin() as conn:  # already decided, so the worker below takes the claim under test
+        conn.execute(text("UPDATE claims SET status = 'denied' WHERE id = :c"), {"c": first["claim_id"]})
     link = client.post(f"/v1/programs/{program_id}/claims/issue", headers=ADMIN, json={"n": 1}).json()["links"][0]
     person = FIELDS | {"name": "Casey Third", "email": "casey@example.net", "address_line1": "5 Pine Ct"}
     token = file_claim(client, link["url"], 9191, person)

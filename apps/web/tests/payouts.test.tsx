@@ -92,7 +92,7 @@ describe("/app/payouts", () => {
     serve(() => Response.json(list));
     const html = renderToStaticMarkup(await PayoutsPage());
     expect(calls).toHaveLength(0);
-    expect(html).toContain("Only an admin can see and create payout export batches");
+    expect(html).toContain("This account cannot see or create payout export batches");
   });
 
   it("shows an API error with its reference", async () => {

@@ -25,7 +25,7 @@ export default async function ClaimsQueuePage({ params, searchParams }: Props) {
     <div>
       <nav aria-label="Breadcrumb" className="mb-3 flex gap-1 text-xs">
         <Link href="/app/programs" className="text-accent hover:underline">
-          Programs
+          Products
         </Link>
         {program.ok ? (
           <>

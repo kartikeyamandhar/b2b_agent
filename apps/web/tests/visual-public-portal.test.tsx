@@ -25,7 +25,6 @@ vi.mock("next/navigation", async (orig) => ({ ...(await orig<typeof import("next
 import ClaimFormPage from "@/app/claim/[token]/page";
 import PortalLayout from "@/app/claim/layout";
 import NotFound from "@/app/not-found";
-import OrganizationPage from "@/app/organization/page";
 import Home from "@/app/page";
 import SignInPage from "@/app/sign-in/[[...sign-in]]/page";
 import SignUpPage from "@/app/sign-up/[[...sign-up]]/page";
@@ -159,7 +158,8 @@ describe("photo labels", () => {
 
   it("uses that summary on the review step, with no check marks", () => {
     const stepper = src("components/portal/ClaimStepper.tsx");
-    expect(stepper).toContain('["Photos", photoSummary(program.required_photos, uploaded)]');
+    // photoKinds is the program's photos with the label photo always first (plan v3).
+    expect(stepper).toContain('["Photos", photoSummary(photoKinds, uploaded)]');
     expect(stepper).not.toContain("✓");
   });
 });
@@ -227,13 +227,13 @@ describe("portal frame and Stripe return pages", () => {
   });
 });
 
-describe("sign-in, sign-up, and organization pages", () => {
+// Plan v3 has no organizations, so only the sign-in and sign-up pages carry the frame here.
+describe("sign-in and sign-up pages", () => {
   it("carry the RecallOps mark and name, linking home, above the Clerk widget", () => {
     for (const [k, v] of Object.entries(CLERK_ENV)) vi.stubEnv(k, v);
     for (const [page, widget] of [
       [SignInPage(), "data-sign-in-widget"],
       [SignUpPage(), "data-sign-up-widget"],
-      [OrganizationPage(), "data-org-list"],
     ] as const) {
       const html = renderToStaticMarkup(page);
       const brand = html.indexOf("data-auth-brand");

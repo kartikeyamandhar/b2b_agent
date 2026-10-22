@@ -1,4 +1,5 @@
-// Phase C: reissuing one claim's portal link from claim detail (admin).
+// Phase C: reissuing one claim's private portal link from claim detail (admin). Plan v3: the new link goes only to the
+// email on the claim, because anyone can start a claim from the product's public link.
 import { readFileSync } from "node:fs";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -41,15 +42,15 @@ describe("reissue rules", () => {
     for (const s of ["draft", "submitted", "needs_info", "flagged", "approved", "denied", "under_review", "capped"]) expect(reissueAvailability(s, true)).toEqual({ allowed: true });
   });
 
-  it("refuses every claim of a closed program, and leaves an unknown program to the API", () => {
-    expect(reissueAvailability("draft", true, "closed")).toMatchObject({ allowed: false, reason: expect.stringContaining("program is closed") });
+  it("refuses every claim of a closed product, and leaves an unknown product to the API", () => {
+    expect(reissueAvailability("draft", true, "closed")).toMatchObject({ allowed: false, reason: expect.stringContaining("product is closed") });
     expect(reissueAvailability("draft", true, null)).toEqual({ allowed: true });
     expect(reissueAvailability("draft", true, "open")).toEqual({ allowed: true });
   });
 
   it("refuses paid and closed claims and reviewers, with a reason", () => {
     for (const s of ["paid", "closed"]) expect(reissueAvailability(s, true)).toMatchObject({ allowed: false, reason: expect.stringContaining(s) });
-    expect(reissueAvailability("flagged", false)).toMatchObject({ allowed: false, reason: expect.stringContaining("admin") });
+    expect(reissueAvailability("flagged", false)).toMatchObject({ allowed: false, reason: "This account cannot issue claim links." });
   });
 
   it("only posts to a well-formed claim id", () => {
@@ -69,7 +70,7 @@ describe("ReissueLink", () => {
 
   it("explains why it is unavailable", () => {
     expect(renderToStaticMarkup(<ReissueLink claimId={C} status="paid" canAdmin />)).toContain("data-reissue-blocked");
-    expect(renderToStaticMarkup(<ReissueLink claimId={C} status="flagged" canAdmin={false} />)).toContain("Only an admin");
+    expect(renderToStaticMarkup(<ReissueLink claimId={C} status="flagged" canAdmin={false} />)).toContain("This account cannot issue claim links.");
   });
 });
 
@@ -89,7 +90,7 @@ describe("/app/claims/[id]", () => {
     const html = await render();
     expect(calls.some((c) => c.url.endsWith(`/v1/programs/${claim.program_id as string}`))).toBe(true);
     expect(html).toContain("data-reissue-blocked");
-    expect(html).toContain("The program is closed");
+    expect(html).toContain("The product is closed");
     expect(html).not.toContain("data-reissue-start");
   });
 
@@ -101,6 +102,6 @@ describe("/app/claims/[id]", () => {
 
   it("shows a reviewer why they cannot reissue", async () => {
     vi.stubEnv("RECALLOPS_DEV_ROLE", "reviewer");
-    expect(await render()).toContain("Only an admin can issue a new claim link");
+    expect(await render()).toContain("This account cannot issue claim links.");
   });
 });

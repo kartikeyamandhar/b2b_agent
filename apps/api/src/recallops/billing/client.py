@@ -57,6 +57,22 @@ def firm_lock(engine: Engine, firm_id: UUID) -> Iterator[None]:
             conn.commit()
 
 
+@contextmanager
+def claim_lock(engine: Engine, claim_id: UUID) -> Iterator[None]:
+    """Serializes Stripe calls for one claim's refund (Connect onboarding), so concurrent claimants of one firm never
+    wait on each other."""
+    with engine.connect() as conn:
+        acquired = conn.scalar(text("SELECT pg_try_advisory_lock(7420021, hashtext(:id))"), {"id": str(claim_id)})
+        conn.commit()
+        if not acquired:
+            raise PaymentError("this refund is already being set up; retry shortly")
+        try:
+            yield
+        finally:
+            conn.execute(text("SELECT pg_advisory_unlock(7420021, hashtext(:id))"), {"id": str(claim_id)})
+            conn.commit()
+
+
 def data(obj: Any) -> dict[str, Any]:
     if isinstance(obj, stripe.StripeObject):
         return dict(obj.to_dict())

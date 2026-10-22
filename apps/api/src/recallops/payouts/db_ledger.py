@@ -20,7 +20,7 @@ from __future__ import annotations
 from collections.abc import Callable, Iterator
 from contextlib import AbstractContextManager, contextmanager
 from dataclasses import dataclass
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from typing import Any
 from uuid import UUID
 
@@ -105,6 +105,19 @@ def lock_program_money(session: Session, program_id: UUID) -> None:
     session.execute(
         text("SELECT pg_advisory_xact_lock(:cls, hashtext(:p))"), {"cls": MONEY_LOCK_CLASS, "p": str(program_id)}
     )
+
+
+def choice_deadline(p: Payout, choice_days: int, onboarding_days: int) -> datetime | None:
+    """When a bank-transfer refund still waiting on the claimant becomes a mailed check (plan v3): choice_days after it
+    last became theirs to choose (approval, or a released hold) while no way is chosen, onboarding_days after bank
+    setup started (or after the release, if later). None when nothing waits on the claimant. One rule for the payment
+    job (stripe_connect.expire_choices) and the date the claimant sees (portal.payout_choice_due)."""
+    if p.method != "stripe_connect" or p.status not in ("pending", "onboarding"):
+        return None
+    opened = p.choice_opened_at or p.created_at
+    if p.status == "pending":
+        return opened + timedelta(days=choice_days)
+    return max(p.connect_started_at or p.created_at, opened) + timedelta(days=onboarding_days)
 
 
 def lock_claim_and_payout(session: Session, ctx: FirmContext, payout_id: UUID) -> tuple[Payout, str]:
@@ -211,7 +224,14 @@ class DbPayoutLedger:
         status = "pending_export" if method in EXPORT_METHODS else "pending"
         inserted = session.execute(
             insert(Payout)
-            .values(firm_id=ctx.firm_id, claim_id=claim_id, amount_cents=amount_cents, method=method, status=status)
+            .values(
+                firm_id=ctx.firm_id,
+                claim_id=claim_id,
+                amount_cents=amount_cents,
+                method=method,
+                status=status,
+                choice_opened_at=None if method in EXPORT_METHODS else datetime.now(UTC),
+            )
             .on_conflict_do_nothing(index_elements=["claim_id"])
             .returning(Payout.id)
         ).first()
@@ -249,7 +269,14 @@ class DbPayoutLedger:
             session.execute(
                 update(Payout)
                 .where(Payout.id == row.id)
-                .values(status=released, hold_requested=False, last_error=None, updated_at=datetime.now(UTC))
+                .values(
+                    status=released,
+                    hold_requested=False,
+                    last_error=None,
+                    updated_at=datetime.now(UTC),
+                    # The claimant's window to choose starts again: it ran while a person held the refund.
+                    choice_opened_at=None if released == "pending_export" else datetime.now(UTC),
+                )
             )
             _audit(session, ctx, "payout_released", row.id, {"status": "held"}, {"status": released})
             session.flush()

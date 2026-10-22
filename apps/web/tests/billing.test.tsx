@@ -9,16 +9,19 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 vi.hoisted(() => {
   (globalThis as { window?: unknown }).window ??= globalThis;
 });
+vi.mock("next/navigation", async (orig) => ({ ...(await orig<typeof import("next/navigation")>()), useRouter: () => ({ push: vi.fn(), refresh: vi.fn(), replace: vi.fn() }) }));
 
 import BillingPage from "@/app/app/billing/page";
 import { BillingLive, usageQuery } from "@/components/BillingLive";
 import { BillingView } from "@/components/BillingView";
 import { Usage } from "@/lib/api-types";
 import { startStripeSession } from "@/lib/billing-actions";
-import { RETURN_POLL_MS, accessLimited, billingActions, meterRatio, meters, planLabel } from "@/lib/billing";
+import { RETURN_POLL_MS, accessLimited, billingActions, meterRatio, meters, planLabel, planSummary } from "@/lib/billing";
 
-const free = Usage.parse(JSON.parse(readFileSync(new URL("./fixtures/usage-free.json", import.meta.url), "utf8")));
-const growth = { ...free, plan: "growth", effective_plan: "growth", subscription_status: "active", limits: { open_programs: null, claims_per_month: null, reviewer_seats: null } };
+// Plan v3 usage: the one limit is active products (the shared fixture still carries the old limit names).
+const fixture = Usage.parse(JSON.parse(readFileSync(new URL("./fixtures/usage-free.json", import.meta.url), "utf8")));
+const free = { ...fixture, active_products: 1, limits: { active_products: 1 } };
+const growth = { ...free, plan: "growth", effective_plan: "growth", subscription_status: "active", limits: { active_products: null } };
 const render = (el: ReactElement) => renderToStaticMarkup(<QueryClientProvider client={new QueryClient()}>{el}</QueryClientProvider>);
 
 afterEach(() => {
@@ -48,9 +51,13 @@ describe("billing rules", () => {
     expect(accessLimited({ plan: "free", effective_plan: "free" })).toBe(false);
   });
 
-  it("reads limits, with null as unlimited", () => {
-    expect(meters(free).map((m) => [m.used, m.limit])).toEqual([[1, 1], [37, 50], [null, 2]]);
-    expect(meters(growth).map((m) => m.limit)).toEqual([null, null, null]);
+  it("reads the active-product limit, with null as unlimited, and no claims or seat limits", () => {
+    expect(meters(free).map((m) => [m.label, m.used, m.limit])).toEqual([["Active products", 1, 1]]);
+    expect(meters(growth).map((m) => m.limit)).toEqual([null]);
+    expect(meters({ ...free, active_products: undefined, open_programs: 2 })[0]!.used).toBe(2);
+    expect(planSummary(free)).toMatch(/^Free covers one product at a time, with unlimited claims/);
+    expect(planSummary(growth)).toMatch(/^Growth runs any number of products/);
+    expect(planSummary({ effective_plan: "enterprise", limits: {} })).toBeNull();
     expect(meterRatio({ label: "x", used: 37, limit: 50 })).toBe(0.74);
     expect(meterRatio({ label: "x", used: 60, limit: 50 })).toBe(1);
     expect(meterRatio({ label: "x", used: 3, limit: null })).toBeNull();
@@ -58,10 +65,13 @@ describe("billing rules", () => {
 });
 
 describe("BillingView and BillingLive", () => {
-  it("shows the plan, meters against limits, and no invoices", () => {
+  it("shows the plan, the product meter, claims checked, and no invoices", () => {
     const out = renderToStaticMarkup(<BillingView usage={free} />);
     expect(out).toContain('data-plan="free"');
-    expect(out).toContain("37 of 50");
+    expect(out).toContain("1 of 1");
+    expect(out).toContain("Free covers one product at a time");
+    expect(out).toMatch(/data-claims-checked="true">37</);
+    expect(out).not.toMatch(/reviewer|seat|claims per month/i);
     expect(out).toContain("Model spend this month");
     expect(out).toContain("No invoices yet.");
   });
@@ -75,10 +85,10 @@ describe("BillingView and BillingLive", () => {
     expect(out).toContain("Billing sync needs attention: quantity update failed");
     expect(out).toContain("in_test_1");
     expect(out).toContain("$99.00");
-    expect(out).toContain("Unlimited");
+    expect(out).toContain("1 of unlimited");
   });
 
-  it("offers Upgrade to Growth to an admin on Free, and nothing to a reviewer", () => {
+  it("offers Upgrade to Growth to the company on Free, and nothing to a development reviewer", () => {
     const admin = render(<BillingLive initialUsage={free} canManage returned={false} loadedAt={Date.now()} />);
     expect(admin).toContain("data-billing-checkout");
     expect(admin).not.toContain("data-billing-portal");
@@ -140,7 +150,7 @@ describe("startStripeSession (mocked API, no Stripe calls)", () => {
   });
 
   it.each([
-    [403, "the reviewer role cannot manage billing"],
+    [403, "this account cannot manage billing"],
     [409, "a subscription already exists; use Customer Portal"],
     [503, "Stripe test prices are not configured"],
   ])("returns the API's %i problem without navigating", async (status, detail) => {
@@ -174,33 +184,56 @@ describe("usage polling after a Stripe return", () => {
 });
 
 describe("/app/billing page", () => {
+  const FIRM = { id: "00000000-0000-4000-8000-00000000d002", name: "Acme Kettles", onboarded: true, plan: "free", effective_plan: "free", subscription_status: null, approved: false, active_products: 0, product_limit: 1 };
+  const PLANS = [
+    { id: "free", product_limit: 1, program_price_cents: null, included_claims: null, claim_price_cents: null, currency: "usd", refund_options: ["stripe_connect", "check_export"] },
+    { id: "growth", product_limit: null, program_price_cents: 4900, included_claims: 500, claim_price_cents: 25, currency: "usd", refund_options: ["stripe_connect", "check_export"] },
+  ];
+
   beforeEach(() => {
     vi.stubEnv("RECALLOPS_API_URL", "http://127.0.0.1:8000");
     vi.stubEnv("RECALLOPS_WEB_AUTH", "dev");
     vi.stubEnv("RECALLOPS_DEV_FIRM_ID", "00000000-0000-4000-8000-00000000d002");
   });
 
+  function serve(usage: unknown = free) {
+    const urls: string[] = [];
+    vi.stubGlobal("fetch", async (url: string) => {
+      urls.push(url);
+      const path = new URL(url).pathname;
+      if (path === "/v1/me") return Response.json({ operator: false, email: "ops@acme.example", firm: FIRM });
+      if (path === "/v1/plans") return Response.json(PLANS);
+      return Response.json(usage);
+    });
+    return urls;
+  }
+
   const page = async (search: Record<string, string> = {}) =>
     render(await BillingPage({ searchParams: Promise.resolve(search) }));
 
-  it("reads usage and offers Checkout to an admin", async () => {
+  it("reads usage, the company, and the plans, and offers Checkout with Growth's price before approval", async () => {
     vi.stubEnv("RECALLOPS_DEV_ROLE", "admin");
-    const urls: string[] = [];
-    vi.stubGlobal("fetch", async (url: string) => (urls.push(url), Response.json(free)));
+    const urls = serve();
     const out = await page();
-    expect(urls).toEqual(["http://127.0.0.1:8000/v1/usage"]);
+    expect([...urls].sort()).toEqual(["http://127.0.0.1:8000/v1/me", "http://127.0.0.1:8000/v1/plans", "http://127.0.0.1:8000/v1/usage"]);
     expect(out).toContain("Billing and usage");
     expect(out).toContain("data-billing-checkout");
+    expect(out).toContain("Growth: $49.00 a month for each open product");
+    expect(out).toContain("4242 4242 4242 4242");
+    expect(out).toMatch(/data-company-name="true"[^>]*value="Acme Kettles"|value="Acme Kettles"[^>]*data-company-name="true"/);
   });
 
-  it("is read-only for a reviewer", async () => {
+  it("is read-only for a development reviewer", async () => {
     vi.stubEnv("RECALLOPS_DEV_ROLE", "reviewer");
-    vi.stubGlobal("fetch", async () => Response.json(free));
-    expect(await page()).toContain("data-billing-readonly");
+    serve();
+    const out = await page();
+    expect(out).toContain("data-billing-readonly");
+    expect(out).toContain("This account cannot change the plan or payment details.");
+    expect(out.replace(/<[^>]+>/g, " ")).not.toMatch(/organization/i); // visible text (autocomplete="organization" is the HTML token for a company name)
   });
 
-  it("shows the return banner when Stripe sends the admin back", async () => {
-    vi.stubGlobal("fetch", async () => Response.json(free));
+  it("shows the return banner when Stripe sends the company back", async () => {
+    serve();
     expect(await page({ stripe: "return" })).toContain("data-stripe-returned");
   });
 

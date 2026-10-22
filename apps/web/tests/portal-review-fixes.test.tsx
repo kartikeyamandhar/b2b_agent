@@ -70,7 +70,7 @@ describe("payout choice for a scheduled check (finding 1)", () => {
   it("gives a payout 409 its own sentence and leaves the rest to the portal copy", () => {
     expect(payoutSentence(409)).toBe("Your refund can no longer be changed this way. Refresh the page to see how it will be paid.");
     expect(payoutSentence(409)).not.toBe(portalSentence(409));
-    for (const s of [0, 400, 402, 404, 422, 429, 503]) expect(payoutSentence(s)).toBe(portalSentence(s));
+    for (const s of [0, 400, 404, 422, 429, 503]) expect(payoutSentence(s)).toBe(portalSentence(s));
   });
 });
 

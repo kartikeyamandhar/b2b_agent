@@ -2,7 +2,7 @@
 export function portalSentence(status: number): string {
   switch (status) {
     case 404:
-      return "This claim link is not valid or has expired. Use the most recent link the firm sent you.";
+      return "This claim link is not valid or has expired. If you started a claim and did not submit it, it may have been removed: start a new one from the product's claim link.";
     case 409:
       return "Your claim changed since this page loaded. Refresh the page to see where it stands.";
     case 413:
@@ -10,8 +10,6 @@ export function portalSentence(status: number): string {
       return "Some of the information or a photo could not be accepted. Check it and try again.";
     case 429:
       return "Too many attempts in a short time. Wait a few minutes and try again.";
-    case 402:
-      return "This firm pays refunds by mailed check. Choose a mailed check instead.";
     case 400:
       return "Stripe needs your email address. Add it to your claim details, or choose a mailed check.";
     case 0:

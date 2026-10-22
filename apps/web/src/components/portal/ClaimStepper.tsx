@@ -9,8 +9,10 @@ import { ApiError, type ApiProblem } from "@/lib/api/problem";
 import {
   EMPTY_DRAFT,
   PHOTOS_BUSY_REASON,
+  REFUND_CHOICE,
   STEPS,
   anyPhotoBusy,
+  claimPhotoKinds,
   clearDraft,
   fieldLabel,
   loadDraft,
@@ -22,17 +24,19 @@ import {
   remedyPromise,
   saveDraft,
   sessionStore,
+  submitBlockedReason,
   submitBody,
+  submitSentence,
   validateStep,
   type DraftFields,
   type FieldErrors,
   type PhotoPhase,
 } from "@/lib/portal";
 import { formatDate } from "@/lib/format";
-import { portalSentence } from "@/lib/portal-copy";
 
 import { ProblemAlert } from "../ProblemAlert";
 
+import { ClaimLinkCard } from "./ClaimLinkCard";
 import { PhotoCapture } from "./PhotoCapture";
 
 const today = () => new Date().toISOString().slice(0, 10);
@@ -110,13 +114,15 @@ function Summary({ rows }: { rows: Array<[string, ReactNode]> }) {
 
 /**
  * Back, Continue, and Submit. While a photo is still preparing or uploading all three wait: moving on would submit
- * without it, and going back would unmount the capture that holds the bytes for Try again.
+ * without it, and going back would unmount the capture that holds the bytes for Try again. Submit also waits, with
+ * its reason shown, while `submitBlocked` names something the API would refuse the claim without (the label photo).
  */
 export function StepNav({
   showBack,
   isReview,
   submitting,
   photosBusy,
+  submitBlocked = null,
   onBack,
   onContinue,
   onSubmit,
@@ -125,15 +131,23 @@ export function StepNav({
   isReview: boolean;
   submitting: boolean;
   photosBusy: boolean;
+  submitBlocked?: string | null;
   onBack: () => void;
   onContinue: () => void;
   onSubmit: () => void;
 }) {
+  const blocked = isReview && !photosBusy ? submitBlocked : null;
+  const describedBy = photosBusy ? "step-nav-wait" : blocked ? "step-nav-blocked" : undefined;
   return (
     <div className="grid gap-2">
       {photosBusy ? (
         <p id="step-nav-wait" aria-live="polite" className="text-sm text-ink-muted" data-photos-busy>
           {PHOTOS_BUSY_REASON}
+        </p>
+      ) : null}
+      {blocked ? (
+        <p id="step-nav-blocked" aria-live="polite" className="text-sm text-warn-ink" data-blocked-reason>
+          {blocked}
         </p>
       ) : null}
       <div className="flex gap-3">
@@ -146,8 +160,8 @@ export function StepNav({
           <button
             type="button"
             onClick={onSubmit}
-            disabled={submitting || photosBusy}
-            aria-describedby={photosBusy ? "step-nav-wait" : undefined}
+            disabled={submitting || photosBusy || !!blocked}
+            aria-describedby={describedBy}
             className="min-h-12 flex-[2] rounded-md bg-accent px-4 text-base font-semibold text-bg hover:opacity-90 disabled:opacity-60"
             data-submit
           >
@@ -170,7 +184,8 @@ export function StepNav({
   );
 }
 
-/** The six-step claim form (02-ui.md /claim/[token]). Fields resume from this tab's session; photos from the API. */
+/** The six-step claim form (02-ui.md /claim/[token]). Fields resume from this tab's session; photos from the API. The
+ *  first step also shows the claim's private link, the only way back to this claim (plan v3). */
 export function ClaimStepper({ token, view }: { token: string; view: PortalView }) {
   const router = useRouter();
   const program = view.program;
@@ -197,7 +212,10 @@ export function ClaimStepper({ token, view }: { token: string; view: PortalView 
     if (restored) saveDraft(sessionStore(), view.claim_id, fields, step);
   }, [fields, step, restored, view.claim_id]);
 
-  const missing = missingPhotos(program.required_photos, uploaded);
+  // The label photo is always asked for, first: the API refuses to submit a claim without one (plan v3).
+  const photoKinds = claimPhotoKinds(program.required_photos);
+  const missing = missingPhotos(photoKinds, uploaded);
+  const submitBlocked = submitBlockedReason(uploaded);
   const current = STEPS[step]!;
   const set = (k: keyof DraftFields) => (v: string) => setFields((f) => ({ ...f, [k]: v }));
 
@@ -221,7 +239,7 @@ export function ClaimStepper({ token, view }: { token: string; view: PortalView 
   }
 
   async function onSubmit() {
-    if (photosBusy) return;
+    if (photosBusy || submitBlocked) return;
     const e = validateStep("review", fields, missing, today(), { requireModel });
     setErrors(e);
     if (Object.keys(e).length) return;
@@ -232,7 +250,10 @@ export function ClaimStepper({ token, view }: { token: string; view: PortalView 
       clearDraft(sessionStore(), view.claim_id);
       router.push(`/claim/${encodeURIComponent(token)}/status`);
     } catch (err) {
-      setProblem(err instanceof ApiError ? err.problem : { status: 0, title: "Error", detail: null, correlationId: null, retryAfterSeconds: null });
+      const p = err instanceof ApiError ? err.problem : { status: 0, title: "Error", detail: null, correlationId: null, retryAfterSeconds: null };
+      // The API answers 409 only while it has no label photo, so this page's record of one was wrong.
+      if (p.status === 409) setUploaded((u) => u.filter((k) => k !== "label"));
+      setProblem(p);
       setSubmitting(false);
     }
   }
@@ -240,143 +261,155 @@ export function ClaimStepper({ token, view }: { token: string; view: PortalView 
   const err = (k: keyof DraftFields) => errors[k];
 
   return (
-    <div className="grid min-w-0 grid-cols-1 gap-6 rounded-xl border border-line bg-surface p-5 sm:p-7">
-      <nav aria-label="Claim steps">
-        <p className="text-sm text-ink-muted">
-          Step {step + 1} of {STEPS.length}
-        </p>
-        <ol className="mt-1 grid grid-cols-6 gap-1" aria-hidden="true">
-          {STEPS.map((s, i) => (
-            <li key={s.id} className={`h-1.5 rounded ${i <= step ? "bg-brand" : "bg-line"}`} />
-          ))}
-        </ol>
-      </nav>
-
-      <h2 ref={heading} tabIndex={-1} className="text-xl font-semibold outline-none" data-step={current.id}>
-        {current.title}
-      </h2>
-
-      {current.id === "product" ? (
-        <div className="grid gap-3 text-base">
-          <p>This claim is for these models:</p>
-          <ul className="flex flex-wrap gap-2">
-            {program.models.length ? (
-              program.models.map((m) => (
-                <li key={m} className="rounded border border-line-strong px-2 py-1 font-mono">
-                  {m}
-                </li>
-              ))
-            ) : (
-              <li className="text-ink-muted">The notice does not list model numbers.</li>
-            )}
-          </ul>
-          {program.model_label_location ? <p>The model number is {program.model_label_location}.</p> : null}
-          <p className="rounded border border-line bg-panel p-3">{remedyPromise(program.remedy_type)}</p>
-          <p className="text-sm text-ink-muted">Continue if you have one of these products.</p>
-        </div>
-      ) : null}
-
-      {current.id === "details" ? (
-        <div className="grid gap-4">
-          <Field
-            name="model_claimed"
-            value={fields.model_claimed}
-            error={err("model_claimed")}
-            onChange={set("model_claimed")}
-            list="recall-models"
-            hint={requireModel ? "Type it exactly as printed on the label." : "If your product's label shows a model number, type it exactly as printed."}
-            autoComplete="off"
-            optional={!requireModel}
-          />
-          <datalist id="recall-models">
-            {program.models.map((m) => (
-              <option key={m} value={m} />
+    <div className="grid min-w-0 gap-5">
+      <div className="grid min-w-0 grid-cols-1 gap-6 rounded-xl border border-line bg-surface p-5 sm:p-7">
+        <nav aria-label="Claim steps">
+          <p className="text-sm text-ink-muted">
+            Step {step + 1} of {STEPS.length}
+          </p>
+          <ol className="mt-1 grid grid-cols-6 gap-1" aria-hidden="true">
+            {STEPS.map((s, i) => (
+              <li key={s.id} className={`h-1.5 rounded ${i <= step ? "bg-brand" : "bg-line"}`} />
             ))}
-          </datalist>
-          <Field name="serial_claimed" value={fields.serial_claimed} error={err("serial_claimed")} onChange={set("serial_claimed")} optional autoComplete="off" />
-          <Field name="date_code_claimed" value={fields.date_code_claimed} error={err("date_code_claimed")} onChange={set("date_code_claimed")} optional autoComplete="off" />
-          <Field name="quantity" value={fields.quantity} error={err("quantity")} onChange={set("quantity")} type="number" inputMode="numeric" />
-        </div>
-      ) : null}
+          </ol>
+        </nav>
 
-      {current.id === "photos" ? (
-        <div className="grid gap-4">
-          {program.required_photos.map((kind) => (
-            <PhotoCapture
-              key={kind}
-              token={token}
-              kind={kind}
-              hint={photoHint(kind, program)}
-              alreadyUploaded={uploaded.includes(kind)}
-              onUploaded={(k) => setUploaded((u) => (u.includes(k) ? u : [...u, k]))}
-              onPhaseChange={(phase) => setPhotoPhases((p) => ({ ...p, [kind]: phase }))}
+        <h2 ref={heading} tabIndex={-1} className="text-xl font-semibold outline-none" data-step={current.id}>
+          {current.title}
+        </h2>
+
+        {current.id === "product" ? (
+          <div className="grid gap-3 text-base">
+            <p>This claim is for these models:</p>
+            <ul className="flex flex-wrap gap-2">
+              {program.models.length ? (
+                program.models.map((m) => (
+                  <li key={m} className="rounded border border-line-strong px-2 py-1 font-mono">
+                    {m}
+                  </li>
+                ))
+              ) : (
+                <li className="text-ink-muted">The notice does not list model numbers.</li>
+              )}
+            </ul>
+            {program.model_label_location ? <p>The model number is {program.model_label_location}.</p> : null}
+            <div className="grid gap-1 rounded border border-line bg-panel p-3">
+              <p>{remedyPromise(program.remedy_type)}</p>
+              {program.remedy_type === "refund" ? <p className="text-sm text-ink-muted">{REFUND_CHOICE}</p> : null}
+            </div>
+            <p className="text-sm text-ink-muted">Continue if you have one of these products.</p>
+          </div>
+        ) : null}
+
+        {current.id === "details" ? (
+          <div className="grid gap-4">
+            <Field
+              name="model_claimed"
+              value={fields.model_claimed}
+              error={err("model_claimed")}
+              onChange={set("model_claimed")}
+              list="recall-models"
+              hint={requireModel ? "Type it exactly as printed on the label." : "If your product's label shows a model number, type it exactly as printed."}
+              autoComplete="off"
+              optional={!requireModel}
             />
-          ))}
-          {errors.photos ? (
-            <p role="alert" tabIndex={-1} data-step-error className="text-base text-warn-ink">
-              {errors.photos}
-            </p>
-          ) : null}
-        </div>
-      ) : null}
+            <datalist id="recall-models">
+              {program.models.map((m) => (
+                <option key={m} value={m} />
+              ))}
+            </datalist>
+            <Field name="serial_claimed" value={fields.serial_claimed} error={err("serial_claimed")} onChange={set("serial_claimed")} optional autoComplete="off" />
+            <Field name="date_code_claimed" value={fields.date_code_claimed} error={err("date_code_claimed")} onChange={set("date_code_claimed")} optional autoComplete="off" />
+            <Field name="quantity" value={fields.quantity} error={err("quantity")} onChange={set("quantity")} type="number" inputMode="numeric" />
+          </div>
+        ) : null}
 
-      {current.id === "purchase" ? (
-        <div className="grid gap-4">
-          <Field name="retailer_claimed" value={fields.retailer_claimed} error={err("retailer_claimed")} onChange={set("retailer_claimed")} optional hint="The store or website name." autoComplete="off" />
-          <Field name="purchase_date" value={fields.purchase_date} error={err("purchase_date")} onChange={set("purchase_date")} type="date" optional />
-        </div>
-      ) : null}
+        {current.id === "photos" ? (
+          <div className="grid gap-4">
+            {photoKinds.map((kind) => (
+              <PhotoCapture
+                key={kind}
+                token={token}
+                kind={kind}
+                hint={photoHint(kind, program)}
+                alreadyUploaded={uploaded.includes(kind)}
+                onUploaded={(k) => setUploaded((u) => (u.includes(k) ? u : [...u, k]))}
+                onPhaseChange={(phase) => setPhotoPhases((p) => ({ ...p, [kind]: phase }))}
+              />
+            ))}
+            {errors.photos ? (
+              <p role="alert" tabIndex={-1} data-step-error className="text-base text-warn-ink">
+                {errors.photos}
+              </p>
+            ) : null}
+          </div>
+        ) : null}
 
-      {current.id === "contact" ? (
-        <div className="grid gap-4">
-          <Field name="name" value={fields.name} error={err("name")} onChange={set("name")} autoComplete="name" />
-          <Field name="email" value={fields.email} error={err("email")} onChange={set("email")} type="email" inputMode="email" autoComplete="email" />
-          <Field name="phone" value={fields.phone} error={err("phone")} onChange={set("phone")} type="tel" inputMode="tel" autoComplete="tel" optional />
-          <Field name="address_line1" value={fields.address_line1} error={err("address_line1")} onChange={set("address_line1")} autoComplete="address-line1" />
-          <Field name="city" value={fields.city} error={err("city")} onChange={set("city")} autoComplete="address-level2" />
-          <Field name="state" value={fields.state} error={err("state")} onChange={set("state")} autoComplete="address-level1" />
-          <Field name="zip" value={fields.zip} error={err("zip")} onChange={set("zip")} inputMode="numeric" autoComplete="postal-code" />
-        </div>
-      ) : null}
+        {current.id === "purchase" ? (
+          <div className="grid gap-4">
+            <Field name="retailer_claimed" value={fields.retailer_claimed} error={err("retailer_claimed")} onChange={set("retailer_claimed")} optional hint="The store or website name." autoComplete="off" />
+            <Field name="purchase_date" value={fields.purchase_date} error={err("purchase_date")} onChange={set("purchase_date")} type="date" optional />
+          </div>
+        ) : null}
 
-      {current.id === "review" ? (
-        <div className="grid gap-4">
-          <Summary
-            rows={[
-              ["Model", fields.model_claimed],
-              ["Serial", fields.serial_claimed],
-              ["Date code", fields.date_code_claimed],
-              ["Quantity", fields.quantity],
-              ["Photos", photoSummary(program.required_photos, uploaded)],
-              ["Bought at", fields.retailer_claimed],
-              ["Bought on", fields.purchase_date ? formatDate(fields.purchase_date) : ""],
-              ["Name", fields.name],
-              ["Email", fields.email],
-              ["Phone", fields.phone],
-              ["Address", [fields.address_line1, fields.city, fields.state, fields.zip].filter(Boolean).join(", ")],
-            ]}
-          />
-          <p className="rounded border border-line bg-panel p-3 text-base">{remedyPromise(program.remedy_type)}</p>
-          <p className="text-sm text-ink-muted">You cannot change these answers after you submit.</p>
-          {Object.keys(errors).length ? (
-            <p role="alert" className="text-base text-warn-ink">
-              Some answers need attention: {Object.values(errors).join(" ")}
-            </p>
-          ) : null}
-        </div>
-      ) : null}
+        {current.id === "contact" ? (
+          <div className="grid gap-4">
+            <Field name="name" value={fields.name} error={err("name")} onChange={set("name")} autoComplete="name" />
+            <Field name="email" value={fields.email} error={err("email")} onChange={set("email")} type="email" inputMode="email" autoComplete="email" />
+            <Field name="phone" value={fields.phone} error={err("phone")} onChange={set("phone")} type="tel" inputMode="tel" autoComplete="tel" optional />
+            <Field name="address_line1" value={fields.address_line1} error={err("address_line1")} onChange={set("address_line1")} autoComplete="address-line1" />
+            <Field name="city" value={fields.city} error={err("city")} onChange={set("city")} autoComplete="address-level2" />
+            <Field name="state" value={fields.state} error={err("state")} onChange={set("state")} autoComplete="address-level1" />
+            <Field name="zip" value={fields.zip} error={err("zip")} onChange={set("zip")} inputMode="numeric" autoComplete="postal-code" />
+          </div>
+        ) : null}
 
-      {problem ? <ProblemAlert problem={problem} sentence={portalSentence(problem.status)} audience="claimant" /> : null}
+        {current.id === "review" ? (
+          <div className="grid gap-4">
+            <Summary
+              rows={[
+                ["Model", fields.model_claimed],
+                ["Serial", fields.serial_claimed],
+                ["Date code", fields.date_code_claimed],
+                ["Quantity", fields.quantity],
+                ["Photos", photoSummary(photoKinds, uploaded)],
+                ["Bought at", fields.retailer_claimed],
+                ["Bought on", fields.purchase_date ? formatDate(fields.purchase_date) : ""],
+                ["Name", fields.name],
+                ["Email", fields.email],
+                ["Phone", fields.phone],
+                ["Address", [fields.address_line1, fields.city, fields.state, fields.zip].filter(Boolean).join(", ")],
+              ]}
+            />
+            <p className="rounded border border-line bg-panel p-3 text-base">{remedyPromise(program.remedy_type)}</p>
+            {submitBlocked ? (
+              <button type="button" onClick={() => go(STEPS.findIndex((s) => s.id === "photos"))} disabled={photosBusy} className="justify-self-start text-base font-medium text-accent underline disabled:opacity-60" data-go-photos>
+                Add the label photo
+              </button>
+            ) : null}
+            <p className="text-sm text-ink-muted">You cannot change these answers after you submit.</p>
+            {Object.keys(errors).length ? (
+              <p role="alert" className="text-base text-warn-ink">
+                Some answers need attention: {Object.values(errors).join(" ")}
+              </p>
+            ) : null}
+          </div>
+        ) : null}
 
-      <StepNav
-        showBack={step > 0}
-        isReview={current.id === "review"}
-        submitting={submitting}
-        photosBusy={photosBusy}
-        onBack={() => go(step - 1)}
-        onContinue={onContinue}
-        onSubmit={() => void onSubmit()}
-      />
+        {problem ? <ProblemAlert problem={problem} sentence={submitSentence(problem)} audience="claimant" /> : null}
+
+        <StepNav
+          showBack={step > 0}
+          isReview={current.id === "review"}
+          submitting={submitting}
+          photosBusy={photosBusy}
+          submitBlocked={submitBlocked}
+          onBack={() => go(step - 1)}
+          onContinue={onContinue}
+          onSubmit={() => void onSubmit()}
+        />
+      </div>
+      {current.id === "product" ? <ClaimLinkCard token={token} claimId={view.claim_id} /> : null}
     </div>
   );
 }

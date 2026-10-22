@@ -27,9 +27,9 @@ describe("statusLabel", () => {
     expect(statusLabel("claim", "constructor").known).toBe(false);
   });
 
-  it("uses the agreed wording for held payouts and issued links", () => {
+  it("uses the agreed wording for held payouts and unsubmitted claims", () => {
     expect(statusLabel("payout", "held").label).toBe("On hold, a person is reviewing");
-    expect(statusLabel("claim", "draft").label).toBe("Link issued");
+    expect(statusLabel("claim", "draft").label).toBe("Started, not submitted");
     expect(statusLabel("run", "waiting_human").tone).toBe("attention");
   });
 

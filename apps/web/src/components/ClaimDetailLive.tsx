@@ -183,7 +183,14 @@ export function ClaimDetailLive({
           <ReviewerActions claim={claim} onDone={onDone} pending={review !== null} onAlreadyQueued={onAlreadyQueued} />
           <PayoutPanel payout={claim.payout} remedy={claim.remedy} />
           <FraudPanel claimId={claim.id} clusters={claim.clusters} hits={duplicateHits(trace)} programId={claim.program_id} />
-          <ReissueLink claimId={claim.id} status={claim.status} canAdmin={canAdmin} programStatus={programStatus} onDone={() => void claimQ.refetch()} />
+          <ReissueLink
+            claimId={claim.id}
+            status={claim.status}
+            canAdmin={canAdmin}
+            programStatus={programStatus}
+            email={claim.claimant.email ?? null}
+            onDone={() => void claimQ.refetch()}
+          />
           <Panel id="claim-run" title="Latest run">
             {claim.run ? (
               <p className="flex flex-wrap items-center gap-2 text-sm">

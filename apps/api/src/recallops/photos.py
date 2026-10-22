@@ -9,7 +9,7 @@ import warnings
 from dataclasses import dataclass
 from typing import Any
 
-from PIL import Image, UnidentifiedImageError
+from PIL import Image, ImageOps, UnidentifiedImageError
 
 from recallops.fraud.phash import phash_image
 from recallops.storage import Storage
@@ -50,6 +50,27 @@ def inspect(data: bytes, max_pixels: int = DEFAULT_MAX_PIXELS) -> PhotoFacts:
     except (UnidentifiedImageError, OSError, Image.DecompressionBombError, Image.DecompressionBombWarning) as exc:
         raise InvalidPhoto(f"not a readable image: {exc}") from exc
     return facts
+
+
+def downscale(data: bytes, max_pixels: int, max_bytes: int | None = None, quality: int = 85) -> bytes | None:
+    """A claimant photo over max_pixels, or over max_bytes, re-encoded as a JPEG of at most about max_pixels (plan v3:
+    a public link must not be able to fill the shared photo bucket; a 2 MP PNG is 6 MB as uploaded), turned upright
+    first (a phone stores its rotation as EXIF, which a re-encode drops). None when the photo is already small enough.
+    Deterministic, so two uploads of the same photo still match. Call after inspect(), which refuses decompression
+    bombs."""
+    with Image.open(io.BytesIO(data)) as image:
+        pixels = image.width * image.height
+        if pixels <= max_pixels and (max_bytes is None or len(data) <= max_bytes):
+            return None
+        upright = ImageOps.exif_transpose(image) or image
+        scale = min(1.0, (max_pixels / (upright.width * upright.height)) ** 0.5)
+        size = (max(1, int(upright.width * scale)), max(1, int(upright.height * scale)))
+        small = upright.convert("RGB")
+        if size != small.size:
+            small = small.resize(size, Image.Resampling.LANCZOS)
+        out = io.BytesIO()
+        small.save(out, format="JPEG", quality=quality, optimize=True)
+        return out.getvalue()
 
 
 def store(storage: Storage, relative_path: str, data: bytes, content_type: str = "image/jpeg") -> PhotoFacts:

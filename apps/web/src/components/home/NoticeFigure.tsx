@@ -34,7 +34,7 @@ export function NoticeFigure() {
           ))}
         </dl>
         <p className="mt-3 text-sm text-ink-muted">
-          Each rule is taken from the notice&rsquo;s own words, so a reviewer can check it against the source.
+          Each rule is taken from the notice&rsquo;s own words, so anyone can check it against the source.
         </p>
       </figcaption>
     </figure>

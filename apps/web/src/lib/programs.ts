@@ -1,7 +1,8 @@
-// Program figures derived from GET /v1/programs fields only (no endpoint beyond the contract).
+// Product figures derived from GET /v1/programs fields only (no endpoint beyond the contract). Programs are called
+// products in the console's copy (plan v3); code names and URLs keep program.
 import type { Program } from "@/lib/api-types";
 
-/** Claim statuses in queue order: issued, in flight, waiting on a person, decided, delivered. */
+/** Claim statuses in queue order: started, in flight, waiting on a person, decided, delivered. */
 export const CLAIM_STATUS_ORDER = [
   "draft",
   "submitted",
@@ -22,8 +23,8 @@ export const AWAITING_REVIEW = ["flagged", "under_review", "capped"] as const;
 export const CORRECTED = ["paid", "closed"] as const;
 
 export type ProgramMetrics = {
-  /** Links issued that the claimant has not submitted yet (status draft). */
-  linksOpen: number;
+  /** Claims started from the product's claim link and not submitted yet (status draft). */
+  notSubmitted: number;
   /** Every claim past draft. */
   filed: number;
   awaitingReview: number;
@@ -41,12 +42,12 @@ const count = (counts: Record<string, number>, status: string): number => {
 export function programMetrics(p: Pick<Program, "claim_counts" | "units_affected">): ProgramMetrics {
   const counts = p.claim_counts;
   const total = Object.keys(counts).reduce((sum, s) => sum + count(counts, s), 0);
-  const linksOpen = count(counts, "draft");
+  const notSubmitted = count(counts, "draft");
   const corrected = CORRECTED.reduce((sum, s) => sum + count(counts, s), 0);
   const units = p.units_affected;
   return {
-    linksOpen,
-    filed: total - linksOpen,
+    notSubmitted,
+    filed: total - notSubmitted,
     awaitingReview: AWAITING_REVIEW.reduce((sum, s) => sum + count(counts, s), 0),
     needsInfo: count(counts, "needs_info"),
     corrected,

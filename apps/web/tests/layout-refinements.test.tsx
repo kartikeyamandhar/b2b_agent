@@ -52,7 +52,7 @@ describe("/app/programs layout", () => {
   it("uses the summary and cards for a few programs", async () => {
     serve(list.items);
     const html = renderToStaticMarkup(await ProgramsPage());
-    expect(html).toContain('data-portfolio-stat="Open programs"');
+    expect(html).toContain('data-portfolio-stat="Open products"');
     expect(html).toContain("data-program-card=");
     expect(html).not.toContain("<table");
   });
@@ -66,20 +66,24 @@ describe("/app/programs layout", () => {
 });
 
 describe("sidebar", () => {
-  it("groups navigation and marks Programs on a claim page", () => {
-    expect([...new Set(CONSOLE_NAV.map((n) => n.group))]).toEqual(["Operations", "Account", "Platform"]);
-    const html = renderToStaticMarkup(<AppShell identityNote="note" org={{ name: "Development firm", detail: "…00d001 · Admin · dev auth" }}>x</AppShell>);
+  it("groups navigation and marks Products on a claim page", () => {
+    expect([...new Set(CONSOLE_NAV.map((n) => n.group))]).toEqual(["Operations", "Account"]);
+    const html = renderToStaticMarkup(<AppShell identityNote="note" company={{ name: "Acme Kettles", detail: "Free plan" }}>x</AppShell>);
     expect(html).toContain(">Operations<");
     expect(html).toContain(">Account<");
-    expect(html).not.toContain(">Platform<"); // the operator's group shows to the operator only
+    expect(html).not.toContain(">Platform<");
     expect(html).toMatch(/aria-current="page"[^>]*href="\/app\/programs"|href="\/app\/programs"[^>]*aria-current="page"/);
+    expect(html).toContain(">Products<");
   });
 
-  it("shows the organization with initials, or the identity note without one", () => {
-    const withOrg = renderToStaticMarkup(<AppShell identityNote="note" org={{ name: "Development firm", detail: "…00d001 · Admin · dev auth" }}>x</AppShell>);
-    expect(withOrg).toContain("data-org-block");
-    expect(withOrg).toContain(">DF<");
-    expect(withOrg).toContain("Development firm");
+  it("shows the company with initials and its plan, or the identity note without one", () => {
+    const withCompany = renderToStaticMarkup(<AppShell identityNote="note" company={{ name: "Acme Kettles", detail: "Free plan · ops@acme.example" }}>x</AppShell>);
+    expect(withCompany).toContain("data-company-block");
+    expect(withCompany).toContain(">Company<");
+    expect(withCompany).toContain(">AK<");
+    expect(withCompany).toContain("Acme Kettles");
+    expect(withCompany).toContain("Free plan · ops@acme.example");
+    expect(withCompany).not.toMatch(/organization/i);
     const without = renderToStaticMarkup(<AppShell identityNote="Console auth not configured">x</AppShell>);
     expect(without).toContain("Console auth not configured");
   });

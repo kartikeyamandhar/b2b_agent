@@ -58,6 +58,8 @@ def current_firm(principal: Annotated[Principal, Depends(current_user)]) -> Firm
         return build_provider().firm_context(principal)
     except NoFirmError as exc:
         raise HTTPException(status.HTTP_403_FORBIDDEN, str(exc)) from exc
+    except AuthUnavailable as exc:  # Clerk could not say whether this account is the operator: create nothing
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, "sign-in verification unavailable") from exc
 
 
 def require_role(role: Role) -> Callable[[FirmContext], FirmContext]:

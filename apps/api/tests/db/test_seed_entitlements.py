@@ -22,7 +22,7 @@ def test_a_new_demo_claim_and_a_second_program_are_entitled_after_the_seed(inter
         conn.execute(text("SELECT set_config('app.audit_purge', 'on', true)"))
         for table in CLEAN_ORDER:
             conn.execute(text(f"DELETE FROM {table}"))
-    n = get_settings().free_claims_per_month + 5  # more than a free firm may decide in a month
+    n = 105  # more claims than the old free monthly limit (100), which is gone (plan v3: free decides any number)
     seed.run(internal_engine_test, n=n)
     billing = PlanBilling(internal_engine_test, get_settings())
     demo = FirmContext(firm_id=seed.DEMO_FIRM_ID, user_id="tester", role="admin")

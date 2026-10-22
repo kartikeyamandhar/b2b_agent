@@ -15,7 +15,9 @@ export type Loaded<T> = { ok: true; data: T } | { ok: false; problem: ApiProblem
 
 export const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-async function load<T>(run: () => Promise<T>): Promise<Loaded<T>> {
+/** Runs one API read and turns API, sign-in, and configuration errors into a result (exported for loaders that live
+ *  next to their feature, such as lib/me.ts and lib/intake.ts). */
+export async function load<T>(run: () => Promise<T>): Promise<Loaded<T>> {
   try {
     return { ok: true, data: await run() };
   } catch (err) {
@@ -115,6 +117,6 @@ export function loadAccess(env: Env = process.env): Promise<Loaded<AccessStatus>
   return load(() => apiJson(AccessStatus, { surface: "console", path: "/v1/access" }, env));
 }
 
-export function loadOperatorAccess(env: Env = process.env, timeoutMs?: number): Promise<Loaded<OperatorAccessRequest[]>> {
-  return load(() => apiJson(z.array(OperatorAccessRequest), { surface: "console", path: "/v1/operator/access", timeoutMs }, env));
+export function loadOperatorAccess(env: Env = process.env): Promise<Loaded<OperatorAccessRequest[]>> {
+  return load(() => apiJson(z.array(OperatorAccessRequest), { surface: "console", path: "/v1/operator/access" }, env));
 }

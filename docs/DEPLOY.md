@@ -14,7 +14,7 @@ RecallOps has been live since 2026-10-21. The one link is **https://recallops-fi
 | Database | Supabase Postgres 16 | Free | All data, with row-level security |
 | Claim photos | Supabase Storage, private bucket `claim-photos` | Free | Photos; the API proxies every byte after the firm check |
 | Fraud graph | Neo4j AuraDB Free | Free | Fraud rings (already created; credentials in `~/.config/recallops/deploy.env`) |
-| Sign-in | Clerk | Free | Company staff and organizations |
+| Sign-in | Clerk | Free | Company accounts (one account is one company) and the operator |
 | Payments | Stripe, test mode only | Free | Firm plans and claimant refunds; no real money |
 
 The website is the only address anyone visits. The browser never talks to the API directly: the website's server calls it, attaches the signed-in user's Clerk token, and passes through only `/v1` and `/portal` requests. The worker and the cron jobs have no public address.
@@ -56,8 +56,8 @@ The project runs Postgres 17. Its direct host (`db.<ref>.supabase.co`) answers o
 | `WEB_PROXY_SECRET`, `INTERNAL_SHARED_SECRET`, `CLAIM_TOKEN_SECRET` | Generated above |
 | `CLERK_SECRET_KEY`, `CLERK_PUBLISHABLE_KEY`, `CLERK_ISSUER` | Step 4 (leave `CLERK_JWKS_URL` empty: it is derived from the issuer). The API also reads operator addresses with the secret key |
 | `CLERK_ALLOWED_ORIGINS` | `https://<your-site>.vercel.app` |
-| `PLATFORM_OPERATOR_EMAILS` | The operator's email address: who approves organizations (step 7) |
-| `PLATFORM_OPERATOR_USER_IDS` | Optional: Clerk user ids that are also operators (step 7) |
+| `PLATFORM_OPERATOR_EMAILS` | The operator's email address: who approves companies (step 7) |
+| `PLATFORM_OPERATOR_USER_IDS` | The operator's Clerk user id as well, once the account exists: checked locally, with no Clerk lookup (step 7) |
 | `PORTAL_BASE_URL` (every service) | `https://<your-site>.vercel.app/claim` |
 | `BILLING_RETURN_URL` | `https://<your-site>.vercel.app/app/billing/return` |
 | `CONNECT_RETURN_URL`, `CONNECT_REFRESH_URL` | `https://<your-site>.vercel.app/claim/connect-return` and `.../claim/connect-refresh` |
@@ -89,7 +89,7 @@ Why the proxy secret matters: every claim page reaches the API from Vercel's ser
 
 ## 4. Sign-in (Clerk)
 
-1. Use the Clerk application from `docs/onboarding/login.md`: email and password, an emailed code at sign-up, and Organizations enabled with the roles `org:admin` and `org:reviewer` (make `org:reviewer` the default). Organizations are off in a new Clerk application; turning them on also turns on "force organization selection", which suits RecallOps because every user works inside a firm. The live instance requires passwords of at least 15 characters.
+1. Use a Clerk application with email and password and an emailed code at sign-up. Leave Organizations off: since plan v3 (2026-10-22) one account is one company, and the API ignores organization claims. Turn test mode off in the Clerk dashboard if you can, so `+clerk_test` addresses cannot be verified with a fixed code; either way the operator's queue marks a test address next to the company's email. The live instance requires passwords of at least 15 characters.
 2. Under **Domains** or **Allowed origins**, add `https://<your-site>.vercel.app`.
 3. Copy the publishable key, the secret key, and the Frontend API URL (which is `CLERK_ISSUER`). A development instance is fine for the class; it shows a small "development mode" badge.
 
@@ -104,30 +104,24 @@ In the repository's **Settings, Secrets and variables, Actions**, add `RECALLOPS
 
 ## 7. Company verification: you are the operator
 
-An organization runs a recall only after the platform operator approves it. Put the operator's email address in `PLATFORM_OPERATOR_EMAILS` on the API service (several are separated by commas). Any account whose verified address is listed is the operator, so deleting and recreating the account changes nothing. Gmail addresses match with or without dots; a `+tag` address is a different address, and a `+clerk_test` address is refused (Clerk's test mode verifies those with a fixed code). The check needs the real `CLERK_SECRET_KEY` on the API, and production refuses to start without it. `PLATFORM_OPERATOR_USER_IDS` still works for Clerk user ids. Production refuses to start with `ACCESS_APPROVAL=off`.
+A company runs a recall only after the platform operator approves it. Put the operator's email address in `PLATFORM_OPERATOR_EMAILS` on the API service (several are separated by commas), and once that account exists, its Clerk user id in `PLATFORM_OPERATOR_USER_IDS` too, so the API recognizes it without asking Clerk. Any account whose verified address is listed is the operator, so deleting and recreating the account changes nothing. Gmail addresses match with or without dots; a `+tag` address is a different address, and a `+clerk_test` address is refused. The check needs the real `CLERK_SECRET_KEY` on the API, and production refuses to start without it. Production refuses to start with `ACCESS_APPROVAL=off`.
 
-The operator has every access: the queue at `/operator` opens with or without an organization, and inside an organization the operator passes the gate and the organization is approved for a recall the moment the operator asks for it or opens a program on it (unless another organization holds that recall). To demo both sides, keep two accounts: the operator's, and a company's that is not listed.
+The operator has no company. Signing in as the operator opens one window, `/operator`, from every console address: the requests waiting for a decision, each with the company's name, its account email (marked when unverified or a test address), the recall, the company's plan and products, and a hint comparing the email domain with the company and websites the notice names. Approve when the domain matches the company, or after calling the contact number in the notice. Approving creates the company's product from the notice and opens it with its claim link, unless the company's plan has no room (it stays closed until they upgrade) or the notice gives no refund amount (it waits for the company to set one). Revoking pauses the product: its link and its claimants' links stop, the worker leaves its claims, and no new refunds start; approving again resumes the same product and link. One company at most runs each recall. To demo both sides, use two browsers (or a private window): Clerk keeps one session per browser.
 
-New organizations see only **Recall access** until you approve them. Review requests at `/operator`: each shows the requester's work-email domain and the company and websites the notice names. Approve when the email domain matches the company, or after calling the contact number in the notice. One organization at most runs each recall, and revoking stops its console, claim links, and refunds. Programs that existed before this check arrived as pending requests from `migration`.
+New companies name themselves and pick Free or Growth at sign-up, then see only **Recall access**, Billing, and their name until you approve a request.
 
-## 8. Demo data (optional)
+## 8. Demo data (local only)
 
-The demo is the laminator recall with 500 decided claims, bound to one Clerk organization. Sign up on the live site and create the organization first, read its id (`org_...`) from the Clerk dashboard, then run the seed as a one-off job on the worker service, which already holds every production setting:
-
-```bash
-# Render dashboard: recallops-worker, Jobs, Run job (or POST /v1/services/<worker id>/jobs)
-PYTHONPATH=src SEED_CLERK_ORG_ID=org_your_organization_id uv run --frozen python -m recallops.seed
-```
-
-Run it next to the database, not from a laptop: it makes about 3,000 storage calls and several thousand queries, and the first attempts from a home connection met Supabase's rate limit, a timeout, and connections that took up to 68 s to open. On Render it took 14 minutes. The live worker can keep running: seeded claims carry the seed's lease until their decision is recorded, so the agent never spends model money on them. Rerunning the seed replaces the demo firms' data; the empty firm your first sign-in created stays, unbound.
+`make seed` builds the laminator recall with 500 decided claims for local development. Since plan v3 it refuses `APP_ENV=prod`: it writes companies with an approval nobody gave, and a public claim link must never sit next to them. The live site starts empty and fills through the steps below. (Before plan v3 the seed ran once as a one-off job on the worker service; that took 14 minutes next to the database, against several Supabase rate-limit and timeout errors from a home connection.)
 
 ## 9. Check it end to end
 
-1. Open the website, sign up, and create an organization. Your first sign-in creates the company's private space (or, after step 8, opens the demo firm).
-2. **New program**: search the CPSC archive (for example "laminator"), create the program, review the rules, and open it.
-3. **Issue claim links**, open one in a private window on a phone, and file a claim with three photos.
-4. Within a minute the worker decides it. Open the claim in the console and read its trace.
-5. Generate the monthly report and download its PDF.
+1. In one browser, sign up as a company: name it and pick Free. Under **Recall access**, find a CPSC recall (for example "laminator") and ask for it.
+2. In another browser, sign in as the operator and approve the request. The company's product opens with its claim link and QR code.
+3. On a phone, scan the QR code, start a claim, and file it with its photos.
+4. Within a minute the worker decides it. Open the claim in the console and read its trace. If it is approved, choose a bank transfer on the phone and finish Stripe's test onboarding; the payment job sends the transfer within 10 minutes (the platform's Stripe test balance must be funded).
+5. Ask for a second recall on Free: the answer is the upgrade prompt. Upgrade under Billing with the test card 4242 4242 4242 4242 and ask again.
+6. Generate the monthly report and download its PDF.
 
 If anything fails, Render's logs are JSON lines with an `event` field: start with `http_request`, `worker_claim_done`, and any `level: error`.
 
@@ -144,7 +138,7 @@ The first deploy (2026-10-21, observed timeline in `docs/traces/M6-deploy.md`) d
 - **Clerk's development handshake redirected the homepage.** The homepage loads no Clerk script, so the proxy now skips `/`.
 - **Clerk's widgets were unreadable in dark mode** (near-black text on the dark sidebar); they now take the dark palette.
 - **The first live claim looped.** The agent never reads a claimant's text reply, so a reply re-ran the same facts and asked the same question again. Replies now correct the details asked about; a note alone goes to a person; a repeated question goes to a person.
-- **Anyone could run anyone's recall.** An organization calling itself 3M opened the Primark recall. Organizations now need the operator's approval (step 7).
+- **Anyone could run anyone's recall.** An organization calling itself 3M opened the Primark recall. Companies now need the operator's approval (step 7).
 
 ## Costs
 

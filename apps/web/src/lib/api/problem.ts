@@ -83,9 +83,9 @@ export function humanSentence(status: number): string {
     case 401:
       return "Your session has ended. Sign in again to continue.";
     case 402:
-      return "Your current plan does not include this. An administrator can upgrade it under Billing.";
+      return "Your plan does not include this. Upgrade it under Billing.";
     case 403:
-      return "Your role does not allow this action. Ask an administrator.";
+      return "This account cannot do this.";
     case 404:
       return "This item was not found, or you do not have access to it.";
     case 409:
@@ -103,17 +103,31 @@ export function humanSentence(status: number): string {
   }
 }
 
-/** A 403 from company verification (the organization is not approved for a recall), not a role problem. */
+/** A 403 from company verification (the company is not approved for a recall yet), not an account problem. The API
+ *  still says "organization" in some details, so both words match. */
 export function isAccessPending(problem: Pick<ApiProblem, "status" | "detail">): boolean {
   return problem.status === 403 && /not approved|request access/i.test(problem.detail ?? "");
 }
 
-export const ACCESS_PENDING_SENTENCE = "This organization is not approved to run this recall yet.";
+export const ACCESS_PENDING_SENTENCE = "Your company is not approved to run this recall yet.";
 
-/** A 409 because another organization holds the recall's approval (one organization per recall), which no refresh
- *  can fix: the operator revokes that approval first. */
+/** A 409 because another company holds the recall's approval (one company per recall), which no refresh can fix: the
+ *  operator revokes that approval first. */
 export function isHeldElsewhere(problem: Pick<ApiProblem, "status" | "detail">): boolean {
-  return problem.status === 409 && /another organization (runs|is already approved for) this recall/i.test(problem.detail ?? "");
+  return problem.status === 409 && /another (organization|company) (runs|is already approved for) this recall/i.test(problem.detail ?? "");
 }
 
-export const HELD_ELSEWHERE_SENTENCE = "Another organization runs this recall.";
+export const HELD_ELSEWHERE_SENTENCE = "Another company runs this recall. Revoke its approval first if this company should run it instead.";
+
+/** A 409 from POST /v1/access before the company named itself and picked a plan (plan v3 onboarding). */
+export function isNotOnboarded(problem: Pick<ApiProblem, "status" | "detail">): boolean {
+  return problem.status === 409 && /finish setting up/i.test(problem.detail ?? "");
+}
+
+/** The 503 GET /v1/me answers while the API cannot check who is signed in yet (Clerk unreachable). A missing website
+ *  setting is also a 503, but a different problem: it keeps its own message. */
+export function isSignInUnavailable(problem: Pick<ApiProblem, "status" | "title">): boolean {
+  return problem.status === 503 && problem.title !== "Not Configured";
+}
+
+export const SIGN_IN_UNAVAILABLE_SENTENCE = "Sign-in verification is unavailable. Try again in a moment.";

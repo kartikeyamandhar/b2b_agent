@@ -6,7 +6,8 @@ export type StatusKind = "claim" | "run" | "payout" | "outcome" | "program";
 export type StatusLabel = { label: string; tone: Tone; known: boolean };
 
 const CLAIM: Record<string, Omit<StatusLabel, "known">> = {
-  draft: { label: "Link issued", tone: "neutral" },
+  // Plan v3: a draft is a claim someone started from the product's claim link and has not submitted.
+  draft: { label: "Started, not submitted", tone: "neutral" },
   submitted: { label: "Submitted", tone: "progress" },
   needs_info: { label: "Needs info", tone: "attention" },
   under_review: { label: "Under review", tone: "attention" },

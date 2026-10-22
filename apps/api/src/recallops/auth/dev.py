@@ -75,7 +75,7 @@ class DevAuthProvider:
 
     def firm_context(self, principal: Principal) -> FirmContext:
         if principal.firm_id is None or principal.role is None:
-            raise NoFirmError("no organization: send X-Dev-Firm-Id")
+            raise NoFirmError("no company: send X-Dev-Firm-Id")
         return FirmContext(firm_id=principal.firm_id, user_id=principal.user_id, role=principal.role)
 
 

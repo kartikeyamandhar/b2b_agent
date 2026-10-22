@@ -12,11 +12,13 @@ firm and model calls across the worker (decisions log 2026-10-18). Each tick doe
    capped, or failed, so a resume is never possible before the interrupt is persisted (durability sync).
 
 A claim that fails WORKER_MAX_ATTEMPTS times is held for a person (status capped) and its run is closed as failed
-(not resumable; the reviewer's action applies directly). BudgetExhausted stops the worker: the global model budget is
-spent. A firm that is over its plan's limit is skipped for one polling interval, so it never blocks other firms
-(03-payments.md section 8: work resumes within one interval after an upgrade). On start and on idle ticks the worker
-recovers adjudication runs left running by a crash after the claim was decided or held: the claim's status says
-whether the run reached its interrupt (waiting_human, capped) or finished (done).
+(not resumable; the reviewer's action applies directly). When the global model budget is spent (BudgetExhausted), or a
+product has had INTAKE_AGENT_CLAIMS_PER_PROGRAM_DAY agent runs today, claims are decided by the rules checker instead,
+so the worker never stops for every company (plan v3). Companies take turns, the oldest claim first within each, and
+a product in draft does not run. A firm that is over its plan's limit is skipped for one polling interval, so it never
+blocks other firms. Every SWEEP_EVERY_S the worker deletes drafts nobody submitted within DRAFT_TTL_HOURS. On start
+and on idle ticks the worker recovers adjudication runs left running by a crash after the claim was decided or held:
+the claim's status says whether the run reached its interrupt (waiting_human, capped) or finished (done).
 
 After a claim's decision has committed, the worker projects it into the fraud graph (recallops.fraud.sync), which
 rewrites fraud_clusters; idle ticks re-project claims whose facts changed. The graph never decides anything: a sync
@@ -79,6 +81,10 @@ from recallops.tracing.writer import DbTrace
 log = get_logger("claims.worker")
 
 LOCK_KEY = 7_420_017  # pg advisory lock id for "the one worker"
+BUDGET_FALLBACK_S = 3600.0  # after the model budget is spent, the rules checker decides claims for this long
+SWEEP_EVERY_S = 600.0  # how often abandoned drafts are swept
+NIL_FIRM = UUID(int=0)
+AGENT_UNAVAILABLE = "agent_unavailable"  # hold reason: the rules checker approved while the agent was unavailable
 
 
 class AnotherWorkerRunning(RuntimeError):
@@ -134,6 +140,9 @@ class Worker:
         self.embedder = build_embedder(self.settings.embedding_model_id, self.settings.embedding_dim)
         self.stopped = False
         self.blocked_firms: dict[UUID, float] = {}  # firm -> monotonic expiry (not entitled to adjudicate)
+        self.last_firm: UUID = NIL_FIRM  # companies take turns (lease_claim)
+        self.budget_fallback_until = 0.0  # monotonic: until then claims use the rules checker
+        self.next_sweep = 0.0
         # graph=True builds the store from settings (None when NEO4J_URI is empty); False or None disables it.
         self.graph: GraphStore | None = (
             build_graph_store(self.settings) if graph is True else (graph if graph is not False else None)
@@ -201,31 +210,108 @@ class Worker:
             )
 
     def lease_claim(self) -> Leased | None:
+        """The next submitted claim, taking companies in turn (plan v3: one company's flood, through its public link,
+        must not hold up everyone else's claims), the oldest first within a company. A product in draft does not run.
+        """
         now = time.monotonic()
         self.blocked_firms = {f: t for f, t in self.blocked_firms.items() if t > now}
+        where = (
+            "c.status = 'submitted' AND (c.lease_until IS NULL OR c.lease_until < now()) "
+            "AND EXISTS (SELECT 1 FROM recall_programs pd WHERE pd.id = c.program_id AND pd.status <> 'draft') "
+            "AND (CAST(:access_off AS boolean) OR EXISTS (SELECT 1 FROM recall_programs pr "
+            f"WHERE pr.id = c.program_id AND {access.approved_program_sql('pr')})) "
+            "AND (c.firm_id <> ALL(CAST(:blocked AS uuid[])) "
+            "OR EXISTS (SELECT 1 FROM claim_usage u WHERE u.firm_id = c.firm_id AND u.claim_id = c.id "
+            "AND u.period_start = :period))"
+        )
+        params = {
+            "me": self.worker_id,
+            "ttl": self.settings.worker_lease_s,
+            "blocked": [str(f) for f in self.blocked_firms],
+            "period": datetime.now(UTC).date().replace(day=1),
+            "access_off": not access.required(self.settings),
+            "last": str(self.last_firm),
+        }
+        lease = (
+            "UPDATE claims SET lease_owner = :me, lease_until = now() + make_interval(secs => :ttl), "
+            "attempts = attempts + 1 WHERE id = (SELECT c.id FROM claims c WHERE {where} "
+            "ORDER BY c.submitted_at NULLS LAST, c.id FOR UPDATE OF c SKIP LOCKED LIMIT 1) "
+            "RETURNING id, firm_id, attempts"
+        )
         with self.engine.begin() as conn:
-            row = conn.execute(
+            firm = conn.execute(
                 text(
-                    "UPDATE claims SET lease_owner = :me, lease_until = now() + make_interval(secs => :ttl), "
-                    "attempts = attempts + 1 WHERE id = (SELECT c.id FROM claims c WHERE c.status = 'submitted' "
-                    "AND (c.lease_until IS NULL OR c.lease_until < now()) "
-                    "AND (CAST(:access_off AS boolean) OR EXISTS (SELECT 1 FROM recall_programs pr "
-                    f"WHERE pr.id = c.program_id AND {access.approved_program_sql('pr')})) "
-                    "AND (c.firm_id <> ALL(CAST(:blocked AS uuid[])) "
-                    "OR EXISTS (SELECT 1 FROM claim_usage u WHERE u.firm_id = c.firm_id AND u.claim_id = c.id "
-                    "AND u.period_start = :period)) "
-                    "ORDER BY c.submitted_at NULLS LAST, c.id FOR UPDATE OF c SKIP LOCKED LIMIT 1) "
-                    "RETURNING id, firm_id, attempts"
+                    f"SELECT c.firm_id FROM claims c WHERE {where} GROUP BY c.firm_id "
+                    "ORDER BY (c.firm_id <= CAST(:last AS uuid)), c.firm_id LIMIT 1"
                 ),
-                {
-                    "me": self.worker_id,
-                    "ttl": self.settings.worker_lease_s,
-                    "blocked": [str(f) for f in self.blocked_firms],
-                    "period": datetime.now(UTC).date().replace(day=1),
-                    "access_off": not access.required(self.settings),
-                },
+                params,
+            ).scalar_one_or_none()
+            if firm is None:
+                return None
+            row = conn.execute(
+                text(lease.format(where=where + " AND c.firm_id = :firm")), {**params, "firm": firm}
             ).first()
-        return Leased(row.id, row.firm_id, row.attempts) if row else None
+            if row is None:  # that company's claims were taken meanwhile: any company's next claim
+                row = conn.execute(text(lease.format(where=where)), params).first()
+        if row is None:
+            return None
+        self.last_firm = row.firm_id
+        return Leased(row.id, row.firm_id, row.attempts)
+
+    def sweep_due(self) -> bool:
+        return time.monotonic() >= self.next_sweep
+
+    def sweep_drafts(self) -> int:
+        """Claims started from a public link and never submitted are deleted after DRAFT_TTL_HOURS, with their photos
+        (plan v3: started claims would otherwise pile up in the queue and the photo bucket). A draft a campaign
+        registration still points to is kept. Objects are deleted only after the rows are gone."""
+        self.next_sweep = time.monotonic() + SWEEP_EVERY_S
+        old = (
+            "c.status = 'draft' AND c.created_at < now() - make_interval(hours => :h) "
+            "AND (c.lease_until IS NULL OR c.lease_until < now()) "
+            "AND NOT EXISTS (SELECT 1 FROM registrations r WHERE r.claim_id = c.id)"
+        )
+        try:
+            with self.engine.begin() as conn:
+                # Lock the drafts first: a claimant who submits at the 48-hour mark waits for this transaction, and
+                # only the rows locked here lose their photos (plan v3 review: reading paths and deleting in two
+                # unlocked statements removed the photos of a claim submitted in between).
+                ids = (
+                    conn.execute(
+                        text(f"SELECT c.id FROM claims c WHERE {old} FOR UPDATE OF c SKIP LOCKED"),
+                        {"h": self.settings.draft_ttl_hours},
+                    )
+                    .scalars()
+                    .all()
+                )
+                paths = (
+                    conn.execute(
+                        text("SELECT storage_path FROM claim_photos WHERE claim_id = ANY(:ids)"), {"ids": list(ids)}
+                    )
+                    .scalars()
+                    .all()
+                    if ids
+                    else []
+                )
+                gone = (
+                    conn.execute(
+                        text("DELETE FROM claims WHERE id = ANY(:ids) AND status = 'draft' RETURNING id"),
+                        {"ids": list(ids)},
+                    ).all()
+                    if ids
+                    else []
+                )
+        except Exception as exc:  # noqa: BLE001 - housekeeping must never stop the worker
+            log_event(log, "draft_sweep_failed", level=30, error=type(exc).__name__)
+            return 0
+        for path in paths:
+            try:
+                self.storage.delete(path)
+            except Exception as exc:  # noqa: BLE001 - an object left behind is logged, the rows are already gone
+                log_event(log, "draft_photo_delete_failed", level=30, error=type(exc).__name__)
+        if gone:
+            log_event(log, "drafts_swept", claims=len(gone), photos=len(paths))
+        return len(gone)
 
     def release_claim(self, claim_id: UUID, undo_attempt: bool = False) -> None:
         with self.engine.begin() as conn:
@@ -301,12 +387,49 @@ class Worker:
     def _record_usage(self, firm_id: UUID, claim_id: UUID, run_id: UUID, cost: Decimal) -> None:
         self.billing.record_usage(FirmContext(firm_id=firm_id, user_id="agent", role="admin"), claim_id, run_id, cost)
 
+    def agent_allowed(self, program_id: UUID) -> bool:
+        """Platform safety, the same on every plan (plan v3): at most INTAKE_AGENT_CLAIMS_PER_PROGRAM_DAY claims a
+        product a day go to the AI agent, and none while the model budget is spent; the rest use the rules checker,
+        so a public link cannot spend the model budget for every company."""
+        if time.monotonic() < self.budget_fallback_until:
+            return False
+        with self.engine.connect() as conn:
+            today = conn.execute(
+                text(
+                    "SELECT count(*) FROM agent_runs WHERE program_id = :p AND graph = 'adjudicate' "
+                    "AND started_at >= date_trunc('day', now() AT TIME ZONE 'UTC') AT TIME ZONE 'UTC'"
+                ),
+                {"p": program_id},
+            ).scalar_one()
+        return int(today) < self.settings.intake_agent_claims_per_program_day
+
+    def _close_for_fallback(self, run_id: UUID) -> None:
+        """Closed as failed before the rules checker decides the claim; left running, recover_orphans would read the
+        claim's hold as this run's interrupt and mark a run that never reached one waiting_human."""
+        with self.engine.begin() as conn:
+            conn.execute(
+                text(
+                    "UPDATE agent_runs SET status = 'failed', finished_at = now(), lease_owner = NULL, "
+                    "lease_until = NULL, outcome = coalesce(outcome, '{}'::jsonb) "
+                    "|| '{\"budget_fallback\": true}'::jsonb WHERE id = :r AND status = 'running'"
+                ),
+                {"r": run_id},
+            )
+
     def adjudicate(self, leased: Leased) -> str:
         with Session(self.engine) as session:
             loaded = load_claim(session, leased.claim_id)
         if self.settings.adjudicator == "rules_only":
             return self._rules_only(loaded)
         attached = self._existing_run(loaded.claim_id)
+        budget_spent = time.monotonic() < self.budget_fallback_until
+        if budget_spent or (attached is None and not self.agent_allowed(loaded.program_id)):
+            if attached is not None:  # a run the spent budget stopped halfway can never finish
+                self._close_for_fallback(attached)
+            log_event(
+                log, "worker_agent_quota_fallback", claim_id=str(loaded.claim_id), program_id=str(loaded.program_id)
+            )
+            return self._rules_only(loaded, fallback=True)
         trace = (
             DbTrace.attach(self.engine, attached)
             if attached
@@ -355,7 +478,11 @@ class Worker:
         self._record_usage(loaded.firm_id, loaded.claim_id, trace.run_id, charged_cost(self.engine, trace.run_id))
         return result.outcome or (result.held or {}).get("reason", "held")
 
-    def _rules_only(self, loaded: LoadedClaim) -> str:
+    def _rules_only(self, loaded: LoadedClaim, fallback: bool = False) -> str:
+        """fallback: the agent was unavailable (the product's daily quota, or a spent model budget). The rules checker
+        never looks at a photo (presence only), so an approval it reaches then waits for a person instead of paying
+        (hold_reason agent_unavailable, plan v3 review); denials and questions still go out at once. In
+        ADJUDICATOR=rules_only mode the checker decides on its own, as before."""
         with Session(self.engine) as session:
             others = program_claims(session, loaded.firm_id, loaded.program_id, loaded.claim_id)
         trace = DbTrace(self.engine, "rules_only", loaded.firm_id, loaded.claim_id, loaded.program_id)
@@ -379,6 +506,8 @@ class Worker:
                     "claim_status": "flagged" if result.outcome == "flag" else "under_review",
                 }
             )
+        elif fallback and result.outcome == "approve":
+            effects.hold({"reason": AGENT_UNAVAILABLE, "decision": decision, "claim_status": "under_review"})
         else:
             effects.apply(decision)
         self.release_claim(loaded.claim_id)
@@ -525,9 +654,7 @@ class Worker:
         if resume is not None:
             try:
                 self.resume(*resume)
-            except BudgetExhausted:
-                raise
-            except Exception as exc:  # noqa: BLE001 - contained: a failing resume must not stop the worker
+            except Exception as exc:  # noqa: BLE001 - contained: a failing resume (a spent budget too) must not stop the worker
                 self.park_resume(resume[0], resume[1], exc)
                 return True
             self.graph_sync(resume[1])
@@ -547,9 +674,14 @@ class Worker:
         t0 = time.monotonic()
         try:
             outcome = self.adjudicate(leased)
-        except BudgetExhausted:
+        except BudgetExhausted as exc:
+            # The model budget is spent: claims go to the rules checker for a while instead of every company's claims
+            # waiting on a stopped worker (plan v3). The run it stopped halfway is closed when the claim is leased
+            # again (adjudicate).
             self.release_claim(leased.claim_id, undo_attempt=True)
-            raise
+            self.budget_fallback_until = time.monotonic() + BUDGET_FALLBACK_S
+            log_event(log, "worker_budget_exhausted", level=40, error=str(exc), fallback_s=BUDGET_FALLBACK_S)
+            return True
         except Exception as exc:  # noqa: BLE001 - logged; the lease expires and a later attempt retries
             log_event(
                 log,
@@ -599,12 +731,10 @@ class Worker:
             self.graph_start()
             while not self.stopped:
                 self.heartbeat({"adjudicator": self.settings.adjudicator, "variant": self.config.variant})
-                try:
-                    did = self.tick()
-                except BudgetExhausted as exc:
-                    log_event(log, "worker_budget_exhausted", level=40, error=str(exc))
-                    return 3
+                did = self.tick()
                 idle = 0 if did else idle + 1
+                if self.sweep_due():
+                    self.sweep_drafts()
                 if not did and (self.recover_orphans() or self.recover_usage_costs() or self.graph_resync()):
                     idle = 0
                 if max_idle_ticks is not None and idle >= max_idle_ticks:

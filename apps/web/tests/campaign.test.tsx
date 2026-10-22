@@ -12,12 +12,12 @@ import { CampaignSummary } from "@/lib/api-types";
 import { campaignStage, checkCsvFile, notificationRows, rejectedRows, sampleDrafts, sendTotal, splitPlaceholder, templateCsv } from "@/lib/campaign";
 
 const P = "0874f66f-bfb5-552b-bd93-6266f49c1d5a";
-const empty = CampaignSummary.parse({ registrations: 0, matched: 0, unmatched: 0, claim_links: 0, notifications: {}, sample: [], simulated: true });
+const empty = CampaignSummary.parse({ registrations: 0, matched: 0, unmatched: 0, claim_link: null, notifications: {}, sample: [], simulated: true });
 const drafted = CampaignSummary.parse({
   registrations: 3,
   matched: 2,
   unmatched: 1,
-  claim_links: 2,
+  claim_link: null, // not taking claims: the API leaves the placeholder in the sample
   notifications: { "email:draft": 2, "phone_text:sent": 1, "fax:draft": 4 },
   sample: [{ channel: "email", status: "draft", subject: "Safety recall: Laminators", body: "Dear Sam,\n\nFile your claim at {claim_link}. <b>x</b>" }],
   simulated: true,
@@ -114,15 +114,15 @@ describe("components", () => {
     expect(html).toMatch(/data-step="send"[^>]*data-current="true"|data-current="true"[^>]*data-step="send"/);
   });
 
-  it("blocks drafting until the program is open", () => {
+  it("blocks drafting until the product is open", () => {
     const html = renderToStaticMarkup(<Campaign programId={P} programStatus="draft" initial={{ ...drafted, notifications: {} }} canAdmin />);
-    expect(html).toContain("Open the program before drafting notices");
+    expect(html).toContain("Open the product before drafting notices");
     expect(html).toMatch(/<button[^>]*disabled=""[^>]*data-draft/);
   });
 
   it("is read-only for reviewers", () => {
     const html = renderToStaticMarkup(<Campaign programId={P} programStatus="open" initial={drafted} canAdmin={false} />);
-    expect(html).toContain("Only an admin can upload registrations");
+    expect(html).toContain("This account can read the campaign but not upload registrations");
     expect(html).not.toContain("data-upload");
     expect(html).not.toContain("data-send-start");
   });

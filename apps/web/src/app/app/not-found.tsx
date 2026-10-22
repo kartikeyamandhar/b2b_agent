@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-/** A console page that does not exist, shown inside the console shell (sidebar and organization kept), left aligned
+/** A console page that does not exist, shown inside the console shell (sidebar and company kept), left aligned
  *  like every other console page. It renders for notFound() under /app; the public pages have the root not-found. */
 export default function ConsoleNotFound() {
   return (
@@ -11,7 +11,7 @@ export default function ConsoleNotFound() {
       </header>
       <p className="flex flex-wrap gap-2">
         <Link href="/app/programs" className="rounded-md border border-accent bg-accent px-3 py-1.5 text-sm font-medium text-bg hover:opacity-90">
-          Go to programs
+          Go to products
         </Link>
         <Link href="/" className="rounded-md border border-line-strong bg-surface px-3 py-1.5 text-sm font-medium text-ink hover:bg-panel">
           Go to the homepage

@@ -123,6 +123,8 @@ class Firm(Base):
     id: Mapped[UUID] = _pk()
     name: Mapped[str]
     clerk_org_id: Mapped[str | None]
+    clerk_user_id: Mapped[str | None]
+    onboarded_at: Mapped[datetime | None]
     stripe_customer_id: Mapped[str | None]
     plan: Mapped[str] = mapped_column(server_default="free")
     created_at: Mapped[datetime] = _now()
@@ -150,6 +152,7 @@ class RecallProgram(Base):
     closed_at: Mapped[datetime | None]
     created_at: Mapped[datetime] = _now()
     access_id: Mapped[UUID | None] = mapped_column(ForeignKey("recall_access.id"))
+    intake_version: Mapped[int] = mapped_column(server_default="1")
 
 
 class RecallAccess(Base):
@@ -165,6 +168,8 @@ class RecallAccess(Base):
     status: Mapped[str] = mapped_column(server_default="requested")
     requested_by: Mapped[str]
     requester_domain: Mapped[str | None]
+    requester_email: Mapped[str | None]
+    requester_email_verified: Mapped[bool | None]
     decided_by: Mapped[str | None]
     decided_at: Mapped[datetime | None]
     note: Mapped[str | None]
@@ -315,6 +320,7 @@ class Payout(Base):
     connect_account_id: Mapped[str | None]
     hold_requested: Mapped[bool] = mapped_column(server_default="false")
     connect_started_at: Mapped[datetime | None]
+    choice_opened_at: Mapped[datetime | None]  # 0009: when the refund last became the claimant's to choose
     connect_ready: Mapped[bool] = mapped_column(server_default="false")
     transfer_started_at: Mapped[datetime | None]
     transfer_retry_at: Mapped[datetime | None]

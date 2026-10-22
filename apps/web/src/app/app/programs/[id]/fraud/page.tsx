@@ -16,7 +16,7 @@ export default async function FraudRingsPage({ params }: { params: Promise<{ id:
     <div className="grid grid-cols-1 gap-6">
       <nav aria-label="Breadcrumb" className="text-xs">
         <Link href="/app/programs" className="text-accent hover:underline">
-          ← Programs
+          ← Products
         </Link>
         {program.ok ? (
           <>

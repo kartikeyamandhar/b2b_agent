@@ -11,7 +11,7 @@ from __future__ import annotations
 import json
 import re
 from dataclasses import dataclass
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from typing import Any
 from uuid import UUID, uuid4
 
@@ -22,8 +22,8 @@ from recallops import access
 from recallops.auth.provider import ClaimTokenVerifier
 from recallops.claims.tools.checks import destruction_required, receipt_required
 from recallops.logs import get_logger, log_event
-from recallops.models import AgentRun, AgentStep, AuditLog, Claim, ClaimPhoto, Recall, RecallProgram
-from recallops.photos import InvalidPhoto, inspect
+from recallops.models import AgentRun, AgentStep, AuditLog, Claim, ClaimPhoto, Payout, Recall, RecallProgram
+from recallops.photos import InvalidPhoto, downscale, inspect
 from recallops.rules.schemas import IdentificationRules, RemedyRules
 from recallops.settings import get_settings
 from recallops.storage import Storage
@@ -85,6 +85,13 @@ def resolve(session: Session, verifier: ClaimTokenVerifier, token: str, claim_id
     return PortalClaim(claim, program, recall.title if recall else "Recall")
 
 
+def _company_name(session: Session, program: RecallProgram) -> str | None:
+    from recallops.models import Firm
+
+    firm = session.get(Firm, program.firm_id)
+    return firm.name if firm else None
+
+
 def required_photos(program: RecallProgram) -> list[str]:
     remedy = RemedyRules.model_validate(program.remedy_rules or {})
     out = ["label"]
@@ -110,15 +117,14 @@ def view(session: Session, pc: PortalClaim) -> dict[str, Any]:
     messages = [
         {"sender": m.get("from", "firm"), "text": m.get("text", ""), "at": m.get("at")} for m in (claim.messages or [])
     ]
-    from recallops.models import Payout
-
-    payout_status = session.scalar(
-        select(Payout.status).where(Payout.claim_id == claim.id, Payout.firm_id == claim.firm_id)
-    )
+    payout = session.scalars(select(Payout).where(Payout.claim_id == claim.id, Payout.firm_id == claim.firm_id)).first()
+    payout_status = payout.status if payout else None
     return {
         "claim_id": claim.id,
         "status": claimant_status(claim.status),
         "program": {
+            "company_name": _company_name(session, program),
+            "contact": remedy.contact,
             "title": pc.title,
             "models": ident.models,
             "model_label_location": ident.model_label_location,
@@ -134,7 +140,20 @@ def view(session: Session, pc: PortalClaim) -> dict[str, Any]:
         "photos_uploaded": kinds,
         "messages": messages,
         "payout_status": payout_status,
+        "payout_choice_due": payout_choice_due(payout),
     }
+
+
+def payout_choice_due(payout: Payout | None) -> date | None:
+    """The day a bank-transfer refund still waiting on the claimant becomes a mailed check (payouts.db_ledger
+    .choice_deadline, the rule the payment job applies). None once the money is on its way or will be mailed anyway."""
+    from recallops.payouts.db_ledger import choice_deadline
+
+    if payout is None:
+        return None
+    settings = get_settings()
+    due = choice_deadline(payout, settings.payout_choice_days, settings.payout_onboarding_days)
+    return due.date() if due else None
 
 
 CLAIMANT_REASON = {
@@ -261,11 +280,24 @@ def _safe_question(question: Any) -> str | None:
     return _UUID.sub("another claim", str(question))[:500]
 
 
+class LabelPhotoMissing(ValueError):
+    """A claim is submitted with at least the label photo (plan v3): every claim needs one, and it makes a scripted
+    claim through a public link cost an image upload. A missing destruction or receipt photo is still asked for after
+    the decision (needs_info), as before."""
+
+
 def submit(session: Session, pc: PortalClaim, fields: dict[str, Any]) -> bool:
     """True when this call submitted the claim; False when it was already submitted (idempotent replay)."""
     claim = pc.claim
     if claim.status != "draft":
         return False
+    has_label = session.scalar(
+        select(ClaimPhoto.id).where(
+            ClaimPhoto.claim_id == claim.id, ClaimPhoto.firm_id == claim.firm_id, ClaimPhoto.kind == "label"
+        )
+    )
+    if has_label is None:
+        raise LabelPhotoMissing("add a photo of the product's label before submitting")
     ident = IdentificationRules.model_validate(pc.program.identification_rules or {})
     remedy = RemedyRules.model_validate(pc.program.remedy_rules or {})
     kind = (
@@ -323,6 +355,8 @@ def add_photo(
     data: bytes,
     max_bytes: int,
     max_pixels: int,
+    store_pixels: int | None = None,
+    store_bytes: int | None = None,
 ) -> tuple[ClaimPhoto, list[str]]:
     """Returns the new photo and the storage keys it replaced; the caller deletes those only after the commit. The
     bytes are stored before the row is written, so a failed put (StorageError) leaves no row behind."""
@@ -342,6 +376,11 @@ def add_photo(
         raise PhotoRejected(str(exc)) from exc
     if facts.exif.get("format") not in ("JPEG", "PNG"):
         raise PhotoRejected("photo must be JPEG or PNG")
+    if store_pixels is not None:
+        smaller = downscale(data, store_pixels, store_bytes)
+        if smaller is not None:
+            data, ext = smaller, "jpg"
+            facts = inspect(data, max_pixels)
     relative = f"{claim.firm_id}/{claim.id}/{kind}-{uuid4().hex}.{ext}"
     storage.put(relative, data, MEDIA_TYPES[ext])
     old = list(
@@ -486,8 +525,6 @@ def choose_check_payout(session: Session, pc: PortalClaim, mailing_address: str 
         text("SELECT status, claimant, program_id FROM claims WHERE id = :c AND firm_id = :f FOR UPDATE"),
         {"c": claim.id, "f": claim.firm_id},
     ).one()
-    from recallops.models import Payout
-
     payout = session.scalars(
         select(Payout).where(Payout.firm_id == claim.firm_id, Payout.claim_id == claim.id).with_for_update()
     ).first()

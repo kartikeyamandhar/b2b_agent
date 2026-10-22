@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 
 import { ProblemAlert } from "@/components/ProblemAlert";
 import { ClaimStepper } from "@/components/portal/ClaimStepper";
+import { ClaimHeader, RecallContact } from "@/components/portal/RecallFacts";
 import { loadPortal } from "@/lib/api/queries";
 import { portalSentence } from "@/lib/portal-copy";
 
@@ -13,10 +14,12 @@ export default async function ClaimFormPage({ params }: { params: Promise<{ toke
   if (!view.ok) return <ProblemAlert problem={view.problem} sentence={portalSentence(view.problem.status)} showDetail={false} audience="claimant" />;
   // Submitted claims cannot be edited: the status page is where the claimant goes from here.
   if (view.data.status !== "draft") redirect(`/claim/${encodeURIComponent(token)}/status`);
+  const program = view.data.program;
   return (
     <div>
-      <h1 className="display-title mb-6 text-[1.375rem] leading-snug sm:text-[1.75rem]">{view.data.program.title}</h1>
+      <ClaimHeader companyName={program.company_name} title={program.title} />
       <ClaimStepper token={token} view={view.data} />
+      <RecallContact contact={program.contact} />
     </div>
   );
 }

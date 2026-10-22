@@ -2,15 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { NotSignedIn, consoleAuthHeaders } from "@/lib/api/auth-seam";
 import { ConfigError } from "@/lib/api/config";
-import {
-  PROXY_MATCHER,
-  clerkEnabled,
-  consoleAccess,
-  consoleRole,
-  missingClerkSettings,
-  routeKind,
-  webAuthMode,
-} from "@/lib/auth/mode";
+import { PROXY_MATCHER, clerkEnabled, consoleAccess, missingClerkSettings, routeKind, webAuthMode } from "@/lib/auth/mode";
 
 // Placeholder values only: these are not keys.
 const CLERK = { RECALLOPS_WEB_AUTH: "clerk", NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_placeholder", CLERK_SECRET_KEY: "sk_test_placeholder" };
@@ -42,6 +34,9 @@ describe("routes", () => {
     ["/claim/tok", "public"],
     ["/claim/tok/status", "public"],
     ["/api/portal/tok/photos", "public"],
+    ["/file/tok", "public"],
+    ["/file", "public"],
+    ["/api/portal/intake/tok", "public"],
     ["/sign-in", "public"],
     ["/sign-in/factor-one", "public"],
     ["/sign-up", "public"],
@@ -59,34 +54,38 @@ describe("routes", () => {
     }
   });
 
-  it("never runs it on the homepage, the claimant portal, or static files", () => {
+  it("never runs it on the homepage, the claimant portal, the public product link, or static files", () => {
     // The homepage loads no Clerk script; under the proxy, Clerk's development instance bounced every first visit
     // through a handshake redirect, so link previews and crawlers saw a 307 instead of the page (first deploy).
-    for (const p of ["/", "/claim", "/claim/tok", "/claim/tok/status", "/claim/connect-return", "/api/portal/tok", "/api/portal/tok/photos", "/_next/static/chunks/a.js", "/favicon.ico", "/icon.svg", "/apple-icon.png"]) {
+    for (const p of [
+      "/",
+      "/claim",
+      "/claim/tok",
+      "/claim/tok/status",
+      "/claim/connect-return",
+      "/file",
+      "/file/intake.tok",
+      "/api/portal/tok",
+      "/api/portal/tok/photos",
+      "/api/portal/intake/tok",
+      "/_next/static/chunks/a.js",
+      "/favicon.ico",
+      "/icon.svg",
+      "/apple-icon.png",
+    ]) {
       expect(matcher.test(p), p).toBe(false);
     }
   });
+
+  it("still runs it on paths that only start like a public one", () => {
+    for (const p of ["/files", "/filed/x", "/claims"]) expect(matcher.test(p), p).toBe(true);
+  });
 });
 
-describe("roles (backend auth/clerk.py)", () => {
-  it.each([
-    ["org:admin", "admin"],
-    ["admin", "admin"],
-    ["org:reviewer", "reviewer"],
-    ["reviewer", "reviewer"],
-    ["org:member", null],
-    ["org:admin2", null],
-    ["", null],
-    [null, null],
-  ])("%s -> %s", (orgRole, role) => {
-    expect(consoleRole(orgRole)).toBe(role);
-  });
-
-  it("sends a user without an organization to create one, and stops other roles", () => {
-    expect(consoleAccess({ userId: null, orgId: null, orgRole: null })).toEqual({ kind: "redirect", to: "/sign-in" });
-    expect(consoleAccess({ userId: "u", orgId: null, orgRole: null })).toEqual({ kind: "redirect", to: "/organization" });
-    expect(consoleAccess({ userId: "u", orgId: "org_1", orgRole: "org:member" }).kind).toBe("no-access");
-    expect(consoleAccess({ userId: "u", orgId: "org_1", orgRole: "org:reviewer" })).toEqual({ kind: "ok", role: "reviewer", orgId: "org_1" });
+describe("console access (plan v3: one account is one company)", () => {
+  it("asks only for a session; GET /v1/me decides the rest", () => {
+    expect(consoleAccess({ userId: null })).toEqual({ kind: "redirect", to: "/sign-in" });
+    expect(consoleAccess({ userId: "user_1" })).toEqual({ kind: "ok", userId: "user_1" });
   });
 });
 

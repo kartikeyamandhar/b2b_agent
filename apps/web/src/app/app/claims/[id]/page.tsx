@@ -19,7 +19,7 @@ export default async function ClaimPage({ params }: { params: Promise<{ id: stri
     <div>
       <nav aria-label="Breadcrumb" className="mb-3 text-xs">
         <Link href={claim.ok ? `/app/programs/${claim.data.program_id}/claims` : "/app/programs"} className="text-accent hover:underline">
-          ← {claim.ok ? "Claims queue" : "Programs"}
+          ← {claim.ok ? "Claims queue" : "Products"}
         </Link>
       </nav>
       {claim.ok ? (

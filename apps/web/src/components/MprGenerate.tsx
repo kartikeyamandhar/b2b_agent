@@ -50,7 +50,7 @@ export function MprGenerate({ programId, period, canGenerate, hasReport }: { pro
   const [problem, setProblem] = useState<ApiProblem | null>(null);
   const [busy, setBusy] = useState(false);
 
-  if (!canGenerate) return <p className="text-sm text-ink-muted">Only an admin can generate reports.</p>;
+  if (!canGenerate) return <p className="text-sm text-ink-muted">This account can read reports but not generate them.</p>;
 
   async function generate() {
     const built = manualBody(manual);
@@ -80,7 +80,7 @@ export function MprGenerate({ programId, period, canGenerate, hasReport }: { pro
       }}
     >
       <details>
-        <summary className="cursor-pointer text-sm font-medium text-ink">Boxes the firm fills in (optional)</summary>
+        <summary className="cursor-pointer text-sm font-medium text-ink">Boxes your company fills in (optional)</summary>
         <p className="mt-1 text-xs text-ink-muted">Leave a box empty to keep its documented default. Values entered here are marked in the report.</p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {MANUAL_NUMBER_FIELDS.map((k) => (

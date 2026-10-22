@@ -71,10 +71,10 @@ class ClaimsRepo(TenantRepo):
         after: tuple[datetime, UUID] | None = None,
         limit: int = 50,
     ) -> list[Claim]:
-        """Keyset pagination on (created_at, id), oldest first (the queue sorts by age)."""
+        """Keyset pagination on (created_at, id), oldest first (the queue sorts by age). Claims started from the public
+        link and not submitted yet (draft) appear only when asked for by status (plan v3)."""
         stmt = select(Claim).where(Claim.firm_id == self.firm_id, Claim.program_id == program_id)
-        if status:
-            stmt = stmt.where(Claim.status == status)
+        stmt = stmt.where(Claim.status == status) if status else stmt.where(Claim.status != "draft")
         if after:
             stmt = stmt.where(tuple_(Claim.created_at, Claim.id) > tuple_(after[0], after[1]))
         stmt = stmt.order_by(Claim.created_at, Claim.id).limit(limit)

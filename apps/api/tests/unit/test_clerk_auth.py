@@ -1,5 +1,6 @@
-"""Clerk session JWT verification (04-login.md sections 3 and 8). No network: the JWKS client is a stub over a key
-generated here, and firm resolution is stubbed (tests/db/test_clerk_firms.py covers it against Postgres)."""
+"""Clerk session JWT verification (04-login.md sections 3 and 8) and one account = one company (plan v3). No network:
+the JWKS client is a stub over a key generated here, and firm resolution is stubbed (tests/db/test_clerk_firms.py
+covers it against Postgres)."""
 
 from __future__ import annotations
 
@@ -16,9 +17,8 @@ from jwt.utils import base64url_decode, base64url_encode
 
 from recallops.auth import deps
 from recallops.auth.clerk import ClerkAuthProvider, ClerkPrincipal
-from recallops.auth.provider import AuthError, NoFirmError
+from recallops.auth.provider import AuthError, AuthUnavailable, OperatorHasNoFirm
 from recallops.settings import Settings
-from recallops.tenancy import Role
 
 ISSUER = "https://test-instance.clerk.accounts.dev"
 ORIGIN = "http://localhost:3000"
@@ -49,22 +49,33 @@ class StubJwks:
 
 
 class StubbedClerk(ClerkAuthProvider):
-    def __init__(self, settings: Settings) -> None:
+    def __init__(self, settings: Settings, existing: uuid.UUID | None = None) -> None:
         super().__init__(settings, jwks_client=StubJwks())
-        self.resolved: list[tuple[str, str, Role]] = []
+        self.existing = existing
+        self.finds = 0
+        self.resolved: list[str] = []
 
-    def _resolve(self, org_id: str, org_slug: str | None, user_id: str, role: Role) -> uuid.UUID:
-        self.resolved.append((org_id, user_id, role))
+    def _find(self, user_id: str) -> uuid.UUID | None:
+        self.finds += 1
+        return self.existing
+
+    def _resolve(self, user_id: str) -> uuid.UUID:
+        self.resolved.append(user_id)
         return FIRM
 
 
-def settings() -> Settings:
+def settings(**over: Any) -> Settings:
     return Settings(
-        auth_provider="clerk",
-        claim_token_provider="hmac",
-        clerk_issuer=ISSUER,
-        clerk_jwks_url="",  # derived from the issuer, whatever the local .env holds
-        clerk_allowed_origins=ORIGIN,
+        **{
+            "auth_provider": "clerk",
+            "claim_token_provider": "hmac",
+            "clerk_issuer": ISSUER,
+            "clerk_jwks_url": "",  # derived from the issuer, whatever the local .env holds
+            "clerk_allowed_origins": ORIGIN,
+            "platform_operator_user_ids": "",
+            "platform_operator_emails": "",
+            **over,
+        }
     )
 
 
@@ -98,24 +109,21 @@ def provider() -> StubbedClerk:
     return StubbedClerk(settings())
 
 
-def test_a_valid_token_names_the_user_org_and_role(provider: StubbedClerk) -> None:
+def test_a_valid_token_makes_the_account_its_companys_admin(provider: StubbedClerk) -> None:
     principal = provider.authenticate(bearer(token()))
     assert isinstance(principal, ClerkPrincipal)
-    assert (principal.user_id, principal.org_id, principal.role, principal.org_slug) == (
-        "user_abc",
-        "org_123",
-        "admin",
-        "acme-recalls",
-    )
+    assert (principal.user_id, principal.role) == ("user_abc", "admin")
     ctx = provider.firm_context(principal)
     assert (ctx.firm_id, ctx.user_id, ctx.role) == (FIRM, "user_abc", "admin")
+    assert provider.resolved == ["user_abc"]
 
 
-def test_version_one_org_claims_and_the_org_prefix_are_read(provider: StubbedClerk) -> None:
-    v1 = claims(o=None, org_id="org_9", org_role="org:reviewer", org_slug="nine")
-    principal = provider.authenticate(bearer(token(v1)))
-    assert isinstance(principal, ClerkPrincipal)
-    assert (principal.org_id, principal.role) == ("org_9", "reviewer")
+def test_organization_claims_are_ignored(provider: StubbedClerk) -> None:
+    """No organizations (owner decision 2026-10-22): a token that still carries them acts for its account alone."""
+    for payload in (claims(o={"id": "org_9", "rol": "org:member"}), claims(o=None, org_id="org_9", org_role="x")):
+        principal = provider.authenticate(bearer(token(payload)))
+        assert principal.role == "admin"
+        assert provider.firm_context(principal).firm_id == FIRM
 
 
 @pytest.mark.parametrize(
@@ -160,22 +168,51 @@ def test_required_claims_must_be_present(provider: StubbedClerk) -> None:
             provider.authenticate(bearer(token(claims(**{missing: None}))))
 
 
-def test_no_organization_or_an_unknown_role_means_no_firm(provider: StubbedClerk) -> None:
-    for payload in (claims(o=None), claims(o={"id": "org_123", "rol": "owner"})):
-        principal = provider.authenticate(bearer(token(payload)))
-        with pytest.raises(NoFirmError):
-            provider.firm_context(principal)
-    assert provider.resolved == []
+def _record(asked: list[str], user: str, answer: str) -> str:
+    asked.append(user)
+    return answer
 
 
-def test_the_firm_is_cached_per_org_user_and_role(provider: StubbedClerk) -> None:
+def test_an_existing_company_is_found_without_asking_clerk_and_then_cached(monkeypatch: pytest.MonkeyPatch) -> None:
+    asked: list[str] = []
+    monkeypatch.setattr("recallops.auth.clerk.operator_status", lambda _s, u: _record(asked, u, "company"))
+    known = StubbedClerk(settings(platform_operator_emails="ops@example.com"), existing=FIRM)
+    principal = known.authenticate(bearer(token()))
+    for _ in range(3):
+        assert known.firm_context(principal).firm_id == FIRM
+    assert (known.finds, known.resolved, asked) == (1, [], [])  # one lookup, then the cache; Clerk never asked
+
+
+def test_a_new_account_is_checked_against_the_operator_once_then_gets_its_company(
+    provider: StubbedClerk, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    asked: list[str] = []
+    monkeypatch.setattr("recallops.auth.clerk.operator_status", lambda _s, u: _record(asked, u, "company"))
     principal = provider.authenticate(bearer(token()))
     provider.firm_context(principal)
     provider.firm_context(principal)
-    assert len(provider.resolved) == 1
-    reviewer = provider.authenticate(bearer(token(claims(o={"id": "org_123", "rol": "org:reviewer"}))))
-    provider.firm_context(reviewer)
-    assert provider.resolved[-1] == ("org_123", "user_abc", "reviewer")
+    assert (asked, provider.resolved) == (["user_abc"], ["user_abc"])
+
+
+def test_the_operator_never_gets_a_company(monkeypatch: pytest.MonkeyPatch) -> None:
+    by_id = StubbedClerk(settings(platform_operator_user_ids="user_abc"))
+    with pytest.raises(OperatorHasNoFirm):
+        by_id.firm_context(by_id.authenticate(bearer(token())))
+    monkeypatch.setattr("recallops.auth.clerk.operator_status", lambda _s, _u: "operator")
+    by_email = StubbedClerk(settings())
+    with pytest.raises(OperatorHasNoFirm):
+        by_email.firm_context(by_email.authenticate(bearer(token())))
+    assert by_id.resolved == by_email.resolved == []
+
+
+def test_an_unknown_operator_answer_creates_nothing(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Clerk could not be asked: a new account would otherwise become a company for good, and if it is the operator's
+    that is permanent (plan v3 red team). Sign-in answers 503 and creates nothing."""
+    monkeypatch.setattr("recallops.auth.clerk.operator_status", lambda _s, _u: "unknown")
+    stub = StubbedClerk(settings())
+    with pytest.raises(AuthUnavailable):
+        stub.firm_context(stub.authenticate(bearer(token())))
+    assert stub.resolved == []
 
 
 def test_the_provider_needs_an_issuer() -> None:
@@ -201,15 +238,31 @@ def client(provider: StubbedClerk, monkeypatch: pytest.MonkeyPatch) -> TestClien
 
 def test_role_guard_matrix_over_http(client: TestClient) -> None:
     admin = bearer(token())
-    reviewer = bearer(token(claims(o={"id": "org_123", "rol": "org:reviewer"})))
-    no_org = bearer(token(claims(o=None)))
+    member_claims = bearer(token(claims(o={"id": "org_123", "rol": "org:member"})))
     assert client.get("/any", headers=admin).status_code == 200
     assert client.get("/admin", headers=admin).status_code == 200
-    assert client.get("/any", headers=reviewer).status_code == 200
-    assert client.get("/admin", headers=reviewer).status_code == 403
-    assert client.get("/any", headers=no_org).status_code == 403
+    assert client.get("/admin", headers=member_claims).status_code == 200  # organization roles no longer matter
     assert client.get("/any").status_code == 401
     assert client.get("/any", headers=bearer("not.a.jwt")).status_code == 401
+
+
+def test_the_operator_and_an_unknown_answer_over_http(monkeypatch: pytest.MonkeyPatch) -> None:
+    app = FastAPI()
+
+    @app.get("/any")
+    def any_member(ctx: deps.FirmDep) -> dict[str, str]:
+        return {"role": ctx.role}
+
+    operator = StubbedClerk(settings(platform_operator_user_ids="user_abc"))
+    monkeypatch.setattr(deps, "build_provider", lambda: operator)
+    refused = TestClient(app).get("/any", headers=bearer(token()))
+    assert refused.status_code == 403 and "operator" in refused.json()["detail"]
+    monkeypatch.setattr("recallops.auth.clerk.operator_status", lambda _s, _u: "unknown")
+    unknown = StubbedClerk(settings())
+    monkeypatch.setattr(deps, "build_provider", lambda: unknown)
+    down = TestClient(app).get("/any", headers=bearer(token()))
+    assert down.status_code == 503 and down.json()["detail"] == "sign-in verification unavailable"
+    assert unknown.resolved == []
 
 
 class DownJwks:
@@ -231,13 +284,3 @@ def test_a_keys_outage_answers_503_not_401(monkeypatch: pytest.MonkeyPatch) -> N
     assert response.status_code == 503
     assert response.json()["detail"] == "sign-in verification unavailable"
     assert "timed out" not in response.text
-
-
-def test_a_member_role_is_told_why_and_never_resolves_a_firm(client: TestClient, provider: StubbedClerk) -> None:
-    member = bearer(token(claims(o={"id": "org_123", "rol": "org:member"})))
-    no_org = bearer(token(claims(o=None)))
-    member_answer, no_org_answer = client.get("/any", headers=member), client.get("/any", headers=no_org)
-    assert member_answer.status_code == no_org_answer.status_code == 403
-    assert "org:admin or org:reviewer" in member_answer.json()["detail"]
-    assert "no active organization" in no_org_answer.json()["detail"]
-    assert provider.resolved == []

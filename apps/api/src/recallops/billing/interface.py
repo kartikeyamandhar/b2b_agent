@@ -11,7 +11,7 @@ from uuid import UUID
 
 from recallops.tenancy import FirmContext
 
-Action = Literal["open_program", "adjudicate_claim", "create_payout"]
+Action = Literal["open_program", "create_program", "adjudicate_claim", "create_payout"]
 
 
 @dataclass(frozen=True)

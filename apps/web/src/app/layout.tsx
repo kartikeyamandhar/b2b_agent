@@ -17,8 +17,8 @@ export const viewport: Viewport = {
   ],
 };
 
-// No ClerkProvider here: ClerkShell provides Clerk per section (the console through ClerkConsole, and the sign-in,
-// sign-up, and organization pages), and only in Clerk mode, so the claim portal never loads Clerk.
+// No ClerkProvider here: ClerkShell provides Clerk per section (the console and the operator window through
+// ClerkConsole, and the sign-in and sign-up pages), and only in Clerk mode, so the claim portal never loads Clerk.
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">

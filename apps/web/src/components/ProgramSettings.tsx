@@ -16,6 +16,7 @@ import {
   evidenceByField,
   lifecycle,
   lifecycleBlock,
+  lifecycleProblemSentence,
   optionsRequireDestructionPhoto,
   remedyOptionsFor,
   rulesPatch,
@@ -158,14 +159,14 @@ function Rows<T extends Record<string, string>>({
 
 const LIFECYCLE_COPY = {
   open: {
-    title: "Open the program",
-    body: "Opening starts the recall in RecallOps: you can issue claim links, claimants can file, and the adjudicator decides claims with these rules. Open programs count toward your plan.",
-    confirm: "Open program",
+    title: "Open the product",
+    body: "Opening starts taking claims: the product gets its claim link, claimants can file, and the adjudicator decides claims with these rules. Each open product counts toward your plan; Free covers one.",
+    confirm: "Open product",
   },
   closed: {
-    title: "Close the program",
-    body: "Closing is permanent: a closed program cannot be reopened. Every claim link stops working at once, so claimants can no longer file, answer a question, add a photo, see a decision, or choose how a refund is paid. You can still decide claims here.",
-    confirm: "Close program permanently",
+    title: "Close the product",
+    body: "Closing is permanent: a closed product cannot be reopened. Its claim link and every claimant’s private link stop working at once, so claimants can no longer file, answer a question, add a photo, see a decision, or choose how a refund is paid. You can still decide claims here.",
+    confirm: "Close product permanently",
   },
 } as const;
 
@@ -180,7 +181,7 @@ export function LifecycleControl({ program, onChanged, blocked = null }: { progr
   const [problem, setProblem] = useState<ApiProblem | null>(null);
 
   if (next === null) {
-    return <p className="text-sm text-ink-muted">This program is closed. Its records stay available for reports; open a new program for further work.</p>;
+    return <p className="text-sm text-ink-muted">This product is closed. Its records stay available for reports.</p>;
   }
   const copy = LIFECYCLE_COPY[next];
   const impact = next === "closed" ? closeImpact(program.claim_counts) : [];
@@ -226,7 +227,7 @@ export function LifecycleControl({ program, onChanged, blocked = null }: { progr
         </div>
       ) : (
         <div role="group" aria-label={copy.title} className={`grid gap-2 rounded-md border p-3 ${next === "closed" ? "border-danger/40 bg-danger-soft" : "border-line bg-panel"}`}>
-          <p className="text-sm font-medium">{next === "closed" ? "Close this program? This cannot be undone." : "Open this program now?"}</p>
+          <p className="text-sm font-medium">{next === "closed" ? "Close this product? This cannot be undone." : "Open this product now?"}</p>
           <div className="flex flex-wrap gap-2">
             <button type="button" onClick={() => void move()} disabled={busy || !!blocked} className={next === "closed" ? DANGER : PRIMARY} data-lifecycle-confirm>
               {busy ? "Saving…" : copy.confirm}
@@ -238,10 +239,8 @@ export function LifecycleControl({ program, onChanged, blocked = null }: { progr
         </div>
       )}
       {problem ? (
-        <ProblemAlert
-          problem={problem}
-          sentence={problem.status === 402 ? "Your plan does not allow another open program. An administrator can upgrade it under Billing." : undefined}
-        />
+        // The plan and refund-amount answers have a fixed sentence that already says what the API's detail says.
+        <ProblemAlert problem={problem} sentence={lifecycleProblemSentence(problem)} showDetail={lifecycleProblemSentence(problem) === undefined} />
       ) : null}
       {problem?.status === 402 ? (
         <p className="text-sm">
@@ -253,10 +252,10 @@ export function LifecycleControl({ program, onChanged, blocked = null }: { progr
 }
 
 /**
- * Program settings (PATCH /v1/programs/{id}, admin): the identification and remedy rules the adjudicator checks,
- * the review threshold, and the lifecycle. Reviewers see the same page read-only.
+ * Product settings (PATCH /v1/programs/{id}, admin): the identification and remedy rules the adjudicator checks,
+ * the review threshold, and the lifecycle. Without the admin role (the dev provider's reviewer) it is read-only.
  */
-export function ProgramSettings({ program: initial, canAdmin, created = false }: { program: Program; canAdmin: boolean; created?: boolean }) {
+export function ProgramSettings({ program: initial, canAdmin }: { program: Program; canAdmin: boolean }) {
   const router = useRouter();
   const [program, setProgram] = useState(initial);
   const [saved, setSaved] = useState(() => draftFromProgram(initial));
@@ -331,13 +330,7 @@ export function ProgramSettings({ program: initial, canAdmin, created = false }:
 
   return (
     <div className="grid gap-5">
-      {created && program.status === "draft" ? (
-        <div role="status" className="rounded-lg border border-success/40 bg-success-soft p-4 text-sm text-success-ink" data-created>
-          Draft program created. Review the rules RecallOps read from the notice, correct anything it missed, then open
-          the program.
-        </div>
-      ) : null}
-      {!canAdmin ? <p className="text-sm text-ink-muted">Only an admin can change rules, the threshold, or the program’s status.</p> : null}
+      {!canAdmin ? <p className="text-sm text-ink-muted">This account can read these settings but not change them.</p> : null}
       {warnings.length ? (
         <ul className="grid gap-1 rounded-lg border border-warn/40 bg-warn-soft p-4 text-sm text-warn-ink" data-rules-warnings>
           {warnings.map((w) => (
@@ -352,7 +345,7 @@ export function ProgramSettings({ program: initial, canAdmin, created = false }:
           e.preventDefault();
           void save();
         }}
-        aria-label="Program rules"
+        aria-label="Product rules"
       >
         <Card
           id="identification-rules"
@@ -448,7 +441,7 @@ export function ProgramSettings({ program: initial, canAdmin, created = false }:
                   <li key={`${o.type}-${i}`}>
                     {remedyLabel(o.type)}
                     {(o.proof_required ?? []).length ? ` · proof: ${(o.proof_required ?? []).join(", ").replace(/_/g, " ")}` : ""}
-                    {o.payout?.method ? ` · paid by ${o.payout.method.replace(/_/g, " ")}` : ""}
+                    {o.payout?.method ? ` · the notice says paid by ${o.payout.method.replace(/_/g, " ")}` : ""}
                   </li>
                 ))}
               </ul>
@@ -490,7 +483,7 @@ export function ProgramSettings({ program: initial, canAdmin, created = false }:
             onChanged={(p) => {
               // A status change leaves the rules alone, so unsaved edits in the form are kept.
               setProgram(p);
-              setStatusNotice(p.status === "open" ? "Program opened. You can now issue claim links from the overview." : "Program closed.");
+              setStatusNotice(p.status === "open" ? "Product opened. Its claim link is on the product’s page." : "Product closed.");
               router.refresh();
             }}
           />

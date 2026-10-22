@@ -12,7 +12,8 @@ export function detailSentence(problem: Pick<ApiProblem, "status" | "detail">): 
 }
 
 /** Every API error renders a human sentence plus the correlation id (02-ui.md section 6). Claimants (the portal) see
- *  the reference only: a status code means nothing to them, and "Error 0" (a dropped connection) even less. */
+ *  the reference only: a status code means nothing to them, and "Error 0" (a dropped connection) even less. A known
+ *  company-verification answer gets its own sentence in place of the API's detail, which still says "organization". */
 export function ProblemAlert({
   problem,
   onRetry,
@@ -26,25 +27,20 @@ export function ProblemAlert({
   showDetail?: boolean;
   audience?: "console" | "claimant";
 }) {
-  const detail = showDetail ? detailSentence(problem) : null;
+  const pending = isAccessPending(problem);
+  const heldElsewhere = isHeldElsewhere(problem);
+  const detail = showDetail && !pending && !heldElsewhere ? detailSentence(problem) : null;
   const code = audience === "console" && problem.status > 0 ? `Error ${problem.status}` : null;
   return (
     <div role="alert" className="rounded-lg border border-danger/30 bg-danger-soft p-4 text-sm text-danger-ink">
       <p className="font-medium">
-        {sentence ?? (isAccessPending(problem) ? ACCESS_PENDING_SENTENCE : isHeldElsewhere(problem) ? HELD_ELSEWHERE_SENTENCE : humanSentence(problem.status))}
+        {sentence ?? (pending ? ACCESS_PENDING_SENTENCE : heldElsewhere ? HELD_ELSEWHERE_SENTENCE : humanSentence(problem.status))}
       </p>
       {detail ? <p className="mt-1">{detail}</p> : null}
-      {isAccessPending(problem) ? (
+      {pending ? (
         <p className="mt-1">
           <Link href="/app/access" className="font-medium underline">
             Go to Recall access
-          </Link>
-        </p>
-      ) : null}
-      {isHeldElsewhere(problem) ? (
-        <p className="mt-1">
-          <Link href="/operator" className="font-medium underline">
-            Open the operator queue
           </Link>
         </p>
       ) : null}

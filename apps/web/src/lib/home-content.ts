@@ -40,16 +40,16 @@ export const RULES = [
 export const STEPS = [
   {
     name: "Load the recall",
-    text: "Pick a recall from the CPSC archive. Its rules come from the notice, and you review them before the program opens.",
+    text: "Ask for a recall from the CPSC archive. Once the operator confirms your company issued it, its rules come from the notice and the product opens.",
   },
-  { name: "Reach owners", text: "Each owner gets a link to one claim, with no account or password." },
+  { name: "Reach owners", text: "Owners open the product's claim link or scan its QR code, and file a claim with no account or password." },
   {
     name: "Decide each claim",
-    text: "The agent reads the label, the destroyed product, and the receipt, and cites a rule for every reason. A reviewer decides anything unclear.",
+    text: "The agent reads the label, the destroyed product, and the receipt, and cites a rule for every reason. A person decides anything unclear.",
   },
   {
     name: "Pay the refund",
-    text: "Approved refunds go out as a mailed check or a Stripe transfer, and the ledger refuses to pay a claim twice.",
+    text: "Each claimant chooses a bank transfer or a mailed check for an approved refund, and the ledger refuses to pay a claim twice.",
   },
   {
     name: "File the report",

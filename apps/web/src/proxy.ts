@@ -1,5 +1,6 @@
 // Next.js 16 proxy (formerly middleware). In Clerk mode it runs clerkMiddleware on everything except the homepage,
-// the claimant portal, and static files, and requires a session on console pages (redirect to sign-in). Console API
+// the claimant portal, the public product link pages, and static files, and requires a session on console pages
+// (redirect to sign-in). Console API
 // calls under /api/v1 are not redirected: the /api route answers 401 itself when there is no session (auth-seam.ts).
 // In dev mode it does nothing.
 import { clerkMiddleware } from "@clerk/nextjs/server";
@@ -28,5 +29,5 @@ export default function proxy(req: NextRequest, event: NextFetchEvent) {
 
 // Must equal PROXY_MATCHER in src/lib/auth/mode.ts (Next reads this statically; a test compares them).
 export const config = {
-  matcher: ["/((?!$|_next/|claim(?:/|$)|api/portal(?:/|$)|favicon\\.ico$|icon\\.svg$|apple-icon\\.png$).*)"],
+  matcher: ["/((?!$|_next/|claim(?:/|$)|file(?:/|$)|api/portal(?:/|$)|favicon\\.ico$|icon\\.svg$|apple-icon\\.png$).*)"],
 };

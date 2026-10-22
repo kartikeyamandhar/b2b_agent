@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 
 import { shortId } from "@/lib/claims";
-import { qrMatrix, qrPath, qrPixels, qrRects, qrSheetHtml, qrSpan, qrSvg, type QrItem } from "@/lib/qr";
+import { qrMatrix, qrPath, qrPixels, qrRects, qrSpan, qrSvg } from "@/lib/qr";
 
 const BUTTON = "rounded border border-line bg-surface px-2 py-1 text-xs text-ink hover:bg-panel";
 
@@ -61,28 +61,31 @@ export function qrPngBlob(value: string, scale = 16): Promise<Blob> {
   return new Promise((resolve, reject) => canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("no image"))), "image/png"));
 }
 
-/** A printable sheet of codes in a new window (the links never go into a URL or storage). False when pop-ups are
- *  blocked. The new window gets no handle back to the console. */
-export function openQrSheet(items: readonly QrItem[], heading: string, open: (url: string, target: string) => Window | null = (u, t) => window.open(u, t)): boolean {
+type Opener = (url: string, target: string) => Window | null;
+
+/** A self-contained printable page (the product's poster) in a new window, printed at once; the link never goes into
+ *  a URL or storage. False when pop-ups are blocked. The new window gets no handle back to the console. */
+export function openPrintable(html: string, open: Opener = (u, t) => window.open(u, t)): boolean {
   const w = open("", "_blank");
   if (!w) return false;
   w.opener = null;
   w.document.open();
-  w.document.write(qrSheetHtml(items, heading));
+  w.document.write(html);
   w.document.close();
   w.focus();
   w.print();
   return true;
 }
 
-/** One claim's code with its downloads. */
-export function QrPanel({ url, claimId }: { url: string; claimId: string }) {
+/** A code with its SVG and PNG downloads: one claim's link (named after the claim), or a product's claim link with its
+ *  own file name and label. */
+export function QrPanel({ url, claimId, fileName, label }: { url: string; claimId?: string; fileName?: string; label?: string }) {
   const [problem, setProblem] = useState<string | null>(null);
-  const name = `claim-${shortId(claimId)}-qr`;
+  const name = fileName ?? (claimId ? `claim-${shortId(claimId)}-qr` : "claim-link-qr");
   return (
     <div className="grid justify-items-start gap-2" data-qr-panel>
       <div className="rounded-md border border-line bg-white p-2">
-        <QrCode value={url} label={`QR code for the link of claim ${shortId(claimId)}`} />
+        <QrCode value={url} label={label ?? (claimId ? `QR code for the link of claim ${shortId(claimId)}` : "QR code for the claim link")} />
       </div>
       <div className="flex flex-wrap gap-2">
         <button type="button" className={BUTTON} onClick={() => saveBlob(new Blob([qrSvg(url, 1024)], { type: "image/svg+xml" }), `${name}.svg`)}>

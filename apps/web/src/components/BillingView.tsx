@@ -1,5 +1,5 @@
 import type { Usage } from "@/lib/api-types";
-import { accessLimited, meterRatio, meters, planLabel } from "@/lib/billing";
+import { accessLimited, meterRatio, meters, planLabel, planSummary } from "@/lib/billing";
 import { formatCents, formatCount, formatDate, formatUsdCost } from "@/lib/format";
 
 import { Panel } from "./ClaimPanels";
@@ -15,10 +15,11 @@ const SUB_LABEL: Record<string, string> = {
   paused: "Paused",
 };
 
-/** Plan, Stripe status, usage against limits, and invoices (GET /v1/usage). Presentational. */
+/** Plan, Stripe status, usage against the plan's product limit, and invoices (GET /v1/usage). Presentational. */
 export function BillingView({ usage }: { usage: Usage }) {
   const limited = accessLimited(usage);
   const sub = usage.subscription_status;
+  const summary = planSummary(usage);
   return (
     <div className="grid gap-4 lg:grid-cols-2">
       <Panel id="billing-plan" title="Plan" tone={limited || usage.billing_sync_error ? "attention" : undefined}>
@@ -34,6 +35,11 @@ export function BillingView({ usage }: { usage: Usage }) {
               </dd>
             ) : null}
           </div>
+          {summary ? (
+            <dd className="text-ink-muted" data-plan-summary>
+              {summary}
+            </dd>
+          ) : null}
           {/* Access differs from the plan only while billing is unresolved; otherwise a line would repeat the plan name. */}
           {limited ? (
             <dd className="text-warn-ink" data-access-limited>
@@ -71,6 +77,12 @@ export function BillingView({ usage }: { usage: Usage }) {
               </div>
             );
           })}
+          <div className="flex justify-between gap-2">
+            <dt>Claims checked this month</dt>
+            <dd className="tabular-nums" data-claims-checked>
+              {formatCount(usage.claims_adjudicated)}
+            </dd>
+          </div>
           <div className="flex justify-between gap-2 text-ink-muted">
             <dt>Model spend this month</dt>
             <dd className="tabular-nums" data-model-spend>

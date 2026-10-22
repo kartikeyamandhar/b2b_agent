@@ -22,7 +22,7 @@ describe("ProgramsTable", () => {
 
   it("shows the derived figures for an open program", () => {
     expect(html).toContain("53,634");
-    expect(html).toContain(">500<"); // filed: everything except the 3 issued links
+    expect(html).toContain(">500<"); // filed: everything except the 3 claims started and not submitted
     expect(html).toContain(">117<"); // awaiting review: flagged
     expect(html).toContain("110");
     expect(html).toContain("(0.2%)");
@@ -35,13 +35,13 @@ describe("ProgramsTable", () => {
     expect(html).toContain("(—)");
   });
 
-  it("escapes program titles", () => {
+  it("escapes product titles", () => {
     expect(html).toContain("&lt;b&gt;draft&lt;/b&gt;");
     expect(html).not.toContain("<b>draft</b>");
   });
 
   it("is a labelled table with column headers", () => {
-    expect(html).toContain('<caption class="sr-only">Recall programs</caption>');
+    expect(html).toContain('<caption class="sr-only">Products</caption>');
     expect(html.match(/scope="col"/g)).toHaveLength(7);
   });
 });

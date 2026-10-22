@@ -17,16 +17,16 @@ import re
 import threading
 import time
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Literal
 from uuid import UUID
 
 import httpx
-from sqlalchemy import insert, select, text
+from sqlalchemy import func, insert, select, text
 from sqlalchemy.exc import DBAPIError, IntegrityError
 from sqlalchemy.orm import Session
 
 from recallops.logs import get_logger, log_event
-from recallops.models import AuditLog, Recall, RecallAccess, RecallProgram
+from recallops.models import Recall, RecallAccess, RecallProgram
 from recallops.settings import EXAMPLE_CLERK_SECRET_KEY, Settings, canonical_email
 from recallops.tenancy import FirmContext
 
@@ -34,7 +34,7 @@ log = get_logger("access")
 
 APPROVED = "approved"
 PENDING_DETAIL = (
-    "This organization is not approved to run a recall yet. Request access to your recall, and the platform "
+    "This company is not approved to run a recall yet. Request access to your recall, and the platform "
     "operator will review it."
 )
 
@@ -104,7 +104,7 @@ def program_approved(session: Session, program: RecallProgram, settings: Setting
 
 def require_program(session: Session, program: RecallProgram, settings: Settings) -> None:
     if not program_approved(session, program, settings):
-        raise AccessDenied("this organization is not approved to run this recall")
+        raise AccessDenied("this company is not approved to run this recall")
 
 
 @dataclass(frozen=True)
@@ -234,12 +234,78 @@ def is_operator(settings: Settings, user_id: str | None) -> bool:
     return found is not None and not found.verified.isdisjoint(emails)
 
 
+OperatorStatus = Literal["operator", "company", "unknown"]
+
+
+def operator_status(settings: Settings, user_id: str) -> OperatorStatus:
+    """Whether a signed-in account is the platform operator, with a third answer when Clerk cannot be asked. Sign-in
+    never creates a company on "unknown" (red team of plan v2: one failed lookup would have made the operator a
+    company for good)."""
+    if user_id in settings.operator_ids():
+        return "operator"
+    emails = settings.operator_emails()
+    if not emails or settings.auth_provider != "clerk":
+        return "company"
+    found = clerk_emails(settings, user_id)
+    if found is None:
+        return "unknown"
+    return "operator" if not found.verified.isdisjoint(emails) else "company"
+
+
 def requester_domain(settings: Settings, user_id: str) -> str | None:
     """The domain of the requester's primary email, from Clerk; None when unavailable (a hint only, never required)."""
     found = clerk_emails(settings, user_id)
     if found is None or found.primary is None:
         return None
     return found.primary.rsplit("@", 1)[1][:253]
+
+
+@dataclass(frozen=True)
+class Requester:
+    """Who asked, as Clerk knows them, kept on the request so the operator's window needs no Clerk call per row."""
+
+    email: str
+    verified: bool
+
+
+def requester_of(settings: Settings, user_id: str) -> Requester | None:
+    found = clerk_emails(settings, user_id)
+    if found is None or found.primary is None:
+        return None
+    return Requester(found.primary, canonical_email(found.primary) in found.verified)
+
+
+class NotOnboarded(ValueError):
+    """The company has not named itself and chosen a plan yet."""
+
+
+class OverPlan(PermissionError):
+    """Free covers one product; asking for another needs Growth."""
+
+
+def check_can_request(session: Session, ctx: FirmContext, settings: Settings) -> None:
+    """Before a company asks for a recall (plan v3): it has finished onboarding, and on Free it has no product and no
+    request waiting already (free covers one product, owner decision 2026-10-22)."""
+    from recallops.billing.policy import FREE_PRODUCT_LIMIT, active_products, effective_plan
+    from recallops.models import Firm
+
+    firm = session.get(Firm, ctx.firm_id)
+    if firm is None or firm.onboarded_at is None:
+        raise NotOnboarded("finish setting up your company first: its name and plan")
+    if effective_plan(session, firm) != "free":
+        return
+    waiting = session.scalar(
+        select(func.count())
+        .select_from(RecallAccess)
+        .where(RecallAccess.firm_id == ctx.firm_id, RecallAccess.status == "requested")
+    )
+    if active_products(session, ctx.firm_id) + int(waiting or 0) >= settings.free_active_products:
+        raise OverPlan(FREE_PRODUCT_LIMIT)
+
+
+def is_test_address(email: str | None) -> bool:
+    """Clerk's test mode verifies any +clerk_test address with a fixed code, so it proves nothing about a company."""
+    return bool(email) and "+clerk_test" in str(email).lower()
 
 
 @dataclass(frozen=True)
@@ -256,6 +322,7 @@ def request_access(
     recall_id: UUID | None,
     typed: Typed | None,
     domain: str | None,
+    requester: Requester | None = None,
 ) -> UUID:
     """A firm asks to run a recall (or a typed notice). Inserts only the columns the app role may write, so the new
     row is always 'requested'. A second open request for the same recall is refused."""
@@ -269,13 +336,15 @@ def request_access(
         "requested_by": ctx.user_id,
         "requester_domain": domain,
     }
+    if requester is not None:
+        values |= {"requester_email": requester.email[:320], "requester_email_verified": requester.verified}
     if typed is not None:
         values |= {"typed_title": typed.title, "typed_company": typed.company, "typed_notice": typed.notice}
     try:
         with session.begin_nested():
             access_id = session.execute(insert(RecallAccess).values(**values).returning(RecallAccess.id)).scalar_one()
     except IntegrityError as exc:
-        raise AccessAlreadyOpen("this organization already has an open request for this recall") from exc
+        raise AccessAlreadyOpen("this company already has an open request for this recall") from exc
     log_event(log, "access_requested", firm_id=str(ctx.firm_id), access_id=str(access_id), typed=typed is not None)
     return access_id
 
@@ -318,6 +387,7 @@ def operator_list(session: Session) -> list[dict[str, Any]]:
     for r in rows:
         recall = recalls.get(r["recall_id"])
         company, sites = notice_hints(recall)
+        trusted = r.get("requester_email_verified") is not False and not is_test_address(r.get("requester_email"))
         if recall is None:
             company = r["typed_company"]
         out.append(
@@ -327,7 +397,8 @@ def operator_list(session: Session) -> list[dict[str, Any]]:
                 "recall_number": recall.source_id if recall else None,
                 "notice_company": company,
                 "notice_sites": sites,
-                "domain_matches": domain_matches(r["requester_domain"], company, sites),
+                "domain_matches": trusted and domain_matches(r["requester_domain"], company, sites),
+                "requester_test_address": is_test_address(r.get("requester_email")),
             }
         )
     return out
@@ -345,7 +416,7 @@ def decide(session: Session, operator_id: str, access_id: UUID, status: str, not
     except DBAPIError as exc:  # psycopg files the function's check_violation under IntegrityError too: go by code
         code = getattr(exc.orig, "sqlstate", None)
         if code == "23505":  # unique_violation: recall_access_one_owner
-            raise AccessHeldElsewhere("another organization is already approved for this recall") from exc
+            raise AccessHeldElsewhere("another company is already approved for this recall") from exc
         if code == "23514":  # check_violation, raised by the function for a move it does not allow
             raise AccessStateConflict("that decision is not allowed for this request's current status") from exc
         if code == "P0002":  # no_data_found
@@ -353,78 +424,3 @@ def decide(session: Session, operator_id: str, access_id: UUID, status: str, not
         raise
     log_event(log, "access_decided", firm_id=str(firm_id), access_id=str(access_id), status=status)
     return UUID(str(firm_id))
-
-
-OPERATOR_NOTE = "approved on request by the platform operator"
-
-
-@dataclass(frozen=True)
-class Grant:
-    access_id: UUID
-    approved: bool  # False: another organization holds the recall, so the request waits like anyone's
-    created: bool  # a new request row was made
-
-
-def _open_request(session: Session, ctx: FirmContext, recall_id: UUID) -> RecallAccess | None:
-    return session.scalar(
-        select(RecallAccess)
-        .where(
-            RecallAccess.firm_id == ctx.firm_id,
-            RecallAccess.recall_id == recall_id,
-            RecallAccess.status.in_(("requested", APPROVED)),
-        )
-        .execution_options(populate_existing=True)  # the definer function writes past the ORM
-    )
-
-
-def operator_grant(
-    session: Session,
-    ctx: FirmContext,
-    settings: Settings,
-    recall_id: UUID | None,
-    typed: Typed | None,
-    domain: str | None,
-) -> Grant:
-    """The organization the operator is acting in is approved the moment the operator asks or opens a program (owner
-    decision 2026-10-22: the operator has every access). It is still a request row and an operator decision with its
-    audit row, so the trail reads like any approval, and the database still keeps one organization per recall: when
-    another organization holds the recall, the request stays open. A request made at the same moment (a double click,
-    a second tab, a colleague) is reused rather than failing. Run in that organization's tenant session."""
-    existing = _open_request(session, ctx, recall_id) if recall_id is not None else None
-    created = False
-    if existing is None:
-        try:
-            access_id = request_access(session, ctx, settings, recall_id, typed, domain)
-            created = True
-        except AccessAlreadyOpen:  # another request for this recall committed first: decide that one
-            existing = _open_request(session, ctx, recall_id) if recall_id is not None else None
-            if existing is None:
-                raise
-    if existing is not None:
-        if existing.status == APPROVED:
-            return Grant(existing.id, True, False)
-        access_id = existing.id
-    try:
-        decide(session, ctx.user_id, access_id, APPROVED, OPERATOR_NOTE)
-    except AccessHeldElsewhere:
-        log_event(log, "access_held_elsewhere", firm_id=str(ctx.firm_id), access_id=str(access_id))
-        return Grant(access_id, False, created)
-    except AccessStateConflict:  # decided at the same moment: approved by the other request, or refused in the queue
-        row = session.scalar(
-            select(RecallAccess).where(RecallAccess.id == access_id).execution_options(populate_existing=True)
-        )
-        if row is not None and row.status == APPROVED:
-            return Grant(access_id, True, created)
-        raise AccessConflict("this request was decided at the same moment; refresh and try again") from None
-    session.add(
-        AuditLog(
-            firm_id=ctx.firm_id,
-            actor=ctx.user_id,
-            action="access_decided",
-            target_type="recall_access",
-            target_id=str(access_id),
-            before={},
-            after={"status": APPROVED, "note": OPERATOR_NOTE},
-        )
-    )
-    return Grant(access_id, True, created)

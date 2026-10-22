@@ -5,10 +5,12 @@ import type { Program } from "@/lib/api-types";
 import { NOT_STATED, formatCents, formatCount, formatDate, formatPercent, formatPercentFixed } from "@/lib/format";
 import { isClaimStatus, queueHref } from "@/lib/claims";
 import { instructionReadsAsSentence } from "@/lib/portal";
+import { linkState } from "@/lib/products";
 import { programMetrics, remedyLabel, statusRows } from "@/lib/programs";
 import { proofSentence, statusLabel } from "@/lib/status";
 
-import { IssueLinks } from "./IssueLinks";
+import { ProductLinkCard } from "./ProductLinkCard";
+import { RulesCheckReminder } from "./RulesCheckNote";
 import { StatusBadge } from "./StatusBadge";
 
 function Fact({ label, children }: { label: string; children: ReactNode }) {
@@ -89,8 +91,58 @@ export function registrationHref(url: string | null | undefined): string | null 
   }
 }
 
-export function ProgramOverview({ program, canAdmin = false }: { program: Program; canAdmin?: boolean }) {
+const BANNER = "mt-5 rounded-lg border border-warn/40 bg-warn-soft p-4 text-sm text-warn-ink";
+
+/** What keeps the product from taking claims, at the top of its page; nothing when it takes them (or is closed). */
+export function ProductBanner({ program }: { program: Program }) {
+  const state = linkState(program);
+  const settings = `/app/programs/${program.id}/settings`;
+  if (state.kind === "paused") {
+    return (
+      <div className={BANNER} data-paused-banner>
+        <p>
+          <span className="font-medium">Paused.</span> Your plan covers one product. Upgrade under <Link href="/app/billing">Billing</Link> to take
+          claims here again.
+        </p>
+      </div>
+    );
+  }
+  if (state.kind === "needs_amount") {
+    return (
+      <div className={BANNER} data-refund-amount-banner>
+        <p className="font-medium">Set the refund amount</p>
+        <p className="mt-1">
+          This product pays refunds, and the recall notice states no price, so it cannot take claims until the price range
+          is set. <Link href={`${settings}#identification-rules`}>Set the price range in Rules and settings</Link>, then
+          open the product.
+        </p>
+      </div>
+    );
+  }
+  if (state.kind === "draft") {
+    return (
+      <div className={BANNER} data-draft-banner>
+        <p className="font-medium">This product is a draft.</p>
+        <p className="mt-1">
+          It takes no claims until it opens. <Link href={settings}>Review the rules and open it</Link>.
+        </p>
+      </div>
+    );
+  }
+  return null;
+}
+
+const NO_LINK: Record<string, string> = {
+  closed: "This product is closed. Its claim link, and every claimant’s private link, no longer work.",
+  paused: "The claim link is paused while your plan covers another product. Claims already started carry on.",
+  needs_amount: "No claim link yet. It appears once the refund amount is set and the product opens.",
+  draft: "No claim link yet. It appears once the product opens.",
+  none: "No claim link right now.",
+};
+
+export function ProgramOverview({ program, canAdmin = false, companyName = null }: { program: Program; canAdmin?: boolean; companyName?: string | null }) {
   const m = programMetrics(program);
+  const link = linkState(program);
   const ident = program.identification_rules;
   const remedy = program.remedy_rules;
   const price = ident.price_range_cents;
@@ -121,17 +173,11 @@ export function ProgramOverview({ program, canAdmin = false }: { program: Progra
         </span>
       </div>
 
-      {program.status === "draft" ? (
-        <div className="mt-5 rounded-lg border border-warn/40 bg-warn-soft p-4 text-sm text-warn-ink" data-draft-banner>
-          <p className="font-medium">This program is a draft.</p>
-          <p className="mt-1">
-            Claim links cannot be issued and no claims are decided until the program is opened.{" "}
-            {canAdmin ? (
-              <Link href={`/app/programs/${program.id}/settings`}>Review the rules and open it</Link>
-            ) : (
-              "An admin reviews the rules and opens it."
-            )}
-          </p>
+      <ProductBanner program={program} />
+      {program.status === "open" ? (
+        // Empty until this browser's memory is read; the note never leaves a gap when it is not shown.
+        <div className="mt-5 empty:hidden">
+          <RulesCheckReminder programId={program.id} />
         </div>
       ) : null}
 
@@ -151,8 +197,14 @@ export function ProgramOverview({ program, canAdmin = false }: { program: Progra
         {program.closed_at ? ` · closed ${formatDate(program.closed_at)}` : ""}.
       </p>
 
-      <Section id="claim-links" title="Claim links">
-        <IssueLinks programId={program.id} open={program.status === "open"} closed={program.status === "closed"} canIssue={canAdmin} programTitle={program.title} />
+      <Section id="claim-link" title="Claim link">
+        {link.kind === "live" ? (
+          <ProductLinkCard program={program} url={link.url} companyName={companyName} canAdmin={canAdmin} />
+        ) : (
+          <p className="rounded-lg border border-line bg-surface p-4 text-sm text-ink-muted" data-no-claim-link={link.kind}>
+            {NO_LINK[link.kind]}
+          </p>
+        )}
       </Section>
 
       <Section id="claims-by-status" title="Claims by status">

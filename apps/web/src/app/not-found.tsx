@@ -13,7 +13,7 @@ export default function NotFound() {
       <BrandMark size={40} />
       <h1 className="page-title mt-2">Page not found</h1>
       <p className="text-ink-muted">
-        Check the address. If you are filing a claim, open the full link the firm sent you.
+        Check the address. If you are filing a claim, open the full claim link the company gave you.
       </p>
       <div className="mt-3 flex flex-wrap justify-center gap-3">
         <Link href="/" className="rounded-md bg-accent px-4 py-2 font-semibold text-bg hover:opacity-90">

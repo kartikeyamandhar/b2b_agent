@@ -346,28 +346,41 @@ def seed_program(engine: Engine, firm_id: uuid.UUID, recall_source_id: str, n: i
     return summary
 
 
+class SeedRefused(RuntimeError):
+    """The seed writes demo companies with an approval nobody gave; production never runs it (plan v3 red team)."""
+
+
 def run(engine: Engine | None = None, n: int = 500, seed: int = 42) -> dict[str, Any]:
+    settings = get_settings()
+    if settings.app_env == "prod":
+        raise SeedRefused("make seed never runs with APP_ENV=prod")
     engine = engine or internal_engine()
     t0 = time.monotonic()
     ingest_run([("cpsc_sample", json.loads(FIXTURE.read_text(encoding="utf-8")))], engine)
-    org_id = get_settings().seed_clerk_org_id.strip() or None
+    user_id = settings.seed_clerk_user_id.strip() or None
     with Session(engine) as session, session.begin():
         _wipe(session, [DEMO_FIRM_ID, OTHER_FIRM_ID])
-        if org_id is not None:
-            # Signing in before seeding creates an empty firm for the organization; the demo firm takes the binding
-            # over, so AUTH_PROVIDER=clerk lands on the seeded data (PR 8 review). Development data only.
+        if user_id is not None:
+            # Signing in before seeding creates an empty company for the account; the demo firm takes the account
+            # over, so AUTH_PROVIDER=clerk lands on the seeded data. Development data only.
             moved = session.execute(
-                update(Firm).where(Firm.clerk_org_id == org_id).values(clerk_org_id=None).returning(Firm.id)
+                update(Firm).where(Firm.clerk_user_id == user_id).values(clerk_user_id=None).returning(Firm.id)
             ).scalars()
             for firm_id in moved:
-                log_event(log, "seed_clerk_org_unbound", firm_id=str(firm_id))
+                log_event(log, "seed_clerk_user_unbound", firm_id=str(firm_id))
         session.add_all(
             [
                 # Enterprise: unlimited and never billed or synced to Stripe, so the seeded 500 claims leave the
                 # demo path (new claims decided within seconds) working. A growth firm without a paid subscription
                 # counts as free (100 claims a month). Try Checkout with the other firm, which is free (PR 6 review).
-                Firm(id=DEMO_FIRM_ID, name="Demo Recall Co", plan="enterprise", clerk_org_id=org_id),
-                Firm(id=OTHER_FIRM_ID, name="Other Firm Inc", plan="free"),
+                Firm(
+                    id=DEMO_FIRM_ID,
+                    name="Demo Recall Co",
+                    plan="enterprise",
+                    clerk_user_id=user_id,
+                    onboarded_at=datetime.now(UTC),
+                ),
+                Firm(id=OTHER_FIRM_ID, name="Other Firm Inc", plan="free", onboarded_at=datetime.now(UTC)),
             ]
         )
         session.flush()

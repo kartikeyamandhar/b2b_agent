@@ -18,12 +18,12 @@ export default async function PayoutsPage() {
           Payouts
         </h1>
         <p className="mt-2 max-w-2xl text-ink-muted">
-          Refunds paid by mailed check leave RecallOps as an export file for your bank. Card and bank refunds through
-          Stripe are tracked on each claim.
+          After a refund is approved, the claimant chooses a bank transfer or a mailed check. Mailed checks leave
+          RecallOps as an export file for your bank; bank transfers through Stripe are tracked on each claim.
         </p>
       </header>
       {role !== "admin" ? (
-        <ProblemAlert problem={{ status: 403, title: "Forbidden", detail: null, correlationId: null, retryAfterSeconds: null }} sentence="Only an admin can see and create payout export batches." />
+        <ProblemAlert problem={{ status: 403, title: "Forbidden", detail: null, correlationId: null, retryAfterSeconds: null }} sentence="This account cannot see or create payout export batches." />
       ) : !result!.ok ? (
         <ProblemAlert problem={result!.problem} />
       ) : (
@@ -34,7 +34,9 @@ export default async function PayoutsPage() {
               New export batch
             </h2>
             <p className="mt-1 mb-4 text-sm text-ink-muted">
-              Collects every approved refund whose claimant chose a mailed check, across all programs, into one CSV.
+              Collects every approved refund waiting for a mailed check, across all products, into one CSV. A refund
+              joins it when the claimant chose a check, or did not finish choosing or setting up a bank transfer by the
+              deadline.
             </p>
             <CreateExport />
           </section>

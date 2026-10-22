@@ -62,7 +62,7 @@ describe("StatusFilter", () => {
     expect(html).toContain(`href="/app/programs/${P}/claims?status=flagged"`);
     expect(html).toContain(`href="/app/programs/${P}/claims"`);
     expect(html).not.toContain("cursor=");
-    expect(html).toMatch(/data-filter="all"[^>]*>All<span[^>]*>302</);
+    expect(html).toMatch(/data-filter="all"[^>]*>All<span[^>]*>299</); // the unfiltered queue leaves out the 3 drafts
     expect(html).toMatch(/data-filter="capped"[^>]*>Capped<span[^>]*>0</);
   });
 
@@ -135,7 +135,7 @@ describe("ClaimsQueue (server render)", () => {
   it("renders a filtered empty state", () => {
     const html = render(<ClaimsQueue {...base} params={{ status: "capped", cursor: null }} initialPage={{ ok: true, data: { items: [], next_cursor: null } }} />);
     expect(html).toContain("No capped claims");
-    expect(html).toContain("Choose All to see every claim.");
+    expect(html).toContain("Choose All to see every submitted claim.");
     expect(html).not.toContain("<table");
   });
 });

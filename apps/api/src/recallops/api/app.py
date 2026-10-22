@@ -64,6 +64,8 @@ def create_app() -> FastAPI:
     problems.install(app)
     install_guards(app)
     for router in (
+        routes.account,
+        routes.public,
         routes.access,
         routes.operator,
         routes.firm,

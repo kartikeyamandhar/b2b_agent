@@ -1,6 +1,8 @@
 # Onboarding: login owner (component 4)
 
-You own Clerk sign-in and organizations in apps/web, Clerk token verification in the backend, firm resolution, roles, and the consumer claim tokens (04-login.md). Tenant scoping, row-level security, the Neo4j graph's structural tenancy, and the cross-tenant tests are the backend owner's and ship today. Read **docs/contracts/CHANGES.md** items 1, 17, 18, 19a, and 36 to 40 first: the claim-token protocol changed, and the backend review of your PR 8 changed a migration, added a route, and tightened settings.
+> Since 2026-10-22 (plan v3, CHANGES item 57) the owner builds every component alone and there are no Clerk organizations: one account is one company. This guide is kept as history; the passages below describe the current behaviour.
+
+You own Clerk sign-in in apps/web, Clerk token verification in the backend, firm resolution, roles, and the consumer claim tokens (04-login.md). Tenant scoping, row-level security, the Neo4j graph's structural tenancy, and the cross-tenant tests are the backend owner's and ship today. Read **docs/contracts/CHANGES.md** items 1, 17, 18, 19a, and 36 to 40 first: the claim-token protocol changed, and the backend review of your PR 8 changed a migration, added a route, and tightened settings.
 
 For billing-admin authorization, claimant payout tokens or reviewer-seat limits, follow the
 [payments handoff: login owner](payments.md#login-owner). It defines the payment integration checks your
@@ -12,7 +14,7 @@ provider must preserve and separates logged-in user requests from signed Stripe 
   - `provider.py`: `AuthProvider` (`authenticate(headers) -> Principal`, `firm_context(principal) -> FirmContext`), `ClaimTokenVerifier` (`verify(token) -> ClaimTokenContext(firm_id, claim_id)`, `token_hash(token)`, `issue(firm_id, claim_id) -> str`), and the errors `AuthError` (401) and `NoFirmError` (403).
   - `dev.py`: `DevAuthProvider` reads `X-Dev-Firm-Id`, `X-Dev-Role`, `X-Dev-User-Id`; it refuses `APP_ENV=prod` and any Stripe or Clerk key containing `_live_`. `DevClaimTokenVerifier` issues and accepts `dev.<firm uuid>.<claim uuid>`; it refuses `APP_ENV=prod` and `AUTH_PROVIDER=clerk`.
   - `deps.py`: `current_user`, `current_firm`, `require_role("admin")`, `claim_token`, and `build_provider()` / `build_claim_verifier()`, which build `ClerkAuthProvider` (`clerk.py`) and `HmacClaimTokenVerifier` (`hmac_tokens.py`) for `clerk` and `hmac` (2026-10-20).
-  - `clerk.py`: verifies the Clerk session JWT (RS256 against the instance JWKS, cached 1 hour and refetched on an unknown kid; exp, nbf, iat, iss, sub required; azp checked against `CLERK_ALLOWED_ORIGINS` when present). Org claims: `o.id` and `o.rol` (session token v2), falling back to `org_id` and `org_role` (v1); the `org:` prefix is stripped. `firm_context` calls `recallops_firm_for_clerk_org` (migration 0007, SECURITY DEFINER) and mirrors `firm_members` under the firm's RLS context, cached per org, user and role for 5 minutes.
+  - `clerk.py`: verifies the Clerk session JWT (RS256 against the instance JWKS, cached 1 hour and refetched on an unknown kid; exp, nbf, iat, iss, sub required; azp checked against `CLERK_ALLOWED_ORIGINS` when present). Organization claims are ignored (plan v3): the account (`sub`) is the company and its role is always admin. `firm_context` finds the company with `recallops_firm_of_clerk_user` and, at an account's first sign-in, creates it with `recallops_firm_for_clerk_user` (migration 0009, SECURITY DEFINER); the platform operator never gets one, and when Clerk cannot say whether a new account is the operator the answer is a 503 that creates nothing.
   - `hmac_tokens.py`: 96-character base64url tokens carrying firm id, claim id and expiry under HMAC-SHA256 (the link is `<PORTAL_BASE_URL>/<token>`); refuses any spelling of the example `CLAIM_TOKEN_SECRET` or one shorter than 32 bytes.
   - `POST /v1/claims/{claim_id}/link` (admin, programs.py `reissue_link`): a fresh link for one claim that stops the old one; the fix for lost, leaked, and day-90 links (04-login.md section 5).
   - A JWKS fetch failure is `AuthUnavailable` (503), not a 401.
@@ -33,10 +35,10 @@ provider must preserve and separates logged-in user requests from signed Stripe 
 Sign-up with email and the user's own password, with a verification code emailed at sign-up, is Clerk configuration; the backend sends no email.
 
 1. Create an application. **User & authentication → Email**: sign-up with email on, **Verify at sign-up** on, method **Email verification code**. **Password**: on.
-2. **Organizations**: enabled. Roles: keep `org:admin`; add `org:reviewer` and make it the **default role for new members** (Clerk's default, `org:member`, gets a 403 that says to ask an admin).
+2. **Organizations**: off (plan v3: one account is one company).
 3. **API keys**: copy into `.env` only: `CLERK_SECRET_KEY`, `CLERK_PUBLISHABLE_KEY`, `CLERK_ISSUER` (the Frontend API URL), and `CLERK_ALLOWED_ORIGINS` (the web app's origin). Leave `CLERK_JWKS_URL` empty: it is derived from the issuer, and a value on another host is refused. Generate `CLAIM_TOKEN_SECRET` with the command in `.env.example`, and set `AUTH_PROVIDER=clerk` and `CLAIM_TOKEN_PROVIDER=hmac`.
-4. Until apps/web exists, sign up on Clerk's hosted Account Portal (`https://<instance>.accounts.dev/sign-up`), then create an organization there.
-5. **Demo data under Clerk**: your first sign-in creates an empty firm for the organization. To land on the seeded demo firm instead, put the organization id (`org_...`, Clerk dashboard) in `SEED_CLERK_ORG_ID` and run `make seed`; the demo firm takes the binding over. Restart `make api` afterwards, because the firm lookup is cached for 5 minutes.
+4. Sign up on the website (`/sign-up`); the account's first sign-in creates its company, which names itself and picks a plan at `/app/welcome`.
+5. **Demo data under Clerk** (local only; the seed refuses production): your first sign-in creates an empty company for the account. To land on the seeded demo company instead, put the account's user id (`user_...`, Clerk dashboard) in `SEED_CLERK_USER_ID` and run `make seed`; the demo company takes the binding over. Restart `make api` afterwards, because the company lookup is cached.
 
 ## Run the backend locally
 

@@ -1,14 +1,12 @@
-"""Company verification (migration 0008; decisions log 2026-10-22), with ACCESS_APPROVAL=required as in production.
+"""Company verification (migrations 0008 and 0009; decisions log 2026-10-22), with ACCESS_APPROVAL=required as in
+production.
 
-The first live deploy let any signed-up organization run any recall: an organization called "3M" could open the
-Primark recall, issue claim links in Primark's name, and pay refunds. Now an organization reaches nothing but its
-access requests until the platform operator approves a recall for it, one organization at most holds a recall, a
-firm can never approve itself, and revoking stops the console, claim links, and new payments."""
+A company reaches its account, access, and billing routes, and nothing else, until the platform operator approves a
+recall for it; one company at most holds a recall, and a company can never approve itself. Approving opens the
+company's product at once (plan v3), revoking closes it, and on Free a company runs one product."""
 
 from __future__ import annotations
 
-import threading
-import time
 import uuid
 from collections.abc import Iterator
 from typing import Any
@@ -31,12 +29,10 @@ from tests.conftest import CLEAN_ORDER
 pytestmark = pytest.mark.db
 
 IMPOSTOR = uuid.UUID("00000000-0000-4000-8000-0000000000e1")
-OPERATOR_FIRM = uuid.UUID("00000000-0000-4000-8000-0000000000e2")
 OPERATOR_ID = "user_operator"
 DEMO = {"X-Dev-Firm-Id": str(seed.DEMO_FIRM_ID), "X-Dev-Role": "admin"}
 FAKE = {"X-Dev-Firm-Id": str(IMPOSTOR), "X-Dev-Role": "admin", "X-Dev-User-Id": "user_impostor"}
 OPERATOR = {"X-Dev-Firm-Id": str(IMPOSTOR), "X-Dev-Role": "admin", "X-Dev-User-Id": OPERATOR_ID}
-OWN = {"X-Dev-Firm-Id": str(OPERATOR_FIRM), "X-Dev-Role": "admin", "X-Dev-User-Id": OPERATOR_ID}
 
 
 @pytest.fixture(scope="module")
@@ -48,7 +44,6 @@ def seeded(internal_engine_test: Engine) -> dict[str, Any]:
     result = seed.run(internal_engine_test, n=12)
     with internal_engine_test.begin() as conn:
         conn.execute(text("INSERT INTO firms (id, name) VALUES (:f, 'Impostor Co')"), {"f": IMPOSTOR})
-        conn.execute(text("INSERT INTO firms (id, name) VALUES (:f, 'Platform Operator')"), {"f": OPERATOR_FIRM})
         programs = conn.execute(text("SELECT id, firm_id, recall_id FROM recall_programs")).all()
         spare = conn.execute(
             text("SELECT id FROM recalls WHERE id <> ALL(:used) ORDER BY recall_date DESC LIMIT 1"),
@@ -73,8 +68,14 @@ def client(
     get_settings.cache_clear()
     with internal_engine_test.begin() as conn:
         conn.execute(text("UPDATE recall_programs SET access_id = NULL"))
-        conn.execute(text("DELETE FROM recall_programs WHERE firm_id = ANY(:f)"), {"f": [IMPOSTOR, OPERATOR_FIRM]})
+        conn.execute(text("DELETE FROM recall_programs WHERE firm_id = :f"), {"f": IMPOSTOR})
         conn.execute(text("DELETE FROM recall_access"))
+        # Revoking closes a product (plan v3): each test starts with the seeded products open again.
+        conn.execute(
+            text("UPDATE recall_programs SET status = 'open', closed_at = NULL WHERE id = ANY(:p)"),
+            {"p": seeded["programs"]},
+        )
+        conn.execute(text("UPDATE firms SET plan = 'free', onboarded_at = now() WHERE id = :f"), {"f": IMPOSTOR})
     seed.approve_seeded(internal_engine_test, seeded["programs"])
     from recallops.api.app import create_app
 
@@ -95,11 +96,22 @@ def _decide(client: TestClient, access_id: str, decision: str) -> Any:
     return client.post(f"/v1/operator/access/{access_id}", json={"decision": decision}, headers=OPERATOR)
 
 
-def test_an_unapproved_organization_reaches_only_its_access_requests(client: TestClient) -> None:
+def _program(client: TestClient, headers: dict[str, str]) -> dict[str, Any]:
+    items = client.get("/v1/programs", headers=headers).json()["items"]
+    assert len(items) == 1, items
+    return dict(items[0])
+
+
+def _intake(url: str) -> str:
+    return "/portal/intake/" + url.rsplit("/", 1)[1]
+
+
+def test_an_unapproved_company_reaches_only_its_account_access_and_billing(client: TestClient) -> None:
     denied = client.get("/v1/programs", headers=FAKE)
     assert denied.status_code == 403 and "not approved" in denied.json()["detail"]
-    assert client.post("/v1/billing/portal", headers=FAKE).status_code == 403  # billing is gated too
-    assert client.get("/v1/usage", headers=FAKE).status_code == 403
+    usage = client.get("/v1/usage", headers=FAKE)  # the plan and paying for it work before approval (plan v3)
+    assert usage.status_code == 200 and usage.json()["limits"] == {"active_products": 1}
+    assert "not approved" not in client.post("/v1/billing/portal", headers=FAKE).text
     status = client.get("/v1/access", headers=FAKE).json()
     assert status == {**status, "required": True, "approved": False, "operator": False, "requests": []}
     assert client.get("/v1/recalls?q=laminator", headers=FAKE).status_code == 200  # finding its recall is allowed
@@ -111,7 +123,8 @@ def test_a_request_starts_pending_and_a_firm_can_never_approve_itself(
 ) -> None:
     made = _request(client, FAKE, recall_id=seeded["laminator"])
     assert made["status"] == "requested" and made["typed"] is False and "Laminator" in made["title"]
-    assert client.post("/v1/access", json={"recall_id": str(seeded["laminator"])}, headers=FAKE).status_code == 409
+    again = client.post("/v1/access", json={"recall_id": str(seeded["laminator"])}, headers=FAKE)
+    assert again.status_code == 402  # free covers one product, and one request is already waiting
     ctx = FirmContext(firm_id=IMPOSTOR, user_id="user_impostor", role="admin")
     with tenant_session(ctx, engine=app_engine_test) as session:
         with pytest.raises(ProgrammingError, match="permission denied"), session.begin_nested():
@@ -138,6 +151,7 @@ def test_only_the_operator_lists_and_decides_and_sees_who_already_holds_a_recall
     row = listed[made["id"]]
     assert row["firm_name"] == "Impostor Co" and row["status"] == "requested"
     assert row["notice_company"] == "3M Company" and row["approved_elsewhere"] == "Demo Recall Co"
+    assert row["firm_plan"] == "free" and row["firm_active_products"] == 0
     second = _decide(client, made["id"], "approved")
     assert second.status_code == 409 and "already approved" in second.json()["detail"]  # one firm per recall
     rejected = _decide(client, made["id"], "rejected")
@@ -146,187 +160,121 @@ def test_only_the_operator_lists_and_decides_and_sees_who_already_holds_a_recall
     assert client.get("/v1/programs", headers=FAKE).status_code == 403
 
 
-def test_revoking_stops_the_console_claim_links_and_the_worker(
+def test_revoking_pauses_the_product_and_approving_again_resumes_the_same_link(
     client: TestClient, seeded: dict[str, Any], internal_engine_test: Engine
 ) -> None:
+    """Revoking stops the console, every link, and the worker without closing the product: closing is final, and a
+    re-approval used to make a second product with a new link, stranding the first one's claimants (plan v3 review)."""
     claim = str(seeded["demo"]["first_claim_id"])
-    assert client.get(f"/portal/dev.{seed.DEMO_FIRM_ID}.{claim}").status_code == 200
+    claim_link = f"/portal/dev.{seed.DEMO_FIRM_ID}.{claim}"
+    product_link = "/portal/intake/" + _program(client, DEMO)["intake_url"].rsplit("/", 1)[1]
+    assert client.get(claim_link).status_code == 200 and client.get(product_link).status_code == 200
     demo_access = next(
         r for r in client.get("/v1/operator/access", headers=OPERATOR).json() if r["firm_id"] == str(seed.DEMO_FIRM_ID)
     )
-    assert _decide(client, demo_access["id"], "revoked").json()["status"] == "revoked"
+    revoked = _decide(client, demo_access["id"], "revoked").json()
+    assert revoked["status"] == "revoked" and revoked["product"] is None
+    with internal_engine_test.connect() as conn:
+        status = conn.execute(
+            text("SELECT status FROM recall_programs WHERE id = :p"), {"p": seeded["demo_program"]}
+        ).scalar_one()
+    assert status == "open"  # paused by the approval check, not closed
     assert client.get("/v1/programs", headers=DEMO).status_code == 403
-    assert client.get(f"/portal/dev.{seed.DEMO_FIRM_ID}.{claim}").status_code == 404  # links already sent stop
+    assert client.get(claim_link).status_code == 404 and client.get(product_link).status_code == 404
     with internal_engine_test.begin() as conn:
         conn.execute(text("UPDATE claims SET status = 'submitted', lease_until = NULL WHERE id = :c"), {"c": claim})
     worker = Worker(engine=internal_engine_test, settings=get_settings(), llm=fakes.client([])[0], worker_id="w")
     assert worker.lease_claim() is None  # the only submitted claim belongs to a revoked firm: left alone
-    audit = client.get(f"/v1/claims/{claim}", headers=DEMO)
-    assert audit.status_code == 403
+
+    again = _request(client, DEMO, recall_id=seeded["laminator"])
+    product = _decide(client, again["id"], "approved").json()["product"]
+    assert product == {"id": str(seeded["demo_program"]), "status": "open", "error": None}  # the same product
+    assert client.get(claim_link).status_code == 200 and client.get(product_link).status_code == 200  # same links
+    with internal_engine_test.begin() as conn:
+        conn.execute(text("UPDATE claims SET status = 'approved' WHERE id = :c"), {"c": claim})
 
 
-def test_programs_need_an_approved_recall_and_a_typed_notice_needs_its_own_approval(
+def test_the_operator_sees_each_companys_products_and_an_approved_company_keeps_its_name(
     client: TestClient, seeded: dict[str, Any]
 ) -> None:
-    spare = _request(client, FAKE, recall_id=seeded["spare"])
-    assert _decide(client, spare["id"], "approved").status_code == 200
-    assert client.get("/v1/access", headers=FAKE).json()["approved"] is True
-    taken = client.post("/v1/programs", json={"recall_id": str(seeded["laminator"])}, headers=FAKE)
-    assert taken.status_code == 403  # approved for another recall, not this one
-    assert client.post("/v1/programs", json={"recall_id": str(seeded["spare"])}, headers=FAKE).status_code == 201
-    manual = {"title": "Acme Kettle Recall", "description": "Acme recalls kettle model K-1 sold at Target."}
-    assert client.post("/v1/programs", json={"manual": manual}, headers=FAKE).status_code == 403
-    typed = _request(
-        client, FAKE, typed={"title": "Acme Kettle Recall", "company": "Acme", "notice": "Acme recalls..."}
-    )
-    assert typed["typed"] is True
-    assert _decide(client, typed["id"], "approved").status_code == 200
-    made = client.post("/v1/programs", json={"manual": manual, "access_id": typed["id"]}, headers=FAKE)
-    assert made.status_code == 201
-    again = client.post("/v1/programs", json={"manual": manual, "access_id": typed["id"]}, headers=FAKE)
-    assert again.status_code == 409  # one program per typed notice
+    listed = client.get("/v1/operator/access", headers=OPERATOR).json()
+    demo = next(r for r in listed if r["firm_id"] == str(seed.DEMO_FIRM_ID))
+    assert demo["firm_active_products"] == 1  # read through the owner policy (it counted 0 under forced RLS)
+    renamed = client.patch("/v1/firm", json={"name": "Walmart Refund Center"}, headers=DEMO)
+    assert renamed.status_code == 409 and "operator" in renamed.json()["detail"]
+    assert client.patch("/v1/firm", json={"name": "Impostor Holdings"}, headers=FAKE).status_code == 200  # unapproved
+    client.patch("/v1/firm", json={"name": "Impostor Co"}, headers=FAKE)
 
 
-def test_the_operator_has_every_access_and_a_recall_still_has_one_organization(
+def test_approval_opens_the_product_with_its_one_claim_link(client: TestClient, seeded: dict[str, Any]) -> None:
+    made = _request(client, FAKE, recall_id=seeded["spare"])
+    approved = _decide(client, made["id"], "approved")
+    assert approved.status_code == 200, approved.text
+    product = approved.json()["product"]
+    assert product["status"] in ("open", "draft") and product["id"]
+    program = _program(client, FAKE)
+    assert program["id"] == product["id"]
+    if program["needs_refund_amount"]:  # a refund notice with no price waits for the amount (plan v3)
+        assert product == {"id": program["id"], "status": "draft", "error": "missing_refund_amount"}
+        assert program["intake_url"] is None
+        return
+    assert program["status"] == "open" and program["takes_new_claims"] and program["intake_url"]
+    view = client.get(_intake(program["intake_url"]))
+    assert view.status_code == 200 and view.json()["company_name"] == "Impostor Co"
+    status = client.get("/v1/access", headers=FAKE).json()
+    assert status["approved"] is True and status["requests"][0]["program_status"] == "open"
+
+
+def test_free_covers_one_product_and_growth_lifts_it(
     client: TestClient, seeded: dict[str, Any], internal_engine_test: Engine
 ) -> None:
-    """Owner decision 2026-10-22: the operator passes the gate, and their own organization is approved the moment it
-    asks or opens a program, through an ordinary request, decision, and audit row."""
-    status = client.get("/v1/access", headers=OWN).json()
-    assert status["approved"] is False and status["operator"] is True
-    assert client.get("/v1/programs", headers=OWN).status_code == 200  # the gate lets the operator through
-    colleague = {**OWN, "X-Dev-User-Id": "user_colleague"}
-    assert client.get("/v1/programs", headers=colleague).status_code == 403  # the user, not the firm
-
-    with internal_engine_test.begin() as conn:
-        fresh = conn.execute(
-            text(
-                "SELECT id FROM recalls WHERE id <> ALL(:used) AND id NOT IN "
-                "(SELECT recall_id FROM recall_programs WHERE recall_id IS NOT NULL) ORDER BY recall_date DESC LIMIT 1"
-            ),
-            {"used": [seeded["spare"]]},
-        ).scalar_one()
-    opened = client.post("/v1/programs", json={"recall_id": str(fresh)}, headers=OWN)
-    assert opened.status_code == 201, opened.text  # never asked: approved on the spot
-    with internal_engine_test.begin() as conn:
-        row = conn.execute(
-            text("SELECT id, status, decided_by, note FROM recall_access WHERE firm_id = :f AND recall_id = :r"),
-            {"f": OPERATOR_FIRM, "r": fresh},
-        ).one()
-        audited = conn.execute(
-            text("SELECT actor, after FROM audit_log WHERE action = 'access_decided' AND target_id = :t"),
-            {"t": str(row.id)},
-        ).one()
-    assert (row.status, row.decided_by, row.note) == ("approved", OPERATOR_ID, access.OPERATOR_NOTE)
-    assert audited.actor == OPERATOR_ID and audited.after["status"] == "approved"
-
-    assert _request(client, OWN, recall_id=seeded["spare"])["status"] == "approved"  # a request: approved at once
-    typed = _request(client, OWN, typed={"title": "Acme Kettle Recall", "company": "Acme", "notice": "Acme recalls"})
-    assert typed["status"] == "approved"
-    manual = {"title": "Acme Kettle Recall", "description": "Acme recalls kettle model K-1 sold at Target."}
-    assert (
-        client.post("/v1/programs", json={"manual": manual, "access_id": typed["id"]}, headers=OWN).status_code == 201
-    )
-
-    # Demo Recall Co runs the laminator: the operator's program is refused and leaves no request behind.
-    refused = client.post("/v1/programs", json={"recall_id": str(seeded["laminator"])}, headers=OWN)
-    assert refused.status_code == 409 and "revoke its approval in the operator queue" in refused.json()["detail"]
-    with internal_engine_test.begin() as conn:
-        left = conn.execute(
-            text("SELECT count(*) FROM recall_access WHERE firm_id = :f AND recall_id = :r"),
-            {"f": OPERATOR_FIRM, "r": seeded["laminator"]},
-        ).scalar_one()
-    assert left == 0
-    held = _request(client, OWN, recall_id=seeded["laminator"])
-    assert held["status"] == "requested"  # asked while another firm holds it: waits, like anyone's
-    again_held = client.post("/v1/access", json={"recall_id": str(seeded["laminator"])}, headers=OWN)
-    assert again_held.status_code == 409  # nothing new to create, and still held elsewhere
-    demo = next(
-        r
-        for r in client.get("/v1/operator/access", headers=OPERATOR).json()
-        if r["firm_id"] == str(seed.DEMO_FIRM_ID) and r["status"] == "approved"
-    )
-    assert _decide(client, demo["id"], "revoked").status_code == 200
-    again = client.post("/v1/programs", json={"recall_id": str(seeded["laminator"])}, headers=OWN)
-    assert again.status_code == 201, again.text  # the open request is the one approved
-    ids = {r["id"]: r["status"] for r in client.get("/v1/access", headers=OWN).json()["requests"]}
-    assert ids[held["id"]] == "approved"
+    made = _request(client, FAKE, recall_id=seeded["spare"])
+    assert _decide(client, made["id"], "approved").status_code == 200
+    typed = {"typed": {"title": "Acme Kettle Recall", "company": "Acme", "notice": "Acme recalls kettle K-1."}}
+    second = client.post("/v1/access", json=typed, headers=FAKE)
+    assert second.status_code == 402
+    assert second.json()["detail"] == "Free covers one product. Upgrade to Growth to add another."  # a sentence
+    with internal_engine_test.begin() as conn:  # an unlimited plan (enterprise is never billed)
+        conn.execute(text("UPDATE firms SET plan = 'enterprise' WHERE id = :f"), {"f": IMPOSTOR})
+    assert client.post("/v1/access", json=typed, headers=FAKE).status_code == 201
 
 
-def _fresh_recall(engine: Engine) -> UUID:
-    with engine.begin() as conn:
-        return UUID(
-            str(
-                conn.execute(
-                    text(
-                        "SELECT id FROM recalls WHERE id NOT IN (SELECT recall_id FROM recall_programs WHERE recall_id "
-                        "IS NOT NULL) AND id NOT IN (SELECT recall_id FROM recall_access WHERE recall_id IS NOT NULL) "
-                        "ORDER BY recall_date DESC LIMIT 1"
-                    )
-                ).scalar_one()
-            )
-        )
-
-
-def _commit_later(conn: Any, delay: float) -> threading.Thread:
-    def run() -> None:
-        time.sleep(delay)
-        conn.commit()
-
-    thread = threading.Thread(target=run)
-    thread.start()
-    return thread
-
-
-def test_operator_requests_made_at_the_same_moment_reuse_each_other(
-    client: TestClient, internal_engine_test: Engine
+def test_a_company_finishes_onboarding_before_asking(
+    client: TestClient, seeded: dict[str, Any], internal_engine_test: Engine
 ) -> None:
-    """A second open request for the same recall commits while the operator's POST /v1/programs waits on the unique
-    index (a double click, a second tab, a colleague): the program opens on that request. It answered 500 (review)."""
-    fresh = _fresh_recall(internal_engine_test)
-    conn = internal_engine_test.connect()
-    racer = conn.execute(
-        text("INSERT INTO recall_access (firm_id, recall_id, requested_by) VALUES (:f, :r, 'racer') RETURNING id"),
-        {"f": OPERATOR_FIRM, "r": fresh},
-    ).scalar_one()
-    thread = _commit_later(conn, 0.5)
-    made = client.post("/v1/programs", json={"recall_id": str(fresh)}, headers=OWN)
-    thread.join()
-    conn.close()
-    assert made.status_code == 201, made.text
-    with internal_engine_test.begin() as c:
-        rows = c.execute(text("SELECT id, status FROM recall_access WHERE recall_id = :r"), {"r": fresh}).all()
-    assert [(r.id, r.status) for r in rows] == [(racer, "approved")]
+    with internal_engine_test.begin() as conn:
+        conn.execute(text("UPDATE firms SET onboarded_at = NULL WHERE id = :f"), {"f": IMPOSTOR})
+    early = client.post("/v1/access", json={"recall_id": str(seeded["spare"])}, headers=FAKE)
+    assert early.status_code == 409 and "setting up your company" in early.json()["detail"]
+    named = client.post("/v1/onboarding", json={"name": "Impostor Co\u202e", "plan": "free"}, headers=FAKE)
+    assert named.status_code == 200 and named.json()["checkout_url"] is None
+    assert named.json()["firm"]["name"] == "Impostor Co"  # format characters cannot reorder a name on screen
+    assert client.post("/v1/onboarding", json={"name": "Again", "plan": "free"}, headers=FAKE).status_code == 409
+    assert client.post("/v1/access", json={"recall_id": str(seeded["spare"])}, headers=FAKE).status_code == 201
 
 
-def test_a_request_approved_at_the_same_moment_is_not_read_as_another_organizations(
-    client: TestClient, internal_engine_test: Engine
+def test_a_typed_notice_opens_its_own_product_on_approval(client: TestClient, internal_engine_test: Engine) -> None:
+    notice = "Acme recalls about 1,200 Kettle model K-1 sold at Target from January 2025 for about $40. Stop using."
+    typed = _request(client, FAKE, typed={"title": "Acme Kettle Recall", "company": "Acme", "notice": notice})
+    assert typed["typed"] is True and typed["status"] == "requested"
+    product = _decide(client, typed["id"], "approved").json()["product"]
+    assert product["id"] is not None
+    program = _program(client, FAKE)
+    assert program["title"] == "Acme Kettle Recall" and program["id"] == product["id"]
+    manual = {"title": "Acme Kettle Recall", "description": notice}
+    again = client.post("/v1/programs", json={"manual": manual, "access_id": typed["id"]}, headers=FAKE)
+    assert again.status_code == 409  # one product per typed notice
+
+
+def test_approving_twice_makes_one_product(
+    client: TestClient, seeded: dict[str, Any], internal_engine_test: Engine
 ) -> None:
-    """The operator's open request is approved by another tab while this POST /v1/programs waits on its row lock. It
-    answered 409 'another organization runs this recall' about the operator's own organization (review)."""
-    fresh = _fresh_recall(internal_engine_test)
-    with internal_engine_test.begin() as c:
-        row = c.execute(
-            text("INSERT INTO recall_access (firm_id, recall_id, requested_by) VALUES (:f, :r, 'x') RETURNING id"),
-            {"f": OPERATOR_FIRM, "r": fresh},
-        ).scalar_one()
-    conn = internal_engine_test.connect()
-    conn.execute(
-        text(
-            "UPDATE recall_access SET status = 'approved', decided_by = 'other-tab', decided_at = now() WHERE id = :i"
-        ),
-        {"i": row},
-    )
-    thread = _commit_later(conn, 0.5)
-    made = client.post("/v1/programs", json={"recall_id": str(fresh)}, headers=OWN)
-    thread.join()
-    conn.close()
-    assert made.status_code == 201, made.text
-    with internal_engine_test.begin() as c:
-        holders = c.execute(
-            text("SELECT firm_id FROM recall_access WHERE recall_id = :r AND status = 'approved'"), {"r": fresh}
-        ).all()
-    assert [h.firm_id for h in holders] == [OPERATOR_FIRM]
+    made = _request(client, FAKE, recall_id=seeded["spare"])
+    assert _decide(client, made["id"], "approved").status_code == 200
+    assert _decide(client, made["id"], "approved").status_code == 409  # the double click
+    with internal_engine_test.connect() as conn:
+        n = conn.execute(text("SELECT count(*) FROM recall_programs WHERE firm_id = :f"), {"f": IMPOSTOR}).scalar_one()
+    assert n == 1
 
 
 def test_production_refuses_to_run_without_verification() -> None:
