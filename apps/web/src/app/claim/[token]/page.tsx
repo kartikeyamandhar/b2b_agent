@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 export default async function ClaimFormPage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
   const view = await loadPortal(token);
-  if (!view.ok) return <ProblemAlert problem={view.problem} sentence={portalSentence(view.problem.status)} showDetail={false} />;
+  if (!view.ok) return <ProblemAlert problem={view.problem} sentence={portalSentence(view.problem.status)} showDetail={false} audience="claimant" />;
   // Submitted claims cannot be edited: the status page is where the claimant goes from here.
   if (view.data.status !== "draft") redirect(`/claim/${encodeURIComponent(token)}/status`);
   return (

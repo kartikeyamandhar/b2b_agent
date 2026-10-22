@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type ReactNode } from "react";
 
@@ -86,7 +87,14 @@ function Step({ n, title, children }: { n: number; title: string; children: Reac
  * Create a draft program (POST /v1/programs, admin). Nothing reaches claimants until the program is opened on its
  * settings page, after the extracted rules are reviewed.
  */
-export function NewProgram({ existingRecallIds }: { existingRecallIds: readonly string[] }) {
+export function NewProgram({
+  existingRecallIds,
+  typedNeedsApproval = false,
+}: {
+  existingRecallIds: readonly string[];
+  /** Company verification is on: a notice typed by hand is asked for under Recall access first (it failed here). */
+  typedNeedsApproval?: boolean;
+}) {
   const router = useRouter();
   const existing = new Set(existingRecallIds);
   const [source, setSource] = useState<"recall" | "manual">("recall");
@@ -140,28 +148,44 @@ export function NewProgram({ existingRecallIds }: { existingRecallIds: readonly 
   return (
     <div className="grid gap-5">
       <Step n={1} title="Find the recall">
-        <div role="radiogroup" aria-label="Where the recall comes from" className="mb-4 inline-flex rounded-md border border-line-strong bg-surface p-0.5 text-sm">
-          {(
-            [
-              ["recall", "Search the CPSC archive"],
-              ["manual", "Enter the notice by hand"],
-            ] as const
-          ).map(([value, label]) => (
-            <button
-              key={value}
-              type="button"
-              role="radio"
-              aria-checked={source === value}
-              onClick={() => {
-                setSource(value);
-                setErrors({});
-              }}
-              className={`rounded px-3 py-1 ${source === value ? "bg-accent font-medium text-bg" : "text-ink-muted hover:text-ink"}`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
+        {typedNeedsApproval ? (
+          <p className="mb-4 text-sm text-ink-muted" data-typed-via-access>
+            Not in the archive? A notice typed by hand needs its own approval: ask for it under{" "}
+            <Link href="/app/access" className="text-accent hover:underline">
+              Recall access
+            </Link>
+            , then create the program from there.
+          </p>
+        ) : (
+          // Phones get the two halves of the row and shorter labels, so neither label wraps inside its button.
+          <div
+            role="radiogroup"
+            aria-label="Where the recall comes from"
+            className="mb-4 grid w-full grid-cols-2 rounded-md border border-line-strong bg-surface p-0.5 text-sm sm:inline-flex sm:w-auto"
+          >
+            {(
+              [
+                ["recall", "Search the CPSC archive", "Search CPSC"],
+                ["manual", "Enter the notice by hand", "Enter by hand"],
+              ] as const
+            ).map(([value, label, short]) => (
+              <button
+                key={value}
+                type="button"
+                role="radio"
+                aria-checked={source === value}
+                onClick={() => {
+                  setSource(value);
+                  setErrors({});
+                }}
+                className={`rounded px-3 py-1 whitespace-nowrap ${source === value ? "bg-accent font-medium text-bg" : "text-ink-muted hover:text-ink"}`}
+              >
+                <span className="sm:hidden">{short}</span>
+                <span className="hidden sm:inline">{label}</span>
+              </button>
+            ))}
+          </div>
+        )}
 
         {source === "recall" ? (
           <div className="grid gap-3" data-source="recall">
@@ -204,7 +228,7 @@ export function NewProgram({ existingRecallIds }: { existingRecallIds: readonly 
                 </>
               )
             ) : (
-              <p className="text-sm text-ink-muted">Search the public CPSC recalls loaded by the nightly feed. An empty search lists the newest.</p>
+              <p className="text-xs text-ink-muted">Search the public CPSC recalls loaded by the nightly feed. An empty search lists the newest.</p>
             )}
             <FieldError id="recall-error" message={errors.recall} />
           </div>

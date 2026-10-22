@@ -9,6 +9,7 @@ import { reissueAvailability, reissuePath } from "@/lib/claim-link";
 
 import { Panel } from "./ClaimPanels";
 import { ProblemAlert } from "./ProblemAlert";
+import { QrPanel } from "./QrCode";
 
 const PRIMARY = "rounded-md border border-accent bg-accent px-3 py-1.5 text-sm font-medium text-bg hover:opacity-90 disabled:opacity-60";
 const SECONDARY = "rounded-md border border-line-strong bg-surface px-3 py-1.5 text-sm font-medium text-ink hover:bg-panel disabled:opacity-60";
@@ -95,20 +96,7 @@ export function ReissueLink({
               </div>
             </div>
           )}
-          {link ? (
-            <div className="grid gap-2 rounded-md border border-success/40 bg-success-soft p-3 text-sm text-success-ink" role="status" data-reissued>
-              <p className="font-medium">New link issued. It is shown only now.</p>
-              <div className="flex min-w-0 items-center gap-2">
-                <code className="min-w-0 flex-1 truncate rounded border border-line bg-surface px-2 py-1 font-mono text-xs text-ink" title={link}>
-                  {link}
-                </code>
-                <button type="button" onClick={() => void copy()} className="shrink-0 rounded border border-line bg-surface px-2 py-1 text-xs text-ink">
-                  {copied ? "Copied" : "Copy"}
-                </button>
-              </div>
-              <p className="text-xs">It works like a password for this one claim: send it only to the claimant.</p>
-            </div>
-          ) : null}
+          {link ? <ReissuedLink link={link} claimId={claimId} copied={copied} onCopy={() => void copy()} /> : null}
           {problem ? (
             <ProblemAlert
               problem={problem}
@@ -118,5 +106,24 @@ export function ReissueLink({
         </div>
       )}
     </Panel>
+  );
+}
+
+/** The new link, shown once, with its QR code for a printed letter. */
+export function ReissuedLink({ link, claimId, copied, onCopy }: { link: string; claimId: string; copied: boolean; onCopy: () => void }) {
+  return (
+    <div className="grid gap-2 rounded-md border border-success/40 bg-success-soft p-3 text-sm text-success-ink" role="status" data-reissued>
+      <p className="font-medium">New link issued. It is shown only now.</p>
+      <div className="flex min-w-0 items-center gap-2">
+        <code className="min-w-0 flex-1 truncate rounded border border-line bg-surface px-2 py-1 font-mono text-xs text-ink" title={link}>
+          {link}
+        </code>
+        <button type="button" onClick={onCopy} className="shrink-0 rounded border border-line bg-surface px-2 py-1 text-xs text-ink">
+          {copied ? "Copied" : "Copy"}
+        </button>
+      </div>
+      <QrPanel url={link} claimId={claimId} />
+      <p className="text-xs">The link and its QR code work like a password for this one claim: send them only to the claimant.</p>
+    </div>
   );
 }

@@ -22,8 +22,9 @@ import {
   type ReviewWait,
 } from "@/lib/claim-detail";
 import { shortId } from "@/lib/claims";
-import { formatDateTime } from "@/lib/format";
+import { formatDateTime, formatUsdCost } from "@/lib/format";
 import { claimDetailQuery, traceQuery } from "@/lib/queries/claim";
+import { graphLabel } from "@/lib/status";
 
 import { AuditTrail, ClaimFacts, DecisionPanel, FraudPanel, MessagesPanel, Panel, PayoutPanel, PhotoEvidence } from "./ClaimPanels";
 import { ProblemAlert } from "./ProblemAlert";
@@ -32,6 +33,8 @@ import { ReviewerActions, type ActionDone } from "./ReviewerActions";
 import { StatusBadge } from "./StatusBadge";
 
 const CHECK_AGAIN = "rounded-md border border-line-strong bg-surface px-2.5 py-1 text-xs font-medium text-ink hover:border-ink";
+/** The header's links share one secondary style (the same as Check again). */
+const HEADER_LINK = "rounded-md border border-line-strong bg-surface px-2.5 py-1 font-medium text-ink hover:border-ink";
 
 /** Fires once at `until` (and again when `until` moves). */
 function useExpiry(until: number | null): boolean {
@@ -124,12 +127,12 @@ export function ClaimDetailLive({
           Claim <span className="font-mono">{shortId(claim.id)}</span>
         </h1>
         <StatusBadge kind="claim" value={claim.status} />
-        <span className="text-xs text-ink-muted">created {formatDateTime(claim.created_at)}</span>
+        <span className="text-xs text-ink-muted">Created {formatDateTime(claim.created_at)}</span>
         <span className="ml-auto flex gap-2 text-xs">
-          <Link href={`/app/claims/${claim.id}/trace`} className="rounded-md border border-line-strong bg-surface px-2 py-1 font-medium text-ink hover:border-ink">
+          <Link href={`/app/claims/${claim.id}/trace`} className={HEADER_LINK}>
             Open trace
           </Link>
-          <Link href={`/app/programs/${claim.program_id}/claims`} className="rounded-lg border border-line bg-surface px-2 py-1">
+          <Link href={`/app/programs/${claim.program_id}/claims`} className={HEADER_LINK}>
             Claims queue
           </Link>
         </span>
@@ -165,14 +168,16 @@ export function ClaimDetailLive({
         </div>
       ) : null}
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+      {/* Three columns only from xl: below 1280 px the sidebar leaves each column too narrow for the claimant's
+          details and the photo captions, so the panels stack (decision first). */}
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-3">
         <div className="grid min-w-0 grid-cols-1 content-start gap-4">
           <ClaimFacts claim={claim} />
         </div>
         <div className="grid min-w-0 grid-cols-1 content-start gap-4">
           <PhotoEvidence claimId={claim.id} photos={claim.photos} readings={readingsByPhotoKind(trace)} />
         </div>
-        <div className="order-first grid min-w-0 grid-cols-1 content-start gap-4 lg:order-none">
+        <div className="order-first grid min-w-0 grid-cols-1 content-start gap-4 xl:order-none">
           <DecisionPanel claimId={claim.id} decision={claim.decision} decidedAt={claim.decided_at} />
           <MessagesPanel messages={claim.messages} />
           <ReviewerActions claim={claim} onDone={onDone} pending={review !== null} onAlreadyQueued={onAlreadyQueued} />
@@ -184,9 +189,11 @@ export function ClaimDetailLive({
               <p className="flex flex-wrap items-center gap-2 text-sm">
                 <StatusBadge kind="run" value={claim.run.status} />
                 <span className="text-xs text-ink-muted">
-                  {claim.run.graph} · {claim.run.steps} steps · ${claim.run.cost_usd}
+                  {graphLabel(claim.run.graph)} · {claim.run.steps} {claim.run.steps === 1 ? "step" : "steps"} · {formatUsdCost(claim.run.cost_usd)}
                 </span>
               </p>
+            ) : claim.status === "draft" ? (
+              <p className="text-sm text-ink-muted">Not submitted yet, so nothing has been checked.</p>
             ) : (
               <p className="text-sm text-ink-muted">Not adjudicated yet.</p>
             )}

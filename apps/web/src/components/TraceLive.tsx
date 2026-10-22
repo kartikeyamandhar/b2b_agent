@@ -13,8 +13,21 @@ import { EmptyState } from "./States";
 import { TraceView } from "./TraceView";
 
 /** Polls the trace every 1.5 s while the run is running (trace.md), then stops. A claim with no run yet is watched
- *  every 2 s for up to two minutes after the page loads, so the worker's first run appears without a reload. */
-export function TraceLive({ claimId, initialTrace, cited, loadedAt }: { claimId: string; initialTrace: Trace | null; cited: readonly string[]; loadedAt: number }) {
+ *  every 2 s for up to two minutes after the page loads, so the worker's first run appears without a reload.
+ *  `claimStatus` words the empty state: a draft waits for the claimant, not the worker. */
+export function TraceLive({
+  claimId,
+  initialTrace,
+  cited,
+  loadedAt,
+  claimStatus = null,
+}: {
+  claimId: string;
+  initialTrace: Trace | null;
+  cited: readonly string[];
+  loadedAt: number;
+  claimStatus?: string | null;
+}) {
   const client = useQueryClient();
   const [watchUntil] = useState(() => loadedAt + FIRST_RUN_WATCH_MS);
   const extra = () => traceWatchPollMs(client.getQueryData<Trace | null>(["trace", claimId]), watchUntil, Date.now());
@@ -25,6 +38,8 @@ export function TraceLive({ claimId, initialTrace, cited, loadedAt }: { claimId:
       {problem ? <ProblemAlert problem={problem} /> : null}
       {q.data ? (
         <TraceView trace={q.data} claimId={claimId} cited={cited} />
+      ) : claimStatus === "draft" ? (
+        <EmptyState title="Not submitted yet">The claimant has not submitted this claim yet, so nothing has been checked.</EmptyState>
       ) : (
         <EmptyState title="Not adjudicated yet">The claim has no run. The worker picks up submitted claims a few seconds after they arrive.</EmptyState>
       )}

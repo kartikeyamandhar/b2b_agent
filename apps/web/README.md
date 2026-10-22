@@ -19,7 +19,11 @@ https://recallops-five.vercel.app (2026-10-21).
   Stripe return page (`/app/billing`, `/app/billing/return`).
 - Sign-in (Clerk mode): `/sign-in`, `/sign-up`, and `/organization`.
 - Company verification: an organization reaches only its recall access requests (`/app/access`) until the platform
-  operator approves a recall for it; the operator decides requests at `/app/operator`.
+  operator approves a recall for it. The operator (by verified email) decides requests at `/operator`, which sits
+  outside the organization gate so it opens with no organization too; inside an organization the operator passes the
+  gate, gets an "Operator queue" sidebar item, and their requests are approved on request (`/app/operator` redirects).
+- Claim links as QR codes: every issued or reissued link shows its QR code (SVG and PNG downloads), and a batch prints
+  as sheets of up to 1,000 codes.
 - Claimant portal (public, no Clerk): `/claim/[token]`, `/claim/[token]/status`, `/claim/connect-return`, and
   `/claim/connect-refresh`.
 
@@ -52,7 +56,11 @@ src/app/app/                 console: layout (auth gate, AppShell, react-query P
                              campaign), claims/[id] (detail, trace), payouts, and billing (with return) pages
 src/app/claim/               claimant portal: [token] (stepper), [token]/status, connect-return, connect-refresh
 src/app/sign-in/ sign-up/    Clerk sign-in and sign-up (Clerk mode)
-src/app/organization/        create or select an organization (Clerk mode)
+src/app/organization/        create or select an organization (Clerk mode), with the operator's queue link streamed in
+src/app/operator/            the platform operator's queue, outside the console's organization gate
+src/app/not-found.tsx        the branded 404 for public pages; src/app/app/not-found.tsx (with the [...missing] catch-all)
+                             keeps a mistyped console URL inside the shell
+src/app/icon.svg             the shield mark as the tab icon (dark-mode aware); apple-icon.png (180x180) for home screens
 src/app/api/[...path]/       same-origin proxy for client components: /api/v1/* and /api/portal/* only
 
 src/lib/api-types.ts         GENERATED zod schemas and types; never edit by hand
@@ -62,9 +70,10 @@ src/lib/api/forward.ts       proxy rules: path allowlist, header allowlists (uni
 src/lib/api/backend.ts       server-side API calls with timeouts and typed errors; apiJson() parses with zod
 src/lib/api/problem.ts       RFC 7807 -> { status, title, detail, correlationId, retryAfterSeconds } + human sentence
 src/lib/api/queries.ts       page loaders returning { ok, data } or { ok: false, problem } (pages render the error state)
+src/lib/api/operator.ts      the operator queue loaded once per request, and a quick (3 s) operator check
 src/lib/api/client.ts        browser fetch through /api, validated with zod
 src/lib/auth/                Clerk mode rules (routes, matcher, roles, console access), the server-side session
-                             lookup, and the current console role
+                             lookup, the current console role, and the dev-mode shell identity
 src/lib/queries/             react-query options (queue, claim, and trace polling)
 src/lib/status.ts            labels for claim, run, payout, outcome, and program statuses; unknown -> "In progress"
 src/lib/format.ts            counts, cents, UTC dates and times, percents
@@ -75,6 +84,8 @@ src/lib/claims.ts            queue URL state, API path, review classification
 src/lib/claim-detail.ts      reviewer action rules (mirrors claims/review.py), note limits, photo readings and duplicate
                              hits from the trace, citations, cap use, polling and worker waits
 src/lib/claim-link.ts        claim link reissue rules
+src/lib/qr.ts                QR codes for claim links (qrcode-generator): module matrix, SVG path, PNG rectangles, the
+                             printed sheet
 src/lib/shortcuts.ts         console keyboard shortcuts (queue and claim)
 src/lib/mpr.ts               monthly progress report periods, boxes, and sources
 src/lib/fraud.ts             fraud graph to rings
@@ -93,13 +104,14 @@ src/lib/access.ts            company verification: request bodies, status words,
 src/components/              shell and shared: AppShell, NavLinks, BrandMark, AccountControls, ClerkShell,
                              ClerkConsole, AuthOff, StatusBadge, ProblemAlert, States (LoadingState, EmptyState)
                              programs: ProgramsTable, ProgramPortfolio, ProgramOverview, NewProgram, ProgramSettings,
-                             IssueLinks
+                             IssueLinks (IssuedLinkList), QrCode (QrPanel, the print sheet)
                              claims: ClaimsQueue (client), ClaimsTable, QueueControls, ClaimDetailLive (client),
-                             ClaimPanels, ReviewerActions (client), ReissueLink, TraceView, TraceLive
+                             ClaimPanels, ReviewerActions (client), ReissueLink (ReissuedLink), TraceView, TraceLive
                              reports, fraud, campaign: MprGenerate, MprReportView, FraudRings, Campaign
                              money: PayoutExports, BillingScreen, BillingView, BillingLive
                              homepage (home/): NoticeFigure
-                             company verification: AccessGate (gateConsole), AccessRequests, OperatorQueue
+                             company verification: AccessGate (gateConsole), AccessRequests, OperatorQueue,
+                             OperatorLink, ClerkOperatorConsole (in ClerkConsole)
 src/components/portal/       ClaimStepper, PhotoCapture, StatusView, NeedsInfoReply, PayoutChoice, AutoRefresh,
                              ConnectReturn
 tests/                       vitest (node environment; components rendered with react-dom/server)
@@ -144,8 +156,10 @@ tokens and classes; do not add one-off colors or fonts.
   `/organization` to `/sign-in`. Console API calls go through `/api/v1/*`, where `auth-seam.ts` reads the session on
   the server and sends `Authorization: Bearer <session token>`; without a session the route answers 401 and never calls
   the API, and the browser's own `Authorization` and `X-Dev-*` headers are always dropped. The console layout sends a
-  user with no organization to `/organization` (create or select one) and stops a role other than `org:admin` or
-  `org:reviewer` before any data loads, mirroring the backend's 403s. The organization switcher and user menu sit in
+  user with no organization to `/organization` (create or select one) at once and stops a role other than `org:admin`
+  or `org:reviewer` before any data loads, mirroring the backend's 403s. The platform operator's queue (`/operator`)
+  is outside that gate; `/organization` and the no-access view stream a link to it for the operator only (a 3 s check
+  that never holds the page). The organization switcher and user menu sit in
   the shell header, and the console's query cache is keyed by organization. `ClerkProvider` wraps only the console,
   sign-in, sign-up, and organization pages, so the claimant portal never loads Clerk. Keyless mode and telemetry are
   off. The token never reaches browser JavaScript: every console call runs on the Next server.
@@ -153,7 +167,8 @@ tokens and classes; do not add one-off colors or fonts.
   `admin` or `reviewer` role, and never when `VERCEL_ENV=production`. None of the settings is `NEXT_PUBLIC_`.
 - **Packages beyond the CLAUDE.md pin list**, pinned exactly because the pinned stack cannot build or test without
   them: `@tailwindcss/postcss` 4.3.3 (Tailwind 4's PostCSS plugin), `@types/react` and `@types/react-dom` 19.3.0,
-  `@types/node` 22.20.5 (matches Node 22), `vite` 8.3.4 (vitest 5's peer). Not installed yet: Stripe and Supabase
+  `@types/node` 22.20.5 (matches Node 22), `vite` 8.3.4 (vitest 5's peer). `qrcode-generator` 2.0.4 (MIT, no
+  dependencies, released 2025-08-07) draws claim-link QR codes (owner decision 2026-10-22). Not installed yet: Stripe and Supabase
   (no browser use in the current flows) and Playwright.
 - **Toolchain:** the lockfile was written by npm 10.9.4 (the pin), and CI uses Node 22.22.0. Local verification ran on Node 24.15.0.
 

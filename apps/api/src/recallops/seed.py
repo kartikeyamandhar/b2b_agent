@@ -23,6 +23,7 @@ from sqlalchemy.orm import Session
 
 from recallops.claims.rules_only import adjudicate
 from recallops.claims.tools import ClaimFacts, PhotoRef
+from recallops.claims.wording import claimant_question
 from recallops.db.engine import internal_engine
 from recallops.db.session import internal_session
 from recallops.ingest.runner import run as ingest_run
@@ -135,7 +136,7 @@ def _facts(c: SynthClaim) -> ClaimFacts:
 
 
 def _question(reasons: list[str]) -> str:
-    return "To finish your claim, please provide: " + "; ".join(reasons) + "."
+    return claimant_question(reasons)
 
 
 def insert_claims(

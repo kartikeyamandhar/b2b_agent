@@ -25,6 +25,26 @@ export function accessStatusTone(status: string): "neutral" | "good" | "attentio
   return STATUS_TONE[status] ?? "neutral";
 }
 
+const TONE_CLASS = {
+  neutral: "border-line bg-panel text-ink",
+  good: "border-success/40 bg-success-soft text-success-ink",
+  attention: "border-warn/40 bg-warn-soft text-warn-ink",
+} as const;
+
+/** The status pill's classes, shared by the access page and the operator queue so a status looks the same on both.
+ *  It never shrinks or wraps, so it keeps its place beside a long recall title. */
+export function accessBadgeClass(status: string): string {
+  return `inline-flex shrink-0 items-center whitespace-nowrap rounded-full border px-2 py-0.5 text-xs font-medium ${TONE_CLASS[accessStatusTone(status)]}`;
+}
+
+/** Who asked, in words: requests that migration 0008 made for programs that already existed say so instead of
+ *  showing the system actor; a person's id is shown as the API gives it. */
+export function requesterLabel(requestedBy: string | null | undefined): string {
+  if (!requestedBy) return "Not recorded";
+  if (requestedBy === "migration") return "Created automatically for an existing program";
+  return requestedBy;
+}
+
 export type TypedDraft = { title: string; company: string; notice: string };
 
 /** The request body for a CPSC recall, or for a typed notice; null while the typed form is incomplete. */

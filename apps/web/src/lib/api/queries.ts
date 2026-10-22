@@ -115,6 +115,6 @@ export function loadAccess(env: Env = process.env): Promise<Loaded<AccessStatus>
   return load(() => apiJson(AccessStatus, { surface: "console", path: "/v1/access" }, env));
 }
 
-export function loadOperatorAccess(env: Env = process.env): Promise<Loaded<OperatorAccessRequest[]>> {
-  return load(() => apiJson(z.array(OperatorAccessRequest), { surface: "console", path: "/v1/operator/access" }, env));
+export function loadOperatorAccess(env: Env = process.env, timeoutMs?: number): Promise<Loaded<OperatorAccessRequest[]>> {
+  return load(() => apiJson(z.array(OperatorAccessRequest), { surface: "console", path: "/v1/operator/access", timeoutMs }, env));
 }

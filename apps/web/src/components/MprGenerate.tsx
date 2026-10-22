@@ -10,6 +10,11 @@ import { MANUAL_NUMBER_FIELDS, boxLabel, periodLabel } from "@/lib/mpr";
 
 import { ProblemAlert } from "./ProblemAlert";
 
+// The console's input style (ProgramSettings uses the same), so these boxes match every other form.
+const INPUT = "w-full min-w-0 rounded-md border border-line-strong bg-surface px-2.5 py-1.5 text-sm";
+// content-end: a label that wraps to two lines keeps its input level with the inputs beside it.
+const LABEL = "grid content-end gap-1 text-xs";
+
 type Manual = Record<(typeof MANUAL_NUMBER_FIELDS)[number], string> & { homepage_posting: "" | "yes" | "no"; homepage_posting_explanation: string };
 
 const EMPTY: Manual = {
@@ -68,45 +73,45 @@ export function MprGenerate({ programId, period, canGenerate, hasReport }: { pro
 
   return (
     <form
-      className="grid gap-3 rounded-lg border border-line bg-surface p-3"
+      className="grid gap-4 rounded-lg border border-line bg-surface p-4 sm:p-5"
       onSubmit={(e) => {
         e.preventDefault();
         void generate();
       }}
     >
       <details>
-        <summary className="cursor-pointer text-sm">Boxes the firm fills in (optional)</summary>
+        <summary className="cursor-pointer text-sm font-medium text-ink">Boxes the firm fills in (optional)</summary>
         <p className="mt-1 text-xs text-ink-muted">Leave a box empty to keep its documented default. Values entered here are marked in the report.</p>
-        <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {MANUAL_NUMBER_FIELDS.map((k) => (
-            <label key={k} className="grid gap-1 text-xs">
+            <label key={k} className={LABEL}>
               {boxLabel(k)}
               <input
                 inputMode="numeric"
                 value={manual[k]}
                 onChange={(e) => setManual((m) => ({ ...m, [k]: e.target.value }))}
-                className="rounded border border-line-strong bg-surface px-2 py-1 text-sm"
+                className={INPUT}
               />
             </label>
           ))}
-          <label className="grid gap-1 text-xs">
+          <label className={LABEL}>
             Recall posted on the homepage
             <select
               value={manual.homepage_posting}
               onChange={(e) => setManual((m) => ({ ...m, homepage_posting: e.target.value as Manual["homepage_posting"] }))}
-              className="rounded border border-line-strong bg-surface px-2 py-1 text-sm"
+              className={INPUT}
             >
               <option value="">Default</option>
               <option value="yes">Yes</option>
               <option value="no">No</option>
             </select>
           </label>
-          <label className="grid gap-1 text-xs sm:col-span-2">
+          <label className={`${LABEL} sm:col-span-2`}>
             Homepage posting explanation
             <input
               value={manual.homepage_posting_explanation}
               onChange={(e) => setManual((m) => ({ ...m, homepage_posting_explanation: e.target.value }))}
-              className="rounded border border-line-strong bg-surface px-2 py-1 text-sm"
+              className={INPUT}
             />
           </label>
         </div>

@@ -55,7 +55,8 @@ export function CampaignStatus({ summary }: { summary: CampaignSummary }) {
   const rows = notificationRows(summary.notifications);
   return (
     <div className="grid grid-cols-1 gap-4">
-      <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      {/* Same tiles as the fraud and payout pages: four across from lg, values pinned to the bottom of each tile. */}
+      <dl className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         {(
           [
             ["Registrations", summary.registrations],
@@ -64,9 +65,9 @@ export function CampaignStatus({ summary }: { summary: CampaignSummary }) {
             ["Claim links", summary.claim_links],
           ] as const
         ).map(([label, value]) => (
-          <div key={label} className="min-w-0 rounded-lg border border-line bg-surface px-4 py-4">
+          <div key={label} className="flex min-w-0 flex-col rounded-lg border border-line bg-surface px-4 py-4">
             <dt className="eyebrow">{label}</dt>
-            <dd className="kpi-value mt-2">{formatCount(value)}</dd>
+            <dd className="kpi-value mt-auto pt-2 break-words">{formatCount(value)}</dd>
           </div>
         ))}
       </dl>
@@ -239,7 +240,7 @@ export function Campaign({
           updates that owner. Only example.com, example.net, or example.org emails and 555-0100 to 555-0199 phones are
           accepted.
         </p>
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
+        <div className="flex flex-col gap-2 lg:flex-row lg:items-end">
           <label className="grid min-w-0 flex-1 gap-1 text-xs">
             Registrations file (CSV, up to 5 MB)
             <input ref={fileRef} type="file" accept=".csv,text/csv" className="min-w-0 text-sm file:mr-3 file:rounded-md file:border file:border-line-strong file:bg-surface file:px-3 file:py-1.5 file:text-sm" onChange={() => setFileError(null)} />

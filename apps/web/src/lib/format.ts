@@ -27,6 +27,22 @@ export function formatPercent(ratio: number | null): string {
   return ratio === null ? "—" : PERCENT.format(ratio);
 }
 
+const PERCENT_FIXED = new Intl.NumberFormat("en-US", { style: "percent", minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+/** One decimal always, so a column of percentages lines up ("22.0%" beside "21.4%"). */
+export function formatPercentFixed(ratio: number | null): string {
+  return ratio === null ? "—" : PERCENT_FIXED.format(ratio);
+}
+
+const USD_COST = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2, maximumFractionDigits: 4 });
+
+/** Model spend, a decimal string in dollars from the API ("0.000000", "0.037476"): "$0.00", "$0.0375". */
+export function formatUsdCost(value: string | number | null | undefined): string {
+  if (value === null || value === undefined || value === "") return "—";
+  const n = Number(value);
+  return Number.isFinite(n) ? USD_COST.format(n) : String(value);
+}
+
 const DATE_TIME = new Intl.DateTimeFormat("en-US", {
   dateStyle: "medium",
   timeStyle: "short",

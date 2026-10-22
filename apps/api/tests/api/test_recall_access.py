@@ -7,6 +7,8 @@ firm can never approve itself, and revoking stops the console, claim links, and 
 
 from __future__ import annotations
 
+import threading
+import time
 import uuid
 from collections.abc import Iterator
 from typing import Any
@@ -29,10 +31,12 @@ from tests.conftest import CLEAN_ORDER
 pytestmark = pytest.mark.db
 
 IMPOSTOR = uuid.UUID("00000000-0000-4000-8000-0000000000e1")
+OPERATOR_FIRM = uuid.UUID("00000000-0000-4000-8000-0000000000e2")
 OPERATOR_ID = "user_operator"
 DEMO = {"X-Dev-Firm-Id": str(seed.DEMO_FIRM_ID), "X-Dev-Role": "admin"}
 FAKE = {"X-Dev-Firm-Id": str(IMPOSTOR), "X-Dev-Role": "admin", "X-Dev-User-Id": "user_impostor"}
 OPERATOR = {"X-Dev-Firm-Id": str(IMPOSTOR), "X-Dev-Role": "admin", "X-Dev-User-Id": OPERATOR_ID}
+OWN = {"X-Dev-Firm-Id": str(OPERATOR_FIRM), "X-Dev-Role": "admin", "X-Dev-User-Id": OPERATOR_ID}
 
 
 @pytest.fixture(scope="module")
@@ -44,6 +48,7 @@ def seeded(internal_engine_test: Engine) -> dict[str, Any]:
     result = seed.run(internal_engine_test, n=12)
     with internal_engine_test.begin() as conn:
         conn.execute(text("INSERT INTO firms (id, name) VALUES (:f, 'Impostor Co')"), {"f": IMPOSTOR})
+        conn.execute(text("INSERT INTO firms (id, name) VALUES (:f, 'Platform Operator')"), {"f": OPERATOR_FIRM})
         programs = conn.execute(text("SELECT id, firm_id, recall_id FROM recall_programs")).all()
         spare = conn.execute(
             text("SELECT id FROM recalls WHERE id <> ALL(:used) ORDER BY recall_date DESC LIMIT 1"),
@@ -68,7 +73,7 @@ def client(
     get_settings.cache_clear()
     with internal_engine_test.begin() as conn:
         conn.execute(text("UPDATE recall_programs SET access_id = NULL"))
-        conn.execute(text("DELETE FROM recall_programs WHERE firm_id = :f"), {"f": IMPOSTOR})
+        conn.execute(text("DELETE FROM recall_programs WHERE firm_id = ANY(:f)"), {"f": [IMPOSTOR, OPERATOR_FIRM]})
         conn.execute(text("DELETE FROM recall_access"))
     seed.approve_seeded(internal_engine_test, seeded["programs"])
     from recallops.api.app import create_app
@@ -180,6 +185,148 @@ def test_programs_need_an_approved_recall_and_a_typed_notice_needs_its_own_appro
     assert made.status_code == 201
     again = client.post("/v1/programs", json={"manual": manual, "access_id": typed["id"]}, headers=FAKE)
     assert again.status_code == 409  # one program per typed notice
+
+
+def test_the_operator_has_every_access_and_a_recall_still_has_one_organization(
+    client: TestClient, seeded: dict[str, Any], internal_engine_test: Engine
+) -> None:
+    """Owner decision 2026-10-22: the operator passes the gate, and their own organization is approved the moment it
+    asks or opens a program, through an ordinary request, decision, and audit row."""
+    status = client.get("/v1/access", headers=OWN).json()
+    assert status["approved"] is False and status["operator"] is True
+    assert client.get("/v1/programs", headers=OWN).status_code == 200  # the gate lets the operator through
+    colleague = {**OWN, "X-Dev-User-Id": "user_colleague"}
+    assert client.get("/v1/programs", headers=colleague).status_code == 403  # the user, not the firm
+
+    with internal_engine_test.begin() as conn:
+        fresh = conn.execute(
+            text(
+                "SELECT id FROM recalls WHERE id <> ALL(:used) AND id NOT IN "
+                "(SELECT recall_id FROM recall_programs WHERE recall_id IS NOT NULL) ORDER BY recall_date DESC LIMIT 1"
+            ),
+            {"used": [seeded["spare"]]},
+        ).scalar_one()
+    opened = client.post("/v1/programs", json={"recall_id": str(fresh)}, headers=OWN)
+    assert opened.status_code == 201, opened.text  # never asked: approved on the spot
+    with internal_engine_test.begin() as conn:
+        row = conn.execute(
+            text("SELECT id, status, decided_by, note FROM recall_access WHERE firm_id = :f AND recall_id = :r"),
+            {"f": OPERATOR_FIRM, "r": fresh},
+        ).one()
+        audited = conn.execute(
+            text("SELECT actor, after FROM audit_log WHERE action = 'access_decided' AND target_id = :t"),
+            {"t": str(row.id)},
+        ).one()
+    assert (row.status, row.decided_by, row.note) == ("approved", OPERATOR_ID, access.OPERATOR_NOTE)
+    assert audited.actor == OPERATOR_ID and audited.after["status"] == "approved"
+
+    assert _request(client, OWN, recall_id=seeded["spare"])["status"] == "approved"  # a request: approved at once
+    typed = _request(client, OWN, typed={"title": "Acme Kettle Recall", "company": "Acme", "notice": "Acme recalls"})
+    assert typed["status"] == "approved"
+    manual = {"title": "Acme Kettle Recall", "description": "Acme recalls kettle model K-1 sold at Target."}
+    assert (
+        client.post("/v1/programs", json={"manual": manual, "access_id": typed["id"]}, headers=OWN).status_code == 201
+    )
+
+    # Demo Recall Co runs the laminator: the operator's program is refused and leaves no request behind.
+    refused = client.post("/v1/programs", json={"recall_id": str(seeded["laminator"])}, headers=OWN)
+    assert refused.status_code == 409 and "revoke its approval in the operator queue" in refused.json()["detail"]
+    with internal_engine_test.begin() as conn:
+        left = conn.execute(
+            text("SELECT count(*) FROM recall_access WHERE firm_id = :f AND recall_id = :r"),
+            {"f": OPERATOR_FIRM, "r": seeded["laminator"]},
+        ).scalar_one()
+    assert left == 0
+    held = _request(client, OWN, recall_id=seeded["laminator"])
+    assert held["status"] == "requested"  # asked while another firm holds it: waits, like anyone's
+    again_held = client.post("/v1/access", json={"recall_id": str(seeded["laminator"])}, headers=OWN)
+    assert again_held.status_code == 409  # nothing new to create, and still held elsewhere
+    demo = next(
+        r
+        for r in client.get("/v1/operator/access", headers=OPERATOR).json()
+        if r["firm_id"] == str(seed.DEMO_FIRM_ID) and r["status"] == "approved"
+    )
+    assert _decide(client, demo["id"], "revoked").status_code == 200
+    again = client.post("/v1/programs", json={"recall_id": str(seeded["laminator"])}, headers=OWN)
+    assert again.status_code == 201, again.text  # the open request is the one approved
+    ids = {r["id"]: r["status"] for r in client.get("/v1/access", headers=OWN).json()["requests"]}
+    assert ids[held["id"]] == "approved"
+
+
+def _fresh_recall(engine: Engine) -> UUID:
+    with engine.begin() as conn:
+        return UUID(
+            str(
+                conn.execute(
+                    text(
+                        "SELECT id FROM recalls WHERE id NOT IN (SELECT recall_id FROM recall_programs WHERE recall_id "
+                        "IS NOT NULL) AND id NOT IN (SELECT recall_id FROM recall_access WHERE recall_id IS NOT NULL) "
+                        "ORDER BY recall_date DESC LIMIT 1"
+                    )
+                ).scalar_one()
+            )
+        )
+
+
+def _commit_later(conn: Any, delay: float) -> threading.Thread:
+    def run() -> None:
+        time.sleep(delay)
+        conn.commit()
+
+    thread = threading.Thread(target=run)
+    thread.start()
+    return thread
+
+
+def test_operator_requests_made_at_the_same_moment_reuse_each_other(
+    client: TestClient, internal_engine_test: Engine
+) -> None:
+    """A second open request for the same recall commits while the operator's POST /v1/programs waits on the unique
+    index (a double click, a second tab, a colleague): the program opens on that request. It answered 500 (review)."""
+    fresh = _fresh_recall(internal_engine_test)
+    conn = internal_engine_test.connect()
+    racer = conn.execute(
+        text("INSERT INTO recall_access (firm_id, recall_id, requested_by) VALUES (:f, :r, 'racer') RETURNING id"),
+        {"f": OPERATOR_FIRM, "r": fresh},
+    ).scalar_one()
+    thread = _commit_later(conn, 0.5)
+    made = client.post("/v1/programs", json={"recall_id": str(fresh)}, headers=OWN)
+    thread.join()
+    conn.close()
+    assert made.status_code == 201, made.text
+    with internal_engine_test.begin() as c:
+        rows = c.execute(text("SELECT id, status FROM recall_access WHERE recall_id = :r"), {"r": fresh}).all()
+    assert [(r.id, r.status) for r in rows] == [(racer, "approved")]
+
+
+def test_a_request_approved_at_the_same_moment_is_not_read_as_another_organizations(
+    client: TestClient, internal_engine_test: Engine
+) -> None:
+    """The operator's open request is approved by another tab while this POST /v1/programs waits on its row lock. It
+    answered 409 'another organization runs this recall' about the operator's own organization (review)."""
+    fresh = _fresh_recall(internal_engine_test)
+    with internal_engine_test.begin() as c:
+        row = c.execute(
+            text("INSERT INTO recall_access (firm_id, recall_id, requested_by) VALUES (:f, :r, 'x') RETURNING id"),
+            {"f": OPERATOR_FIRM, "r": fresh},
+        ).scalar_one()
+    conn = internal_engine_test.connect()
+    conn.execute(
+        text(
+            "UPDATE recall_access SET status = 'approved', decided_by = 'other-tab', decided_at = now() WHERE id = :i"
+        ),
+        {"i": row},
+    )
+    thread = _commit_later(conn, 0.5)
+    made = client.post("/v1/programs", json={"recall_id": str(fresh)}, headers=OWN)
+    thread.join()
+    conn.close()
+    assert made.status_code == 201, made.text
+    with internal_engine_test.begin() as c:
+        holders = c.execute(
+            text("SELECT firm_id FROM recall_access WHERE recall_id = :r AND status = 'approved'"), {"r": fresh}
+        ).all()
+    assert [h.firm_id for h in holders] == [OPERATOR_FIRM]
 
 
 def test_production_refuses_to_run_without_verification() -> None:

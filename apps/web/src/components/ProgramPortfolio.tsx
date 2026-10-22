@@ -48,11 +48,15 @@ export function portfolio(programs: readonly Program[]): Portfolio {
   };
 }
 
-function Stat({ label, value, note, tone }: { label: string; value: string; note?: string; tone?: "attention" }) {
+/** A tile like the program page's KPIs: the value at the foot, and an attention accent that adds no height. */
+function Stat({ label, value, note, tone, className = "" }: { label: string; value: string; note?: string; tone?: "attention"; className?: string }) {
   return (
-    <div className={`min-w-0 rounded-lg border bg-surface px-5 py-4 ${tone === "attention" ? "border-warn/40 border-t-2 border-t-warn" : "border-line"}`} data-portfolio-stat={label}>
+    <div
+      className={`flex min-w-0 flex-col rounded-lg border bg-surface px-5 py-4 ${tone === "attention" ? "border-warn/40 border-t-warn shadow-[inset_0_1px_0_0_var(--warn)]" : "border-line"} ${className}`}
+      data-portfolio-stat={label}
+    >
       <dt className="eyebrow">{label}</dt>
-      <dd className="kpi-value mt-2">
+      <dd className="kpi-value mt-auto pt-2">
         {value}
         {note ? <span className="ml-1.5 align-middle text-sm font-normal text-ink-muted">{note}</span> : null}
       </dd>
@@ -63,8 +67,10 @@ function Stat({ label, value, note, tone }: { label: string; value: string; note
 export function PortfolioSummary({ programs }: { programs: readonly Program[] }) {
   const t = portfolio(programs);
   return (
-    <dl className="grid grid-cols-2 gap-3 lg:grid-cols-5" aria-label="All programs">
-      <Stat label="Open programs" value={formatCount(t.open)} note={`of ${formatCount(t.total)}`} />
+    // Five tiles in two columns would leave the last one alone: below xl the first spans the row and the other four
+    // pair up under it. Five across waits for xl, where a fifth of the column still fits a six-digit value.
+    <dl className="grid grid-cols-2 gap-3 xl:grid-cols-5" aria-label="All programs">
+      <Stat label="Open programs" value={formatCount(t.open)} note={`of ${formatCount(t.total)}`} className="col-span-2 xl:col-span-1" />
       <Stat label="Units affected" value={formatCount(t.units)} />
       <Stat label="Claims filed" value={formatCount(t.filed)} />
       <Stat label="Awaiting review" value={formatCount(t.awaitingReview)} tone={t.awaitingReview > 0 ? "attention" : undefined} />

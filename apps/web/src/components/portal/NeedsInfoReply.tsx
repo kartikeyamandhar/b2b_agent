@@ -14,8 +14,8 @@ import {
   answerOutcome,
   answerPhotoKinds,
   isPhotoBusy,
+  photoButtonLabel,
   photoHint,
-  photoKindLabel,
   portalPath,
   type AnswerGate,
   type PhotoPhase,
@@ -109,12 +109,14 @@ export function NeedsInfoReply({ token, view }: { token: string; view: Pick<Port
         void send();
       }}
     >
+      {/* A legend sits outside its fieldset's grid, so its own margin keeps it apart from the first field. Legends are
+          group headings (semibold, like "Our question"); field labels are medium, as on the claim form. */}
       {fields.length ? (
         <fieldset className="grid gap-3" data-answer-fields>
-          <legend className="text-base font-medium">Check these details</legend>
+          <legend className="mb-2 text-base font-semibold">Check these details</legend>
           {fields.map((f) => (
             <label key={f.name} className="grid gap-1 text-base">
-              {ANSWER_FIELD_LABEL[f.name]}
+              <span className="font-medium">{ANSWER_FIELD_LABEL[f.name]}</span>
               <input
                 name={f.name}
                 type={f.name === "purchase_date" ? "date" : "text"}
@@ -130,7 +132,7 @@ export function NeedsInfoReply({ token, view }: { token: string; view: Pick<Port
         </fieldset>
       ) : null}
       <fieldset className="grid gap-2">
-        <legend className="text-base font-medium">Add a photo</legend>
+        <legend className="mb-2 text-base font-semibold">Add a photo</legend>
         <div className="flex flex-wrap gap-2">
           {kinds.map((k) => (
             <button
@@ -143,7 +145,7 @@ export function NeedsInfoReply({ token, view }: { token: string; view: Pick<Port
               className={`min-h-12 rounded-md border px-3 text-base ${photoKind === k ? "border-accent bg-accent text-bg" : "border-line-strong"} hover:opacity-90 disabled:opacity-60`}
               data-answer-photo={k}
             >
-              {photoKindLabel(k)[0]!.toUpperCase() + photoKindLabel(k).slice(1)}
+              {photoButtonLabel(k)}
             </button>
           ))}
         </div>
@@ -160,7 +162,7 @@ export function NeedsInfoReply({ token, view }: { token: string; view: Pick<Port
         ) : null}
       </fieldset>
       <label htmlFor="reply" className="text-base font-medium">
-        A note for the company (optional)
+        A note for the company <span className="font-normal text-ink-muted">(optional)</span>
       </label>
       <textarea
         id="reply"
@@ -181,7 +183,7 @@ export function NeedsInfoReply({ token, view }: { token: string; view: Pick<Port
           {ANSWER_OUTCOME_TEXT[outcome]}
         </p>
       )}
-      {problem ? <ProblemAlert problem={problem} sentence={portalSentence(problem.status)} /> : null}
+      {problem ? <ProblemAlert problem={problem} sentence={portalSentence(problem.status)} audience="claimant" /> : null}
       <AnswerActions gate={gate} busy={busy} onSendWithoutPhoto={() => void send(true)} />
     </form>
   );

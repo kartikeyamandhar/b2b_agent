@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import type { ReactNode } from "react";
 
 import { MprGenerate } from "@/components/MprGenerate";
 import { MprReportView } from "@/components/MprReportView";
@@ -18,27 +19,39 @@ export default async function ReportsPage({ params, searchParams }: Props) {
   const { id } = await params;
   const sp = await searchParams;
   const [program, role] = await Promise.all([loadProgram(id), currentConsoleRole()]);
-  if (!program.ok) return <ProblemAlert problem={program.problem} />;
+  // The same frame as the fraud, settings, and campaign pages: breadcrumb, heading, then the content or the alert.
+  const frame = (body: ReactNode) => (
+    <div className="grid grid-cols-1 gap-6">
+      <nav aria-label="Breadcrumb" className="text-xs">
+        <Link href="/app/programs" className="text-accent hover:underline">
+          ← Programs
+        </Link>
+        {program.ok ? (
+          <>
+            <span className="mx-1 text-ink-muted">/</span>
+            <Link href={`/app/programs/${program.data.id}`} className="text-accent hover:underline">
+              {program.data.title}
+            </Link>
+          </>
+        ) : null}
+      </nav>
+      <header>
+        <h1 className="page-title">Monthly progress reports</h1>
+        <p className="mt-2 max-w-2xl text-ink-muted">
+          The CPSC monthly progress report, counted from this program&apos;s claims and checked by an independent recount.
+        </p>
+      </header>
+      {body}
+    </div>
+  );
+  if (!program.ok) return frame(<ProblemAlert problem={program.problem} />);
   const periods = reportPeriods(program.data.opened_at ?? program.data.created_at, new Date());
   const requested = typeof sp.period === "string" ? sp.period : undefined;
   const period = isPeriod(requested) ? requested : periods[0]!;
   const report = await loadMpr(id, period);
 
-  return (
-    <div className="grid gap-4">
-      <nav aria-label="Breadcrumb" className="flex flex-wrap gap-1 text-xs">
-        <Link href="/app/programs" className="text-accent hover:underline">
-          Programs
-        </Link>
-        <span aria-hidden="true">/</span>
-        <Link href={`/app/programs/${id}`} className="text-accent hover:underline">
-          {program.data.title}
-        </Link>
-      </nav>
-      <h1 className="page-title">Monthly progress reports</h1>
-      <p className="text-sm text-ink-muted">
-        The CPSC monthly progress report, counted from this program&apos;s claims and checked by an independent recount.
-      </p>
+  return frame(
+    <>
       <nav aria-label="Report periods">
         <ul className="flex flex-wrap gap-1.5">
           {periods.map((p) => (
@@ -63,6 +76,6 @@ export default async function ReportsPage({ params, searchParams }: Props) {
       )}
       {/* Keyed by period: the boxes the firm types belong to one month and never carry over to the next. */}
       <MprGenerate key={period} programId={id} period={period} canGenerate={role === "admin"} hasReport={report.ok && !!report.data} />
-    </div>
+    </>,
   );
 }

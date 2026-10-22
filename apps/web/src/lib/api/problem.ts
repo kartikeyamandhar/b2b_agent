@@ -109,3 +109,11 @@ export function isAccessPending(problem: Pick<ApiProblem, "status" | "detail">):
 }
 
 export const ACCESS_PENDING_SENTENCE = "This organization is not approved to run this recall yet.";
+
+/** A 409 because another organization holds the recall's approval (one organization per recall), which no refresh
+ *  can fix: the operator revokes that approval first. */
+export function isHeldElsewhere(problem: Pick<ApiProblem, "status" | "detail">): boolean {
+  return problem.status === 409 && /another organization (runs|is already approved for) this recall/i.test(problem.detail ?? "");
+}
+
+export const HELD_ELSEWHERE_SENTENCE = "Another organization runs this recall.";

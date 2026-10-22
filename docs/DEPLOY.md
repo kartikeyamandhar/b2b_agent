@@ -54,9 +54,10 @@ The project runs Postgres 17. Its direct host (`db.<ref>.supabase.co`) answers o
 | `NEO4J_URI`, `NEO4J_USER`, `NEO4J_PASSWORD`, `NEO4J_DATABASE`, `GRAPH_KEY_SECRET` | `deploy.env` (this Aura instance names its user and database after the instance id) |
 | `SUPABASE_URL`, `SUPABASE_SERVICE_KEY` | `deploy.env` (the legacy `service_role` key; the adapter is untested with the new `sb_secret_` keys) |
 | `WEB_PROXY_SECRET`, `INTERNAL_SHARED_SECRET`, `CLAIM_TOKEN_SECRET` | Generated above |
-| `CLERK_SECRET_KEY`, `CLERK_PUBLISHABLE_KEY`, `CLERK_ISSUER` | Step 4 (leave `CLERK_JWKS_URL` empty: it is derived from the issuer) |
+| `CLERK_SECRET_KEY`, `CLERK_PUBLISHABLE_KEY`, `CLERK_ISSUER` | Step 4 (leave `CLERK_JWKS_URL` empty: it is derived from the issuer). The API also reads operator addresses with the secret key |
 | `CLERK_ALLOWED_ORIGINS` | `https://<your-site>.vercel.app` |
-| `PLATFORM_OPERATOR_USER_IDS` | Your Clerk user id (`user_...`): who approves organizations (step 7) |
+| `PLATFORM_OPERATOR_EMAILS` | The operator's email address: who approves organizations (step 7) |
+| `PLATFORM_OPERATOR_USER_IDS` | Optional: Clerk user ids that are also operators (step 7) |
 | `PORTAL_BASE_URL` (every service) | `https://<your-site>.vercel.app/claim` |
 | `BILLING_RETURN_URL` | `https://<your-site>.vercel.app/app/billing/return` |
 | `CONNECT_RETURN_URL`, `CONNECT_REFRESH_URL` | `https://<your-site>.vercel.app/claim/connect-return` and `.../claim/connect-refresh` |
@@ -103,9 +104,11 @@ In the repository's **Settings, Secrets and variables, Actions**, add `RECALLOPS
 
 ## 7. Company verification: you are the operator
 
-An organization runs a recall only after the platform operator approves it. Put your Clerk user id (`user_...`, Clerk dashboard, Users) in `PLATFORM_OPERATOR_USER_IDS` on the API service; several ids are separated by commas. Production refuses to start with `ACCESS_APPROVAL=off`.
+An organization runs a recall only after the platform operator approves it. Put the operator's email address in `PLATFORM_OPERATOR_EMAILS` on the API service (several are separated by commas). Any account whose verified address is listed is the operator, so deleting and recreating the account changes nothing. Gmail addresses match with or without dots; a `+tag` address is a different address, and a `+clerk_test` address is refused (Clerk's test mode verifies those with a fixed code). The check needs the real `CLERK_SECRET_KEY` on the API, and production refuses to start without it. `PLATFORM_OPERATOR_USER_IDS` still works for Clerk user ids. Production refuses to start with `ACCESS_APPROVAL=off`.
 
-New organizations see only **Recall access** until you approve them. Review requests at `/app/operator`: each shows the requester's work-email domain and the company and websites the notice names. Approve when the email domain matches the company, or after calling the contact number in the notice. One organization at most runs each recall, and revoking stops its console, claim links, and refunds. Programs that existed before this check arrived as pending requests from `migration`.
+The operator has every access: the queue at `/operator` opens with or without an organization, and inside an organization the operator passes the gate and the organization is approved for a recall the moment the operator asks for it or opens a program on it (unless another organization holds that recall). To demo both sides, keep two accounts: the operator's, and a company's that is not listed.
+
+New organizations see only **Recall access** until you approve them. Review requests at `/operator`: each shows the requester's work-email domain and the company and websites the notice names. Approve when the email domain matches the company, or after calling the contact number in the notice. One organization at most runs each recall, and revoking stops its console, claim links, and refunds. Programs that existed before this check arrived as pending requests from `migration`.
 
 ## 8. Demo data (optional)
 

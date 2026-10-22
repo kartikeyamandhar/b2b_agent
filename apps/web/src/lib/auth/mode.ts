@@ -32,7 +32,7 @@ const startsWith = (p: string, prefix: string) => p === prefix || p.startsWith(`
  */
 export function routeKind(pathname: string): RouteKind {
   if (startsWith(pathname, "/api/v1")) return "console-api";
-  if (startsWith(pathname, "/app") || startsWith(pathname, "/organization")) return "console-page";
+  if (startsWith(pathname, "/app") || startsWith(pathname, "/organization") || startsWith(pathname, "/operator")) return "console-page";
   return "public";
 }
 
@@ -41,7 +41,7 @@ export function routeKind(pathname: string): RouteKind {
  * are excluded, so neither a first-time visitor nor a claimant touches Clerk at all. Kept here so a test can check it;
  * proxy.ts must repeat it literally, because Next reads the matcher statically.
  */
-export const PROXY_MATCHER = "/((?!$|_next/|claim(?:/|$)|api/portal(?:/|$)|favicon\\.ico$).*)";
+export const PROXY_MATCHER = "/((?!$|_next/|claim(?:/|$)|api/portal(?:/|$)|favicon\\.ico$|icon\\.svg$|apple-icon\\.png$).*)";
 
 export type ConsoleRole = "admin" | "reviewer";
 

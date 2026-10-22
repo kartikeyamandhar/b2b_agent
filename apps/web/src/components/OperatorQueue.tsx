@@ -6,17 +6,18 @@ import { useState } from "react";
 import { OperatorAccessRequest } from "@/lib/api-types";
 import { sendJson } from "@/lib/api/client";
 import { ApiError, type ApiProblem } from "@/lib/api/problem";
-import { OPERATOR_ACTION_LABEL, accessStatusLabel, domainHint, operatorActions } from "@/lib/access";
+import { OPERATOR_ACTION_LABEL, accessBadgeClass, accessStatusLabel, domainHint, operatorActions, requesterLabel } from "@/lib/access";
 import { formatDateTime } from "@/lib/format";
 
 import { ProblemAlert } from "./ProblemAlert";
 
-/** The platform operator's queue: every organization's requests to run a recall, with the hints to check first. */
+/** The platform operator's queue: every organization's requests to run a recall, with the hints to check first. Left
+ *  aligned at the main gutter like every other console page; the narrower measure keeps the cards readable. */
 export function OperatorQueue({ requests }: { requests: readonly OperatorAccessRequest[] }) {
   const pending = requests.filter((r) => r.status === "requested");
   const decided = requests.filter((r) => r.status !== "requested");
   return (
-    <div className="mx-auto grid w-full max-w-4xl gap-6" data-operator-queue>
+    <div className="grid w-full max-w-4xl gap-6" data-operator-queue>
       <header className="grid gap-2">
         <h1 className="page-title">Organizations asking to run a recall</h1>
         <p className="text-ink-muted">
@@ -67,21 +68,27 @@ export function RequestCard({ r }: { r: OperatorAccessRequest }) {
 
   return (
     <article className="grid gap-2 rounded-lg border border-line bg-surface p-4" data-operator-request={r.id}>
-      <div className="flex flex-wrap items-start justify-between gap-2">
-        <div className="min-w-0">
+      {/* From sm the status stays top right whatever the title's length; on a phone it sits under the title, so the
+          title keeps the card's width. */}
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
+        <div className="min-w-0 flex-1">
           <p className="break-words font-semibold text-ink">{r.firm_name}</p>
           <p className="break-words text-sm text-ink">
             {r.typed ? "Typed notice: " : `Recall ${r.recall_number ?? ""}: `}
             {r.title}
           </p>
         </div>
-        <span className="text-xs text-ink-muted">{accessStatusLabel(r.status)}</span>
+        <span className={accessBadgeClass(r.status)} data-access-status={r.status}>
+          {accessStatusLabel(r.status)}
+        </span>
       </div>
       <dl className="grid gap-x-4 gap-y-1 text-sm sm:grid-cols-[10rem_minmax(0,1fr)]">
         <dt className="text-ink-muted">Requested by</dt>
-        <dd className="break-all">
-          {r.requested_by}, {formatDateTime(r.created_at)}
+        <dd className="[overflow-wrap:anywhere]" data-requested-by>
+          {requesterLabel(r.requested_by)}
         </dd>
+        <dt className="text-ink-muted">Requested on</dt>
+        <dd>{formatDateTime(r.created_at)}</dd>
         <dt className="text-ink-muted">Company in the notice</dt>
         <dd>{r.notice_company ?? r.typed_company ?? "Not named"}</dd>
       </dl>

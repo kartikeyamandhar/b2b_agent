@@ -82,6 +82,28 @@ describe("apiJson", () => {
     expect((err as ApiError).problem).toMatchObject({ status: 502, title: "Contract Mismatch", correlationId: "r-1" });
   });
 
+  it("turns a body that is cut off or stalls into an ApiError, never a raw error", async () => {
+    const cut = new ReadableStream({ start: (c) => c.error(new TypeError("terminated")) });
+    stubFetch(() => new Response(cut, { status: 200, headers: { "x-request-id": "r1" } }));
+    const err = await apiJson(z.object({}), { surface: "console", path: "/v1/programs" }, ENV).catch((e: unknown) => e);
+    expect(err).toBeInstanceOf(ApiError);
+    expect((err as ApiError).problem).toMatchObject({ status: 502, correlationId: "r1" });
+    const stalled = new ReadableStream({ start: (c) => c.error(new DOMException("timed out", "TimeoutError")) });
+    stubFetch(() => new Response(stalled, { status: 200 }));
+    const late = await apiJson(z.object({}), { surface: "console", path: "/v1/programs" }, ENV).catch((e: unknown) => e);
+    expect((late as ApiError).problem.status).toBe(504);
+  });
+
+  it("uses a shorter deadline for one call when asked, never a longer one", async () => {
+    stubFetch(() => new Response("{}"));
+    const timeout = vi.spyOn(AbortSignal, "timeout");
+    await apiJson(z.object({}), { surface: "console", path: "/v1/operator/access", timeoutMs: 3000 }, ENV);
+    await apiJson(z.object({}), { surface: "console", path: "/v1/operator/access", timeoutMs: 999_999 }, ENV);
+    await apiJson(z.object({}), { surface: "console", path: "/v1/programs" }, ENV);
+    expect(timeout.mock.calls.map((c) => c[0])).toEqual([3000, 30000, 30000]);
+    timeout.mockRestore();
+  });
+
   it("sends a JSON body with its content type", async () => {
     const calls = stubFetch(() => Response.json({ items: [] }));
     await apiJson(Shape, { surface: "console", path: "/v1/x", method: "POST", json: { n: 3 } }, ENV);

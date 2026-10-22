@@ -61,7 +61,7 @@ describe("ProgramOverview", () => {
     expect(html).toContain("2501 through 2534");
     expect(html).toContain("Refund");
     expect(html).toContain("Upload a photo of the cut cord");
-    expect(html).toContain("Proof required: destruction_photo");
+    expect(html).toContain("Proof required: destruction photo");
     expect(html).toContain("Cut the power cord");
   });
 

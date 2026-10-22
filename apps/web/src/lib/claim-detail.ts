@@ -365,6 +365,62 @@ export function reasonParts(reason: string): ReasonPart[] {
   return parts;
 }
 
+/** A duplicate reason by kind (checks.py DuplicateHit), read before the other claim's short id. */
+const DUPLICATE_AS: Record<string, string> = {
+  same_photo: "same photo as claim",
+  same_address: "same home address as claim",
+  same_payout: "same payout destination as claim",
+  same_serial: "same serial number as claim",
+  same_mailing: "same mailing address as claim",
+};
+
+function duplicateReason(kind: string, claimId: string, detail: string | undefined): string {
+  const d = (detail ?? "").trim();
+  const photo = /^(\w+) (sha256|phash\b.*)$/.exec(d);
+  if (kind === "same_photo" && photo) {
+    return `same ${photo[1]!.replaceAll("_", " ")} photo as claim ${claimId} (${photo[2] === "sha256" ? "identical file" : "near match"})`;
+  }
+  if (kind === "same_address" && d === "email") return `same email address as claim ${claimId}`;
+  const lead = Object.hasOwn(DUPLICATE_AS, kind) ? DUPLICATE_AS[kind]! : `possible duplicate (${kind.replaceAll("_", " ")}) of claim`;
+  // The detail repeats the kind ("address", "serial", "payout destination"); anything else is kept.
+  const redundant = ["", "address", "serial", "payout destination", "mailing address"].includes(d);
+  return `${lead} ${claimId}${redundant ? "" : ` (${d.replaceAll("_", " ")})`}`;
+}
+
+/** The rules-only checker's verdict tokens, where a reason carries one (rules_only.py, policy.py). */
+const VERDICT_REASON: ReadonlyArray<readonly [RegExp, string]> = [
+  [/^retailer not_listed\b/, "retailer is not on the sold-at list"],
+  [/^model not_provided$/, "model number not given"],
+  [/^model ambiguous$/, "model number could match more than one rule"],
+  [/^date code not_provided$/, "date code not given"],
+  [/^date code unparsed$/, "date code could not be read"],
+  [/^purchase date after$/, "bought after the recall window"],
+];
+
+/** Tokens that can appear anywhere in a reason, the agent's included. */
+const TOKEN_WORDS: ReadonlyArray<readonly [RegExp, string]> = [
+  [/\bnot_listed\b/g, "not on the sold-at list"],
+  [/\bnot_provided\b/g, "not given"],
+  [/\bout_of_range\b/g, "out of range"],
+  [/\bsame_(photo|address|payout|serial|mailing)\b/g, "same $1"],
+];
+
+/**
+ * A decision reason in words a reviewer reads. The reasons are composed by frozen backend code ("retailer
+ * not_listed; proof of purchase needed", "duplicate same_payout with claim <id> (payout destination)"), so the
+ * console words them here. Claim ids stay in place for reasonParts to link. The first letter is left as sent; the
+ * panel capitalizes it for display.
+ */
+export function reasonText(reason: string): string {
+  const r = reason.trim();
+  const dup = new RegExp(`^duplicate (\\w+) with claim (${CLAIM_ID.source})(?: \\((.*)\\))?$`, "i").exec(r);
+  if (dup) return duplicateReason(dup[1]!, dup[2]!, dup[3]);
+  let out = r;
+  for (const [pattern, words] of VERDICT_REASON) out = out.replace(pattern, words);
+  for (const [pattern, words] of TOKEN_WORDS) out = out.replace(pattern, words);
+  return out;
+}
+
 /** Duplicate-check hits that the Neo4j clusters do not already show (same kind and same other claim). */
 export function newHits(hits: readonly DuplicateHit[], clusters: ReadonlyArray<{ kind: string; member_claim_ids: readonly string[] }>): DuplicateHit[] {
   return hits.filter((h) => !clusters.some((c) => c.kind === h.kind && c.member_claim_ids.includes(h.otherClaimId)));

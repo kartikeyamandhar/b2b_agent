@@ -48,23 +48,35 @@ IMAGE: Responses = {200: {"content": {"image/jpeg": {}, "image/png": {}}}}
 PDF: Responses = {200: {"content": {"application/pdf": {}}}}
 MPR_PERIOD = r"^\d{4}-(0[1-9]|1[0-2])$"
 PHOTO_STORAGE_DOWN = "photo storage unavailable"
+HELD_ELSEWHERE = "another organization runs this recall; revoke its approval in the operator queue first"
 
 
 def require_approved_firm(ctx: FirmDep, db: TenantDb) -> None:
     """Company verification (decisions log 2026-10-22): until the operator approves a recall for this organization,
-    the only routes it reaches are the access routes (its requests and the recall search)."""
-    if not access_service.firm_approved(db, ctx, get_settings()):
+    the only routes it reaches are the access routes (its requests and the recall search). The operator passes."""
+    settings = get_settings()
+    if not access_service.firm_approved(db, ctx, settings) and not access_service.is_operator(settings, ctx.user_id):
         raise HTTPException(status.HTTP_403_FORBIDDEN, access_service.PENDING_DETAIL)
 
 
 def require_operator(principal: Annotated[Principal, Depends(current_user)]) -> str:
-    """The platform operator: a user id in PLATFORM_OPERATOR_USER_IDS, checked from the verified token."""
+    """The platform operator: the verified token's user id in PLATFORM_OPERATOR_USER_IDS, or that account's verified
+    email in PLATFORM_OPERATOR_EMAILS. No organization needed."""
     if not access_service.is_operator(get_settings(), principal.user_id):
         raise HTTPException(status.HTTP_403_FORBIDDEN, "only the platform operator may do this")
     return str(principal.user_id)
 
 
 OperatorDep = Annotated[str, Depends(require_operator)]
+
+
+def caller_is_operator(principal: Annotated[Principal, Depends(current_user)]) -> bool:
+    """Declared before TenantDb in a route's parameters, so a slow Clerk lookup runs before the tenant session opens
+    and never holds a database connection."""
+    return access_service.is_operator(get_settings(), principal.user_id)
+
+
+CallerIsOperator = Annotated[bool, Depends(caller_is_operator)]
 APPROVED = [Depends(require_approved_firm)]
 firm = APIRouter(prefix="/v1", tags=["firm"], responses=AUTH, dependencies=APPROVED)
 access = APIRouter(prefix="/v1", tags=["access"], responses=AUTH)
@@ -127,12 +139,12 @@ def _access_view(db: Session, row: RecallAccess) -> s.AccessRequest:
 
 
 @access.get("/access", response_model=s.AccessStatus, summary="This organization's access: approved or not, and why")
-def access_status(ctx: FirmDep, db: TenantDb) -> s.AccessStatus:
+def access_status(ctx: FirmDep, operator: CallerIsOperator, db: TenantDb) -> s.AccessStatus:
     settings = get_settings()
     return s.AccessStatus(
         required=access_service.required(settings),
         approved=access_service.firm_approved(db, ctx, settings),
-        operator=access_service.is_operator(settings, ctx.user_id),
+        operator=operator,
         requests=[_access_view(db, r) for r in access_service.own_requests(db, ctx)],
     )
 
@@ -144,14 +156,22 @@ def access_status(ctx: FirmDep, db: TenantDb) -> s.AccessStatus:
     responses={**NOT_FOUND, **CONFLICT},
     summary="Ask the platform operator for access to a recall, or to a typed notice not in the archive",
 )
-def request_access(body: s.AccessRequestCreate, ctx: AdminDep, db: TenantDb) -> s.AccessRequest:
+def request_access(
+    body: s.AccessRequestCreate, ctx: AdminDep, operator: CallerIsOperator, db: TenantDb
+) -> s.AccessRequest:
     if (body.recall_id is None) == (body.typed is None):
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "give exactly one of recall_id or typed")
     settings = get_settings()
     typed = access_service.Typed(body.typed.title, body.typed.company, body.typed.notice) if body.typed else None
     domain = access_service.requester_domain(settings, ctx.user_id)
     try:
-        access_id = access_service.request_access(db, ctx, settings, body.recall_id, typed, domain)
+        if operator:  # approved at once, unless another firm holds it
+            grant = access_service.operator_grant(db, ctx, settings, body.recall_id, typed, domain)
+            if not grant.approved and not grant.created:
+                raise HTTPException(status.HTTP_409_CONFLICT, HELD_ELSEWHERE)
+            access_id = grant.access_id
+        else:
+            access_id = access_service.request_access(db, ctx, settings, body.recall_id, typed, domain)
     except access_service.AccessConflict as exc:
         raise HTTPException(status.HTTP_409_CONFLICT, str(exc)) from exc
     except LookupError as exc:
@@ -234,14 +254,26 @@ def get_program(program_id: UUID, ctx: FirmDep, db: TenantDb) -> s.Program:
     responses={**NOT_FOUND, **CONFLICT},  # a draft: the plan is checked when it is opened (PATCH status=open)
     summary="Open a program from a recall; runs rule extraction and returns rules for review",
 )
-def create_program(body: s.ProgramCreate, ctx: AdminDep, db: TenantDb) -> s.Program:
+def create_program(body: s.ProgramCreate, ctx: AdminDep, operator: CallerIsOperator, db: TenantDb) -> s.Program:
     if (body.recall_id is None) == (body.manual is None):
         raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "give exactly one of recall_id or manual")
+    settings = get_settings()
+    if body.recall_id is not None and access_service.required(settings) and operator:
+        # The operator opens a program on any CPSC recall without asking first (the request is approved here).
+        if db.get(Recall, body.recall_id) is None:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "recall not found")
+        domain = access_service.requester_domain(settings, ctx.user_id)
+        try:
+            grant = access_service.operator_grant(db, ctx, settings, body.recall_id, None, domain)
+        except access_service.AccessConflict as exc:
+            raise HTTPException(status.HTTP_409_CONFLICT, str(exc)) from exc
+        if not grant.approved:
+            raise HTTPException(status.HTTP_409_CONFLICT, HELD_ELSEWHERE)
     try:
         program, _, _ = program_service.create_program(
             db,
             ctx,
-            get_settings(),
+            settings,
             billing_gate(db),
             body.recall_id,
             body.manual.model_dump() if body.manual else None,

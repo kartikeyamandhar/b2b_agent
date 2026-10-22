@@ -184,12 +184,12 @@
         "additionalProperties": false,
         "properties": {
           "approved": {
-            "description": "the organization holds at least one approved recall: the console is open",
+            "description": "the organization holds at least one approved recall: the console is open (for the operator too)",
             "title": "Approved",
             "type": "boolean"
           },
           "operator": {
-            "description": "the caller may approve organizations",
+            "description": "the caller is the platform operator: approves organizations, passes the console gate, and the organization they act in is approved for a recall the moment they ask (unless another organization holds it)",
             "title": "Operator",
             "type": "boolean"
           },

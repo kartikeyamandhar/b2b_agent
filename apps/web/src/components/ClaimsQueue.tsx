@@ -10,12 +10,30 @@ import { QUEUE_POLL_MS, type QueueParams } from "@/lib/claims";
 import { formatClock } from "@/lib/format";
 import { claimsQueueQuery, programCountsQuery } from "@/lib/queries/claims-queue";
 import { moveIndex, queueMove, shortcutKey } from "@/lib/shortcuts";
-import { statusLabel } from "@/lib/status";
 
 import { ClaimsTable } from "./ClaimsTable";
 import { ProblemAlert } from "./ProblemAlert";
 import { QueuePager, ReviewSummary, StatusFilter } from "./QueueControls";
 import { EmptyState, LoadingState } from "./States";
+
+/** A filtered view's empty title, in sentence case ("No capped claims", not "No claims with status Capped"). */
+const EMPTY_TITLE: Record<string, string> = {
+  draft: "No unused claim links",
+  submitted: "No submitted claims",
+  needs_info: "No claims waiting on the claimant",
+  under_review: "No claims under review",
+  approved: "No approved claims",
+  denied: "No denied claims",
+  flagged: "No flagged claims",
+  capped: "No capped claims",
+  paid: "No paid claims",
+  closed: "No closed claims",
+};
+
+export function emptyQueueTitle(status: string | null): string {
+  if (!status) return "No claims yet";
+  return Object.hasOwn(EMPTY_TITLE, status) ? EMPTY_TITLE[status]! : "No claims with this status";
+}
 
 function toProblem(err: unknown): ApiProblem {
   if (err instanceof ApiError) return err.problem;
@@ -95,10 +113,12 @@ export function ClaimsQueue({ programId, params, initialPage, initialProgram, lo
 
       {page ? (
         page.items.length === 0 ? (
-          <EmptyState title={params.status ? `No claims with status ${statusLabel("claim", params.status).label}` : "No claims yet"}>
+          <EmptyState title={emptyQueueTitle(params.status)}>
             {params.cursor
               ? "There are no more claims after the previous page."
-              : "Claims appear here as claimants submit them through the portal."}
+              : params.status
+                ? "Choose All to see every claim."
+                : "Claims appear here as claimants submit them through the portal."}
           </EmptyState>
         ) : (
           <>

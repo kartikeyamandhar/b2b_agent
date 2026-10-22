@@ -23,14 +23,26 @@ export function ConnectReturn({ kind }: { kind: "return" | "refresh" }) {
     if (token) router.replace(`/claim/${encodeURIComponent(token)}/status`);
     else setLost(true);
   }, [router]);
-  return lost ? (
-    <p className="text-base">
-      {kind === "refresh" ? "Your Stripe setup link expired. " : "You are back from Stripe. "}
-      Open the claim link the firm sent you to see your refund status{kind === "refresh" ? " and get a new setup link" : ""}.
-    </p>
-  ) : (
-    <p role="status" className="text-base">
-      Taking you back to your claim…
-    </p>
+  return <ConnectReturnCard kind={kind} lost={lost} />;
+}
+
+/** The same card as the status page, with one heading for both moments, so the page does not jump when the tab
+ *  turns out to have lost the claim. */
+export function ConnectReturnCard({ kind, lost }: { kind: "return" | "refresh"; lost: boolean }) {
+  return (
+    <section aria-labelledby="connect-title" className="rounded-xl border border-line bg-surface p-5">
+      <h1 id="connect-title" className="display-title text-2xl">
+        {kind === "refresh" ? "Your Stripe setup link expired" : "You are back from Stripe"}
+      </h1>
+      {lost ? (
+        <p className="mt-1 text-base" data-connect-lost>
+          Open the claim link the firm sent you to {kind === "refresh" ? "get a new setup link and see your refund status" : "see your refund status"}.
+        </p>
+      ) : (
+        <p role="status" className="mt-1 text-base">
+          Taking you back to your claim…
+        </p>
+      )}
+    </section>
   );
 }

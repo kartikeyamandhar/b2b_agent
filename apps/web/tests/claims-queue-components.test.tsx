@@ -126,7 +126,7 @@ describe("ClaimsQueue (server render)", () => {
     const problem = { status: 400, title: "Bad Request", detail: "invalid cursor", correlationId: "c-400", retryAfterSeconds: null };
     const html = render(<ClaimsQueue {...base} initialPage={{ ok: false, problem }} />);
     expect(html).toContain('role="alert"');
-    expect(html).toContain("invalid cursor");
+    expect(html).toContain("Invalid cursor.");
     expect(html).toContain("c-400");
     expect(html).toContain("Try again");
     expect(html).not.toContain("<table");
@@ -134,7 +134,8 @@ describe("ClaimsQueue (server render)", () => {
 
   it("renders a filtered empty state", () => {
     const html = render(<ClaimsQueue {...base} params={{ status: "capped", cursor: null }} initialPage={{ ok: true, data: { items: [], next_cursor: null } }} />);
-    expect(html).toContain("No claims with status Capped");
+    expect(html).toContain("No capped claims");
+    expect(html).toContain("Choose All to see every claim.");
     expect(html).not.toContain("<table");
   });
 });

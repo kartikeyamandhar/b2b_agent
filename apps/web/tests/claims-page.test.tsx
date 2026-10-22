@@ -75,7 +75,7 @@ describe("/app/programs/[id]/claims", () => {
         : undefined,
     );
     const html = await render(P, { cursor: "c3RhbGU" });
-    expect(html).toContain("invalid cursor");
+    expect(html).toContain("Invalid cursor.");
     expect(html).toContain("c-400");
     expect(html).not.toContain("<table");
   });

@@ -4,25 +4,27 @@ import Link from "next/link";
 
 import type { Trace, TraceStep } from "@/lib/api-types";
 import { capUsage, describeResult, isPureCode, resultId, splitCitations, stopReason } from "@/lib/claim-detail";
-import { formatDateTime } from "@/lib/format";
+import { formatDateTime, formatUsdCost } from "@/lib/format";
+import { graphLabel } from "@/lib/status";
 
 import { StatusBadge } from "./StatusBadge";
 
-const GRAPH_LABEL: Record<string, string> = {
-  adjudicate: "Adjudication agent",
-  rules_only: "Rules-only checker",
-  rules_plus_vision: "Rules plus vision (evaluation)",
-  extract_rules: "Rule extraction",
-};
+/**
+ * Only steps that call a model count toward the step cap, so a rules-only run of seven steps reads "0 of 8"; the
+ * label says what is counted. Costs keep their unit in the label, like the time, at two to four decimals.
+ */
+const CAP_LABEL: Record<string, string> = { Steps: "Steps counted toward the cap" };
+const USD_PLAIN = new Intl.NumberFormat("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 4 });
+const capValue = (label: string, v: string) => (label === "Cost (USD)" && v.trim() && Number.isFinite(Number(v)) ? USD_PLAIN.format(Number(v)) : v);
 
 function CapsBar({ trace }: { trace: Trace }) {
   return (
     <dl className="grid gap-3 sm:grid-cols-3" aria-label="Run use against its caps">
       {capUsage(trace).map((c) => (
         <div key={c.label} data-cap={c.label}>
-          <dt className="text-xs text-ink-muted">{c.label}</dt>
+          <dt className="text-xs text-ink-muted">{CAP_LABEL[c.label] ?? c.label}</dt>
           <dd className="text-sm tabular-nums">
-            {c.used} <span className="text-ink-muted">of {c.max}</span>
+            {capValue(c.label, c.used)} <span className="text-ink-muted">of {capValue(c.label, c.max)}</span>
           </dd>
           <div
             className="mt-1 h-1.5 rounded bg-line"
@@ -110,8 +112,8 @@ function Step({ step, cited }: { step: TraceStep; cited: ReadonlySet<string> }) 
             <>pure code{step.latency_ms > 0 ? ` · ${step.latency_ms} ms` : ""}</>
           ) : (
             <>
-              {step.latency_ms} ms · {step.tokens_in}/{step.tokens_out} tokens · ${step.cost_usd}
-              {step.nominal_cost_usd && step.nominal_cost_usd !== step.cost_usd ? ` (nominal $${step.nominal_cost_usd})` : ""}
+              {step.latency_ms} ms · {step.tokens_in}/{step.tokens_out} tokens · {formatUsdCost(step.cost_usd)}
+              {step.nominal_cost_usd && step.nominal_cost_usd !== step.cost_usd ? ` (nominal ${formatUsdCost(step.nominal_cost_usd)})` : ""}
             </>
           )}
         </span>
@@ -134,7 +136,7 @@ function Step({ step, cited }: { step: TraceStep; cited: ReadonlySet<string> }) 
 export function TraceView({ trace, claimId, cited }: { trace: Trace; claimId: string; cited: readonly string[] }) {
   const citedResults = new Set(splitCitations(cited).results);
   const steps = [...trace.steps].sort((a, b) => a.idx - b.idx);
-  const graph = Object.hasOwn(GRAPH_LABEL, trace.run.graph) ? GRAPH_LABEL[trace.run.graph] : trace.run.graph;
+  const graph = graphLabel(trace.run.graph);
   return (
     <div className="grid gap-4">
       <div className="flex flex-wrap items-center gap-2 text-sm">
@@ -142,7 +144,8 @@ export function TraceView({ trace, claimId, cited }: { trace: Trace; claimId: st
         <StatusBadge kind="run" value={trace.run.status} />
         <span className="text-xs text-ink-muted">
           run <span className="font-mono">{trace.run.run_id.slice(0, 8)}</span> · started {formatDateTime(trace.run.started_at)}
-          {trace.run.finished_at ? ` · finished ${formatDateTime(trace.run.finished_at)}` : " · not finished"} · {trace.run.steps} rows · ${trace.run.cost_usd} charged
+          {trace.run.finished_at ? ` · finished ${formatDateTime(trace.run.finished_at)}` : " · not finished"} · {trace.run.steps}{" "}
+          {trace.run.steps === 1 ? "step" : "steps"} · {formatUsdCost(trace.run.cost_usd)} charged
         </span>
       </div>
       <CapsBar trace={trace} />

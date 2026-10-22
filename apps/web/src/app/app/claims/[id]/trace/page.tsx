@@ -26,7 +26,7 @@ export default async function TracePage({ params }: { params: Promise<{ id: stri
       ) : !trace.ok ? (
         <ProblemAlert problem={trace.problem} />
       ) : (
-        <TraceLive claimId={id} initialTrace={trace.data} cited={claim.data.decision?.cited_rules ?? []} loadedAt={loadedAt} />
+        <TraceLive claimId={id} initialTrace={trace.data} cited={claim.data.decision?.cited_rules ?? []} loadedAt={loadedAt} claimStatus={claim.data.status} />
       )}
     </div>
   );

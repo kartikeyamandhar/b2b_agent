@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { OrganizationList } from "@clerk/nextjs";
+import { Suspense } from "react";
 
 import { AuthOff } from "@/components/AuthOff";
-import { ClerkShell } from "@/components/ClerkShell";
+import { AuthFrame, ClerkShell } from "@/components/ClerkShell";
+import { OperatorLink } from "@/components/OperatorLink";
 import { clerkEnabled } from "@/lib/auth/mode";
 
 export const dynamic = "force-dynamic";
@@ -13,13 +15,17 @@ export default function OrganizationPage() {
   if (!clerkEnabled(process.env)) return <AuthOff />;
   return (
     <ClerkShell>
-      <main className="mx-auto grid min-h-dvh max-w-xl place-items-center p-4">
-        <div className="grid gap-3">
+      <AuthFrame>
+        <div className="grid w-full max-w-xl gap-3">
           <h1 className="page-title">Choose your organization</h1>
           <p className="text-sm text-ink-muted">RecallOps works inside an organization. Create one, or pick one you belong to.</p>
           <OrganizationList hidePersonal afterSelectOrganizationUrl="/app/programs" afterCreateOrganizationUrl="/app/programs" />
+          {/* Streams in for the platform operator only, who needs no organization; the page never waits for it. */}
+          <Suspense fallback={null}>
+            <OperatorLink />
+          </Suspense>
         </div>
-      </main>
+      </AuthFrame>
     </ClerkShell>
   );
 }

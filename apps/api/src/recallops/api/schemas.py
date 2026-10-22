@@ -157,8 +157,13 @@ class AccessRequest(Schema):
 
 class AccessStatus(Schema):
     required: bool = Field(description="false only in tests (ACCESS_APPROVAL=off)")
-    approved: bool = Field(description="the organization holds at least one approved recall: the console is open")
-    operator: bool = Field(description="the caller may approve organizations")
+    approved: bool = Field(
+        description="the organization holds at least one approved recall: the console is open (for the operator too)"
+    )
+    operator: bool = Field(
+        description="the caller is the platform operator: approves organizations, passes the console gate, and the "
+        "organization they act in is approved for a recall the moment they ask (unless another organization holds it)"
+    )
     requests: list[AccessRequest]
 
 
