@@ -102,3 +102,10 @@ export function humanSentence(status: number): string {
         : "The request could not be completed.";
   }
 }
+
+/** A 403 from company verification (the organization is not approved for a recall), not a role problem. */
+export function isAccessPending(problem: Pick<ApiProblem, "status" | "detail">): boolean {
+  return problem.status === 403 && /not approved|request access/i.test(problem.detail ?? "");
+}
+
+export const ACCESS_PENDING_SENTENCE = "This organization is not approved to run this recall yet.";

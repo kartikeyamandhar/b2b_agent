@@ -1,4 +1,6 @@
-import { humanSentence, type ApiProblem } from "@/lib/api/problem";
+import Link from "next/link";
+
+import { ACCESS_PENDING_SENTENCE, humanSentence, isAccessPending, type ApiProblem } from "@/lib/api/problem";
 
 /** Every API error renders a human sentence plus the correlation id (02-ui.md section 6). */
 export function ProblemAlert({
@@ -14,8 +16,15 @@ export function ProblemAlert({
 }) {
   return (
     <div role="alert" className="rounded-lg border border-danger/30 bg-danger-soft p-4 text-sm text-danger-ink">
-      <p className="font-medium">{sentence ?? humanSentence(problem.status)}</p>
+      <p className="font-medium">{sentence ?? (isAccessPending(problem) ? ACCESS_PENDING_SENTENCE : humanSentence(problem.status))}</p>
       {showDetail && problem.detail ? <p className="mt-1">{problem.detail}</p> : null}
+      {isAccessPending(problem) ? (
+        <p className="mt-1">
+          <Link href="/app/access" className="font-medium underline">
+            Go to Recall access
+          </Link>
+        </p>
+      ) : null}
       {problem.retryAfterSeconds !== null ? (
         <p className="mt-1">You can try again in {problem.retryAfterSeconds} seconds.</p>
       ) : null}
