@@ -15,7 +15,7 @@ from datetime import UTC, datetime
 from typing import Any
 from uuid import UUID, uuid4
 
-from sqlalchemy import delete, select, text, update
+from sqlalchemy import delete, func, select, text, update
 from sqlalchemy.orm import Session
 
 from recallops.auth.provider import ClaimTokenVerifier
@@ -32,6 +32,16 @@ PHOTO_KINDS = ("label", "destruction", "receipt", "other")
 CONTENT_TYPES = {"image/jpeg": "jpg", "image/png": "png"}
 MEDIA_TYPES = {ext: media for media, ext in CONTENT_TYPES.items()}
 EDITABLE = ("draft", "needs_info")
+# Claim fields a reply to needs_info may correct, in the order the reply form shows them, with the words a reply's
+# summary uses for each.
+ANSWER_FIELDS = {
+    "model_claimed": "model number",
+    "serial_claimed": "serial number",
+    "date_code_claimed": "date code",
+    "retailer_claimed": "store",
+    "purchase_date": "purchase date",
+}
+NOT_CONFIRMED = ("mismatch", "ambiguous", "not_provided", "unparsed", "out_of_range")
 
 
 class LinkInvalid(LookupError):
@@ -40,6 +50,10 @@ class LinkInvalid(LookupError):
 
 class NotEditable(ValueError):
     pass
+
+
+class EmptyAnswer(ValueError):
+    """A reply with no text, no changed detail, and no new photo."""
 
 
 class PhotoRejected(ValueError):
@@ -111,6 +125,7 @@ def view(session: Session, pc: PortalClaim) -> dict[str, Any]:
         "pending_question": _safe_question(decision.get("question_for_claimant"))
         if claim.status == "needs_info"
         else None,
+        **_reply_form(session, claim, program),
         "decision_reasons": claimant_reasons(claim.status, decision, failed_rules(session, claim)),
         "photos_uploaded": kinds,
         "messages": messages,
@@ -134,9 +149,8 @@ def claimant_status(status: str) -> str:
     return "under_review" if status in HELD_FOR_PERSON else status
 
 
-def failed_rules(session: Session, claim: Claim) -> set[str]:
-    """The deny rules the claim's latest run actually failed, read from its recorded check results. The decision's
-    cited_rules list every rule a reason touched, passing ones included, so they cannot word a denial alone."""
+def _latest_checks(session: Session, claim: Claim, tools: tuple[str, ...]) -> list[tuple[str, dict[str, Any]]]:
+    """The named tools' recorded results from the claim's latest run, in step order."""
     run_id = session.scalar(
         select(AgentRun.id)
         .where(AgentRun.claim_id == claim.id, AgentRun.firm_id == claim.firm_id)
@@ -144,13 +158,66 @@ def failed_rules(session: Session, claim: Claim) -> set[str]:
         .limit(1)
     )
     if run_id is None:
-        return set()
-    failed: set[str] = set()
+        return []
     rows = session.execute(
-        select(AgentStep.tool, AgentStep.result).where(AgentStep.run_id == run_id, AgentStep.tool.in_(DENY_CHECKS))
+        select(AgentStep.tool, AgentStep.result)
+        .where(AgentStep.run_id == run_id, AgentStep.tool.in_(tools))
+        .order_by(AgentStep.idx)
     )
-    for tool, result in rows:
-        r = result if isinstance(result, dict) else {}
+    return [(str(tool), result if isinstance(result, dict) else {}) for tool, result in rows]
+
+
+def _reply_form(session: Session, claim: Claim, program: RecallProgram) -> dict[str, Any]:
+    """While a claim waits on the claimant: the fields and photos the reply form shows, from the checks the latest run
+    could not pass (a store not on the list shows the store, an unreadable label asks for the label photo). Each field
+    carries the claim's current value. When the run left no usable checks, the form shows the model, store, and date
+    and the program's required photos."""
+    if claim.status != "needs_info":
+        return {"answer_fields": [], "answer_photos": []}
+    fields: set[str] = set()
+    photos: set[str] = set()
+    tools = ("read_label_photo", "check_model", "check_serial", "check_date_code", "check_purchase")
+    destruction = ("check_destruction_photo", "check_destruction_presence")
+    for tool, r in _latest_checks(session, claim, (*tools, *destruction)):
+        if tool == "read_label_photo" and r.get("legible") is False:
+            photos.add("label")
+        elif tool == "check_model" and r.get("verdict") in NOT_CONFIRMED:
+            fields.add("model_claimed")
+            photos.add("label")
+        elif tool == "check_serial" and r.get("verdict") in NOT_CONFIRMED:
+            fields.add("serial_claimed")
+        elif tool == "check_date_code" and r.get("verdict") in NOT_CONFIRMED:
+            fields.add("date_code_claimed")
+        elif tool == "check_purchase":
+            if r.get("retailer") in ("not_listed", "unknown"):
+                fields.add("retailer_claimed")
+            if r.get("window") in ("before", "after", "unknown"):
+                fields.add("purchase_date")
+            if r.get("receipt") == "missing":
+                photos.add("receipt")
+        elif tool in destruction and (
+            r.get("verdict") == "missing" or (r.get("verdict") == "checked" and not r.get("complies"))
+        ):
+            photos.add("destruction")
+    if not fields and not photos:
+        fields = {"model_claimed", "retailer_claimed", "purchase_date"}
+        photos = set(required_photos(program))
+    return {
+        "answer_fields": [{"name": f, "value": _field_value(claim, f)} for f in ANSWER_FIELDS if f in fields],
+        "answer_photos": [k for k in PHOTO_KINDS if k in photos],
+    }
+
+
+def _field_value(claim: Claim, name: str) -> str | None:
+    value = getattr(claim, name)
+    return None if value is None else value.isoformat() if name == "purchase_date" else str(value)
+
+
+def failed_rules(session: Session, claim: Claim) -> set[str]:
+    """The deny rules the claim's latest run actually failed, read from its recorded check results. The decision's
+    cited_rules list every rule a reason touched, passing ones included, so they cannot word a denial alone."""
+    failed: set[str] = set()
+    for tool, r in _latest_checks(session, claim, DENY_CHECKS):
         if tool == "check_model" and r.get("verdict") == "mismatch":
             failed.add("R:models")
         elif tool == "check_serial" and r.get("verdict") == "out_of_range":
@@ -298,20 +365,60 @@ def add_photo(
     return photo, [p.storage_path for p in old]
 
 
-def answer(session: Session, pc: PortalClaim, message: str) -> None:
-    """A reply to needs_info sends the claim back for a fresh adjudication run."""
+def answer(session: Session, pc: PortalClaim, message: str, fields: dict[str, Any] | None = None) -> str:
+    """A reply to needs_info. Corrected claim fields, or a photo uploaded since the decision, send the claim back for
+    a fresh adjudication run ("rechecked"). A reply that only adds text goes to a person ("to_person", hold_reason
+    claimant_reply): the agent reads claim fields and photos, never claimant text (that would be an instruction
+    channel from the public), so a run on unchanged facts asks the same question again. That loop is what the first
+    live claim met (2026-10-21)."""
     claim = pc.claim
     if claim.status != "needs_info":
         raise NotEditable("the claim is not waiting for an answer")
-    entry = {"from": "claimant", "text": message[:2000], "at": datetime.now(UTC).isoformat()}
-    done = session.execute(
-        text(
-            "UPDATE claims SET messages = messages || CAST(:m AS jsonb), status = 'submitted', "
-            "submitted_at = now(), decision = NULL, decided_at = NULL, decided_by = NULL, attempts = 0 "
-            "WHERE id = :c AND firm_id = :f AND status = 'needs_info' RETURNING id"
-        ),
-        {"m": json.dumps([entry]), "c": claim.id, "f": claim.firm_id},
-    ).first()
+    changed = {
+        k: v
+        for k, v in (fields or {}).items()
+        if k in ANSWER_FIELDS and v is not None and v != "" and v != getattr(claim, k)
+    }
+    new_photo = bool(
+        claim.decided_at
+        and session.scalar(
+            select(func.count())
+            .select_from(ClaimPhoto)
+            .where(
+                ClaimPhoto.claim_id == claim.id,
+                ClaimPhoto.firm_id == claim.firm_id,
+                ClaimPhoto.uploaded_at > claim.decided_at,
+            )
+        )
+    )
+    note = message.strip()[:2000]
+    if not (note or changed or new_photo):
+        raise EmptyAnswer("write an answer, correct a detail, or add a photo")
+    summary = [f"Updated the {', '.join(ANSWER_FIELDS[k] for k in ANSWER_FIELDS if k in changed)}."] if changed else []
+    if new_photo:
+        summary.append("Added a photo.")
+    entry: dict[str, Any] = {"from": "claimant", "text": note or " ".join(summary), "at": datetime.now(UTC).isoformat()}
+    if changed:
+        entry["changed"] = sorted(changed)
+    messages = [*(claim.messages or []), entry]
+    fence = (Claim.id == claim.id, Claim.firm_id == claim.firm_id, Claim.status == "needs_info")
+    if changed or new_photo:
+        after, outcome = "submitted", "rechecked"
+        values: dict[str, Any] = {
+            **changed,
+            "messages": messages,
+            "status": after,
+            "submitted_at": datetime.now(UTC),
+            "decision": None,
+            "decided_at": None,
+            "decided_by": None,
+            "attempts": 0,
+        }
+    else:
+        after, outcome = "under_review", "to_person"
+        held = {**(claim.decision or {}), "routed_to_human": True, "hold_reason": "claimant_reply"}
+        values = {"messages": messages, "status": after, "decision": held}
+    done = session.execute(update(Claim).where(*fence).values(**values).returning(Claim.id)).first()
     if done is None:  # the claim left needs_info meanwhile (a reviewer, or a duplicate found later)
         raise NotEditable("the claim is no longer waiting for an answer")
     session.add(
@@ -322,9 +429,11 @@ def answer(session: Session, pc: PortalClaim, message: str) -> None:
             target_type="claim",
             target_id=str(claim.id),
             before={"status": "needs_info"},
-            after={"status": "submitted"},
+            after={"status": after, "changed": sorted(changed), "new_photo": new_photo},
         )
     )
+    log_event(log, "portal_answer", firm_id=str(claim.firm_id), claim_id=str(claim.id), outcome=outcome)
+    return outcome
 
 
 CHOOSABLE = ("pending", "onboarding", "failed", "pending_export")

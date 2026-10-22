@@ -150,3 +150,8 @@ def audit(a: AuditLog) -> s.AuditEntry:
 def claimant(data: dict[str, Any]) -> s.Claimant:
     keys = set(s.Claimant.model_fields)
     return s.Claimant.model_validate({k: v for k, v in data.items() if k in keys})
+
+
+def message(m: dict[str, Any]) -> dict[str, Any]:
+    """One entry of claims.messages, as the portal shows it: the firm's question or the claimant's reply."""
+    return {"sender": m.get("from", "firm"), "text": m.get("text", ""), "at": m.get("at")}

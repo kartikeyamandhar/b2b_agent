@@ -401,6 +401,14 @@
             "title": "Id",
             "type": "string"
           },
+          "messages": {
+            "description": "questions to the claimant and their replies, oldest first",
+            "items": {
+              "$ref": "#/components/schemas/PortalMessage"
+            },
+            "title": "Messages",
+            "type": "array"
+          },
           "model_claimed": {
             "anyOf": [
               {
@@ -967,7 +975,7 @@
                 "type": "null"
               }
             ],
-            "description": "why the claim waits for a person: flagged, over_value_threshold, model_disagrees_with_rules, capped, failed, payout_held_needs_review, shared_mailing_address (CHANGES item 6)",
+            "description": "why the claim waits for a person: flagged, over_value_threshold, model_disagrees_with_rules, capped, failed, payout_held_needs_review, shared_mailing_address (CHANGES item 6), claimant_reply, repeated_question (CHANGES item 53)",
             "title": "Hold Reason"
           },
           "outcome": {
@@ -1902,16 +1910,109 @@
       "PortalAnswer": {
         "additionalProperties": false,
         "properties": {
+          "date_code_claimed": {
+            "anyOf": [
+              {
+                "maxLength": 40,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date Code Claimed"
+          },
           "message": {
+            "default": "",
+            "description": "the claimant's note; text alone is read by a person and never sent to the agent",
             "maxLength": 2000,
             "title": "Message",
             "type": "string"
+          },
+          "model_claimed": {
+            "anyOf": [
+              {
+                "maxLength": 80,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Claimed"
+          },
+          "purchase_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Purchase Date"
+          },
+          "retailer_claimed": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retailer Claimed"
+          },
+          "serial_claimed": {
+            "anyOf": [
+              {
+                "maxLength": 80,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Serial Claimed"
+          }
+        },
+        "title": "PortalAnswer",
+        "type": "object"
+      },
+      "PortalAnswerField": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "enum": [
+              "model_claimed",
+              "serial_claimed",
+              "date_code_claimed",
+              "retailer_claimed",
+              "purchase_date"
+            ],
+            "title": "Name",
+            "type": "string"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "the claim's current value; purchase_date as YYYY-MM-DD",
+            "title": "Value"
           }
         },
         "required": [
-          "message"
+          "name",
+          "value"
         ],
-        "title": "PortalAnswer",
+        "title": "PortalAnswerField",
         "type": "object"
       },
       "PortalMessage": {
@@ -2171,6 +2272,27 @@
       "PortalView": {
         "additionalProperties": false,
         "properties": {
+          "answer_fields": {
+            "description": "while needs_info: the claim fields the reply form shows, with their current values, from the checks the latest run could not pass",
+            "items": {
+              "$ref": "#/components/schemas/PortalAnswerField"
+            },
+            "title": "Answer Fields",
+            "type": "array"
+          },
+          "answer_photos": {
+            "description": "while needs_info: the photos the reply form asks for",
+            "items": {
+              "enum": [
+                "label",
+                "destruction",
+                "receipt"
+              ],
+              "type": "string"
+            },
+            "title": "Answer Photos",
+            "type": "array"
+          },
           "claim_id": {
             "format": "uuid",
             "title": "Claim Id",
@@ -3638,14 +3760,14 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/Problem"
                 }
               }
             },
-            "description": "Validation Error"
+            "description": "Unprocessable Content"
           }
         },
-        "summary": "Reply to needs_info; the claim is adjudicated again",
+        "summary": "Reply to needs_info: corrected details or a new photo are checked again; a note alone goes to a person",
         "tags": [
           "portal"
         ]

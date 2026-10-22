@@ -125,3 +125,20 @@ def test_the_decision_carries_why_a_claim_waits() -> None:
         "approved",
         ["c4"],
     )
+
+
+def test_the_console_shows_the_claimant_thread_and_a_note_alone_reaches_a_person(
+    client: TestClient, internal_engine_test: Engine
+) -> None:
+    """A reply that only adds a note goes to a person (first live claim, 2026-10-21), so the console must show it."""
+    claim = _one(
+        internal_engine_test, "SELECT id FROM claims WHERE firm_id = :f AND status = 'needs_info' ORDER BY id LIMIT 1"
+    )
+    link = _dev_link(claim)
+    assert client.post(f"{link}/answer", json={}).status_code == 422  # nothing to send
+    view = client.post(f"{link}/answer", json={"message": "I bought it at the Boston store in May"}).json()
+    assert view["status"] == "under_review" and view["answer_fields"] == []
+    detail = client.get(f"/v1/claims/{claim}", headers=ADMIN).json()
+    assert detail["decision"]["hold_reason"] == "claimant_reply"
+    assert detail["messages"][-1] == {**detail["messages"][-1], "sender": "claimant"}
+    assert detail["messages"][-1]["text"] == "I bought it at the Boston store in May"

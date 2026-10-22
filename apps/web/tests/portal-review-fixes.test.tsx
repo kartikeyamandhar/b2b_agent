@@ -132,7 +132,7 @@ describe("needs_info reply waits for its photo (finding 3)", () => {
   });
 
   it("starts with Send answer enabled when no photo is chosen", () => {
-    const out = renderToStaticMarkup(<NeedsInfoReply token={T} program={program} />);
+    const out = renderToStaticMarkup(<NeedsInfoReply token={T} view={{ program, answer_fields: [], answer_photos: [] }} />);
     expect(tag(out, "data-send-answer")).not.toContain('disabled=""');
     expect(out).not.toContain("data-send-blocked");
   });

@@ -47,7 +47,7 @@ export function StatusView({ token, view }: { token: string; view: PortalView })
           <p className="rounded border border-line bg-panel p-3 text-base" data-pending-question>
             {view.pending_question ?? "Please add any information that helps us confirm your claim."}
           </p>
-          <NeedsInfoReply token={token} program={view.program} />
+          <NeedsInfoReply token={token} view={view} />
         </section>
       ) : null}
 

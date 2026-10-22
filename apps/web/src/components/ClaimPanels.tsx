@@ -141,6 +141,8 @@ const HOLD_REASON: Record<string, string> = {
   failed: "The automated run failed.",
   payout_held_needs_review: "A held payout needs a person's approval before money moves.",
   shared_mailing_address: "The check would go to an address another claim also uses.",
+  claimant_reply: "The claimant replied with a note but changed no detail or photo. Read the note and decide.",
+  repeated_question: "The AI would have asked the claimant again. Read the thread and decide, or ask your own question.",
 };
 
 export function DecisionPanel({ claimId, decision, decidedAt }: { claimId: string; decision: Decision | null; decidedAt: string | null }) {
@@ -375,6 +377,26 @@ export function AuditTrail({ entries }: { entries: readonly AuditEntry[] }) {
           </table>
         </div>
       )}
+    </Panel>
+  );
+}
+
+/** The questions sent to the claimant and their replies, oldest first. A note on its own reaches a person, never the
+ *  AI (hold_reason claimant_reply), so this is where a reviewer reads it. */
+export function MessagesPanel({ messages }: { messages: ClaimDetail["messages"] }) {
+  if (!messages?.length) return null;
+  return (
+    <Panel id="claim-messages" title="Messages with the claimant">
+      <ol className="grid gap-2" data-claim-messages>
+        {messages.map((m, i) => (
+          <li key={i} className={`rounded-md border p-3 text-sm ${m.sender === "claimant" ? "border-line bg-panel" : "border-line bg-surface"}`}>
+            <p className="mb-1 text-xs text-ink-muted">
+              {m.sender === "claimant" ? "Claimant" : "Question from the firm"}, {formatDateTime(m.at)}
+            </p>
+            <p className="whitespace-pre-wrap break-words text-ink">{m.text}</p>
+          </li>
+        ))}
+      </ol>
     </Panel>
   );
 }

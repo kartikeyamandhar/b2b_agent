@@ -186,7 +186,8 @@ class Decision(Schema):
     hold_reason: str | None = Field(
         None,
         description="why the claim waits for a person: flagged, over_value_threshold, model_disagrees_with_rules, "
-        "capped, failed, payout_held_needs_review, shared_mailing_address (CHANGES item 6)",
+        "capped, failed, payout_held_needs_review, shared_mailing_address (CHANGES item 6), claimant_reply, "
+        "repeated_question (CHANGES item 53)",
     )
     reopened_from: str | None = Field(None, description="the status a later duplicate reopened this claim from")
     duplicate_found_later: list[str] = Field(default_factory=list, description="claim ids that reopened this claim")
@@ -288,6 +289,12 @@ class Claimant(Schema):
     synthetic: bool = False
 
 
+class PortalMessage(Schema):
+    sender: Literal["firm", "claimant"]
+    text: str
+    at: datetime
+
+
 class ClaimDetail(Schema):
     id: UUID
     program_id: UUID
@@ -307,6 +314,9 @@ class ClaimDetail(Schema):
     clusters: list[Cluster]
     payout: PayoutView | None
     audit: list[AuditEntry]
+    messages: list[PortalMessage] = Field(
+        default_factory=list, description="questions to the claimant and their replies, oldest first"
+    )
     created_at: datetime
     submitted_at: datetime | None
     decided_at: datetime | None
@@ -479,10 +489,9 @@ class PortalProgram(Schema):
     required_photos: list[Literal["label", "destruction", "receipt"]]
 
 
-class PortalMessage(Schema):
-    sender: Literal["firm", "claimant"]
-    text: str
-    at: datetime
+class PortalAnswerField(Schema):
+    name: Literal["model_claimed", "serial_claimed", "date_code_claimed", "retailer_claimed", "purchase_date"]
+    value: str | None = Field(description="the claim's current value; purchase_date as YYYY-MM-DD")
 
 
 class PortalView(Schema):
@@ -495,6 +504,14 @@ class PortalView(Schema):
     photos_uploaded: list[Literal["label", "destruction", "receipt", "other"]] = Field(default_factory=list)
     payout_status: PayoutStatus | None = None
     messages: list[PortalMessage] = Field(default_factory=list, description="needs_info questions and replies")
+    answer_fields: list[PortalAnswerField] = Field(
+        default_factory=list,
+        description="while needs_info: the claim fields the reply form shows, with their current values, from the "
+        "checks the latest run could not pass",
+    )
+    answer_photos: list[Literal["label", "destruction", "receipt"]] = Field(
+        default_factory=list, description="while needs_info: the photos the reply form asks for"
+    )
 
 
 _CONTROL = re.compile(r"[\x00-\x1f\x7f]")
@@ -549,7 +566,20 @@ class PortalSubmit(Schema):
 
 
 class PortalAnswer(Schema):
-    message: str = Field(max_length=2000)
+    message: str = Field(
+        "",
+        max_length=2000,
+        description="the claimant's note; text alone is read by a person and never sent to the agent",
+    )
+    model_claimed: str | None = Field(None, max_length=80)
+    serial_claimed: str | None = Field(None, max_length=80)
+    date_code_claimed: str | None = Field(None, max_length=40)
+    retailer_claimed: str | None = Field(None, max_length=120)
+    purchase_date: date | None = None
+
+    _clean = field_validator("model_claimed", "serial_claimed", "date_code_claimed", "retailer_claimed", mode="before")(
+        clean_text
+    )
 
 
 class PortalPayout(Schema):

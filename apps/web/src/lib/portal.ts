@@ -1,6 +1,6 @@
 // Claim portal rules (02-ui.md /claim/[token]): steps, validation, resumable drafts, plain-language status, and the
 // post-approval payout choice. Pure, so it is unit-tested. The backend stays the authority on every rule here.
-import { PortalSubmit, type PortalView } from "@/lib/api-types";
+import { PortalSubmit, type PortalAnswer, type PortalAnswerField, type PortalView } from "@/lib/api-types";
 import { portalSentence } from "@/lib/portal-copy";
 import { isStripeHostedUrl } from "@/lib/stripe-url";
 
@@ -426,4 +426,47 @@ export const STATUS_REFRESH_MAX = 8;
 
 export function shouldAutoRefresh(status: string, refreshesSoFar: number): boolean {
   return status === "submitted" && refreshesSoFar < STATUS_REFRESH_MAX;
+}
+
+// ---- Replying to a question (needs_info). The API lists the fields and photos the reply form shows, from the checks
+// the latest run could not pass. Corrected details or a new photo are checked again; a note alone goes to a person,
+// because the AI never reads claimant text (a note would otherwise loop the same question; first live claim).
+
+export const ANSWER_FIELD_LABEL: Record<PortalAnswerField["name"], string> = {
+  model_claimed: "Model number",
+  serial_claimed: "Serial number",
+  date_code_claimed: "Date code",
+  retailer_claimed: "Where you bought it",
+  purchase_date: "Purchase date",
+};
+
+/** The reply body: the note, plus only the details the claimant changed. */
+export function answerBody(note: string, edits: Readonly<Record<string, string>>, fields: readonly PortalAnswerField[]): PortalAnswer {
+  const body: Record<string, string> = { message: note.trim() };
+  for (const f of fields) {
+    const value = (edits[f.name] ?? f.value ?? "").trim();
+    if (value && value !== (f.value ?? "")) body[f.name] = value;
+  }
+  return body as PortalAnswer;
+}
+
+export type AnswerOutcome = "rechecked" | "to_person" | "empty";
+
+/** What sending will do, said on the form before the claimant sends. */
+export function answerOutcome(body: PortalAnswer, photoAdded: boolean): AnswerOutcome {
+  const changed = Object.keys(body).some((k) => k !== "message");
+  if (changed || photoAdded) return "rechecked";
+  return body.message ? "to_person" : "empty";
+}
+
+export const ANSWER_OUTCOME_TEXT: Record<AnswerOutcome, string> = {
+  rechecked: "We will check your claim again with what you changed.",
+  to_person: "A person at the company will read your note. Correct a detail or add a photo to have your claim checked again.",
+  empty: "Correct a detail, add the photo we asked for, or write a note.",
+};
+
+/** Photo buttons on the reply form: what the question asks for, else the program's required photos; plus an extra. */
+export function answerPhotoKinds(view: Pick<PortalView, "answer_photos" | "program">): string[] {
+  const asked = view.answer_photos?.length ? view.answer_photos : view.program.required_photos;
+  return [...new Set([...asked, "other"])];
 }

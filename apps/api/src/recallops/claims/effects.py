@@ -50,7 +50,10 @@ WITH_A_PERSON = ("under_review", "capped")
 DUPLICATE_HOLD = "duplicate_found_later"
 # Holds set after a decision, outside any LangGraph interrupt: the claim's run has finished, so a reviewer's action
 # applies to the claim directly and a crashed run with one of these is done, not waiting (final review 2026-10-19).
-POST_DECISION_HOLDS = ("payout_held_needs_review", "shared_mailing_address")
+POST_DECISION_HOLDS = ("payout_held_needs_review", "shared_mailing_address", "claimant_reply", "repeated_question")
+# Loop stop for needs_info (first live claim, 2026-10-21): an automated run that would ask a question already asked,
+# or more than this many questions in all, sends the claim to a person instead of asking again.
+MAX_QUESTIONS = 2
 
 
 def lock_claim_program(session: Session, firm_id: UUID, claim_id: UUID) -> None:
@@ -75,6 +78,15 @@ def _audit(
             after=after,
         )
     )
+
+
+def _would_loop(session: Session, claim_id: UUID, final: dict[str, Any]) -> bool:
+    """True when asking this needs_info question would repeat one already asked (compared without case or extra
+    spaces) or exceed MAX_QUESTIONS. Read inside the decision's transaction, after the claim row is locked."""
+    messages = session.scalar(select(Claim.messages).where(Claim.id == claim_id)) or []
+    asked = [" ".join(str(m.get("text", "")).split()).casefold() for m in messages if m.get("from") == "firm"]
+    question = " ".join(str(final.get("question_for_claimant") or "").split()).casefold()
+    return (bool(question) and question in asked) or len(asked) >= MAX_QUESTIONS
 
 
 def duplicate_partners(session: Session, firm_id: UUID, claim_id: UUID, phash_bits: int) -> list[UUID]:
@@ -267,6 +279,10 @@ class DbEffects:
                 status = "under_review"  # a held payout is released only by a person
                 decision["routed_to_human"] = True
                 decision["hold_reason"] = "payout_held_needs_review"
+            if outcome == "needs_info" and automated and _would_loop(session, self.claim_id, final):
+                status = "under_review"  # the claimant would be asked again; a person reads the thread instead
+                decision["routed_to_human"] = True
+                decision["hold_reason"] = "repeated_question"
             stmt = update(Claim).where(
                 Claim.id == self.claim_id, Claim.firm_id == self.ctx.firm_id, Claim.status.in_(prior)
             )
@@ -281,7 +297,7 @@ class DbEffects:
                 log_event(log, "claim_apply_skipped", claim_id=str(self.claim_id), status=before, outcome=outcome)
                 return
             question = final.get("question_for_claimant")
-            if outcome == "needs_info" and question:
+            if status == "needs_info" and question:
                 message = {"from": "firm", "text": question, "at": datetime.now(UTC).isoformat()}
                 session.execute(
                     text("UPDATE claims SET messages = messages || CAST(:m AS jsonb) WHERE id = :c"),

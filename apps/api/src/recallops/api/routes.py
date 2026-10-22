@@ -260,6 +260,7 @@ def get_claim(claim_id: UUID, ctx: FirmDep, db: TenantDb) -> s.ClaimDetail:
         clusters=[views.cluster(f) for f in repo.clusters(claim_id)],
         payout=views.payout(pay) if pay else None,
         audit=[views.audit(a) for a in repo.audit(claim_id)],
+        messages=[views.message(m) for m in c.messages or []],
         created_at=c.created_at,
         submitted_at=c.submitted_at,
         decided_at=c.decided_at,
@@ -783,17 +784,20 @@ def portal_photo(
 @portal.post(
     "/{token}/answer",
     response_model=s.PortalView,
-    responses={**NOT_FOUND, 409: {"model": s.Problem}},
-    summary="Reply to needs_info; the claim is adjudicated again",
+    responses={**NOT_FOUND, 409: {"model": s.Problem}, 422: {"model": s.Problem}},
+    summary="Reply to needs_info: corrected details or a new photo are checked again; a note alone goes to a person",
 )
 def portal_answer(token: str, body: s.PortalAnswer, token_ctx: ClaimTokenDep) -> s.PortalView:
     ctx, claim_id = _portal(token, token_ctx)
+    fields = body.model_dump(include=set(portal_service.ANSWER_FIELDS), exclude_none=True)
     with tenant_session(ctx) as session:
         pc = _portal_claim_in(session, token, claim_id)
         try:
-            portal_service.answer(session, pc, body.message)
+            portal_service.answer(session, pc, body.message, fields)
         except portal_service.NotEditable as exc:
             raise HTTPException(status.HTTP_409_CONFLICT, str(exc)) from exc
+        except portal_service.EmptyAnswer as exc:
+            raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(exc)) from exc
         session.expire_all()
         return _portal_view(session, _portal_claim_in(session, token, claim_id))
 
