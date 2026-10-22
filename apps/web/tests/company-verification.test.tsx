@@ -8,6 +8,7 @@ vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: () => {}, push:
 import { gateConsole } from "@/components/AccessGate";
 import { AccessRequests } from "@/components/AccessRequests";
 import { OperatorQueue } from "@/components/OperatorQueue";
+import { ProblemAlert } from "@/components/ProblemAlert";
 import type { AccessRequest, AccessStatus, OperatorAccessRequest } from "@/lib/api-types";
 import { accessBody, accessStatusLabel, domainHint, operatorActions, requestFor, typedReadyForProgram } from "@/lib/access";
 
@@ -54,8 +55,16 @@ describe("the console gate", () => {
     expect(html).toContain("Waiting for review");
   });
 
-  it("opens the console when approved, for the operator, when not required, and when the status cannot be read", async () => {
-    for (const s of [status({ approved: true }), status({ operator: true }), status({ required: false })]) {
+  it("gives an unapproved operator the access page with the queue under it, so they can approve themselves", async () => {
+    const queue = async () => ({ ok: true as const, data: [OP] });
+    const html = renderToStaticMarkup(<>{await gateConsole(child, ok(status({ operator: true })), queue)}</>);
+    expect(html).not.toContain("data-console-child");
+    expect(html).toContain("Request access to your recall");
+    expect(html).toContain("Organizations asking to run a recall");
+  });
+
+  it("opens the console when approved, when not required, and when the status cannot be read", async () => {
+    for (const s of [status({ approved: true }), status({ approved: true, operator: true }), status({ required: false })]) {
       expect(renderToStaticMarkup(<>{await gateConsole(child, ok(s))}</>)).toContain("data-console-child");
     }
     const down = async () => ({ ok: false as const, problem: { status: 503, title: "Down", detail: null, correlationId: null, retryAfterSeconds: null } });
@@ -86,6 +95,19 @@ describe("the operator queue", () => {
   it("warns when another organization already runs the recall", () => {
     const html = renderToStaticMarkup(<OperatorQueue requests={[{ ...OP, approved_elsewhere: "Demo Recall Co" }]} />);
     expect(html).toContain("Demo Recall Co already runs this recall");
+  });
+});
+
+describe("the alert for an organization not approved yet", () => {
+  it("says so and links to Recall access instead of blaming the user's role", () => {
+    const html = renderToStaticMarkup(
+      <ProblemAlert problem={{ status: 403, title: "Forbidden", detail: "This organization is not approved to run a recall yet.", correlationId: "c", retryAfterSeconds: null }} />,
+    );
+    expect(html).toContain("This organization is not approved to run this recall yet.");
+    expect(html).toContain('href="/app/access"');
+    expect(html).not.toContain("Your role does not allow");
+    const role = renderToStaticMarkup(<ProblemAlert problem={{ status: 403, title: "Forbidden", detail: "admins only", correlationId: null, retryAfterSeconds: null }} />);
+    expect(role).toContain("Your role does not allow");
   });
 });
 
