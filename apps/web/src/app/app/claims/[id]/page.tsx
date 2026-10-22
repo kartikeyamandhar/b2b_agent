@@ -33,7 +33,10 @@ export default async function ClaimPage({ params }: { params: Promise<{ id: stri
           <ClaimDetailLive initialClaim={claim.data} initialTrace={trace.ok ? trace.data : null} loadedAt={loadedAt} canAdmin={role === "admin"} programStatus={program?.ok ? program.data.status : null} />
         </>
       ) : (
-        <ProblemAlert problem={claim.problem} />
+        <div className="grid gap-4">
+          <h1 className="page-title">Claim</h1>
+          <ProblemAlert problem={claim.problem} />
+        </div>
       )}
     </div>
   );

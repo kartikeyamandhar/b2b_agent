@@ -25,13 +25,14 @@ function Download({ batch }: { batch: ExportBatchSummary }) {
   const href = exportCsvHref(batch.id);
   if (!href) return <span className="text-xs text-ink-muted">Unavailable</span>;
   return (
-    <a href={href} download={exportFilename(batch)} className="inline-block rounded-md border border-line-strong bg-surface px-2 py-1 text-xs font-medium text-ink hover:bg-panel" data-download={batch.id}>
+    <a href={href} download={exportFilename(batch)} className="inline-block whitespace-nowrap rounded-md border border-line-strong bg-surface px-2 py-1 text-xs font-medium text-ink hover:bg-panel" data-download={batch.id}>
       Download CSV
     </a>
   );
 }
 
-/** The batch history: a table on wide screens, cards on phones. */
+/** The batch history: a table from lg, cards below it. Under lg the sidebar leaves the table too little room, so it
+ *  would scroll sideways; the fingerprint column waits for xl, and the cards always show it. */
 export function ExportBatchTable({ items }: { items: readonly ExportBatchSummary[] }) {
   if (items.length === 0) {
     return (
@@ -42,16 +43,16 @@ export function ExportBatchTable({ items }: { items: readonly ExportBatchSummary
   }
   return (
     <>
-      <ul className="grid grid-cols-1 gap-2 sm:hidden">
+      <ul className="grid grid-cols-1 gap-2 lg:hidden">
         {items.map((b) => (
           <li key={b.id} className="min-w-0 rounded-lg border border-line bg-surface p-3 text-sm" data-batch={b.id}>
             <div className="flex items-start justify-between gap-2">
-              <div>
+              <div className="min-w-0">
                 <p className="font-medium">{formatCents(b.total_cents)}</p>
                 <p className="text-xs text-ink-muted">
                   {countOf(b.row_count, "payout")} · {formatDateTime(b.created_at)}
                 </p>
-                <p className="text-xs text-ink-muted">{batchAuthor(b.created_by)}</p>
+                <p className="text-xs text-ink-muted [overflow-wrap:anywhere]">{batchAuthor(b.created_by)}</p>
               </div>
               <Download batch={b} />
             </div>
@@ -61,13 +62,15 @@ export function ExportBatchTable({ items }: { items: readonly ExportBatchSummary
           </li>
         ))}
       </ul>
-      <div className="hidden overflow-x-auto rounded-lg border border-line bg-surface sm:block">
+      {/* relative: the header's sr-only label is absolutely positioned, and without a positioned scroller it escaped
+          the overflow and widened the whole page. */}
+      <div className="relative hidden overflow-x-auto rounded-lg border border-line bg-surface lg:block">
         <table className="w-full border-collapse text-sm">
           <caption className="sr-only">Export batches, newest first</caption>
           <thead className="border-b border-line bg-panel">
             <tr>
               {["Created", "By", "Payouts", "Total", "File fingerprint (sha256)", ""].map((h, i) => (
-                <th key={i} scope="col" className={`px-3 py-2 text-xs font-medium text-ink-muted ${i === 2 || i === 3 ? "text-right" : "text-left"}`}>
+                <th key={i} scope="col" className={`px-3 py-2 text-xs font-medium whitespace-nowrap text-ink-muted ${i === 2 || i === 3 ? "text-right" : "text-left"} ${i === 4 ? "hidden xl:table-cell" : ""}`}>
                   {h || <span className="sr-only">Download</span>}
                 </th>
               ))}
@@ -77,10 +80,15 @@ export function ExportBatchTable({ items }: { items: readonly ExportBatchSummary
             {items.map((b) => (
               <tr key={b.id} className="border-b border-line last:border-b-0" data-batch={b.id}>
                 <td className="px-3 py-2 whitespace-nowrap">{formatDateTime(b.created_at)}</td>
-                <td className="px-3 py-2">{batchAuthor(b.created_by)}</td>
+                <td className="px-3 py-2">
+                  {/* The cap sits on the span: a table cell's own max-width is not reliably honoured. */}
+                  <span className="block max-w-40 truncate whitespace-nowrap" title={batchAuthor(b.created_by)}>
+                    {batchAuthor(b.created_by)}
+                  </span>
+                </td>
                 <td className="px-3 py-2 text-right tabular-nums">{formatCount(b.row_count)}</td>
                 <td className="px-3 py-2 text-right tabular-nums">{formatCents(b.total_cents)}</td>
-                <td className="max-w-56 px-3 py-2">
+                <td className="hidden max-w-56 px-3 py-2 xl:table-cell">
                   <code className="block truncate font-mono text-xs text-ink-muted" title={b.sha256}>
                     {b.sha256}
                   </code>
@@ -180,17 +188,19 @@ export function ExportSummary({ items, limit = EXPORT_LIST_LIMIT }: { items: rea
   const partial = items.length >= limit;
   return (
     <div className="grid gap-2" data-export-summary={partial ? "shown" : "all"}>
-      <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+      {/* Three across from lg (the sidebar leaves too little room below it); values pinned to each tile's bottom. */}
+      <dl className="grid grid-cols-2 gap-3 lg:grid-cols-3">
         {(
           [
             [partial ? "Batches shown" : "Batches", formatCount(t.batches)],
             [partial ? "Payouts in these batches" : "Payouts exported", formatCount(t.rows)],
             [partial ? "Total in these batches" : "Total exported", formatCents(t.cents)],
           ] as const
-        ).map(([label, value]) => (
-          <div key={label} className="min-w-0 rounded-lg border border-line bg-surface px-4 py-4">
+        ).map(([label, value], i) => (
+          // Two across below lg would leave the third tile alone beside an empty cell; it takes the full row instead.
+          <div key={label} className={`flex min-w-0 flex-col rounded-lg border border-line bg-surface px-4 py-4 ${i === 2 ? "col-span-2 lg:col-span-1" : ""}`}>
             <dt className="eyebrow">{label}</dt>
-            <dd className="kpi-value mt-2 [overflow-wrap:anywhere]">{value}</dd>
+            <dd className="kpi-value mt-auto pt-2 break-words">{value}</dd>
           </div>
         ))}
       </dl>

@@ -17,7 +17,7 @@ import {
   missingPhotos,
   modelRequired,
   photoHint,
-  photoKindLabel,
+  photoSummary,
   portalPath,
   remedyPromise,
   saveDraft,
@@ -347,7 +347,7 @@ export function ClaimStepper({ token, view }: { token: string; view: PortalView 
               ["Serial", fields.serial_claimed],
               ["Date code", fields.date_code_claimed],
               ["Quantity", fields.quantity],
-              ["Photos", program.required_photos.map((k) => `${photoKindLabel(k)}${uploaded.includes(k) ? " ✓" : " (missing)"}`).join(", ")],
+              ["Photos", photoSummary(program.required_photos, uploaded)],
               ["Bought at", fields.retailer_claimed],
               ["Bought on", fields.purchase_date ? formatDate(fields.purchase_date) : ""],
               ["Name", fields.name],
@@ -366,7 +366,7 @@ export function ClaimStepper({ token, view }: { token: string; view: PortalView 
         </div>
       ) : null}
 
-      {problem ? <ProblemAlert problem={problem} sentence={portalSentence(problem.status)} /> : null}
+      {problem ? <ProblemAlert problem={problem} sentence={portalSentence(problem.status)} audience="claimant" /> : null}
 
       <StepNav
         showBack={step > 0}

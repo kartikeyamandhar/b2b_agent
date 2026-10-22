@@ -1,10 +1,9 @@
 import type { ReactNode } from "react";
 
-import { gateConsole } from "@/components/AccessGate";
+import { gateConsole, gateNav } from "@/components/AccessGate";
 import { AppShell } from "@/components/AppShell";
 import { ClerkConsole } from "@/components/ClerkConsole";
-import { devIdentity } from "@/lib/api/auth-seam";
-import { ConfigError } from "@/lib/api/config";
+import { devShellIdentity } from "@/lib/auth/dev-shell";
 import { missingClerkSettings, webAuthMode } from "@/lib/auth/mode";
 
 import { Providers } from "./providers";
@@ -23,22 +22,12 @@ export default async function ConsoleLayout({ children }: { children: ReactNode 
     return <ClerkConsole>{children}</ClerkConsole>;
   }
 
-  let note: string;
-  let org: { name: string; detail: string } | undefined;
-  let role: "admin" | "reviewer" | undefined;
-  try {
-    const id = devIdentity();
-    role = id.role;
-    note = `Development auth · firm ${id.firmId} · ${id.role}`;
-    org = { name: "Development firm", detail: `…${id.firmId.slice(-6)} · ${id.role === "admin" ? "Admin" : "Reviewer"} · dev auth` };
-  } catch (err) {
-    if (!(err instanceof ConfigError)) throw err;
-    note = `Console auth not configured: ${err.message}`;
-  }
+  const { note, org, role } = devShellIdentity();
+  const gate = await gateConsole(children);
   return (
     <Providers>
-      <AppShell identityNote={note} org={org} role={role}>
-        {await gateConsole(children)}
+      <AppShell identityNote={note} org={org} role={role} operator={gate.operator} items={gateNav(gate)}>
+        {gate.body}
       </AppShell>
     </Providers>
   );

@@ -26,8 +26,9 @@ describe("phone cards", () => {
     const page = ClaimPage.parse(read("claims-page.json"));
     const out = renderToStaticMarkup(<ClaimsTable claims={page.items} />);
     expect(out.match(/data-card-claim-id=/g)).toHaveLength(page.items.length);
-    expect(out).toContain("md:hidden");
-    expect(out).toMatch(/class="hidden [^"]*\bmd:block\b[^"]*"/);
+    // Cards below lg, where the sidebar leaves too little room for the table's columns.
+    expect(out).toContain("lg:hidden");
+    expect(out).toMatch(/class="hidden [^"]*\blg:block\b[^"]*"/);
     const card = out.split("<li").find((l) => l.includes('data-card-claim-id="66dcc492'))!;
     expect(card).toContain("border-l-warn");
     expect(card).toContain("Needs a reviewer");
@@ -41,11 +42,11 @@ describe("phone cards", () => {
 });
 
 describe("claim detail on phones", () => {
-  it("puts the decision and reviewer actions first below the large breakpoint", () => {
+  it("puts the decision and reviewer actions first below the extra-large breakpoint", () => {
     const claim = ClaimDetail.parse(read("claim-detail.json"));
     const out = renderToStaticMarkup(<QueryClientProvider client={new QueryClient()}><ClaimDetailLive initialClaim={claim} initialTrace={null} loadedAt={Date.now()} /></QueryClientProvider>);
     const col = out.split('class="').find((c) => c.startsWith("order-first"));
-    expect(col).toContain("lg:order-none");
+    expect(col).toContain("xl:order-none");
   });
 });
 
@@ -78,7 +79,7 @@ describe("portal copy", () => {
 
 describe("navigation and titles", () => {
   it("links Billing from the console navigation", () => {
-    expect(CONSOLE_NAV.map((n) => n.href)).toEqual(["/app/programs", "/app/payouts", "/app/billing", "/app/access"]);
+    expect(CONSOLE_NAV.map((n) => n.href)).toEqual(["/app/programs", "/app/payouts", "/app/billing", "/app/access", "/operator"]);
   });
 
   it("gives each page its own title under the RecallOps template", () => {

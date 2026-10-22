@@ -36,6 +36,8 @@ describe("routes", () => {
     ["/app", "console-page"],
     ["/app/programs/p/claims", "console-page"],
     ["/organization", "console-page"],
+    ["/operator", "console-page"],
+    ["/operators", "public"],
     ["/api/v1/programs", "console-api"],
     ["/claim/tok", "public"],
     ["/claim/tok/status", "public"],
@@ -52,7 +54,7 @@ describe("routes", () => {
   const matcher = new RegExp(`^${PROXY_MATCHER}$`);
 
   it("runs the proxy on the console, the API proxy, and sign-in", () => {
-    for (const p of ["/app", "/app/programs", "/api/v1/programs", "/sign-in", "/sign-up/verify", "/organization", "/app/claims/c/trace"]) {
+    for (const p of ["/app", "/app/programs", "/api/v1/programs", "/sign-in", "/sign-up/verify", "/organization", "/app/claims/c/trace", "/operator"]) {
       expect(matcher.test(p), p).toBe(true);
     }
   });
@@ -60,7 +62,7 @@ describe("routes", () => {
   it("never runs it on the homepage, the claimant portal, or static files", () => {
     // The homepage loads no Clerk script; under the proxy, Clerk's development instance bounced every first visit
     // through a handshake redirect, so link previews and crawlers saw a 307 instead of the page (first deploy).
-    for (const p of ["/", "/claim", "/claim/tok", "/claim/tok/status", "/claim/connect-return", "/api/portal/tok", "/api/portal/tok/photos", "/_next/static/chunks/a.js", "/favicon.ico"]) {
+    for (const p of ["/", "/claim", "/claim/tok", "/claim/tok/status", "/claim/connect-return", "/api/portal/tok", "/api/portal/tok/photos", "/_next/static/chunks/a.js", "/favicon.ico", "/icon.svg", "/apple-icon.png"]) {
       expect(matcher.test(p), p).toBe(false);
     }
   });

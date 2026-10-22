@@ -38,7 +38,8 @@ import { GET, POST } from "@/app/api/[...path]/route";
 import ProgramsPage from "@/app/app/programs/page";
 import ClaimStatusPage from "@/app/claim/[token]/status/page";
 import { Providers } from "@/app/app/providers";
-import { ClerkConsole } from "@/components/ClerkConsole";
+import { ClerkConsole, ClerkOperatorConsole } from "@/components/ClerkConsole";
+import { OperatorLink } from "@/components/OperatorLink";
 
 // The organization is approved to run a recall (company verification), so the console renders its children.
 const APPROVED = async () => ({ ok: true as const, data: { required: true, approved: true, operator: false, requests: [] } });
@@ -142,17 +143,44 @@ describe("pages in Clerk mode", () => {
 });
 
 describe("console gate", () => {
-  const render = async (s: { userId: string | null; orgId: string | null; orgRole: string | null }) =>
-    renderToStaticMarkup(await ClerkConsole({ children: <p data-console-child>queue</p>, context: async () => s, recallAccess: APPROVED }));
+  let checks = 0;
+  const NOT_OPERATOR = async () => {
+    checks += 1;
+    return false;
+  };
+  const render = async (s: { userId: string | null; orgId: string | null; orgRole: string | null }, recallAccess = APPROVED) =>
+    renderToStaticMarkup(await ClerkConsole({ children: <p data-console-child>queue</p>, context: async () => s, recallAccess, operatorCheck: NOT_OPERATOR }));
 
-  it("sends a user without an organization to the organization page", async () => {
+  it("sends a user without an organization to the organization page at once, without asking the API", async () => {
+    checks = 0;
     const err = await render({ userId: "u", orgId: null, orgRole: null }).catch((e: unknown) => e);
     expect(String((err as { digest?: string }).digest)).toContain("/organization");
+    expect(checks).toBe(0); // a sleeping API used to hold this redirect for up to the full API timeout (review)
   });
 
   it("sends a signed-out visitor to sign-in", async () => {
     const err = await render({ userId: null, orgId: null, orgRole: null }).catch((e: unknown) => e);
     expect(String((err as { digest?: string }).digest)).toContain("/sign-in");
+  });
+
+  it("links the operator queue in the sidebar for the operator only (Clerk mode, with an organization)", async () => {
+    const as = (operator: boolean) => async () => ({ ok: true as const, data: { required: true, approved: true, operator, requests: [] } });
+    const operatorHtml = await render({ userId: "u", orgId: "org_1", orgRole: "org:admin" }, as(true));
+    expect(operatorHtml).toContain('href="/operator"');
+    expect(operatorHtml).toContain("data-console-child");
+    expect(await render({ userId: "u", orgId: "org_1", orgRole: "org:admin" }, as(false))).not.toContain('href="/operator"');
+    const unapproved = async () => ({ ok: true as const, data: { required: true, approved: false, operator: true, requests: [] } });
+    expect(await render({ userId: "u", orgId: "org_1", orgRole: "org:admin" }, unapproved)).toContain("data-console-child"); // all access
+  });
+
+  it("offers only Recall access in the sidebar while the organization is not approved", async () => {
+    const unapproved = async () => ({ ok: true as const, data: { required: true, approved: false, operator: false, requests: [] } });
+    const html = await render({ userId: "u", orgId: "org_1", orgRole: "org:admin" }, unapproved);
+    expect(html).not.toContain("data-console-child");
+    expect(html).toContain(">Recall access<");
+    for (const label of ["Programs", "Payouts", "Billing", "Operator queue"]) expect(html).not.toContain(`>${label}<`);
+    const approved = await render({ userId: "u", orgId: "org_1", orgRole: "org:admin" });
+    for (const label of ["Programs", "Payouts", "Billing", "Recall access"]) expect(approved).toContain(`>${label}<`);
   });
 
   it("stops a member role before any console content renders", async () => {
@@ -178,6 +206,42 @@ describe("console gate", () => {
     expect(html).toContain("data-org-switcher");
     expect(html).toContain("data-user-button");
     expect(html).toContain("data-clerk-provider");
+  });
+});
+
+describe("the operator queue outside the organization gate", () => {
+  const frame = async (ctx: { userId: string | null; orgId: string | null; orgRole: string | null }, operator: boolean) =>
+    renderToStaticMarkup(await ClerkOperatorConsole({ children: <p data-operator-child>queue</p>, operator, context: async () => ctx }));
+
+  it("gives the operator without an organization only the queue, and a way to run a recall", async () => {
+    const html = await frame({ userId: "u", orgId: null, orgRole: null }, true);
+    expect(html).toContain("data-operator-child");
+    expect(html).toContain("data-operator-no-org");
+    expect(html).toContain('href="/operator"');
+    expect(html).not.toContain(">Programs<");
+    expect(html).toContain("Platform operator");
+  });
+
+  it("keeps the whole console navigation for an operator inside an organization, and reaches the queue from a member role", async () => {
+    const admin = await frame({ userId: "u", orgId: "org_1", orgRole: "org:admin" }, true);
+    expect(admin).toContain(">Programs<");
+    expect(admin).toContain('href="/operator"');
+    expect(admin).not.toContain("data-operator-no-org");
+    const member = await frame({ userId: "u", orgId: "org_1", orgRole: "org:member" }, true);
+    expect(member).toContain("data-operator-child"); // a member role no longer hides the queue (review)
+  });
+
+  it("shows nothing of the operator's to anyone else, and sends a signed-out visitor to sign-in", async () => {
+    const html = await frame({ userId: "u", orgId: null, orgRole: null }, false);
+    expect(html).not.toContain('href="/operator"');
+    expect(html).not.toContain("data-operator-no-org");
+    const err = await frame({ userId: null, orgId: null, orgRole: null }, false).catch((e: unknown) => e);
+    expect(String((err as { digest?: string }).digest)).toContain("/sign-in");
+  });
+
+  it("streams a link to the queue for the operator only", async () => {
+    expect(renderToStaticMarkup(<>{await OperatorLink({ check: async () => true })}</>)).toContain('href="/operator"');
+    expect(await OperatorLink({ check: async () => false })).toBeNull();
   });
 });
 

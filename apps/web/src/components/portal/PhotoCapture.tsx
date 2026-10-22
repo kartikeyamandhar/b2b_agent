@@ -136,7 +136,7 @@ export function PhotoCapture({
           {message}
         </p>
       ) : null}
-      {problem ? <ProblemAlert problem={problem} sentence={portalSentence(problem.status)} /> : null}
+      {problem ? <ProblemAlert problem={problem} sentence={portalSentence(problem.status)} audience="claimant" /> : null}
       <div className="flex flex-wrap gap-2">
         <label
           htmlFor={inputId}
@@ -158,7 +158,13 @@ export function PhotoCapture({
           />
         </label>
         {phase === "error" && blob.current ? (
-          <button type="button" onClick={() => void upload()} className="min-h-12 rounded-lg border border-line bg-surface px-4 text-base">
+          // Styled like Retake beside it: border-line all but vanished on the dark surface.
+          <button
+            type="button"
+            onClick={() => void upload()}
+            className="min-h-12 rounded-md border border-line-strong bg-surface px-4 text-base font-medium text-ink hover:border-ink"
+            data-photo-retry
+          >
             Try again
           </button>
         ) : null}

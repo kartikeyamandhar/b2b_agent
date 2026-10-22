@@ -6,15 +6,33 @@ import { formatCents, formatDateTime } from "@/lib/format";
 
 import { StatusBadge } from "./StatusBadge";
 
-const th = "px-3 py-2 text-left text-xs font-medium text-ink-muted";
+// The table shows from lg; below it the sidebar leaves too little room, so phones and tablets get cards. From lg to xl
+// (about 670 px of table) Retailer and Decided wait for xl and cells are a little tighter; Created and Decided always
+// stack their date over their time (on one line they overflowed the main column at 1280 to 1440 px), so every column
+// stays in view without sideways scrolling.
+const cell = "px-2 py-2 xl:px-3";
+const th = `${cell} text-left text-xs font-medium text-ink-muted`;
 const muted = <span className="text-ink-muted">—</span>;
+
+/** "Oct 21, 2026, 20:55 UTC" as the date over the time. */
+function Stamp({ value }: { value: string | null | undefined }) {
+  const full = formatDateTime(value);
+  const at = full.lastIndexOf(", ");
+  if (at < 0) return <>{full}</>;
+  return (
+    <>
+      <span className="block">{full.slice(0, at)}</span>
+      <span className="text-ink-muted">{full.slice(at + 2)}</span>
+    </>
+  );
+}
 
 /** The queue table (02-ui.md component 2). Claims that need a reviewer carry a marker and a text label. */
 export function ClaimsTable({ claims, selectedId = null }: { claims: readonly ClaimSummary[]; selectedId?: string | null }) {
   return (
     <>
       <ClaimCards claims={claims} selectedId={selectedId} />
-      <div className="hidden overflow-x-auto rounded-lg border border-line bg-surface md:block">
+      <div className="hidden overflow-x-auto rounded-lg border border-line bg-surface lg:block">
       <table className="w-full border-collapse text-sm">
         <caption className="sr-only">Claims, oldest first</caption>
         <thead className="border-b border-line bg-panel">
@@ -23,11 +41,11 @@ export function ClaimsTable({ claims, selectedId = null }: { claims: readonly Cl
             <th scope="col" className={th}>Status</th>
             <th scope="col" className={th}>Outcome</th>
             <th scope="col" className={th}>Review</th>
-            <th scope="col" className={`${th} hidden md:table-cell`}>Model</th>
-            <th scope="col" className={`${th} hidden lg:table-cell`}>Retailer</th>
-            <th scope="col" className={`${th} hidden md:table-cell text-right`}>Refund</th>
+            <th scope="col" className={th}>Model</th>
+            <th scope="col" className={`${th} hidden xl:table-cell`}>Retailer</th>
+            <th scope="col" className={`${th} text-right`}>Refund</th>
             <th scope="col" className={th}>Created</th>
-            <th scope="col" className={`${th} hidden sm:table-cell`}>Decided</th>
+            <th scope="col" className={`${th} hidden xl:table-cell`}>Decided</th>
           </tr>
         </thead>
         <tbody>
@@ -45,7 +63,7 @@ export function ClaimsTable({ claims, selectedId = null }: { claims: readonly Cl
               >
                 <th
                   scope="row"
-                  className={`border-l-4 px-3 py-2 text-left font-normal ${needsReviewer ? "border-l-warn" : "border-l-transparent"}`}
+                  className={`border-l-4 ${cell} text-left font-normal ${needsReviewer ? "border-l-warn" : "border-l-transparent"}`}
                 >
                   <Link
                     href={`/app/claims/${c.id}`}
@@ -56,22 +74,24 @@ export function ClaimsTable({ claims, selectedId = null }: { claims: readonly Cl
                     <span className="sr-only"> (claim {c.id})</span>
                   </Link>
                 </th>
-                <td className="px-3 py-2">
+                <td className={cell}>
                   <StatusBadge kind="claim" value={c.status} />
                 </td>
-                <td className="px-3 py-2">{c.outcome ? <StatusBadge kind="outcome" value={c.outcome} /> : muted}</td>
-                <td className={`px-3 py-2 whitespace-nowrap ${needsReviewer ? "font-medium text-warn-ink" : "text-ink-muted"}`}>
+                <td className={cell}>{c.outcome ? <StatusBadge kind="outcome" value={c.outcome} /> : muted}</td>
+                <td className={`${cell} whitespace-nowrap ${needsReviewer ? "font-medium text-warn-ink" : "text-ink-muted"}`}>
                   {REVIEW_LABEL[review] || muted}
                 </td>
-                <td className="hidden px-3 py-2 font-mono text-xs md:table-cell">{c.model_claimed ?? muted}</td>
-                <td className="hidden max-w-48 truncate px-3 py-2 lg:table-cell" title={c.retailer_claimed ?? undefined}>
+                <td className={`${cell} font-mono text-xs`}>{c.model_claimed ?? muted}</td>
+                <td className={`${cell} hidden max-w-40 truncate xl:table-cell`} title={c.retailer_claimed ?? undefined}>
                   {c.retailer_claimed ?? muted}
                 </td>
-                <td className="hidden px-3 py-2 text-right tabular-nums md:table-cell">
+                <td className={`${cell} text-right whitespace-nowrap tabular-nums`}>
                   {c.refund_cents === null ? muted : formatCents(c.refund_cents)}
                 </td>
-                <td className="px-3 py-2 whitespace-nowrap text-xs">{formatDateTime(c.created_at)}</td>
-                <td className="hidden px-3 py-2 whitespace-nowrap text-xs sm:table-cell">{formatDateTime(c.decided_at)}</td>
+                <td className={`${cell} whitespace-nowrap text-xs`}>
+                  <Stamp value={c.created_at} />
+                </td>
+                <td className={`${cell} hidden whitespace-nowrap text-xs xl:table-cell`}>{c.decided_at ? <Stamp value={c.decided_at} /> : muted}</td>
               </tr>
             );
           })}
@@ -82,10 +102,10 @@ export function ClaimsTable({ claims, selectedId = null }: { claims: readonly Cl
   );
 }
 
-/** Phones: one card per claim, every field visible without sideways scrolling. */
+/** Phones and tablets: one card per claim, every field visible without sideways scrolling. */
 function ClaimCards({ claims, selectedId }: { claims: readonly ClaimSummary[]; selectedId: string | null }) {
   return (
-    <ul className="grid gap-2 md:hidden" aria-label="Claims, oldest first">
+    <ul className="grid gap-2 lg:hidden" aria-label="Claims, oldest first">
       {claims.map((c) => {
         const review = reviewState(c);
         const needsReviewer = review === "needs_reviewer";

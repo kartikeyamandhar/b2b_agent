@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from decimal import Decimal
 from functools import lru_cache
 from pathlib import Path
@@ -26,6 +27,21 @@ EXAMPLE_CLAIM_TOKEN_SECRET = "ZmFrZS1jbGFpbS10b2tlbi1zZWNyZXQtMzItYnl0ZXM="
 EXAMPLE_CLERK_JWKS_URL = "https://example.clerk.accounts.dev/.well-known/jwks.json"
 EXAMPLE_CLERK_HOST = "example.clerk.accounts.dev"
 LOCAL_HOSTS = frozenset({"localhost", "127.0.0.1", "::1"})
+# An ASCII address (RFC 5322 atext local part): a look-alike such as the Kelvin sign, which lowercases to "k", never
+# counts as the operator's address.
+EMAIL = re.compile(r"[a-z0-9!#$%&'*+/=?^_`{|}~.-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}")
+GMAIL_DOMAINS = frozenset({"gmail.com", "googlemail.com"})
+EXAMPLE_CLERK_SECRET_KEY = "sk_test_fake"
+
+
+def canonical_email(address: str) -> str:
+    """How operator addresses are compared: lowercase, and for Gmail without the dots Gmail ignores (one mailbox, so
+    kartikeya.mandhar777@gmail.com is kartikeyamandhar777@gmail.com) and with googlemail.com read as gmail.com. A +tag
+    is kept, because the tagged address can belong to a different account."""
+    local, _, domain = address.strip().lower().rpartition("@")
+    if domain in GMAIL_DOMAINS:
+        return local.replace(".", "") + "@gmail.com"
+    return f"{local}@{domain}"
 
 
 def is_local_uri(uri: str) -> bool:
@@ -61,7 +77,10 @@ class Settings(BaseSettings):
 
     # Auth seam (component 4 replaces the provider).
     auth_provider: Literal["dev", "clerk"] = Field("dev", description="dev reads X-Dev-* headers.")
-    clerk_secret_key: SecretStr = Field(SecretStr("sk_test_fake"), description="Clerk secret key (login owner).")
+    clerk_secret_key: SecretStr = Field(
+        SecretStr(EXAMPLE_CLERK_SECRET_KEY),
+        description="Clerk secret key (login owner). The API also uses it to read operator email addresses.",
+    )
     clerk_publishable_key: str = Field("pk_test_fake", description="Clerk publishable key.")
     clerk_jwks_url: str = Field(
         "", description="Empty: derived from CLERK_ISSUER (<issuer>/.well-known/jwks.json). Set only to override."
@@ -90,6 +109,12 @@ class Settings(BaseSettings):
     platform_operator_user_ids: str = Field(
         "",
         description="Comma-separated user ids (Clerk user_..., or the dev provider's user id) who approve firms.",
+    )
+    platform_operator_emails: str = Field(
+        "",
+        description="Comma-separated email addresses of the platform operator (Clerk only; needs CLERK_SECRET_KEY). An "
+        "account is the operator while one of its verified addresses is listed, so a deleted and recreated account "
+        "keeps the role. Gmail addresses match with or without dots.",
     )
 
     # Payments seam (component 3).
@@ -278,10 +303,27 @@ class Settings(BaseSettings):
         """Production never runs without company verification (decisions log 2026-10-22)."""
         if self.app_env == "prod" and self.access_approval != "required":
             raise ValueError("ACCESS_APPROVAL must be required in prod")
+        listed = [e.strip() for e in self.platform_operator_emails.split(",") if e.strip()]
+        if any(not e.isascii() or not EMAIL.fullmatch(e.lower()) for e in listed):
+            raise ValueError("PLATFORM_OPERATOR_EMAILS must be comma-separated ASCII email addresses")
+        # Clerk's test mode verifies any +clerk_test address with a fixed code on development instances: anyone could
+        # sign up as one.
+        if any("+clerk_test" in e.lower() for e in listed):
+            raise ValueError("PLATFORM_OPERATOR_EMAILS must not list a +clerk_test address")
+        key = self.clerk_secret_key.get_secret_value()
+        if (
+            self.app_env == "prod"
+            and listed
+            and (self.auth_provider != "clerk" or key in ("", EXAMPLE_CLERK_SECRET_KEY))
+        ):
+            raise ValueError("PLATFORM_OPERATOR_EMAILS needs AUTH_PROVIDER=clerk and a real CLERK_SECRET_KEY in prod")
         return self
 
     def operator_ids(self) -> frozenset[str]:
         return frozenset(u.strip() for u in self.platform_operator_user_ids.split(",") if u.strip())
+
+    def operator_emails(self) -> frozenset[str]:
+        return frozenset(canonical_email(e) for e in self.platform_operator_emails.split(",") if e.strip())
 
     @model_validator(mode="after")
     def _login_guards(self) -> Settings:

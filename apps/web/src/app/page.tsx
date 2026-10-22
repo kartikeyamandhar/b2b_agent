@@ -167,13 +167,14 @@ export default function Home() {
       <footer className="border-t border-line">
         <div className={`${WRAP} grid gap-3 py-8 text-sm text-ink-muted md:grid-cols-[1fr_auto] md:gap-x-10`}>
           <p>RecallOps is a class project by a team of four in the UCLA MSBA program, fall 2026.</p>
+          <p>Owners filing a claim: use the link you were sent. No account is needed.</p>
+          {/* Last in reading order, so phones show both notes together; placed beside them from md up. */}
           <a
             href={REPO_URL}
-            className="whitespace-nowrap text-ink underline decoration-line-strong underline-offset-4 hover:decoration-ink md:row-span-2 md:self-center"
+            className="whitespace-nowrap text-ink underline decoration-line-strong underline-offset-4 hover:decoration-ink md:col-start-2 md:row-span-2 md:row-start-1 md:self-center"
           >
             Source on GitHub
           </a>
-          <p>Owners filing a claim: use the link you were sent. No account is needed.</p>
         </div>
       </footer>
     </>

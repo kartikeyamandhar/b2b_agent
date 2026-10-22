@@ -4,10 +4,11 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import type { AuditEntry, ClaimDetail, Cluster, Decision, PayoutView, Photo } from "@/lib/api-types";
-import { clusterLabel, newHits, orderPhotos, photoSrc, reasonParts, splitCitations, type DuplicateHit, type Reading } from "@/lib/claim-detail";
+import { clusterLabel, newHits, orderPhotos, photoSrc, reasonParts, reasonText, splitCitations, type DuplicateHit, type Reading } from "@/lib/claim-detail";
 import { shortId } from "@/lib/claims";
 import { formatCents, formatDate, formatDateTime } from "@/lib/format";
 import { remedyLabel } from "@/lib/programs";
+import { auditActionLabel, decidedByLabel, humanize, statusLabel } from "@/lib/status";
 
 import { StatusBadge } from "./StatusBadge";
 
@@ -25,9 +26,11 @@ export function Panel({ id, title, children, tone }: { id: string; title: string
   );
 }
 
+/** A label and its value. The label column narrows in a narrow panel (its dl is the container), so a value such as a
+ *  payout status badge keeps room in a three-column claim page. */
 function Row({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="grid grid-cols-[8rem_minmax(0,1fr)] gap-2 py-0.5 text-sm">
+    <div className="grid grid-cols-[6.5rem_minmax(0,1fr)] gap-2 py-0.5 text-sm @xs:grid-cols-[8rem_minmax(0,1fr)]">
       <dt className="text-ink-muted">{label}</dt>
       <dd className="min-w-0 [overflow-wrap:anywhere]">{children}</dd>
     </div>
@@ -42,16 +45,16 @@ export function ClaimFacts({ claim }: { claim: ClaimDetail }) {
   const address = [p.address_line1, [p.city, p.state].filter(Boolean).join(", "), p.zip].filter(Boolean).join(" · ");
   return (
     <Panel id="claim-facts" title="Claimant and claim">
-      <dl>
+      <dl className="@container">
         <Row label="Name">
           {val(p.name)}
-          {p.synthetic ? <span className="ml-2 rounded border border-line bg-surface px-1 text-xs text-ink-muted">synthetic</span> : null}
+          {p.synthetic ? <span className="ml-2 rounded border border-line bg-surface px-1 text-xs whitespace-nowrap text-ink-muted">synthetic</span> : null}
         </Row>
         <Row label="Email">{val(p.email)}</Row>
         <Row label="Phone">{val(p.phone)}</Row>
         <Row label="Address">{val(address)}</Row>
       </dl>
-      <dl className="mt-3 border-t border-line pt-2">
+      <dl className="@container mt-3 border-t border-line pt-2">
         <Row label="Model">{claim.model_claimed ? <span className="font-mono">{claim.model_claimed}</span> : dash}</Row>
         <Row label="Serial">{claim.serial_claimed ? <span className="font-mono">{claim.serial_claimed}</span> : dash}</Row>
         <Row label="Date code">{claim.date_code_claimed ? <span className="font-mono">{claim.date_code_claimed}</span> : dash}</Row>
@@ -82,14 +85,17 @@ export function PhotoEvidence({
       {photos.length === 0 ? (
         <p className="text-sm text-ink-muted">No photos were uploaded with this claim.</p>
       ) : (
-        <ul className="grid gap-3">
+        // Sized by the panel, not the window: the photo sits beside its caption once the panel has room for both, and
+        // above it in a narrow column, so a caption never runs out of its panel. The box is 4:3, a camera's usual
+        // shape, and a photo is never cropped to fit it: it is evidence.
+        <ul className="@container grid gap-3">
           {orderPhotos(photos).map((ph) => {
             const src = photoSrc(ph.url, claimId);
             const label = Object.hasOwn(PHOTO_LABEL, ph.kind) ? PHOTO_LABEL[ph.kind] : ph.kind;
             const reading = Object.hasOwn(readings, ph.kind) ? readings[ph.kind] : undefined;
             return (
               <li key={ph.id} data-photo-kind={ph.kind}>
-                <figure className="grid gap-2 sm:grid-cols-[10rem_1fr]">
+                <figure className="grid gap-2 @xs:grid-cols-[10rem_minmax(0,1fr)]">
                   {src ? (
                     <a href={src} target="_blank" rel="noopener" className="block">
                       {/* eslint-disable-next-line @next/next/no-img-element -- bytes come from the authenticated proxy */}
@@ -97,15 +103,15 @@ export function PhotoEvidence({
                         src={src}
                         alt={`${label} photo submitted with the claim`}
                         loading="lazy"
-                        className="h-32 w-full rounded border border-line bg-panel object-contain sm:w-40"
+                        className="aspect-[4/3] h-auto w-full rounded border border-line bg-panel object-contain @xs:w-40"
                       />
                     </a>
                   ) : (
-                    <div className="grid h-32 place-items-center rounded border border-dashed border-line text-xs text-ink-muted">
+                    <div className="grid aspect-[4/3] w-full place-items-center rounded border border-dashed border-line text-xs text-ink-muted @xs:w-40">
                       Photo unavailable
                     </div>
                   )}
-                  <figcaption className="text-sm">
+                  <figcaption className="min-w-0 text-sm">
                     <p className="font-medium">{label}</p>
                     <p className="text-xs text-ink-muted">
                       Uploaded {formatDateTime(ph.uploaded_at)} · sha256 <span className="font-mono">{ph.sha256.slice(0, 12)}</span>
@@ -159,7 +165,7 @@ export function DecisionPanel({ claimId, decision, decidedAt }: { claimId: strin
       <div className="flex flex-wrap items-center gap-2">
         <StatusBadge kind="outcome" value={decision.outcome} />
         <span className="text-xs text-ink-muted">
-          by {decision.decided_by ?? "unknown"} · {formatDateTime(decidedAt)}
+          by {decidedByLabel(decision.decided_by)} · {formatDateTime(decidedAt)}
           {decision.confidence !== null && decision.confidence !== undefined ? ` · confidence ${Math.round(decision.confidence * 100)}%` : ""}
           {decision.routed_to_human ? " · routed to a person" : ""}
         </span>
@@ -185,10 +191,12 @@ export function DecisionPanel({ claimId, decision, decidedAt }: { claimId: strin
         </p>
       ) : null}
       {decision.reasons.length ? (
+        // The reasons come from frozen backend code in lowercase with internal tokens: reasonText words them, and the
+        // first letter is capitalized for display only.
         <ul className="mt-2 list-disc pl-5 text-sm">
           {decision.reasons.map((r, i) => (
-            <li key={`${i}-${r}`}>
-              {reasonParts(r).map((p, j) =>
+            <li key={`${i}-${r}`} className="first-letter:uppercase" data-reason>
+              {reasonParts(reasonText(r)).map((p, j) =>
                 "claimId" in p ? (
                   <Link key={j} href={`/app/claims/${p.claimId}`} className="font-mono text-accent underline" title={p.claimId}>
                     {shortId(p.claimId)}
@@ -241,7 +249,7 @@ export function PayoutPanel({ payout, remedy }: { payout: PayoutView | null; rem
   const reversed = payout.stripe_reversed_cents ?? 0;
   return (
     <Panel id="claim-payout" title="Payout" tone={payout.status === "held" || reversed > 0 ? "attention" : undefined}>
-      <dl>
+      <dl className="@container">
         <Row label="Status">
           <StatusBadge kind="payout" value={payout.status} />
         </Row>
@@ -329,11 +337,14 @@ function ClaimLinks({ ids }: { ids: readonly string[] }) {
   );
 }
 
+/** A claim status as the badges word it; a value the console does not know reads as words. */
+const statusWords = (s: string) => (statusLabel("claim", s).known ? statusLabel("claim", s).label : humanize(s));
+
 function change(before: Record<string, unknown> | null, after: Record<string, unknown> | null): string {
   const b = before?.status;
   const a = after?.status;
-  if (typeof b === "string" && typeof a === "string") return `${b} → ${a}`;
-  if (typeof a === "string") return `→ ${a}`;
+  if (typeof b === "string" && typeof a === "string") return `${statusWords(b)} → ${statusWords(a)}`;
+  if (typeof a === "string") return `→ ${statusWords(a)}`;
   return "";
 }
 
@@ -344,7 +355,7 @@ export function AuditTrail({ entries }: { entries: readonly AuditEntry[] }) {
         <p className="text-sm text-ink-muted">No audit entries.</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse text-sm">
+          <table className="w-full min-w-[30rem] border-collapse text-sm">
             <caption className="sr-only">Audit trail, oldest first</caption>
             <thead>
               <tr className="border-b border-line text-left text-xs text-ink-muted">
@@ -359,12 +370,14 @@ export function AuditTrail({ entries }: { entries: readonly AuditEntry[] }) {
                 <tr key={`${e.at}-${i}`} className="border-b border-line align-top last:border-b-0">
                   <td className="py-1 pr-3 text-xs whitespace-nowrap">{formatDateTime(e.at)}</td>
                   <td className="py-1 pr-3 font-mono text-xs">{e.actor}</td>
-                  <td className="py-1 pr-3">{e.action}</td>
+                  <td className="py-1 pr-3 text-xs" title={e.action}>
+                    {auditActionLabel(e.action)}
+                  </td>
                   <td className="py-1 text-xs">
                     {change(e.before, e.after)}
                     {e.after && Object.keys(e.after).some((k) => k !== "status") ? (
                       <details className="mt-0.5">
-                        <summary className="cursor-pointer text-ink-muted">details</summary>
+                        <summary className="cursor-pointer text-ink-muted">Details</summary>
                         <pre className="mt-1 max-w-md overflow-x-auto whitespace-pre-wrap rounded bg-panel p-1 font-mono text-xs">
                           {JSON.stringify(e.after, null, 2)}
                         </pre>

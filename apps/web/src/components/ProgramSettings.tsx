@@ -25,6 +25,7 @@ import {
   type RulesDraft,
   type SerialRow,
 } from "@/lib/program-rules";
+import { instructionReadsAsSentence } from "@/lib/portal";
 import { remedyLabel } from "@/lib/programs";
 
 import { ProblemAlert } from "./ProblemAlert";
@@ -60,10 +61,12 @@ export function Evidence({ quotes, edited }: { quotes?: readonly string[]; edite
   );
 }
 
+/** content-start: in a row where a neighbour has a notice quote, the grid stretches this field to the row's height;
+ *  without it the extra height went to the input, which then sat lower and taller than its neighbours. */
 function Field({ label, hint, error, children, evidence }: { label: string; hint?: string; error?: string; children: ReactNode; evidence?: ReactNode }) {
   return (
-    <div className="grid min-w-0 gap-1">
-      <label className="grid gap-1 text-xs">
+    <div className="grid min-w-0 content-start gap-1" data-field>
+      <label className="grid content-start gap-1 text-xs">
         <span className="font-medium text-ink">{label}</span>
         {children}
       </label>
@@ -424,9 +427,15 @@ export function ProgramSettings({ program: initial, canAdmin, created = false }:
             "destructionInstruction",
             "Destruction instruction",
             destructionByOption
-              ? "Shown to claimants on the photo step, and checked against their destruction photo. A destruction photo stays required while a remedy option below lists it, even if you clear this field."
-              : "Shown to claimants on the photo step, and checked against their destruction photo.",
+              ? "Shown to claimants on the photo step when it reads as a sentence, and checked against their destruction photo. A destruction photo stays required while a remedy option below lists it, even if you clear this field."
+              : "Shown to claimants on the photo step when it reads as a sentence, and checked against their destruction photo.",
           )}
+          {draft.destructionInstruction.trim() && !instructionReadsAsSentence(draft.destructionInstruction) ? (
+            <p className="-mt-2 text-xs text-warn-ink" data-instruction-cut>
+              This looks cut off from the notice, so claimants see a general instruction instead. Replace it with the notice&rsquo;s
+              full sentence.
+            </p>
+          ) : null}
           <div className="grid gap-4 lg:grid-cols-2">
             {text("registrationUrl", "Registration address")}
             {text("contact", "Contact")}

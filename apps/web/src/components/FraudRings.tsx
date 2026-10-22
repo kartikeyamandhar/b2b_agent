@@ -106,7 +106,9 @@ export function FraudRings({ graph }: { graph: FraudGraphView }) {
 
   return (
     <div className="grid grid-cols-1 gap-6">
-      <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      {/* Four across only from lg: between 640 and 1023 px the sidebar leaves each tile too narrow for "3 claims".
+          Each tile is a column with its value pinned to the bottom, so a label that wraps never lowers its number. */}
+      <dl className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         {(
           [
             ["Rings", formatCount(summary.rings)],
@@ -115,9 +117,9 @@ export function FraudRings({ graph }: { graph: FraudGraphView }) {
             ["Largest ring", summary.largest ? `${summary.largest} claims` : "—"],
           ] as const
         ).map(([label, value]) => (
-          <div key={label} className="min-w-0 rounded-lg border border-line bg-surface px-4 py-4">
+          <div key={label} className="flex min-w-0 flex-col rounded-lg border border-line bg-surface px-4 py-4">
             <dt className="eyebrow">{label}</dt>
-            <dd className="kpi-value mt-2 [overflow-wrap:anywhere]">{value}</dd>
+            <dd className="kpi-value mt-auto pt-2 break-words">{value}</dd>
           </div>
         ))}
       </dl>

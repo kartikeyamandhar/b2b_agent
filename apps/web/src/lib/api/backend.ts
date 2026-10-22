@@ -12,6 +12,8 @@ export type UpstreamInit = {
   headers?: Headers;
   body?: BodyInit | null;
   requestId?: string;
+  /** A shorter deadline than RECALLOPS_API_TIMEOUT_MS for a call a page must not wait on. */
+  timeoutMs?: number;
 };
 
 /** The claimant's address for a portal call: the proxied request's headers, or the server component's request. */
@@ -27,7 +29,9 @@ async function portalClientIp(incoming: Headers | undefined): Promise<string | n
 
 /** Raw upstream call. Network failures and timeouts become ApiError with status 502 or 504. */
 export async function upstream(surface: Surface, path: string, search: string, init: UpstreamInit, env: Env = process.env): Promise<Response> {
-  const { baseUrl, timeoutMs } = apiConfig(env);
+  const config = apiConfig(env);
+  const baseUrl = config.baseUrl;
+  const timeoutMs = Math.min(config.timeoutMs, init.timeoutMs ?? config.timeoutMs);
   const requestId = init.requestId ?? crypto.randomUUID();
   const identity = surface === "console" ? await consoleAuthHeaders(env) : null;
   const headers = forwardRequestHeaders(init.headers ?? new Headers(), identity, requestId);
@@ -59,8 +63,22 @@ export async function upstream(surface: Surface, path: string, search: string, i
   }
 }
 
+/** The answer's body. The request's deadline also covers the body, and a body that stalls past it or is cut off
+ *  (an API restart mid-answer) is an ApiError like any other failed call, never a raw error that crashes a layout. */
 async function readBody(res: Response): Promise<unknown> {
-  const text = await res.text();
+  let text: string;
+  try {
+    text = await res.text();
+  } catch (err) {
+    const timedOut = err instanceof DOMException && err.name === "TimeoutError";
+    throw new ApiError({
+      status: timedOut ? 504 : 502,
+      title: timedOut ? "Gateway Timeout" : "Bad Gateway",
+      detail: timedOut ? "the API did not finish its answer in time" : "the API answer was cut off",
+      correlationId: res.headers.get("x-request-id"),
+      retryAfterSeconds: null,
+    });
+  }
   if (!text) return null;
   try {
     return JSON.parse(text);
@@ -75,6 +93,7 @@ export type JsonCall = {
   search?: string;
   method?: "GET" | "POST" | "PATCH";
   json?: unknown;
+  timeoutMs?: number;
 };
 
 /** Typed JSON call for server components: parses the answer with the contract's zod schema. */
@@ -85,7 +104,7 @@ export async function apiJson<S extends z.ZodType>(schema: S, call: JsonCall, en
     call.surface,
     call.path,
     call.search ?? "",
-    { method: call.method ?? "GET", headers, body: call.json === undefined ? null : JSON.stringify(call.json) },
+    { method: call.method ?? "GET", headers, body: call.json === undefined ? null : JSON.stringify(call.json), timeoutMs: call.timeoutMs },
     env,
   );
   const body = await readBody(res);

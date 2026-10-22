@@ -182,9 +182,27 @@ export function missingPhotos(required: readonly string[], uploaded: readonly st
   return required.filter((k) => !uploaded.includes(k));
 }
 
-const PHOTO_LABEL: Record<string, string> = { label: "label", destruction: "destruction", receipt: "receipt", other: "extra" };
+const PHOTO_LABEL: Record<string, string> = { label: "label", destruction: "destruction", receipt: "receipt", other: "additional" };
 export function photoKindLabel(kind: string): string {
   return Object.hasOwn(PHOTO_LABEL, kind) ? PHOTO_LABEL[kind]! : kind;
+}
+
+const capitalize = (s: string) => (s ? s[0]!.toUpperCase() + s.slice(1) : s);
+
+/** The reply form's photo buttons: "Label photo", "Receipt photo", and "Additional photo" for any other, the same name
+ *  its panel's legend uses. */
+export function photoButtonLabel(kind: string): string {
+  return `${capitalize(photoKindLabel(kind))} photo`;
+}
+
+/** The review step's photo line, in words: "Label and destruction photos added; receipt photo missing". */
+export function photoSummary(required: readonly string[], uploaded: readonly string[]): string {
+  if (!required.length) return "No photos needed";
+  const phrase = (kinds: string[], state: string) => `${listJoin(kinds.map(photoKindLabel))} photo${kinds.length > 1 ? "s" : ""} ${state}`;
+  const added = required.filter((k) => uploaded.includes(k));
+  const missing = missingPhotos(required, uploaded);
+  const parts = [added.length ? phrase(added, "added") : null, missing.length ? phrase(missing, "missing") : null].filter((p): p is string => p !== null);
+  return capitalize(parts.join("; "));
 }
 
 // ---- Photo uploads ----
@@ -220,6 +238,25 @@ export function answerGate(photo: PhotoPhase | null, sendWithoutPhoto = false): 
   return { canSend: true, reason: null, offerWithoutPhoto: false };
 }
 
+const DESTRUCTION_GENERIC = "Photograph the product after disabling it as the recall notice instructs.";
+
+/**
+ * Whether an extracted destruction instruction reads as words a claimant can follow. The regex extractor (frozen with
+ * the ablation) cuts its sentence at any period, so a notice that names a website can leave a URL tail such as
+ * "com/3M/en_US/scotch-brand/..., confirm that their laminator is included" (seen on the seeded 3M program), and a
+ * quoted word can leave a dangling quote mark ("write \""). Those are never shown as an instruction.
+ */
+export function instructionReadsAsSentence(text: string): boolean {
+  const t = text.trim();
+  if (t.split(/\s+/).length < 2 || !/^[A-Za-z]/.test(t)) return false;
+  if (/[/\\]|https?:|www\.|\b[\w-]+\.(?:com|net|org|gov|us|co)\b/i.test(t)) return false;
+  if (/^(?:com|net|org|gov|us|co|html?)\b/i.test(t)) return false;
+  const straight = (t.match(/"/g) ?? []).length;
+  const opening = (t.match(/[“]/g) ?? []).length;
+  const closing = (t.match(/[”]/g) ?? []).length;
+  return straight % 2 === 0 && opening === closing;
+}
+
 export function photoHint(kind: string, program: PortalView["program"]): string {
   if (kind === "label") {
     return program.model_label_location
@@ -227,9 +264,13 @@ export function photoHint(kind: string, program: PortalView["program"]): string 
       : "Photograph the label that shows the model number.";
   }
   if (kind === "destruction") {
-    return program.destruction_instruction
-      ? `First do this: ${program.destruction_instruction}. Then photograph the product so the result is visible.`
-      : "Photograph the product after disabling it as the recall notice instructs.";
+    const instruction = (program.destruction_instruction ?? "").trim().replace(/[\s.;:,]+$/, "");
+    if (!instruction || !instructionReadsAsSentence(instruction)) return DESTRUCTION_GENERIC;
+    // A short imperative ("cut the power cord") is the step itself; a whole notice sentence ("Consumers should ...")
+    // is quoted as the notice's words rather than turned into a command.
+    return /^[a-z]/.test(instruction)
+      ? `First do this: ${instruction}. Then photograph the product so the result is visible.`
+      : `${DESTRUCTION_GENERIC} The notice says: “${instruction}.”`;
   }
   if (kind === "receipt") return "Photograph your receipt or order confirmation so the store and date are readable.";
   return "Add a photo.";
@@ -315,6 +356,25 @@ export function plainStatus(view: Pick<PortalView, "status" | "program" | "payou
     default:
       return { title: "Your claim is in progress", body: "We will update this page as it moves forward.", tone: "neutral" };
   }
+}
+
+export const GENERIC_QUESTION = "Please add any information that helps us confirm your claim.";
+
+/**
+ * A question from the firm as the claimant reads it. Rules-only runs used to join internal reason codes into the
+ * question ("please provide: retailer not_listed; proof of purchase needed"); the backend now words them for
+ * claimants, and any text that still carries a snake_case code reads as the generic question instead.
+ */
+export function claimantQuestion(text: string | null | undefined): string {
+  const t = (text ?? "").trim();
+  return !t || /[a-z]+_[a-z]+/.test(t) ? GENERIC_QUESTION : t;
+}
+
+/** A message time in the reader's own locale and time zone ("Oct 21, 2026, 8:55 PM"); claimants never read UTC. */
+export function localDateTime(value: string, opts: { locale?: string; timeZone?: string } = {}): string {
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return value;
+  return new Intl.DateTimeFormat(opts.locale, { dateStyle: "medium", timeStyle: "short", timeZone: opts.timeZone }).format(d);
 }
 
 function approvedNextStep(remedyType: string | null | undefined, payoutStatus: string | null | undefined): string {
@@ -465,7 +525,7 @@ export const ANSWER_OUTCOME_TEXT: Record<AnswerOutcome, string> = {
   empty: "Correct a detail, add the photo we asked for, or write a note.",
 };
 
-/** Photo buttons on the reply form: what the question asks for, else the program's required photos; plus an extra. */
+/** Photo buttons on the reply form: what the question asks for, else the program's required photos; plus another. */
 export function answerPhotoKinds(view: Pick<PortalView, "answer_photos" | "program">): string[] {
   const asked = view.answer_photos?.length ? view.answer_photos : view.program.required_photos;
   return [...new Set([...asked, "other"])];

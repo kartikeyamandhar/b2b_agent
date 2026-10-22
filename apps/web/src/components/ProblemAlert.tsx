@@ -1,23 +1,39 @@
 import Link from "next/link";
 
-import { ACCESS_PENDING_SENTENCE, humanSentence, isAccessPending, type ApiProblem } from "@/lib/api/problem";
+import { ACCESS_PENDING_SENTENCE, HELD_ELSEWHERE_SENTENCE, humanSentence, isAccessPending, isHeldElsewhere, type ApiProblem } from "@/lib/api/problem";
 
-/** Every API error renders a human sentence plus the correlation id (02-ui.md section 6). */
+/** The API's detail as a sentence ("program not found" reads "Program not found."); none for a 404, whose human
+ *  sentence already says it. */
+export function detailSentence(problem: Pick<ApiProblem, "status" | "detail">): string | null {
+  const d = problem.detail?.trim();
+  if (!d || problem.status === 404) return null;
+  const s = d.charAt(0).toUpperCase() + d.slice(1);
+  return /[.!?]$/.test(s) ? s : `${s}.`;
+}
+
+/** Every API error renders a human sentence plus the correlation id (02-ui.md section 6). Claimants (the portal) see
+ *  the reference only: a status code means nothing to them, and "Error 0" (a dropped connection) even less. */
 export function ProblemAlert({
   problem,
   onRetry,
   sentence,
   showDetail = true,
+  audience = "console",
 }: {
   problem: ApiProblem;
   onRetry?: () => void;
   sentence?: string;
   showDetail?: boolean;
+  audience?: "console" | "claimant";
 }) {
+  const detail = showDetail ? detailSentence(problem) : null;
+  const code = audience === "console" && problem.status > 0 ? `Error ${problem.status}` : null;
   return (
     <div role="alert" className="rounded-lg border border-danger/30 bg-danger-soft p-4 text-sm text-danger-ink">
-      <p className="font-medium">{sentence ?? (isAccessPending(problem) ? ACCESS_PENDING_SENTENCE : humanSentence(problem.status))}</p>
-      {showDetail && problem.detail ? <p className="mt-1">{problem.detail}</p> : null}
+      <p className="font-medium">
+        {sentence ?? (isAccessPending(problem) ? ACCESS_PENDING_SENTENCE : isHeldElsewhere(problem) ? HELD_ELSEWHERE_SENTENCE : humanSentence(problem.status))}
+      </p>
+      {detail ? <p className="mt-1">{detail}</p> : null}
       {isAccessPending(problem) ? (
         <p className="mt-1">
           <Link href="/app/access" className="font-medium underline">
@@ -25,18 +41,27 @@ export function ProblemAlert({
           </Link>
         </p>
       ) : null}
+      {isHeldElsewhere(problem) ? (
+        <p className="mt-1">
+          <Link href="/operator" className="font-medium underline">
+            Open the operator queue
+          </Link>
+        </p>
+      ) : null}
       {problem.retryAfterSeconds !== null ? (
         <p className="mt-1">You can try again in {problem.retryAfterSeconds} seconds.</p>
       ) : null}
-      <p className="mt-2 text-xs">
-        Error {problem.status}
-        {problem.correlationId ? (
-          <>
-            {" "}
-            · reference <code className="font-mono select-all">{problem.correlationId}</code>
-          </>
-        ) : null}
-      </p>
+      {code || problem.correlationId ? (
+        <p className="mt-2 text-xs">
+          {code}
+          {code && problem.correlationId ? " · " : null}
+          {problem.correlationId ? (
+            <>
+              {code ? "reference" : "Reference"} <code className="font-mono select-all">{problem.correlationId}</code>
+            </>
+          ) : null}
+        </p>
+      ) : null}
       {onRetry ? (
         <button type="button" onClick={onRetry} className="mt-3 rounded-md border border-danger/40 bg-surface px-3 py-1.5 text-xs font-medium">
           Try again

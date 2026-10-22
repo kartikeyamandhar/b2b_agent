@@ -10,13 +10,14 @@ from collections.abc import Iterator
 from typing import Any
 from uuid import uuid4
 
+import httpx
 import jwt
 import pytest
 from cryptography.hazmat.primitives.asymmetric import rsa
 from fastapi.testclient import TestClient
 from sqlalchemy import Engine, text
 
-from recallops import seed
+from recallops import access, seed
 from recallops.auth import clerk as clerk_module
 from recallops.auth import deps
 from recallops.auth.clerk import ClerkAuthProvider, ClerkPrincipal
@@ -197,3 +198,53 @@ def test_closing_the_program_kills_links_and_refuses_reissue(world: dict[str, An
     assert c.get(url.replace(PORTAL, "/portal")).status_code == 404
     refused = c.post(f"/v1/claims/{claim_id}/link", headers=session("org_demo"))
     assert refused.status_code == 409 and "closed" in refused.json()["detail"]
+
+
+def test_the_operator_by_email_with_and_without_an_organization(world: dict[str, Any]) -> None:
+    """Owner decision 2026-10-22, end to end with Clerk session tokens: the account with the listed verified address is
+    the operator with no organization (the queue) and inside a new one (the console opens with no approval), while
+    any other account is gated as before; a Clerk outage fails closed with one lookup per account per window."""
+    users = {"user_ops": "Kartikeya.Mandhar777@gmail.com", "user_e2e": "admin@demo.example"}
+    calls: list[str] = []
+    down = [False]
+
+    def clerk_users(request: httpx.Request) -> httpx.Response:
+        calls.append(request.url.path)
+        if down[0]:
+            raise httpx.ConnectTimeout("unreachable", request=request)
+        user = request.url.path.rsplit("/", 1)[1]
+        address = users.get(user, f"{user}@company.example")
+        verified = {"id": "idn_1", "email_address": address, "verification": {"status": "verified"}}
+        return httpx.Response(200, json={"primary_email_address_id": "idn_1", "email_addresses": [verified]})
+
+    c = world["client"]
+    with pytest.MonkeyPatch.context() as mp:
+        mp.setenv("ACCESS_APPROVAL", "required")
+        mp.setenv("PLATFORM_OPERATOR_EMAILS", "kartikeyamandhar777@gmail.com")
+        mp.setenv("CLERK_SECRET_KEY", "sk_test_e2e")
+        mp.setattr("recallops.access._clerk_http", httpx.Client(transport=httpx.MockTransport(clerk_users)))
+        access._clerk_cache.clear()
+        get_settings.cache_clear()
+        try:
+            assert c.get("/v1/operator/access", headers=session(None, user="user_ops")).status_code == 200
+            assert c.get("/v1/operator/access", headers=session(None, user="user_nobody")).status_code == 403
+            own = session("org_operator", user="user_ops")
+            status = c.get("/v1/access", headers=own).json()
+            assert status["operator"] is True and status["approved"] is False
+            assert c.get("/v1/programs", headers=own).status_code == 200  # the gate lets the operator through
+            stranger = session("org_stranger", user="user_stranger")
+            assert c.get("/v1/access", headers=stranger).json()["operator"] is False
+            assert c.get("/v1/programs", headers=stranger).status_code == 403
+            assert c.get("/v1/programs", headers=session("org_demo")).status_code == 200  # approved by the seed
+            assert len(calls) == len(set(calls))  # one lookup per account, then the cache
+
+            access._clerk_cache.clear()
+            down[0] = True
+            before = len(calls)
+            for _ in range(3):
+                assert c.get("/v1/operator/access", headers=session(None, user="user_ops")).status_code == 403
+                assert c.get("/v1/programs", headers=stranger).status_code == 403
+            assert len(calls) - before == 2  # one failed lookup per account, kept for the window
+        finally:
+            access._clerk_cache.clear()
+    get_settings.cache_clear()

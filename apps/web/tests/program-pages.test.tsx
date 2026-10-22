@@ -71,7 +71,7 @@ describe("/app/programs", () => {
     const html = await render(ProgramsPage());
     expect(html).toContain('role="alert"');
     expect(html).toContain(sentence);
-    expect(html).toContain("detail from the API");
+    expect(html).toContain("Detail from the API.");
     expect(html).toContain(`corr-${status}`);
   });
 
@@ -96,7 +96,7 @@ describe("/app/programs", () => {
     serve(() => Response.json(programs));
     const html = await render(ProgramsPage());
     expect(calls).toHaveLength(0);
-    expect(html).toContain("console auth is not configured");
+    expect(html).toContain("Console auth is not configured");
   });
 });
 

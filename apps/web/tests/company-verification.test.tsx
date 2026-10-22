@@ -3,10 +3,12 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 
-vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: () => {}, push: () => {} }) }));
+vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh: () => {}, push: () => {} }), usePathname: () => "/app/programs" }));
 
 import { gateConsole } from "@/components/AccessGate";
+import { AppShell, OPERATOR_NAV } from "@/components/AppShell";
 import { AccessRequests } from "@/components/AccessRequests";
+import { NewProgram } from "@/components/NewProgram";
 import { OperatorQueue } from "@/components/OperatorQueue";
 import { ProblemAlert } from "@/components/ProblemAlert";
 import type { AccessRequest, AccessStatus, OperatorAccessRequest } from "@/lib/api-types";
@@ -47,28 +49,43 @@ const OP: OperatorAccessRequest = {
 
 describe("the console gate", () => {
   const child = <p data-console-child>queue</p>;
+  const body = async (s: AccessStatus) => renderToStaticMarkup(<>{(await gateConsole(child, ok(s))).body}</>);
 
   it("shows only the access page to an organization not approved yet", async () => {
-    const html = renderToStaticMarkup(<>{await gateConsole(child, ok(status({ requests: [REQ] })))}</>);
+    const html = await body(status({ requests: [REQ] }));
     expect(html).not.toContain("data-console-child");
     expect(html).toContain("Request access to your recall");
     expect(html).toContain("Waiting for review");
   });
 
-  it("gives an unapproved operator the access page with the queue under it, so they can approve themselves", async () => {
-    const queue = async () => ({ ok: true as const, data: [OP] });
-    const html = renderToStaticMarkup(<>{await gateConsole(child, ok(status({ operator: true })), queue)}</>);
-    expect(html).not.toContain("data-console-child");
-    expect(html).toContain("Request access to your recall");
-    expect(html).toContain("Organizations asking to run a recall");
+  it("opens the console for the platform operator, approved or not, and tells the sidebar", async () => {
+    for (const s of [status({ operator: true }), status({ operator: true, approved: true })]) {
+      const gate = await gateConsole(child, ok(s));
+      expect(gate.operator).toBe(true);
+      expect(renderToStaticMarkup(<>{gate.body}</>)).toContain("data-console-child");
+    }
   });
 
   it("opens the console when approved, when not required, and when the status cannot be read", async () => {
-    for (const s of [status({ approved: true }), status({ approved: true, operator: true }), status({ required: false })]) {
-      expect(renderToStaticMarkup(<>{await gateConsole(child, ok(s))}</>)).toContain("data-console-child");
+    for (const s of [status({ approved: true }), status({ required: false })]) {
+      expect(await body(s)).toContain("data-console-child");
+      expect((await gateConsole(child, ok(s))).operator).toBe(false);
     }
     const down = async () => ({ ok: false as const, problem: { status: 503, title: "Down", detail: null, correlationId: null, retryAfterSeconds: null } });
-    expect(renderToStaticMarkup(<>{await gateConsole(child, down)}</>)).toContain("data-console-child");
+    const gate = await gateConsole(child, down);
+    expect(renderToStaticMarkup(<>{gate.body}</>)).toContain("data-console-child");
+    expect(gate.operator).toBe(false);
+  });
+});
+
+describe("the operator's sidebar link", () => {
+  it("shows the queue to the operator only", () => {
+    expect(renderToStaticMarkup(<AppShell identityNote="n" role="admin">x</AppShell>)).not.toContain('href="/operator"');
+    expect(renderToStaticMarkup(<AppShell identityNote="n" role="admin" operator>x</AppShell>)).toContain('href="/operator"');
+    const alone = renderToStaticMarkup(<AppShell identityNote="n" items={OPERATOR_NAV} operator>x</AppShell>);
+    expect(alone).toContain(">Operator queue<");
+    for (const label of ["Programs", "Payouts", "Billing", "Recall access"]) expect(alone).not.toContain(`>${label}<`);
+    expect(OPERATOR_NAV.map((i) => i.href)).toEqual(["/operator"]);
   });
 });
 
@@ -77,8 +94,39 @@ describe("the access page", () => {
     const typed: AccessRequest = { ...REQ, id: "t1", recall_id: null, typed: true, status: "approved", title: "Acme Kettle Recall", typed_notice: "Acme recalls…" };
     const html = renderToStaticMarkup(<AccessRequests status={status({ approved: true, operator: true, requests: [typed] })} />);
     expect(html).toContain("Create the program");
-    expect(html).toContain('href="/app/operator"');
+    expect(html).toContain('href="/operator"');
     expect(html).toContain("Recall access"); // not the gated heading
+    expect(html).toContain("data-operator-intro"); // the operator's own requests are approved on request
+  });
+});
+
+describe("the operator's own requests", () => {
+  it("offers to approve an open request at once to the operator only", () => {
+    const open = renderToStaticMarkup(<AccessRequests status={status({ operator: true, requests: [REQ] })} />);
+    expect(open).toContain(`data-approve-own="${REQ.id}"`);
+    expect(open).toContain("Approve now");
+    const company = renderToStaticMarkup(<AccessRequests status={status({ requests: [REQ] })} />);
+    expect(company).not.toContain("data-approve-own");
+    expect(company).not.toContain("data-operator-intro");
+    expect(company).toContain("checks your work email domain");
+  });
+
+  it("says another organization runs the recall, with the way out, instead of asking for a refresh", () => {
+    const held = { status: 409, title: "Conflict", detail: "another organization runs this recall; revoke its approval in the operator queue first", correlationId: "c", retryAfterSeconds: null };
+    const html = renderToStaticMarkup(<ProblemAlert problem={held} />);
+    expect(html).toContain("Another organization runs this recall.");
+    expect(html).toContain('href="/operator"');
+    expect(html).not.toContain("Refresh the page");
+    const decided = renderToStaticMarkup(<ProblemAlert problem={{ ...held, detail: "another organization is already approved for this recall" }} />);
+    expect(decided).toContain("Another organization runs this recall.");
+  });
+
+  it("sends a typed notice through Recall access while approval is required", () => {
+    const gated = renderToStaticMarkup(<NewProgram existingRecallIds={[]} typedNeedsApproval />);
+    expect(gated).toContain("data-typed-via-access");
+    expect(gated).toContain('href="/app/access"');
+    expect(gated).not.toContain("Enter the notice by hand");
+    expect(renderToStaticMarkup(<NewProgram existingRecallIds={[]} />)).toContain("Enter the notice by hand");
   });
 });
 

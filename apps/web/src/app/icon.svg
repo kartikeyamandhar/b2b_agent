@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56">
+  <!-- The BrandMark shield (src/components/BrandMark.tsx) with fixed colors, since a favicon cannot read the page's
+       tokens. Strokes are heavier than the inline mark so the check still reads at 16 px in a browser tab. -->
+  <style>
+    .tile { fill: #2672cf; fill-opacity: 0.1; stroke: #2672cf; stroke-width: 2.5; }
+    .line { fill: none; stroke: #2672cf; stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; }
+    @media (prefers-color-scheme: dark) {
+      .tile { fill: #3987e5; fill-opacity: 0.16; stroke: #3987e5; }
+      .line { stroke: #3987e5; }
+    }
+  </style>
+  <rect class="tile" x="1.25" y="1.25" width="53.5" height="53.5" rx="14"/>
+  <path class="line" d="M28 13 L41 18 V29 C41 38.5 35.5 44 28 47 C20.5 44 15 38.5 15 29 V18 Z"/>
+  <path class="line" d="M22 30 L26.5 34.5 L34.5 25.5"/>
+</svg>

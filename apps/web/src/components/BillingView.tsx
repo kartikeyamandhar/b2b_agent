@@ -1,6 +1,6 @@
 import type { Usage } from "@/lib/api-types";
 import { accessLimited, meterRatio, meters, planLabel } from "@/lib/billing";
-import { formatCents, formatCount, formatDate } from "@/lib/format";
+import { formatCents, formatCount, formatDate, formatUsdCost } from "@/lib/format";
 
 import { Panel } from "./ClaimPanels";
 
@@ -34,14 +34,13 @@ export function BillingView({ usage }: { usage: Usage }) {
               </dd>
             ) : null}
           </div>
+          {/* Access differs from the plan only while billing is unresolved; otherwise a line would repeat the plan name. */}
           {limited ? (
             <dd className="text-warn-ink" data-access-limited>
               Access is limited to {planLabel(usage.effective_plan)} features until billing is resolved, although the plan is{" "}
               {planLabel(usage.plan)}.
             </dd>
-          ) : (
-            <dd className="text-ink-muted">Access: {planLabel(usage.effective_plan)} features.</dd>
-          )}
+          ) : null}
           {usage.billing_sync_error ? (
             <dd className="text-warn-ink" data-sync-error>
               Billing sync needs attention: {usage.billing_sync_error}
@@ -74,7 +73,9 @@ export function BillingView({ usage }: { usage: Usage }) {
           })}
           <div className="flex justify-between gap-2 text-ink-muted">
             <dt>Model spend this month</dt>
-            <dd className="tabular-nums">${usage.model_cost_usd}</dd>
+            <dd className="tabular-nums" data-model-spend>
+              {formatUsdCost(usage.model_cost_usd)}
+            </dd>
           </div>
         </dl>
       </Panel>

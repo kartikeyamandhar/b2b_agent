@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { NewProgram } from "@/components/NewProgram";
 import { ProblemAlert } from "@/components/ProblemAlert";
-import { loadPrograms } from "@/lib/api/queries";
+import { loadAccess, loadPrograms } from "@/lib/api/queries";
 import { currentConsoleRole } from "@/lib/auth/current-role";
 import { programRecallIds } from "@/lib/program-create";
 
@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "New program" };
 
 export default async function NewProgramPage() {
-  const [programs, role] = await Promise.all([loadPrograms(), currentConsoleRole()]);
+  const [programs, role, access] = await Promise.all([loadPrograms(), currentConsoleRole(), loadAccess()]);
   return (
     <div className="grid gap-6">
       <nav aria-label="Breadcrumb" className="text-xs">
@@ -31,7 +31,7 @@ export default async function NewProgramPage() {
       ) : !programs.ok ? (
         <ProblemAlert problem={programs.problem} />
       ) : (
-        <NewProgram existingRecallIds={[...programRecallIds(programs.data.items)]} />
+        <NewProgram existingRecallIds={[...programRecallIds(programs.data.items)]} typedNeedsApproval={!access.ok || access.data.required} />
       )}
     </div>
   );

@@ -4,15 +4,28 @@ import type { ReactNode } from "react";
 import { BrandMark } from "./BrandMark";
 import { NavLinks } from "./NavLinks";
 
-export type NavItem = { href: string; label: string; group: string; adminOnly?: boolean };
+export type NavItem = {
+  href: string;
+  label: string;
+  group: string;
+  adminOnly?: boolean;
+  operatorOnly?: boolean;
+  /** Other path prefixes this item stands for (a gated console shows its one page under every /app URL). */
+  also?: readonly string[];
+};
 
-// Only built pages are linked. Groups give the sidebar its hierarchy.
+// Only built pages are linked. Groups give the sidebar its hierarchy. The operator's queue approves every firm's
+// requests, so it is its own Platform group rather than one of this firm's Account pages (shown to the operator only).
 export const CONSOLE_NAV: readonly NavItem[] = [
   { href: "/app/programs", label: "Programs", group: "Operations" },
   { href: "/app/payouts", label: "Payouts", group: "Operations", adminOnly: true },
   { href: "/app/billing", label: "Billing", group: "Account" },
   { href: "/app/access", label: "Recall access", group: "Account" },
+  { href: "/operator", label: "Operator queue", group: "Platform", operatorOnly: true },
 ];
+
+/** The platform operator signed in without an organization: their queue is the only page to open. */
+export const OPERATOR_NAV: readonly NavItem[] = CONSOLE_NAV.filter((i) => i.operatorOnly);
 
 /** The RecallOps wordmark, as in the README banner: the shield mark and the name in the system sans. */
 export function Wordmark() {
@@ -61,6 +74,8 @@ export function AppShell({
   controls,
   org,
   role,
+  operator = false,
+  items = CONSOLE_NAV,
 }: {
   children: ReactNode;
   identityNote: string;
@@ -68,8 +83,11 @@ export function AppShell({
   org?: OrgIdentity;
   /** Hides admin-only sections from reviewers; the API still enforces every role. */
   role?: "admin" | "reviewer";
+  /** The platform operator also gets their queue (the API checks the operator on every call too). */
+  operator?: boolean;
+  items?: readonly NavItem[];
 }) {
-  const nav = CONSOLE_NAV.filter((i) => !i.adminOnly || role === "admin");
+  const nav = items.filter((i) => (!i.adminOnly || role === "admin") && (!i.operatorOnly || operator));
   return (
     <div className="flex min-h-dvh flex-col bg-paper md:flex-row">
       <nav aria-label="Console" className="border-b border-line bg-panel md:sticky md:top-0 md:flex md:h-dvh md:w-64 md:shrink-0 md:flex-col md:border-r md:border-b-0">

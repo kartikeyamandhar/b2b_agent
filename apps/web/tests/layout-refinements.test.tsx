@@ -67,10 +67,11 @@ describe("/app/programs layout", () => {
 
 describe("sidebar", () => {
   it("groups navigation and marks Programs on a claim page", () => {
-    expect([...new Set(CONSOLE_NAV.map((n) => n.group))]).toEqual(["Operations", "Account"]);
+    expect([...new Set(CONSOLE_NAV.map((n) => n.group))]).toEqual(["Operations", "Account", "Platform"]);
     const html = renderToStaticMarkup(<AppShell identityNote="note" org={{ name: "Development firm", detail: "…00d001 · Admin · dev auth" }}>x</AppShell>);
     expect(html).toContain(">Operations<");
     expect(html).toContain(">Account<");
+    expect(html).not.toContain(">Platform<"); // the operator's group shows to the operator only
     expect(html).toMatch(/aria-current="page"[^>]*href="\/app\/programs"|href="\/app\/programs"[^>]*aria-current="page"/);
   });
 

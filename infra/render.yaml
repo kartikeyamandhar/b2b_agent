@@ -68,7 +68,9 @@ services:
         sync: false
       - key: CLERK_ALLOWED_ORIGINS
         sync: false
-      - key: PLATFORM_OPERATOR_USER_IDS   # Clerk user ids allowed to approve organizations (company verification)
+      - key: PLATFORM_OPERATOR_EMAILS   # the operator's address: any account with it verified approves organizations
+        sync: false
+      - key: PLATFORM_OPERATOR_USER_IDS   # optional: Clerk user ids that are also operators
         sync: false
       - key: STRIPE_SECRET_KEY
         sync: false

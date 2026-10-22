@@ -25,7 +25,7 @@ describe("ProblemAlert", () => {
     );
     expect(html).toContain('role="alert"');
     expect(html).toContain("Refresh the page");
-    expect(html).toContain("a review is already pending");
+    expect(html).toContain("A review is already pending.");
     expect(html).toContain("c-42");
   });
 

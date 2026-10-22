@@ -28,5 +28,5 @@ export default function proxy(req: NextRequest, event: NextFetchEvent) {
 
 // Must equal PROXY_MATCHER in src/lib/auth/mode.ts (Next reads this statically; a test compares them).
 export const config = {
-  matcher: ["/((?!$|_next/|claim(?:/|$)|api/portal(?:/|$)|favicon\\.ico$).*)"],
+  matcher: ["/((?!$|_next/|claim(?:/|$)|api/portal(?:/|$)|favicon\\.ico$|icon\\.svg$|apple-icon\\.png$).*)"],
 };

@@ -1,6 +1,10 @@
+"use client";
+
+import { useSyncExternalStore } from "react";
+
 import type { PortalView } from "@/lib/api-types";
-import { formatDateTime } from "@/lib/format";
-import { canChoosePayout, payoutProgress, plainStatus, shouldAutoRefresh } from "@/lib/portal";
+import { formatDate } from "@/lib/format";
+import { canChoosePayout, claimantQuestion, localDateTime, payoutProgress, plainStatus, shouldAutoRefresh } from "@/lib/portal";
 
 import { AutoRefresh } from "./AutoRefresh";
 import { NeedsInfoReply } from "./NeedsInfoReply";
@@ -12,7 +16,17 @@ const TONE = {
   attention: "border-warn/40 border-l-4 border-l-warn bg-warn-soft text-warn-ink",
 } as const;
 
-/** The claim status page (02-ui.md /claim/[token]/status). Server-rendered, so reading it needs no JavaScript. */
+const noSubscription = () => () => {};
+
+/** When a message was sent, in the reader's own time zone and clock. The server cannot know either, so its HTML
+ *  carries the date alone, and the browser fills in its local date and time once the page loads. */
+export function MessageTime({ at }: { at: string }) {
+  const local = useSyncExternalStore(noSubscription, () => localDateTime(at), () => null);
+  return <time dateTime={at}>{local ?? formatDate(at)}</time>;
+}
+
+/** The claim status page (02-ui.md /claim/[token]/status). Rendered on the server, so reading it needs no
+ *  JavaScript; it is a client component only so message times can switch to the reader's time zone. */
 export function StatusView({ token, view }: { token: string; view: PortalView }) {
   const plain = plainStatus(view);
   const progress = payoutProgress(view.payout_status);
@@ -45,7 +59,7 @@ export function StatusView({ token, view }: { token: string; view: PortalView })
             Our question
           </h3>
           <p className="rounded border border-line bg-panel p-3 text-base" data-pending-question>
-            {view.pending_question ?? "Please add any information that helps us confirm your claim."}
+            {claimantQuestion(view.pending_question)}
           </p>
           <NeedsInfoReply token={token} view={view} />
         </section>
@@ -74,9 +88,10 @@ export function StatusView({ token, view }: { token: string; view: PortalView })
             {messages.map((m, i) => (
               <li key={`${m.at}-${i}`} className={`rounded border p-2 text-base ${m.sender === "claimant" ? "border-line bg-panel" : "border-line-strong"}`}>
                 <p className="text-xs text-ink-muted">
-                  {m.sender === "claimant" ? "You" : "The firm"} · {formatDateTime(m.at)}
+                  {m.sender === "claimant" ? "You" : "The firm"} · <MessageTime at={m.at} />
                 </p>
-                <p className="mt-0.5 whitespace-pre-wrap">{m.text}</p>
+                {/* The claimant's own words stay as written; the firm's questions get the same guard as the box above. */}
+                <p className="mt-0.5 whitespace-pre-wrap">{m.sender === "claimant" ? m.text : claimantQuestion(m.text)}</p>
               </li>
             ))}
           </ol>

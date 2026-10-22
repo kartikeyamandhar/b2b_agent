@@ -99,7 +99,7 @@ export function PayoutChoice({ token, current }: { token: string; current: strin
       ) : (
         <p className="text-sm text-ink-muted">You leave this site to finish on Stripe, then come back here.</p>
       )}
-      {problem ? <ProblemAlert problem={problem} sentence={payoutSentence(problem.status)} /> : null}
+      {problem ? <ProblemAlert problem={problem} sentence={payoutSentence(problem.status)} audience="claimant" /> : null}
       <button type="submit" disabled={busy || (checkScheduled && !address.trim())} className="min-h-12 rounded-md bg-accent px-4 text-base font-semibold text-bg hover:opacity-90 disabled:opacity-60" data-payout-submit>
         {busy ? "Saving…" : method === "stripe_connect" ? (current === "onboarding" ? "Continue on Stripe" : "Set up on Stripe") : current === "pending_export" ? "Update mailing address" : "Choose a mailed check"}
       </button>

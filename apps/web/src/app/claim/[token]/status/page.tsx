@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 export default async function ClaimStatusPage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
   const view = await loadPortal(token);
-  if (!view.ok) return <ProblemAlert problem={view.problem} sentence={portalSentence(view.problem.status)} showDetail={false} />;
+  if (!view.ok) return <ProblemAlert problem={view.problem} sentence={portalSentence(view.problem.status)} showDetail={false} audience="claimant" />;
   return (
     <div>
       <h1 className="display-title mb-6 text-[1.375rem] leading-snug sm:text-[1.75rem]">{view.data.program.title}</h1>

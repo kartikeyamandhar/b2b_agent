@@ -58,6 +58,7 @@ from recallops.claims.context import LoadedClaim, load_claim, photo_reader, prog
 from recallops.claims.effects import POST_DECISION_HOLDS, DbEffects
 from recallops.claims.graph import VARIANTS, AgentConfig, build_graph, run_budget, summarize
 from recallops.claims.rules_only import adjudicate as rules_only_adjudicate
+from recallops.claims.wording import claimant_question
 from recallops.db.engine import app_engine, internal_engine
 from recallops.fraud.graph import GraphError, GraphStore, GraphUnavailable, build_graph_store
 from recallops.fraud.graph_admin import ensure_schema
@@ -366,9 +367,7 @@ class Worker:
             "outcome": result.outcome,
             "reasons": result.reasons,
             "cited_rules": result.cited_rules,
-            "question_for_claimant": ("Please provide: " + "; ".join(result.reasons) + ".")
-            if result.outcome == "needs_info"
-            else None,
+            "question_for_claimant": claimant_question(result.reasons) if result.outcome == "needs_info" else None,
             "confidence": None,
             "decided_by": "rules_only",
         }

@@ -3,13 +3,19 @@ operator approves it, and one firm at most holds an approved request per recall.
 
 Firms read and create their own requests through the tenant session. The operator's cross-firm list and every
 decision go through two SECURITY DEFINER functions (recallops_access_requests, recallops_decide_access); the API calls
-them only after checking that the caller's user id is in PLATFORM_OPERATOR_USER_IDS. The requester's work-email domain
-and the company and websites named in the notice are hints for the operator, never a decision by themselves.
+them only after checking that the caller is the operator: a user id in PLATFORM_OPERATOR_USER_IDS, or an account with
+a verified address in PLATFORM_OPERATOR_EMAILS. The operator has every access (owner decision 2026-10-22): the console
+gate lets them through, and the organization they act in is approved the moment they ask, through the same request and
+decision rows as any firm. The requester's work-email domain and the company and websites named in the notice are
+hints for the operator, never a decision by themselves.
 """
 
 from __future__ import annotations
 
+import json
 import re
+import threading
+import time
 from dataclasses import dataclass
 from typing import Any
 from uuid import UUID
@@ -20,8 +26,8 @@ from sqlalchemy.exc import DBAPIError, IntegrityError
 from sqlalchemy.orm import Session
 
 from recallops.logs import get_logger, log_event
-from recallops.models import Recall, RecallAccess, RecallProgram
-from recallops.settings import Settings
+from recallops.models import AuditLog, Recall, RecallAccess, RecallProgram
+from recallops.settings import EXAMPLE_CLERK_SECRET_KEY, Settings, canonical_email
 from recallops.tenancy import FirmContext
 
 log = get_logger("access")
@@ -53,6 +59,18 @@ class AccessDenied(PermissionError):
 
 class AccessConflict(ValueError):
     """An open request already exists, the move is not allowed, or another firm holds the recall."""
+
+
+class AccessAlreadyOpen(AccessConflict):
+    """This firm already has an open (requested or approved) request for the recall."""
+
+
+class AccessHeldElsewhere(AccessConflict):
+    """Another firm holds the approved request for the recall (the one-owner unique index)."""
+
+
+class AccessStateConflict(AccessConflict):
+    """The request's current status does not allow this decision (it was decided at the same moment, for example)."""
 
 
 def required(settings: Settings) -> bool:
@@ -89,28 +107,139 @@ def require_program(session: Session, program: RecallProgram, settings: Settings
         raise AccessDenied("this organization is not approved to run this recall")
 
 
+@dataclass(frozen=True)
+class ClerkEmails:
+    primary: str | None
+    verified: frozenset[str]  # canonical_email forms
+
+
+class ClerkLookupFailed(Exception):
+    """Clerk's answer was too slow, too large, or not a user record."""
+
+
+CLERK_LOOKUP_TTL_S = 60.0
+CLERK_FAILURE_TTL_S = 15.0  # a failed lookup is kept briefly, so a Clerk outage costs one wait per account per window
+CLERK_DEADLINE_S = 3.0  # for the whole call: httpx's timeouts bound each phase, not the total
+CLERK_MAX_BYTES = 256_000
+CLERK_CACHE_MAX = 1000
+CLERK_USER_ID = re.compile(r"user_[A-Za-z0-9]{1,64}")
+_clerk_cache: dict[str, tuple[float, ClerkEmails | None]] = {}
+_clerk_locks: dict[str, threading.Lock] = {}
+_clerk_locks_guard = threading.Lock()
+_clerk_http: httpx.Client | None = None
+
+
+def _http() -> httpx.Client:
+    global _clerk_http
+    if _clerk_http is None:
+        _clerk_http = httpx.Client(timeout=httpx.Timeout(connect=1.0, read=2.0, write=1.0, pool=1.0))
+    return _clerk_http
+
+
+def _fetch_user(key: str, user_id: str) -> Any:
+    deadline = time.monotonic() + CLERK_DEADLINE_S
+    body = bytearray()
+    with _http().stream("GET", CLERK_USERS_URL + user_id, headers={"Authorization": f"Bearer {key}"}) as r:
+        r.raise_for_status()  # a redirect is refused here too: the client does not follow redirects
+        for chunk in r.iter_bytes():
+            body += chunk
+            if len(body) > CLERK_MAX_BYTES or time.monotonic() > deadline:
+                raise ClerkLookupFailed("the answer was too slow or too large")
+    return json.loads(body)
+
+
+def _emails(user: Any) -> ClerkEmails:
+    """The primary and verified addresses of a Clerk user record; anything not shaped like one fails the lookup."""
+    if not isinstance(user, dict) or not isinstance(user.get("email_addresses"), list):
+        raise ClerkLookupFailed("not a user record")
+    primary_id = user.get("primary_email_address_id")
+    primary: str | None = None
+    verified: set[str] = set()
+    for e in user["email_addresses"]:
+        address = e.get("email_address") if isinstance(e, dict) else None
+        if not isinstance(address, str) or not address.isascii() or "@" not in address:
+            continue  # only ASCII addresses count (a look-alike letter never lowercases into the operator's address)
+        address = address.strip().lower()
+        if isinstance(primary_id, str) and e.get("id") == primary_id:
+            primary = address
+        verification = e.get("verification")
+        if isinstance(verification, dict) and verification.get("status") == "verified":
+            verified.add(canonical_email(address))
+    return ClerkEmails(primary, frozenset(verified))
+
+
+def _lock(user_id: str) -> threading.Lock:
+    with _clerk_locks_guard:
+        if len(_clerk_locks) >= CLERK_CACHE_MAX:
+            _clerk_locks.clear()
+        return _clerk_locks.setdefault(user_id, threading.Lock())
+
+
+def _cached(user_id: str) -> tuple[bool, ClerkEmails | None]:
+    hit = _clerk_cache.get(user_id)
+    if hit is not None and hit[0] > time.monotonic():
+        return True, hit[1]
+    return False, None
+
+
+def clerk_emails(settings: Settings, user_id: str) -> ClerkEmails | None:
+    """The account's primary and verified email addresses, from Clerk's Backend API; None when unavailable. A lookup
+    is kept for a minute (a failure for 15 s), and one lookup at a time runs per account: the operator check runs on
+    console requests, and a Clerk outage must not turn into one blocked call per request."""
+    key = settings.clerk_secret_key.get_secret_value()
+    if (
+        settings.auth_provider != "clerk"
+        or key in ("", EXAMPLE_CLERK_SECRET_KEY)
+        or not CLERK_USER_ID.fullmatch(user_id)
+    ):
+        return None
+    found, value = _cached(user_id)
+    if found:
+        return value
+    with _lock(user_id):
+        found, value = _cached(user_id)  # the lookup another request just finished
+        if found:
+            return value
+        started = time.monotonic()
+        try:
+            value = _emails(_fetch_user(key, user_id))
+            ttl = CLERK_LOOKUP_TTL_S
+        except (httpx.HTTPError, ValueError, ClerkLookupFailed) as exc:  # ValueError covers a body that is not JSON
+            log_event(
+                log,
+                "clerk_user_lookup_failed",
+                level=30,
+                error=type(exc).__name__,
+                duration_ms=round((time.monotonic() - started) * 1000),
+            )
+            value, ttl = None, CLERK_FAILURE_TTL_S
+        if len(_clerk_cache) >= CLERK_CACHE_MAX:
+            _clerk_cache.clear()
+        _clerk_cache[user_id] = (time.monotonic() + ttl, value)
+        return value
+
+
 def is_operator(settings: Settings, user_id: str | None) -> bool:
-    return bool(user_id) and user_id in settings.operator_ids()
+    """A user id in PLATFORM_OPERATOR_USER_IDS, or (Clerk) an account with a verified address in
+    PLATFORM_OPERATOR_EMAILS, compared by canonical_email. Fails closed: when Clerk cannot be asked, the caller is not
+    the operator."""
+    if not user_id:
+        return False
+    if user_id in settings.operator_ids():
+        return True
+    emails = settings.operator_emails()
+    if not emails:
+        return False
+    found = clerk_emails(settings, user_id)
+    return found is not None and not found.verified.isdisjoint(emails)
 
 
 def requester_domain(settings: Settings, user_id: str) -> str | None:
     """The domain of the requester's primary email, from Clerk; None when unavailable (a hint only, never required)."""
-    key = settings.clerk_secret_key.get_secret_value()
-    if settings.auth_provider != "clerk" or not key or not user_id.startswith("user_"):
+    found = clerk_emails(settings, user_id)
+    if found is None or found.primary is None:
         return None
-    try:
-        r = httpx.get(CLERK_USERS_URL + user_id, headers={"Authorization": f"Bearer {key}"}, timeout=3.0)
-        r.raise_for_status()
-        user = r.json()
-    except (httpx.HTTPError, ValueError) as exc:
-        log_event(log, "access_domain_lookup_failed", level=30, error=type(exc).__name__)
-        return None
-    primary = user.get("primary_email_address_id")
-    for e in user.get("email_addresses") or []:
-        address = str(e.get("email_address", ""))
-        if e.get("id") == primary and "@" in address:
-            return address.rsplit("@", 1)[1].lower()[:253]
-    return None
+    return found.primary.rsplit("@", 1)[1][:253]
 
 
 @dataclass(frozen=True)
@@ -146,7 +275,7 @@ def request_access(
         with session.begin_nested():
             access_id = session.execute(insert(RecallAccess).values(**values).returning(RecallAccess.id)).scalar_one()
     except IntegrityError as exc:
-        raise AccessConflict("this organization already has an open request for this recall") from exc
+        raise AccessAlreadyOpen("this organization already has an open request for this recall") from exc
     log_event(log, "access_requested", firm_id=str(ctx.firm_id), access_id=str(access_id), typed=typed is not None)
     return access_id
 
@@ -216,11 +345,86 @@ def decide(session: Session, operator_id: str, access_id: UUID, status: str, not
     except DBAPIError as exc:  # psycopg files the function's check_violation under IntegrityError too: go by code
         code = getattr(exc.orig, "sqlstate", None)
         if code == "23505":  # unique_violation: recall_access_one_owner
-            raise AccessConflict("another organization is already approved for this recall") from exc
+            raise AccessHeldElsewhere("another organization is already approved for this recall") from exc
         if code == "23514":  # check_violation, raised by the function for a move it does not allow
-            raise AccessConflict("that decision is not allowed for this request's current status") from exc
+            raise AccessStateConflict("that decision is not allowed for this request's current status") from exc
         if code == "P0002":  # no_data_found
             raise LookupError("access request not found") from exc
         raise
     log_event(log, "access_decided", firm_id=str(firm_id), access_id=str(access_id), status=status)
     return UUID(str(firm_id))
+
+
+OPERATOR_NOTE = "approved on request by the platform operator"
+
+
+@dataclass(frozen=True)
+class Grant:
+    access_id: UUID
+    approved: bool  # False: another organization holds the recall, so the request waits like anyone's
+    created: bool  # a new request row was made
+
+
+def _open_request(session: Session, ctx: FirmContext, recall_id: UUID) -> RecallAccess | None:
+    return session.scalar(
+        select(RecallAccess)
+        .where(
+            RecallAccess.firm_id == ctx.firm_id,
+            RecallAccess.recall_id == recall_id,
+            RecallAccess.status.in_(("requested", APPROVED)),
+        )
+        .execution_options(populate_existing=True)  # the definer function writes past the ORM
+    )
+
+
+def operator_grant(
+    session: Session,
+    ctx: FirmContext,
+    settings: Settings,
+    recall_id: UUID | None,
+    typed: Typed | None,
+    domain: str | None,
+) -> Grant:
+    """The organization the operator is acting in is approved the moment the operator asks or opens a program (owner
+    decision 2026-10-22: the operator has every access). It is still a request row and an operator decision with its
+    audit row, so the trail reads like any approval, and the database still keeps one organization per recall: when
+    another organization holds the recall, the request stays open. A request made at the same moment (a double click,
+    a second tab, a colleague) is reused rather than failing. Run in that organization's tenant session."""
+    existing = _open_request(session, ctx, recall_id) if recall_id is not None else None
+    created = False
+    if existing is None:
+        try:
+            access_id = request_access(session, ctx, settings, recall_id, typed, domain)
+            created = True
+        except AccessAlreadyOpen:  # another request for this recall committed first: decide that one
+            existing = _open_request(session, ctx, recall_id) if recall_id is not None else None
+            if existing is None:
+                raise
+    if existing is not None:
+        if existing.status == APPROVED:
+            return Grant(existing.id, True, False)
+        access_id = existing.id
+    try:
+        decide(session, ctx.user_id, access_id, APPROVED, OPERATOR_NOTE)
+    except AccessHeldElsewhere:
+        log_event(log, "access_held_elsewhere", firm_id=str(ctx.firm_id), access_id=str(access_id))
+        return Grant(access_id, False, created)
+    except AccessStateConflict:  # decided at the same moment: approved by the other request, or refused in the queue
+        row = session.scalar(
+            select(RecallAccess).where(RecallAccess.id == access_id).execution_options(populate_existing=True)
+        )
+        if row is not None and row.status == APPROVED:
+            return Grant(access_id, True, created)
+        raise AccessConflict("this request was decided at the same moment; refresh and try again") from None
+    session.add(
+        AuditLog(
+            firm_id=ctx.firm_id,
+            actor=ctx.user_id,
+            action="access_decided",
+            target_type="recall_access",
+            target_id=str(access_id),
+            before={},
+            after={"status": APPROVED, "note": OPERATOR_NOTE},
+        )
+    )
+    return Grant(access_id, True, created)
