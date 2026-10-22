@@ -18,6 +18,7 @@ from uuid import UUID, uuid4
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from recallops import access
 from recallops.auth.provider import ClaimTokenVerifier
 from recallops.billing.interface import BillingGate
 from recallops.db.engine import app_engine
@@ -124,23 +125,34 @@ def create_program(
     recall_id: UUID | None,
     manual: dict[str, Any] | None,
     value_threshold_cents: int | None,
+    access_id: UUID | None = None,
 ) -> tuple[RecallProgram, str, str]:
+    """A CPSC recall needs this firm's approved request for it; a typed notice needs the approved typed request it
+    names (access_id), used by one program only (company verification, decisions log 2026-10-22)."""
     if recall_id is not None:
         recall = session.get(Recall, recall_id)
         if recall is None:
             raise LookupError("recall not found")
         title, source_text = recall.title, recall.source_text
+        access_id = None  # a CPSC program is matched to its approval by recall id (access.program_approved)
     elif manual is not None:
         title = clean(manual["title"])
         source_text = manual_source_text(manual["title"], manual["description"])
     else:
         raise ValueError("give recall_id or manual")
+    if access.required(settings):
+        probe = RecallProgram(firm_id=ctx.firm_id, recall_id=recall_id, access_id=access_id)
+        if not access.program_approved(session, probe, settings):
+            raise access.AccessDenied("request access to this recall and wait for the operator's approval")
+    if access_id is not None and session.scalar(select(RecallProgram.id).where(RecallProgram.access_id == access_id)):
+        raise Conflict("a program already runs this typed notice")
     extraction = extract_rules(source_text, settings, ctx)
     rules_json = json.loads(extraction.rules.model_dump_json())
     program = RecallProgram(
         id=uuid4(),
         firm_id=ctx.firm_id,
         recall_id=recall_id,
+        access_id=access_id,
         status="draft",
         identification_rules=rules_json["identification"],
         remedy_rules=rules_json["remedy"],
@@ -206,6 +218,7 @@ def patch_program(
         if program.status == "closed":
             raise Conflict("a closed program cannot be reopened; open a new program")
         if status == "open":
+            access.require_program(session, program, settings)
             session.execute(select(Firm.id).where(Firm.id == ctx.firm_id).with_for_update())
             entitlement = billing.check_entitlement(ctx, "open_program")
             if not entitlement.allowed:
@@ -258,6 +271,7 @@ def reissue_link(
     program = session.get(RecallProgram, claim.program_id)
     if program is None or program.status == "closed":
         raise Conflict("the program is closed: its claim links stay dead")
+    access.require_program(session, program, settings)
     if claim.status in REISSUE_REFUSED:
         raise Conflict(f"the claim is {claim.status}: there is nothing left for the claimant to do")
     token = verifier.issue(ctx.firm_id, claim.id)
@@ -277,6 +291,7 @@ def issue_links(
 ) -> list[tuple[UUID, str]]:
     if program.status != "open":
         raise Conflict("open the program before issuing claim links")
+    access.require_program(session, program, settings)
     links: list[tuple[UUID, str]] = []
     for _ in range(n):
         claim_id = uuid4()

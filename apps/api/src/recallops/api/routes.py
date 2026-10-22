@@ -7,19 +7,21 @@ from datetime import UTC, date, datetime
 from typing import Annotated, Any
 from uuid import UUID
 
-from fastapi import APIRouter, Body, File, Form, Header, HTTPException, Query, Request, UploadFile, status
+from fastapi import APIRouter, Body, Depends, File, Form, Header, HTTPException, Query, Request, UploadFile, status
 from fastapi.responses import Response
 from sqlalchemy import func, select, text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
+from recallops import access as access_service
 from recallops import portal as portal_service
 from recallops import programs as program_service
 from recallops.api import schemas as s
 from recallops.api import views
 from recallops.api.deps import PublicDb, TenantDb
 from recallops.api.problems import PaymentRequired
-from recallops.auth.deps import AdminDep, ClaimTokenDep, FirmDep, build_claim_verifier
+from recallops.auth.deps import AdminDep, ClaimTokenDep, FirmDep, build_claim_verifier, current_user
+from recallops.auth.provider import Principal
 from recallops.billing.interface import BillingGate
 from recallops.billing.policy import PlanBilling
 from recallops.billing.service import billing_summary
@@ -29,7 +31,7 @@ from recallops.db.repos import ClaimsRepo, ProgramsRepo, RunsRepo, UsageRepo
 from recallops.db.session import tenant_session
 from recallops.fraud.view import FraudGraphView
 from recallops.logs import get_logger, log_event
-from recallops.models import Claim, Recall, RecallProgram, WorkerHeartbeat
+from recallops.models import AuditLog, Claim, Recall, RecallAccess, RecallProgram, WorkerHeartbeat
 from recallops.payouts.db_ledger import DbPayoutLedger
 from recallops.settings import get_settings
 from recallops.storage import InvalidKey, Storage, StorageError, build_storage
@@ -47,11 +49,31 @@ PDF: Responses = {200: {"content": {"application/pdf": {}}}}
 MPR_PERIOD = r"^\d{4}-(0[1-9]|1[0-2])$"
 PHOTO_STORAGE_DOWN = "photo storage unavailable"
 
-firm = APIRouter(prefix="/v1", tags=["firm"], responses=AUTH)
+
+def require_approved_firm(ctx: FirmDep, db: TenantDb) -> None:
+    """Company verification (decisions log 2026-10-22): until the operator approves a recall for this organization,
+    the only routes it reaches are the access routes (its requests and the recall search)."""
+    if not access_service.firm_approved(db, ctx, get_settings()):
+        raise HTTPException(status.HTTP_403_FORBIDDEN, access_service.PENDING_DETAIL)
+
+
+def require_operator(principal: Annotated[Principal, Depends(current_user)]) -> str:
+    """The platform operator: a user id in PLATFORM_OPERATOR_USER_IDS, checked from the verified token."""
+    if not access_service.is_operator(get_settings(), principal.user_id):
+        raise HTTPException(status.HTTP_403_FORBIDDEN, "only the platform operator may do this")
+    return str(principal.user_id)
+
+
+OperatorDep = Annotated[str, Depends(require_operator)]
+APPROVED = [Depends(require_approved_firm)]
+firm = APIRouter(prefix="/v1", tags=["firm"], responses=AUTH, dependencies=APPROVED)
+access = APIRouter(prefix="/v1", tags=["access"], responses=AUTH)
+operator = APIRouter(prefix="/v1/operator", tags=["operator"], responses=AUTH)
 billing = APIRouter(
     prefix="/v1/billing",
     tags=["billing (component 3)"],
     responses={**AUTH, **NOT_FOUND, **CONFLICT, 503: {"model": s.Problem}},
+    dependencies=APPROVED,
 )
 portal = APIRouter(prefix="/portal", tags=["portal"])
 internal = APIRouter(prefix="/internal", tags=["internal"])
@@ -65,7 +87,7 @@ def billing_gate(session: Session | None = None) -> BillingGate:
 # Public archive
 
 
-@firm.get("/recalls", response_model=s.RecallPage, summary="Search the public recall archive (full text)")
+@access.get("/recalls", response_model=s.RecallPage, summary="Search the public recall archive (full text)")
 def search_recalls(
     _: FirmDep, db: PublicDb, q: str | None = None, since: date | None = None, limit: int = Query(25, ge=1, le=100)
 ) -> s.RecallPage:
@@ -82,6 +104,103 @@ def search_recalls(
     total = db.scalar(select(func.count()).select_from(stmt.order_by(None).subquery())) or 0
     rows = db.scalars(stmt.limit(limit)).all()
     return s.RecallPage(items=[views.recall_summary(r) for r in rows], total=total)
+
+
+# Company verification (migration 0008; decisions log 2026-10-22)
+
+
+def _access_view(db: Session, row: RecallAccess) -> s.AccessRequest:
+    recall = db.get(Recall, row.recall_id) if row.recall_id else None
+    return s.AccessRequest(
+        id=row.id,
+        recall_id=row.recall_id,
+        title=recall.title if recall else (row.typed_title or "Typed notice"),
+        typed=row.recall_id is None,
+        typed_company=row.typed_company,
+        typed_notice=row.typed_notice,
+        program_id=None if recall else db.scalar(select(RecallProgram.id).where(RecallProgram.access_id == row.id)),
+        status=row.status,
+        note=row.note,
+        created_at=row.created_at,
+        decided_at=row.decided_at,
+    )
+
+
+@access.get("/access", response_model=s.AccessStatus, summary="This organization's access: approved or not, and why")
+def access_status(ctx: FirmDep, db: TenantDb) -> s.AccessStatus:
+    settings = get_settings()
+    return s.AccessStatus(
+        required=access_service.required(settings),
+        approved=access_service.firm_approved(db, ctx, settings),
+        operator=access_service.is_operator(settings, ctx.user_id),
+        requests=[_access_view(db, r) for r in access_service.own_requests(db, ctx)],
+    )
+
+
+@access.post(
+    "/access",
+    response_model=s.AccessRequest,
+    status_code=201,
+    responses={**NOT_FOUND, **CONFLICT},
+    summary="Ask the platform operator for access to a recall, or to a typed notice not in the archive",
+)
+def request_access(body: s.AccessRequestCreate, ctx: AdminDep, db: TenantDb) -> s.AccessRequest:
+    if (body.recall_id is None) == (body.typed is None):
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "give exactly one of recall_id or typed")
+    settings = get_settings()
+    typed = access_service.Typed(body.typed.title, body.typed.company, body.typed.notice) if body.typed else None
+    domain = access_service.requester_domain(settings, ctx.user_id)
+    try:
+        access_id = access_service.request_access(db, ctx, settings, body.recall_id, typed, domain)
+    except access_service.AccessConflict as exc:
+        raise HTTPException(status.HTTP_409_CONFLICT, str(exc)) from exc
+    except LookupError as exc:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "recall not found") from exc
+    row = db.get(RecallAccess, access_id)
+    assert row is not None
+    return _access_view(db, row)
+
+
+@operator.get("/access", response_model=list[s.OperatorAccessRequest], summary="Every organization's requests")
+def operator_requests(_: OperatorDep, db: PublicDb) -> list[s.OperatorAccessRequest]:
+    return [s.OperatorAccessRequest(**_operator_fields(r)) for r in access_service.operator_list(db)]
+
+
+@operator.post(
+    "/access/{access_id}",
+    response_model=s.OperatorAccessRequest,
+    responses={**NOT_FOUND, **CONFLICT},
+    summary="Approve, reject, or revoke an organization's request",
+)
+def operator_decide(access_id: UUID, body: s.AccessDecision, op: OperatorDep, db: PublicDb) -> s.OperatorAccessRequest:
+    try:
+        firm_id = access_service.decide(db, op, access_id, body.decision, body.note)
+    except access_service.AccessConflict as exc:
+        raise HTTPException(status.HTTP_409_CONFLICT, str(exc)) from exc
+    except LookupError as exc:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "access request not found") from exc
+    with tenant_session(FirmContext(firm_id=firm_id, user_id=op, role="admin")) as session:
+        session.add(
+            AuditLog(
+                firm_id=firm_id,
+                actor=op,
+                action="access_decided",
+                target_type="recall_access",
+                target_id=str(access_id),
+                before={},
+                after={"status": body.decision, "note": body.note},
+            )
+        )
+    row = next(r for r in access_service.operator_list(db) if r["id"] == access_id)
+    return s.OperatorAccessRequest(**_operator_fields(row))
+
+
+def _operator_fields(r: dict[str, Any]) -> dict[str, Any]:
+    keys = set(s.OperatorAccessRequest.model_fields) - {"title", "typed"}
+    return {k: r.get(k) for k in keys} | {
+        "title": r.get("recall_title") or "Typed notice",
+        "typed": r["recall_id"] is None,
+    }
 
 
 # Programs
@@ -112,7 +231,7 @@ def get_program(program_id: UUID, ctx: FirmDep, db: TenantDb) -> s.Program:
     "/programs",
     response_model=s.Program,
     status_code=201,
-    responses=NOT_FOUND,  # created as a draft: the plan is checked when it is opened (PATCH status=open)
+    responses={**NOT_FOUND, **CONFLICT},  # a draft: the plan is checked when it is opened (PATCH status=open)
     summary="Open a program from a recall; runs rule extraction and returns rules for review",
 )
 def create_program(body: s.ProgramCreate, ctx: AdminDep, db: TenantDb) -> s.Program:
@@ -127,9 +246,12 @@ def create_program(body: s.ProgramCreate, ctx: AdminDep, db: TenantDb) -> s.Prog
             body.recall_id,
             body.manual.model_dump() if body.manual else None,
             body.value_threshold_cents,
+            body.access_id,
         )
     except program_service.NotEntitled as exc:
         raise PaymentRequired(exc.action, exc.reason) from exc
+    except program_service.Conflict as exc:
+        raise HTTPException(status.HTTP_409_CONFLICT, str(exc)) from exc
     except LookupError as exc:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "recall not found") from exc
     return _program_view(db, ctx, program)
@@ -570,7 +692,7 @@ def campaign_drafts(program_id: UUID, body: s.CampaignDraftRequest, ctx: AdminDe
 def campaign_send(program_id: UUID, body: s.CampaignSendRequest, ctx: AdminDep, db: TenantDb) -> s.CampaignCounts:
     from recallops import campaigns
 
-    _open_program(db, ctx, program_id)
+    access_service.require_program(db, _open_program(db, ctx, program_id), get_settings())
     return s.CampaignCounts(counts=campaigns.send(db, ctx, program_id, body.channel))
 
 

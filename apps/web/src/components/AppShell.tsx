@@ -11,6 +11,7 @@ export const CONSOLE_NAV: readonly NavItem[] = [
   { href: "/app/programs", label: "Programs", group: "Operations" },
   { href: "/app/payouts", label: "Payouts", group: "Operations", adminOnly: true },
   { href: "/app/billing", label: "Billing", group: "Account" },
+  { href: "/app/access", label: "Recall access", group: "Account" },
 ];
 
 /** The RecallOps wordmark, as in the README banner: the shield mark and the name in the system sans. */

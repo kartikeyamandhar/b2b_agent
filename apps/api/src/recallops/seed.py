@@ -76,6 +76,7 @@ TENANT_DELETE_ORDER = (
     "audit_log",
     "claims",
     "recall_programs",
+    "recall_access",
     "usage_meters",
     "firm_members",
 )
@@ -378,10 +379,25 @@ def run(engine: Engine | None = None, n: int = 500, seed: int = 42) -> dict[str,
         )
     demo = seed_program(engine, DEMO_FIRM_ID, DEMO_RECALL, n, seed)
     other = seed_program(engine, OTHER_FIRM_ID, OTHER_RECALL, 5, seed)
+    approve_seeded(engine, [uuid.UUID(demo["program_id"]), uuid.UUID(other["program_id"])])
     graph = seed_graph(
         engine, [(DEMO_FIRM_ID, uuid.UUID(demo["program_id"])), (OTHER_FIRM_ID, uuid.UUID(other["program_id"]))]
     )
     return {"demo": demo, "other": other, "graph": graph, "seconds": round(time.monotonic() - t0, 2)}
+
+
+def approve_seeded(engine: Engine, program_ids: list[uuid.UUID]) -> None:
+    """The demo firms run their recalls as if the operator had approved them (company verification, migration
+    0008), so a fresh setup opens on the seeded console. Skipped for a recall another firm already holds."""
+    with engine.begin() as conn:
+        conn.execute(
+            text(
+                "INSERT INTO recall_access (firm_id, recall_id, status, requested_by, decided_by, decided_at, note) "
+                "SELECT p.firm_id, p.recall_id, 'approved', 'seed', 'seed', now(), 'demo data' FROM recall_programs p "
+                "WHERE p.id = ANY(:ids) AND p.recall_id IS NOT NULL ON CONFLICT DO NOTHING"
+            ),
+            {"ids": program_ids},
+        )
 
 
 def seed_graph(engine: Engine, programs: list[tuple[uuid.UUID, uuid.UUID]]) -> dict[str, Any]:

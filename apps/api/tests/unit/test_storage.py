@@ -355,6 +355,7 @@ def prod(**values: object) -> Settings:
     base: dict[str, object] = {
         "_env_file": None,
         "app_env": "prod",
+        "access_approval": "required",
         "neo4j_uri": "",  # the graph guard is tested elsewhere
         "portal_base_url": "https://recallops.example/claim",  # so is the portal guard
         "storage_backend": "supabase",

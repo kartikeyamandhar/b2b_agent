@@ -18,12 +18,14 @@ from uuid import UUID, uuid4
 from sqlalchemy import delete, func, select, text, update
 from sqlalchemy.orm import Session
 
+from recallops import access
 from recallops.auth.provider import ClaimTokenVerifier
 from recallops.claims.tools.checks import destruction_required, receipt_required
 from recallops.logs import get_logger, log_event
 from recallops.models import AgentRun, AgentStep, AuditLog, Claim, ClaimPhoto, Recall, RecallProgram
 from recallops.photos import InvalidPhoto, inspect
 from recallops.rules.schemas import IdentificationRules, RemedyRules
+from recallops.settings import get_settings
 from recallops.storage import Storage
 
 log = get_logger("portal")
@@ -77,6 +79,8 @@ def resolve(session: Session, verifier: ClaimTokenVerifier, token: str, claim_id
     ).one()
     if program.status == "closed":
         raise LinkInvalid()
+    if not access.program_approved(session, program, get_settings()):
+        raise LinkInvalid()  # the firm is not (or no longer) approved for this recall: its links stop working
     recall = session.get(Recall, program.recall_id) if program.recall_id else None
     return PortalClaim(claim, program, recall.title if recall else "Recall")
 

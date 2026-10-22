@@ -141,7 +141,13 @@ def test_dev_provider_refuses_live_keys_and_prod() -> None:
         DevAuthProvider(Settings(), environ={"CLERK_SECRET_KEY": "sk_live_abc"})
     with pytest.raises(UnsafeDevAuth):
         DevAuthProvider(
-            Settings(app_env="prod", neo4j_uri="", portal_base_url="https://recallops.example/claim"), environ={}
+            Settings(
+                app_env="prod",
+                access_approval="required",
+                neo4j_uri="",
+                portal_base_url="https://recallops.example/claim",
+            ),
+            environ={},
         )
     provider = DevAuthProvider(Settings(), environ={})
     principal = provider.authenticate({"X-Dev-Firm-Id": str(seed.DEMO_FIRM_ID), "X-Dev-Role": "reviewer"})

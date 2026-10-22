@@ -28,6 +28,7 @@ TENANT_TABLES = (
     "usage_reports",
     "billing_accounts",
     "firm_members",
+    "recall_access",
     "recall_programs",
     "documents",
     "document_chunks",
@@ -77,6 +78,7 @@ def _seed_firm(conn: object, name: str) -> FirmRows:
         "INSERT INTO export_batches (firm_id, created_by, row_count, total_cents, sha256, csv) "
         "VALUES (:f, 'system', 1, 1000, 'x', 'payout_id'::bytea)",
         "INSERT INTO registrations (id, firm_id, program_id, external_ref) VALUES (:r, :f, :p, 'reg-1')",
+        "INSERT INTO recall_access (firm_id, typed_title, typed_company, requested_by) VALUES (:f, 't', 'c', 'u')",
         "INSERT INTO notifications (firm_id, program_id, registration_id, channel, subject, body) "
         "VALUES (:f, :p, :r, 'email', 's', 'b')",
         "INSERT INTO mpr_reports (firm_id, program_id, period_start, period_end, payload, generated_by) "
@@ -166,7 +168,7 @@ def test_updates_and_deletes_of_firm_b_affect_zero_rows(
         for table in TENANT_TABLES:
             if table in APPEND_ONLY:
                 continue
-            if table == "claim_usage":
+            if table in {"claim_usage", "recall_access"}:  # the app role may not update these at all
                 with pytest.raises(ProgrammingError, match="permission denied"), session.begin_nested():
                     session.execute(text(f"UPDATE {table} SET firm_id = firm_id WHERE firm_id = :b"), {"b": b.firm_id})
             else:
@@ -174,7 +176,14 @@ def test_updates_and_deletes_of_firm_b_affect_zero_rows(
                     text(f"UPDATE {table} SET firm_id = firm_id WHERE firm_id = :b"), {"b": b.firm_id}
                 )
                 assert updated.rowcount == 0, table  # type: ignore[attr-defined]
-            if table in {"billing_accounts", "billing_invoices", "claim_usage", "run_usage_costs", "usage_reports"}:
+            if table in {
+                "billing_accounts",
+                "billing_invoices",
+                "claim_usage",
+                "run_usage_costs",
+                "usage_reports",
+                "recall_access",
+            }:
                 with pytest.raises(ProgrammingError, match="permission denied"), session.begin_nested():
                     session.execute(text(f"DELETE FROM {table} WHERE firm_id = :b"), {"b": b.firm_id})
                 continue

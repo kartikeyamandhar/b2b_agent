@@ -68,6 +68,8 @@ services:
         sync: false
       - key: CLERK_ALLOWED_ORIGINS
         sync: false
+      - key: PLATFORM_OPERATOR_USER_IDS   # Clerk user ids allowed to approve organizations (company verification)
+        sync: false
       - key: STRIPE_SECRET_KEY
         sync: false
       - key: STRIPE_WEBHOOK_SECRET

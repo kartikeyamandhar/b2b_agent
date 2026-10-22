@@ -50,6 +50,7 @@ from sqlalchemy import Engine, text
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 
+from recallops import access
 from recallops.billing.interface import BillingGate
 from recallops.billing.policy import PlanBilling
 from recallops.claims.agent_tools import ToolContext
@@ -207,6 +208,8 @@ class Worker:
                     "UPDATE claims SET lease_owner = :me, lease_until = now() + make_interval(secs => :ttl), "
                     "attempts = attempts + 1 WHERE id = (SELECT c.id FROM claims c WHERE c.status = 'submitted' "
                     "AND (c.lease_until IS NULL OR c.lease_until < now()) "
+                    "AND (CAST(:access_off AS boolean) OR EXISTS (SELECT 1 FROM recall_programs pr "
+                    f"WHERE pr.id = c.program_id AND {access.approved_program_sql('pr')})) "
                     "AND (c.firm_id <> ALL(CAST(:blocked AS uuid[])) "
                     "OR EXISTS (SELECT 1 FROM claim_usage u WHERE u.firm_id = c.firm_id AND u.claim_id = c.id "
                     "AND u.period_start = :period)) "
@@ -218,6 +221,7 @@ class Worker:
                     "ttl": self.settings.worker_lease_s,
                     "blocked": [str(f) for f in self.blocked_firms],
                     "period": datetime.now(UTC).date().replace(day=1),
+                    "access_off": not access.required(self.settings),
                 },
             ).first()
         return Leased(row.id, row.firm_id, row.attempts) if row else None

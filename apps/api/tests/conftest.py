@@ -26,6 +26,9 @@ os.environ["STRIPE_PUBLISHABLE_KEY"] = "pk_test_fake"
 os.environ["STRIPE_WEBHOOK_SECRET"] = "whsec_fake"
 os.environ["STRIPE_CONNECT_WEBHOOK_SECRET"] = "whsec_fake"
 os.environ["STRIPE_API_VERSION"] = "2026-09-30.endive"
+# Company verification (migration 0008) is on by default everywhere and refused off in prod. The suite runs with it
+# off so its fixtures can make firms and programs freely; tests/api/test_recall_access.py turns it on.
+os.environ["ACCESS_APPROVAL"] = "off"
 os.environ["STRIPE_PROGRAM_PRICE_ID"] = ""
 os.environ["STRIPE_CLAIM_PRICE_ID"] = ""
 os.environ["STRIPE_PORTAL_CONFIGURATION_ID"] = ""
@@ -81,6 +84,7 @@ CLEAN_ORDER = (
     "documents",
     "claims",
     "recall_programs",
+    "recall_access",
     "audit_log",
     "usage_meters",
     "firm_members",

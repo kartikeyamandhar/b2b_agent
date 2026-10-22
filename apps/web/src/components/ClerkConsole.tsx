@@ -5,6 +5,7 @@ import { Providers } from "@/app/app/providers";
 import { clerkContext } from "@/lib/auth/clerk-session";
 import { consoleAccess, type ClerkContext } from "@/lib/auth/mode";
 
+import { gateConsole, type AccessLoader } from "./AccessGate";
 import { AccountControls } from "./AccountControls";
 import { AppShell } from "./AppShell";
 import { ClerkShell } from "./ClerkShell";
@@ -21,9 +22,18 @@ function NoAccess({ reason }: { reason: string }) {
 }
 
 /** The console in Clerk mode: the access decision from consoleAccess(), then the shell with account controls. */
-export async function ClerkConsole({ children, context = clerkContext }: { children: ReactNode; context?: () => Promise<ClerkContext> }) {
+export async function ClerkConsole({
+  children,
+  context = clerkContext,
+  recallAccess,
+}: {
+  children: ReactNode;
+  context?: () => Promise<ClerkContext>;
+  recallAccess?: AccessLoader;
+}) {
   const access = consoleAccess(await context());
   if (access.kind === "redirect") redirect(access.to);
+  const body = access.kind === "ok" ? await gateConsole(children, recallAccess) : null;
   return (
     <ClerkShell>
       {access.kind === "no-access" ? (
@@ -34,7 +44,7 @@ export async function ClerkConsole({ children, context = clerkContext }: { child
         // A new QueryClient per organization: switching organizations never shows another firm's cached data.
         <Providers key={access.orgId}>
           <AppShell identityNote={ROLE_LABEL[access.role]} controls={<AccountControls />} role={access.role}>
-            {children}
+            {body}
           </AppShell>
         </Providers>
       )}

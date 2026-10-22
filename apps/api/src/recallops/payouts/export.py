@@ -27,6 +27,7 @@ from uuid import UUID
 
 from sqlalchemy import Engine, select, text
 
+from recallops import access
 from recallops.db.engine import internal_engine
 from recallops.db.session import internal_session, set_firm, tenant_session
 from recallops.logs import configure, get_logger, log_event
@@ -74,10 +75,13 @@ def export_firm(
             text(
                 "SELECT p.id, p.claim_id, p.amount_cents, p.currency, c.claimant FROM claims c "
                 "JOIN payouts p ON p.claim_id = c.id AND p.firm_id = c.firm_id "
+                "JOIN recall_programs pr ON pr.id = c.program_id "
                 "WHERE c.firm_id = :f AND c.status = 'approved' AND p.status = 'pending_export' "
+                # A firm not (or no longer) approved for the recall pays no check (company verification).
+                f"AND (CAST(:access_off AS boolean) OR {access.approved_program_sql('pr')}) "
                 "ORDER BY p.created_at, p.id FOR UPDATE OF c, p SKIP LOCKED"
             ),
-            {"f": firm_id},
+            {"f": firm_id, "access_off": not access.required(get_settings())},
         ).all()
         if not rows:
             return None

@@ -18,6 +18,8 @@ https://recallops-five.vercel.app (2026-10-21).
   agent trace (`/app/claims/[id]/trace`), payout export batches (`/app/payouts`), and billing and usage with the
   Stripe return page (`/app/billing`, `/app/billing/return`).
 - Sign-in (Clerk mode): `/sign-in`, `/sign-up`, and `/organization`.
+- Company verification: an organization reaches only its recall access requests (`/app/access`) until the platform
+  operator approves a recall for it; the operator decides requests at `/app/operator`.
 - Claimant portal (public, no Clerk): `/claim/[token]`, `/claim/[token]/status`, `/claim/connect-return`, and
   `/claim/connect-refresh`.
 
@@ -86,6 +88,7 @@ src/lib/portal-copy.ts       plain sentences for portal errors
 src/lib/image.ts             on-device photo compression (under 1.5 MB, longest edge 2000 px)
 src/lib/home-content.ts      homepage copy: the recall 27024 quote (tested word for word), rules, steps, results
 src/lib/clerk-appearance.ts  dark-mode palette for Clerk's switcher and user menu (Clerk's own palette is light)
+src/lib/access.ts            company verification: request bodies, status words, the operator's actions and domain hint
 
 src/components/              shell and shared: AppShell, NavLinks, BrandMark, AccountControls, ClerkShell,
                              ClerkConsole, AuthOff, StatusBadge, ProblemAlert, States (LoadingState, EmptyState)
@@ -96,6 +99,7 @@ src/components/              shell and shared: AppShell, NavLinks, BrandMark, Ac
                              reports, fraud, campaign: MprGenerate, MprReportView, FraudRings, Campaign
                              money: PayoutExports, BillingScreen, BillingView, BillingLive
                              homepage (home/): NoticeFigure
+                             company verification: AccessGate (gateConsole), AccessRequests, OperatorQueue
 src/components/portal/       ClaimStepper, PhotoCapture, StatusView, NeedsInfoReply, PayoutChoice, AutoRefresh,
                              ConnectReturn
 tests/                       vitest (node environment; components rendered with react-dom/server)

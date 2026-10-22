@@ -1,6 +1,220 @@
 {
   "components": {
     "schemas": {
+      "AccessDecision": {
+        "additionalProperties": false,
+        "properties": {
+          "decision": {
+            "enum": [
+              "approved",
+              "rejected",
+              "revoked"
+            ],
+            "title": "Decision",
+            "type": "string"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "required": [
+          "decision"
+        ],
+        "title": "AccessDecision",
+        "type": "object"
+      },
+      "AccessRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "decided_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decided At"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "the operator's note on the decision",
+            "title": "Note"
+          },
+          "program_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "a typed notice's program, once created from this request",
+            "title": "Program Id"
+          },
+          "recall_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recall Id"
+          },
+          "status": {
+            "enum": [
+              "requested",
+              "approved",
+              "rejected",
+              "revoked"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "title": {
+            "description": "the recall's title, or the typed notice's",
+            "title": "Title",
+            "type": "string"
+          },
+          "typed": {
+            "title": "Typed",
+            "type": "boolean"
+          },
+          "typed_company": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Typed Company"
+          },
+          "typed_notice": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "the typed notice's text, as this organization sent it",
+            "title": "Typed Notice"
+          }
+        },
+        "required": [
+          "id",
+          "recall_id",
+          "title",
+          "typed",
+          "status",
+          "created_at",
+          "decided_at"
+        ],
+        "title": "AccessRequest",
+        "type": "object"
+      },
+      "AccessRequestCreate": {
+        "additionalProperties": false,
+        "properties": {
+          "recall_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "a recall from GET /v1/recalls; or give typed",
+            "title": "Recall Id"
+          },
+          "typed": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TypedNotice"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "a recall not in the CPSC archive yet"
+          }
+        },
+        "title": "AccessRequestCreate",
+        "type": "object"
+      },
+      "AccessStatus": {
+        "additionalProperties": false,
+        "properties": {
+          "approved": {
+            "description": "the organization holds at least one approved recall: the console is open",
+            "title": "Approved",
+            "type": "boolean"
+          },
+          "operator": {
+            "description": "the caller may approve organizations",
+            "title": "Operator",
+            "type": "boolean"
+          },
+          "requests": {
+            "items": {
+              "$ref": "#/components/schemas/AccessRequest"
+            },
+            "title": "Requests",
+            "type": "array"
+          },
+          "required": {
+            "description": "false only in tests (ACCESS_APPROVAL=off)",
+            "title": "Required",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "required",
+          "approved",
+          "operator",
+          "requests"
+        ],
+        "title": "AccessStatus",
+        "type": "object"
+      },
       "AuditEntry": {
         "additionalProperties": false,
         "properties": {
@@ -1759,6 +1973,200 @@
         "title": "MprReport",
         "type": "object"
       },
+      "OperatorAccessRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "approved_elsewhere": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "another organization already approved for the recall",
+            "title": "Approved Elsewhere"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "decided_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decided At"
+          },
+          "decided_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decided By"
+          },
+          "domain_matches": {
+            "description": "a hint: the email domain matches the notice's company or a website",
+            "title": "Domain Matches",
+            "type": "boolean"
+          },
+          "firm_id": {
+            "format": "uuid",
+            "title": "Firm Id",
+            "type": "string"
+          },
+          "firm_name": {
+            "title": "Firm Name",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "notice_company": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "the company the notice names",
+            "title": "Notice Company"
+          },
+          "notice_sites": {
+            "description": "websites the notice names",
+            "items": {
+              "type": "string"
+            },
+            "title": "Notice Sites",
+            "type": "array"
+          },
+          "recall_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recall Id"
+          },
+          "recall_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recall Number"
+          },
+          "requested_by": {
+            "title": "Requested By",
+            "type": "string"
+          },
+          "requester_domain": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "the requester's work-email domain, from Clerk (a hint)",
+            "title": "Requester Domain"
+          },
+          "status": {
+            "enum": [
+              "requested",
+              "approved",
+              "rejected",
+              "revoked"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "typed": {
+            "title": "Typed",
+            "type": "boolean"
+          },
+          "typed_company": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Typed Company"
+          },
+          "typed_notice": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "the typed notice's text, first 4,000 characters",
+            "title": "Typed Notice"
+          }
+        },
+        "required": [
+          "id",
+          "firm_id",
+          "firm_name",
+          "recall_id",
+          "recall_number",
+          "title",
+          "typed",
+          "typed_company",
+          "status",
+          "requested_by",
+          "domain_matches",
+          "decided_by",
+          "decided_at",
+          "note",
+          "created_at"
+        ],
+        "title": "OperatorAccessRequest",
+        "type": "object"
+      },
       "Payout": {
         "additionalProperties": false,
         "properties": {
@@ -2653,6 +3061,19 @@
           }
         ],
         "properties": {
+          "access_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "with manual: the operator-approved typed-notice request the program comes from",
+            "title": "Access Id"
+          },
           "manual": {
             "anyOf": [
               {
@@ -3349,6 +3770,37 @@
           "created_at"
         ],
         "title": "TraceStep",
+        "type": "object"
+      },
+      "TypedNotice": {
+        "additionalProperties": false,
+        "properties": {
+          "company": {
+            "description": "the recalling company, as the notice names it",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Company",
+            "type": "string"
+          },
+          "notice": {
+            "maxLength": 20000,
+            "minLength": 1,
+            "title": "Notice",
+            "type": "string"
+          },
+          "title": {
+            "maxLength": 300,
+            "minLength": 1,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "company",
+          "notice"
+        ],
+        "title": "TypedNotice",
         "type": "object"
       },
       "Usage": {
@@ -4061,6 +4513,126 @@
         ]
       }
     },
+    "/v1/access": {
+      "get": {
+        "operationId": "access_status_v1_access_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "summary": "This organization's access: approved or not, and why",
+        "tags": [
+          "access"
+        ]
+      },
+      "post": {
+        "operationId": "request_access_v1_access_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccessRequestCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessRequest"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "the resource is not in a state that allows this"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Ask the platform operator for access to a recall, or to a typed notice not in the archive",
+        "tags": [
+          "access"
+        ]
+      }
+    },
     "/v1/billing/checkout": {
       "post": {
         "operationId": "checkout_v1_billing_checkout_post",
@@ -4615,6 +5187,144 @@
         ]
       }
     },
+    "/v1/operator/access": {
+      "get": {
+        "operationId": "operator_requests_v1_operator_access_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/OperatorAccessRequest"
+                  },
+                  "title": "Response Operator Requests V1 Operator Access Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          }
+        },
+        "summary": "Every organization's requests",
+        "tags": [
+          "operator"
+        ]
+      }
+    },
+    "/v1/operator/access/{access_id}": {
+      "post": {
+        "operationId": "operator_decide_v1_operator_access__access_id__post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "access_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Access Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccessDecision"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperatorAccessRequest"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "not found, or belongs to another firm"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "the resource is not in a state that allows this"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Approve, reject, or revoke an organization's request",
+        "tags": [
+          "operator"
+        ]
+      }
+    },
     "/v1/payouts/exports": {
       "get": {
         "operationId": "list_exports_v1_payouts_exports_get",
@@ -4891,6 +5601,16 @@
               }
             },
             "description": "not found, or belongs to another firm"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "the resource is not in a state that allows this"
           },
           "422": {
             "content": {
@@ -6187,7 +6907,7 @@
         },
         "summary": "Search the public recall archive (full text)",
         "tags": [
-          "firm"
+          "access"
         ]
       }
     },
