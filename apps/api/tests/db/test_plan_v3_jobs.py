@@ -191,13 +191,14 @@ def test_a_refund_nobody_chose_a_way_to_receive_becomes_a_check(clean_db: Engine
     ledger.mark_onboarding(ctx, payouts["stalled"], "acct_stalled")
     settings = get_settings()
     with clean_db.begin() as conn:
-        conn.execute(
-            text(
-                "UPDATE payouts SET created_at = now() - make_interval(days => :d), "
-                "choice_opened_at = now() - make_interval(days => :d) WHERE id = ANY(:p)"
-            ),
-            {"d": settings.payout_choice_days + 1, "p": [payouts["unchosen"], payouts["shared"]]},
-        )
+        for name, minutes in (("unchosen", 1), ("shared", 0)):  # distinct ages: the job takes the older one first
+            conn.execute(
+                text(
+                    "UPDATE payouts SET created_at = now() - make_interval(days => :d, mins => :m), "
+                    "choice_opened_at = now() - make_interval(days => :d, mins => :m) WHERE id = :p"
+                ),
+                {"d": settings.payout_choice_days + 1, "m": minutes, "p": payouts[name]},
+            )
         conn.execute(
             text(
                 "UPDATE payouts SET created_at = now() - make_interval(days => :d), "
