@@ -7,7 +7,7 @@ RecallOps has been live since 2026-10-21. The one link is **https://recallops-fi
 | Piece | Host | Plan | What it does |
 |---|---|---|---|
 | Website: console and claim portal (`apps/web`) | Vercel | Hobby (free) | **The one link people open.** The console at `/app`, claim links at `/claim/<token>` |
-| API (`recallops-api`) | Render web service | Free | Every request from the website; Stripe webhooks; the nightly CPSC pull |
+| API (`recallops-api`) | Render web service | Starter, about $7 a month | Every request from the website; Stripe webhooks; the nightly CPSC pull |
 | Worker (`recallops-worker`) | Render background worker | Starter, about $7 a month | Decides each submitted claim with the AI agent |
 | Payment jobs (`recallops-payment-jobs`) | Render cron, every 10 minutes | Paid by the minute | Reports usage to Stripe and sends Connect refunds |
 | Check export (`recallops-check-export`) | Render cron, nightly | Paid by the minute | Batches mailed-check refunds (an admin can also press "Create export batch") |
@@ -66,7 +66,7 @@ The project runs Postgres 17. Its direct host (`db.<ref>.supabase.co`) answers o
 
 3. When the API is up, `https://<api>.onrender.com/healthz` answers with `"status":"ok"`. It is a cheap liveness check that never contacts the graph, so its `"graph":"disabled"` means "not checked here". `/readyz` answers 503 until the worker has sent a heartbeat (which is how you know the worker is running), and then reports the graph's real status.
 
-The free web service sleeps after 15 minutes without traffic, so the first click after a quiet spell takes about a minute. The worker cannot be free on Render. If you skip it, claims wait in "submitted" until a worker runs somewhere: a laptop running `ADJUDICATOR=agent LLM_MODE=live make worker` with the production `DATABASE_URL_INTERNAL` works for a demo.
+The API runs on Starter since 2026-10-23. On the free plan a web service sleeps after 15 minutes without traffic, and the first click after a quiet spell takes about a minute (42 seconds observed that day). The worker cannot be free on Render. If you skip it, claims wait in "submitted" until a worker runs somewhere: a laptop running `ADJUDICATOR=agent LLM_MODE=live make worker` with the production `DATABASE_URL_INTERNAL` works for a demo.
 
 ## 3. Website (Vercel)
 
@@ -78,7 +78,7 @@ The free web service sleeps after 15 minutes without traffic, so the first click
 | `RECALLOPS_API_URL` | `https://<api>.onrender.com` (https is required for anything that is not this machine) |
 | `RECALLOPS_WEB_AUTH` | `clerk` (the dev headers refuse to run on any Vercel deployment) |
 | `RECALLOPS_WEB_PROXY_SECRET` | The same value as the API's `WEB_PROXY_SECRET` |
-| `RECALLOPS_API_TIMEOUT_MS` | `55000`: the free API sleeps after 15 idle minutes and takes about a minute to wake |
+| `RECALLOPS_API_TIMEOUT_MS` | `55000`: long enough for a free-plan API to wake; on Starter the API does not sleep |
 | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY` | Step 4 |
 | `NEXT_PUBLIC_CLERK_SIGN_IN_URL`, `NEXT_PUBLIC_CLERK_SIGN_UP_URL` | `/sign-in`, `/sign-up` |
 | `NEXT_PUBLIC_CLERK_KEYLESS_DISABLED`, `NEXT_PUBLIC_CLERK_TELEMETRY_DISABLED` | `true`, `true` |
@@ -143,4 +143,4 @@ The first deploy (2026-10-21, observed timeline in `docs/traces/M6-deploy.md`) d
 
 ## Costs
 
-The free tiers cover the website, the API, the database, photos, the graph, sign-in, and Stripe test mode. The paid pieces are the Render worker (about $7 a month) and the two cron jobs (billed by the minute, typically cents a month), plus AI calls of about 0.2 cents per claim, all metered against the project's budget. The whole project has spent $1.63 on AI so far.
+The free tiers cover the website, the database, photos, the graph, sign-in, and Stripe test mode. The paid pieces are the Render API and worker (about $7 a month each) and the two cron jobs (billed by the minute, typically cents a month), plus AI calls of about 0.2 cents per claim, all metered against the project's budget. The whole project has spent about $1.67 on AI so far.

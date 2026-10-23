@@ -17,7 +17,7 @@ services:
     region: virginia
     runtime: python
     rootDir: apps/api
-    plan: free
+    plan: starter
     buildCommand: pip install uv==0.11.21 && uv sync --frozen
     # --no-access-log: a claim link's token is in the URL path, so uvicorn's access log would write every claimant's
     # credential to the log stream (the app's own request log redacts it; backend review of PR 8).

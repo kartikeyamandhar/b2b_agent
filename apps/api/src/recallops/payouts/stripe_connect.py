@@ -378,7 +378,7 @@ def expire_choices(engine: Engine, settings: Settings) -> int:
                 "< now() - make_interval(days => :choice)) OR "
                 "(po.status = 'onboarding' AND greatest(coalesce(po.connect_started_at, po.created_at), "
                 "coalesce(po.choice_opened_at, po.created_at)) < now() - make_interval(days => :setup))) "
-                "ORDER BY po.created_at"
+                "ORDER BY po.created_at, po.id"  # a tie must not decide which shared-address refund is held first
             ),
             {"choice": settings.payout_choice_days, "setup": settings.payout_onboarding_days},
         ).all()
