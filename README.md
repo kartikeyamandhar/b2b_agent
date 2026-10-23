@@ -137,14 +137,14 @@ How one claim moves through the system:
 | Part | Runs on | Plan |
 |---|---|---|
 | Website (`apps/web`) | Vercel | Hobby (free) |
-| API (`recallops-api`) | Render web service | Free |
+| API (`recallops-api`) | Render web service | Starter, about $7 a month |
 | Worker and two cron jobs | Render | Starter, about $7 a month for the worker; the cron jobs cost cents |
 | Postgres and photo storage | Supabase | Free |
 | Fraud graph | Neo4j AuraDB | Free |
 | Sign-in | Clerk development instance | Free |
 | Payments | Stripe sandbox, test mode | Free |
 
-On Render's free plan the API sleeps after 15 idle minutes, so the first request after a quiet spell takes about a minute. [docs/DEPLOY.md](docs/DEPLOY.md) lists every service, setting, and secret, and how to deploy again.
+The API moved from Render's free plan to Starter on 2026-10-23, so it no longer sleeps between visits (the free plan took 42 seconds to wake that morning). [docs/DEPLOY.md](docs/DEPLOY.md) lists every service, setting, and secret, and how to deploy again.
 
 ## Design decisions and why
 
